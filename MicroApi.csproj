@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\CollectionController.cs" />
+    <Compile Remove="Controllers\DepartmentController.cs" />
+    <Compile Remove="Controllers\InsuranceController.cs" />
+    <Compile Remove="Controllers\ItemsController.cs" />
+    <Compile Remove="Controllers\ReportController.cs" />
+    <Compile Remove="Controllers\SchemaController.cs" />
+    <Compile Remove="Controllers\TestController.cs" />
+    <Compile Remove="Controllers\UserLabController.cs" />
+    <Compile Remove="DataLayer\Interface\ICollectionService.cs" />
+    <Compile Remove="DataLayer\Interface\IDepartmentService.cs" />
+    <Compile Remove="DataLayer\Interface\IInsuranceService.cs" />
+    <Compile Remove="DataLayer\Interface\IItemsService.cs" />
+    <Compile Remove="DataLayer\Interface\IReportService.cs" />
+    <Compile Remove="DataLayer\Interface\ISchemaService.cs" />
+    <Compile Remove="DataLayer\Interface\ITestService.cs" />
+    <Compile Remove="DataLayer\Interface\IUserLabService.cs" />
+    <Compile Remove="DataLayer\Service\CollectionService.cs" />
+    <Compile Remove="DataLayer\Service\DepartmentService.cs" />
+    <Compile Remove="DataLayer\Service\InsuranceService.cs" />
+    <Compile Remove="DataLayer\Service\ItemsService.cs" />
+    <Compile Remove="DataLayer\Service\ReportService.cs" />
+    <Compile Remove="DataLayer\Service\SchemaService.cs" />
+    <Compile Remove="DataLayer\Service\TestService.cs" />
+    <Compile Remove="DataLayer\Service\UserLabService.cs" />
+    <Compile Remove="Models\Collection.cs" />
+    <Compile Remove="Models\Department.cs" />
+    <Compile Remove="Models\Insurance.cs" />
+    <Compile Remove="Models\Item.cs" />
+    <Compile Remove="Models\Report.cs" />
+    <Compile Remove="Models\Schema.cs" />
+    <Compile Remove="Models\UserLab.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AzentLibrary">
+      <HintPath>Libraries\AzentLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
