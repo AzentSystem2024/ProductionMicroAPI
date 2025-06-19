@@ -8,6 +8,9 @@ namespace MicroApi.Models
         public bool IS_INACTIVE { get; set; }
 
     }
+    /// <summary>
+    /// ////////
+    /// </summary>
     public class HospitalListResponse
     {
         public int flag { get; set; }
