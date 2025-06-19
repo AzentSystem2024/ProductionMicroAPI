@@ -9,9 +9,8 @@ namespace MicroApi.DataLayer.Interface
         DistributorListResponse GetDistributorList();
         DistributorResponse GetDistributorById(int id);
         DistributorResponse DeleteDistributorData(int id);
-
-        //DistributorLocationResponse InsertDistributorLocation(DistributorLocation location);
-        // DistributorLocationResponse UpdateDistributorLocation(DistributorLocationUpdate location);
+        InsertResponse InsertDistrict(District district);
+        InsertResponse InsertCity(City city);
 
 
 

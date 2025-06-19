@@ -22,43 +22,7 @@ namespace MicroApi.DataLayer.Service
                     using (var tx = connection.BeginTransaction())
                     {
                         try
-                        {
-                            // ✅ Skip inserting Country and State
-                            // Assume distributor.COUNTRY_ID and distributor.STATE_ID are already provided and valid
-
-                            // 1. Insert new District if ID is 0
-                            if (distributor.DISTRICT_ID == 0 && !string.IsNullOrWhiteSpace(distributor.DISTRICT_NAME))
-                            {
-                                string sql = @"INSERT INTO TB_DISTRICT (DISTRICT, STATE_ID, COUNTRY_ID)
-                                       OUTPUT INSERTED.ID
-                                       VALUES (@NAME, @STATE_ID, @COUNTRY_ID)";
-                                using (var cmd = new SqlCommand(sql, connection, tx))
-                                {
-                                    cmd.Parameters.AddWithValue("@NAME", distributor.DISTRICT_NAME);
-                                    cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
-                                    cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
-                                    distributor.DISTRICT_ID = (int)cmd.ExecuteScalar();
-                                }
-                            }
-
-                            // 2. Insert new City if ID is 0
-                            if (distributor.CITY_ID == 0 && !string.IsNullOrWhiteSpace(distributor.CITY_NAME))
-                            {
-                                string sql = @"INSERT INTO TB_CITY (CITY_NAME, DISTRICT_ID, STATE_ID, COUNTRY_ID, STD_CODE)
-                                       OUTPUT INSERTED.ID
-                                       VALUES (@NAME, @DISTRICT_ID, @STATE_ID, @COUNTRY_ID, @STD_CODE)";
-                                using (var cmd = new SqlCommand(sql, connection, tx))
-                                {
-                                    cmd.Parameters.AddWithValue("@NAME", distributor.CITY_NAME);
-                                    cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
-                                    cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
-                                    cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
-                                    cmd.Parameters.AddWithValue("@STD_CODE", distributor.STD_CODE);
-                                    distributor.CITY_ID = (int)cmd.ExecuteScalar();
-                                }
-                            }
-
-                            // 3. Insert Distributor via SP_TB_DISTRIBUTOR and get inserted ID
+                        {                           
                             int distributorId = 0;
                             using (var cmd = new SqlCommand("SP_TB_DISTRIBUTOR", connection, tx))
                             {
@@ -78,7 +42,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@WHATSAPP_NO", distributor.WHATSAPP_NO ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@EMAIL", distributor.EMAIL ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@IS_ACTIVE", distributor.IS_ACTIVE);
+                                cmd.Parameters.AddWithValue("@IS_INACTIVE", distributor.IS_INACTIVE);
                                 cmd.Parameters.AddWithValue("@SALESMAN_EMAIL", distributor.SALESMAN_EMAIL ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@WAREHOUSE_ID", distributor.WAREHOUSE_ID);
                                 cmd.Parameters.AddWithValue("@CONTACT_NAME", distributor.CONTACT_NAME ?? (object)DBNull.Value);
@@ -94,7 +58,7 @@ namespace MicroApi.DataLayer.Service
                                 distributorId = insertedId != null ? Convert.ToInt32(insertedId) : 0;
                             }
 
-                            // 4. Insert into TB_DISTRIBUTOR_LOCATIONS
+                            // ✅ 4. Insert into TB_DISTRIBUTOR_LOCATIONS
                             if (distributor.LOCATIONS != null && distributor.LOCATIONS.Any())
                             {
                                 string insertLocSql = @"
@@ -140,6 +104,7 @@ namespace MicroApi.DataLayer.Service
         }
 
 
+
         public DistributorResponse UpdateDistributor(DistributorUpdate distributor)
         {
             DistributorResponse res = new DistributorResponse();
@@ -155,45 +120,13 @@ namespace MicroApi.DataLayer.Service
                     {
                         try
                         {
-                            // Step 1: Insert District if ID = 0
-                            if (distributor.DISTRICT_ID == 0 && !string.IsNullOrWhiteSpace(distributor.DISTRICT_NAME))
-                            {
-                                string sql = @"INSERT INTO TB_DISTRICT (DISTRICT, STATE_ID, COUNTRY_ID)
-                                       OUTPUT INSERTED.ID
-                                       VALUES (@NAME, @STATE_ID, @COUNTRY_ID)";
-                                using (var cmd = new SqlCommand(sql, connection, tx))
-                                {
-                                    cmd.Parameters.AddWithValue("@NAME", distributor.DISTRICT_NAME);
-                                    cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
-                                    cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
-                                    distributor.DISTRICT_ID = (int)cmd.ExecuteScalar();
-                                }
-                            }
 
-                            // Step 2: Insert City if ID = 0
-                            if (distributor.CITY_ID == 0 && !string.IsNullOrWhiteSpace(distributor.CITY_NAME))
-                            {
-                                string sql = @"INSERT INTO TB_CITY (CITY_NAME, DISTRICT_ID, STATE_ID, COUNTRY_ID, STD_CODE)
-                                       OUTPUT INSERTED.ID
-                                       VALUES (@NAME, @DISTRICT_ID, @STATE_ID, @COUNTRY_ID, @STD_CODE)";
-                                using (var cmd = new SqlCommand(sql, connection, tx))
-                                {
-                                    cmd.Parameters.AddWithValue("@NAME", distributor.CITY_NAME);
-                                    cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
-                                    cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
-                                    cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
-                                    cmd.Parameters.AddWithValue("@STD_CODE", distributor.STD_CODE);
-                                    distributor.CITY_ID = (int)cmd.ExecuteScalar();
-                                }
-                            }
-
-                            // Step 3: Call Update SP for Distributor
                             using (var cmd = new SqlCommand("SP_TB_DISTRIBUTOR", connection, tx))
                             {
                                 cmd.CommandType = CommandType.StoredProcedure;
 
                                 cmd.Parameters.AddWithValue("@ID", distributor.ID);
-                                cmd.Parameters.AddWithValue("@ACTION", 2); // UPDATE
+                                cmd.Parameters.AddWithValue("@ACTION", 2); 
                                 cmd.Parameters.AddWithValue("@CODE", distributor.CODE);
                                 cmd.Parameters.AddWithValue("@DISTRIBUTOR_NAME", distributor.DISTRIBUTOR_NAME);
                                 cmd.Parameters.AddWithValue("@ADDRESS", distributor.ADDRESS);
@@ -206,7 +139,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@WHATSAPP_NO", distributor.WHATSAPP_NO ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@EMAIL", distributor.EMAIL ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@IS_ACTIVE", distributor.IS_ACTIVE);
+                                cmd.Parameters.AddWithValue("@IS_INACTIVE", distributor.IS_INACTIVE);
                                 cmd.Parameters.AddWithValue("@SALESMAN_EMAIL", distributor.SALESMAN_EMAIL ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@WAREHOUSE_ID", distributor.WAREHOUSE_ID);
                                 cmd.Parameters.AddWithValue("@CONTACT_NAME", distributor.CONTACT_NAME ?? (object)DBNull.Value);
@@ -221,7 +154,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.ExecuteNonQuery();
                             }
 
-                            // Step 4: Update Distributor Location(s) if available
+                            // ✅ Step 2: Update Distributor Location(s)
                             if (distributor.LOCATIONS != null && distributor.LOCATIONS.Any())
                             {
                                 foreach (var loc in distributor.LOCATIONS)
@@ -273,7 +206,6 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
-
         public DistributorListResponse GetDistributorList()
         {
             DistributorListResponse res = new DistributorListResponse
@@ -296,7 +228,7 @@ namespace MicroApi.DataLayer.Service
                     using (var cmd = new SqlCommand("SP_TB_DISTRIBUTOR", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@ID", DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
@@ -311,6 +243,7 @@ namespace MicroApi.DataLayer.Service
                                     ADDRESS = reader["ADDRESS"]?.ToString(),
                                     COUNTRY_ID = reader["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COUNTRY_ID"]) : 0,
                                     STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
+                                    STATE_NAME = reader["STATE_NAME"] != DBNull.Value ? reader["STATE_NAME"].ToString() : string.Empty,
                                     DISTRICT_ID = reader["DISTRICT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRICT_ID"]) : 0,
                                     CITY_ID = reader["CITY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CITY_ID"]) : 0,
                                     TELEPHONE = reader["TELEPHONE"]?.ToString(),
@@ -318,7 +251,7 @@ namespace MicroApi.DataLayer.Service
                                     MOBILE = reader["MOBILE"]?.ToString(),
                                     WHATSAPP_NO = reader["WHATSAPP_NO"]?.ToString(),
                                     EMAIL = reader["EMAIL"]?.ToString(),
-                                    IS_ACTIVE = reader["IS_ACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_ACTIVE"]) : false,
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
                                     SALESMAN_EMAIL = reader["SALESMAN_EMAIL"]?.ToString(),
                                     WAREHOUSE_ID = reader["WAREHOUSE_ID"] != DBNull.Value ? Convert.ToInt32(reader["WAREHOUSE_ID"]) : 0,
                                     CONTACT_NAME = reader["CONTACT_NAME"]?.ToString(),
@@ -411,7 +344,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@MOBILE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@WHATSAPP_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@EMAIL", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IS_ACTIVE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IS_INACTIVE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@SALESMAN_EMAIL", DBNull.Value);
                         cmd.Parameters.AddWithValue("@WAREHOUSE_ID", 0);
                         cmd.Parameters.AddWithValue("@CONTACT_NAME", DBNull.Value);
@@ -442,7 +375,7 @@ namespace MicroApi.DataLayer.Service
                                     MOBILE = reader["MOBILE"]?.ToString(),
                                     WHATSAPP_NO = reader["WHATSAPP_NO"]?.ToString(),
                                     EMAIL = reader["EMAIL"]?.ToString(),
-                                    IS_ACTIVE = reader["IS_ACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_ACTIVE"]) : false,
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
                                     SALESMAN_EMAIL = reader["SALESMAN_EMAIL"]?.ToString(),
                                     WAREHOUSE_ID = reader["WAREHOUSE_ID"] != DBNull.Value ? Convert.ToInt32(reader["WAREHOUSE_ID"]) : 0,
                                     CONTACT_NAME = reader["CONTACT_NAME"]?.ToString(),
@@ -545,181 +478,96 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
-        //public DistributorLocationResponse InsertDistributorLocation(DistributorLocation location)
-        //{
-        //    var res = new DistributorLocationResponse();
+        public InsertResponse InsertDistrict(District district)
+        {
+            InsertResponse res = new InsertResponse();
 
-        //    try
-        //    {
-        //        using (var connection = ADO.GetConnection())
-        //        {
-        //            if (connection.State == ConnectionState.Closed)
-        //                connection.Open();
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
 
-        //            // Verify the distributor exists
-        //            string checkDistributor = "SELECT COUNT(1) FROM TB_DISTRIBUTOR WHERE ID = @DISTRIBUTOR_ID AND IS_ACTIVE = 1";
-        //            using (var checkCmd = new SqlCommand(checkDistributor, connection))
-        //            {
-        //                checkCmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", location.DISTRIBUTOR_ID);
+                    string sql = @"INSERT INTO TB_DISTRICT (DISTRICT, STATE_ID, COUNTRY_ID)
+                           VALUES (@DISTRICT, @STATE_ID, @COUNTRY_ID)";
 
-        //                int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                    using (var cmd = new SqlCommand(sql, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@DISTRICT", district.DISTRICT_NAME?.Trim());
+                        cmd.Parameters.AddWithValue("@STATE_ID", district.STATE_ID);
+                        cmd.Parameters.AddWithValue("@COUNTRY_ID", district.COUNTRY_ID);
 
-        //                if (count == 0)
-        //                {
-        //                    res.flag = 0;
-        //                    res.Message = "Invalid or inactive distributor.";
-        //                    return res;
-        //                }
-        //            }
+                        int rows = cmd.ExecuteNonQuery();
 
-        //            // Insert into TB_DISTRIBUTOR_LOCATIONS
-        //            string insertSql = @"
-        //        INSERT INTO TB_DISTRIBUTOR_LOCATIONS 
-        //        (DISTRIBUTOR_ID, LOCATION, ADDRESS, TELEPHONE, MOBILE, IS_INACTIVE)
-        //        VALUES (@DISTRIBUTOR_ID, @LOCATION, @ADDRESS, @TELEPHONE, @MOBILE, @IS_INACTIVE)";
+                        if (rows > 0)
+                        {
+                            res.flag = 1;
+                            res.Message = "Success";
+                        }
+                        else
+                        {
+                            res.flag = 0;
+                            res.Message = "Failed";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error inserting district: " + ex.Message;
+            }
 
-        //            using (var cmd = new SqlCommand(insertSql, connection))
-        //            {
-        //                cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", location.DISTRIBUTOR_ID);
-        //                cmd.Parameters.AddWithValue("@LOCATION", location.LOCATION);
-        //                cmd.Parameters.AddWithValue("@ADDRESS", location.ADDRESS ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@TELEPHONE", location.TELEPHONE ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@MOBILE", location.MOBILE ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@IS_INACTIVE", location.IS_INACTIVE);
+            return res;
+        }
 
-        //                int rowsAffected = cmd.ExecuteNonQuery();
+        public InsertResponse InsertCity(City city)
+        {
+            InsertResponse res = new InsertResponse();
 
-        //                if (rowsAffected > 0)
-        //                {
-        //                    res.flag = 1;
-        //                    res.Message = "Success";
-        //                }
-        //                else
-        //                {
-        //                    res.flag = 0;
-        //                    res.Message = "Failed.";
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.flag = 0;
-        //        res.Message = "Error: " + ex.Message;
-        //    }
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
 
-        //    return res;
-        //}
-        //public DistributorLocationResponse UpdateDistributorLocation(DistributorLocationUpdate location)
-        //{
-        //    DistributorLocationResponse res = new DistributorLocationResponse();
+                    string sql = @"INSERT INTO TB_CITY (CITY_NAME, DISTRICT_ID, STATE_ID, COUNTRY_ID, STD_CODE)
+                           VALUES (@CITY_NAME, @DISTRICT_ID, @STATE_ID, @COUNTRY_ID, @STD_CODE)";
 
-        //    try
-        //    {
-        //        using (var connection = ADO.GetConnection())
-        //        {
-        //            if (connection.State == ConnectionState.Closed)
-        //                connection.Open();
+                    using (var cmd = new SqlCommand(sql, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@CITY_NAME", city.CITY_NAME?.Trim());
+                        cmd.Parameters.AddWithValue("@DISTRICT_ID", city.DISTRICT_ID);
+                        cmd.Parameters.AddWithValue("@STATE_ID", city.STATE_ID);
+                        cmd.Parameters.AddWithValue("@COUNTRY_ID", city.COUNTRY_ID);
+                        cmd.Parameters.AddWithValue("@STD_CODE", city.STD_CODE);
 
-        //            string sql = @"
-        //        UPDATE TB_DISTRIBUTOR_LOCATIONS
-        //        SET
-        //            DISTRIBUTOR_ID = @DISTRIBUTOR_ID,
-        //            LOCATION = @LOCATION,
-        //            ADDRESS = @ADDRESS,
-        //            TELEPHONE = @TELEPHONE,
-        //            MOBILE = @MOBILE,
-        //            IS_INACTIVE = @IS_INACTIVE
-        //        WHERE ID = @ID";
+                        int rows = cmd.ExecuteNonQuery();
 
-        //            using (var cmd = new SqlCommand(sql, connection))
-        //            {
-        //                cmd.Parameters.AddWithValue("@ID", location.ID);
-        //                cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", location.DISTRIBUTOR_ID);
-        //                cmd.Parameters.AddWithValue("@LOCATION", location.LOCATION);
-        //                cmd.Parameters.AddWithValue("@ADDRESS", location.ADDRESS ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@TELEPHONE", location.TELEPHONE ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@MOBILE", location.MOBILE ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@IS_INACTIVE", location.IS_INACTIVE);
+                        if (rows > 0)
+                        {
+                            res.flag = 1;
+                            res.Message = "Success";
+                        }
+                        else
+                        {
+                            res.flag = 0;
+                            res.Message = "failed.";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error inserting city: " + ex.Message;
+            }
 
-        //                int rowsAffected = cmd.ExecuteNonQuery();
+            return res;
+        }
 
-        //                if (rowsAffected > 0)
-        //                {
-        //                    res.flag = 1;
-        //                    res.Message = "Success";
-        //                }
-        //                else
-        //                {
-        //                    res.flag = 0;
-        //                    res.Message = "Failed";
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.flag = 0;
-        //        res.Message = "Error: " + ex.Message;
-        //    }
-
-        //    return res;
-        //}
-        //public DistributorLocationResponse GetDistributorLocationById(int id)
-        //{
-        //    DistributorLocationResponse res = new DistributorLocationResponse();
-
-        //    try
-        //    {
-        //        using (SqlConnection con = ADO.GetConnection())
-        //        {
-        //            if (con.State == ConnectionState.Closed)
-        //                con.Open();
-
-        //            string sql = @"SELECT ID, DISTRIBUTOR_ID, LOCATION, ADDRESS, TELEPHONE, MOBILE, IS_INACTIVE 
-        //                   FROM TB_DISTRIBUTOR_LOCATIONS 
-        //                   WHERE ID = @ID";
-
-        //            using (SqlCommand cmd = new SqlCommand(sql, con))
-        //            {
-        //                cmd.Parameters.AddWithValue("@ID", id);
-
-        //                using (SqlDataReader reader = cmd.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        var location = new DistributorLocationUpdate
-        //                        {
-        //                            ID = Convert.ToInt32(reader["ID"]),
-        //                            DISTRIBUTOR_ID = Convert.ToInt32(reader["DISTRIBUTOR_ID"]),
-        //                            LOCATION = reader["LOCATION"]?.ToString(),
-        //                            ADDRESS = reader["ADDRESS"]?.ToString(),
-        //                            TELEPHONE = reader["TELEPHONE"]?.ToString(),
-        //                            MOBILE = reader["MOBILE"]?.ToString(),
-        //                            IS_INACTIVE = Convert.ToBoolean(reader["IS_INACTIVE"])
-        //                        };
-
-        //                        res.flag = 1;
-        //                        res.Message = "Success";
-        //                        res.Data = location;
-        //                    }
-        //                    else
-        //                    {
-        //                        res.flag = 0;
-        //                        res.Message = "No record found";
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.flag = 0;
-        //        res.Message = "Error: " + ex.Message;
-        //    }
-
-        //    return res;
-        //}
 
     }
 }

@@ -102,40 +102,42 @@ namespace MicroApi.Controllers
             return res;
         }
 
-        //[HttpPost]
-        //[Route("save")]
-        //public DistributorLocationResponse InsertLocation(DistributorLocation location)
-        //{
-        //    DistributorLocationResponse res = new DistributorLocationResponse();
+        [HttpPost]
+        [Route("savedistrict")]
+        public InsertResponse InsertDistrict(District district)
+        {
+            InsertResponse res = new InsertResponse();
 
-        //    try
-        //    {
-        //        res = _distributorService.InsertDistributorLocation(location); 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.flag = 0;
-        //        res.Message = ex.Message;
-        //    }
+            try
+            {
+                res = _distributorService.InsertDistrict(district); 
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
 
-        //    return res;
-        //}
-        //[HttpPost]
-        //[Route("edit")]
-        //public DistributorLocationResponse UpdateLocation(DistributorLocationUpdate location)
-        //{
-        //    DistributorLocationResponse res = new DistributorLocationResponse();
-        //    try
-        //    {
-        //        res = _distributorService.UpdateDistributorLocation(location);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.flag = 0;
-        //        res.Message = ex.Message;
-        //    }
-        //    return res;
-        //}
+            return res;
+        }
+        [HttpPost]
+        [Route("savecity")]
+        public InsertResponse InsertCity(City city)
+        {
+            InsertResponse res = new InsertResponse();
+
+            try
+            {
+                res = _distributorService.InsertCity(city); 
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
 
 
     }
