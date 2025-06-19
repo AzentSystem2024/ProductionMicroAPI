@@ -21,13 +21,19 @@ namespace MicroApi.Controllers
             List<DropDown> vData = new List<DropDown>();
             try
             {
-                vData = _DropDownService.GetDropDownData(vInput.NAME);
+                vData = _DropDownService.GetDropDownData(
+                    vInput.NAME,
+                    vInput.COUNTRY_ID,
+                    vInput.STATE_ID,
+                    vInput.DISTRICT_ID
+                );
             }
             catch (Exception ex)
             {
-
+                // Optionally log or handle the exception
             }
             return vData;
         }
+
     }
 }
