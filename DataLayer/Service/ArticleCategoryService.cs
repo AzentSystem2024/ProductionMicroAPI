@@ -83,6 +83,7 @@ namespace MicroApi.DataLayer.Service
                         ID = Convert.ToInt32(reader["ID"]),
                         CODE = Convert.ToString(reader["CODE"]),
                         NAME = Convert.ToString(reader["DESCRIPTION"]),
+                        IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
                         SIZES = new List<int>(),
                         PACKING = new List<Packing>()
                     };
@@ -277,7 +278,7 @@ namespace MicroApi.DataLayer.Service
                         WHERE IS_DELETED=0 AND ID = @ID", con, tran);
                             updateCmd.Parameters.AddWithValue("@CODE", request.CODE);
                             updateCmd.Parameters.AddWithValue("@DESC", request.DESCRIPTION);
-                            updateCmd.Parameters.AddWithValue("@DIS_INACTIVEESC", request.IS_INACTIVE);
+                            updateCmd.Parameters.AddWithValue("@IS_INACTIVE", request.IS_INACTIVE);
                             updateCmd.Parameters.AddWithValue("@ID", request.ID);
                             updateCmd.ExecuteNonQuery();
 
@@ -585,7 +586,8 @@ namespace MicroApi.DataLayer.Service
                             {
                                 ID = Convert.ToInt32(reader["ID"]),
                                 CODE = Convert.ToString(reader["CODE"]),
-                                DESCRIPTION = Convert.ToString(reader["DESCRIPTION"])
+                                DESCRIPTION = Convert.ToString(reader["DESCRIPTION"]),
+                                IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
                             });
                         }
                     }

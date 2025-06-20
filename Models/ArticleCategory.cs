@@ -34,6 +34,7 @@
         public int ID { get; set; }
         public string CODE { get; set; }
         public string NAME { get; set; }
+        public bool? IS_INACTIVE { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
         public List<Packing> PACKING { get; set; } = new List<Packing>();
     }
@@ -109,6 +110,7 @@
         public int ID { get; set; }
         public string CODE { get; set; }
         public string DESCRIPTION { get; set; }
+        public bool? IS_INACTIVE { get; set; }
     }
 
 }

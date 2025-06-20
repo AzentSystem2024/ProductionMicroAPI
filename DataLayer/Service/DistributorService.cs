@@ -33,10 +33,10 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@CODE", distributor.CODE);
                                 cmd.Parameters.AddWithValue("@DISTRIBUTOR_NAME", distributor.DISTRIBUTOR_NAME);
                                 cmd.Parameters.AddWithValue("@ADDRESS", distributor.ADDRESS);
-                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
-                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
-                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
-                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID);
+                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID.HasValue && distributor.COUNTRY_ID > 0 ? distributor.COUNTRY_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID.HasValue && distributor.STATE_ID > 0 ? distributor.STATE_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID.HasValue && distributor.DISTRICT_ID > 0 ? distributor.DISTRICT_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID.HasValue && distributor.CITY_ID > 0 ? distributor.CITY_ID : (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@TELEPHONE", distributor.TELEPHONE ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@FAX", distributor.FAX ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
@@ -130,10 +130,10 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@CODE", distributor.CODE);
                                 cmd.Parameters.AddWithValue("@DISTRIBUTOR_NAME", distributor.DISTRIBUTOR_NAME);
                                 cmd.Parameters.AddWithValue("@ADDRESS", distributor.ADDRESS);
-                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
-                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
-                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
-                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID);
+                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID.HasValue && distributor.COUNTRY_ID > 0 ? distributor.COUNTRY_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID.HasValue && distributor.STATE_ID > 0 ? distributor.STATE_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID.HasValue && distributor.DISTRICT_ID > 0 ? distributor.DISTRICT_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID.HasValue && distributor.CITY_ID > 0 ? distributor.CITY_ID : (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@TELEPHONE", distributor.TELEPHONE ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@FAX", distributor.FAX ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
@@ -484,6 +484,14 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
+                // ✅ 1. Validate DISTRICT_NAME
+                if (string.IsNullOrWhiteSpace(district.DISTRICT_NAME))
+                {
+                    res.flag = 0;
+                    res.Message = "District name is required.";
+                    return res;
+                }
+
                 using (var connection = ADO.GetConnection())
                 {
                     if (connection.State == ConnectionState.Closed)
@@ -494,7 +502,7 @@ namespace MicroApi.DataLayer.Service
 
                     using (var cmd = new SqlCommand(sql, connection))
                     {
-                        cmd.Parameters.AddWithValue("@DISTRICT", district.DISTRICT_NAME?.Trim());
+                        cmd.Parameters.AddWithValue("@DISTRICT", district.DISTRICT_NAME);
                         cmd.Parameters.AddWithValue("@STATE_ID", district.STATE_ID);
                         cmd.Parameters.AddWithValue("@COUNTRY_ID", district.COUNTRY_ID);
 
@@ -508,7 +516,7 @@ namespace MicroApi.DataLayer.Service
                         else
                         {
                             res.flag = 0;
-                            res.Message = "Failed";
+                            res.Message = "Failed ";
                         }
                     }
                 }
@@ -522,23 +530,56 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
+
         public InsertResponse InsertCity(City city)
         {
             InsertResponse res = new InsertResponse();
 
             try
             {
+                // ✅ 1. Validate CITY_NAME
+                if (string.IsNullOrWhiteSpace(city.CITY_NAME))
+                {
+                    res.flag = 0;
+                    res.Message = "City name is required.";
+                    return res;
+                }
+
                 using (var connection = ADO.GetConnection())
                 {
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
+                    // ✅ 2. Optional: Check for duplicate city under the same district/state/country
+                    string checkSql = @"SELECT COUNT(1) FROM TB_CITY 
+                                WHERE CITY_NAME = @CITY_NAME 
+                                  AND DISTRICT_ID = @DISTRICT_ID 
+                                  AND STATE_ID = @STATE_ID 
+                                  AND COUNTRY_ID = @COUNTRY_ID";
+
+                    using (var checkCmd = new SqlCommand(checkSql, connection))
+                    {
+                        checkCmd.Parameters.AddWithValue("@CITY_NAME", city.CITY_NAME.Trim());
+                        checkCmd.Parameters.AddWithValue("@DISTRICT_ID", city.DISTRICT_ID);
+                        checkCmd.Parameters.AddWithValue("@STATE_ID", city.STATE_ID);
+                        checkCmd.Parameters.AddWithValue("@COUNTRY_ID", city.COUNTRY_ID);
+
+                        int exists = (int)checkCmd.ExecuteScalar();
+                        if (exists > 0)
+                        {
+                            res.flag = 0;
+                            res.Message = "City already exists under the specified location.";
+                            return res;
+                        }
+                    }
+
+                    // ✅ 3. Insert
                     string sql = @"INSERT INTO TB_CITY (CITY_NAME, DISTRICT_ID, STATE_ID, COUNTRY_ID, STD_CODE)
                            VALUES (@CITY_NAME, @DISTRICT_ID, @STATE_ID, @COUNTRY_ID, @STD_CODE)";
 
                     using (var cmd = new SqlCommand(sql, connection))
                     {
-                        cmd.Parameters.AddWithValue("@CITY_NAME", city.CITY_NAME?.Trim());
+                        cmd.Parameters.AddWithValue("@CITY_NAME", city.CITY_NAME);
                         cmd.Parameters.AddWithValue("@DISTRICT_ID", city.DISTRICT_ID);
                         cmd.Parameters.AddWithValue("@STATE_ID", city.STATE_ID);
                         cmd.Parameters.AddWithValue("@COUNTRY_ID", city.COUNTRY_ID);
@@ -546,16 +587,8 @@ namespace MicroApi.DataLayer.Service
 
                         int rows = cmd.ExecuteNonQuery();
 
-                        if (rows > 0)
-                        {
-                            res.flag = 1;
-                            res.Message = "Success";
-                        }
-                        else
-                        {
-                            res.flag = 0;
-                            res.Message = "failed.";
-                        }
+                        res.flag = rows > 0 ? 1 : 0;
+                        res.Message = rows > 0 ? "Success" : "Failed to insert city.";
                     }
                 }
             }
@@ -567,6 +600,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+
 
 
     }
