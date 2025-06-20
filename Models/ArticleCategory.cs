@@ -16,8 +16,8 @@
     }
     public class PackCombination
     {
-        public int SIZE { get; set; }
-        public int QUANTITY { get; set; }
+        public int size { get; set; }
+        public int pairQty { get; set; }
     }
 
     public class Packing
@@ -34,6 +34,7 @@
         public int ID { get; set; }
         public string CODE { get; set; }
         public string NAME { get; set; }
+        public bool? IS_INACTIVE { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
         public List<Packing> PACKING { get; set; } = new List<Packing>();
     }
@@ -48,6 +49,7 @@
     {
         public string CODE { get; set; }
         public string DESCRIPTION { get; set; }
+        public bool IS_INACTIVE { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
         public List<Packing> PACKING { get; set; } = new List<Packing>();
     }
@@ -61,6 +63,7 @@
         public int ID { get; set; }  
         public string CODE { get; set; } = string.Empty;
         public string DESCRIPTION { get; set; } = string.Empty;
+        public bool IS_INACTIVE { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
         public List<Packing> PACKING { get; set; } = new List<Packing>();
     }
@@ -107,6 +110,7 @@
         public int ID { get; set; }
         public string CODE { get; set; }
         public string DESCRIPTION { get; set; }
+        public bool? IS_INACTIVE { get; set; }
     }
 
 }

@@ -67,7 +67,7 @@ namespace MicroApi.DataLayer.Service
                 using (SqlConnection con = ADO.GetConnection())
                 {
                     // Load category basic details
-                    var catCmd = new SqlCommand("SELECT ID, CODE, DESCRIPTION FROM TB_ARTICLE_CATEGORY WHERE IS_DELETED=0 AND ID = @catId", con);
+                    var catCmd = new SqlCommand("SELECT ID, CODE, DESCRIPTION,IS_INACTIVE FROM TB_ARTICLE_CATEGORY WHERE IS_DELETED=0 AND ID = @catId", con);
                     catCmd.Parameters.AddWithValue("@catId", Id);
 
                     using var reader = catCmd.ExecuteReader();
@@ -83,6 +83,7 @@ namespace MicroApi.DataLayer.Service
                         ID = Convert.ToInt32(reader["ID"]),
                         CODE = Convert.ToString(reader["CODE"]),
                         NAME = Convert.ToString(reader["DESCRIPTION"]),
+                        IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
                         SIZES = new List<int>(),
                         PACKING = new List<Packing>()
                     };
@@ -139,8 +140,8 @@ namespace MicroApi.DataLayer.Service
 
                         packings[packName].PACKCOMBINATIONS.Add(new PackCombination
                         {
-                            SIZE = Convert.ToInt32(row["SIZE_ID"]),    
-                            QUANTITY = Convert.ToInt32(row["QUANTITY"])
+                            size = Convert.ToInt32(row["SIZE_ID"]),    
+                            pairQty = Convert.ToInt32(row["QUANTITY"])
                         });
                     }
 
@@ -170,8 +171,8 @@ namespace MicroApi.DataLayer.Service
                 using (SqlTransaction tx = con.BeginTransaction())
                 {
                     // 1️⃣ Insert into TB_ARTICLE_CATEGORY
-                    string catSql = @"INSERT INTO TB_ARTICLE_CATEGORY (CODE, DESCRIPTION,IS_DELETED) 
-                              VALUES (@CODE, @DESC,0); 
+                    string catSql = @"INSERT INTO TB_ARTICLE_CATEGORY (CODE, DESCRIPTION,IS_DELETED,IS_INACTIVE) 
+                              VALUES (@CODE, @DESC,0,@IS_INACTIVE); 
                               SELECT SCOPE_IDENTITY();";
 
                     int categoryId;
@@ -179,6 +180,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.Parameters.AddWithValue("@CODE", request.CODE);
                         cmd.Parameters.AddWithValue("@DESC", request.DESCRIPTION);
+                        cmd.Parameters.AddWithValue("@IS_INACTIVE", request.IS_INACTIVE);
                         categoryId = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
@@ -223,9 +225,9 @@ namespace MicroApi.DataLayer.Service
                             using (SqlCommand cmd = new SqlCommand(sizeIdSql, con, tx))
                             {
                                 cmd.Parameters.AddWithValue("@CID", categoryId);
-                                cmd.Parameters.AddWithValue("@SIZE", combo.SIZE);
+                                cmd.Parameters.AddWithValue("@SIZE", combo.size);
                                 var result = cmd.ExecuteScalar();
-                                if (result == null) throw new Exception($"Size {combo.SIZE} not found for category.");
+                                if (result == null) throw new Exception($"Size {combo.size} not found for category.");
                                 sizeId = Convert.ToInt32(result);
                             }
 
@@ -237,7 +239,7 @@ namespace MicroApi.DataLayer.Service
                             {
                                 cmd.Parameters.AddWithValue("@PACKID", packId);
                                 cmd.Parameters.AddWithValue("@SIZEID", sizeId);
-                                cmd.Parameters.AddWithValue("@QTY", combo.QUANTITY);
+                                cmd.Parameters.AddWithValue("@QTY", combo.pairQty);
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -272,10 +274,11 @@ namespace MicroApi.DataLayer.Service
                             // Update main category
                             var updateCmd = new SqlCommand(@"
                         UPDATE TB_ARTICLE_CATEGORY 
-                        SET CODE = @CODE, DESCRIPTION = @DESC 
+                        SET CODE = @CODE, DESCRIPTION = @DESC ,IS_INACTIVE = @IS_INACTIVE
                         WHERE IS_DELETED=0 AND ID = @ID", con, tran);
                             updateCmd.Parameters.AddWithValue("@CODE", request.CODE);
                             updateCmd.Parameters.AddWithValue("@DESC", request.DESCRIPTION);
+                            updateCmd.Parameters.AddWithValue("@IS_INACTIVE", request.IS_INACTIVE);
                             updateCmd.Parameters.AddWithValue("@ID", request.ID);
                             updateCmd.ExecuteNonQuery();
 
@@ -327,9 +330,9 @@ namespace MicroApi.DataLayer.Service
 
                                 foreach (var comb in pack.PACKCOMBINATIONS)
                                 {
-                                    if (!sizeIdMap.TryGetValue(comb.SIZE, out int sizeId))
+                                    if (!sizeIdMap.TryGetValue(comb.size, out int sizeId))
                                     {
-                                        throw new Exception($"Size '{comb.SIZE}' not found in inserted sizes.");
+                                        throw new Exception($"Size '{comb.size}' not found in inserted sizes.");
                                     }
 
                                     var combCmd = new SqlCommand(@"
@@ -338,7 +341,7 @@ namespace MicroApi.DataLayer.Service
                                 VALUES (@PACKID, @SIZEID, @QTY);", con, tran);
                                     combCmd.Parameters.AddWithValue("@PACKID", packId);
                                     combCmd.Parameters.AddWithValue("@SIZEID", sizeId);
-                                    combCmd.Parameters.AddWithValue("@QTY", comb.QUANTITY);
+                                    combCmd.Parameters.AddWithValue("@QTY", comb.pairQty);
 
                                     combCmd.ExecuteNonQuery();
                                 }
@@ -569,10 +572,10 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == System.Data.ConnectionState.Closed)
                         connection.Open();
 
-                    string sql = @"SELECT ID, CODE, DESCRIPTION
-                           FROM TB_ARTICLE_CATEGORY
-                           WHERE IS_DELETED = 0
-                           ORDER BY CODE";
+                    string sql = @"SELECT ID, CODE, DESCRIPTION, IS_INACTIVE
+                                    FROM TB_ARTICLE_CATEGORY
+                                    WHERE IS_DELETED = 0
+                                    ORDER BY TRY_CAST(CODE AS INT) ASC";
 
                     using (var cmd = new SqlCommand(sql, connection))
                     using (var reader = cmd.ExecuteReader())
@@ -583,7 +586,8 @@ namespace MicroApi.DataLayer.Service
                             {
                                 ID = Convert.ToInt32(reader["ID"]),
                                 CODE = Convert.ToString(reader["CODE"]),
-                                DESCRIPTION = Convert.ToString(reader["DESCRIPTION"])
+                                DESCRIPTION = Convert.ToString(reader["DESCRIPTION"]),
+                                IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
                             });
                         }
                     }
