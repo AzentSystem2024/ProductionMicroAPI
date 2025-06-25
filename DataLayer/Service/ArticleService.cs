@@ -192,43 +192,8 @@ namespace MicroApi.Service
                                     NEW_ARRIVAL_DAYS = reader["NEW_ARRIVAL_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NEW_ARRIVAL_DAYS"]) : 0,
                                     NEXT_SERIAL = reader["NEXT_SERIAL"] != DBNull.Value ? Convert.ToInt32(reader["NEXT_SERIAL"]) : 0,
                                     IMAGE_NAME = reader["IMAGE_NAME"] != DBNull.Value ? reader["IMAGE_NAME"].ToString() : string.Empty,
-                                    IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
-                                    COMPONENT_ARTICLE_ID = reader["COMPONENT_ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPONENT_ARTICLE_ID"]) : (int?)null,
-                                    ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NO"].ToString() : string.Empty,
-                                    ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NAME"].ToString() : string.Empty
-                                };
-                            }
-                        }
-                    }
-
-                    // Fetch size-wise article information
-                    if (articleDetails != null)
-                    {
-                        using (var cmd = new SqlCommand("SP_GetSizeWiseArticleInfo", connection))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@UnitID", articleDetails.UNIT_ID);
-                            cmd.Parameters.AddWithValue("@ArtNo", articleDetails.ART_NO);
-                            cmd.Parameters.AddWithValue("@Color", articleDetails.COLOR);
-                            cmd.Parameters.AddWithValue("@CategoryID", articleDetails.CATEGORY_ID);
-                            cmd.Parameters.AddWithValue("@Price", articleDetails.PRICE);
-
-                            using (var reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    sizes.Add(new Sizes
-                                    {
-                                        ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                        Size = reader["SIZE"] != DBNull.Value ? Convert.ToInt32(reader["SIZE"]) : 0,
-                                        OrderNo = reader["ORDER_NO"] != DBNull.Value ? reader["ORDER_NO"].ToString() : string.Empty
-                                    });
-                                }
-                            }
-                        }
-
-                        articleDetails.Sizes = sizes;
-                    }
+                                    IsComponent = reader["IsComponent"] != DBNull.Value && Convert.ToBoolean(reader["IsComponent"]),
+                                    ComponentArticleID = reader["ComponentArticleID"] != DBNull.Value ? Convert.ToInt32(reader["ComponentArticleID"]) : 0,
 
                     if (articleDetails != null)
                     {

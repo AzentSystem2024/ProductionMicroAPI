@@ -85,7 +85,7 @@ namespace MicroApi.Controllers
             return res;
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("Delete/{id:int}")]
         public ArticleResponse Delete(int id)
         {
