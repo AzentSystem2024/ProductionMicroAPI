@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Data;
 using MicroApi.Models;
 using MicroApi.Helper;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.DataLayer.Service
@@ -38,10 +39,10 @@ namespace MicroApi.DataLayer.Service
                             {
                                 Group group = new Group
                                 {
-                                    GROUP_ID = !reader.IsDBNull(reader.GetOrdinal("GroupID")) ? reader.GetInt32(reader.GetOrdinal("GroupID")) : 0,
-                                    GROUP_NAME = !reader.IsDBNull(reader.GetOrdinal("GroupName")) ? reader.GetString(reader.GetOrdinal("GroupName")) : string.Empty,
-                                    GROUP_SUPER_ID = !reader.IsDBNull(reader.GetOrdinal("ParentGroupID")) ? reader.GetInt32(reader.GetOrdinal("ParentGroupID")) : 0,
-                                    GROUP_LEVEL = !reader.IsDBNull(reader.GetOrdinal("GroupLevel")) ? reader.GetInt32(reader.GetOrdinal("GroupLevel")) : 0
+                                    GroupID = !reader.IsDBNull(reader.GetOrdinal("GroupId")) ? reader.GetInt32(reader.GetOrdinal("GroupId")) : 0,
+                                    GroupName = !reader.IsDBNull(reader.GetOrdinal("Groupname")) ? reader.GetString(reader.GetOrdinal("Groupname")) : string.Empty,
+                                    GroupSuperID = !reader.IsDBNull(reader.GetOrdinal("ParentGroupId")) ? reader.GetInt32(reader.GetOrdinal("ParentGroupId")) : 0,
+                                    GroupLevel = !reader.IsDBNull(reader.GetOrdinal("Grouplevel")) ? reader.GetInt32(reader.GetOrdinal("Grouplevel")) : 0
                                 };
 
                                 response.Data.Add(group);

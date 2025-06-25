@@ -33,10 +33,10 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@CODE", distributor.CODE);
                                 cmd.Parameters.AddWithValue("@DISTRIBUTOR_NAME", distributor.DISTRIBUTOR_NAME);
                                 cmd.Parameters.AddWithValue("@ADDRESS", distributor.ADDRESS);
-                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID.HasValue && distributor.COUNTRY_ID > 0 ? distributor.COUNTRY_ID : (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID.HasValue && distributor.STATE_ID > 0 ? distributor.STATE_ID : (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID.HasValue && distributor.DISTRICT_ID > 0 ? distributor.DISTRICT_ID : (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID.HasValue && distributor.CITY_ID > 0 ? distributor.CITY_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
+                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
+                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
+                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID); 
                                 cmd.Parameters.AddWithValue("@TELEPHONE", distributor.TELEPHONE ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@FAX", distributor.FAX ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
@@ -52,7 +52,8 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@ZONE_ID", distributor.ZONE_ID);
                                 cmd.Parameters.AddWithValue("@LOGIN_NAME", distributor.LOGIN_NAME);
                                 cmd.Parameters.AddWithValue("@LOGIN_PASSWORD", distributor.LOGIN_PASSWORD);
-                                cmd.Parameters.AddWithValue("@PARENT_ID", distributor.PARENT_ID);
+                                // cmd.Parameters.AddWithValue("@PARENT_ID", distributor.PARENT_ID);
+                                cmd.Parameters.AddWithValue("@PARENT_ID", distributor.PARENT_ID > 0 ? distributor.PARENT_ID : 0);
 
                                 object insertedId = cmd.ExecuteScalar();
                                 distributorId = insertedId != null ? Convert.ToInt32(insertedId) : 0;
@@ -130,10 +131,10 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@CODE", distributor.CODE);
                                 cmd.Parameters.AddWithValue("@DISTRIBUTOR_NAME", distributor.DISTRIBUTOR_NAME);
                                 cmd.Parameters.AddWithValue("@ADDRESS", distributor.ADDRESS);
-                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID.HasValue && distributor.COUNTRY_ID > 0 ? distributor.COUNTRY_ID : (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID.HasValue && distributor.STATE_ID > 0 ? distributor.STATE_ID : (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID.HasValue && distributor.DISTRICT_ID > 0 ? distributor.DISTRICT_ID : (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID.HasValue && distributor.CITY_ID > 0 ? distributor.CITY_ID : (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
+                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
+                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
+                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID);
                                 cmd.Parameters.AddWithValue("@TELEPHONE", distributor.TELEPHONE ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@FAX", distributor.FAX ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
@@ -240,6 +241,7 @@ namespace MicroApi.DataLayer.Service
                                     ID = Convert.ToInt32(reader["ID"]),
                                     CODE = reader["CODE"]?.ToString(),
                                     DISTRIBUTOR_NAME = reader["DISTRIBUTOR_NAME"]?.ToString(),
+                                    DISTRIBUTOR_TYPE = reader["DISTRIBUTOR_TYPE"]?.ToString(),
                                     ADDRESS = reader["ADDRESS"]?.ToString(),
                                     COUNTRY_ID = reader["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COUNTRY_ID"]) : 0,
                                     STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
@@ -365,6 +367,8 @@ namespace MicroApi.DataLayer.Service
                                     ID = Convert.ToInt32(reader["ID"]),
                                     CODE = reader["CODE"]?.ToString(),
                                     DISTRIBUTOR_NAME = reader["DISTRIBUTOR_NAME"]?.ToString(),
+                                    DISTRIBUTOR_TYPE = reader["DISTRIBUTOR_TYPE"]?.ToString(),
+                                    // PARENT_DISTRIBUTOR_NAME = reader["PARENT_DISTRIBUTOR_NAME"]?.ToString(),
                                     ADDRESS = reader["ADDRESS"]?.ToString(),
                                     COUNTRY_ID = reader["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COUNTRY_ID"]) : 0,
                                     STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,

@@ -1,0 +1,14 @@
+﻿using MicroApi.Models;
+
+namespace MicroApi.DataLayer.Interface
+{
+    public interface IACTransactionsService
+    {
+        JournalResponse InsertJournal(JournalHeader journal);
+        JournalResponse UpdateJournal(JournalUpdateHeader header);
+        JournalListResponse GetJournalVoucherList();
+        JournalResponse GetJournalById(int id);
+
+
+    }
+}

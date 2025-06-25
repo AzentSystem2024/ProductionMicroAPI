@@ -5,11 +5,10 @@
         public string CODE { get; set; }
         public string DISTRIBUTOR_NAME { get; set; }
         public string ADDRESS { get; set; }
-
-        public int? COUNTRY_ID { get; set; }
-        public int? STATE_ID { get; set; }
-        public int? DISTRICT_ID { get; set; }
-        public int? CITY_ID { get; set; }
+        public int COUNTRY_ID { get; set; }
+        public int STATE_ID { get; set; }
+        public int DISTRICT_ID { get; set; }
+        public int CITY_ID { get; set; }
         public string TELEPHONE { get; set; }
         public string FAX { get; set; }
         public string MOBILE { get; set; }
@@ -35,13 +34,15 @@
         public int ID { get; set; }
         public string CODE { get; set; }
         public string DISTRIBUTOR_NAME { get; set; }
+        //public string? PARENT_DISTRIBUTOR_NAME { get; set; }
+        public string DISTRIBUTOR_TYPE { get; set; }
         public string ADDRESS { get; set; }
-        public int? COUNTRY_ID { get; set; }          
+        public int COUNTRY_ID { get; set; }          
         public bool IS_INACTIVE { get; set; }
-        public int? STATE_ID { get; set; }
+        public int STATE_ID { get; set; }
         public string? STATE_NAME { get; set; }
-        public int? DISTRICT_ID { get; set; }
-        public int? CITY_ID { get; set; }
+        public int DISTRICT_ID { get; set; }
+        public int CITY_ID { get; set; }
         public string TELEPHONE { get; set; }
         public string FAX { get; set; }
         public string MOBILE { get; set; }

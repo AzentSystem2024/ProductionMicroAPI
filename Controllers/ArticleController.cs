@@ -4,7 +4,7 @@ using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 
-namespace ProductionMicroApi.Controllers
+namespace MicroApi.Controllers
 {
     [Route("api/article")]
     [ApiController]
@@ -53,12 +53,12 @@ namespace ProductionMicroApi.Controllers
 
         [HttpPost]
         [Route("Select/{id:int}")]
-        public ArticleResponse Select(int id)
+        public ArticleResponse Select(int id, int Unit_id, string Art_no, string Color, int CategoryId, float Price)
         {
             ArticleResponse res = new ArticleResponse();
             try
             {
-                res = _articleService.GetArticleById(id);
+                res = _articleService.GetArticleById(id, Unit_id, Art_no, Color, CategoryId, Price);
             }
             catch (Exception ex)
             {
