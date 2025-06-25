@@ -142,7 +142,7 @@ namespace MicroApi.Service
         }
 
 
-        public ArticleResponse GetArticleById(int id,int Unit_id, string Art_no, string Color, int CategoryId, float Price)
+        public ArticleResponse GetArticleById(int id, int Unit_id, string Art_no, string Color, int CategoryId, float Price)
         {
             ArticleResponse res = new ArticleResponse();
             ArticleUpdate articleDetails = null;
@@ -180,8 +180,7 @@ namespace MicroApi.Service
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
                                     COLOR = reader["COLOR"] != DBNull.Value ? reader["COLOR"].ToString() : string.Empty,
                                     SIZE = reader["SIZE"] != DBNull.Value ? reader["SIZE"].ToString() : string.Empty,
-                                    // PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
-                                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["PRICE"]) : 0,
+                                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
                                     PACK_QTY = reader["PACK_QTY"] != DBNull.Value ? Convert.ToInt32(reader["PACK_QTY"]) : 0,
                                     PART_NO = reader["PART_NO"] != DBNull.Value ? reader["PART_NO"].ToString() : string.Empty,
                                     ALIAS_NO = reader["ALIAS_NO"] != DBNull.Value ? reader["ALIAS_NO"].ToString() : string.Empty,
@@ -192,8 +191,43 @@ namespace MicroApi.Service
                                     NEW_ARRIVAL_DAYS = reader["NEW_ARRIVAL_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NEW_ARRIVAL_DAYS"]) : 0,
                                     NEXT_SERIAL = reader["NEXT_SERIAL"] != DBNull.Value ? Convert.ToInt32(reader["NEXT_SERIAL"]) : 0,
                                     IMAGE_NAME = reader["IMAGE_NAME"] != DBNull.Value ? reader["IMAGE_NAME"].ToString() : string.Empty,
-                                    IsComponent = reader["IsComponent"] != DBNull.Value && Convert.ToBoolean(reader["IsComponent"]),
-                                    ComponentArticleID = reader["ComponentArticleID"] != DBNull.Value ? Convert.ToInt32(reader["ComponentArticleID"]) : 0,
+                                    IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
+                                    COMPONENT_ARTICLE_ID = reader["COMPONENT_ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPONENT_ARTICLE_ID"]) : (int?)null,
+                                    ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NO"].ToString() : string.Empty,
+                                    ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NAME"].ToString() : string.Empty
+                                };
+                            }
+                        }
+                    }
+
+                    // Fetch size-wise article information
+                    if (articleDetails != null)
+                    {
+                        using (var cmd = new SqlCommand("SP_GetSizeWiseArticleInfo", connection))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@UnitID", articleDetails.UNIT_ID);
+                            cmd.Parameters.AddWithValue("@ArtNo", articleDetails.ART_NO);
+                            cmd.Parameters.AddWithValue("@Color", articleDetails.COLOR);
+                            cmd.Parameters.AddWithValue("@CategoryID", articleDetails.CATEGORY_ID);
+                            cmd.Parameters.AddWithValue("@Price", articleDetails.PRICE);
+
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    sizes.Add(new Sizes
+                                    {
+                                        ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                        Size = reader["SIZE"] != DBNull.Value ? reader["SIZE"].ToString() : string.Empty,
+                                        OrderNo = reader["ORDER_NO"] != DBNull.Value ? reader["ORDER_NO"].ToString() : string.Empty
+                                    });
+                                }
+                            }
+                        }
+
+                        articleDetails.Sizes = sizes;
+                    }
 
                     if (articleDetails != null)
                     {
@@ -266,8 +300,7 @@ namespace MicroApi.Service
                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
                     COLOR = reader["COLOR"] != DBNull.Value ? reader["COLOR"].ToString() : string.Empty,
                     SIZE = reader["SIZE"] != DBNull.Value ? reader["SIZE"].ToString() : string.Empty,
-                    //PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
-                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["PRICE"]) : 0,
+                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
                     PACK_QTY = reader["PACK_QTY"] != DBNull.Value ? Convert.ToInt32(reader["PACK_QTY"]) : 0,
                     PART_NO = reader["PART_NO"] != DBNull.Value ? reader["PART_NO"].ToString() : string.Empty,
                     ALIAS_NO = reader["ALIAS_NO"] != DBNull.Value ? reader["ALIAS_NO"].ToString() : string.Empty,
