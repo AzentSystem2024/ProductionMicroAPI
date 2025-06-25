@@ -59,6 +59,7 @@
         public string SupplierName { get; set; }
         public bool IS_COMPONENT { get; set; }
         public int? COMPONENT_ARTICLE_ID { get; set; }
+        public string ComponentArticleNo { get; set; }
         public string ComponentArticleName { get; set; }
         public DateTime CreatedDate { get; set; }
         public List<Sizes> Sizes { get; set; }

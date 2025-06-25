@@ -85,7 +85,7 @@ namespace MicroApi.DataLayer.Service
                         NAME = Convert.ToString(reader["DESCRIPTION"]),
                         IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
                         SIZES = new List<int>(),
-                        PACKING = new List<Packing>()
+                        PACKING = new List<PackingMaster>()
                     };
                     reader.Close();
 
@@ -120,7 +120,7 @@ namespace MicroApi.DataLayer.Service
                     var packTbl = new DataTable();
                     packTbl.Load(packCmd.ExecuteReader());
 
-                    var packings = new Dictionary<string, Packing>();
+                    var packings = new Dictionary<string, PackingMaster>();
 
                     foreach (DataRow row in packTbl.Rows)
                     {
@@ -128,7 +128,7 @@ namespace MicroApi.DataLayer.Service
 
                         if (!packings.ContainsKey(packName))
                         {
-                            packings[packName] = new Packing
+                            packings[packName] = new PackingMaster
                             {
                                 NAME = packName,
                                 ISEXPORT = Convert.ToBoolean(row["IS_EXPORT"]),

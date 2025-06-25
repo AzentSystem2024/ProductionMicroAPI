@@ -4,7 +4,7 @@ using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 
-namespace ProductionMicroApi.Controllers
+namespace MicroApi.Controllers
 {
     [Route("api/article")]
     [ApiController]
@@ -85,7 +85,7 @@ namespace ProductionMicroApi.Controllers
             return res;
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("Delete/{id:int}")]
         public ArticleResponse Delete(int id)
         {

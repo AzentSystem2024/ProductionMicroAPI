@@ -20,7 +20,7 @@
         public int pairQty { get; set; }
     }
 
-    public class Packing
+    public class PackingMaster
     {
         public string NAME { get; set; }
         public bool ISEXPORT { get; set; }
@@ -36,7 +36,7 @@
         public string NAME { get; set; }
         public bool? IS_INACTIVE { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
-        public List<Packing> PACKING { get; set; } = new List<Packing>();
+        public List<PackingMaster> PACKING { get; set; } = new List<PackingMaster>();
     }
 
     public class CategoryResponse
@@ -51,7 +51,7 @@
         public string DESCRIPTION { get; set; }
         public bool IS_INACTIVE { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
-        public List<Packing> PACKING { get; set; } = new List<Packing>();
+        public List<PackingMaster> PACKING { get; set; } = new List<PackingMaster>();
     }
     public class ArticleCategoryResponse
     {
@@ -65,7 +65,7 @@
         public string DESCRIPTION { get; set; } = string.Empty;
         public bool IS_INACTIVE { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
-        public List<Packing> PACKING { get; set; } = new List<Packing>();
+        public List<PackingMaster> PACKING { get; set; } = new List<PackingMaster>();
     }
       public class PackingSummary
     {

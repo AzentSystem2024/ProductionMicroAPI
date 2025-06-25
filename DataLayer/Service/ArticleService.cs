@@ -191,7 +191,10 @@ namespace MicroApi.Service
                                     NEW_ARRIVAL_DAYS = reader["NEW_ARRIVAL_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NEW_ARRIVAL_DAYS"]) : 0,
                                     NEXT_SERIAL = reader["NEXT_SERIAL"] != DBNull.Value ? Convert.ToInt32(reader["NEXT_SERIAL"]) : 0,
                                     IMAGE_NAME = reader["IMAGE_NAME"] != DBNull.Value ? reader["IMAGE_NAME"].ToString() : string.Empty,
-                                    IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"])
+                                    IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
+                                    COMPONENT_ARTICLE_ID = reader["COMPONENT_ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPONENT_ARTICLE_ID"]) : (int?)null,
+                                    ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NO"].ToString() : string.Empty,
+                                    ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NAME"].ToString() : string.Empty
                                 };
                             }
                         }
