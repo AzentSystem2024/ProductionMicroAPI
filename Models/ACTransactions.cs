@@ -59,6 +59,8 @@
         public string? PARTY_NAME { get; set; }
         public string? REF_NO { get; set; }
         public int? TRANS_TYPE { get; set; }
+        public int? TRANS_STATUS { get; set; }
+         public bool? IS_APPROVED { get; set; }
         public string? NARRATION { get; set; }
         public int? USER_ID { get; set; }
         public string? CHEQUE_NO { get; set; }
@@ -139,5 +141,10 @@
         public List<JournalListDetail> DETAILS { get; set; }
     }
 
-
+    public class VoucherResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public string VoucherNo { get; set; }
+    }
 }

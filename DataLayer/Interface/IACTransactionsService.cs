@@ -8,6 +8,8 @@ namespace MicroApi.DataLayer.Interface
         JournalResponse UpdateJournal(JournalUpdateHeader header);
         JournalListResponse GetJournalVoucherList();
         JournalResponse GetJournalById(int id);
+        VoucherResponse GetLastVoucherNo();
+        JournalResponse DeleteJournal(int id);
 
 
     }

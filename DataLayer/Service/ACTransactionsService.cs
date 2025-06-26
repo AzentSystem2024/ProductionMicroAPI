@@ -129,7 +129,6 @@ namespace MicroApi.DataLayer.Service
             cmd.Parameters.AddWithValue(name, value ?? DBNull.Value);
         }
 
-        // 🔧 Parses dd-MM-yyyy string or returns DBNull.Value
         private static object ParseDate(string? dateStr)
         {
             return DateTime.TryParseExact(dateStr, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt)
@@ -170,6 +169,7 @@ namespace MicroApi.DataLayer.Service
                             PARTY_NAME = @PARTY_NAME,
                             NARRATION = @NARRATION,
                             TRANS_TYPE = @TRANS_TYPE,
+                            TRANS_STATUS = @TRANS_STATUS,
                             CHEQUE_NO = @CHEQUE_NO,
                             CHEQUE_DATE = @CHEQUE_DATE,
                             BANK_NAME = @BANK_NAME,
@@ -186,6 +186,8 @@ namespace MicroApi.DataLayer.Service
                             PAY_TYPE_ID = @PAY_TYPE_ID,
                             PAY_HEAD_ID = @PAY_HEAD_ID
                         WHERE TRANS_ID = @TRANS_ID";
+                            int transStatus = (header.IS_APPROVED == true) ? 5 : (header.TRANS_STATUS ?? 1);
+
 
                             using (var headerCmd = new SqlCommand(updateHeaderSql, connection, tx))
                             {
@@ -195,15 +197,16 @@ namespace MicroApi.DataLayer.Service
                                 headerCmd.Parameters.AddWithValue("@PARTY_NAME", (object?)header.PARTY_NAME ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@NARRATION", (object?)header.NARRATION ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@TRANS_TYPE", header.TRANS_TYPE ?? (object)DBNull.Value);
+                                headerCmd.Parameters.AddWithValue("@TRANS_STATUS", transStatus);
                                 headerCmd.Parameters.AddWithValue("@CHEQUE_NO", (object?)header.CHEQUE_NO ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@CHEQUE_DATE", (object?)header.CHEQUE_DATE ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@BANK_NAME", (object?)header.BANK_NAME ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@RECON_DATE", (object?)header.RECON_DATE ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@IS_PASSED", header.IS_PASSED);
-                                headerCmd.Parameters.AddWithValue("@PARTY_ID", header.PARTY_ID);
+                                headerCmd.Parameters.AddWithValue("@IS_PASSED", (object?)header.IS_PASSED ?? DBNull.Value);
+                                headerCmd.Parameters.AddWithValue("@PARTY_ID", (object?)header.PARTY_ID ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@PARTY_REF_NO", (object?)header.PARTY_REF_NO ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@SCHEDULE_NO", header.SCHEDULE_NO ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@IS_CLOSED", header.IS_CLOSED);
+                                headerCmd.Parameters.AddWithValue("@IS_CLOSED", (object?)header.IS_CLOSED ?? DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@VERIFY_USER_ID", header.VERIFY_USER_ID ?? (object)DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@APPROVE1_USER_ID", header.APPROVE1_USER_ID ?? (object)DBNull.Value);
                                 headerCmd.Parameters.AddWithValue("@APPROVE2_USER_ID", header.APPROVE2_USER_ID ?? (object)DBNull.Value);
@@ -247,9 +250,9 @@ namespace MicroApi.DataLayer.Service
                                     // ➕ Insert
                                     string insertSql = @"
                                 INSERT INTO TB_AC_TRANS_DETAIL
-                                (TRANS_ID, SL_NO, BILL_NO, HEAD_ID, REMARKS, DR_AMOUNT, CR_AMOUNT, ADD_TIME)
+                                (TRANS_ID, SL_NO, BILL_NO, HEAD_ID, REMARKS, DR_AMOUNT, CR_AMOUNT)
                                 VALUES
-                                (@TRANS_ID, @SL_NO, @BILL_NO, @LEDGE_CODE, @PARTICULARS, @DEBIT_AMOUNT, @CREDIT_AMOUNT, GETDATE())";
+                                (@TRANS_ID, @SL_NO, @BILL_NO, @LEDGE_CODE, @PARTICULARS, @DEBIT_AMOUNT, @CREDIT_AMOUNT)";
 
                                     using (var cmd = new SqlCommand(insertSql, connection, tx))
                                     {
@@ -267,7 +270,7 @@ namespace MicroApi.DataLayer.Service
 
                             tx.Commit();
                             res.flag = 1;
-                            res.Message = "Journal updated successfully.";
+                            res.Message = "Success";
                         }
                         catch (Exception ex1)
                         {
@@ -433,9 +436,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
                                         JOURNAL_NO = reader["VOUCHER_NO"]?.ToString(),
-                                        TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value
-                                            ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("yyyy-MM-dd")
-                                            : null,
+                                        TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("yyyy-MM-dd"): null,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
@@ -450,6 +451,7 @@ namespace MicroApi.DataLayer.Service
                                     SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : (int?)null,
                                     BILL_NO = reader["BILL_NO"]?.ToString(),
                                     LEDGE_CODE = reader["LEDGE_CODE"]?.ToString(),
+                                    LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     PARTICULARS = reader["PARTICULARS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
                                     CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0
@@ -479,7 +481,77 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public VoucherResponse GetLastVoucherNo()
+        {
+            VoucherResponse res = new VoucherResponse();
 
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                SELECT TOP 1 VOUCHER_NO 
+                FROM TB_AC_TRANS_HEADER 
+                WHERE TRANS_TYPE = 4 
+                ORDER BY TRANS_ID DESC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        res.flag = 1;
+                        res.VoucherNo = result != null ? result.ToString() : "";
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.VoucherNo = "";
+            }
+
+            return res;
+        }
+        public JournalResponse DeleteJournal(int id)
+        {
+            JournalResponse res = new JournalResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == System.Data.ConnectionState.Closed)
+                        connection.Open();
+
+                    string procedureName = "SP_TB_AC_TRANS_HEADER_DETAIL";
+
+                    using (var cmd = new SqlCommand(procedureName, connection))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@ID", id);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+
+                    }
+
+                }
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
 
 
 
