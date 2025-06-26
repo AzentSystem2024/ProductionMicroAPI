@@ -138,6 +138,8 @@
         public string REF_NO { get; set; }
         public int TRANS_TYPE { get; set; }
         public string NARRATION { get; set; }
+        public bool IS_APPROVED { get; set; }
+
         public List<JournalListDetail> DETAILS { get; set; }
     }
 

@@ -441,6 +441,7 @@ namespace MicroApi.DataLayer.Service
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
                                         NARRATION = reader["NARRATION"]?.ToString(),
+                                        IS_APPROVED = reader["TRANS_STATUS"] != DBNull.Value && Convert.ToInt32(reader["TRANS_STATUS"]) == 5,
                                         DETAILS = new List<JournalListDetail>()
                                     };
                                 }
