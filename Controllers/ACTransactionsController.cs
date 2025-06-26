@@ -122,6 +122,26 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("approve")]
+        public JournalResponse UpdateApprovalStatus(ApprovalRequest request)
+        {
+            JournalResponse res = new JournalResponse();
+
+            try
+            {
+                res = _journalService.JournalApproval(request.TRANS_ID, request.IS_APPROVED ?? false);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = null;
+            }
+
+            return res;
+        }
+
 
     }
 }
