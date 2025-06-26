@@ -38,6 +38,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.Parameters.AddWithValue("@DISTRICT_ID", districtId);
                 }
+               
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);

@@ -114,9 +114,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("insert")]
-        public UserMenuResponse Insert(UserRole objuserrole)
+        public UserRoleResponse Insert(UserRole objuserrole)
         {
-            UserMenuResponse res = new UserMenuResponse();
+            UserRoleResponse res = new UserRoleResponse();
 
             string apiKey = "";
             Int32 intUserID = 1;
@@ -145,14 +145,14 @@ namespace MicroApi.Controllers
             {
                 Int32 UserroleID = _Service.Insert(objuserrole, intUserID);
 
-                res.Flag = 1;
-                res.Message = "Success";
+                res.flag = 1;
+                res.message = "Success";
                 //res.Data = _Service.GetItems(UserroleID);
             }
             catch (Exception ex)
             {
-                res.Flag = 0;
-                res.Message = ex.Message;
+                res.flag = 0;
+                res.message = ex.Message;
                 return res;
             }
 
