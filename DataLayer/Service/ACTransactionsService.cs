@@ -93,7 +93,7 @@ namespace MicroApi.DataLayer.Service
                         AddParam(detailCmd, "@COMPANY_ID", input.COMPANY_ID);
                         AddParam(detailCmd, "@STORE_ID", input.STORE_ID);
                         AddParam(detailCmd, "@SL_NO", detail.SL_NO);
-                        AddParam(detailCmd, "@HEAD_ID", detail.LEDGE_CODE);
+                        AddParam(detailCmd, "@HEAD_ID", detail.LEDGER_CODE);
                         AddParam(detailCmd, "@DR_AMOUNT", detail.DEBIT_AMOUNT);
                         AddParam(detailCmd, "@CR_AMOUNT", detail.CREDIT_AMOUNT);
                         AddParam(detailCmd, "@REMARKS", detail.PARTICULARS);
@@ -359,7 +359,7 @@ namespace MicroApi.DataLayer.Service
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : (int?)null,
                                     BILL_NO = reader["BILL_NO"]?.ToString(),
-                                    LEDGE_CODE = reader["LEDGE_CODE"]?.ToString(),
+                                    LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     PARTICULARS = reader["PARTICULARS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
@@ -434,7 +434,7 @@ namespace MicroApi.DataLayer.Service
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : (int?)null,
                                     BILL_NO = reader["BILL_NO"]?.ToString(),
-                                    LEDGE_CODE = reader["LEDGE_CODE"]?.ToString(),
+                                    LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     PARTICULARS = reader["PARTICULARS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,

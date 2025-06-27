@@ -23,13 +23,11 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.Parameters.AddWithValue("@NAME", vName);
 
-                // Add parameter for STATE_NAME (filtered by country)
                 if (vName == "STATE_NAME")
                 {
                     cmd.Parameters.AddWithValue("@COUNTRY_ID", countryId);
                 }
 
-                // Add parameter for DISTRICT_NAME (filtered by state)
                 if (vName == "DISTRICT_NAME")
                 {
                     cmd.Parameters.AddWithValue("@STATE_ID", stateId);

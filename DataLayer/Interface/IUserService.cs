@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         UserResponse Insert(User user);
         UserResponse Update(UserUpdate user);
         UserSelectResponse GetUserById(int id);
-        UserListResponse GetLogList(int? id = null);
+        UserListResponse GetUserList();
 
         UserResponse DeleteUserData(int id);
 

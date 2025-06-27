@@ -73,7 +73,7 @@ namespace MicroApi.Controllers
             UserListResponse res = new UserListResponse();
             try
             {
-                res = _userService.GetLogList();
+                res = _userService.GetUserList();
 
             }
             catch (Exception ex)

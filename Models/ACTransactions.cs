@@ -40,7 +40,7 @@
     {
         public int? SL_NO { get; set; }
         public string BILL_NO { get; set; }
-        public string LEDGE_CODE { get; set; }
+        public string LEDGER_CODE { get; set; }
         public string? LEDGER_NAME { get; set; }
         public string PARTICULARS { get; set; }
         public decimal DEBIT_AMOUNT { get; set; }
@@ -141,7 +141,7 @@
         public int ID { get; set; }
         public int? SL_NO { get; set; }
         public string BILL_NO { get; set; }
-        public string LEDGE_CODE { get; set; }
+        public string LEDGER_CODE { get; set; }
         public string LEDGER_NAME { get; set; }
         public string PARTICULARS { get; set; }
         public decimal DEBIT_AMOUNT { get; set; }
