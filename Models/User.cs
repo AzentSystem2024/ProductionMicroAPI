@@ -54,6 +54,8 @@
         public DateTime? DOB { get; set; }
         public string EMAIL { get; set; }
         public bool IS_INACTIVE { get; set; }
+        public List<int> COMPANY_ID { get; set; }
+
     }
     public class UserListResponse
     {

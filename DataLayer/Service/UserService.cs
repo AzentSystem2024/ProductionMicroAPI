@@ -152,6 +152,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@USER_ROLE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@DOB", DBNull.Value);
                         cmd.Parameters.AddWithValue("@EMAIL", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
@@ -183,15 +184,15 @@ namespace MicroApi.DataLayer.Service
                                          ID = Convert.ToInt32(reader["ID"]),
                                          USER_NAME = reader["USER_NAME"]?.ToString(),
                                         LOGIN_NAME = reader["LOGIN_NAME"]?.ToString(),
-                                        PASSWORD = reader["PASSWORD"]?.ToString(),
+                                        PASSWORD = decryptedPwd,
                                         WHATSAPP_NO = reader["WHATSAPP_NO"]?.ToString(),
                                         MOBILE = reader["MOBILE"]?.ToString(),
                                         USER_ROLE = reader["USER_ROLE"]?.ToString(),
                                         DOB = reader["DOB"] != DBNull.Value ? Convert.ToDateTime(reader["DOB"]) : (DateTime?)null,
                                         EMAIL = reader["EMAIL"]?.ToString(),
-                                        IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
-                                        //Companies = new List<UserCompanyMapping>() 
-                                    };
+                                        IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"]),
+                                        COMPANY_ID = reader["COMPANY_ID"]?.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries) .Select(s => int.TryParse(s, out var val) ? val : 0) .Where(id => id > 0) .ToList(),
+                                     };
                                 }
 
                                 res.Data.Add(user);
@@ -241,6 +242,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@USER_ROLE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@DOB", DBNull.Value);
                         cmd.Parameters.AddWithValue("@EMAIL", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
@@ -258,7 +260,9 @@ namespace MicroApi.DataLayer.Service
                                     USER_ROLE = reader["USER_ROLE"]?.ToString() ?? "",
                                     DOB = reader["DOB"] != DBNull.Value ? Convert.ToDateTime(reader["DOB"]) : (DateTime?)null,
                                     EMAIL = reader["EMAIL"]?.ToString() ?? "",
-                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"]),
+                                    COMPANY_ID = reader["COMPANY_ID"]?.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries).Select(s => int.TryParse(s, out var val) ? val : 0).Where(id => id > 0).ToList(),
+
                                 };
 
                                 res.Data.Add(user);
