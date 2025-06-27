@@ -69,7 +69,7 @@ namespace MicroApi.DataLayer.Service
                         if (reader.Read())
                         {
                             headerId = Convert.ToInt32(reader["TRANS_ID"]);
-                            journalNo = reader["JOURNAL_NO"]?.ToString();
+                            journalNo = reader["VOUCHER_NO"]?.ToString();
                         }
                         else throw new Exception("No data returned from journal header insert.");
                     }
@@ -93,7 +93,7 @@ namespace MicroApi.DataLayer.Service
                         AddParam(detailCmd, "@COMPANY_ID", input.COMPANY_ID);
                         AddParam(detailCmd, "@STORE_ID", input.STORE_ID);
                         AddParam(detailCmd, "@SL_NO", detail.SL_NO);
-                        AddParam(detailCmd, "@HEAD_ID", detail.LEDGE_CODE);
+                        AddParam(detailCmd, "@HEAD_ID", detail.LEDGER_CODE);
                         AddParam(detailCmd, "@DR_AMOUNT", detail.DEBIT_AMOUNT);
                         AddParam(detailCmd, "@CR_AMOUNT", detail.CREDIT_AMOUNT);
                         AddParam(detailCmd, "@REMARKS", detail.PARTICULARS);
@@ -123,7 +123,6 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
-        // 🔧 Helper to handle nulls gracefully
         private static void AddParam(SqlCommand cmd, string name, object? value)
         {
             cmd.Parameters.AddWithValue(name, value ?? DBNull.Value);
@@ -154,123 +153,103 @@ namespace MicroApi.DataLayer.Service
                     {
                         try
                         {
-                            // ✅ Parse TRANS_DATE (assumes dd-MM-yyyy format)
                             DateTime parsedDate;
                             if (!DateTime.TryParseExact(header.TRANS_DATE, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
-                            {
                                 throw new Exception("Invalid TRANS_DATE format. Expected dd-MM-yyyy.");
-                            }
 
-                            // ✅ Update Header
-                            string updateHeaderSql = @"
-                        UPDATE TB_AC_TRANS_HEADER
-                        SET TRANS_DATE = @DATE,
-                            REF_NO = @REF_NO,
-                            PARTY_NAME = @PARTY_NAME,
-                            NARRATION = @NARRATION,
-                            TRANS_TYPE = @TRANS_TYPE,
-                            TRANS_STATUS = @TRANS_STATUS,
-                            CHEQUE_NO = @CHEQUE_NO,
-                            CHEQUE_DATE = @CHEQUE_DATE,
-                            BANK_NAME = @BANK_NAME,
-                            RECON_DATE = @RECON_DATE,
-                            IS_PASSED = @IS_PASSED,
-                            PARTY_ID = @PARTY_ID,
-                            PARTY_REF_NO = @PARTY_REF_NO,
-                            SCHEDULE_NO = @SCHEDULE_NO,
-                            IS_CLOSED = @IS_CLOSED,
-                            VERIFY_USER_ID = @VERIFY_USER_ID,
-                            APPROVE1_USER_ID = @APPROVE1_USER_ID,
-                            APPROVE2_USER_ID = @APPROVE2_USER_ID,
-                            APPROVE3_USER_ID = @APPROVE3_USER_ID,
-                            PAY_TYPE_ID = @PAY_TYPE_ID,
-                            PAY_HEAD_ID = @PAY_HEAD_ID
-                        WHERE TRANS_ID = @TRANS_ID";
-                            int transStatus = (header.IS_APPROVED == true) ? 5 : (header.TRANS_STATUS ?? 1);
+                            // 🔁 Prepare DataTable for UDT
+                            DataTable detailTable = new DataTable();
+                            detailTable.Columns.Add("ID", typeof(int));
+                            detailTable.Columns.Add("TRANS_ID", typeof(int));
+                            detailTable.Columns.Add("COMPANY_ID", typeof(int));
+                            detailTable.Columns.Add("STORE_ID", typeof(string));
+                            detailTable.Columns.Add("SL_NO", typeof(int));
+                            detailTable.Columns.Add("HEAD_ID", typeof(int));
+                            detailTable.Columns.Add("DR_AMOUNT", typeof(decimal));
+                            detailTable.Columns.Add("CR_AMOUNT", typeof(decimal));
+                            detailTable.Columns.Add("REMARKS", typeof(string));
+                            detailTable.Columns.Add("OPP_HEAD_ID", typeof(int));
+                            detailTable.Columns.Add("OPP_HEAD_NAME", typeof(string));
+                            detailTable.Columns.Add("BILL_NO", typeof(string));
+                            detailTable.Columns.Add("JOB_ID", typeof(int));
+                            detailTable.Columns.Add("CREATED_STORE_ID", typeof(string));
+                            detailTable.Columns.Add("STORE_AUTO_ID", typeof(string));
 
-
-                            using (var headerCmd = new SqlCommand(updateHeaderSql, connection, tx))
-                            {
-                                headerCmd.Parameters.AddWithValue("@TRANS_ID", header.TRANS_ID);
-                                headerCmd.Parameters.AddWithValue("@DATE", parsedDate);
-                                headerCmd.Parameters.AddWithValue("@REF_NO", (object?)header.REF_NO ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@PARTY_NAME", (object?)header.PARTY_NAME ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@NARRATION", (object?)header.NARRATION ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@TRANS_TYPE", header.TRANS_TYPE ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@TRANS_STATUS", transStatus);
-                                headerCmd.Parameters.AddWithValue("@CHEQUE_NO", (object?)header.CHEQUE_NO ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@CHEQUE_DATE", (object?)header.CHEQUE_DATE ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@BANK_NAME", (object?)header.BANK_NAME ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@RECON_DATE", (object?)header.RECON_DATE ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@IS_PASSED", (object?)header.IS_PASSED ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@PARTY_ID", (object?)header.PARTY_ID ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@PARTY_REF_NO", (object?)header.PARTY_REF_NO ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@SCHEDULE_NO", header.SCHEDULE_NO ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@IS_CLOSED", (object?)header.IS_CLOSED ?? DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@VERIFY_USER_ID", header.VERIFY_USER_ID ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@APPROVE1_USER_ID", header.APPROVE1_USER_ID ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@APPROVE2_USER_ID", header.APPROVE2_USER_ID ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@APPROVE3_USER_ID", header.APPROVE3_USER_ID ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@PAY_TYPE_ID", header.PAY_TYPE_ID ?? (object)DBNull.Value);
-                                headerCmd.Parameters.AddWithValue("@PAY_HEAD_ID", header.PAY_HEAD_ID ?? (object)DBNull.Value);
-
-                                headerCmd.ExecuteNonQuery();
-                            }
-
-                            // 🔁 Update or Insert Details
                             foreach (var d in header.DETAILS)
                             {
-                                if (d.ID > 0)
-                                {
-                                    // 🔄 Update
-                                    string updateSql = @"
-                                UPDATE TB_AC_TRANS_DETAIL
-                                SET BILL_NO = @BILL_NO,
-                                    SL_NO = @SL_NO,
-                                    HEAD_ID = @LEDGE_CODE,
-                                    REMARKS = @PARTICULARS,
-                                    DR_AMOUNT = @DEBIT_AMOUNT,
-                                    CR_AMOUNT = @CREDIT_AMOUNT
-                                WHERE ID = @ID";
+                                detailTable.Rows.Add(
+                                    d.ID,
+                                    header.TRANS_ID,
+                                    d.COMPANY_ID ?? 0,
+                                    d.STORE_ID ?? 0,
+                                    d.SL_NO ?? 0,
+                                    d.HEAD_ID ?? 0,
+                                    d.DEBIT_AMOUNT ?? 0,
+                                    d.CREDIT_AMOUNT ?? 0,
+                                    d.REMARKS ?? "",
+                                    d.OPP_HEAD_ID ?? (object)DBNull.Value,
+                                    d.OPP_HEAD_NAME ?? "",
+                                    d.BILL_NO ?? "",
+                                    d.JOB_ID ?? (object)DBNull.Value,
+                                    d.CREATED_STORE_ID ?? 0,
+                                    d.STORE_AUTO_ID ?? 0
+                                );
+                            }
 
-                                    using (var cmd = new SqlCommand(updateSql, connection, tx))
-                                    {
-                                        cmd.Parameters.AddWithValue("@ID", d.ID);
-                                        cmd.Parameters.AddWithValue("@SL_NO", d.SL_NO ?? (object)DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@BILL_NO", (object?)d.BILL_NO ?? DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@LEDGE_CODE", (object?)d.LEDGE_CODE ?? DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@PARTICULARS", (object?)d.PARTICULARS ?? DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@DEBIT_AMOUNT", d.DEBIT_AMOUNT);
-                                        cmd.Parameters.AddWithValue("@CREDIT_AMOUNT", d.CREDIT_AMOUNT);
-                                        cmd.ExecuteNonQuery();
-                                    }
-                                }
-                                else
-                                {
-                                    // ➕ Insert
-                                    string insertSql = @"
-                                INSERT INTO TB_AC_TRANS_DETAIL
-                                (TRANS_ID, SL_NO, BILL_NO, HEAD_ID, REMARKS, DR_AMOUNT, CR_AMOUNT)
-                                VALUES
-                                (@TRANS_ID, @SL_NO, @BILL_NO, @LEDGE_CODE, @PARTICULARS, @DEBIT_AMOUNT, @CREDIT_AMOUNT)";
+                            // 🔁 Call SP
+                            using (var cmd = new SqlCommand("SP_TB_AC_TRANS_HEADER_DETAIL", connection, tx))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue("@ID", header.TRANS_ID);
+                                cmd.Parameters.AddWithValue("@ACTION", 2);
+                                cmd.Parameters.AddWithValue("@COMPANY_ID", header.COMPANY_ID);
+                                cmd.Parameters.AddWithValue("@STORE_ID", header.STORE_ID);
+                                cmd.Parameters.AddWithValue("@FIN_ID", header.FIN_ID);
+                                cmd.Parameters.AddWithValue("@TRANS_TYPE", header.TRANS_TYPE);
+                                cmd.Parameters.AddWithValue("@TRANS_DATE", parsedDate);
+                                cmd.Parameters.AddWithValue("@TRANS_STATUS", header.TRANS_STATUS);
+                                cmd.Parameters.AddWithValue("@VOUCHER_NO", header.JOURNAL_NO ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@RECEIPT_NO", header.RECEIPT_NO ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@IS_DIRECT", header.IS_DIRECT ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@REF_NO", (object?)header.REF_NO ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@CHEQUE_NO", (object?)header.CHEQUE_NO ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@CHEQUE_DATE", (object?)header.CHEQUE_DATE ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@BANK_NAME", (object?)header.BANK_NAME ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@RECON_DATE", (object?)header.RECON_DATE ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PDC_ID", header.PDC_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@IS_CLOSED", header.IS_CLOSED ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PARTY_ID", header.PARTY_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PARTY_NAME", (object?)header.PARTY_NAME ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PARTY_REF_NO", (object?)header.PARTY_REF_NO ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@IS_PASSED", header.IS_PASSED ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@SCHEDULE_NO", header.SCHEDULE_NO ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@NARRATION", (object?)header.NARRATION ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@CREATE_USER_ID", header.CREATE_USER_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@VERIFY_USER_ID", header.VERIFY_USER_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", header.APPROVE1_USER_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", header.APPROVE2_USER_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", header.APPROVE3_USER_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PAY_TYPE_ID", header.PAY_TYPE_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PAY_HEAD_ID", header.PAY_HEAD_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@ADD_TIME", DateTime.Now);
+                                cmd.Parameters.AddWithValue("@CREATED_STORE_ID", header.CREATED_STORE_ID ?? (object)DBNull.Value);
 
-                                    using (var cmd = new SqlCommand(insertSql, connection, tx))
+                                var tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", detailTable);
+                                tvp.SqlDbType = SqlDbType.Structured;
+
+                                using (var reader = cmd.ExecuteReader())
+                                {
+                                    if (reader.Read())
                                     {
-                                        cmd.Parameters.AddWithValue("@TRANS_ID", header.TRANS_ID);
-                                        cmd.Parameters.AddWithValue("@SL_NO", d.SL_NO ?? (object)DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@BILL_NO", (object?)d.BILL_NO ?? DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@LEDGE_CODE", (object?)d.LEDGE_CODE ?? DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@PARTICULARS", (object?)d.PARTICULARS ?? DBNull.Value);
-                                        cmd.Parameters.AddWithValue("@DEBIT_AMOUNT", d.DEBIT_AMOUNT);
-                                        cmd.Parameters.AddWithValue("@CREDIT_AMOUNT", d.CREDIT_AMOUNT);
-                                        cmd.ExecuteNonQuery();
+                                        //res.TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]);
+                                        //res.JOURNAL_NO = reader["JOURNAL_NO"].ToString();
+                                        res.flag = 1;
+                                        res.Message = "Success";
                                     }
                                 }
                             }
 
                             tx.Commit();
-                            res.flag = 1;
-                            res.Message = "Success";
                         }
                         catch (Exception ex1)
                         {
@@ -289,7 +268,6 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-
 
 
         public JournalListResponse GetJournalVoucherList()
@@ -319,7 +297,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", 0);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 0);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 4);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
@@ -365,7 +343,12 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_DATE = reader["TRANS_DATE"]?.ToString(),
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         REF_NO = reader["REF_NO"]?.ToString(),
-                                        TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
+                                        TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value
+                                    ? Convert.ToInt32(reader["TRANS_TYPE"])
+                                    : 0,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value
+                                    ? Convert.ToInt32(reader["TRANS_STATUS"])
+                                    : 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         DETAILS = new List<JournalListDetail>()
                                     };
@@ -376,7 +359,7 @@ namespace MicroApi.DataLayer.Service
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : (int?)null,
                                     BILL_NO = reader["BILL_NO"]?.ToString(),
-                                    LEDGE_CODE = reader["LEDGE_CODE"]?.ToString(),
+                                    LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     PARTICULARS = reader["PARTICULARS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
@@ -451,7 +434,7 @@ namespace MicroApi.DataLayer.Service
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : (int?)null,
                                     BILL_NO = reader["BILL_NO"]?.ToString(),
-                                    LEDGE_CODE = reader["LEDGE_CODE"]?.ToString(),
+                                    LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     PARTICULARS = reader["PARTICULARS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
@@ -553,6 +536,71 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+
+        public JournalResponse JournalApproval(int transId, bool isApproved)
+        {
+            JournalResponse res = new JournalResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (var tx = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            using (var cmd = new SqlCommand("SP_TB_AC_TRANS_HEADER_DETAIL", connection, tx))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+
+                                cmd.Parameters.AddWithValue("@ID", transId);
+                                cmd.Parameters.AddWithValue("@ACTION", 4);
+                                cmd.Parameters.AddWithValue("@IS_APPROVED", isApproved ? 1 : 0);
+
+                                using (var reader = cmd.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        res.flag = 1;
+                                        res.Message = "Updated";
+                                        res.Data = new ApprovalRequest
+                                        {
+                                            TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                            IS_APPROVED = isApproved
+                                        };
+                                    }
+                                    else
+                                    {
+                                        res.flag = 0;
+                                        res.Message = "No record found to update.";
+                                        res.Data = null;
+                                    }
+                                }
+                            }
+
+                            tx.Commit();
+                        }
+                        catch (Exception ex1)
+                        {
+                            tx.Rollback();
+                            res.flag = 0;
+                            res.Message = "Transaction Failed: " + ex1.Message;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Database Error: " + ex.Message;
+            }
+
+            return res;
+        }
+
 
 
 

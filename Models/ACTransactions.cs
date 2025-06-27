@@ -40,7 +40,7 @@
     {
         public int? SL_NO { get; set; }
         public string BILL_NO { get; set; }
-        public string LEDGE_CODE { get; set; }
+        public string LEDGER_CODE { get; set; }
         public string? LEDGER_NAME { get; set; }
         public string PARTICULARS { get; set; }
         public decimal DEBIT_AMOUNT { get; set; }
@@ -78,25 +78,42 @@
         public int? APPROVE3_USER_ID { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? CREATED_STORE_ID { get; set; }
+        public int? RECEIPT_NO { get; set; }
+        public int? IS_DIRECT { get; set; }
+        public int? PDC_ID { get; set; }
+        public int? CREATE_USER_ID { get; set; }
+        public string? ADD_TIME { get; set; }
         public List<JournalUpdateDetail> DETAILS { get; set; }
     }
 
     public class JournalUpdateDetail
     {
         public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public int? SL_NO { get; set; }
-        public string? BILL_NO { get; set; }
-        public string? LEDGE_CODE { get; set; }
-        public string? PARTICULARS { get; set; }
+        public int? HEAD_ID { get; set; }
         public decimal? DEBIT_AMOUNT { get; set; }
         public decimal? CREDIT_AMOUNT { get; set; }
+        public string? REMARKS { get; set; }
+        public int? OPP_HEAD_ID { get; set; }
+        public string? OPP_HEAD_NAME { get; set; }
+        public string? BILL_NO { get; set; }
+        public int? JOB_ID { get; set; }
+        public int? CREATED_STORE_ID { get; set; }
+        public int? STORE_AUTO_ID { get; set; }
     }
 
     public class JournalResponse
     {
         public int flag { get; set; }
         public string Message { get; set; }
-        public JournalViewHeader Data { get; set; }
+      
+        public object Data { get; set; }
 
     }
 
@@ -115,6 +132,7 @@
         public string REF_NO { get; set; }
         public int TRANS_TYPE { get; set; }
         public string NARRATION { get; set; }
+        public int TRANS_STATUS { get; set; }
         public List<JournalListDetail> DETAILS { get; set; }
     }
 
@@ -123,7 +141,7 @@
         public int ID { get; set; }
         public int? SL_NO { get; set; }
         public string BILL_NO { get; set; }
-        public string LEDGE_CODE { get; set; }
+        public string LEDGER_CODE { get; set; }
         public string LEDGER_NAME { get; set; }
         public string PARTICULARS { get; set; }
         public decimal DEBIT_AMOUNT { get; set; }
@@ -149,4 +167,26 @@
         public string Message { get; set; }
         public string VoucherNo { get; set; }
     }
+    public class JournalDetailUDT
+    {
+        public int COMPANY_ID { get; set; }
+        public int STORE_ID { get; set; }
+        public int? SL_NO { get; set; }
+        public int? HEAD_ID { get; set; }
+        public decimal? DR_AMOUNT { get; set; }
+        public decimal? CR_AMOUNT { get; set; }
+        public string? REMARKS { get; set; }
+        public int? OPP_HEAD_ID { get; set; }
+        public string? OPP_HEAD_NAME { get; set; }
+        public string? BILL_NO { get; set; }
+        public int? JOB_ID { get; set; }
+        public int? CREATED_STORE_ID { get; set; }
+        public int? STORE_AUTO_ID { get; set; }
+    }
+    public class ApprovalRequest
+    {
+        public int TRANS_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
+    }
+
 }
