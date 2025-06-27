@@ -83,6 +83,7 @@
         public string PackingName { get; set; }
         public string Type { get; set; }
         public string Brand { get; set; }
+        public int UnitId { get; set; }
         public string Unit { get; set; }
         public string PartNo { get; set; }
         public string AliasNo { get; set; }

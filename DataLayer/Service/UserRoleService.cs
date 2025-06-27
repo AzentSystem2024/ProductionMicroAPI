@@ -290,63 +290,142 @@ namespace MicroApi.Services
                 throw ex;
             }
         }
-        public UserRole GetItems(int id)
+        public UserRoleResponse GetUserRoleById(int userId, int roleId)
         {
-            UserRole userRole = new UserRole();
-            List<UserMenuList> userMenuLists = new List<UserMenuList>();
-            try
+            var response = new UserRoleResponse { flag = 1, message = "Success", data = new List<UserRole>() };
+
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_TB_USER_ROLE", connection))
             {
-                // Assuming id is an integer. If it's a string, make sure to properly escape it.
-                string strSQL = "SELECT ID,UserRole,IsInactive,LastModifiedTime " +
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@UserId", userId);
+                cmd.Parameters.AddWithValue("@Action", 0);
 
-
-                "FROM TB_USER_ROLES " +
-
-                "WHERE TB_USER_ROLES.ID = " + id; // Assuming id is an integer. If it's a string, use parameters to avoid SQL injection.
-
-
-                DataTable tbl = ADO.GetDataTable(strSQL, "Customer");
-                if (tbl.Rows.Count > 0)
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    DataRow dr = tbl.Rows[0];
-
-
-                    userRole.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : (int?)null;
-                    userRole.UserRoles = dr["UserRole"] != DBNull.Value ? Convert.ToString(dr["UserRole"]) : null;
-                    userRole.IsInactive = dr["IsInactive"] != DBNull.Value ? Convert.ToBoolean(dr["IsInactive"]) : (bool?)null;
-                    userRole.LastModifiedTime = dr["LastModifiedTime"] != DBNull.Value ? Convert.ToDateTime(dr["LastModifiedTime"]) : (DateTime?)null;
-
-
-                    strSQL = "SELECT TB_USER_ROLE_MENUS.MenuId, " +
-                              "TB_MENUS.MenuName " +
-                              "FROM TB_USER_ROLE_MENUS " +
-                            "LEFT JOIN TB_MENUS ON TB_USER_ROLE_MENUS.MenuId = TB_MENUS.ID " +
-                            "WHERE TB_USER_ROLE_MENUS.UserRoleID = " + id;
-
-
-                    DataTable tblDetail = ADO.GetDataTable(strSQL, "CustomerConfiguration");
-                    if (tblDetail.Rows.Count > 0)
+                    var ds = new DataSet();
+                    try
                     {
-                        foreach (DataRow dr1 in tblDetail.Rows)
+                        da.Fill(ds);
+                        if (ds.Tables.Count == 0)
                         {
-                            userMenuLists.Add(new UserMenuList
+                            response.flag = 0;
+                            response.message = "No data returned from the stored procedure.";
+                            return response;
+                        }
+
+                        var combinedTable = ds.Tables[0];
+                        var userRoles = new Dictionary<int, UserRole>();
+
+                        foreach (DataRow row in combinedTable.Rows)
+                        {
+                            if (row["ID"] != DBNull.Value)
                             {
+                                int currentRoleId = Convert.ToInt32(row["ID"]);
+                                if (!userRoles.ContainsKey(currentRoleId))
+                                {
+                                    userRoles[currentRoleId] = new UserRole
+                                    {
+                                        ID = currentRoleId,
+                                        UserRoles = row["UserRole"].ToString(),
+                                        LastModifiedTime = row["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["LastModifiedTime"]).ToLocalTime(),
+                                        CreateTime = row["CreatedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["CreatedTime"]).ToLocalTime(),
+                                        IsInactive = row["IsInactive"] != DBNull.Value && Convert.ToBoolean(row["IsInactive"]),
+                                        usermenulist = new List<UserMenuList>()
+                                    };
+                                }
 
-                                MenuId = Convert.ToInt32(dr1["MenuId"]),
-                                MenuName = Convert.ToString(dr1["MenuName"])
+                                userRoles[currentRoleId].usermenulist.Add(new UserMenuList
+                                {
+                                    MenuId = Convert.ToInt32(row["menuid"]),
+                                    MenuName = row["menuname"].ToString(),
+                                    MenuOrder = row["menuorder"].ToString(),
+                                    Selected = row["Selected"] != DBNull.Value && Convert.ToBoolean(row["Selected"])
+                                });
+                            }
+                        }
 
-                            });
+                        // Filter the user roles to only include the one with the specified roleId
+                        if (userRoles.ContainsKey(roleId))
+                        {
+                            response.data.Add(userRoles[roleId]);
+                        }
+                        else
+                        {
+                            response.flag = 0;
+                            response.message = "No user role found with the specified ID.";
                         }
                     }
-                    userRole.usermenulist = userMenuLists;
-
+                    catch (Exception ex)
+                    {
+                        response.flag = 0;
+                        response.message = ex.Message;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
 
-            }
-            return userRole;
+            return response;
         }
+
+        //public UserRole GetItems(int id)
+        //{
+        //    UserRole userRole = new UserRole();
+        //    List<UserMenuList> userMenuLists = new List<UserMenuList>();
+        //    try
+        //    {
+        //        // Assuming id is an integer. If it's a string, make sure to properly escape it.
+        //        string strSQL = "SELECT ID,UserRole,IsInactive,LastModifiedTime " +
+
+
+        //        "FROM TB_USER_ROLES " +
+
+        //        "WHERE TB_USER_ROLES.ID = " + id; // Assuming id is an integer. If it's a string, use parameters to avoid SQL injection.
+
+
+        //        DataTable tbl = ADO.GetDataTable(strSQL, "Customer");
+        //        if (tbl.Rows.Count > 0)
+        //        {
+        //            DataRow dr = tbl.Rows[0];
+
+
+        //            userRole.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : (int?)null;
+        //            userRole.UserRoles = dr["UserRole"] != DBNull.Value ? Convert.ToString(dr["UserRole"]) : null;
+        //            userRole.IsInactive = dr["IsInactive"] != DBNull.Value ? Convert.ToBoolean(dr["IsInactive"]) : (bool?)null;
+        //            userRole.LastModifiedTime = dr["LastModifiedTime"] != DBNull.Value ? Convert.ToDateTime(dr["LastModifiedTime"]) : (DateTime?)null;
+
+
+        //            strSQL = "SELECT TB_USER_ROLE_MENUS.MenuId, " +
+        //                      "TB_MENUS.MenuName " +
+        //                      "FROM TB_USER_ROLE_MENUS " +
+        //                    "LEFT JOIN TB_MENUS ON TB_USER_ROLE_MENUS.MenuId = TB_MENUS.ID " +
+        //                    "WHERE TB_USER_ROLE_MENUS.UserRoleID = " + id;
+
+
+        //            DataTable tblDetail = ADO.GetDataTable(strSQL, "CustomerConfiguration");
+        //            if (tblDetail.Rows.Count > 0)
+        //            {
+        //                foreach (DataRow dr1 in tblDetail.Rows)
+        //                {
+        //                    userMenuLists.Add(new UserMenuList
+        //                    {
+
+        //                        MenuId = Convert.ToInt32(dr1["MenuId"]),
+        //                        MenuName = Convert.ToString(dr1["MenuName"]),
+        //                        MenuOrder = Convert.ToString(dr1["MenuOrder"]),
+        //                        Selected =  Convert.ToBoolean(dr1["Selected"])
+
+        //                    });
+        //                }
+        //            }
+        //            userRole.usermenulist = userMenuLists;
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    return userRole;
+        //}
     }
 }

@@ -114,9 +114,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("insert")]
-        public UserRoleResponse Insert(UserRole objuserrole)
+        public UserMenuResponse Insert(UserRole objuserrole)
         {
-            UserRoleResponse res = new UserRoleResponse();
+            UserMenuResponse res = new UserMenuResponse();
 
             string apiKey = "";
             Int32 intUserID = 1;
@@ -145,14 +145,14 @@ namespace MicroApi.Controllers
             {
                 Int32 UserroleID = _Service.Insert(objuserrole, intUserID);
 
-                res.flag = 1;
-                res.message = "Success";
+                res.Flag = 1;
+                res.Message = "Success";
                 //res.Data = _Service.GetItems(UserroleID);
             }
             catch (Exception ex)
             {
-                res.flag = 0;
-                res.message = ex.Message;
+                res.Flag = 0;
+                res.Message = ex.Message;
                 return res;
             }
 
@@ -258,50 +258,22 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("select/{id:int}")]
-        public UserRole GetItems(int id)
+        public UserRoleResponse Select(int id)
         {
-            UserRole res = new UserRole();
-
-            string apiKey = "";
-            Int32 intUserID = 1;
-
-            /*
-            foreach (var header in Request.Headers)
-            {
-                if (header.Key == "x-api-key")
-                    apiKey = header.Value.ToList()[0];
-            }
-
-
-
-            User_DAL userDAL = new User_DAL();
-            Int32 intUserID = userDAL.GetUserIDWithToken(apiKey);
-            if (intUserID < 1)
-            {
-                res.flag = "0";
-                res.message = "Invalid authorization key";
-                return res;
-            }
-
-            */
-
-
+            UserRoleResponse res = new UserRoleResponse();
             try
             {
-                //res.flag = 1;
-                //res.Message = "Success";
-                res = _Service.GetItems(id);
+                int userId = 1; // Replace with actual user ID retrieval logic
+                res = _Service.GetUserRoleById(userId, id);
             }
             catch (Exception ex)
             {
-                //res.Flag = 0;
-                //res.Message = ex.Message;
-                return res;
+                res.flag = 0;
+                res.message = ex.Message;
             }
-
             return res;
         }
-
+       
 
     }
 }
