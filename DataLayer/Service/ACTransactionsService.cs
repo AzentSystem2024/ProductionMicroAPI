@@ -600,9 +600,8 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        //----------------------------------END JOURNAL VOUCHER-----------------------------------------//
 
-
-
-
+      
     }
 }

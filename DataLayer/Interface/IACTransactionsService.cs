@@ -12,6 +12,5 @@ namespace MicroApi.DataLayer.Interface
         JournalResponse DeleteJournal(int id);
         JournalResponse JournalApproval(int transId, bool isApproved);
 
-
     }
 }
