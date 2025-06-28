@@ -12,11 +12,12 @@ namespace MicroApi.Models
         public bool? IsInactive { get; set; }
         public DateTime? LastModifiedTime { get; set; }
         public DateTime? CreateTime { get; set; }
-        public bool CanAdd { get; set; }
-        public bool CanView { get; set; }
-        public  bool CanEdit { get; set; }
-        public bool CanPrint { get; set; }
-        public bool CanDelete { get; set; }
+        //public bool CanAdd { get; set; }
+        //public bool CanView { get; set; }
+        //public  bool CanEdit { get; set; }
+        //public bool CanApprove { get; set; }
+        //public bool CanPrint { get; set; }
+        //public bool CanDelete { get; set; }
         public List<UserMenuList> usermenulist { get; set; }
     }
     public class UserRoleResponse
@@ -43,6 +44,7 @@ namespace MicroApi.Models
         public bool CanAdd { get; set; }
         public bool CanView { get; set; }
         public bool CanPrint { get; set; }
+        public bool CanApprove { get; set; }
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
     }

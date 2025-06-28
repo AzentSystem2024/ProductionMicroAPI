@@ -67,14 +67,15 @@ namespace MicroApi.Services
                                     MenuId = Convert.ToInt32(row["menuid"]),
                                     MenuName = row["menuname"].ToString(),
                                     MenuOrder = row["menuorder"].ToString(),
-                                    Selected = row["Selected"] != DBNull.Value && Convert.ToBoolean(row["Selected"]),
+                                    Selected = Convert.ToBoolean(row["Selected"]),
                                     CanAdd = row["CanAdd"] != DBNull.Value && Convert.ToBoolean(row["CanAdd"]),
                                     CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),
                                     CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
                                     CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
+                                    CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
                                     CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"])
-                                });
-                         
+                                }); ;
+
                             }
                         }
 
@@ -152,141 +153,113 @@ namespace MicroApi.Services
 
             return response;
         }
-        public int Insert(UserRole userrole, Int32 userID)
+        public int Insert(UserRole userRole, int userID)
         {
-            SqlConnection connection = ADO.GetConnection();
-            SqlTransaction objtrans = connection.BeginTransaction();
-
-            try
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                DataTable tbl = new DataTable();
-
-                tbl.Columns.Add("MenuId", typeof(Int32));
-                //tbl.Columns.Add("MenuName", typeof(string));
-                //tbl.Columns.Add("MenuOrder", typeof(String));
-                //tbl.Columns.Add("Selected", typeof(bool));
-
-                if (userrole.usermenulist != null && userrole.usermenulist.Any())
+                SqlTransaction objTrans = connection.BeginTransaction();
+                try
                 {
+                    DataTable tbl = new DataTable();
+                    tbl.Columns.Add("MenuID", typeof(Int32));
+                    tbl.Columns.Add("CanAdd", typeof(bool));
+                    tbl.Columns.Add("CanView", typeof(bool));
+                    tbl.Columns.Add("CanPrint", typeof(bool));
+                    tbl.Columns.Add("CanEdit", typeof(bool));
+                    tbl.Columns.Add("CanApprove", typeof(bool));
+                    tbl.Columns.Add("CanDelete", typeof(bool));
 
-                    foreach (UserMenuList ur in userrole.usermenulist)
+                    if (userRole.usermenulist != null && userRole.usermenulist.Any())
                     {
-                        DataRow dRow = tbl.NewRow();
-                        dRow["MenuId"] = ur.MenuId;
-                        //dRow["MenuName"] = ur.MenuName;
-                        //dRow["MenuOrder"] = ur.MenuOrder;
-                        //dRow["Selected"] = ur.Selected;
-
-                        tbl.Rows.Add(dRow);
-                        tbl.AcceptChanges();
+                        foreach (UserMenuList ur in userRole.usermenulist)
+                        {
+                            DataRow dRow = tbl.NewRow();
+                            dRow["MenuID"] = ur.MenuId;
+                            dRow["CanAdd"] = ur.CanAdd;
+                            dRow["CanView"] = ur.CanView;
+                            dRow["CanPrint"] = ur.CanPrint;
+                            dRow["CanEdit"] = ur.CanEdit;
+                            dRow["CanApprove"] = ur.CanApprove;
+                            dRow["CanDelete"] = ur.CanDelete;
+                            tbl.Rows.Add(dRow);
+                        }
                     }
-                }
 
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = connection;
-                    cmd.Transaction = objtrans;
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_USER_ROLE", connection, objTrans))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 2);
+                        cmd.Parameters.AddWithValue("@UserRole", userRole.UserRoles);
+                        cmd.Parameters.AddWithValue("@IsInactive", userRole.IsInactive);
+                        cmd.Parameters.AddWithValue("@UserID", userID);
+                        cmd.Parameters.AddWithValue("@MenuInfos", tbl);
 
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "SP_TB_USER_ROLE";
-                    cmd.Parameters.AddWithValue("ACTION", 2);
+                        cmd.ExecuteNonQuery();
+                        objTrans.Commit();
+                    }
 
-                    // cmd.Parameters.AddWithValue("ID", customer.ID);
-                    cmd.Parameters.AddWithValue("UserRole", userrole.UserRoles);
-                    cmd.Parameters.AddWithValue("IsInactive", userrole.IsInactive);
-                    cmd.Parameters.AddWithValue("UserID", userID);
-                    cmd.Parameters.AddWithValue("@CanAdd", userrole.CanAdd);
-                    cmd.Parameters.AddWithValue("@CanView", userrole.CanView);
-                    cmd.Parameters.AddWithValue("@CanPrint", userrole.CanPrint);
-                    cmd.Parameters.AddWithValue("@CanEdit", userrole.CanEdit);
-                    cmd.Parameters.AddWithValue("@CanDelete", userrole.CanDelete);
-
-                    cmd.Parameters.AddWithValue("@MenuIDs", tbl);
-
-                    cmd.ExecuteNonQuery();
-
-                    objtrans.Commit();
-
-                    connection.Close();
                     return 0;
                 }
-            }
-            catch (Exception ex)
-            {
-                objtrans.Rollback();
-                connection.Close();
-                throw ex;
+                catch (Exception ex)
+                {
+                    objTrans.Rollback();
+                    throw ex;
+                }
             }
         }
-        public int Update(UserRole userrole, Int32 userID)
+        public int Update(UserRole userRole, int userID)
         {
-            SqlConnection connection = ADO.GetConnection();
-            SqlTransaction objtrans = connection.BeginTransaction();
-
-            try
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                DataTable tbl = new DataTable();
-
-                tbl.Columns.Add("MenuId", typeof(Int32));
-                tbl.Columns.Add("CanAdd", typeof(bool));
-                tbl.Columns.Add("CanView", typeof(bool));
-                tbl.Columns.Add("CanPrint", typeof(bool));
-                tbl.Columns.Add("CanEdit", typeof(bool));
-                tbl.Columns.Add("CanDelete", typeof(bool));
-                //tbl.Columns.Add("MenuName", typeof(string));
-                //tbl.Columns.Add("MenuOrder", typeof(String));
-                //tbl.Columns.Add("Selected", typeof(bool));
-
-                if (userrole.usermenulist != null && userrole.usermenulist.Any())
+                SqlTransaction objTrans = connection.BeginTransaction();
+                try
                 {
+                    DataTable tbl = new DataTable();
+                    tbl.Columns.Add("MenuID", typeof(int));
+                    tbl.Columns.Add("CanAdd", typeof(bool));
+                    tbl.Columns.Add("CanView", typeof(bool));
+                    tbl.Columns.Add("CanPrint", typeof(bool));
+                    tbl.Columns.Add("CanEdit", typeof(bool));
+                    tbl.Columns.Add("CanApprove", typeof(bool));
+                    tbl.Columns.Add("CanDelete", typeof(bool));
 
-                    foreach (UserMenuList ur in userrole.usermenulist)
+                    if (userRole.usermenulist != null && userRole.usermenulist.Any())
                     {
-                        DataRow dRow = tbl.NewRow();
-                        dRow["MenuId"] = ur.MenuId;
-                        dRow["CanAdd"] = ur.CanAdd;
-                        dRow["CanView"] = ur.CanView;
-                        dRow["CanPrint"] = ur.CanPrint;
-                        dRow["CanEdit"] = ur.CanEdit;
-                        dRow["CanDelete"] = ur.CanDelete;
-                        //dRow["MenuName"] = ur.MenuName;
-                        //dRow["MenuOrder"] = ur.MenuOrder;
-                        //dRow["Selected"] = ur.Selected;
-
-                        tbl.Rows.Add(dRow);
-                        tbl.AcceptChanges();
+                        foreach (UserMenuList ur in userRole.usermenulist)
+                        {
+                            DataRow dRow = tbl.NewRow();
+                            dRow["MenuID"] = ur.MenuId;
+                            dRow["CanAdd"] = ur.CanAdd;
+                            dRow["CanView"] = ur.CanView;
+                            dRow["CanPrint"] = ur.CanPrint;
+                            dRow["CanEdit"] = ur.CanEdit;
+                            dRow["CanApprove"] = ur.CanApprove;
+                            dRow["CanDelete"] = ur.CanDelete;
+                            tbl.Rows.Add(dRow);
+                        }
                     }
-                }
 
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = connection;
-                    cmd.Transaction = objtrans;
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_USER_ROLE", connection, objTrans))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@ID", userRole.ID);
+                        cmd.Parameters.AddWithValue("@UserRole", userRole.UserRoles);
+                        cmd.Parameters.AddWithValue("@IsInactive", userRole.IsInactive);
+                        cmd.Parameters.AddWithValue("@UserID", userID);
+                        cmd.Parameters.AddWithValue("@MenuInfos", tbl);
 
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "SP_TB_USER_ROLE";
-                    cmd.Parameters.AddWithValue("ACTION", 3);
+                        cmd.ExecuteNonQuery();
+                        objTrans.Commit();
+                    }
 
-                    cmd.Parameters.AddWithValue("ID", userrole.ID);
-                    cmd.Parameters.AddWithValue("UserRole", userrole.UserRoles);
-                    cmd.Parameters.AddWithValue("IsInactive", userrole.IsInactive);
-                    cmd.Parameters.AddWithValue("UserID", userID);
-
-                    cmd.Parameters.AddWithValue("@MenuIDs", tbl);
-
-                    cmd.ExecuteNonQuery();
-
-                    objtrans.Commit();
-
-                    connection.Close();
                     return 0;
                 }
-            }
-            catch (Exception ex)
-            {
-                objtrans.Rollback();
-                connection.Close();
-                throw ex;
+                catch (Exception ex)
+                {
+                    objTrans.Rollback();
+                    throw ex;
+                }
             }
         }
         public void DeleteUserRole(int Id, int userID)
