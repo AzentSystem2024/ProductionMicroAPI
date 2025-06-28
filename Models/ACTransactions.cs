@@ -1,6 +1,5 @@
 ﻿namespace MicroApi.Models
 {
-    // Used for Insert
     public class JournalHeader
     {
         public int COMPANY_ID { get; set; }
@@ -188,5 +187,6 @@
         public int TRANS_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
     }
-
+    //-------------------END---------------------------//
+   
 }

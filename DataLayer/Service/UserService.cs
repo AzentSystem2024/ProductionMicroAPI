@@ -303,12 +303,12 @@ namespace MicroApi.DataLayer.Service
                     using (var cmd = new SqlCommand(procedureName, connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 3); 
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
                         cmd.Parameters.AddWithValue("@ID", id);
 
-                        int rowsAffected = cmd.ExecuteNonQuery();
+                        object result = cmd.ExecuteScalar();
 
-                        if (rowsAffected > 0)
+                        if (result != null && int.TryParse(result.ToString(), out int deletedId))
                         {
                             res.flag = 1;
                             res.Message = "Success";
