@@ -333,7 +333,14 @@ namespace MicroApi.Services
                                         MenuId = Convert.ToInt32(row["menuid"]),
                                         MenuName = row["menuname"].ToString(),
                                         MenuOrder = row["menuorder"].ToString(),
-                                        Selected = Convert.ToBoolean(row["Selected"])
+                                        Selected = Convert.ToBoolean(row["Selected"]),
+                                        CanAdd = row["CanAdd"] != DBNull.Value && Convert.ToBoolean(row["CanAdd"]),
+                                        CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),
+                                        CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
+                                        CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
+                                        CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
+                                        CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"])
+                                   
                                     });
                                 }
                             }
