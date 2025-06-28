@@ -67,8 +67,14 @@ namespace MicroApi.Services
                                     MenuId = Convert.ToInt32(row["menuid"]),
                                     MenuName = row["menuname"].ToString(),
                                     MenuOrder = row["menuorder"].ToString(),
-                                    Selected = row["Selected"] != DBNull.Value && Convert.ToBoolean(row["Selected"])
+                                    Selected = row["Selected"] != DBNull.Value && Convert.ToBoolean(row["Selected"]),
+                                    CanAdd = row["CanAdd"] != DBNull.Value && Convert.ToBoolean(row["CanAdd"]),
+                                    CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),
+                                    CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
+                                    CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
+                                    CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"])
                                 });
+                         
                             }
                         }
 
@@ -189,6 +195,11 @@ namespace MicroApi.Services
                     cmd.Parameters.AddWithValue("UserRole", userrole.UserRoles);
                     cmd.Parameters.AddWithValue("IsInactive", userrole.IsInactive);
                     cmd.Parameters.AddWithValue("UserID", userID);
+                    cmd.Parameters.AddWithValue("@CanAdd", userrole.CanAdd);
+                    cmd.Parameters.AddWithValue("@CanView", userrole.CanView);
+                    cmd.Parameters.AddWithValue("@CanPrint", userrole.CanPrint);
+                    cmd.Parameters.AddWithValue("@CanEdit", userrole.CanEdit);
+                    cmd.Parameters.AddWithValue("@CanDelete", userrole.CanDelete);
 
                     cmd.Parameters.AddWithValue("@MenuIDs", tbl);
 
@@ -217,6 +228,11 @@ namespace MicroApi.Services
                 DataTable tbl = new DataTable();
 
                 tbl.Columns.Add("MenuId", typeof(Int32));
+                tbl.Columns.Add("CanAdd", typeof(bool));
+                tbl.Columns.Add("CanView", typeof(bool));
+                tbl.Columns.Add("CanPrint", typeof(bool));
+                tbl.Columns.Add("CanEdit", typeof(bool));
+                tbl.Columns.Add("CanDelete", typeof(bool));
                 //tbl.Columns.Add("MenuName", typeof(string));
                 //tbl.Columns.Add("MenuOrder", typeof(String));
                 //tbl.Columns.Add("Selected", typeof(bool));
@@ -228,6 +244,11 @@ namespace MicroApi.Services
                     {
                         DataRow dRow = tbl.NewRow();
                         dRow["MenuId"] = ur.MenuId;
+                        dRow["CanAdd"] = ur.CanAdd;
+                        dRow["CanView"] = ur.CanView;
+                        dRow["CanPrint"] = ur.CanPrint;
+                        dRow["CanEdit"] = ur.CanEdit;
+                        dRow["CanDelete"] = ur.CanDelete;
                         //dRow["MenuName"] = ur.MenuName;
                         //dRow["MenuOrder"] = ur.MenuOrder;
                         //dRow["Selected"] = ur.Selected;
@@ -290,82 +311,79 @@ namespace MicroApi.Services
                 throw ex;
             }
         }
-        public UserRoleResponse GetUserRoleById(int userId, int roleId)
+        public UserRole GetItems(int id)
         {
-            var response = new UserRoleResponse { flag = 1, message = "Success", data = new List<UserRole>() };
-
-            using (SqlConnection connection = ADO.GetConnection())
-            using (SqlCommand cmd = new SqlCommand("SP_TB_USER_ROLE", connection))
+            UserRole userRole = new UserRole
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                cmd.Parameters.AddWithValue("@Action", 0);
+                usermenulist = new List<UserMenuList>()
+            };
 
-                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_TB_USER_ROLE", connection))
                 {
-                    var ds = new DataSet();
-                    try
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Action", 0); // Action to get user roles
+                    cmd.Parameters.AddWithValue("@ID", id); // Specific user role ID
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
+                        DataSet ds = new DataSet();
                         da.Fill(ds);
-                        if (ds.Tables.Count == 0)
-                        {
-                            response.flag = 0;
-                            response.message = "No data returned from the stored procedure.";
-                            return response;
-                        }
 
-                        var combinedTable = ds.Tables[0];
-                        var userRoles = new Dictionary<int, UserRole>();
-
-                        foreach (DataRow row in combinedTable.Rows)
+                        if (ds.Tables.Count > 0)
                         {
-                            if (row["ID"] != DBNull.Value)
+                            var combinedTable = ds.Tables[0];
+                            var userRoles = new Dictionary<int, UserRole>();
+
+                            foreach (DataRow row in combinedTable.Rows)
                             {
-                                int currentRoleId = Convert.ToInt32(row["ID"]);
-                                if (!userRoles.ContainsKey(currentRoleId))
+                                if (row["ID"] != DBNull.Value)
                                 {
-                                    userRoles[currentRoleId] = new UserRole
+                                    int roleId = Convert.ToInt32(row["ID"]);
+                                    if (!userRoles.ContainsKey(roleId))
                                     {
-                                        ID = currentRoleId,
-                                        UserRoles = row["UserRole"].ToString(),
-                                        LastModifiedTime = row["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["LastModifiedTime"]).ToLocalTime(),
-                                        CreateTime = row["CreatedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["CreatedTime"]).ToLocalTime(),
-                                        IsInactive = row["IsInactive"] != DBNull.Value && Convert.ToBoolean(row["IsInactive"]),
-                                        usermenulist = new List<UserMenuList>()
-                                    };
-                                }
+                                        userRoles[roleId] = new UserRole
+                                        {
+                                            ID = roleId,
+                                            UserRoles = row["UserRole"].ToString(),
+                                            LastModifiedTime = row["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["LastModifiedTime"]).ToLocalTime(),
+                                            CreateTime = row["CreatedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["CreatedTime"]).ToLocalTime(),
+                                            IsInactive = row["IsInactive"] != DBNull.Value && Convert.ToBoolean(row["IsInactive"]),
+                                            usermenulist = new List<UserMenuList>()
+                                        };
+                                    }
 
-                                userRoles[currentRoleId].usermenulist.Add(new UserMenuList
-                                {
-                                    MenuId = Convert.ToInt32(row["menuid"]),
-                                    MenuName = row["menuname"].ToString(),
-                                    MenuOrder = row["menuorder"].ToString(),
-                                    Selected = row["Selected"] != DBNull.Value && Convert.ToBoolean(row["Selected"])
-                                });
+                                    userRoles[roleId].usermenulist.Add(new UserMenuList
+                                    {
+                                        MenuId = Convert.ToInt32(row["menuid"]),
+                                        MenuName = row["menuname"].ToString(),
+                                        MenuOrder = row["menuorder"].ToString(),
+                                        Selected = Convert.ToBoolean(row["Selected"])
+                                    });
+                                }
+                            }
+
+                            // Assuming the ID is valid and exists in the dictionary
+                            if (userRoles.ContainsKey(id))
+                            {
+                                userRole = userRoles[id];
                             }
                         }
-
-                        // Filter the user roles to only include the one with the specified roleId
-                        if (userRoles.ContainsKey(roleId))
-                        {
-                            response.data.Add(userRoles[roleId]);
-                        }
-                        else
-                        {
-                            response.flag = 0;
-                            response.message = "No user role found with the specified ID.";
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        response.flag = 0;
-                        response.message = ex.Message;
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
 
-            return response;
+            return userRole;
         }
+
+
+
 
         //public UserRole GetItems(int id)
         //{
@@ -410,9 +428,7 @@ namespace MicroApi.Services
         //                    {
 
         //                        MenuId = Convert.ToInt32(dr1["MenuId"]),
-        //                        MenuName = Convert.ToString(dr1["MenuName"]),
-        //                        MenuOrder = Convert.ToString(dr1["MenuOrder"]),
-        //                        Selected =  Convert.ToBoolean(dr1["Selected"])
+        //                        MenuName = Convert.ToString(dr1["MenuName"])
 
         //                    });
         //                }

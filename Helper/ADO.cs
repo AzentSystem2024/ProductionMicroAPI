@@ -177,7 +177,30 @@ namespace MicroApi.Helper
             }
             return tbl;
         }
-        
+
+        public static DataTable GetDataTable(string sql, SqlParameter[] parameters)
+        {
+            DataTable table = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection("DefaultConnection"))
+            {
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(table);
+                    }
+                }
+            }
+
+            return table;
+        }
+
         private static string DecryptString(string Value)
         {
 
