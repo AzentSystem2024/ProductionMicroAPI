@@ -49,7 +49,7 @@ namespace MicroApi.Controllers
                     return res;
                 }
                 */
-
+                int userId = 1;
                 res = _Service.GetAllUserRoles(intUserID); // Correctly assign the UserRoleResponse
 
                 res.flag = 1;
@@ -258,22 +258,50 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("select/{id:int}")]
-        public UserRoleResponse Select(int id)
+        public UserRole GetItems(int id)
         {
-            UserRoleResponse res = new UserRoleResponse();
+            UserRole res = new UserRole();
+
+            string apiKey = "";
+            Int32 intUserID = 1;
+
+            /*
+            foreach (var header in Request.Headers)
+            {
+                if (header.Key == "x-api-key")
+                    apiKey = header.Value.ToList()[0];
+            }
+
+
+
+            User_DAL userDAL = new User_DAL();
+            Int32 intUserID = userDAL.GetUserIDWithToken(apiKey);
+            if (intUserID < 1)
+            {
+                res.flag = "0";
+                res.message = "Invalid authorization key";
+                return res;
+            }
+
+            */
+
+
             try
             {
-                int userId = 1; // Replace with actual user ID retrieval logic
-                res = _Service.GetUserRoleById(userId, id);
+                //res.flag = 1;
+                //res.Message = "Success";
+                res = _Service.GetItems(id);
             }
             catch (Exception ex)
             {
-                res.flag = 0;
-                res.message = ex.Message;
+                //res.Flag = 0;
+                //res.Message = ex.Message;
+                return res;
             }
+
             return res;
         }
-       
+
 
     }
 }

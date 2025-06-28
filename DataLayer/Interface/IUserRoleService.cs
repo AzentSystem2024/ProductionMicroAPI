@@ -9,7 +9,6 @@ namespace MicroApi.DataLayer.Interface
         public int Insert(UserRole userrole, Int32 userID);
         public int Update(UserRole userrole, Int32 userID);
         public void DeleteUserRole(int Id, int userID);
-        //public UserRole GetItems(int id);
-        public UserRoleResponse GetUserRoleById(int userId, int roleId);
+        public UserRole GetItems(int id);
     }
 }
