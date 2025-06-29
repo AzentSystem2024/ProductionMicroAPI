@@ -63,9 +63,9 @@
         public string? NARRATION { get; set; }
         public int? USER_ID { get; set; }
         public string? CHEQUE_NO { get; set; }
-        public DateTime? CHEQUE_DATE { get; set; }
+        public string? CHEQUE_DATE { get; set; }
         public string? BANK_NAME { get; set; }
-        public DateTime? RECON_DATE { get; set; }
+        public string? RECON_DATE { get; set; }
         public bool? IS_PASSED { get; set; }
         public int? PARTY_ID { get; set; }
         public string? PARTY_REF_NO { get; set; }

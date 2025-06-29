@@ -87,5 +87,56 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("commit")]
+        public CreditNoteResponse Commit(CreditNoteCommitRequest request)
+        {
+            CreditNoteResponse response = new CreditNoteResponse();
+            try
+            {
+                response = _creditNoteService.CommitCreditNote(request);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("DocNo")]
+        public DocResponse GetLastDocNo()
+        {
+            DocResponse res = new DocResponse();
+
+            try
+            {
+                res = _creditNoteService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public CreditNoteResponse Delete(int id)
+        {
+            CreditNoteResponse res = new CreditNoteResponse();
+            try
+            {
+                res = _creditNoteService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+
     }
 }

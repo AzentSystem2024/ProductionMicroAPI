@@ -6,15 +6,15 @@
             public int? COMPANY_ID { get; set; }
             public int? STORE_ID { get; set; }
             public int? FIN_ID { get; set; }
-            public DateTime? TRANS_DATE { get; set; }
+            public string? TRANS_DATE { get; set; }
             public int? TRANS_STATUS { get; set; }
             public int? RECEIPT_NO { get; set; }
             public int? IS_DIRECT { get; set; }
             public string? REF_NO { get; set; }
             public string? CHEQUE_NO { get; set; }
-            public DateTime? CHEQUE_DATE { get; set; }
+            public string? CHEQUE_DATE { get; set; }
             public string? BANK_NAME { get; set; }
-            public DateTime? RECON_DATE { get; set; }
+            public string? RECON_DATE { get; set; }
             public int? PDC_ID { get; set; }
             public bool? IS_CLOSED { get; set; }
             public int? PARTY_ID { get; set; }
@@ -30,19 +30,21 @@
             public int? APPROVE3_USER_ID { get; set; }
             public int? PAY_TYPE_ID { get; set; }
             public int? PAY_HEAD_ID { get; set; }
-            public DateTime? ADD_TIME { get; set; }
+            public string? ADD_TIME { get; set; }
             public int? CREATED_STORE_ID { get; set; }
-            public int? _ID { get; set; }
             public int? INVOICE_ID { get; set; }
             public string INVOICE_NO { get; set; }
-            public List<CreditNoteDetail> NOTE_DETAIL { get; set; }
+            public int? UNIT_ID { get; set; }
+             public int? DISTRIBUTOR_ID { get; set; }
+
+        public List<CreditNoteDetail> NOTE_DETAIL { get; set; }
         }
         public class CreditNoteDetail
         {
             public int SL_NO { get; set; }
             public int HEAD_ID { get; set; }
             public double AMOUNT { get; set; }
-            public double VAT_AMOUNT { get; set; }
+            public double GST_AMOUNT { get; set; }
             public string REMARKS { get; set; }
     }
 
@@ -58,15 +60,15 @@
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public int? FIN_ID { get; set; }
-        public DateTime? TRANS_DATE { get; set; }
+        public string? TRANS_DATE { get; set; }
         public int? TRANS_STATUS { get; set; }
         public int? RECEIPT_NO { get; set; }
         public int? IS_DIRECT { get; set; }
         public string? REF_NO { get; set; }
         public string? CHEQUE_NO { get; set; }
-        public DateTime? CHEQUE_DATE { get; set; }
+        public string? CHEQUE_DATE { get; set; }
         public string? BANK_NAME { get; set; }
-        public DateTime? RECON_DATE { get; set; }
+        public string? RECON_DATE { get; set; }
         public int? PDC_ID { get; set; }
         public bool? IS_CLOSED { get; set; }
         public int? PARTY_ID { get; set; }
@@ -82,10 +84,13 @@
         public int? APPROVE3_USER_ID { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-        public DateTime? ADD_TIME { get; set; }
+        public string? ADD_TIME { get; set; }
         public int? CREATED_STORE_ID { get; set; }
         public int? INVOICE_ID { get; set; }
         public string? INVOICE_NO { get; set; }
+        public int? UNIT_ID { get; set; }
+        public int? DISTRIBUTOR_ID { get; set; }
+
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
 
@@ -94,21 +99,22 @@
         public int SL_NO { get; set; }
         public int HEAD_ID { get; set; }
         public float AMOUNT { get; set; }
-        public float VAT_AMOUNT { get; set; }
+        public float GST_AMOUNT { get; set; }
         public string REMARKS { get; set; }
     }
     public class CreditNoteListItem
     {
         public int TRANS_ID { get; set; }
         public string TRANS_DATE { get; set; }
-        public string CUSTOMER_NAME { get; set; }
         public string INVOICE_NO { get; set; }
         public int TRANS_TYPE { get; set; }
         public float GROSS_AMOUNT { get; set; }
-        public float VAT_AMOUNT { get; set; }
+        public float GST_AMOUNT { get; set; }
         public float NET_AMOUNT { get; set; }
         public string NARRATION { get; set; }
-        public string REMARKS { get; set; }
+        //public string REMARKS { get; set; }
+        public int UNIT_ID { get; set; }      
+        public int DISTRIBUTOR_ID { get; set; }
 
     }
     public class CreditNoteListResponse
@@ -133,8 +139,30 @@
         public int? INVOICE_ID { get; set; }
         public string INVOICE_NO { get; set; }
         public string NARRATION { get; set; }
-        public string PARTY_NAME { get; set; }
+        public int UNIT_ID { get; set; }           
+        public int DISTRIBUTOR_ID { get; set; }
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
+    }
+    public class CreditNoteCommitRequest
+    {
+        public long TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int STORE_ID { get; set; }
+        public int? INVOICE_ID { get; set; }
+        public string? INVOICE_NO { get; set; }
+        public int? UNIT_ID { get; set; }
+        public int? CREATED_STORE_ID { get; set; }
+        public string? BILL_NO { get; set; }
+        public int? JOB_ID { get; set; }
+        public int? STORE_AUTO_ID { get; set; }
+        public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
+    }
+    public class DocResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int DOC_NO { get; set; }
     }
 }
 
