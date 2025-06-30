@@ -191,7 +191,6 @@ namespace MicroApi.Services
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@UserRole", userRole.UserRoles);
                         cmd.Parameters.AddWithValue("@IsInactive", userRole.IsInactive);
-                        cmd.Parameters.AddWithValue("@IsDeleted", userRole.IsDeleted);
                         cmd.Parameters.AddWithValue("@UserID", userID);
                         cmd.Parameters.AddWithValue("@MenuInfos", tbl);
 

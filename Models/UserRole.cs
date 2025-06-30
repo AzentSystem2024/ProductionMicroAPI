@@ -10,7 +10,6 @@ namespace MicroApi.Models
         public int? ID { get; set; }
         public string UserRoles { get; set; }
         public bool? IsInactive { get; set; }
-        public bool? IsDeleted { get; set; }
         public DateTime? LastModifiedTime { get; set; }
         public DateTime? CreateTime { get; set; }
         //public bool CanAdd { get; set; }
