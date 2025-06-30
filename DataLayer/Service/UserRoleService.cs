@@ -263,39 +263,34 @@ namespace MicroApi.Services
                 }
             }
         }
-        public UserMenuResponse DeleteUserRole(int id)
+        public UserRoleResponse DeleteUserRole(int id)
         {
-            UserMenuResponse res = new UserMenuResponse();
+            UserRoleResponse res = new UserRoleResponse();
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = connection;
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "SP_TB_USER_ROLE";
-                    cmd.Parameters.AddWithValue("@ACTION", 4);
-                    cmd.Parameters.AddWithValue("@ID", id);
-                    //cmd.Parameters.AddWithValue("@UserID", userID);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected == 0)
+                    if (connection.State == ConnectionState.Closed) connection.Open();
+                    using (var cmd = new SqlCommand("SP_TB_USER_ROLE", connection))
                     {
-                        res.Flag = 0;
-                        res.Message = "No rows were affected. The role may not exist or cannot be deleted.";
-                        return res;
-                    }
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "SP_TB_USER_ROLE";
+                        cmd.Parameters.AddWithValue("@ACTION", 4);
+                        cmd.Parameters.AddWithValue("@ID", id);
+                       // cmd.Parameters.AddWithValue("@UserID", userID);
 
-                    res.Flag = 1;
-                    res.Message = "Success";
+                        cmd.ExecuteNonQuery();
+                        res.flag = 1;
+                        res.message = "Success";
+
+                    }                    
                 }
             }
             
             catch (Exception ex)
             {
-                res.Flag = 0;
-                res.Message = ex.Message;
+                res.flag = 0;
+                res.message = ex.Message;
             }
             return res;
         }

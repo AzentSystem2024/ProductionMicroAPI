@@ -209,9 +209,19 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("delete/{id:int}")]
-        public UserMenuResponse Delete(int id)
+        public UserRoleResponse Delete(int id)
         {
-            return _Service.DeleteUserRole(id);
+            UserRoleResponse res = new UserRoleResponse();
+            try
+            {
+                return _Service.DeleteUserRole(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
         }
 
         //public UserMenuResponse Delete(int id)
