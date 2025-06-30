@@ -32,10 +32,11 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@LOGIN_NAME", loginInput.LOGIN_NAME);
                         cmd.Parameters.AddWithValue("@PASSWORD", AzentLibrary.Library.EncryptString(loginInput.PASSWORD ?? ""));
                         cmd.Parameters.AddWithValue("@COMPANY_ID", loginInput.COMPANY_ID ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FINANCIAL_YEAR_ID", loginInput.FINANCIAL_YEAR_ID ?? (object)DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
-                            // Result 1: FLAG and MESSAGE
+                            // First result: flag + message
                             if (reader.Read())
                             {
                                 response.flag = reader["FLAG"] != DBNull.Value ? Convert.ToInt32(reader["FLAG"]) : 0;
@@ -44,31 +45,25 @@ namespace MicroApi.DataLayer.Service
 
                             if (response.flag == 1)
                             {
-                                // Skip 2nd result set (user info)
-                                if (reader.NextResult()) { } // skip user info
+                                // Second result: user info
+                                if (reader.NextResult() && reader.Read())
+                                {
+                                    response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0;
+                                    response.USER_NAME = reader["USER_NAME"]?.ToString();
+                                    response.FINANCIAL_YEAR_ID = reader["FINANCIAL_YEAR_ID"] != DBNull.Value ? Convert.ToInt32(reader["FINANCIAL_YEAR_ID"]) : 0;
+                                }
 
-                                // Result 3: Company list + USER_ID/USER_NAME
+                                // Third result: companies
                                 if (reader.NextResult())
                                 {
-                                    bool isFirstRow = true;
-
                                     while (reader.Read())
                                     {
-                                        if (isFirstRow)
-                                        {
-                                            response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0;
-                                            response.USER_NAME = reader["USER_NAME"]?.ToString();
-                                            isFirstRow = false;
-                                        }
-
                                         response.Companies.Add(new CompanyList
                                         {
                                             COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                             COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
                                         });
                                     }
-
-                                    response.FINANCIAL_YEAR_ID = 1;
                                 }
                             }
                         }
@@ -83,7 +78,6 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-
 
 
     }

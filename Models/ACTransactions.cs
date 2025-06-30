@@ -235,7 +235,7 @@
         public int SL_NO { get; set; }
         public int HEAD_ID { get; set; }
         public double AMOUNT { get; set; }
-        public double VAT_AMOUNT { get; set; }
+        public double GST_AMOUNT { get; set; }
         public string REMARKS { get; set; }
     }
     public class DebitNoteResponse
@@ -302,5 +302,36 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public List<DebitNoteListItem> Data { get; set; }
+    }
+    public class DebitNoteSelectedView
+    {
+        public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public DateTime? TRANS_DATE { get; set; }
+        public int? TRANS_STATUS { get; set; }
+        public int? INVOICE_ID { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string NARRATION { get; set; }
+        public int SUPP_ID { get; set; }
+        public float NET_AMOUNT { get; set; }
+        public string DOC_NO { get; set; }
+        public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
+    }
+    public class AC_DebitNoteSelect
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<DebitNoteSelectedView> Data { get; set; }
+    }
+    public class DebitNoteCommitRequest
+    {
+        public int TRANS_ID { get; set; }
+        public bool IS_APPROVED { get; set; }
+    }
+    public class DocNoResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int DOC_NO { get; set; }
     }
 }

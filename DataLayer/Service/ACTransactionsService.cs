@@ -681,7 +681,7 @@ namespace MicroApi.DataLayer.Service
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.VAT_AMOUNT, item.REMARKS ?? string.Empty);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty);
                         }
 
                         SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
@@ -767,7 +767,7 @@ namespace MicroApi.DataLayer.Service
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.VAT_AMOUNT, item.REMARKS ?? string.Empty);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty);
                         }
 
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
@@ -883,6 +883,199 @@ namespace MicroApi.DataLayer.Service
             }
 
             return response;
+        }
+        public AC_DebitNoteSelect GetDebitNoteById(int id)
+        {
+            AC_DebitNoteSelect response = new AC_DebitNoteSelect
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<DebitNoteSelectedView>()
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_AC_DEBIT_NOTE", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 36); 
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            DebitNoteSelectedView header = null;
+
+                            while (reader.Read())
+                            {
+                                if (header == null)
+                                {
+                                    header = new DebitNoteSelectedView
+                                    {
+                                        TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                        TRANS_TYPE = 38,
+                                        TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]): null,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value? Convert.ToInt32(reader["TRANS_STATUS"]): (int?)null,
+                                        INVOICE_ID = reader["INVOICE_ID"] != DBNull.Value? Convert.ToInt32(reader["INVOICE_ID"]): (int?)null,
+                                        INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
+                                        NARRATION = reader["NARRATION"]?.ToString(),
+                                        SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value? Convert.ToSingle(reader["NET_AMOUNT"]): 0,
+                                        DOC_NO = reader["VOUCHER_NO"] != DBNull.Value? Convert.ToString(reader["VOUCHER_NO"]): null,
+                                        NOTE_DETAIL = new List<DebitNoteDetail>()
+                                    };
+                                }
+
+                                header.NOTE_DETAIL.Add(new DebitNoteDetail
+                                {
+                                    SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : 0,
+                                    HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
+                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
+                                    GST_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
+                                    REMARKS = reader["REMARKS"]?.ToString()
+                                });
+                            }
+
+                            if (header != null)
+                            {
+                                response.Data.Add(header);
+                                response.flag = 1;
+                                response.Message = "Success";
+                            }
+                            else
+                            {
+                                response.flag = 0;
+                                response.Message = "No debit note found.";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+
+        public DebitNoteResponse CommitDebitNote(DebitNoteCommitRequest request)
+        {
+            DebitNoteResponse response = new DebitNoteResponse();
+
+            try
+            {
+                if (request.IS_APPROVED && request.TRANS_ID > 0)
+                {
+                    using (SqlConnection con = ADO.GetConnection())
+                    {
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
+
+                        using (SqlCommand cmd = new SqlCommand("SP_AC_DEBIT_NOTE", con))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@ACTION", 3);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+
+                            cmd.ExecuteNonQuery();
+
+                            response.flag = 1;
+                            response.Message = "Debit note committed successfully.";
+                        }
+                    }
+                }
+                else
+                {
+                    response.flag = 0;
+                    response.Message = "Invalid TRANS_ID or IS_APPROVED is false.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+        public DocNoResponse GetLastDocNo()
+        {
+            DocNoResponse res = new DocNoResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                    SELECT TOP 1 VOUCHER_NO 
+                    FROM TB_AC_TRANS_HEADER 
+                    WHERE TRANS_TYPE = 36 
+                    ORDER BY TRANS_ID DESC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        res.flag = 1;
+                        res.DOC_NO = result != null ? Convert.ToInt32(result) : 0;
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        public DebitNoteResponse Delete(int id)
+        {
+            DebitNoteResponse res = new DebitNoteResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == System.Data.ConnectionState.Closed)
+                        connection.Open();
+
+                    string procedureName = "SP_AC_DEBIT_NOTE";
+
+                    using (var cmd = new SqlCommand(procedureName, connection))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 4);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+
+                    }
+
+                }
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
         }
 
     }

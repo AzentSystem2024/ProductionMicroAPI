@@ -197,7 +197,75 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("debitselect/{id:int}")]
+        public AC_DebitNoteSelect GetDebitNoteById(int id)
+        {
+            AC_DebitNoteSelect res = new AC_DebitNoteSelect();
 
+            try
+            {
+                res = _journalService.GetDebitNoteById(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = null;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("commit")]
+        public DebitNoteResponse Commit(DebitNoteCommitRequest request)
+        {
+            DebitNoteResponse response = new DebitNoteResponse();
+            try
+            {
+                response = _journalService.CommitDebitNote(request);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("DocNo")]
+        public DocNoResponse GetLastDocNo()
+        {
+            DocNoResponse res = new DocNoResponse();
+
+            try
+            {
+                res = _journalService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("debitdelete/{id:int}")]
+        public DebitNoteResponse Delete(int id)
+        {
+            DebitNoteResponse res = new DebitNoteResponse();
+            try
+            {
+                res = _journalService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
 }
 
