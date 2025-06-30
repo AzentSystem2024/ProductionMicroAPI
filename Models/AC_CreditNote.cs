@@ -141,6 +141,8 @@
         public string NARRATION { get; set; }
         public int UNIT_ID { get; set; }           
         public int DISTRIBUTOR_ID { get; set; }
+        public float NET_AMOUNT { get; set; }
+
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteCommitRequest

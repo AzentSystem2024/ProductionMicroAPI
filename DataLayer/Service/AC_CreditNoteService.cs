@@ -102,14 +102,15 @@ namespace MicroApi.DataLayer.Service
 
             string[] formats = new[]
             {
-                "dd-MM-yyyy HH:mm:ss",
-                "yyyy-MM-ddTHH:mm:ss.fffZ",
-                "yyyy-MM-ddTHH:mm:ss",
-                "yyyy-MM-dd",
-                "MM/dd/yyyy HH:mm:ss",
-                "MM/dd/yyyy"
+        "dd-MM-yyyy HH:mm:ss",
+        "yyyy-MM-ddTHH:mm:ss.fffZ",
+        "yyyy-MM-ddTHH:mm:ss",
+        "yyyy-MM-dd",
+        "MM/dd/yyyy HH:mm:ss",
+        "MM/dd/yyyy"
     };
 
+            // DO NOT use AdjustToUniversal or AssumeUniversal
             if (DateTime.TryParseExact(dateStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
                 return dt;
 
@@ -342,7 +343,8 @@ namespace MicroApi.DataLayer.Service
                                         INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,             
-                                        DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0, 
+                                        DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                         NOTE_DETAIL = new List<CreditNoteDetailUpdate>()
                                     };
                                 }
