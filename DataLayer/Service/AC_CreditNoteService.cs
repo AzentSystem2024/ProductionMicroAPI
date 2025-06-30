@@ -387,71 +387,31 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                using (SqlConnection con = ADO.GetConnection())
+                if (request.IS_APPROVED && request.TRANS_ID > 0)
                 {
-                    if (con.State == ConnectionState.Closed)
-                        con.Open();
-
-                    using (SqlCommand cmd = new SqlCommand("SP_AC_CREDIT_NOTE", con))
+                    using (SqlConnection con = ADO.GetConnection())
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
 
-                        cmd.Parameters.AddWithValue("@ACTION", 3);
-                        cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                        cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
-                        cmd.Parameters.AddWithValue("@INVOICE_ID", request.INVOICE_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@INVOICE_NO", request.INVOICE_NO ?? "");
-                        cmd.Parameters.AddWithValue("@UNIT_ID", request.UNIT_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", request.CREATED_STORE_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@BILL_NO", request.BILL_NO ?? "");
-                        cmd.Parameters.AddWithValue("@JOB_ID", request.JOB_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@STORE_AUTO_ID", request.STORE_AUTO_ID ?? 0);
-
-                        cmd.Parameters.AddWithValue("@TRANS_STATUS", 5);
-                        cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
-                        cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
-                        cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PDC_ID", 0);
-                        cmd.Parameters.AddWithValue("@IS_CLOSED", false);
-                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IS_PASSED", false);
-                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
-                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
-                        cmd.Parameters.AddWithValue("@ADD_TIME", DateTime.Now);
-
-                        // Table-Valued Parameter
-                        DataTable dtDetail = new DataTable();
-                        dtDetail.Columns.Add("SL_NO", typeof(int));
-                        dtDetail.Columns.Add("HEAD_ID", typeof(int));
-                        dtDetail.Columns.Add("AMOUNT", typeof(float));
-                        dtDetail.Columns.Add("VAT_AMOUNT", typeof(float));
-                        dtDetail.Columns.Add("REMARKS", typeof(string));
-
-                        foreach (var item in request.NOTE_DETAIL)
+                        using (SqlCommand cmd = new SqlCommand("SP_AC_CREDIT_NOTE", con))
                         {
-                            dtDetail.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? "");
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@ACTION", 3);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+
+                            cmd.ExecuteNonQuery();
+
+                            response.flag = 1;
+                            response.Message = "Credit note committed successfully.";
                         }
-
-                        SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dtDetail);
-                        tvp.SqlDbType = SqlDbType.Structured;
-                        tvp.TypeName = "UDT_TB_AC_NOTE_DETAIL";
-
-                        cmd.ExecuteNonQuery();
-
-                        response.flag = 1;
-                        response.Message = "Credit note committed successfully.";
                     }
+                }
+                else
+                {
+                    response.flag = 0;
+                    response.Message = "Invalid TRANS_ID or IS_APPROVED is false.";
                 }
             }
             catch (Exception ex)
@@ -462,6 +422,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
 
         public DocResponse GetLastDocNo()
         {

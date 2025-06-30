@@ -145,18 +145,8 @@
     }
     public class CreditNoteCommitRequest
     {
-        public long TRANS_ID { get; set; }
-        public int TRANS_TYPE { get; set; }
-        public int COMPANY_ID { get; set; }
-        public int STORE_ID { get; set; }
-        public int? INVOICE_ID { get; set; }
-        public string? INVOICE_NO { get; set; }
-        public int? UNIT_ID { get; set; }
-        public int? CREATED_STORE_ID { get; set; }
-        public string? BILL_NO { get; set; }
-        public int? JOB_ID { get; set; }
-        public int? STORE_AUTO_ID { get; set; }
-        public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
+        public int TRANS_ID { get; set; }
+        public bool IS_APPROVED { get; set; }
     }
     public class DocResponse
     {
