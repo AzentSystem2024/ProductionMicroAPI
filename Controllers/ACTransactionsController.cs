@@ -141,8 +141,62 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        //------------------END------------// 
 
-       
+        [HttpPost]
+        [Route("debitinsert")]
+        public DebitNoteResponse DebitInsert(AC_DebitNote model)
+        {
+            DebitNoteResponse res = new DebitNoteResponse();
+
+            try
+            {
+                res = _journalService.SaveDebitNote(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("debitupdate")]
+        public DebitNoteResponse DebitUpdate(AC_DebitNoteUpdate model)
+        {
+            DebitNoteResponse res = new DebitNoteResponse();
+
+            try
+            {
+                res = _journalService.UpdateDebitNote(model);  
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("debitlist")]
+        public DebitNoteListResponse DebitList()
+        {
+            DebitNoteListResponse res = new DebitNoteListResponse();
+            try
+            {
+                res = _journalService.GetDebitNoteList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+                res.Data = new List<DebitNoteListItem>();
+            }
+
+            return res;
+        }
 
     }
 }

@@ -12,5 +12,11 @@ namespace MicroApi.DataLayer.Interface
         JournalResponse DeleteJournal(int id);
         JournalResponse JournalApproval(int transId, bool isApproved);
 
+        DebitNoteResponse SaveDebitNote(AC_DebitNote model);
+        DebitNoteResponse UpdateDebitNote(AC_DebitNoteUpdate model);
+        DebitNoteListResponse GetDebitNoteList();
+
+
+
     }
 }

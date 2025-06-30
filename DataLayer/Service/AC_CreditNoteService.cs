@@ -102,15 +102,15 @@ namespace MicroApi.DataLayer.Service
 
             string[] formats = new[]
             {
-        "dd-MM-yyyy HH:mm:ss",
-        "yyyy-MM-ddTHH:mm:ss.fffZ",
-        "yyyy-MM-ddTHH:mm:ss",
-        "yyyy-MM-dd",
-        "MM/dd/yyyy HH:mm:ss",
-        "MM/dd/yyyy"
-    };
+                "dd-MM-yyyy HH:mm:ss",
+                "dd-MM-yyyy",
+                "yyyy-MM-ddTHH:mm:ss.fffZ",
+                "yyyy-MM-ddTHH:mm:ss",
+                "yyyy-MM-dd",
+                "MM/dd/yyyy HH:mm:ss",
+                "MM/dd/yyyy"
+            };
 
-            // DO NOT use AdjustToUniversal or AssumeUniversal
             if (DateTime.TryParseExact(dateStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
                 return dt;
 
@@ -278,9 +278,10 @@ namespace MicroApi.DataLayer.Service
                                     GST_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                     NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
-                                   // REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
                                     UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                    DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0
+                                    DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0
+
                                 });
                             }
                         }
@@ -345,6 +346,7 @@ namespace MicroApi.DataLayer.Service
                                         UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,             
                                         DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                        DOC_NO = Convert.ToInt32(reader["VOUCHER_NO"]),
                                         NOTE_DETAIL = new List<CreditNoteDetailUpdate>()
                                     };
                                 }

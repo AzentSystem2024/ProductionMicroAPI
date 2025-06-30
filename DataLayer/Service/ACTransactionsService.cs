@@ -130,9 +130,24 @@ namespace MicroApi.DataLayer.Service
 
         private static object ParseDate(string? dateStr)
         {
-            return DateTime.TryParseExact(dateStr, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt)
-                ? dt
-                : DBNull.Value;
+            if (string.IsNullOrWhiteSpace(dateStr))
+                return DBNull.Value;
+
+            string[] formats = new[]
+            {
+                "dd-MM-yyyy HH:mm:ss",
+                "dd-MM-yyyy",
+                "yyyy-MM-ddTHH:mm:ss.fffZ",
+                "yyyy-MM-ddTHH:mm:ss",
+                "yyyy-MM-dd",
+                "MM/dd/yyyy HH:mm:ss",
+                "MM/dd/yyyy"
+    };
+
+            if (DateTime.TryParseExact(dateStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+                return dt;
+
+            return DBNull.Value;
         }
 
 
@@ -602,9 +617,9 @@ namespace MicroApi.DataLayer.Service
         }
         //----------------------------------END JOURNAL VOUCHER-----------------------------------------//
 
-        public CreditNoteResponse SaveDebitNote(AC_DebitNote model)
+        public DebitNoteResponse SaveDebitNote(AC_DebitNote model)
         {
-            CreditNoteResponse response = new CreditNoteResponse();
+            DebitNoteResponse response = new DebitNoteResponse();
 
             try
             {
@@ -619,7 +634,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 1);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
@@ -676,7 +691,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.ExecuteNonQuery();
 
                         response.flag = 1;
-                        response.Message = "Debit note saved successfully.";
+                        response.Message = "Success";
                     }
                 }
             }
@@ -684,6 +699,187 @@ namespace MicroApi.DataLayer.Service
             {
                 response.flag = 0;
                 response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+        public DebitNoteResponse UpdateDebitNote(AC_DebitNoteUpdate model)
+        {
+            DebitNoteResponse response = new DebitNoteResponse();
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_AC_DEBIT_NOTE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 2);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
+                        cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);
+                        cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
+                        cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@RECON_DATE", model.RECON_DATE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
+                        cmd.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@SUPP_ID", model.SUPP_ID ?? 0); 
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
+                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", model.APPROVE3_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
+                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@INVOICE_ID", model.INVOICE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@INVOICE_NO", model.INVOICE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@BILL_NO", model.BILL_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@JOB_ID", model.JOB_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_AUTO_ID", model.STORE_AUTO_ID ?? 0);
+
+                        // Table-valued parameter for NOTE_DETAIL
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("SL_NO", typeof(int));
+                        dt.Columns.Add("HEAD_ID", typeof(int));
+                        dt.Columns.Add("AMOUNT", typeof(double));
+                        dt.Columns.Add("VAT_AMOUNT", typeof(double));
+                        dt.Columns.Add("REMARKS", typeof(string));
+
+                        foreach (var item in model.NOTE_DETAIL)
+                        {
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.VAT_AMOUNT, item.REMARKS ?? string.Empty);
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_TB_AC_NOTE_DETAIL";
+
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Debit note updated successfully.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+
+        public DebitNoteListResponse GetDebitNoteList()
+        {
+            DebitNoteListResponse response = new DebitNoteListResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<DebitNoteListItem>()
+            };
+
+            try
+            {
+                using (SqlConnection conn = ADO.GetConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_AC_DEBIT_NOTE", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 36); 
+                        cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", 0);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
+                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
+                        cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
+                        cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PDC_ID", 0);
+                        cmd.Parameters.AddWithValue("@IS_CLOSED", false);
+                        cmd.Parameters.AddWithValue("@PARTY_ID", 0);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IS_PASSED", false);
+                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
+                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
+                        cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
+                        cmd.Parameters.AddWithValue("@INVOICE_ID", 0);
+                        cmd.Parameters.AddWithValue("@INVOICE_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@REMARKS", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@SUPP_ID", 0); 
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response.Data.Add(new DebitNoteListItem
+                                {
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                    TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value
+                                        ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy")
+                                        : null,
+                                    INVOICE_NO = reader["INVOICE_NO"] != DBNull.Value ? reader["INVOICE_NO"].ToString() : null,
+                                    GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
+                                    GST_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
+                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                    NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
+                                    SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
+                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0
+                                });
+                            }
+                        }
+
+                        response.flag = 1;
+                        response.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = new List<DebitNoteListItem>();
             }
 
             return response;
