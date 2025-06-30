@@ -10,6 +10,7 @@ namespace MicroApi.Models
         public int? ID { get; set; }
         public string UserRoles { get; set; }
         public bool? IsInactive { get; set; }
+        public bool? IsDeleted { get; set; }
         public DateTime? LastModifiedTime { get; set; }
         public DateTime? CreateTime { get; set; }
         //public bool CanAdd { get; set; }
@@ -43,16 +44,16 @@ namespace MicroApi.Models
         public bool? Selected { get; set; }
         public bool CanAdd { get; set; }
         public bool CanView { get; set; }
-        public bool CanPrint { get; set; }
-        public bool CanApprove { get; set; }
         public bool CanEdit { get; set; }
+        public bool CanApprove { get; set; }        
         public bool CanDelete { get; set; }
+        public bool CanPrint { get; set; }
     }
     public class UserMenuResponse
     {
         public int Flag { get; set; }
         public string Message { get; set; }
-        public string ID { get; set; }
+        public int? ID { get; set; }
         public string UserRoles { get; set; }
         public string IsInactive { get; set; }
         public List<UserMenuGroup> Data { get; set; }

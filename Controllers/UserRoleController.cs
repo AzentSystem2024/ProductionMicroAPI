@@ -211,11 +211,16 @@ namespace MicroApi.Controllers
         [Route("delete/{id:int}")]
         public UserMenuResponse Delete(int id)
         {
-            UserMenuResponse res = new UserMenuResponse();
-            UserRole objUserRole = new UserRole();
+            return _Service.DeleteUserRole(id);
+        }
 
-            string apiKey = "";
-            Int32 intUserID = 1;
+        //public UserMenuResponse Delete(int id)
+        //{
+            UserMenuResponse res = new UserMenuResponse();
+            //UserRole objUserRole = new UserRole();
+
+            //string apiKey = "";
+           //int intUserID = 0;
 
             /*
             foreach (var header in Request.Headers)
@@ -237,24 +242,24 @@ namespace MicroApi.Controllers
 
             */
 
-            try
-            {
-                _Service.DeleteUserRole(id, intUserID);
+        //    try
+        //    {
+                
 
-                res.Flag = 1;
-                res.Message = "Success";
-                //res.Data = _Service.GetItems(id);
+        //        //res.Flag = 1;
+        //        //res.Message = "Success";
+        //        res = _Service.DeleteUserRole(id);
 
-            }
-            catch (Exception ex)
-            {
-                res.Flag = 0;
-                res.Message = ex.Message;
-                return res;
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.Flag = 0;
+        //        res.Message = ex.Message;
+               
+        //    }
 
-            return res;
-        }
+        //    return res;
+        //}
 
         [HttpPost]
         [Route("select/{id:int}")]

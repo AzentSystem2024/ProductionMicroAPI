@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Interface
         public UserMenuResponse GetAllUsermainRoles(int intUserID);
         public int Insert(UserRole userrole, Int32 userID);
         public int Update(UserRole userrole, Int32 userID);
-        public void DeleteUserRole(int Id, int userID);
+         UserMenuResponse DeleteUserRole(int Id);
         public UserRole GetItems(int id);
     }
 }

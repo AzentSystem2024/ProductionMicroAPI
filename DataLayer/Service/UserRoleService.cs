@@ -69,12 +69,12 @@ namespace MicroApi.Services
                                     MenuOrder = row["menuorder"].ToString(),
                                     Selected = Convert.ToBoolean(row["Selected"]),
                                     CanAdd = row["CanAdd"] != DBNull.Value && Convert.ToBoolean(row["CanAdd"]),
-                                    CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),
-                                    CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
+                                    CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),                                    
                                     CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
                                     CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
-                                    CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"])
-                                }); ;
+                                    CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"]),
+                                    CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
+                                }); 
 
                             }
                         }
@@ -163,11 +163,11 @@ namespace MicroApi.Services
                     DataTable tbl = new DataTable();
                     tbl.Columns.Add("MenuID", typeof(Int32));
                     tbl.Columns.Add("CanAdd", typeof(bool));
-                    tbl.Columns.Add("CanView", typeof(bool));
-                    tbl.Columns.Add("CanPrint", typeof(bool));
+                    tbl.Columns.Add("CanView", typeof(bool));                    
                     tbl.Columns.Add("CanEdit", typeof(bool));
                     tbl.Columns.Add("CanApprove", typeof(bool));
                     tbl.Columns.Add("CanDelete", typeof(bool));
+                    tbl.Columns.Add("CanPrint", typeof(bool));
 
                     if (userRole.usermenulist != null && userRole.usermenulist.Any())
                     {
@@ -176,11 +176,11 @@ namespace MicroApi.Services
                             DataRow dRow = tbl.NewRow();
                             dRow["MenuID"] = ur.MenuId;
                             dRow["CanAdd"] = ur.CanAdd;
-                            dRow["CanView"] = ur.CanView;
-                            dRow["CanPrint"] = ur.CanPrint;
+                            dRow["CanView"] = ur.CanView;                            
                             dRow["CanEdit"] = ur.CanEdit;
                             dRow["CanApprove"] = ur.CanApprove;
                             dRow["CanDelete"] = ur.CanDelete;
+                            dRow["CanPrint"] = ur.CanPrint;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -191,6 +191,7 @@ namespace MicroApi.Services
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@UserRole", userRole.UserRoles);
                         cmd.Parameters.AddWithValue("@IsInactive", userRole.IsInactive);
+                        cmd.Parameters.AddWithValue("@IsDeleted", userRole.IsDeleted);
                         cmd.Parameters.AddWithValue("@UserID", userID);
                         cmd.Parameters.AddWithValue("@MenuInfos", tbl);
 
@@ -217,11 +218,11 @@ namespace MicroApi.Services
                     DataTable tbl = new DataTable();
                     tbl.Columns.Add("MenuID", typeof(int));
                     tbl.Columns.Add("CanAdd", typeof(bool));
-                    tbl.Columns.Add("CanView", typeof(bool));
-                    tbl.Columns.Add("CanPrint", typeof(bool));
+                    tbl.Columns.Add("CanView", typeof(bool));                    
                     tbl.Columns.Add("CanEdit", typeof(bool));
                     tbl.Columns.Add("CanApprove", typeof(bool));
                     tbl.Columns.Add("CanDelete", typeof(bool));
+                    tbl.Columns.Add("CanPrint", typeof(bool));
 
                     if (userRole.usermenulist != null && userRole.usermenulist.Any())
                     {
@@ -231,10 +232,10 @@ namespace MicroApi.Services
                             dRow["MenuID"] = ur.MenuId;
                             dRow["CanAdd"] = ur.CanAdd;
                             dRow["CanView"] = ur.CanView;
-                            dRow["CanPrint"] = ur.CanPrint;
                             dRow["CanEdit"] = ur.CanEdit;
                             dRow["CanApprove"] = ur.CanApprove;
-                            dRow["CanDelete"] = ur.CanDelete;
+                            dRow["CanDelete"] = ur.CanDelete;                           
+                            dRow["CanPrint"] = ur.CanPrint;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -262,8 +263,9 @@ namespace MicroApi.Services
                 }
             }
         }
-        public void DeleteUserRole(int Id, int userID)
+        public UserMenuResponse DeleteUserRole(int id)
         {
+            UserMenuResponse res = new UserMenuResponse();
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
@@ -272,17 +274,30 @@ namespace MicroApi.Services
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "SP_TB_USER_ROLE";
-                    cmd.Parameters.AddWithValue("ACTION", 4);
-                    cmd.Parameters.AddWithValue("@ID", Id);
-                    cmd.Parameters.AddWithValue("UserID", userID);
+                    cmd.Parameters.AddWithValue("@ACTION", 4);
+                    cmd.Parameters.AddWithValue("@ID", id);
+                    //cmd.Parameters.AddWithValue("@UserID", userID);
 
-                    cmd.ExecuteNonQuery();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                    {
+                        res.Flag = 0;
+                        res.Message = "No rows were affected. The role may not exist or cannot be deleted.";
+                        return res;
+                    }
+
+                    res.Flag = 1;
+                    res.Message = "Success";
                 }
             }
+            
             catch (Exception ex)
             {
-                throw ex;
+                res.Flag = 0;
+                res.Message = ex.Message;
             }
+            return res;
         }
         public UserRole GetItems(int id)
         {
@@ -336,11 +351,11 @@ namespace MicroApi.Services
                                         Selected = Convert.ToBoolean(row["Selected"]),
                                         CanAdd = row["CanAdd"] != DBNull.Value && Convert.ToBoolean(row["CanAdd"]),
                                         CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),
-                                        CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
                                         CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
                                         CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
-                                        CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"])
-                                   
+                                        CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"]),                                        
+                                        CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
+
                                     });
                                 }
                             }
