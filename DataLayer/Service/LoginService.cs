@@ -51,6 +51,7 @@ namespace MicroApi.DataLayer.Service
                                     response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0;
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
                                     response.FINANCIAL_YEAR_ID = reader["FINANCIAL_YEAR_ID"] != DBNull.Value ? Convert.ToInt32(reader["FINANCIAL_YEAR_ID"]) : 0;
+                                    
                                 }
 
                                 // Third result: companies
@@ -62,6 +63,23 @@ namespace MicroApi.DataLayer.Service
                                         {
                                             COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                             COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
+                                        });
+                                    }
+                                }
+                                // Fourth result: menu permissions
+                                if (reader.NextResult())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        response.MenuPermissions.Add(new UserMenusPermission
+                                        {
+                                            MenuID = reader["MenuID"] != DBNull.Value ? Convert.ToInt32(reader["MenuID"]) : 0,
+                                            CanAdd = reader["CanAdd"] != DBNull.Value && Convert.ToBoolean(reader["CanAdd"]),
+                                            CanView = reader["CanView"] != DBNull.Value && Convert.ToBoolean(reader["CanView"]),
+                                            CanEdit = reader["CanEdit"] != DBNull.Value && Convert.ToBoolean(reader["CanEdit"]),
+                                            CanApprove = reader["CanApprove"] != DBNull.Value && Convert.ToBoolean(reader["CanApprove"]),
+                                            CanDelete = reader["CanDelete"] != DBNull.Value && Convert.ToBoolean(reader["CanDelete"]),
+                                            CanPrint = reader["CanPrint"] != DBNull.Value && Convert.ToBoolean(reader["CanPrint"])
                                         });
                                     }
                                 }
