@@ -119,7 +119,7 @@ namespace MicroApi.Controllers
             UserMenuResponse res = new UserMenuResponse();
 
             string apiKey = "";
-            Int32 intUserID = 1;
+           // Int32 intUserID = 1;
 
             /*
             foreach (var header in Request.Headers)
@@ -140,9 +140,17 @@ namespace MicroApi.Controllers
             }
 
             */
+            if (objuserrole == null || objuserrole.usermenulist == null || !objuserrole.usermenulist.Any())
+            {
+                res.Flag = 0;
+                res.Message = "User role data or menu list is required.";
+                return res;
+            }
+
 
             try
             {
+                Int32 intUserID = 1;
                 Int32 UserroleID = _Service.Insert(objuserrole, intUserID);
 
                 res.Flag = 1;
@@ -203,7 +211,6 @@ namespace MicroApi.Controllers
                 res.Message = ex.Message;
                 return res;
             }
-
             return res;
         }
 
