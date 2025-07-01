@@ -22,18 +22,16 @@ namespace MicroApi.Services
             using (SqlCommand cmd = new SqlCommand("SP_TB_USER_ROLE", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@UserId", userId);
                 cmd.Parameters.AddWithValue("@Action", 0);
+                cmd.Parameters.AddWithValue("@UserId", userId);
 
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    var ds = new DataSet();
-
+                    DataSet ds = new DataSet();
                     try
                     {
                         da.Fill(ds);
-
-                        if (ds.Tables.Count == 0)
+                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         {
                             response.flag = 0;
                             response.message = "No data returned from the stored procedure.";
@@ -45,41 +43,35 @@ namespace MicroApi.Services
 
                         foreach (DataRow row in combinedTable.Rows)
                         {
-                            if (row["ID"] != DBNull.Value)
+                            int roleId = Convert.ToInt32(row["ID"]);
+                            if (!userRoles.ContainsKey(roleId))
                             {
-                                int roleId = Convert.ToInt32(row["ID"]);
-
-                                if (!userRoles.ContainsKey(roleId))
+                                userRoles[roleId] = new UserRole
                                 {
-                                    userRoles[roleId] = new UserRole
-                                    {
-                                        ID = roleId,
-                                        UserRoles = row["UserRole"].ToString(),
-                                        LastModifiedTime = row["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["LastModifiedTime"]).ToLocalTime(),
-                                        CreateTime = row["CreatedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)row["CreatedTime"]).ToLocalTime(),
-                                        IsInactive = row["IsInactive"] != DBNull.Value && Convert.ToBoolean(row["IsInactive"]),
-                                        usermenulist = new List<UserMenuList>()
-                                    };
-                                }
-
-                                userRoles[roleId].usermenulist.Add(new UserMenuList
-                                {
-                                    MenuId = Convert.ToInt32(row["menuid"]),
-                                    MenuName = row["menuname"].ToString(),
-                                    MenuOrder = row["menuorder"].ToString(),
-                                    Selected = Convert.ToBoolean(row["Selected"]),
-                                    CanAdd = row["CanAdd"] != DBNull.Value && Convert.ToBoolean(row["CanAdd"]),
-                                    CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),                                    
-                                    CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
-                                    CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
-                                    CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"]),
-                                    CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
-                                }); 
-
+                                    ID = roleId,
+                                    UserRoles = row["UserRole"].ToString(),
+                                    LastModifiedTime = row["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["LastModifiedTime"]),
+                                    CreateTime = row["CreatedTime"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["CreatedTime"]),
+                                    IsInactive = row["IsInactive"] != DBNull.Value && Convert.ToBoolean(row["IsInactive"]),
+                                    usermenulist = new List<UserMenuList>()
+                                };
                             }
+
+                            userRoles[roleId].usermenulist.Add(new UserMenuList
+                            {
+                                MenuId = Convert.ToInt32(row["menuId"]),
+                                MenuName = row["menuName"].ToString(),
+                                MenuOrder = row["menuOrder"].ToString(),
+                                Selected = Convert.ToBoolean(row["Selected"]),
+                                CanAdd = row["CanAdd"] != DBNull.Value && Convert.ToBoolean(row["CanAdd"]),
+                                CanView = row["CanView"] != DBNull.Value && Convert.ToBoolean(row["CanView"]),
+                                CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
+                                CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
+                                CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"]),
+                                CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"])
+                            });
                         }
 
-                        // Convert dictionary values to list for response
                         response.data = userRoles.Values.ToList();
                     }
                     catch (Exception ex)
@@ -274,7 +266,7 @@ namespace MicroApi.Services
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.CommandText = "SP_TB_USER_ROLE";
-                        cmd.Parameters.AddWithValue("@ACTION", 4);
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@ID", id);
                        // cmd.Parameters.AddWithValue("@UserID", userID);
 
@@ -303,7 +295,7 @@ namespace MicroApi.Services
                 using (SqlCommand cmd = new SqlCommand("SP_TB_USER_ROLE", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Action", 0); // Action to get user roles
+                    cmd.Parameters.AddWithValue("@Action", 4); // Action to get user roles
                     cmd.Parameters.AddWithValue("@ID", id); // Specific user role ID
 
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
