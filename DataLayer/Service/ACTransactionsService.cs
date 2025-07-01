@@ -919,7 +919,8 @@ namespace MicroApi.DataLayer.Service
                                     header = new DebitNoteSelectedView
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
-                                        TRANS_TYPE = 38,
+                                        TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
+                                        //TRANS_TYPE = 38,
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]): null,
                                         TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value? Convert.ToInt32(reader["TRANS_STATUS"]): (int?)null,
                                         INVOICE_ID = reader["INVOICE_ID"] != DBNull.Value? Convert.ToInt32(reader["INVOICE_ID"]): (int?)null,
