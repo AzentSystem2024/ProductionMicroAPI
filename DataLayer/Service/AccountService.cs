@@ -27,10 +27,10 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 1);
-                        cmd.Parameters.AddWithValue("@p_GroupName", account.GroupName);
-                        cmd.Parameters.AddWithValue("@p_GroupSuperID", account.GroupSuperID);
-                        cmd.Parameters.AddWithValue("@p_GroupType", account.GroupType);
-                        cmd.Parameters.AddWithValue("@p_GroupLevel", account.GroupLevel);
+                        cmd.Parameters.AddWithValue("@p_GROUP_NAME", account.GROUP_NAME);
+                        cmd.Parameters.AddWithValue("@p_GROUP_SUPER_ID", account.GROUP_SUPER_ID);
+                        cmd.Parameters.AddWithValue("@p_GROUP_TYPE", account.GROUP_TYPE);
+                        cmd.Parameters.AddWithValue("@p_GROUP_LEVEL", account.GROUP_LEVEL);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -40,10 +40,10 @@ namespace MicroApi.DataLayer.Service
                                 res.Message = reader["Message"].ToString();
                                 res.Data = new AccountUpdate
                                 {
-                                    GroupID = Convert.ToInt32(reader["GroupID"]),
-                                    GroupCode = reader["GroupCode"].ToString(),
-                                    GroupName = account.GroupName,
-                                    SerialNo = Convert.ToInt32(reader["SerialNo"])
+                                    GROUP_ID = Convert.ToInt32(reader["GROUP_ID"]),
+                                    GROUP_CODE = reader["GROUP_CODE"].ToString(),
+                                    GROUP_NAME = account.GROUP_NAME,
+                                    SERIAL_NO = Convert.ToInt32(reader["SERIAL_NO"])
                                 };
                             }
                         }
@@ -72,9 +72,9 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 2);
-                        cmd.Parameters.AddWithValue("@p_GroupID", account.GroupID);
-                        cmd.Parameters.AddWithValue("@p_GroupName", account.GroupName);
-                        cmd.Parameters.AddWithValue("@p_ArabicName", account.ArabicName);
+                        cmd.Parameters.AddWithValue("@p_GROUP_ID", account.GROUP_ID);
+                        cmd.Parameters.AddWithValue("@p_GROUP_NAME", account.GROUP_NAME);
+                        cmd.Parameters.AddWithValue("@p_ARABIC_NAME", account.ARABIC_NAME);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -109,7 +109,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 0);
-                        cmd.Parameters.AddWithValue("@p_GroupID", id);
+                        cmd.Parameters.AddWithValue("@p_GROUP_ID", id);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -117,10 +117,11 @@ namespace MicroApi.DataLayer.Service
                             {
                                 res.Data = new AccountUpdate
                                 {
-                                    GroupID = Convert.ToInt32(reader["GroupID"]),
-                                    GroupName = reader["GroupName"].ToString(),
-                                    ArabicName = reader["ArabicName"].ToString(),
-                                    IsInactive = false
+                                    GROUP_ID = Convert.ToInt32(reader["GROUP_ID"]),
+                                    GROUP_CODE = reader["GROUP_CODE"].ToString(),
+                                    GROUP_NAME = reader["GROUP_NAME"].ToString(),
+                                    ARABIC_NAME = reader["ARABIC_NAME"].ToString(),
+                                    IS_INACTIVE = false
                                 };
                                 res.flag = 1;
                                 res.Message = "Success";
@@ -154,9 +155,9 @@ namespace MicroApi.DataLayer.Service
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@p_ACTION", 0);
-                cmd.Parameters.AddWithValue("@p_GroupID", (object)id ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@p_GroupName", DBNull.Value);
-                cmd.Parameters.AddWithValue("@p_ArabicName", DBNull.Value);
+                cmd.Parameters.AddWithValue("@p_GROUP_ID", (object)id ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@p_GROUP_NAME", DBNull.Value);
+                cmd.Parameters.AddWithValue("@p_ARABIC_NAME", DBNull.Value);
 
                 try
                 {
@@ -169,11 +170,11 @@ namespace MicroApi.DataLayer.Service
                         {
                             result.Add(new AccountUpdate
                             {
-                                GroupID = Convert.ToInt32(dr["GroupID"]),
-                                GroupCode = dr["GroupCode"].ToString(),
-                                GroupName = dr["GroupName"].ToString(),
-                                ArabicName = dr["ArabicName"].ToString(),
-                                IsInactive = false
+                                GROUP_ID = Convert.ToInt32(dr["GROUP_ID"]),
+                                GROUP_CODE = dr["GROUP_CODE"].ToString(),
+                                GROUP_NAME = dr["GROUP_NAME"].ToString(),
+                                ARABIC_NAME = dr["ARABIC_NAME"].ToString(),
+                                IS_INACTIVE = false
                             });
                         }
                         res.flag = 1;
@@ -204,7 +205,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 3);
-                        cmd.Parameters.AddWithValue("@p_GroupID", id);
+                        cmd.Parameters.AddWithValue("@p_GROUP_ID", id);
 
                         using (var reader = cmd.ExecuteReader())
                         {

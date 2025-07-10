@@ -143,6 +143,10 @@
         public int DISTRIBUTOR_ID { get; set; }
         public float NET_AMOUNT { get; set; }
         public int DOC_NO { get; set; }
+        public float INVOICE_NET_AMOUNT { get; set; }
+        public float ADJUSTED_AMOUNT { get; set; }
+        public float RECEIVED_AMOUNT { get; set; }
+        public float BALANCE_AMOUNT { get; set; }
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteCommitRequest
@@ -155,6 +159,23 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int DOC_NO { get; set; }
+    }
+
+    public class CreditNoteInvlist
+    {
+        public int TRANS_ID { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string DATE { get; set; }
+        public float NET_AMOUNT { get; set; }
+        public float ADJUSTED_AMOUNT { get; set; }
+        public float RECEIVED_AMOUNT { get; set; }
+        public float BALANCE_AMOUNT { get; set; }
+    }
+    public class CreditNoteInvoiceListResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<CreditNoteInvlist> Data { get; set; }
     }
 }
 

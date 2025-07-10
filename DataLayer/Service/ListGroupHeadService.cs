@@ -43,8 +43,8 @@ namespace MicroApi.DataLayer.Service
                                     MainGroup = reader["MAIN_GROUP"].ToString(),
                                     SubGroup = reader["SUBGROUP"].ToString(),
                                     Category = reader["CATEGORY"].ToString(),
-                                    HeadCode = reader["HeadCode"].ToString(),
-                                    HeadName = reader["HeadName"].ToString(),
+                                    HeadCode = reader["HEAD_CODE"].ToString(),
+                                    HeadName = reader["HEAD_NAME"].ToString(),
                                     ID = !reader.IsDBNull(reader.GetOrdinal("ID")) ? reader.GetInt32(reader.GetOrdinal("ID")) : 0,
 
 

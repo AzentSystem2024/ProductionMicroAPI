@@ -34,5 +34,25 @@ namespace MicroApi.Controllers
             return res;
 
         }
+        [HttpPost]
+        [Route("initdata")]
+        public InitLoginResponse InitLoginData(Login request)
+        {
+            InitLoginResponse res = new InitLoginResponse();
+
+            try
+            {
+                res = _loginService.InitLoginData(request.LOGIN_NAME);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+
+
     }
 }

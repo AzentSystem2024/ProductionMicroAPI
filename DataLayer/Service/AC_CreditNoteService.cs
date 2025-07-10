@@ -349,6 +349,10 @@ namespace MicroApi.DataLayer.Service
                                         DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                         DOC_NO = Convert.ToInt32(reader["VOUCHER_NO"]),
+                                        INVOICE_NET_AMOUNT = reader["INVOICE_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["INVOICE_NET_AMOUNT"]) : 0,
+                                        ADJUSTED_AMOUNT = reader["ADJUSTED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["ADJUSTED_AMOUNT"]) : 0,
+                                        RECEIVED_AMOUNT = reader["RECEIVED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["RECEIVED_AMOUNT"]) : 0,
+                                        BALANCE_AMOUNT = reader["BALANCE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["BALANCE_AMOUNT"]) : 0,
                                         NOTE_DETAIL = new List<CreditNoteDetailUpdate>()
                                     };
                                 }
@@ -499,6 +503,64 @@ namespace MicroApi.DataLayer.Service
             }
 
             return res;
+        }
+        public CreditNoteInvoiceListResponse GetCreditNoteInvoiceList()
+        {
+            CreditNoteInvoiceListResponse response = new CreditNoteInvoiceListResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<CreditNoteInvlist>()
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_AC_CREDIT_NOTE", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Set required parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                CreditNoteInvlist item = new CreditNoteInvlist
+                                {
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
+                                    DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                    ADJUSTED_AMOUNT = reader["ADJUSTED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["ADJUSTED_AMOUNT"]) : 0,
+                                    RECEIVED_AMOUNT = reader["RECEIVED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["RECEIVED_AMOUNT"]) : 0,
+                                    BALANCE_AMOUNT = reader["BALANCE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["BALANCE_AMOUNT"]) : 0
+                                };
+
+                                response.Data.Add(item);
+                            }
+
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error fetching invoice list: " + ex.Message;
+                response.Data = new List<CreditNoteInvlist>();
+            }
+
+            return response;
         }
 
     }

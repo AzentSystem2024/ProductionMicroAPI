@@ -39,10 +39,10 @@ namespace MicroApi.DataLayer.Service
                             {
                                 Group group = new Group
                                 {
-                                    GroupID = !reader.IsDBNull(reader.GetOrdinal("GroupId")) ? reader.GetInt32(reader.GetOrdinal("GroupId")) : 0,
-                                    GroupName = !reader.IsDBNull(reader.GetOrdinal("Groupname")) ? reader.GetString(reader.GetOrdinal("Groupname")) : string.Empty,
-                                    GroupSuperID = !reader.IsDBNull(reader.GetOrdinal("ParentGroupId")) ? reader.GetInt32(reader.GetOrdinal("ParentGroupId")) : 0,
-                                    GroupLevel = !reader.IsDBNull(reader.GetOrdinal("Grouplevel")) ? reader.GetInt32(reader.GetOrdinal("Grouplevel")) : 0
+                                    GROUP_ID = !reader.IsDBNull(reader.GetOrdinal("GroupId")) ? reader.GetInt32(reader.GetOrdinal("GroupId")) : 0,
+                                    GROUP_NAME = !reader.IsDBNull(reader.GetOrdinal("Groupname")) ? reader.GetString(reader.GetOrdinal("Groupname")) : string.Empty,
+                                    GROUP_SUPER_ID = !reader.IsDBNull(reader.GetOrdinal("ParentGroupId")) ? reader.GetInt32(reader.GetOrdinal("ParentGroupId")) : 0,
+                                    GROUP_LEVEL = !reader.IsDBNull(reader.GetOrdinal("Grouplevel")) ? reader.GetInt32(reader.GetOrdinal("Grouplevel")) : 0
                                 };
 
                                 response.Data.Add(group);

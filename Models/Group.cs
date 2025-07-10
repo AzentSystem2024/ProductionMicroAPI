@@ -2,10 +2,10 @@
 {
     public class Group
     {
-        public int? GroupID { get; set; }
-        public string GroupName { get; set; }
-        public int? GroupSuperID { get; set; }
-        public int? GroupLevel { get; set; }
+        public int? GROUP_ID { get; set; }
+        public string GROUP_NAME { get; set; }
+        public int? GROUP_SUPER_ID { get; set; }
+        public int? GROUP_LEVEL { get; set; }
 
     }
     public class GroupResponse

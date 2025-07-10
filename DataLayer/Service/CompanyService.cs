@@ -16,16 +16,16 @@ namespace MicroApi.DataLayer.Service
             {
                 using (var connection = ADO.GetConnection())
                 {
-                    if (connection.State == System.Data.ConnectionState.Closed)
+                    if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
                     string procedureName = "SP_TB_COMPANY_MASTER";
 
                     using (var cmd = new SqlCommand(procedureName, connection))
                     {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.AddWithValue("@ACTION", 1); 
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
                         cmd.Parameters.AddWithValue("@COMPANY_CODE", company.COMPANY_CODE ?? "");
                         cmd.Parameters.AddWithValue("@COMPANY_NAME", company.COMPANY_NAME ?? "");
                         cmd.Parameters.AddWithValue("@CONTACT_NAME", company.CONTACT_NAME ?? "");
@@ -39,17 +39,20 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@COMPANY_TYPE", company.COMPANY_TYPE);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", company.IS_INACTIVE);
 
-                        int rowsAffected = cmd.ExecuteNonQuery();
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                int newCompanyId = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0;
 
-                        if (rowsAffected > 0)
-                        {
-                            res.flag = 1;
-                            res.Message = "Success";
-                        }
-                        else
-                        {
-                            res.flag = 0;
-                            res.Message = "Failed.";
+                                res.flag = 1;
+                                res.Message = "Success";
+                            }
+                            else
+                            {
+                                res.flag = 0;
+                                res.Message = "Failed to insert company.";
+                            }
                         }
                     }
                 }
@@ -57,11 +60,13 @@ namespace MicroApi.DataLayer.Service
             catch (Exception ex)
             {
                 res.flag = 0;
-                res.Message = ex.Message;
+                res.Message = "Exception: " + ex.Message;
             }
 
             return res;
         }
+
+
         public CompanyResponse UpdateCompany(CompanyUpdate company)
         {
             CompanyResponse res = new CompanyResponse();

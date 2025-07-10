@@ -22,11 +22,11 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 1);
-                        cmd.Parameters.AddWithValue("@p_HeadName", accountHead.HeadName);
-                        cmd.Parameters.AddWithValue("@p_GroupID", accountHead.GroupID);
-                        cmd.Parameters.AddWithValue("@p_IsDirect", accountHead.IsDirect);
-                        cmd.Parameters.AddWithValue("@p_ArabicName", (object)accountHead.ArabicName ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@p_HEAD_NAME", accountHead.HEAD_NAME);
+                        cmd.Parameters.AddWithValue("@p_GROUP_ID", accountHead.GROUP_ID);
+                        cmd.Parameters.AddWithValue("@p_IS_DIRECT", accountHead.IS_DIRECT);
+                        cmd.Parameters.AddWithValue("@p_ARABIC_NAME", (object)accountHead.ARABIC_NAME ?? DBNull.Value);
+                       // cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -36,13 +36,13 @@ namespace MicroApi.DataLayer.Service
                                 res.Message = reader["Message"].ToString();
                                 res.Data = new AccountHeadUpdate
                                 {
-                                    HeadID = Convert.ToInt32(reader["HeadID"]),
-                                    HeadName = accountHead.HeadName,
-                                    GroupID = accountHead.GroupID,
-                                    IsDirect = accountHead.IsDirect,
-                                    ArabicName = accountHead.ArabicName,
-                                    IsActive = true,
-                                    SerialNo = Convert.ToInt32(reader["SerialNo"]),
+                                    HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
+                                    HEAD_NAME = accountHead.HEAD_NAME,
+                                    GROUP_ID = accountHead.GROUP_ID,
+                                    IS_DIRECT = accountHead.IS_DIRECT,
+                                    ARABIC_NAME = accountHead.ARABIC_NAME,
+                                    IS_INACTIVE = true,
+                                    SERIAL_NO = Convert.ToInt32(reader["SERIAL_NO"]),
                                    // CostTypeID = accountHead.CostTypeID
                                 };
                             }
@@ -72,12 +72,12 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 2);
-                        cmd.Parameters.AddWithValue("@p_HeadID", accountHead.HeadID);
-                        cmd.Parameters.AddWithValue("@p_HeadName", accountHead.HeadName);
-                        cmd.Parameters.AddWithValue("@p_GroupID", accountHead.GroupID);
-                        cmd.Parameters.AddWithValue("@p_IsDirect", accountHead.IsDirect);
-                        cmd.Parameters.AddWithValue("@p_ArabicName", (object)accountHead.ArabicName ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@p_IsActive", accountHead.IsActive);
+                        cmd.Parameters.AddWithValue("@p_HEAD_ID", accountHead.HEAD_ID);
+                        cmd.Parameters.AddWithValue("@p_HEAD_NAME", accountHead.HEAD_NAME);
+                        cmd.Parameters.AddWithValue("@p_GROUP_ID", accountHead.GROUP_ID);
+                        cmd.Parameters.AddWithValue("@p_IS_DIRECT", accountHead.IS_DIRECT);
+                        cmd.Parameters.AddWithValue("@p_ARABIC_NAME", (object)accountHead.ARABIC_NAME ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@p_IS_INACTIVE", accountHead.IS_INACTIVE);
                        // cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
@@ -113,7 +113,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 0);
-                        cmd.Parameters.AddWithValue("@p_HeadID", id);
+                        cmd.Parameters.AddWithValue("@p_HEAD_ID", id);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -123,17 +123,17 @@ namespace MicroApi.DataLayer.Service
                                 res.Message = "Success";
                                 res.Data = new AccountHeadUpdate
                                 {
-                                    HeadID = Convert.ToInt32(reader["HeadID"]),
-                                    HeadCode = reader["HeadCode"].ToString(),
-                                    HeadName = reader["HeadName"].ToString(),
-                                    GroupID = Convert.ToInt32(reader["GroupID"]),
-                                    IsDirect = Convert.ToBoolean(reader["IsDirect"]),
-                                    ArabicName = reader["ArabicName"].ToString(),
-                                    IsActive = Convert.ToBoolean(reader["IsActive"]),
-                                    SerialNo = Convert.ToInt32(reader["SerialNo"]),
+                                    HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
+                                    HEAD_CODE = reader["HEAD_CODE"].ToString(),
+                                    HEAD_NAME = reader["HEAD_NAME"].ToString(),
+                                    GROUP_ID = Convert.ToInt32(reader["GROUP_ID"]),
+                                    IS_DIRECT = Convert.ToBoolean(reader["IS_DIRECT"]),
+                                    ARABIC_NAME = reader["ARABIC_NAME"].ToString(),
+                                    IS_INACTIVE = Convert.ToBoolean(reader["IS_INACTIVE"]),
+                                    SERIAL_NO = Convert.ToInt32(reader["SERIAL_NO"]),
                                     //CostTypeID = reader["CostTypeID"] != DBNull.Value ? Convert.ToInt32(reader["CostTypeID"]) : (int?)null,
-                                    MainGroupId = reader["MainGroupID"] != DBNull.Value ? Convert.ToInt32(reader["MainGroupID"]) : (int?)null,
-                                    SubGroupId = reader["SubGroupID"] != DBNull.Value ? Convert.ToInt32(reader["SubGroupID"]) : (int?)null
+                                    MAIN_GROUP_ID = reader["MainGROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["MainGROUP_ID"]) : (int?)null,
+                                    SUB_GROUP_ID = reader["SubGROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SubGROUP_ID"]) : (int?)null
                                 };
                             }
                             else
@@ -170,7 +170,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 0);
-                        cmd.Parameters.AddWithValue("@p_HeadID", (object)id ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@p_HEAD_ID", (object)id ?? DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -181,17 +181,17 @@ namespace MicroApi.DataLayer.Service
                             {
                                 lstHead.Add(new AccountHeadUpdate
                                 {
-                                    HeadID = Convert.ToInt32(dr["HeadID"]),
-                                    HeadCode = dr["HeadCode"].ToString(),
-                                    HeadName = dr["HeadName"].ToString(),
-                                    GroupID = Convert.ToInt32(dr["GroupID"]),
-                                    IsDirect = Convert.ToBoolean(dr["IsDirect"]),
-                                    ArabicName = dr["ArabicName"].ToString(),
-                                    IsActive = Convert.ToBoolean(dr["IsActive"]),
-                                    SerialNo = Convert.ToInt32(dr["SerialNo"]),
+                                    HEAD_ID = Convert.ToInt32(dr["HEAD_ID"]),
+                                    HEAD_CODE = dr["HEAD_CODE"].ToString(),
+                                    HEAD_NAME = dr["HEAD_NAME"].ToString(),
+                                    GROUP_ID = Convert.ToInt32(dr["GROUP_ID"]),
+                                    IS_DIRECT = Convert.ToBoolean(dr["IS_DIRECT"]),
+                                    ARABIC_NAME = dr["ARABIC_NAME"].ToString(),
+                                    IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]),
+                                    SERIAL_NO = Convert.ToInt32(dr["SERIAL_NO"]),
                                    // CostTypeID = dr["CostTypeID"] != DBNull.Value ? Convert.ToInt32(dr["CostTypeID"]) : (int?)null,
-                                    MainGroupId = dr["MainGroupID"] != DBNull.Value ? Convert.ToInt32(dr["MainGroupID"]) : (int?)null,
-                                    SubGroupId = dr["SubGroupID"] != DBNull.Value ? Convert.ToInt32(dr["SubGroupID"]) : (int?)null
+                                    MAIN_GROUP_ID = dr["MainGROUP_ID"] != DBNull.Value ? Convert.ToInt32(dr["MainGROUP_ID"]) : (int?)null,
+                                    SUB_GROUP_ID = dr["SubGROUP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SubGROUP_ID"]) : (int?)null
                                 });
                             }
                             res.flag = 1;
@@ -223,7 +223,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@p_ACTION", 3);
-                        cmd.Parameters.AddWithValue("@p_HeadID", id);
+                        cmd.Parameters.AddWithValue("@p_HEAD_ID", id);
 
                         using (var reader = cmd.ExecuteReader())
                         {

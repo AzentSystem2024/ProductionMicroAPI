@@ -25,6 +25,7 @@
         public string LOGIN_NAME { get; set; }
         public string LOGIN_PASSWORD { get; set; }
         public int PARENT_ID { get; set; }
+        public int? COMPANY_ID { get; set; }  
 
         public List<DistributorLocation> LOCATIONS { get; set; }
     }
@@ -35,7 +36,7 @@
         public string CODE { get; set; }
         public string DISTRIBUTOR_NAME { get; set; }
         //public string? PARENT_DISTRIBUTOR_NAME { get; set; }
-        public string DISTRIBUTOR_TYPE { get; set; }
+        public string? DISTRIBUTOR_TYPE { get; set; }
         public string ADDRESS { get; set; }
         public int COUNTRY_ID { get; set; }          
         public bool IS_INACTIVE { get; set; }
@@ -59,6 +60,8 @@
         public string LOGIN_NAME { get; set; }
         public string LOGIN_PASSWORD { get; set; }
         public int? PARENT_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+
         public List<DistributorLocationUpdate> LOCATIONS { get; set; }
 
     }

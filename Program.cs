@@ -44,6 +44,7 @@ builder.Services.AddControllers()
 //auto register services
 builder.Services.AddDataLayerServices();
 
+
 //authentication middleware config
 builder.Services.AddAuthentication(
     options =>

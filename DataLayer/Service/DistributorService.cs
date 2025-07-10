@@ -8,101 +8,109 @@ namespace MicroApi.DataLayer.Service
 {
     public class DistributorService:IDistributorService
     {
-        public DistributorResponse Insert(Distributor distributor)
+       public DistributorResponse Insert(Distributor distributor)
+{
+    DistributorResponse res = new DistributorResponse();
+
+    try
+    {
+        using (var connection = ADO.GetConnection())
         {
-            DistributorResponse res = new DistributorResponse();
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
 
-            try
+            using (var tx = connection.BeginTransaction())
             {
-                using (var connection = ADO.GetConnection())
+                try
                 {
-                    if (connection.State == ConnectionState.Closed)
-                        connection.Open();
+                    int distributorId = 0;
 
-                    using (var tx = connection.BeginTransaction())
+                    using (var cmd = new SqlCommand("SP_TB_DISTRIBUTOR", connection, tx))
                     {
-                        try
-                        {                           
-                            int distributorId = 0;
-                            using (var cmd = new SqlCommand("SP_TB_DISTRIBUTOR", connection, tx))
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
+                        cmd.Parameters.AddWithValue("@CODE", distributor.CODE);
+                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_NAME", distributor.DISTRIBUTOR_NAME);
+                        cmd.Parameters.AddWithValue("@ADDRESS", distributor.ADDRESS);
+                        cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
+                        cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
+                        cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
+                        cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID);
+                        cmd.Parameters.AddWithValue("@TELEPHONE", distributor.TELEPHONE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FAX", distributor.FAX ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@WHATSAPP_NO", distributor.WHATSAPP_NO ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@EMAIL", distributor.EMAIL ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IS_INACTIVE", distributor.IS_INACTIVE);
+                        cmd.Parameters.AddWithValue("@SALESMAN_EMAIL", distributor.SALESMAN_EMAIL ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@WAREHOUSE_ID", distributor.WAREHOUSE_ID);
+                        cmd.Parameters.AddWithValue("@CONTACT_NAME", distributor.CONTACT_NAME ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DISC_PERCENT", distributor.DISC_PERCENT);
+                        cmd.Parameters.AddWithValue("@CREDIT_LIMIT", distributor.CREDIT_LIMIT);
+                        cmd.Parameters.AddWithValue("@CREDIT_DAYS", distributor.CREDIT_DAYS);
+                        cmd.Parameters.AddWithValue("@ZONE_ID", distributor.ZONE_ID);
+                        cmd.Parameters.AddWithValue("@LOGIN_NAME", distributor.LOGIN_NAME);
+                        cmd.Parameters.AddWithValue("@LOGIN_PASSWORD", distributor.LOGIN_PASSWORD);
+                        cmd.Parameters.AddWithValue("@PARENT_ID", distributor.PARENT_ID > 0 ? distributor.PARENT_ID : 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", distributor.COMPANY_ID);
+
+
+                                using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
                             {
-                                cmd.CommandType = CommandType.StoredProcedure;
-
-                                cmd.Parameters.AddWithValue("@ID", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@ACTION", 1);
-                                cmd.Parameters.AddWithValue("@CODE", distributor.CODE);
-                                cmd.Parameters.AddWithValue("@DISTRIBUTOR_NAME", distributor.DISTRIBUTOR_NAME);
-                                cmd.Parameters.AddWithValue("@ADDRESS", distributor.ADDRESS);
-                                cmd.Parameters.AddWithValue("@COUNTRY_ID", distributor.COUNTRY_ID);
-                                cmd.Parameters.AddWithValue("@STATE_ID", distributor.STATE_ID);
-                                cmd.Parameters.AddWithValue("@DISTRICT_ID", distributor.DISTRICT_ID);
-                                cmd.Parameters.AddWithValue("@CITY_ID", distributor.CITY_ID); 
-                                cmd.Parameters.AddWithValue("@TELEPHONE", distributor.TELEPHONE ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@FAX", distributor.FAX ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@MOBILE", distributor.MOBILE ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@WHATSAPP_NO", distributor.WHATSAPP_NO ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@EMAIL", distributor.EMAIL ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@IS_INACTIVE", distributor.IS_INACTIVE);
-                                cmd.Parameters.AddWithValue("@SALESMAN_EMAIL", distributor.SALESMAN_EMAIL ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@WAREHOUSE_ID", distributor.WAREHOUSE_ID);
-                                cmd.Parameters.AddWithValue("@CONTACT_NAME", distributor.CONTACT_NAME ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@DISC_PERCENT", distributor.DISC_PERCENT);
-                                cmd.Parameters.AddWithValue("@CREDIT_LIMIT", distributor.CREDIT_LIMIT);
-                                cmd.Parameters.AddWithValue("@CREDIT_DAYS", distributor.CREDIT_DAYS);
-                                cmd.Parameters.AddWithValue("@ZONE_ID", distributor.ZONE_ID);
-                                cmd.Parameters.AddWithValue("@LOGIN_NAME", distributor.LOGIN_NAME);
-                                cmd.Parameters.AddWithValue("@LOGIN_PASSWORD", distributor.LOGIN_PASSWORD);
-                                // cmd.Parameters.AddWithValue("@PARENT_ID", distributor.PARENT_ID);
-                                cmd.Parameters.AddWithValue("@PARENT_ID", distributor.PARENT_ID > 0 ? distributor.PARENT_ID : 0);
-
-                                object insertedId = cmd.ExecuteScalar();
-                                distributorId = insertedId != null ? Convert.ToInt32(insertedId) : 0;
+                                distributorId = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0;
                             }
+                        }
+                    }
 
-                            // ✅ 4. Insert into TB_DISTRIBUTOR_LOCATIONS
-                            if (distributor.LOCATIONS != null && distributor.LOCATIONS.Any())
-                            {
-                                string insertLocSql = @"
+                    // ✅ Insert into TB_DISTRIBUTOR_LOCATIONS if any
+                    if (distributor.LOCATIONS != null && distributor.LOCATIONS.Any())
+                    {
+                        string insertLocSql = @"
                             INSERT INTO TB_DISTRIBUTOR_LOCATIONS 
                             (DISTRIBUTOR_ID, LOCATION, ADDRESS, TELEPHONE, MOBILE, IS_INACTIVE)
                             VALUES (@DISTRIBUTOR_ID, @LOCATION, @ADDRESS, @TELEPHONE, @MOBILE, @IS_INACTIVE)";
 
-                                foreach (var location in distributor.LOCATIONS)
-                                {
-                                    using (var locCmd = new SqlCommand(insertLocSql, connection, tx))
-                                    {
-                                        locCmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", distributorId);
-                                        locCmd.Parameters.AddWithValue("@LOCATION", location.LOCATION);
-                                        locCmd.Parameters.AddWithValue("@ADDRESS", location.ADDRESS ?? (object)DBNull.Value);
-                                        locCmd.Parameters.AddWithValue("@TELEPHONE", location.TELEPHONE ?? (object)DBNull.Value);
-                                        locCmd.Parameters.AddWithValue("@MOBILE", location.MOBILE ?? (object)DBNull.Value);
-                                        locCmd.Parameters.AddWithValue("@IS_INACTIVE", location.IS_INACTIVE);
-                                        locCmd.ExecuteNonQuery();
-                                    }
-                                }
-                            }
-
-                            tx.Commit();
-                            res.flag = 1;
-                            res.Message = "Success";
-                        }
-                        catch (Exception ex1)
+                        foreach (var location in distributor.LOCATIONS)
                         {
-                            tx.Rollback();
-                            res.flag = 0;
-                            res.Message = "Error during transaction: " + ex1.Message;
+                            using (var locCmd = new SqlCommand(insertLocSql, connection, tx))
+                            {
+                                locCmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", distributorId);
+                                locCmd.Parameters.AddWithValue("@LOCATION", location.LOCATION);
+                                locCmd.Parameters.AddWithValue("@ADDRESS", location.ADDRESS ?? (object)DBNull.Value);
+                                locCmd.Parameters.AddWithValue("@TELEPHONE", location.TELEPHONE ?? (object)DBNull.Value);
+                                locCmd.Parameters.AddWithValue("@MOBILE", location.MOBILE ?? (object)DBNull.Value);
+                                locCmd.Parameters.AddWithValue("@IS_INACTIVE", location.IS_INACTIVE);
+                                locCmd.ExecuteNonQuery();
+                            }
                         }
                     }
+
+                    tx.Commit();
+                    res.flag = 1;
+                    res.Message = "Success";
+                }
+                catch (Exception ex1)
+                {
+                    tx.Rollback();
+                    res.flag = 0;
+                    res.Message = "Error during transaction: " + ex1.Message;
                 }
             }
-            catch (Exception ex)
-            {
-                res.flag = 0;
-                res.Message = "Database connection failed: " + ex.Message;
-            }
-
-            return res;
         }
+    }
+    catch (Exception ex)
+    {
+        res.flag = 0;
+        res.Message = "Database connection failed: " + ex.Message;
+    }
+
+    return res;
+}
+
 
 
 
@@ -151,6 +159,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@LOGIN_NAME", distributor.LOGIN_NAME);
                                 cmd.Parameters.AddWithValue("@LOGIN_PASSWORD", distributor.LOGIN_PASSWORD);
                                 cmd.Parameters.AddWithValue("@PARENT_ID", distributor.PARENT_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@COMPANY_ID", distributor.COMPANY_ID);
 
                                 cmd.ExecuteNonQuery();
                             }
@@ -357,6 +366,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@LOGIN_NAME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@LOGIN_PASSWORD", DBNull.Value);
                         cmd.Parameters.AddWithValue("@PARENT_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {

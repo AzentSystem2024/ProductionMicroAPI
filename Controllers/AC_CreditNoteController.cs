@@ -137,6 +137,24 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("invoicelist")]
+        public CreditNoteInvoiceListResponse GetCreditNoteInvoiceList()
+        {
+            CreditNoteInvoiceListResponse res = new CreditNoteInvoiceListResponse();
 
+            try
+            {
+                res = _creditNoteService.GetCreditNoteInvoiceList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<CreditNoteInvlist>();
+            }
+
+            return res;
+        }
     }
 }

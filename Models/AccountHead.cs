@@ -4,14 +4,14 @@
     {
        // public int HEAD_ID { get; set; }
        // public string? HEAD_CODE { get; set; }
-        public  string? HeadName{ get; set; }
-        public int GroupID { get; set; }
-        public bool IsDirect { get; set; }
-        public bool IsSysHead { get; set; }
-        public string ArabicName { get; set; }
-        public bool IsActive { get; set; }
-        public int SerialNo { get; set; }
-        public int CostTypeID {  get; set; }
+        public  string? HEAD_NAME{ get; set; }
+        public int GROUP_ID { get; set; }
+        public bool IS_DIRECT { get; set; }
+        public bool IS_SYS_HEAD { get; set; }
+        public string ARABIC_NAME { get; set; }
+        public bool IS_INACTIVE { get; set; }
+        public int SERIAL_NO { get; set; }
+        //public int CostTypeID {  get; set; }
 
     }
     public class AccountHeadListResponse
@@ -30,18 +30,18 @@
     }
     public class AccountHeadUpdate
     {
-        public int HeadID { get; set; }
-        public string? HeadCode { get; set; } = null;
+        public int HEAD_ID { get; set; }
+        public string? HEAD_CODE { get; set; } = null;
 
-        public string HeadName { get; set; } = string.Empty;
-        public int GroupID { get; set; }
-        public bool IsDirect { get; set; }
-        public bool IsSysHead { get; set; }
-        public string ArabicName { get; set; } = string.Empty;
-        public bool IsActive { get; set; }
-        public int SerialNo { get; set; }
-        public int? MainGroupId { get; set; }
-        public int? SubGroupId { get; set; }
+        public string HEAD_NAME { get; set; } = string.Empty;
+        public int GROUP_ID { get; set; }
+        public bool IS_DIRECT { get; set; }
+        public bool IS_SYS_HEAD { get; set; }
+        public string ARABIC_NAME { get; set; } = string.Empty;
+        public bool IS_INACTIVE { get; set; }
+        public int SERIAL_NO { get; set; }
+        public int? MAIN_GROUP_ID { get; set; }
+        public int? SUB_GROUP_ID { get; set; }
 
     }
     

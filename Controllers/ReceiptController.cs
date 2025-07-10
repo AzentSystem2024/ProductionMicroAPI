@@ -7,23 +7,23 @@ namespace MicroApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class InvoiceController : ControllerBase
+    public class ReceiptController : ControllerBase
     {
-        private readonly IInvoiceService _invoiceService;
+        private readonly IReceiptService _receiptService;
 
-        public InvoiceController(IInvoiceService invoiceService)
+        public ReceiptController(IReceiptService receiptService)
         {
-            _invoiceService = invoiceService;
+            _receiptService = receiptService;
         }
         [HttpPost]
         [Route("insert")]
-        public InvoiceResponse Insert(Invoice model)
+        public ReceiptResponse Insert(Receipt model)
         {
-            InvoiceResponse res = new InvoiceResponse();
+            ReceiptResponse res = new ReceiptResponse();
 
             try
             {
-                res = _invoiceService.insert(model);
+                res = _receiptService.insert(model);
             }
             catch (Exception ex)
             {
@@ -35,66 +35,68 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("update")]
-        public InvoiceResponse Update(InvoiceUpdate model)
+        public ReceiptResponse UpdateReceipt(ReceiptUpdate model)
         {
-            InvoiceResponse res = new InvoiceResponse();
+            ReceiptResponse res = new ReceiptResponse();
+
             try
             {
-                res = _invoiceService.Update(model);
+                res = _receiptService.Update(model); 
             }
             catch (Exception ex)
             {
                 res.flag = 0;
-                res.Message = ex.Message;
+                res.Message = "Error: " + ex.Message;
             }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("invoicelist")]
+        public PendingInvoiceListResponse GetPendingInvoiceList()
+        {
+            PendingInvoiceListResponse res = new PendingInvoiceListResponse();
+
+            try
+            {
+                res = _receiptService.GetPendingInvoiceList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<PendingInvoiceItem>();
+            }
+
             return res;
         }
         [HttpPost]
         [Route("list")]
-        public TransferGridResponse GetCreditNoteList()
+        public ReceiptListResponse GetReceiptList()
         {
-            TransferGridResponse res = new TransferGridResponse();
+            ReceiptListResponse res = new ReceiptListResponse();
 
             try
             {
-                res = _invoiceService.GetTransferData();
+                res = _receiptService.GetReceiptList();
             }
             catch (Exception ex)
             {
                 res.flag = 0;
                 res.Message = "Error: " + ex.Message;
-                res.Data = new List<TransferGridItem>();
-            }
-
-            return res;
-        }
-        [HttpPost]
-        [Route("getlist")]
-        public InvoiceHeaderResponse GetSaleInvoiceHeaderData()
-        {
-            InvoiceHeaderResponse res = new InvoiceHeaderResponse();
-
-            try
-            {
-                res = _invoiceService.GetSaleInvoiceHeaderData();
-            }
-            catch (Exception ex)
-            {
-                res.flag = 0;
-                res.Message = "Error: " + ex.Message;
-                res.Data = new List<InvoiceHeader>();
+                res.Data = new List<ReceiptListItem>();
             }
 
             return res;
         }
         [HttpPost]
         [Route("select/{id:int}")]
-        public InvoiceHeaderSelectResponse Select(int id)
+        public ReceiptSelectResponse Select(int id)
         {
-            InvoiceHeaderSelectResponse response = new InvoiceHeaderSelectResponse();
+            ReceiptSelectResponse response = new ReceiptSelectResponse();
             try
             {
-                response = _invoiceService.GetSaleInvoiceById(id);
+                response = _receiptService.GetReceiptById(id);
             }
             catch (Exception ex)
             {
@@ -105,12 +107,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("commit")]
-        public InvoiceResponse Commit(CommitInvoiceRequest request)
+        public ReceiptResponse Commit(CommitReceiptRequest request)
         {
-            InvoiceResponse response = new InvoiceResponse();
+            ReceiptResponse response = new ReceiptResponse();
             try
             {
-                response = _invoiceService.CommitInvoice(request);
+                response = _receiptService.CommitReceipt(request);
             }
             catch (Exception ex)
             {
@@ -120,14 +122,14 @@ namespace MicroApi.Controllers
             return response;
         }
         [HttpPost]
-        [Route("invoiceno")]
-        public InvResponse GetInvoiceNo()
+        [Route("receiptno")]
+        public RecResponse GetReceiptNo()
         {
-            InvResponse res = new InvResponse();
+            RecResponse res = new RecResponse();
 
             try
             {
-                res = _invoiceService.GetInvoiceNo();
+                res = _receiptService.GetReceiptNo();
             }
             catch (Exception ex)
             {
@@ -139,12 +141,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("delete/{id:int}")]
-        public InvoiceResponse Delete(int id)
+        public ReceiptResponse Delete(int id)
         {
-            InvoiceResponse res = new InvoiceResponse();
+            ReceiptResponse res = new ReceiptResponse();
             try
             {
-                res = _invoiceService.Delete(id);
+                res = _receiptService.Delete(id);
             }
             catch (Exception ex)
             {
@@ -153,6 +155,5 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-
     }
 }
