@@ -48,7 +48,7 @@ namespace MicroApi.DataLayer.Service
                                 // Second result: user info
                                 if (reader.NextResult() && reader.Read())
                                 {
-                                    response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0;
+                                    response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : (int?)null;
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
                                     response.FINANCIAL_YEAR_ID = reader["FINANCIAL_YEAR_ID"] != DBNull.Value ? Convert.ToInt32(reader["FINANCIAL_YEAR_ID"]) : 0;
                                     
@@ -69,20 +69,44 @@ namespace MicroApi.DataLayer.Service
                                 // Fourth result: menu permissions
                                 if (reader.NextResult())
                                 {
+                                    Dictionary<int, MenuGroup> menuGroups = new Dictionary<int, MenuGroup>();
+
                                     while (reader.Read())
                                     {
-                                        response.MenuPermissions.Add(new UserMenusPermission
+                                        int menuGroupId = reader["MenuGroupID"] != DBNull.Value ? Convert.ToInt32(reader["MenuGroupID"]) : 0;
+
+                                        if (!menuGroups.ContainsKey(menuGroupId))
+                                        {
+                                            menuGroups[menuGroupId] = new MenuGroup
+                                            {
+                                                MenuGroupID = menuGroupId,
+                                                Text = reader["Text"]?.ToString(),
+                                                Icon = reader["Icon"]?.ToString(),
+                                                MenuGroupOrder = reader["MenuGroupOrder"] != DBNull.Value ? Convert.ToDecimal(reader["MenuGroupOrder"]) : 0,
+                                            };
+                                        }
+
+                                        MenuGroup menuGroup = menuGroups[menuGroupId];
+
+                                        menuGroup.Menus.Add(new Menu
                                         {
                                             MenuID = reader["MenuID"] != DBNull.Value ? Convert.ToInt32(reader["MenuID"]) : 0,
+                                            MenuName = reader["MenuName"]?.ToString(),
+                                            MenuOrder = reader["MenuOrder"] != DBNull.Value ? Convert.ToDecimal(reader["MenuOrder"]) : 0,
+                                            Selected = reader["Selected"] != DBNull.Value && Convert.ToBoolean(reader["Selected"]),
                                             CanAdd = reader["CanAdd"] != DBNull.Value && Convert.ToBoolean(reader["CanAdd"]),
                                             CanView = reader["CanView"] != DBNull.Value && Convert.ToBoolean(reader["CanView"]),
                                             CanEdit = reader["CanEdit"] != DBNull.Value && Convert.ToBoolean(reader["CanEdit"]),
                                             CanApprove = reader["CanApprove"] != DBNull.Value && Convert.ToBoolean(reader["CanApprove"]),
                                             CanDelete = reader["CanDelete"] != DBNull.Value && Convert.ToBoolean(reader["CanDelete"]),
-                                            CanPrint = reader["CanPrint"] != DBNull.Value && Convert.ToBoolean(reader["CanPrint"])
+                                            CanPrint = reader["CanPrint"] != DBNull.Value && Convert.ToBoolean(reader["CanPrint"]),
+                                            Path = reader["Path"]?.ToString()
                                         });
                                     }
+
+                                    response.MenuGroups = menuGroups.Values.ToList();
                                 }
+
                             }
                         }
                     }
