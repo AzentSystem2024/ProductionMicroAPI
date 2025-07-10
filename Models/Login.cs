@@ -3,7 +3,7 @@
     public class Login
     {
         public string LOGIN_NAME { get; set; }
-        public string PASSWORD { get; set; }
+        public string? PASSWORD { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? FINANCIAL_YEAR_ID { get; set; }
     }
