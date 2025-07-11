@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class ReportService: IReportService
     {
-        public LedgerReportInitData GetInitData(int companyId)
+        public LedgerReportInitData GetInitData(int id)
         {
             var reportData = new LedgerReportInitData
             {
@@ -17,15 +17,15 @@ namespace MicroApi.DataLayer.Service
 
             using (SqlConnection con = ADO.GetConnection())
             using (SqlCommand cmd = new SqlCommand(@"
-                SELECT DISTINCT H.HEAD_ID, H.HEAD_NAME
-                FROM TB_AC_HEAD H
-                INNER JOIN TB_AC_TRANS_DETAIL TD ON TD.HEAD_ID = H.HEAD_ID
-                INNER JOIN TB_AC_TRANS_HEADER TH ON TH.TRANS_ID = TD.TRANS_ID
-                WHERE TH.COMPANY_ID = @COMPANY_ID
-                ORDER BY H.HEAD_NAME", con))
+        SELECT DISTINCT H.HEAD_ID, H.HEAD_NAME
+        FROM TB_AC_HEAD H
+        INNER JOIN TB_AC_TRANS_DETAIL TD ON TD.HEAD_ID = H.HEAD_ID
+        INNER JOIN TB_AC_TRANS_HEADER TH ON TH.TRANS_ID = TD.TRANS_ID
+        WHERE TH.COMPANY_ID = @COMPANY_ID
+        ORDER BY H.HEAD_NAME", con))
             {
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", id); 
 
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
@@ -40,12 +40,19 @@ namespace MicroApi.DataLayer.Service
                 }
             }
 
+            reportData.flag = 1;
+            reportData.message = "Success";
             return reportData;
         }
 
+
         public LedgerStatementResponse GetLedgerStatement(Report request)
         {
-            var response = new LedgerStatementResponse();
+            var response = new LedgerStatementResponse
+            {
+                data = new List<LedgerStatementItem>() 
+            };
+
             try
             {
                 using (SqlConnection con = ADO.GetConnection())

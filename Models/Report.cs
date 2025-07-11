@@ -23,7 +23,11 @@
     {
         public int flag { get; set; }
         public string message { get; set; }
-        public List<LedgerStatementItem> data { get; set; } 
+        public List<LedgerStatementItem> data { get; set; } = new List<LedgerStatementItem>(); 
+    }
+    public class InitDataRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
     public class DropDownItem
     {

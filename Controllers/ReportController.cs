@@ -15,13 +15,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("initData")]
-        public LedgerReportInitData InitData(int companyId)
+        public LedgerReportInitData InitData(InitDataRequest request)
         {
             LedgerReportInitData res = new LedgerReportInitData();
 
             try
             {
-                res = _ReportService.GetInitData(companyId);
+                res = _ReportService.GetInitData(request.COMPANY_ID);
                 res.flag = 1;
                 res.message = "Success";
 
