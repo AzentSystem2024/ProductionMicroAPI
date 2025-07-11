@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MicroApi.DataLayer.Interface;
+﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MicroApi.Controllers
 {
@@ -18,14 +19,15 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetTrialBalanceReport([FromQuery] int companyId, [FromQuery] int finId, [FromQuery] string dateFrom, [FromQuery] string dateTo)
+        public IActionResult GetTrialBalanceReport([FromBody] ReportRequest request)
         {
             try
             {
-                DateTime parsedDateFrom = DateTime.Parse(dateFrom);
-                DateTime parsedDateTo = DateTime.Parse(dateTo);
+                // Parse the dates using the format "yyyy-MM-dd" to ignore the time component
+                DateTime dateFrom = DateTime.ParseExact(request.DateFrom, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime dateTo = DateTime.ParseExact(request.DateTo, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-                List<TrialBalanceReport> reportData = _trialBalanceReportService.GetTrialBalanceReport(companyId, finId, parsedDateFrom, parsedDateTo);
+                var reportData = _trialBalanceReportService.GetTrialBalanceReport(request.CompanyId, request.FinId, dateFrom, dateTo);
                 return Ok(new { flag = 1, message = "Success", data = reportData });
             }
             catch (Exception ex)
@@ -35,3 +37,4 @@ namespace MicroApi.Controllers
         }
     }
 }
+

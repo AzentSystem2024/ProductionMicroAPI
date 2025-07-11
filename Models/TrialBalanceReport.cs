@@ -15,4 +15,11 @@
         public decimal ClosingBalanceDebit { get; set; }
         public decimal ClosingBalanceCredit { get; set; }
     }
+    public class ReportRequest
+    {
+        public int CompanyId { get; set; }
+        public int FinId { get; set; }
+        public string DateFrom { get; set; }
+        public string DateTo { get; set; }
+    }
 }
