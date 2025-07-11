@@ -50,7 +50,7 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : (int?)null;
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
-                                    response.FINANCIAL_YEAR_ID = reader["FINANCIAL_YEAR_ID"] != DBNull.Value ? Convert.ToInt32(reader["FINANCIAL_YEAR_ID"]) : 0;
+                                   // response.FINANCIAL_YEAR_ID = reader["FINANCIAL_YEAR_ID"] != DBNull.Value ? Convert.ToInt32(reader["FINANCIAL_YEAR_ID"]) : 0;
 
                                 }
 
@@ -106,6 +106,20 @@ namespace MicroApi.DataLayer.Service
 
                                     response.MenuGroups = menuGroups.Values.ToList();
                                 }
+                                if (reader.NextResult())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        response.FINANCIAL_YEARS.Add(new FinancialYear
+                                        {
+                                            FIN_ID = reader["FIN_ID"] != DBNull.Value ? Convert.ToInt32(reader["FIN_ID"]) : 0,
+                                            FIN_CODE = reader["FIN_CODE"]?.ToString(),
+                                            DATE_FROM = reader["DATE_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["DATE_FROM"]) : DateTime.MinValue,
+                                            DATE_TO = reader["DATE_TO"] != DBNull.Value ? Convert.ToDateTime(reader["DATE_TO"]) : DateTime.MinValue,
+                                            IS_CLOSED = reader["IS_CLOSED"] != DBNull.Value && Convert.ToBoolean(reader["IS_CLOSED"])
+                                        });
+                                    }
+                                }
 
                             }
                         }
@@ -143,7 +157,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@LOGIN_NAME", loginName);
-                        cmd.Parameters.AddWithValue("@PASSWORD", DBNull.Value); 
+                        cmd.Parameters.AddWithValue("@PASSWORD", DBNull.Value);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@FINANCIAL_YEAR_ID", DBNull.Value);
 

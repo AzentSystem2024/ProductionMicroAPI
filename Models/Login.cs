@@ -15,7 +15,8 @@
 
         public int? USER_ID { get; set; }
         public string USER_NAME { get; set; }
-        public int FINANCIAL_YEAR_ID { get; set; } = 1;
+       // public FinancialYear FINANCIAL_YEAR { get; set; }
+        public List<FinancialYear> FINANCIAL_YEARS { get; set; } = new(); 
 
         public List<CompanyList> Companies { get; set; } = new List<CompanyList>();
         public List<MenuGroup> MenuGroups { get; set; } = new List<MenuGroup>();
@@ -58,17 +59,13 @@
         public string USER_NAME { get; set; }
         public List<CompanyList> Companies { get; set; } = new List<CompanyList>();
     }
-    //public class UserMenusPermission
-    //{
-    //    public int MenuID { get; set; }
-    //    public string MenuName { get; set; }
-    //    public decimal MenuOrder { get; set; }
-    //    public bool CanAdd { get; set; }
-    //    public bool CanView { get; set; }
-    //    public bool CanEdit { get; set; }
-    //    public bool CanApprove { get; set; }
-    //    public bool CanDelete { get; set; }
-    //    public bool CanPrint { get; set; }
-    //}
+    public class FinancialYear
+    {
+        public int FIN_ID { get; set; }
+        public string FIN_CODE { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public bool IS_CLOSED { get; set; }
+    }
 
 }

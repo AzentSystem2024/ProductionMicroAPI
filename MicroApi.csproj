@@ -12,7 +12,6 @@
     <Compile Remove="Controllers\DepartmentController.cs" />
     <Compile Remove="Controllers\InsuranceController.cs" />
     <Compile Remove="Controllers\ItemsController.cs" />
-    <Compile Remove="Controllers\ReportController.cs" />
     <Compile Remove="Controllers\SchemaController.cs" />
     <Compile Remove="Controllers\TestController.cs" />
     <Compile Remove="Controllers\UserLabController.cs" />
@@ -20,7 +19,6 @@
     <Compile Remove="DataLayer\Interface\IDepartmentService.cs" />
     <Compile Remove="DataLayer\Interface\IInsuranceService.cs" />
     <Compile Remove="DataLayer\Interface\IItemsService.cs" />
-    <Compile Remove="DataLayer\Interface\IReportService.cs" />
     <Compile Remove="DataLayer\Interface\ISchemaService.cs" />
     <Compile Remove="DataLayer\Interface\ITestService.cs" />
     <Compile Remove="DataLayer\Interface\IUserLabService.cs" />
@@ -28,7 +26,6 @@
     <Compile Remove="DataLayer\Service\DepartmentService.cs" />
     <Compile Remove="DataLayer\Service\InsuranceService.cs" />
     <Compile Remove="DataLayer\Service\ItemsService.cs" />
-    <Compile Remove="DataLayer\Service\ReportService.cs" />
     <Compile Remove="DataLayer\Service\SchemaService.cs" />
     <Compile Remove="DataLayer\Service\TestService.cs" />
     <Compile Remove="DataLayer\Service\UserLabService.cs" />
@@ -36,7 +33,6 @@
     <Compile Remove="Models\Department.cs" />
     <Compile Remove="Models\Insurance.cs" />
     <Compile Remove="Models\Item.cs" />
-    <Compile Remove="Models\Report.cs" />
     <Compile Remove="Models\Schema.cs" />
     <Compile Remove="Models\UserLab.cs" />
   </ItemGroup>
