@@ -8,12 +8,12 @@ using System.Globalization;
 namespace MicroApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class Trial_BalanceReportController : ControllerBase
+    [Route("api/AcReports/TrialBalance")]
+    public class TrialBalanceReportController : ControllerBase
     {
         private readonly ITrialBalanceReportService _trialBalanceReportService;
 
-        public Trial_BalanceReportController(ITrialBalanceReportService trialBalanceReportService)
+        public TrialBalanceReportController(ITrialBalanceReportService trialBalanceReportService)
         {
             _trialBalanceReportService = trialBalanceReportService;
         }
