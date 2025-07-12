@@ -2,10 +2,10 @@
 
 namespace MicroApi.DataLayer.Interface
 {
-    public interface IReportService
+    public interface IAC_ReportService
     {
         LedgerReportInitData GetInitData(int companyId);
-        LedgerStatementResponse GetLedgerStatement(Report request);
+        LedgerStatementResponse GetLedgerStatement(AC_Report request);
 
 
     }

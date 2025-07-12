@@ -81,6 +81,7 @@
     {
         public int TRANS_ID { get; set; }
         public string VOUCHER_NO { get; set; }
+        public int? TRANS_STATUS { get; set; }
         public string REC_DATE { get; set; }
         public int UNIT_ID { get; set; }
         public int DISTRIBUTOR_ID { get; set; }

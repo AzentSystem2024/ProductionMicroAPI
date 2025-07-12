@@ -6,7 +6,7 @@ using MicroApi.DataLayer.Interface;
 
 namespace MicroApi.DataLayer.Service
 {
-    public class ReportService: IReportService
+    public class AC_ReportService: IAC_ReportService
     {
         public LedgerReportInitData GetInitData(int id)
         {
@@ -17,12 +17,12 @@ namespace MicroApi.DataLayer.Service
 
             using (SqlConnection con = ADO.GetConnection())
             using (SqlCommand cmd = new SqlCommand(@"
-        SELECT DISTINCT H.HEAD_ID, H.HEAD_NAME
-        FROM TB_AC_HEAD H
-        INNER JOIN TB_AC_TRANS_DETAIL TD ON TD.HEAD_ID = H.HEAD_ID
-        INNER JOIN TB_AC_TRANS_HEADER TH ON TH.TRANS_ID = TD.TRANS_ID
-        WHERE TH.COMPANY_ID = @COMPANY_ID
-        ORDER BY H.HEAD_NAME", con))
+            SELECT DISTINCT H.HEAD_ID, H.HEAD_NAME
+            FROM TB_AC_HEAD H
+            INNER JOIN TB_AC_TRANS_DETAIL TD ON TD.HEAD_ID = H.HEAD_ID
+            INNER JOIN TB_AC_TRANS_HEADER TH ON TH.TRANS_ID = TD.TRANS_ID
+            WHERE TH.COMPANY_ID = @COMPANY_ID
+            ORDER BY H.HEAD_NAME", con))
             {
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.AddWithValue("@COMPANY_ID", id); 
@@ -46,11 +46,11 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public LedgerStatementResponse GetLedgerStatement(Report request)
+        public LedgerStatementResponse GetLedgerStatement(AC_Report request)
         {
             var response = new LedgerStatementResponse
             {
-                data = new List<LedgerStatementItem>() 
+                data = new List<LedgerStatementItem>()
             };
 
             try
@@ -74,6 +74,8 @@ namespace MicroApi.DataLayer.Service
                             {
                                 TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),
                                 TRANS_DATE = rdr["TRANS_DATE"] == DBNull.Value ? null : Convert.ToDateTime(rdr["TRANS_DATE"]),
+                                TRANS_TYPE_ID = rdr["TRANS_TYPE_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(rdr["TRANS_TYPE_ID"]),
+                                TRANS_TYPE_NAME = rdr["TRANS_TYPE_NAME"].ToString(),
                                 VOUCHER_NO = rdr["VOUCHER_NO"].ToString(),
                                 PARTICULARS = rdr["PARTICULARS"].ToString(),
                                 DR_AMOUNT = Convert.ToDecimal(rdr["DR_AMOUNT"]),
@@ -95,6 +97,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
 
     }
 }

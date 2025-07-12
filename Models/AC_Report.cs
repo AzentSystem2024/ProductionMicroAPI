@@ -1,6 +1,6 @@
 ﻿namespace MicroApi.Models
 {
-    public class Report
+    public class AC_Report
     {
         public int COMPANY_ID { get; set; }
         public int FIN_ID { get; set; }
@@ -12,6 +12,8 @@
     {
         public int TRANS_ID { get; set; }
         public DateTime? TRANS_DATE { get; set; }
+        public int? TRANS_TYPE_ID { get; set; }  
+        public string TRANS_TYPE_NAME { get; set; }
         public string VOUCHER_NO { get; set; }
         public string PARTICULARS { get; set; }
         public decimal DR_AMOUNT { get; set; }
