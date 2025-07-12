@@ -1,6 +1,6 @@
 ﻿namespace MicroApi.Models
 {
-    public class Report
+    public class AC_Report
     {
         public int COMPANY_ID { get; set; }
         public int FIN_ID { get; set; }

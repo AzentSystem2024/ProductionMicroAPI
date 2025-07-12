@@ -6,7 +6,7 @@ using MicroApi.DataLayer.Interface;
 
 namespace MicroApi.DataLayer.Service
 {
-    public class ReportService: IReportService
+    public class AC_ReportService: IAC_ReportService
     {
         public LedgerReportInitData GetInitData(int id)
         {
@@ -46,7 +46,7 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public LedgerStatementResponse GetLedgerStatement(Report request)
+        public LedgerStatementResponse GetLedgerStatement(AC_Report request)
         {
             var response = new LedgerStatementResponse
             {

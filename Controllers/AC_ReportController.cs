@@ -6,10 +6,10 @@ namespace MicroApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ReportController : ControllerBase
+    public class AC_ReportController : ControllerBase
     {
-        private readonly IReportService _ReportService;
-        public ReportController(IReportService ReportService)
+        private readonly IAC_ReportService _ReportService;
+        public AC_ReportController(IAC_ReportService ReportService)
         {
             _ReportService = ReportService;
         }
@@ -35,7 +35,7 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost("ledger")]
-        public LedgerStatementResponse GetLedgerStatement(Report request)
+        public LedgerStatementResponse GetLedgerStatement(AC_Report request)
         {
             var res = new LedgerStatementResponse();
             try
