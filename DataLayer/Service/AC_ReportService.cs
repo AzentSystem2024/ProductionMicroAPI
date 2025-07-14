@@ -55,6 +55,8 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
+                request.DATE_FROM = request.DATE_FROM.Date;
+                request.DATE_TO = request.DATE_TO.Date.AddDays(1).AddMilliseconds(-3);
                 using (SqlConnection con = ADO.GetConnection())
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_LEDGER_STATEMENT", con))
                 {
