@@ -15,9 +15,8 @@
 
         public int? USER_ID { get; set; }
         public string USER_NAME { get; set; }
-       // public FinancialYear FINANCIAL_YEAR { get; set; }
-        public List<FinancialYear> FINANCIAL_YEARS { get; set; } = new(); 
-
+        public List<FinancialYear> FINANCIAL_YEARS { get; set; } = new();
+        public CompanyList SELECTED_COMPANY { get; set; } = new CompanyList();
         public List<CompanyList> Companies { get; set; } = new List<CompanyList>();
         public List<MenuGroup> MenuGroups { get; set; } = new List<MenuGroup>();
     }

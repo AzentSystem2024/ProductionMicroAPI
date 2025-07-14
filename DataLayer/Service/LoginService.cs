@@ -36,7 +36,7 @@ namespace MicroApi.DataLayer.Service
 
                         using (var reader = cmd.ExecuteReader())
                         {
-                            // First result: flag + message
+                            // Result 1: FLAG + MESSAGE
                             if (reader.Read())
                             {
                                 response.flag = reader["FLAG"] != DBNull.Value ? Convert.ToInt32(reader["FLAG"]) : 0;
@@ -45,16 +45,14 @@ namespace MicroApi.DataLayer.Service
 
                             if (response.flag == 1)
                             {
-                                // Second result: user info
+                                // Result 2: USER INFO
                                 if (reader.NextResult() && reader.Read())
                                 {
                                     response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : (int?)null;
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
-                                   // response.FINANCIAL_YEAR_ID = reader["FINANCIAL_YEAR_ID"] != DBNull.Value ? Convert.ToInt32(reader["FINANCIAL_YEAR_ID"]) : 0;
-
                                 }
 
-                                // Third result: companies
+                                // Result 3: Assigned Companies
                                 if (reader.NextResult())
                                 {
                                     while (reader.Read())
@@ -66,7 +64,18 @@ namespace MicroApi.DataLayer.Service
                                         });
                                     }
                                 }
-                                // Fourth result: menu permissions
+
+                                // Result 4: Selected Company
+                                if (reader.NextResult() && reader.Read())
+                                {
+                                    response.SELECTED_COMPANY = new CompanyList
+                                    {
+                                        COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
+                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
+                                    };
+                                }
+
+                                // Result 5: Menu Permissions
                                 if (reader.NextResult())
                                 {
                                     Dictionary<int, MenuGroup> menuGroups = new Dictionary<int, MenuGroup>();
@@ -83,12 +92,13 @@ namespace MicroApi.DataLayer.Service
                                                 Text = reader["Text"]?.ToString(),
                                                 Icon = reader["Icon"]?.ToString(),
                                                 MenuGroupOrder = reader["MenuGroupOrder"] != DBNull.Value ? Convert.ToDecimal(reader["MenuGroupOrder"]) : 0,
+                                                Menus = new List<Menu>()
                                             };
                                         }
 
-                                        MenuGroup menuGroup = menuGroups[menuGroupId];
+                                        MenuGroup group = menuGroups[menuGroupId];
 
-                                        menuGroup.Menus.Add(new Menu
+                                        group.Menus.Add(new Menu
                                         {
                                             MenuID = reader["MenuID"] != DBNull.Value ? Convert.ToInt32(reader["MenuID"]) : 0,
                                             MenuName = reader["MenuName"]?.ToString(),
@@ -106,6 +116,8 @@ namespace MicroApi.DataLayer.Service
 
                                     response.MenuGroups = menuGroups.Values.ToList();
                                 }
+
+                                // Result 6: Financial Years
                                 if (reader.NextResult())
                                 {
                                     while (reader.Read())
@@ -120,7 +132,6 @@ namespace MicroApi.DataLayer.Service
                                         });
                                     }
                                 }
-
                             }
                         }
                     }
@@ -134,6 +145,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
 
         public InitLoginResponse InitLoginData(string loginName)
         {

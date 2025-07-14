@@ -5,123 +5,124 @@ using System.Data;
 using MicroApi.DataLayer.Interface;
 using System.Globalization;
 using System.Linq;
+using System.ComponentModel.Design;
+using System.Reflection;
 
 namespace MicroApi.DataLayer.Service
 {
     public class ACTransactionsService:IACTransactionsService
     {
-        public JournalResponse InsertJournal(JournalHeader input)
+        public JournalResponse InsertJournal(JournalHeader model)
         {
-            var res = new JournalResponse();
+            JournalResponse response = new JournalResponse();
 
             try
             {
-                using var connection = ADO.GetConnection();
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-
-                using var tx = connection.BeginTransaction();
-                try
+                using (SqlConnection connection = ADO.GetConnection())
                 {
-                    int headerId;
-                    string journalNo;
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
 
-                    // Step 1: Insert Header via Stored Procedure
-                    using (var cmd = new SqlCommand("SP_TB_AC_TRANS_HEADER_DETAIL", connection, tx))
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_AC_TRANS_HEADER_DETAIL", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        AddParam(cmd, "@ID", DBNull.Value);
-                        AddParam(cmd, "@ACTION", 1);
-                        AddParam(cmd, "@COMPANY_ID", input.COMPANY_ID);
-                        AddParam(cmd, "@STORE_ID", input.STORE_ID);
-                        AddParam(cmd, "@FIN_ID", input.FIN_ID);
-                        AddParam(cmd, "@TRANS_TYPE", 4);
-                        AddParam(cmd, "@TRANS_DATE", ParseDate(input.TRANS_DATE));
-                        AddParam(cmd, "@TRANS_STATUS", input.TRANS_STATUS);
-                        AddParam(cmd, "@VOUCHER_NO", DBNull.Value);
-                        AddParam(cmd, "@RECEIPT_NO", DBNull.Value);
-                        AddParam(cmd, "@IS_DIRECT", 1);
-                        AddParam(cmd, "@REF_NO", input.REF_NO);
-                        AddParam(cmd, "@CHEQUE_NO", input.CHEQUE_NO);
-                        AddParam(cmd, "@CHEQUE_DATE", ParseDate(input.CHEQUE_DATE));
-                        AddParam(cmd, "@BANK_NAME", input.BANK_NAME);
-                        AddParam(cmd, "@RECON_DATE", DBNull.Value);
-                        AddParam(cmd, "@PDC_ID", DBNull.Value);
-                        AddParam(cmd, "@IS_CLOSED", false);
-                        AddParam(cmd, "@PARTY_ID", input.PARTY_ID);
-                        AddParam(cmd, "@PARTY_NAME", input.PARTY_NAME);
-                        AddParam(cmd, "@PARTY_REF_NO", input.PARTY_REF_NO);
-                        AddParam(cmd, "@IS_PASSED", false);
-                        AddParam(cmd, "@SCHEDULE_NO", DBNull.Value);
-                        AddParam(cmd, "@NARRATION", input.NARRATION);
-                        AddParam(cmd, "@CREATE_USER_ID", input.USER_ID);
-                        AddParam(cmd, "@VERIFY_USER_ID", DBNull.Value);
-                        AddParam(cmd, "@APPROVE1_USER_ID", DBNull.Value);
-                        AddParam(cmd, "@APPROVE2_USER_ID", DBNull.Value);
-                        AddParam(cmd, "@APPROVE3_USER_ID", DBNull.Value);
-                        AddParam(cmd, "@PAY_TYPE_ID", DBNull.Value);
-                        AddParam(cmd, "@PAY_HEAD_ID", DBNull.Value);
-                        AddParam(cmd, "@ADD_TIME", DateTime.Now);
-                        AddParam(cmd, "@CREATED_STORE_ID", input.STORE_ID);
+                        // Header parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
+                        cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
+                        cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
+                        cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@RECON_DATE", ParseDate(model.RECON_DATE));
+                        cmd.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
+                        cmd.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
+                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+                       //cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", model.APPROVE3_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
+                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
 
-                        using var reader = cmd.ExecuteReader();
-                        if (reader.Read())
+                        // === UDT Table ===
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("ID", typeof(int));
+                        dt.Columns.Add("TRANS_ID", typeof(int));
+                        dt.Columns.Add("COMPANY_ID", typeof(int));
+                        dt.Columns.Add("STORE_ID", typeof(string));
+                        dt.Columns.Add("SL_NO", typeof(int));
+                        dt.Columns.Add("HEAD_ID", typeof(int));
+                        dt.Columns.Add("DR_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("CR_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("REMARKS", typeof(string));
+                        dt.Columns.Add("OPP_HEAD_ID", typeof(int));
+                        dt.Columns.Add("OPP_HEAD_NAME", typeof(string));
+                        dt.Columns.Add("BILL_NO", typeof(string));
+                        dt.Columns.Add("JOB_ID", typeof(int));
+                        dt.Columns.Add("CREATED_STORE_ID", typeof(string));
+                        dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+
+                        int slno = 1;
+
+                        foreach (var detail in model.DETAILS)
                         {
-                            headerId = Convert.ToInt32(reader["TRANS_ID"]);
-                            journalNo = reader["VOUCHER_NO"]?.ToString();
+                            dt.Rows.Add(
+                                DBNull.Value,                                
+                                0,                                           
+                                model.COMPANY_ID ?? 0,
+                                model.STORE_ID?.ToString() ?? "",
+                                slno++,
+                                int.Parse(detail.LEDGER_CODE ?? "0"),
+                                detail.DEBIT_AMOUNT ?? 0,
+                                detail.CREDIT_AMOUNT ?? 0,
+                                detail.PARTICULARS ?? "",
+                                detail.OPP_HEAD_ID ?? 0,
+                                detail.OPP_HEAD_NAME ?? "",
+                                detail.BILL_NO ?? "",
+                                detail.JOB_ID ?? 0,
+                                detail.CREATED_STORE_ID ?? string.Empty,
+                                detail.STORE_AUTO_ID?.ToString() ?? ""
+                            );
                         }
-                        else throw new Exception("No data returned from journal header insert.");
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_TB_AC_TRANS_DETAIL";
+
+                        // Execute
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Journal saved successfully.";
                     }
-
-                    if (input.DETAILS?.Count == 0)
-                        throw new Exception("No journal details provided.");
-
-                    // Step 2: Insert Details
-                    foreach (var detail in input.DETAILS)
-                    {
-                        const string sql = @"
-                    INSERT INTO TB_AC_TRANS_DETAIL 
-                    (TRANS_ID, COMPANY_ID, STORE_ID, SL_NO, HEAD_ID, DR_AMOUNT, CR_AMOUNT, REMARKS,
-                     OPP_HEAD_ID, OPP_HEAD_NAME, BILL_NO, JOB_ID, CREATED_STORE_ID, STORE_AUTO_ID)
-                    VALUES 
-                    (@TRANS_ID, @COMPANY_ID, @STORE_ID, @SL_NO, @HEAD_ID, @DR_AMOUNT, @CR_AMOUNT, @REMARKS,
-                     NULL, NULL, @BILL_NO, NULL, @CREATED_STORE_ID, NULL)";
-
-                        using var detailCmd = new SqlCommand(sql, connection, tx);
-                        AddParam(detailCmd, "@TRANS_ID", headerId);
-                        AddParam(detailCmd, "@COMPANY_ID", input.COMPANY_ID);
-                        AddParam(detailCmd, "@STORE_ID", input.STORE_ID);
-                        AddParam(detailCmd, "@SL_NO", detail.SL_NO);
-                        AddParam(detailCmd, "@HEAD_ID", detail.LEDGER_CODE);
-                        AddParam(detailCmd, "@DR_AMOUNT", detail.DEBIT_AMOUNT);
-                        AddParam(detailCmd, "@CR_AMOUNT", detail.CREDIT_AMOUNT);
-                        AddParam(detailCmd, "@REMARKS", detail.PARTICULARS);
-                        AddParam(detailCmd, "@BILL_NO", detail.BILL_NO);
-                        AddParam(detailCmd, "@CREATED_STORE_ID", input.STORE_ID);
-
-                        detailCmd.ExecuteNonQuery();
-                    }
-
-                    tx.Commit();
-                    res.flag = 1;
-                    res.Message = $"Journal inserted successfully with Journal No: {journalNo}";
-                }
-                catch (Exception ex1)
-                {
-                    tx.Rollback();
-                    res.flag = 0;
-                    res.Message = $"Transaction Failed: {ex1.Message}";
                 }
             }
             catch (Exception ex)
             {
-                res.flag = 0;
-                res.Message = $"Connection Failed: {ex.Message}";
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
             }
 
-            return res;
+            return response;
         }
+
+
+
 
         private static void AddParam(SqlCommand cmd, string name, object? value)
         {
@@ -173,43 +174,45 @@ namespace MicroApi.DataLayer.Service
                                 throw new Exception("Invalid TRANS_DATE format. Expected dd-MM-yyyy.");
 
                             // 🔁 Prepare DataTable for UDT
-                            DataTable detailTable = new DataTable();
-                            detailTable.Columns.Add("ID", typeof(int));
-                            detailTable.Columns.Add("TRANS_ID", typeof(int));
-                            detailTable.Columns.Add("COMPANY_ID", typeof(int));
-                            detailTable.Columns.Add("STORE_ID", typeof(string));
-                            detailTable.Columns.Add("SL_NO", typeof(int));
-                            detailTable.Columns.Add("HEAD_ID", typeof(int));
-                            detailTable.Columns.Add("DR_AMOUNT", typeof(decimal));
-                            detailTable.Columns.Add("CR_AMOUNT", typeof(decimal));
-                            detailTable.Columns.Add("REMARKS", typeof(string));
-                            detailTable.Columns.Add("OPP_HEAD_ID", typeof(int));
-                            detailTable.Columns.Add("OPP_HEAD_NAME", typeof(string));
-                            detailTable.Columns.Add("BILL_NO", typeof(string));
-                            detailTable.Columns.Add("JOB_ID", typeof(int));
-                            detailTable.Columns.Add("CREATED_STORE_ID", typeof(string));
-                            detailTable.Columns.Add("STORE_AUTO_ID", typeof(string));
+                            DataTable dt = new DataTable();
+                            dt.Columns.Add("ID", typeof(int));
+                            dt.Columns.Add("TRANS_ID", typeof(int));
+                            dt.Columns.Add("COMPANY_ID", typeof(int));
+                            dt.Columns.Add("STORE_ID", typeof(string));
+                            dt.Columns.Add("SL_NO", typeof(int));
+                            dt.Columns.Add("HEAD_ID", typeof(int));
+                            dt.Columns.Add("DR_AMOUNT", typeof(decimal));
+                            dt.Columns.Add("CR_AMOUNT", typeof(decimal));
+                            dt.Columns.Add("REMARKS", typeof(string));
+                            dt.Columns.Add("OPP_HEAD_ID", typeof(int));
+                            dt.Columns.Add("OPP_HEAD_NAME", typeof(string));
+                            dt.Columns.Add("BILL_NO", typeof(string));
+                            dt.Columns.Add("JOB_ID", typeof(int));
+                            dt.Columns.Add("CREATED_STORE_ID", typeof(string));
+                            dt.Columns.Add("STORE_AUTO_ID", typeof(string));
 
-                            foreach (var d in header.DETAILS)
+                            int slno = 1;
+                            foreach (var detail in header.DETAILS)
                             {
-                                detailTable.Rows.Add(
-                                    d.ID,
-                                    header.TRANS_ID,
-                                    d.COMPANY_ID ?? 0,
-                                    d.STORE_ID ?? 0,
-                                    d.SL_NO ?? 0,
-                                    d.HEAD_ID ?? 0,
-                                    d.DEBIT_AMOUNT ?? 0,
-                                    d.CREDIT_AMOUNT ?? 0,
-                                    d.REMARKS ?? "",
-                                    d.OPP_HEAD_ID ?? (object)DBNull.Value,
-                                    d.OPP_HEAD_NAME ?? "",
-                                    d.BILL_NO ?? "",
-                                    d.JOB_ID ?? (object)DBNull.Value,
-                                    d.CREATED_STORE_ID ?? 0,
-                                    d.STORE_AUTO_ID ?? 0
+                                dt.Rows.Add(
+                                    DBNull.Value,
+                                     0,
+                                    header.COMPANY_ID ?? 0,
+                                    header.STORE_ID?.ToString() ?? "",
+                                    slno++,
+                                    int.Parse(detail.LEDGER_CODE ?? "0"), 
+                                    detail.DEBIT_AMOUNT ?? 0,
+                                    detail.CREDIT_AMOUNT ?? 0,
+                                    detail.PARTICULARS ?? "",
+                                    detail.OPP_HEAD_ID ?? 0,
+                                    detail.OPP_HEAD_NAME ?? "",
+                                    detail.BILL_NO ?? "",
+                                    detail.JOB_ID ?? 0,
+                                    detail.CREATED_STORE_ID ?? string.Empty,
+                                    detail.STORE_AUTO_ID ?? string.Empty
                                 );
                             }
+
 
                             // 🔁 Call SP
                             using (var cmd = new SqlCommand("SP_TB_AC_TRANS_HEADER_DETAIL", connection, tx))
@@ -249,7 +252,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@ADD_TIME", DateTime.Now);
                                 cmd.Parameters.AddWithValue("@CREATED_STORE_ID", header.CREATED_STORE_ID ?? (object)DBNull.Value);
 
-                                var tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", detailTable);
+                                var tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
                                 tvp.SqlDbType = SqlDbType.Structured;
 
                                 using (var reader = cmd.ExecuteReader())
@@ -309,10 +312,10 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 0);
 
                         // Pass required default values for mandatory SP parameters
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 4);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);

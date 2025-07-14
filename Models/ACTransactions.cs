@@ -2,13 +2,13 @@
 {
     public class JournalHeader
     {
-        public int COMPANY_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public int? FIN_ID { get; set; }
-        public int TRANS_TYPE { get; set; }
-        public string TRANS_DATE { get; set; } 
+        public int? TRANS_TYPE { get; set; }
+        public string? TRANS_DATE { get; set; } 
         public int? TRANS_STATUS { get; set; } = 1;
-        public string REF_NO { get; set; }
+        public string? REF_NO { get; set; }
         public string? CHEQUE_NO { get; set; }
         public string? CHEQUE_DATE { get; set; }  
         public string? BANK_NAME { get; set; }
@@ -38,21 +38,22 @@
     public class JournalDetail
     {
         public int? SL_NO { get; set; }
-        public string BILL_NO { get; set; }
-        public string LEDGER_CODE { get; set; }
+        public string? BILL_NO { get; set; }
+        public string? LEDGER_CODE { get; set; }
         public string? LEDGER_NAME { get; set; }
-        public string PARTICULARS { get; set; }
-        public decimal DEBIT_AMOUNT { get; set; }
-        public decimal CREDIT_AMOUNT { get; set; }
-        public string? OPP_HEAD_ID { get; set; }
+        public string? PARTICULARS { get; set; }
+        public decimal? DEBIT_AMOUNT { get; set; }
+        public decimal? CREDIT_AMOUNT { get; set; }
+        public int? OPP_HEAD_ID { get; set; }
         public string? OPP_HEAD_NAME { get; set; }
-        public string? JOB_ID { get; set; }
+        public int? JOB_ID { get; set; }
+        public string? CREATED_STORE_ID { get; set; }
         public string? STORE_AUTO_ID { get; set; }
     }
 
     public class JournalUpdateHeader
     {
-        public int TRANS_ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public string? TRANS_DATE { get; set; }
         public string? JOURNAL_NO { get; set; }
         public string? PARTY_NAME { get; set; }
@@ -91,20 +92,19 @@
 
     public class JournalUpdateDetail
     {
-        public int ID { get; set; }
-        public int? COMPANY_ID { get; set; }
-        public int? STORE_ID { get; set; }
+        public int? ID { get; set; }
         public int? SL_NO { get; set; }
-        public int? HEAD_ID { get; set; }
+        public string? BILL_NO { get; set; }
+        public string? LEDGER_CODE { get; set; }
+        public string? LEDGER_NAME { get; set; }
+        public string? PARTICULARS { get; set; }
         public decimal? DEBIT_AMOUNT { get; set; }
         public decimal? CREDIT_AMOUNT { get; set; }
-        public string? REMARKS { get; set; }
         public int? OPP_HEAD_ID { get; set; }
         public string? OPP_HEAD_NAME { get; set; }
-        public string? BILL_NO { get; set; }
         public int? JOB_ID { get; set; }
-        public int? CREATED_STORE_ID { get; set; }
-        public int? STORE_AUTO_ID { get; set; }
+        public string? CREATED_STORE_ID { get; set; }
+        public string? STORE_AUTO_ID { get; set; }
     }
 
     public class JournalResponse
@@ -124,14 +124,14 @@
     }
     public class JournalListItem
     {
-        public int TRANS_ID { get; set; }
-        public string JOURNAL_NO { get; set; }
+        public int? TRANS_ID { get; set; }
+        public string? JOURNAL_NO { get; set; }
         public string TRANS_DATE { get; set; }
-        public string PARTY_NAME { get; set; }
+        public string? PARTY_NAME { get; set; }
         public string REF_NO { get; set; }
-        public int TRANS_TYPE { get; set; }
-        public string NARRATION { get; set; }
-        public int TRANS_STATUS { get; set; }
+        public int? TRANS_TYPE { get; set; }
+        public string? NARRATION { get; set; }
+        public int? TRANS_STATUS { get; set; }
         public List<JournalListDetail> DETAILS { get; set; }
     }
 
@@ -139,12 +139,12 @@
     {
         public int ID { get; set; }
         public int? SL_NO { get; set; }
-        public string BILL_NO { get; set; }
-        public string LEDGER_CODE { get; set; }
+        public string? BILL_NO { get; set; }
+        public string? LEDGER_CODE { get; set; }
         public string LEDGER_NAME { get; set; }
-        public string PARTICULARS { get; set; }
-        public decimal DEBIT_AMOUNT { get; set; }
-        public decimal CREDIT_AMOUNT { get; set; }
+        public string? PARTICULARS { get; set; }
+        public decimal? DEBIT_AMOUNT { get; set; }
+        public decimal? CREDIT_AMOUNT { get; set; }
     }
     public class JournalViewHeader
     {
@@ -333,5 +333,10 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int DOC_NO { get; set; }
+    }
+    public class JournalListFilter
+    {
+        public int COMPANY_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
     }
 }
