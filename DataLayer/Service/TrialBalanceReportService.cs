@@ -41,7 +41,6 @@ namespace MicroApi.DataLayer.Service
                                     Category = reader["CATEGORY_NAME"] != DBNull.Value ? reader["CATEGORY_NAME"].ToString() : string.Empty,
                                     LedgerCode = reader["HEAD_CODE"] != DBNull.Value ? reader["HEAD_CODE"].ToString() : string.Empty,
                                     LedgerName = reader["HEAD_NAME"] != DBNull.Value ? reader["HEAD_NAME"].ToString() : string.Empty,
-                                    TransId = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt64(reader["TRANS_ID"]) : 0,
                                     OpeningBalanceDebit = reader["OB_DR"] != DBNull.Value ? Convert.ToDecimal(reader["OB_DR"]) : 0,
                                     OpeningBalanceCredit = reader["OB_CR"] != DBNull.Value ? Convert.ToDecimal(reader["OB_CR"]) : 0,
                                     DuringThePeriodDebit = reader["TR_DR"] != DBNull.Value ? Convert.ToDecimal(reader["TR_DR"]) : 0,
