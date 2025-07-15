@@ -196,6 +196,13 @@ namespace MicroApi.Controllers
             var response = _timeSheetService.ApproveTimeSheets(request);
             return Ok(response);
         }
+        [HttpPost]
+        [Route("salary-pending")]
+        public IActionResult GetSalaryPendingTimeSheets([FromBody] TimeSheetRequest request)
+        {
+            var response = _timeSheetService.GetSalaryPendingTimeSheets(request);
+            return Ok(response);
+        }
 
     }
 }

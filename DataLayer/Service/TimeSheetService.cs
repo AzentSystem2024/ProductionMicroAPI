@@ -481,6 +481,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     logList.data.Add(new TimeSheetHeader
                     {
+                        ID = Convert.ToInt32(dr["ID"]),
                         EMP_NAME = Convert.IsDBNull(dr["EMP_NAME"]) ? null : Convert.ToString(dr["EMP_NAME"]),
                         EMP_NO = Convert.IsDBNull(dr["EMP_NO"]) ? null : Convert.ToString(dr["EMP_NO"]),
                         EMP_ID = Convert.IsDBNull(dr["EMP_ID"]) ? null : Convert.ToString(dr["EMP_ID"]),
@@ -516,6 +517,49 @@ namespace MicroApi.DataLayer.Service
             response.message = "Approval completed successfully.";
             return response;
         }
+
+        public TimeSheetHeaderListResponseData GetSalaryPendingTimeSheets(TimeSheetRequest request)
+        {
+            TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
+            response.data = new List<TimeSheetHeader>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection))
+            {
+                
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 3);
+                cmd.Parameters.AddWithValue("@CompanyId", request.CompanyId);
+                cmd.Parameters.AddWithValue("@Month", request.Month);
+
+               
+                SqlDataReader reader = cmd.ExecuteReader();
+                response.data = new List<TimeSheetHeader>();
+                while (reader.Read())
+                {
+                    response.data.Add(new TimeSheetHeader
+                    {
+                        ID = Convert.ToInt32(reader["ID"]),
+                        EMP_NAME = reader["EMP_NAME"].ToString(),
+                        EMP_NO = reader["EMP_NO"].ToString(),
+                        EMP_ID = Convert.ToInt32(reader["EMP_ID"]),
+                        //COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
+                        //TS_MONTH = Convert.ToDateTime(reader["TS_MONTH"]),
+                        WORKED_DAYS = Convert.ToSingle(reader["WORKED_DAYS"]),
+                        OT_HOURS = Convert.ToSingle(reader["OT_HOURS"]),
+                        LESS_HOURS = Convert.ToSingle(reader["LESS_HOURS"]),
+                        STATUS = reader["STATUS"].ToString(),
+                        //SALARY_ID = Convert.ToInt32(reader["SALARY_ID"]),
+                        //AMOUNT = Convert.ToDecimal(reader["AMOUNT"])
+                    });
+                }
+                connection.Close();
+            }
+            response.flag = "1";
+            response.message = "Success";
+            return response;
+        }
+
 
     }
 
