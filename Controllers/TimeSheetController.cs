@@ -170,5 +170,32 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("ListTimesheet")]
+        public IActionResult GetTimeSheetByCompanyAndMonth([FromBody] TimeSheetRequest request)
+        {
+            TimeSheetHeaderListResponseData logList = new TimeSheetHeaderListResponseData();
+            try
+            {
+                DateTime month = DateTime.ParseExact(request.Month, "MMMMyyyy", CultureInfo.InvariantCulture);
+                logList = _timeSheetService.GetTimeSheetByCompanyAndMonth(request.CompanyId, month);
+            }
+            catch (Exception ex)
+            {
+                logList.flag = "0";
+                logList.message = ex.Message;
+                return BadRequest(logList);
+            }
+            return Ok(logList);
+        }
+
+        [HttpPost]
+        [Route("approvetimesheet")]
+        public IActionResult ApproveTimeSheets([FromBody] ApproveRequest request)
+        {
+            var response = _timeSheetService.ApproveTimeSheets(request);
+            return Ok(response);
+        }
+
     }
 }

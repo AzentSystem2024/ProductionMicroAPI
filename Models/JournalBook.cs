@@ -3,6 +3,7 @@
     public class JournalBook
     {
         public int TransID { get; set; }
+        public int TransType { get; set; }
         public DateTime Date { get; set; }
         public string DocumentType { get; set; }
         public string VoucherNo { get; set; }

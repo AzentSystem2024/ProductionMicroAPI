@@ -3,6 +3,7 @@ using MicroApi.Helper;
 using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.Net.Mail;
 
@@ -457,6 +458,63 @@ namespace MicroApi.DataLayer.Service
             {
                 throw ex;
             }
+        }
+
+        public TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(int companyId, DateTime month)
+        {
+            TimeSheetHeaderListResponseData logList = new TimeSheetHeaderListResponseData();
+            logList.data = new List<TimeSheetHeader>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Action", 1);
+                cmd.Parameters.AddWithValue("@CompanyId", companyId);
+                cmd.Parameters.AddWithValue("@Month", month);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                foreach (DataRow dr in tbl.Rows)
+                {
+                    logList.data.Add(new TimeSheetHeader
+                    {
+                        EMP_NAME = Convert.IsDBNull(dr["EMP_NAME"]) ? null : Convert.ToString(dr["EMP_NAME"]),
+                        EMP_NO = Convert.IsDBNull(dr["EMP_NO"]) ? null : Convert.ToString(dr["EMP_NO"]),
+                        EMP_ID = Convert.IsDBNull(dr["EMP_ID"]) ? null : Convert.ToString(dr["EMP_ID"]),
+                        WORKED_DAYS = Convert.IsDBNull(dr["WORKED_DAYS"]) ? null : Convert.ToString(dr["WORKED_DAYS"]),
+                        OT_HOURS = Convert.IsDBNull(dr["OT_HOURS"]) ? null : Convert.ToString(dr["OT_HOURS"]),
+                        LESS_HOURS = Convert.IsDBNull(dr["LESS_HOURS"]) ? null : Convert.ToString(dr["LESS_HOURS"]),
+                        STATUS = Convert.IsDBNull(dr["STATUS"]) ? null : Convert.ToString(dr["STATUS"])
+                    });
+                }
+                connection.Close();
+            }
+
+            logList.flag = "1";
+            logList.message = "Success";
+            return logList;
+        }
+
+        public TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request)
+        {
+            TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
+            response.data = new List<TimeSheetHeader>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 2);
+                cmd.Parameters.AddWithValue("@IDs", request.IDs);
+
+                connection.Close();
+            }
+            response.flag = "1";
+            response.message = "Approval completed successfully.";
+            return response;
         }
 
     }

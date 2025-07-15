@@ -36,13 +36,14 @@ namespace MicroApi.DataLayer.Service
                                 journalBookList.Add(new JournalBook
                                 {
                                     TransID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    TransType = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0, 
                                     Date = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).Date : DateTime.MinValue,
                                     DocumentType = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
                                     VoucherNo = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : string.Empty,
                                     Particulars = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : string.Empty,
                                     Remarks = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : string.Empty,
-                                    DebitAmount = reader[7] != DBNull.Value ? Convert.ToDecimal(reader[7]) : 0, // Access by index since there's no alias
-                                    CreditAmount = reader[8] != DBNull.Value ? Convert.ToDecimal(reader[8]) : 0 // Access by index since there's no alias
+                                    DebitAmount = reader[7] != DBNull.Value ? Convert.ToDecimal(reader[7]) : 0, 
+                                    CreditAmount = reader[8] != DBNull.Value ? Convert.ToDecimal(reader[8]) : 0 
                                 });
                             }
                         }
