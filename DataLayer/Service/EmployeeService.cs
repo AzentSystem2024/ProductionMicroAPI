@@ -65,7 +65,7 @@ namespace MicroApi.DataLayer.Service
                         MOL_NUMBER = Convert.IsDBNull(dr["MOL_NUMBER"]) ? null : Convert.ToString(dr["MOL_NUMBER"]),
                         LAST_REJOIN_DATE = Convert.IsDBNull(dr["LAST_REJOIN_DATE"]) ? (DateTime?)null : Convert.ToDateTime(dr["LAST_REJOIN_DATE"]),
                         IS_DELETED = Convert.IsDBNull(dr["IS_DELETED"]) ? false : Convert.ToBoolean(dr["IS_DELETED"]),
-                        STORE_NAME = Convert.IsDBNull(dr["STORE_NAME"]) ? null : Convert.ToString(dr["STORE_NAME"]),
+                       // STORE_NAME = Convert.IsDBNull(dr["STORE_NAME"]) ? null : Convert.ToString(dr["STORE_NAME"]),
                         STATE_NAME = Convert.IsDBNull(dr["STATE_NAME"]) ? null : Convert.ToString(dr["STATE_NAME"]),
                         DEPT_NAME = Convert.IsDBNull(dr["DEPT_NAME"]) ? null : Convert.ToString(dr["DEPT_NAME"]),
                         DESG_NAME = Convert.IsDBNull(dr["DESG_NAME"]) ? null : Convert.ToString(dr["DESG_NAME"]),
@@ -142,17 +142,17 @@ namespace MicroApi.DataLayer.Service
                     tbl1.Columns.Add("HEAD_ID", typeof(Int32));
                     tbl1.Columns.Add("AMOUNT", typeof(float));
 
-                    if (employee.EmployeeSalary != null && employee.EmployeeSalary.Any())
-                    {
-                        foreach (EmployeeSalary ur1 in employee.EmployeeSalary)
-                        {
-                            DataRow dRow1 = tbl1.NewRow();
-                            dRow1["EMP_ID"] = ur1.EMP_ID;
-                            dRow1["HEAD_ID"] = ur1.HEAD_ID;
-                            dRow1["AMOUNT"] = ur1.AMOUNT;
-                            tbl1.Rows.Add(dRow1);
-                        }
-                    }
+                    //if (employee.EmployeeSalary != null && employee.EmployeeSalary.Any())
+                    //{
+                    //    foreach (EmployeeSalary ur1 in employee.EmployeeSalary)
+                    //    {
+                    //        DataRow dRow1 = tbl1.NewRow();
+                    //        dRow1["EMP_ID"] = ur1.EMP_ID;
+                    //        dRow1["HEAD_ID"] = ur1.HEAD_ID;
+                    //        dRow1["AMOUNT"] = ur1.AMOUNT;
+                    //        tbl1.Rows.Add(dRow1);
+                    //    }
+                    //}
 
                     cmd.Parameters.AddWithValue("@UDT_TB_EMPLOYEE_SALARY", tbl1);
 
@@ -166,22 +166,22 @@ namespace MicroApi.DataLayer.Service
                     tblAttachments.Columns.Add("CREATED_USER_ID", typeof(int));
                     tblAttachments.Columns.Add("CREATED_TIME", typeof(DateTime));
 
-                    if (employee.Attachment != null && employee.Attachment.Any())
-                    {
-                        foreach (var file in employee.Attachment)
-                        {
-                            DataRow dRow = tblAttachments.NewRow();
-                            dRow["TRANS_TYPE"] = file.DOC_TYPE;
-                            dRow["TRANS_ID"] = file.DOC_ID;
-                            dRow["FILE_NAME"] = file.FILE_NAME;
-                            dRow["FILE_DATA"] = file.FILE_DATA; // should be a byte[]
-                            dRow["REMARKS"] = file.REMARKS ?? string.Empty;
-                            dRow["CREATED_USER_ID"] = file.USER_ID;
-                            dRow["CREATED_TIME"] = file.CREATED_DATE_TIME;
+                    //if (employee.Attachment != null && employee.Attachment.Any())
+                    //{
+                    //    foreach (var file in employee.Attachment)
+                    //    {
+                    //        DataRow dRow = tblAttachments.NewRow();
+                    //        dRow["TRANS_TYPE"] = file.DOC_TYPE;
+                    //        dRow["TRANS_ID"] = file.DOC_ID;
+                    //        dRow["FILE_NAME"] = file.FILE_NAME;
+                    //        dRow["FILE_DATA"] = file.FILE_DATA; // should be a byte[]
+                    //        dRow["REMARKS"] = file.REMARKS ?? string.Empty;
+                    //        dRow["CREATED_USER_ID"] = file.USER_ID;
+                    //        dRow["CREATED_TIME"] = file.CREATED_DATE_TIME;
 
-                            tblAttachments.Rows.Add(dRow);
-                        }
-                    }
+                    //        tblAttachments.Rows.Add(dRow);
+                    //    }
+                    //}
 
                     cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", tblAttachments);
 
@@ -251,7 +251,7 @@ namespace MicroApi.DataLayer.Service
                         });
                     }
 
-                    employee.EmployeeSalary = employeeSalary;
+                   // employee.EmployeeSalary = employeeSalary;
                 }
 
                 string strAttachmentsSQL = "SELECT ID, TRANS_TYPE, TRANS_ID, FILE_NAME, FILE_DATA, REMARKS, " +
@@ -278,7 +278,7 @@ namespace MicroApi.DataLayer.Service
                         });
                     }
 
-                    employee.Attachment = empAttachments;
+                    //employee.Attachment = empAttachments;
                 }
 
 
@@ -334,7 +334,7 @@ namespace MicroApi.DataLayer.Service
 
                     employee.IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]);
 
-                    employee.STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null;
+                    //employee.STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null;
                     employee.STATE_NAME = dr["STATE_NAME"] != DBNull.Value ? Convert.ToString(dr["STATE_NAME"]) : null;
                     employee.DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : null;
                     employee.DESG_NAME = dr["DESG_NAME"] != DBNull.Value ? Convert.ToString(dr["DESG_NAME"]) : null;
