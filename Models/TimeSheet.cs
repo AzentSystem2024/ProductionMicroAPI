@@ -75,5 +75,34 @@ namespace MicroApi.Models
     //    public string flag { get; set; }
     //    public string message { get; set; }
     //}
+    public class TimeSheetHeader
+    {
+        public int ID { get; set; }
+        public object EMP_NO { get; set; }
+        public object EMP_NAME { get; set; }
+        public object EMP_ID { get; set; }
+        public object WORKED_DAYS { get; set; }
+        public object LESS_HOURS { get; set; }
+        public object OT_HOURS { get; set; }
+        public object STATUS { get; set; }
+
+    }
+    public class TimeSheetHeaderListResponseData
+    {
+        public string flag { get; set; }
+        public string message { get; set; }
+        public List<TimeSheetHeader> data { get; set; }
+    }
+
+    public class TimeSheetRequest
+    {
+        public int CompanyId { get; set; }
+        public string Month { get; set; }
+    }
+    public class BulkApproveRequest
+    {
+        public List<int> IDs { get; set; }
+    }
+
 
 }
