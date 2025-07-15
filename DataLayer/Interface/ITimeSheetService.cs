@@ -11,7 +11,7 @@ namespace MicroApi.DataLayer.Interface
         public saveTimeSheetResponseData DeleteTimeSheet(int id);
         public saveTimeSheetResponseData VerifyData(saveTimeSheetData advData);
         public saveTimeSheetResponseData ApproveData(saveTimeSheetData advData);
-        TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(int companyId, DateTime month);
+        TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(TimeSheetRequest request);
         TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request);
         TimeSheetHeaderListResponseData GetSalaryPendingTimeSheets(TimeSheetRequest request);
 

@@ -460,58 +460,53 @@ namespace MicroApi.DataLayer.Service
             }
         }
 
-        public TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(int companyId, DateTime month)
-        {
-            TimeSheetHeaderListResponseData logList = new TimeSheetHeaderListResponseData();
-            logList.data = new List<TimeSheetHeader>();
-
-            using (SqlConnection connection = ADO.GetConnection())
-            using (SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", 1);
-                cmd.Parameters.AddWithValue("@CompanyId", companyId);
-                cmd.Parameters.AddWithValue("@Month", month);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable tbl = new DataTable();
-                da.Fill(tbl);
-
-                foreach (DataRow dr in tbl.Rows)
-                {
-                    logList.data.Add(new TimeSheetHeader
-                    {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        EMP_NAME = Convert.IsDBNull(dr["EMP_NAME"]) ? null : Convert.ToString(dr["EMP_NAME"]),
-                        EMP_NO = Convert.IsDBNull(dr["EMP_NO"]) ? null : Convert.ToString(dr["EMP_NO"]),
-                        EMP_ID = Convert.IsDBNull(dr["EMP_ID"]) ? null : Convert.ToString(dr["EMP_ID"]),
-                        WORKED_DAYS = Convert.IsDBNull(dr["WORKED_DAYS"]) ? null : Convert.ToString(dr["WORKED_DAYS"]),
-                        OT_HOURS = Convert.IsDBNull(dr["OT_HOURS"]) ? null : Convert.ToString(dr["OT_HOURS"]),
-                        LESS_HOURS = Convert.IsDBNull(dr["LESS_HOURS"]) ? null : Convert.ToString(dr["LESS_HOURS"]),
-                        STATUS = Convert.IsDBNull(dr["STATUS"]) ? null : Convert.ToString(dr["STATUS"])
-                    });
-                }
-                connection.Close();
-            }
-
-            logList.flag = "1";
-            logList.message = "Success";
-            return logList;
-        }
-
-        public TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request)
+        public TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(TimeSheetRequest request)
         {
             TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
             response.data = new List<TimeSheetHeader>();
 
             using (SqlConnection connection = ADO.GetConnection())
-            using (SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection))
             {
+                SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 1);
+                cmd.Parameters.AddWithValue("@CompanyId", request.CompanyId);
+                cmd.Parameters.AddWithValue("@Month", DateTime.ParseExact(request.Month, "MMMMyyyy", CultureInfo.InvariantCulture));
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    response.data.Add(new TimeSheetHeader
+                    {
+                        ID = Convert.ToInt32(reader["ID"]),
+                        EMP_NO = reader["EMP_NO"].ToString(),
+                        EMP_NAME = reader["EMP_NAME"].ToString(),
+                        EMP_ID = Convert.ToInt32(reader["EMP_ID"]),
+                        WORKED_DAYS = reader["WORKED_DAYS"] != DBNull.Value ? Convert.ToSingle(reader["WORKED_DAYS"]) : (float?)null,
+                        LESS_HOURS = reader["LESS_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["LESS_HOURS"]) : (float?)null,
+                        OT_HOURS = reader["OT_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["OT_HOURS"]) : (float?)null,
+                        STATUS = reader["STATUS"].ToString()
+                    });
+                }
+            }
+            response.flag = "1";
+            response.message = "Success";
+            return response;
+        }
+        public TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request)
+        {
+            TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
+           // response.data = new List<TimeSheetHeader>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+           
+            {
+                SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ACTION", 2);
-                cmd.Parameters.AddWithValue("@IDs", request.IDs);
+                cmd.Parameters.AddWithValue("@IDs", string.Join(",", request.IDs));
 
-                connection.Close();
+                cmd.ExecuteNonQuery();
             }
             response.flag = "1";
             response.message = "Approval completed successfully.";

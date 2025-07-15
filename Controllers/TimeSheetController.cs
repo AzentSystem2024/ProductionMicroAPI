@@ -174,19 +174,15 @@ namespace MicroApi.Controllers
         [Route("ListTimesheet")]
         public IActionResult GetTimeSheetByCompanyAndMonth([FromBody] TimeSheetRequest request)
         {
-            TimeSheetHeaderListResponseData logList = new TimeSheetHeaderListResponseData();
             try
             {
-                DateTime month = DateTime.ParseExact(request.Month, "MMMMyyyy", CultureInfo.InvariantCulture);
-                logList = _timeSheetService.GetTimeSheetByCompanyAndMonth(request.CompanyId, month);
+                var logList = _timeSheetService.GetTimeSheetByCompanyAndMonth(request);
+                return Ok(logList);
             }
             catch (Exception ex)
             {
-                logList.flag = "0";
-                logList.message = ex.Message;
-                return BadRequest(logList);
+                return BadRequest(new { flag = "0", message = ex.Message });
             }
-            return Ok(logList);
         }
 
         [HttpPost]
@@ -196,6 +192,7 @@ namespace MicroApi.Controllers
             var response = _timeSheetService.ApproveTimeSheets(request);
             return Ok(response);
         }
+
         [HttpPost]
         [Route("salary-pending")]
         public IActionResult GetSalaryPendingTimeSheets([FromBody] TimeSheetRequest request)
