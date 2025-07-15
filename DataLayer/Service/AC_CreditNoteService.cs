@@ -59,7 +59,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@INVOICE_ID", model.INVOICE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@INVOICE_NO", model.INVOICE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
 
                         // UDT setup
                         DataTable dt = new DataTable();
@@ -168,7 +168,7 @@ namespace MicroApi.DataLayer.Service
 
                         // Distributor/Unit logic
                         cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
 
                         // Table-valued parameter
                         DataTable dt = new DataTable();
@@ -260,7 +260,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@INVOICE_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@REMARKS", DBNull.Value);
                         cmd.Parameters.AddWithValue("@UNIT_ID", 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", 0); // Ensure SP supports this
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", 0); // Ensure SP supports this
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -279,7 +279,7 @@ namespace MicroApi.DataLayer.Service
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                     NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
                                     UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                    DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                    DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                     TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0
 
                                 });
@@ -346,7 +346,7 @@ namespace MicroApi.DataLayer.Service
                                         INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,             
-                                        DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                        DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                         DOC_NO = Convert.ToInt32(reader["VOUCHER_NO"]),
                                         INVOICE_NET_AMOUNT = reader["INVOICE_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["INVOICE_NET_AMOUNT"]) : 0,

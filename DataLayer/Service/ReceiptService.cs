@@ -45,7 +45,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
                         cmd.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
                         cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
@@ -129,7 +129,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
                         cmd.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
                         cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
@@ -292,7 +292,7 @@ namespace MicroApi.DataLayer.Service
                                     TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
                                     REC_DATE = reader["REC_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["REC_DATE"]).ToString("dd-MM-yyyy") : null,
                                     UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                    DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                    DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                     NARRATION = reader["NARRATION"]?.ToString(),
                                     PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                     PAY_TYPE_NAME = reader["PAY_TYPE_NAME"]?.ToString(),
@@ -365,7 +365,7 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                        DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                        DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,

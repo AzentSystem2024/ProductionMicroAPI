@@ -63,7 +63,7 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@SALE_DATE", ParseDate(model.SALE_DATE));
                         CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@DISTRIBUTOR_ID", model.DISTRIBUTOR_ID ?? 0);
+                        CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.GST_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
@@ -153,7 +153,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@SALE_DATE", ParseDate(model.SALE_DATE));
                         cmd.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
                         cmd.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
@@ -264,7 +264,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_CLOSED", false);
                         cmd.Parameters.AddWithValue("@PARTY_ID", 0);
                         cmd.Parameters.AddWithValue("@UNIT_ID", 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", 0);
                         cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_PASSED", false);
@@ -376,7 +376,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_CLOSED", false);
                         cmd.Parameters.AddWithValue("@PARTY_ID", 0);
                         cmd.Parameters.AddWithValue("@UNIT_ID", 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", 0);
                         cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_PASSED", false);
@@ -426,7 +426,7 @@ namespace MicroApi.DataLayer.Service
                                     SALE_NO = reader["SALE_NO"]?.ToString(),
                                     SALE_DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy") : null,
                                     UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                    DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                    DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                     GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
                                     GST_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
@@ -499,7 +499,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_CLOSED", false);
                         cmd.Parameters.AddWithValue("@PARTY_ID", 0);
                         cmd.Parameters.AddWithValue("@UNIT_ID", 0);
-                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", 0);
                         cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_PASSED", false);
@@ -553,7 +553,7 @@ namespace MicroApi.DataLayer.Service
                                         SALE_NO = reader["SALE_NO"]?.ToString(),
                                         SALE_DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                        DISTRIBUTOR_ID = reader["DISTRIBUTOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["DISTRIBUTOR_ID"]) : 0,
+                                        DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                         GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
                                         TAX_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
