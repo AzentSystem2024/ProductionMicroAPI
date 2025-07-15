@@ -47,7 +47,7 @@
             public string DEPT_NAME { get; set; }
             public string DESG_NAME { get; set; }
             public string STATE_NAME { get; set; }
-            public string STORE_NAME { get; set; }
+            public string? STORE_NAME { get; set; }
 
             public bool IS_INACTIVE { get; set; }
             public int? PAYMENT_TYPE { get; set; }
@@ -85,5 +85,9 @@
         public string flag { get; set; }
         public string message { get; set; }
         public Employee data { get; set; }
+    }
+    public class CompanyRequest
+    {
+        public int CompanyId { get; set; }
     }
 }

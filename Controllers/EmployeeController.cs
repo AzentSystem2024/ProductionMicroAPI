@@ -20,14 +20,14 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public List<Employee> List()
+        public List<Employee> List([FromBody] CompanyRequest request)
         {
             List<Employee> employees = new List<Employee>();
 
             try
             {
                 
-                employees = _employeeService.GetAllEmployees();
+                employees = _employeeService.GetAllEmployees(request.CompanyId);
             }
             catch (Exception ex)
             {

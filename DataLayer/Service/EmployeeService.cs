@@ -1,6 +1,7 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net.Mail;
@@ -9,7 +10,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class EmployeeService:IEmployeeService
     {
-        public List<Employee> GetAllEmployees()
+        public List<Employee> GetAllEmployees(int companyId)
         {
             List<Employee> employeeList = new List<Employee>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -19,6 +20,8 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_EMPLOYEE";
                 cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("COMPANY_ID", companyId);
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);

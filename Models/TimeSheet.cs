@@ -99,7 +99,7 @@ namespace MicroApi.Models
         public int CompanyId { get; set; }
         public string Month { get; set; }
     }
-    public class BulkApproveRequest
+    public class ApproveRequest
     {
         public List<int> IDs { get; set; }
     }

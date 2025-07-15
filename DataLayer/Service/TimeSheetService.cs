@@ -3,6 +3,7 @@ using MicroApi.Helper;
 using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.Net.Mail;
 
@@ -497,31 +498,23 @@ namespace MicroApi.DataLayer.Service
             return logList;
         }
 
-        public saveTimeSheetResponseData BulkApproveData(BulkApproveRequest request)
+        public TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request)
         {
-            saveTimeSheetResponseData res = new saveTimeSheetResponseData();
-            try
-            {
-                using (SqlConnection connection = ADO.GetConnection())
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = connection;
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "SP_TIMESHEET_HEADER";
-                    cmd.Parameters.AddWithValue("@ACTION", 2); 
-                    cmd.Parameters.AddWithValue("@IDs", string.Join(",", request.IDs));
+            TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
+            response.data = new List<TimeSheetHeader>();
 
-                    cmd.ExecuteNonQuery();
-                }
-                res.flag = "1";
-                res.message = "Success";
-            }
-            catch (Exception ex)
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection))
             {
-                res.flag = "0";
-                res.message = ex.Message;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 2);
+                cmd.Parameters.AddWithValue("@IDs", request.IDs);
+
+                connection.Close();
             }
-            return res;
+            response.flag = "1";
+            response.message = "Approval completed successfully.";
+            return response;
         }
 
     }

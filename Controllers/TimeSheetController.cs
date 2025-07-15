@@ -190,22 +190,11 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("bulk-approve")]
-        public saveTimeSheetResponseData BulkApproveData([FromBody] BulkApproveRequest request)
+        [Route("approvetimesheet")]
+        public IActionResult ApproveTimeSheets([FromBody] ApproveRequest request)
         {
-            saveTimeSheetResponseData res = new saveTimeSheetResponseData();
-            try
-            {
-                _timeSheetService.BulkApproveData(request);
-                res.flag = "1";
-                res.message = "Success";
-            }
-            catch (Exception ex)
-            {
-                res.flag = "0";
-                res.message = ex.Message;
-            }
-            return res;
+            var response = _timeSheetService.ApproveTimeSheets(request);
+            return Ok(response);
         }
 
     }

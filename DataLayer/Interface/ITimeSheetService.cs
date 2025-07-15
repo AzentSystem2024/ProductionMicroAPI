@@ -12,7 +12,7 @@ namespace MicroApi.DataLayer.Interface
         public saveTimeSheetResponseData VerifyData(saveTimeSheetData advData);
         public saveTimeSheetResponseData ApproveData(saveTimeSheetData advData);
         TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(int companyId, DateTime month);
-        saveTimeSheetResponseData BulkApproveData(BulkApproveRequest request);
+        TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request);
 
     }
 }
