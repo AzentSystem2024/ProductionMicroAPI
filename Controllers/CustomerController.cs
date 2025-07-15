@@ -20,9 +20,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public List<Customer> List()
+        public List<CustomerUpdate> List()
         {
-            List<Customer> customers = new List<Customer>();
+            List<CustomerUpdate> customers = new List<CustomerUpdate>();
 
             try
             {
@@ -37,9 +37,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("select/{id:int}")]
-        public Customer Select(int id)
+        public CustomerUpdate Select(int id)
         {
-            Customer objCustomer = new Customer();
+            CustomerUpdate objCustomer = new CustomerUpdate();
             try
             {
                 
@@ -63,6 +63,29 @@ namespace MicroApi.Controllers
             {
                 
                 Int32 ID = _customerService.SaveData(customerData);
+
+                res.flag = "1";
+                res.message = "Success";
+                res.data = _customerService.GetItems(ID);
+            }
+            catch (Exception ex)
+            {
+                res.flag = "1";
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("update")]
+        public CustomerResponse update(CustomerUpdate customerData)
+        {
+            CustomerResponse res = new CustomerResponse();
+
+            try
+            {
+
+                Int32 ID = _customerService.UpdateCustomer(customerData);
 
                 res.flag = "1";
                 res.message = "Success";
