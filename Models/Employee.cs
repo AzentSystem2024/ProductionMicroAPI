@@ -47,7 +47,7 @@
             public string DEPT_NAME { get; set; }
             public string DESG_NAME { get; set; }
             public string STATE_NAME { get; set; }
-            //public string? STORE_NAME { get; set; }
+            public string? STORE_NAME { get; set; }
 
             public bool IS_INACTIVE { get; set; }
             public int? PAYMENT_TYPE { get; set; }
@@ -58,8 +58,8 @@
             public decimal LEAVE_CREDIT { get; set; }
 
 
-        //public List<EmployeeSalary> EmployeeSalary { get; set; }
-        //public List<EmpAttachment> Attachment { get; set; }
+        public List<EmployeeSalary> EmployeeSalary { get; set; }
+        public List<EmpAttachment> Attachment { get; set; }
     }
     public class EmpAttachment
     {
@@ -78,7 +78,7 @@
         public int EMP_ID { get; set; }
         public int HEAD_ID { get; set; }
         public string HEAD_NAME { get; set; }
-        public float? AMOUNT { get; set; }
+        public float? HEAD_AMOUNT { get; set; }
     }
     public class EmployeeResponse
     {
