@@ -58,22 +58,18 @@ namespace MicroApi.Controllers
         public EmployeeResponse SaveData(Employee storeData)
         {
             EmployeeResponse res = new EmployeeResponse();
-
             try
             {
-                
                 Int32 ID = _employeeService.SaveData(storeData);
-
                 res.flag = "1";
                 res.message = "Success";
                 res.data = _employeeService.GetItems(ID);
             }
             catch (Exception ex)
             {
-                res.flag = "1";
+                res.flag = "0";
                 res.message = ex.Message;
             }
-
             return res;
         }
 

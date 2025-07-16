@@ -82,6 +82,121 @@ namespace MicroApi.DataLayer.Service
             return employeeList;
         }
 
+        //public Int32 SaveData(Employee employee)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection connection = ADO.GetConnection())
+        //        {
+        //            SqlCommand cmd = new SqlCommand();
+        //            cmd.Connection = connection;
+        //            cmd.CommandType = CommandType.StoredProcedure;
+        //            cmd.CommandText = "SP_TB_EMPLOYEE";
+
+        //            cmd.Parameters.AddWithValue("ACTION", 1);
+
+        //            //cmd.Parameters.AddWithValue("ID", employee.ID);
+        //            cmd.Parameters.AddWithValue("ID", (object)employee.ID ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("EMP_CODE", (object)employee.EMP_CODE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("EMP_NAME", (object)employee.EMP_NAME ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("DOB", (object)employee.DOB ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("ADDRESS1", (object)employee.ADDRESS1 ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("ADDRESS2", (object)employee.ADDRESS2 ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("ADDRESS3", (object)employee.ADDRESS3 ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("STATE_ID", (object)employee.STATE_ID ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("CITY", (object)employee.CITY ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("COUNTRY_ID", (object)employee.COUNTRY_ID ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("MOBILE", (object)employee.MOBILE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("EMAIL", (object)employee.EMAIL ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("IS_MALE", (object)employee.IS_MALE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("DEPT_ID", (object)employee.DEPT_ID ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("DESG_ID", (object)employee.DESG_ID ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("DOJ", (object)employee.DOJ ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("BANK_CODE", (object)employee.BANK_CODE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("BANK_AC_NO", (object)employee.BANK_AC_NO ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("BANK_NAME", (object)employee.BANK_NAME ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("PAYMENT_TYPE", (object)employee.PAYMENT_TYPE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("PP_NO", (object)employee.PP_NO ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("PP_EXPIRY", (object)employee.PP_EXPIRY ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("VISA_NO", (object)employee.VISA_NO ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("VISA_EXPIRY", (object)employee.VISA_EXPIRY ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("LICENSE_NO", (object)employee.LICENSE_NO ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("LICENSE_EXPIRY", (object)employee.LICENSE_EXPIRY ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("IS_SALESMAN", (object)employee.IS_SALESMAN ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("IMAGE_NAME", (object)employee.IMAGE_NAME ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("WORK_PERMIT_NO", (object)employee.WORK_PERMIT_NO ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("WORK_PERMIT_EXPIRY", (object)employee.WORK_PERMIT_EXPIRY ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("IBAN_NO", (object)employee.IBAN_NO ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("DAMAN_NO", (object)employee.DAMAN_NO ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("DAMAN_CATEGORY", (object)employee.DAMAN_CATEGORY ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("MOL_NUMBER", (object)employee.MOL_NUMBER ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("LAST_REJOIN_DATE", (object)employee.LAST_REJOIN_DATE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("IS_INACTIVE", (object)employee.IS_INACTIVE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("LEAVE_DAY_BALANCE", (object)employee.LEAVE_DAY_BALANCE ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("DAYS_DEDUCTED", (object)employee.DAYS_DEDUCTED ?? DBNull.Value);
+
+
+        //            DataTable tbl1 = new DataTable();
+
+        //            tbl1.Columns.Add("EMP_ID", typeof(Int32));
+        //            tbl1.Columns.Add("HEAD_ID", typeof(Int32));
+        //            tbl1.Columns.Add("HEAD_AMOUNT", typeof(float));
+
+        //            if (employee.EmployeeSalary != null && employee.EmployeeSalary.Any())
+        //            {
+        //                foreach (EmployeeSalary ur1 in employee.EmployeeSalary)
+        //                {
+        //                    DataRow dRow1 = tbl1.NewRow();
+        //                    dRow1["EMP_ID"] = ur1.EMP_ID;
+        //                    dRow1["HEAD_ID"] = ur1.HEAD_ID;
+        //                    dRow1["HEAD_AMOUNT"] = ur1.HEAD_AMOUNT;
+        //                    tbl1.Rows.Add(dRow1);
+        //                }
+        //            }
+
+        //            cmd.Parameters.AddWithValue("@UDT_TB_EMPLOYEE_SALARY", tbl1);
+
+        //            DataTable tblAttachments = new DataTable();
+
+        //            tblAttachments.Columns.Add("TRANS_TYPE", typeof(short));
+        //            tblAttachments.Columns.Add("TRANS_ID", typeof(int));
+        //            tblAttachments.Columns.Add("FILE_NAME", typeof(string));
+        //            tblAttachments.Columns.Add("FILE_DATA", typeof(byte[]));
+        //            tblAttachments.Columns.Add("REMARKS", typeof(string));
+        //            tblAttachments.Columns.Add("CREATED_USER_ID", typeof(int));
+        //            tblAttachments.Columns.Add("CREATED_TIME", typeof(DateTime));
+
+        //            if (employee.Attachment != null && employee.Attachment.Any())
+        //            {
+        //                foreach (var file in employee.Attachment)
+        //                {
+        //                    DataRow dRow = tblAttachments.NewRow();
+        //                    dRow["TRANS_TYPE"] = file.DOC_TYPE;
+        //                    dRow["TRANS_ID"] = file.DOC_ID;
+        //                    dRow["FILE_NAME"] = file.FILE_NAME;
+        //                    dRow["FILE_DATA"] = file.FILE_DATA; // should be a byte[]
+        //                    dRow["REMARKS"] = file.REMARKS ?? string.Empty;
+        //                    dRow["CREATED_USER_ID"] = file.USER_ID;
+        //                    dRow["CREATED_TIME"] = file.CREATED_DATE_TIME;
+
+        //                    tblAttachments.Rows.Add(dRow);
+        //                }
+        //            }
+
+        //            cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", tblAttachments);
+
+
+        //            Int32 StoreID = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            return StoreID;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
         public Int32 SaveData(Employee employee)
         {
             try
@@ -92,103 +207,48 @@ namespace MicroApi.DataLayer.Service
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "SP_TB_EMPLOYEE";
+                    cmd.Parameters.AddWithValue("@ACTION", 1);
+                    cmd.Parameters.AddWithValue("@ID", (object)employee.ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@EMP_CODE", (object)employee.EMP_CODE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@EMP_NAME", (object)employee.EMP_NAME ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DOB", (object)employee.DOB ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ADDRESS1", (object)employee.ADDRESS1 ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ADDRESS2", (object)employee.ADDRESS2 ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ADDRESS3", (object)employee.ADDRESS3 ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@STATE_ID", (object)employee.STATE_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CITY", (object)employee.CITY ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@COUNTRY_ID", (object)employee.COUNTRY_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@MOBILE", (object)employee.MOBILE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@EMAIL", (object)employee.EMAIL ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IS_MALE", (object)employee.IS_MALE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object)employee.DEPT_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DESG_ID", (object)employee.DESG_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DOJ", (object)employee.DOJ ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@BANK_CODE", (object)employee.BANK_CODE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@BANK_AC_NO", (object)employee.BANK_AC_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@BANK_NAME", (object)employee.BANK_NAME ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PAYMENT_TYPE", (object)employee.PAYMENT_TYPE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PP_NO", (object)employee.PP_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PP_EXPIRY", (object)employee.PP_EXPIRY ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@VISA_NO", (object)employee.VISA_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@VISA_EXPIRY", (object)employee.VISA_EXPIRY ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@LICENSE_NO", (object)employee.LICENSE_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@LICENSE_EXPIRY", (object)employee.LICENSE_EXPIRY ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IS_SALESMAN", (object)employee.IS_SALESMAN ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IMAGE_NAME", (object)employee.IMAGE_NAME ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@WORK_PERMIT_NO", (object)employee.WORK_PERMIT_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@WORK_PERMIT_EXPIRY", (object)employee.WORK_PERMIT_EXPIRY ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IBAN_NO", (object)employee.IBAN_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DAMAN_NO", (object)employee.DAMAN_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DAMAN_CATEGORY", (object)employee.DAMAN_CATEGORY ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@MOL_NUMBER", (object)employee.MOL_NUMBER ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@LAST_REJOIN_DATE", (object)employee.LAST_REJOIN_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IS_INACTIVE", (object)employee.IS_INACTIVE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@LEAVE_DAY_BALANCE", (object)employee.LEAVE_DAY_BALANCE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DAYS_DEDUCTED", (object)employee.DAYS_DEDUCTED ?? DBNull.Value);
 
-                    cmd.Parameters.AddWithValue("ACTION", 1);
-
-                    //cmd.Parameters.AddWithValue("ID", employee.ID);
-                    cmd.Parameters.AddWithValue("ID", (object)employee.ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("EMP_CODE", (object)employee.EMP_CODE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("EMP_NAME", (object)employee.EMP_NAME ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DOB", (object)employee.DOB ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("ADDRESS1", (object)employee.ADDRESS1 ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("ADDRESS2", (object)employee.ADDRESS2 ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("ADDRESS3", (object)employee.ADDRESS3 ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("STATE_ID", (object)employee.STATE_ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("CITY", (object)employee.CITY ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("COUNTRY_ID", (object)employee.COUNTRY_ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("MOBILE", (object)employee.MOBILE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("EMAIL", (object)employee.EMAIL ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("IS_MALE", (object)employee.IS_MALE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DEPT_ID", (object)employee.DEPT_ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DESG_ID", (object)employee.DESG_ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DOJ", (object)employee.DOJ ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("BANK_CODE", (object)employee.BANK_CODE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("BANK_AC_NO", (object)employee.BANK_AC_NO ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("BANK_NAME", (object)employee.BANK_NAME ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("PAYMENT_TYPE", (object)employee.PAYMENT_TYPE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("PP_NO", (object)employee.PP_NO ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("PP_EXPIRY", (object)employee.PP_EXPIRY ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("VISA_NO", (object)employee.VISA_NO ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("VISA_EXPIRY", (object)employee.VISA_EXPIRY ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("LICENSE_NO", (object)employee.LICENSE_NO ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("LICENSE_EXPIRY", (object)employee.LICENSE_EXPIRY ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("IS_SALESMAN", (object)employee.IS_SALESMAN ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("IMAGE_NAME", (object)employee.IMAGE_NAME ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("WORK_PERMIT_NO", (object)employee.WORK_PERMIT_NO ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("WORK_PERMIT_EXPIRY", (object)employee.WORK_PERMIT_EXPIRY ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("IBAN_NO", (object)employee.IBAN_NO ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DAMAN_NO", (object)employee.DAMAN_NO ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DAMAN_CATEGORY", (object)employee.DAMAN_CATEGORY ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("MOL_NUMBER", (object)employee.MOL_NUMBER ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("LAST_REJOIN_DATE", (object)employee.LAST_REJOIN_DATE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("IS_INACTIVE", (object)employee.IS_INACTIVE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("LEAVE_DAY_BALANCE", (object)employee.LEAVE_DAY_BALANCE ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DAYS_DEDUCTED", (object)employee.DAYS_DEDUCTED ?? DBNull.Value);
-
-
-                    DataTable tbl1 = new DataTable();
-
-                    tbl1.Columns.Add("EMP_ID", typeof(Int32));
-                    tbl1.Columns.Add("HEAD_ID", typeof(Int32));
-                    tbl1.Columns.Add("HEAD_AMOUNT", typeof(float));
-
-                    if (employee.EmployeeSalary != null && employee.EmployeeSalary.Any())
-                    {
-                        foreach (EmployeeSalary ur1 in employee.EmployeeSalary)
-                        {
-                            DataRow dRow1 = tbl1.NewRow();
-                            dRow1["EMP_ID"] = ur1.EMP_ID;
-                            dRow1["HEAD_ID"] = ur1.HEAD_ID;
-                            dRow1["HEAD_AMOUNT"] = ur1.HEAD_AMOUNT;
-                            tbl1.Rows.Add(dRow1);
-                        }
-                    }
-
-                    cmd.Parameters.AddWithValue("@UDT_TB_EMPLOYEE_SALARY", tbl1);
-
-                    DataTable tblAttachments = new DataTable();
-
-                    tblAttachments.Columns.Add("TRANS_TYPE", typeof(short));
-                    tblAttachments.Columns.Add("TRANS_ID", typeof(int));
-                    tblAttachments.Columns.Add("FILE_NAME", typeof(string));
-                    tblAttachments.Columns.Add("FILE_DATA", typeof(byte[]));
-                    tblAttachments.Columns.Add("REMARKS", typeof(string));
-                    tblAttachments.Columns.Add("CREATED_USER_ID", typeof(int));
-                    tblAttachments.Columns.Add("CREATED_TIME", typeof(DateTime));
-
-                    if (employee.Attachment != null && employee.Attachment.Any())
-                    {
-                        foreach (var file in employee.Attachment)
-                        {
-                            DataRow dRow = tblAttachments.NewRow();
-                            dRow["TRANS_TYPE"] = file.DOC_TYPE;
-                            dRow["TRANS_ID"] = file.DOC_ID;
-                            dRow["FILE_NAME"] = file.FILE_NAME;
-                            dRow["FILE_DATA"] = file.FILE_DATA; // should be a byte[]
-                            dRow["REMARKS"] = file.REMARKS ?? string.Empty;
-                            dRow["CREATED_USER_ID"] = file.USER_ID;
-                            dRow["CREATED_TIME"] = file.CREATED_DATE_TIME;
-
-                            tblAttachments.Rows.Add(dRow);
-                        }
-                    }
-
-                    cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", tblAttachments);
-
-
-                    Int32 StoreID = Convert.ToInt32(cmd.ExecuteScalar());
-
-                    return StoreID;
+                    Int32 employeeID = Convert.ToInt32(cmd.ExecuteScalar());
+                    return employeeID;
                 }
             }
             catch (Exception ex)
@@ -196,6 +256,7 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
+
 
         public Employee GetItems(int id)
         {
@@ -216,7 +277,7 @@ namespace MicroApi.DataLayer.Service
                 "TB_EMPLOYEE.IBAN_NO, TB_EMPLOYEE.DAMAN_NO, TB_EMPLOYEE.DAMAN_CATEGORY, " +
                 "TB_EMPLOYEE.LEAVE_CREDIT, TB_EMPLOYEE.LESS_SERVICE_DAYS, TB_EMPLOYEE.HOLD_SALARY, " +
                 "TB_EMPLOYEE.MOL_NUMBER, TB_EMPLOYEE.LAST_REJOIN_DATE, TB_EMPLOYEE.INCENTIVE_PERCENT, " +
-                "TB_EMPLOYEE.IS_DELETED, TB_EMPLOYEE.STORE_ID, " +
+                "TB_EMPLOYEE.IS_DELETED, " +
                 "TB_EMPLOYEE.BANK_NAME, TB_EMPLOYEE.PAYMENT_TYPE, " +
                 "TB_EMPLOYEE.IS_INACTIVE, TB_EMPLOYEE.LEAVE_DAY_BALANCE, TB_EMPLOYEE.DAYS_DEDUCTED, " +
 
@@ -237,22 +298,22 @@ namespace MicroApi.DataLayer.Service
 
                 DataTable tblsalary = ADO.GetDataTable(strSalarySQL, "EmployeeSalary");
 
-                if (tblsalary.Rows.Count > 0)
-                {
-                    foreach (DataRow drsalary in tblsalary.Rows)
-                    {
-                        employeeSalary.Add(new EmployeeSalary
-                        {
-                            ID = ADO.ToInt32(drsalary["ID"]),
-                            HEAD_ID = ADO.ToInt32(drsalary["HEAD_ID"]),
-                            HEAD_NAME = ADO.ToString(drsalary["HEAD_NAME"]),
-                            EMP_ID = ADO.ToInt32(drsalary["EMP_ID"]),
-                            HEAD_AMOUNT = ADO.ToInt32(drsalary["HEAD_AMOUNT"]),
-                        });
-                    }
+                //if (tblsalary.Rows.Count > 0)
+                //{
+                //    foreach (DataRow drsalary in tblsalary.Rows)
+                //    {
+                //        employeeSalary.Add(new EmployeeSalary
+                //        {
+                //            ID = ADO.ToInt32(drsalary["ID"]),
+                //            HEAD_ID = ADO.ToInt32(drsalary["HEAD_ID"]),
+                //            HEAD_NAME = ADO.ToString(drsalary["HEAD_NAME"]),
+                //            EMP_ID = ADO.ToInt32(drsalary["EMP_ID"]),
+                //            HEAD_AMOUNT = ADO.ToInt32(drsalary["HEAD_AMOUNT"]),
+                //        });
+                //    }
 
-                    employee.EmployeeSalary = employeeSalary;
-                }
+                //    employee.EmployeeSalary = employeeSalary;
+                //}
 
                 string strAttachmentsSQL = "SELECT ID, TRANS_TYPE, TRANS_ID, FILE_NAME, FILE_DATA, REMARKS, " +
     "CREATED_USER_ID, CREATED_TIME, IS_DELETED, DELETED_USER_ID, DELETED_TIME " +
@@ -261,25 +322,25 @@ namespace MicroApi.DataLayer.Service
 
                 DataTable tblAttachments = ADO.GetDataTable(strAttachmentsSQL, "EmployeeAttachments");
 
-                if (tblAttachments.Rows.Count > 0)
-                {
-                    foreach (DataRow drAttachment in tblAttachments.Rows)
-                    {
-                        empAttachments.Add(new EmpAttachment
-                        {
-                            ID = ADO.ToInt32(drAttachment["ID"]),
-                            DOC_TYPE = ADO.ToInt32(drAttachment["TRANS_TYPE"]),
-                            DOC_ID = ADO.ToInt32(drAttachment["TRANS_ID"]),
-                            FILE_NAME = ADO.ToString(drAttachment["FILE_NAME"]),
-                            FILE_DATA = drAttachment["FILE_DATA"] as byte[],
-                            REMARKS = ADO.ToString(drAttachment["REMARKS"]),
-                            USER_ID = ADO.ToInt32(drAttachment["CREATED_USER_ID"]),
-                            CREATED_DATE_TIME = Convert.ToDateTime(drAttachment["CREATED_TIME"]),
-                        });
-                    }
+                //if (tblAttachments.Rows.Count > 0)
+                //{
+                //    foreach (DataRow drAttachment in tblAttachments.Rows)
+                //    {
+                //        empAttachments.Add(new EmpAttachment
+                //        {
+                //            ID = ADO.ToInt32(drAttachment["ID"]),
+                //            DOC_TYPE = ADO.ToInt32(drAttachment["TRANS_TYPE"]),
+                //            DOC_ID = ADO.ToInt32(drAttachment["TRANS_ID"]),
+                //            FILE_NAME = ADO.ToString(drAttachment["FILE_NAME"]),
+                //            FILE_DATA = drAttachment["FILE_DATA"] as byte[],
+                //            REMARKS = ADO.ToString(drAttachment["REMARKS"]),
+                //            USER_ID = ADO.ToInt32(drAttachment["CREATED_USER_ID"]),
+                //            CREATED_DATE_TIME = Convert.ToDateTime(drAttachment["CREATED_TIME"]),
+                //        });
+                //    }
 
-                    employee.Attachment = empAttachments;
-                }
+                //    employee.Attachment = empAttachments;
+                //}
 
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Employee");
@@ -334,7 +395,7 @@ namespace MicroApi.DataLayer.Service
 
                     employee.IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]);
 
-                    employee.STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null;
+                    //employee.STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null;
                     employee.STATE_NAME = dr["STATE_NAME"] != DBNull.Value ? Convert.ToString(dr["STATE_NAME"]) : null;
                     employee.DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : null;
                     employee.DESG_NAME = dr["DESG_NAME"] != DBNull.Value ? Convert.ToString(dr["DESG_NAME"]) : null;

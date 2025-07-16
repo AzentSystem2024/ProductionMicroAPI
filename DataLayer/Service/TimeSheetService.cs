@@ -513,49 +513,46 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public TimeSheetHeaderListResponseData GetSalaryPendingTimeSheets(TimeSheetRequest request)
+        public TimeSheetHeaderListResponseData GetPayrollPendingTimeSheets(TimeSheetRequest request)
         {
             TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
             response.data = new List<TimeSheetHeader>();
 
             using (SqlConnection connection = ADO.GetConnection())
-            using (SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection))
             {
-                
+                SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ACTION", 3);
                 cmd.Parameters.AddWithValue("@CompanyId", request.CompanyId);
-                cmd.Parameters.AddWithValue("@Month", request.Month);
+                cmd.Parameters.AddWithValue("@Month", DateTime.ParseExact(request.Month, "MMMMyyyy", CultureInfo.InvariantCulture));
 
-               
                 SqlDataReader reader = cmd.ExecuteReader();
-                response.data = new List<TimeSheetHeader>();
+
                 while (reader.Read())
                 {
                     response.data.Add(new TimeSheetHeader
                     {
                         ID = Convert.ToInt32(reader["ID"]),
-                        EMP_NAME = reader["EMP_NAME"].ToString(),
                         EMP_NO = reader["EMP_NO"].ToString(),
+                        EMP_NAME = reader["EMP_NAME"].ToString(),
                         EMP_ID = Convert.ToInt32(reader["EMP_ID"]),
-                        //COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
-                        //TS_MONTH = Convert.ToDateTime(reader["TS_MONTH"]),
-                        WORKED_DAYS = Convert.ToSingle(reader["WORKED_DAYS"]),
-                        OT_HOURS = Convert.ToSingle(reader["OT_HOURS"]),
-                        LESS_HOURS = Convert.ToSingle(reader["LESS_HOURS"]),
+                        WORKED_DAYS = reader["WORKED_DAYS"] != DBNull.Value ? Convert.ToSingle(reader["WORKED_DAYS"]) : (float?)null,
+                        LESS_HOURS = reader["LESS_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["LESS_HOURS"]) : (float?)null,
+                        OT_HOURS = reader["OT_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["OT_HOURS"]) : (float?)null,
                         STATUS = reader["STATUS"].ToString(),
-                        //SALARY_ID = Convert.ToInt32(reader["SALARY_ID"]),
-                        //AMOUNT = Convert.ToDecimal(reader["AMOUNT"])
+                        SALARY_ID = reader["SALARY_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALARY_ID"]) : (int?)null,
+                        AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : (decimal?)null
                     });
                 }
-                connection.Close();
             }
+
             response.flag = "1";
             response.message = "Success";
             return response;
         }
-
-
     }
 
+
 }
+
+
