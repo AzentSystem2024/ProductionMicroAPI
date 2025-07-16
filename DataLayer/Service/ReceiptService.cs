@@ -227,7 +227,6 @@ namespace MicroApi.DataLayer.Service
                             {
                                 PendingInvoiceItem item = new PendingInvoiceItem
                                 {
-                                    SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : 0,
                                     INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
                                     INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value
                                         ? Convert.ToDateTime(reader["INVOICE_DATE"]).ToString("dd-MM-yyyy")
