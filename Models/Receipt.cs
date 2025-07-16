@@ -141,7 +141,16 @@
     {
         public int BILL_ID { get; set; }
         public double AMOUNT { get; set; }
+        public int SL_NO { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string INVOICE_DATE { get; set; }
+        public string REF_NO { get; set; }
+        public string NARRATION { get; set; }
+        public double NET_AMOUNT { get; set; }
+        public double SETTLED_TILL_DATE { get; set; }
+        public double PENDING_AMOUNT { get; set; }
     }
+   
     public class ReceiptSelect
     {
         public int TRANS_ID { get; set; }
@@ -163,8 +172,9 @@
         public string ADD_TIME { get; set; }
         public decimal NET_AMOUNT { get; set; }
         public List<ReceiptDetail> REC_DETAIL { get; set; }
+
     }
-        public class ReceiptSelectResponse
+    public class ReceiptSelectResponse
    {
         public int flag { get; set; }
         public string Message { get; set; }

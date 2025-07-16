@@ -324,7 +324,7 @@ namespace MicroApi.DataLayer.Service
         }
         public ReceiptSelectResponse GetReceiptById(int id)
         {
-            ReceiptSelectResponse response = new ReceiptSelectResponse
+            var response = new ReceiptSelectResponse
             {
                 flag = 0,
                 Message = "Failed",
@@ -348,7 +348,8 @@ namespace MicroApi.DataLayer.Service
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             ReceiptSelect receipt = null;
-                            List<ReceiptDetail> details = new List<ReceiptDetail>();
+                            var recDetails = new List<ReceiptDetail>();
+                            var pendingDetails = new List<ReceiptDetail>();
 
                             while (reader.Read())
                             {
@@ -357,41 +358,54 @@ namespace MicroApi.DataLayer.Service
                                     receipt = new ReceiptSelect
                                     {
                                         TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                        TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                        TRANS_TYPE = reader["TRANS_TYPE"] as int? ?? 0,
                                         REC_DATE = reader["REC_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["REC_DATE"]).ToString("dd-MM-yyyy") : null,
-                                        COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
-                                        STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
-                                        FIN_ID = reader["FIN_ID"] != DBNull.Value ? Convert.ToInt32(reader["FIN_ID"]) : 0,
-                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
+                                        COMPANY_ID = reader["COMPANY_ID"] as int? ?? 0,
+                                        STORE_ID = reader["STORE_ID"] as int? ?? 0,
+                                        FIN_ID = reader["FIN_ID"] as int? ?? 0,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] as int? ?? 0,
                                         REF_NO = reader["REF_NO"]?.ToString(),
-                                       // UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                        DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
+                                        DISTRIBUTOR_ID = reader["CUSTOMER_ID"] as int? ?? 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),
-                                        PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
-                                        PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
+                                        PAY_TYPE_ID = reader["PAY_TYPE_ID"] as int? ?? 0,
+                                        PAY_HEAD_ID = reader["PAY_HEAD_ID"] as int? ?? 0,
                                         ADD_TIME = reader["ADD_TIME"] != DBNull.Value ? Convert.ToDateTime(reader["ADD_TIME"]).ToString("dd-MM-yyyy") : null,
-                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] as decimal? ?? 0,
                                         CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
-                                        REC_DETAIL = new List<ReceiptDetail>()
+                                        REC_DETAIL = new List<ReceiptDetail>(),
                                     };
                                 }
 
-                                // Detail rows
-                                if (reader["BILL_ID"] != DBNull.Value)
+                                int billId = reader["BILL_ID"] as int? ?? 0;
+
+                                if (billId > 0)
                                 {
-                                    details.Add(new ReceiptDetail
+                                    ReceiptDetail detail = new ReceiptDetail
                                     {
-                                        BILL_ID = Convert.ToInt32(reader["BILL_ID"]),
-                                        AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["AMOUNT"]) : 0.0
-                                    });
+                                        BILL_ID = billId,
+                                        AMOUNT = reader["AMOUNT"] as double? ?? 0.0,
+                                        SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : 0,
+                                        INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
+                                        INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        REF_NO = reader["REF_NO"]?.ToString(),
+                                        NARRATION = reader["NARRATION"]?.ToString(),
+                                        NET_AMOUNT = reader["NET_AMOUNT"] as double? ?? 0,
+                                        SETTLED_TILL_DATE = reader["SETTLED_TILL_DATE"] as double? ?? 0,
+                                        PENDING_AMOUNT = reader["PENDING_AMOUNT"] as double? ?? 0
+                                    };
+
+                                    if ((detail.PENDING_AMOUNT > 0 || detail.NET_AMOUNT > 0) && detail.AMOUNT == 0)
+                                        pendingDetails.Add(detail);
+                                    else
+                                        recDetails.Add(detail);
                                 }
                             }
 
                             if (receipt != null)
                             {
-                                receipt.REC_DETAIL = details;
+                                receipt.REC_DETAIL = recDetails;
                                 response.Data.Add(receipt);
                                 response.flag = 1;
                                 response.Message = "Success";
@@ -408,6 +422,9 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
+
+
 
         public ReceiptResponse CommitReceipt(CommitReceiptRequest request)
         {
