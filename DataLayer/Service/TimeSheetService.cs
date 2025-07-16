@@ -482,7 +482,7 @@ namespace MicroApi.DataLayer.Service
                         EMP_NO = reader["EMP_NO"].ToString(),
                         EMP_NAME = reader["EMP_NAME"].ToString(),
                         EMP_ID = Convert.ToInt32(reader["EMP_ID"]),
-                        WORKED_DAYS = reader["WORKED_DAYS"] != DBNull.Value ? Convert.ToSingle(reader["WORKED_DAYS"]) : (float?)null,
+                        WORKED_DAYS = reader["TOTAL_DAYS"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_DAYS"]) : (float?)null,
                         LESS_HOURS = reader["LESS_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["LESS_HOURS"]) : (float?)null,
                         OT_HOURS = reader["OT_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["OT_HOURS"]) : (float?)null,
                         STATUS = reader["STATUS"].ToString()
@@ -536,7 +536,7 @@ namespace MicroApi.DataLayer.Service
                         EMP_NO = reader["EMP_NO"].ToString(),
                         EMP_NAME = reader["EMP_NAME"].ToString(),
                         EMP_ID = Convert.ToInt32(reader["EMP_ID"]),
-                        WORKED_DAYS = reader["WORKED_DAYS"] != DBNull.Value ? Convert.ToSingle(reader["WORKED_DAYS"]) : (float?)null,
+                        WORKED_DAYS = reader["TOTAL_DAYS"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_DAYS"]) : (float?)null,
                         LESS_HOURS = reader["LESS_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["LESS_HOURS"]) : (float?)null,
                         OT_HOURS = reader["OT_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["OT_HOURS"]) : (float?)null,
                         STATUS = reader["STATUS"].ToString(),

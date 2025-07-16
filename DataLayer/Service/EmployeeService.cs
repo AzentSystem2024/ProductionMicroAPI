@@ -198,7 +198,7 @@ namespace MicroApi.DataLayer.Service
         //    }
         //}
 
-        public Int32 SaveData(Employee employee)
+        public int SaveEmployee(Employee employee)
         {
             try
             {
@@ -258,7 +258,7 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
-        public bool UpdateEmployee(Employee employee)
+        public bool UpdateEmployee(EmployeeUpdate employee)
         {
             using (SqlConnection connection = ADO.GetConnection())
             {
@@ -350,25 +350,25 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@COMPANY_ID", employee.COMPANY_ID);
 
                 // Handle attachments only during update
-                //if (employee.Attachments != null && employee.Attachments.Any())
-                //{
-                //    DataTable attachmentTable = new DataTable();
-                //    attachmentTable.Columns.Add("FILE_NAME", typeof(string));
-                //    attachmentTable.Columns.Add("FILE_DATA", typeof(byte[]));
-                //    attachmentTable.Columns.Add("REMARKS", typeof(string));
+                if (employee.Attachments != null && employee.Attachments.Any())
+                {
+                    DataTable attachmentTable = new DataTable();
+                    attachmentTable.Columns.Add("FILE_NAME", typeof(string));
+                    attachmentTable.Columns.Add("FILE_DATA", typeof(byte[]));
+                    attachmentTable.Columns.Add("REMARKS", typeof(string));
 
-                //    foreach (var attachment in employee.Attachments)
-                //    {
-                //        DataRow row = attachmentTable.NewRow();
-                //        row["FILE_NAME"] = attachment.FILE_NAME;
-                //        row["FILE_DATA"] = attachment.FILE_DATA; // Ensure this is byte[]
-                //        row["REMARKS"] = attachment.REMARKS;
-                //        attachmentTable.Rows.Add(row);
-                //    }
+                    foreach (var attachment in employee.Attachments)
+                    {
+                        DataRow row = attachmentTable.NewRow();
+                        row["FILE_NAME"] = attachment.FILE_NAME;
+                        row["FILE_DATA"] = attachment.FILE_DATA; // Ensure this is byte[]
+                        row["REMARKS"] = attachment.REMARKS;
+                        attachmentTable.Rows.Add(row);
+                    }
 
-                //    SqlParameter attachmentParam = cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", attachmentTable);
-                //    attachmentParam.SqlDbType = SqlDbType.Structured;
-                //}
+                    SqlParameter attachmentParam = cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", attachmentTable);
+                    attachmentParam.SqlDbType = SqlDbType.Structured;
+                }
 
                
                 cmd.ExecuteNonQuery();

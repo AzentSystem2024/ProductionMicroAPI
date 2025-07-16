@@ -55,26 +55,27 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("save")]
-        public EmployeeResponse SaveData(Employee storeData)
+        public IActionResult Save([FromBody] Employee employee)
         {
-            EmployeeResponse res = new EmployeeResponse();
+            if (employee == null)
+            {
+                return BadRequest(new { Message = "Invalid employee data" });
+            }
+
             try
             {
-                Int32 ID = _employeeService.SaveData(storeData);
-                res.flag = "1";
-                res.message = "Success";
-                res.data = _employeeService.GetItems(ID);
+                int employeeId = _employeeService.SaveEmployee(employee);
+                return Ok(new { Id = employeeId, Message = "Employee saved successfully" });
             }
             catch (Exception ex)
             {
-                res.flag = "0";
-                res.message = ex.Message;
+                return StatusCode(500, new { Message = "An error occurred while saving the employee", Error = ex.Message });
             }
-            return res;
         }
+
         [HttpPost]
         [Route("update")]
-        public IActionResult Update([FromBody] Employee employee)
+        public IActionResult Update([FromBody] EmployeeUpdate employee)
         {
             if (employee == null || employee.ID <= 0)
             {
@@ -100,7 +101,7 @@ namespace MicroApi.Controllers
         }
 
 
-            [HttpPost]
+        [HttpPost]
         [Route("delete/{id:int}")]
         public EmployeeResponse Delete(int id)
         {
