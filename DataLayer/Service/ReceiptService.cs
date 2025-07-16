@@ -385,7 +385,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         BILL_ID = billId,
                                         AMOUNT = reader["AMOUNT"] as double? ?? 0.0,
-                                        SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : 0,
+                                        //SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : 0,
                                         INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
                                         INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         REF_NO = reader["REF_NO"]?.ToString(),
