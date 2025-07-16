@@ -45,7 +45,7 @@
             public DateTime? LAST_REJOIN_DATE { get; set; }
 
             public string DEPT_NAME { get; set; }
-            public string DESG_NAME { get; set; }
+            public string? DESG_NAME { get; set; }
             public string STATE_NAME { get; set; }
             //public string? STORE_NAME { get; set; }
 

@@ -264,12 +264,92 @@ namespace MicroApi.DataLayer.Service
             {
                 SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@ACTION", 1); // Update action
+                cmd.Parameters.AddWithValue("@ACTION", 2); // Update action
                 cmd.Parameters.AddWithValue("@ID", employee.ID);
 
-                // Add parameters for employee fields as before...
+                // Add parameters only if they are not null
+                if (!string.IsNullOrEmpty(employee.EMP_CODE))
+                    cmd.Parameters.AddWithValue("@EMP_CODE", employee.EMP_CODE);
+                if (!string.IsNullOrEmpty(employee.EMP_NAME))
+                    cmd.Parameters.AddWithValue("@EMP_NAME", employee.EMP_NAME);
+                if (employee.DOB.HasValue)
+                    cmd.Parameters.AddWithValue("@DOB", employee.DOB);
+                if (!string.IsNullOrEmpty(employee.ADDRESS1))
+                    cmd.Parameters.AddWithValue("@ADDRESS1", employee.ADDRESS1);
+                if (!string.IsNullOrEmpty(employee.ADDRESS2))
+                    cmd.Parameters.AddWithValue("@ADDRESS2", employee.ADDRESS2);
+                if (!string.IsNullOrEmpty(employee.ADDRESS3))
+                    cmd.Parameters.AddWithValue("@ADDRESS3", employee.ADDRESS3);
+                if (!string.IsNullOrEmpty(employee.CITY))
+                    cmd.Parameters.AddWithValue("@CITY", employee.CITY);
+                if (employee.STATE_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@STATE_ID", employee.STATE_ID);
+                if (!string.IsNullOrEmpty(employee.MOBILE))
+                    cmd.Parameters.AddWithValue("@MOBILE", employee.MOBILE);
+                if (!string.IsNullOrEmpty(employee.EMAIL))
+                    cmd.Parameters.AddWithValue("@EMAIL", employee.EMAIL);
+                if (employee.IS_MALE.HasValue)
+                    cmd.Parameters.AddWithValue("@IS_MALE", employee.IS_MALE);
+                if (employee.DEPT_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@DEPT_ID", employee.DEPT_ID);
+                if (employee.DESG_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@DESG_ID", employee.DESG_ID);
+                if (employee.DOJ.HasValue)
+                    cmd.Parameters.AddWithValue("@DOJ", employee.DOJ);
+                if (!string.IsNullOrEmpty(employee.BANK_CODE))
+                    cmd.Parameters.AddWithValue("@BANK_CODE", employee.BANK_CODE);
+                if (!string.IsNullOrEmpty(employee.BANK_AC_NO))
+                    cmd.Parameters.AddWithValue("@BANK_AC_NO", employee.BANK_AC_NO);
+                if (!string.IsNullOrEmpty(employee.BANK_NAME))
+                    cmd.Parameters.AddWithValue("@BANK_NAME", employee.BANK_NAME);
+                if (employee.PAYMENT_TYPE.HasValue)
+                    cmd.Parameters.AddWithValue("@PAYMENT_TYPE", employee.PAYMENT_TYPE);
+                if (!string.IsNullOrEmpty(employee.PP_NO))
+                    cmd.Parameters.AddWithValue("@PP_NO", employee.PP_NO);
+                if (employee.PP_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@PP_EXPIRY", employee.PP_EXPIRY);
+                if (!string.IsNullOrEmpty(employee.VISA_NO))
+                    cmd.Parameters.AddWithValue("@VISA_NO", employee.VISA_NO);
+                if (employee.VISA_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@VISA_EXPIRY", employee.VISA_EXPIRY);
+                if (!string.IsNullOrEmpty(employee.LICENSE_NO))
+                    cmd.Parameters.AddWithValue("@LICENSE_NO", employee.LICENSE_NO);
+                if (employee.LICENSE_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@LICENSE_EXPIRY", employee.LICENSE_EXPIRY);
+                if (employee.IS_SALESMAN.HasValue)
+                    cmd.Parameters.AddWithValue("@IS_SALESMAN", employee.IS_SALESMAN);
+                if (!string.IsNullOrEmpty(employee.IMAGE_NAME))
+                    cmd.Parameters.AddWithValue("@IMAGE_NAME", employee.IMAGE_NAME);
+                if (!string.IsNullOrEmpty(employee.WORK_PERMIT_NO))
+                    cmd.Parameters.AddWithValue("@WORK_PERMIT_NO", employee.WORK_PERMIT_NO);
+                if (employee.WORK_PERMIT_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@WORK_PERMIT_EXPIRY", employee.WORK_PERMIT_EXPIRY);
+                if (!string.IsNullOrEmpty(employee.IBAN_NO))
+                    cmd.Parameters.AddWithValue("@IBAN_NO", employee.IBAN_NO);
+                if (!string.IsNullOrEmpty(employee.DAMAN_NO))
+                    cmd.Parameters.AddWithValue("@DAMAN_NO", employee.DAMAN_NO);
+                if (!string.IsNullOrEmpty(employee.DAMAN_CATEGORY))
+                    cmd.Parameters.AddWithValue("@DAMAN_CATEGORY", employee.DAMAN_CATEGORY);
+                //if (employee.LEAVE_CREDIT.HasValue)
+                //    cmd.Parameters.AddWithValue("@LEAVE_CREDIT", employee.LEAVE_CREDIT);
+                //if (employee.LESS_SERVICE_DAYS.HasValue)
+                //    cmd.Parameters.AddWithValue("@LESS_SERVICE_DAYS", employee.LESS_SERVICE_DAYS);
+                //if (employee.HOLD_SALARY.HasValue)
+                //    cmd.Parameters.AddWithValue("@HOLD_SALARY", employee.HOLD_SALARY);
+                if (!string.IsNullOrEmpty(employee.MOL_NUMBER))
+                    cmd.Parameters.AddWithValue("@MOL_NUMBER", employee.MOL_NUMBER);
+                if (employee.LAST_REJOIN_DATE.HasValue)
+                    cmd.Parameters.AddWithValue("@LAST_REJOIN_DATE", employee.LAST_REJOIN_DATE);
+                //if (employee.IS_INACTIVE.HasValue)
+                //    cmd.Parameters.AddWithValue("@IS_INACTIVE", employee.IS_INACTIVE);
+                //if (employee.LEAVE_DAY_BALANCE.HasValue)
+                //    cmd.Parameters.AddWithValue("@LEAVE_DAY_BALANCE", employee.LEAVE_DAY_BALANCE);
+                //if (employee.DAYS_DEDUCTED.HasValue)
+                    cmd.Parameters.AddWithValue("@DAYS_DEDUCTED", employee.DAYS_DEDUCTED);
+                if (employee.COMPANY_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", employee.COMPANY_ID);
 
-                // Handle attachments
+                // Handle attachments only during update
                 //if (employee.Attachments != null && employee.Attachments.Any())
                 //{
                 //    DataTable attachmentTable = new DataTable();
@@ -286,11 +366,11 @@ namespace MicroApi.DataLayer.Service
                 //        attachmentTable.Rows.Add(row);
                 //    }
 
-                   // SqlParameter attachmentParam = cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", attachmentTable);
-                    //attachmentParam.SqlDbType = SqlDbType.Structured;
+                //    SqlParameter attachmentParam = cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", attachmentTable);
+                //    attachmentParam.SqlDbType = SqlDbType.Structured;
                 //}
 
-                connection.Open();
+               
                 cmd.ExecuteNonQuery();
             }
             return true;
