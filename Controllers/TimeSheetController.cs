@@ -194,11 +194,18 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("salary-pending")]
-        public IActionResult GetSalaryPendingTimeSheets([FromBody] TimeSheetRequest request)
+        [Route("payroll-pending")]
+        public IActionResult GetPayrollPendingTimeSheets([FromBody] TimeSheetRequest request)
         {
-            var response = _timeSheetService.GetSalaryPendingTimeSheets(request);
-            return Ok(response);
+            try
+            {
+                var response = _timeSheetService.GetPayrollPendingTimeSheets(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { flag = "0", message = ex.Message });
+            }
         }
 
     }
