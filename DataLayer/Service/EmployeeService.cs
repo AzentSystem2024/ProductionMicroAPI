@@ -75,6 +75,7 @@ namespace MicroApi.DataLayer.Service
                         LEAVE_DAY_BALANCE = Convert.IsDBNull(dr["LEAVE_DAY_BALANCE"]) ? 0 : Convert.ToDecimal(dr["LEAVE_DAY_BALANCE"]),
                         DAYS_DEDUCTED = Convert.IsDBNull(dr["DAYS_DEDUCTED"]) ? 0 : Convert.ToDecimal(dr["DAYS_DEDUCTED"]),
                         LEAVE_CREDIT = Convert.IsDBNull(dr["LEAVE_CREDIT"]) ? 0 : Convert.ToDecimal(dr["LEAVE_CREDIT"]),
+                        //COMPANY_ID = Convert.IsDBNull(dr["COMPANY_ID"]) ? 0 : Convert.ToInt32(dr["COMPANY_ID"]),
                     });
                 }
                 connection.Close();
@@ -246,6 +247,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@IS_INACTIVE", (object)employee.IS_INACTIVE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@LEAVE_DAY_BALANCE", (object)employee.LEAVE_DAY_BALANCE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DAYS_DEDUCTED", (object)employee.DAYS_DEDUCTED ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object)employee.COMPANY_ID ?? DBNull.Value);
 
                     Int32 employeeID = Convert.ToInt32(cmd.ExecuteScalar());
                     return employeeID;
@@ -256,6 +258,124 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
+        public bool UpdateEmployee(Employee employee)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 2); // Update action
+                cmd.Parameters.AddWithValue("@ID", employee.ID);
+
+                // Add parameters only if they are not null
+                if (!string.IsNullOrEmpty(employee.EMP_CODE))
+                    cmd.Parameters.AddWithValue("@EMP_CODE", employee.EMP_CODE);
+                if (!string.IsNullOrEmpty(employee.EMP_NAME))
+                    cmd.Parameters.AddWithValue("@EMP_NAME", employee.EMP_NAME);
+                if (employee.DOB.HasValue)
+                    cmd.Parameters.AddWithValue("@DOB", employee.DOB);
+                if (!string.IsNullOrEmpty(employee.ADDRESS1))
+                    cmd.Parameters.AddWithValue("@ADDRESS1", employee.ADDRESS1);
+                if (!string.IsNullOrEmpty(employee.ADDRESS2))
+                    cmd.Parameters.AddWithValue("@ADDRESS2", employee.ADDRESS2);
+                if (!string.IsNullOrEmpty(employee.ADDRESS3))
+                    cmd.Parameters.AddWithValue("@ADDRESS3", employee.ADDRESS3);
+                if (!string.IsNullOrEmpty(employee.CITY))
+                    cmd.Parameters.AddWithValue("@CITY", employee.CITY);
+                if (employee.STATE_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@STATE_ID", employee.STATE_ID);
+                if (!string.IsNullOrEmpty(employee.MOBILE))
+                    cmd.Parameters.AddWithValue("@MOBILE", employee.MOBILE);
+                if (!string.IsNullOrEmpty(employee.EMAIL))
+                    cmd.Parameters.AddWithValue("@EMAIL", employee.EMAIL);
+                if (employee.IS_MALE.HasValue)
+                    cmd.Parameters.AddWithValue("@IS_MALE", employee.IS_MALE);
+                if (employee.DEPT_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@DEPT_ID", employee.DEPT_ID);
+                if (employee.DESG_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@DESG_ID", employee.DESG_ID);
+                if (employee.DOJ.HasValue)
+                    cmd.Parameters.AddWithValue("@DOJ", employee.DOJ);
+                if (!string.IsNullOrEmpty(employee.BANK_CODE))
+                    cmd.Parameters.AddWithValue("@BANK_CODE", employee.BANK_CODE);
+                if (!string.IsNullOrEmpty(employee.BANK_AC_NO))
+                    cmd.Parameters.AddWithValue("@BANK_AC_NO", employee.BANK_AC_NO);
+                if (!string.IsNullOrEmpty(employee.BANK_NAME))
+                    cmd.Parameters.AddWithValue("@BANK_NAME", employee.BANK_NAME);
+                if (employee.PAYMENT_TYPE.HasValue)
+                    cmd.Parameters.AddWithValue("@PAYMENT_TYPE", employee.PAYMENT_TYPE);
+                if (!string.IsNullOrEmpty(employee.PP_NO))
+                    cmd.Parameters.AddWithValue("@PP_NO", employee.PP_NO);
+                if (employee.PP_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@PP_EXPIRY", employee.PP_EXPIRY);
+                if (!string.IsNullOrEmpty(employee.VISA_NO))
+                    cmd.Parameters.AddWithValue("@VISA_NO", employee.VISA_NO);
+                if (employee.VISA_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@VISA_EXPIRY", employee.VISA_EXPIRY);
+                if (!string.IsNullOrEmpty(employee.LICENSE_NO))
+                    cmd.Parameters.AddWithValue("@LICENSE_NO", employee.LICENSE_NO);
+                if (employee.LICENSE_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@LICENSE_EXPIRY", employee.LICENSE_EXPIRY);
+                if (employee.IS_SALESMAN.HasValue)
+                    cmd.Parameters.AddWithValue("@IS_SALESMAN", employee.IS_SALESMAN);
+                if (!string.IsNullOrEmpty(employee.IMAGE_NAME))
+                    cmd.Parameters.AddWithValue("@IMAGE_NAME", employee.IMAGE_NAME);
+                if (!string.IsNullOrEmpty(employee.WORK_PERMIT_NO))
+                    cmd.Parameters.AddWithValue("@WORK_PERMIT_NO", employee.WORK_PERMIT_NO);
+                if (employee.WORK_PERMIT_EXPIRY.HasValue)
+                    cmd.Parameters.AddWithValue("@WORK_PERMIT_EXPIRY", employee.WORK_PERMIT_EXPIRY);
+                if (!string.IsNullOrEmpty(employee.IBAN_NO))
+                    cmd.Parameters.AddWithValue("@IBAN_NO", employee.IBAN_NO);
+                if (!string.IsNullOrEmpty(employee.DAMAN_NO))
+                    cmd.Parameters.AddWithValue("@DAMAN_NO", employee.DAMAN_NO);
+                if (!string.IsNullOrEmpty(employee.DAMAN_CATEGORY))
+                    cmd.Parameters.AddWithValue("@DAMAN_CATEGORY", employee.DAMAN_CATEGORY);
+                if (employee.LEAVE_CREDIT != default(decimal))
+                    cmd.Parameters.AddWithValue("@LEAVE_CREDIT", employee.LEAVE_CREDIT);
+                //if (employee.LESS_SERVICE_DAYS.HasValue)
+                //    cmd.Parameters.AddWithValue("@LESS_SERVICE_DAYS", employee.LESS_SERVICE_DAYS);
+                //if (employee.HOLD_SALARY.HasValue)
+                //    cmd.Parameters.AddWithValue("@HOLD_SALARY", employee.HOLD_SALARY);
+                if (!string.IsNullOrEmpty(employee.MOL_NUMBER))
+                    cmd.Parameters.AddWithValue("@MOL_NUMBER", employee.MOL_NUMBER);
+                if (employee.LAST_REJOIN_DATE.HasValue)
+                    cmd.Parameters.AddWithValue("@LAST_REJOIN_DATE", employee.LAST_REJOIN_DATE);
+                if (employee.IS_INACTIVE != default(bool))
+                    cmd.Parameters.AddWithValue("@IS_INACTIVE", employee.IS_INACTIVE);
+                if (employee.LEAVE_DAY_BALANCE != default(decimal))
+                    cmd.Parameters.AddWithValue("@LEAVE_DAY_BALANCE", employee.LEAVE_DAY_BALANCE);
+                if (employee.DAYS_DEDUCTED != default(decimal))
+                    cmd.Parameters.AddWithValue("@DAYS_DEDUCTED", employee.DAYS_DEDUCTED);
+                if (employee.COMPANY_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", employee.COMPANY_ID);
+
+                // Handle attachments only during update
+                //if (employee.Attachments != null && employee.Attachments.Any())
+                //{
+                //    DataTable attachmentTable = new DataTable();
+                //    attachmentTable.Columns.Add("FILE_NAME", typeof(string));
+                //    attachmentTable.Columns.Add("FILE_DATA", typeof(byte[]));
+                //    attachmentTable.Columns.Add("REMARKS", typeof(string));
+
+                //    foreach (var attachment in employee.Attachments)
+                //    {
+                //        DataRow row = attachmentTable.NewRow();
+                //        row["FILE_NAME"] = attachment.FILE_NAME;
+                //        row["FILE_DATA"] = attachment.FILE_DATA; // Ensure this is byte[]
+                //        row["REMARKS"] = attachment.REMARKS;
+                //        attachmentTable.Rows.Add(row);
+                //    }
+
+                //    SqlParameter attachmentParam = cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", attachmentTable);
+                //    attachmentParam.SqlDbType = SqlDbType.Structured;
+                //}
+
+               
+                cmd.ExecuteNonQuery();
+            }
+            return true;
+        }
+
 
 
         public Employee GetItems(int id)
@@ -349,63 +469,65 @@ namespace MicroApi.DataLayer.Service
                     DataRow dr = tbl.Rows[0];
 
                     employee.ID = Convert.ToInt32(dr["ID"]);
-                    employee.EMP_CODE = dr["EMP_CODE"] != DBNull.Value ? Convert.ToString(dr["EMP_CODE"]) : null;
-                    employee.EMP_NAME = dr["EMP_NAME"] != DBNull.Value ? Convert.ToString(dr["EMP_NAME"]) : null;
+                    employee.EMP_CODE = dr["EMP_CODE"] != DBNull.Value ? Convert.ToString(dr["EMP_CODE"]) : "";
+                    employee.EMP_NAME = dr["EMP_NAME"] != DBNull.Value ? Convert.ToString(dr["EMP_NAME"]) : "";
                     employee.DOB = dr["DOB"] != DBNull.Value ? Convert.ToDateTime(dr["DOB"]) : (DateTime?)null;
 
-                    employee.ADDRESS1 = dr["ADDRESS1"] != DBNull.Value ? Convert.ToString(dr["ADDRESS1"]) : null;
-                    employee.ADDRESS2 = dr["ADDRESS2"] != DBNull.Value ? Convert.ToString(dr["ADDRESS2"]) : null;
-                    employee.ADDRESS3 = dr["ADDRESS3"] != DBNull.Value ? Convert.ToString(dr["ADDRESS3"]) : null;
-                    employee.CITY = dr["CITY"] != DBNull.Value ? Convert.ToString(dr["CITY"]) : null;
+                    employee.ADDRESS1 = dr["ADDRESS1"] != DBNull.Value ? Convert.ToString(dr["ADDRESS1"]) : "";
+                    employee.ADDRESS2 = dr["ADDRESS2"] != DBNull.Value ? Convert.ToString(dr["ADDRESS2"]) : "";
+                    employee.ADDRESS3 = dr["ADDRESS3"] != DBNull.Value ? Convert.ToString(dr["ADDRESS3"]) : "";
+                    employee.CITY = dr["CITY"] != DBNull.Value ? Convert.ToString(dr["CITY"]) : "";
 
                     employee.STATE_ID = dr["STATE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STATE_ID"]) : null;
                     employee.COUNTRY_ID = dr["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COUNTRY_ID"]) : (int?)null;
 
-                    employee.MOBILE = dr["MOBILE"] != DBNull.Value ? Convert.ToString(dr["MOBILE"]) : null;
-                    employee.EMAIL = dr["EMAIL"] != DBNull.Value ? Convert.ToString(dr["EMAIL"]) : null;
+                    employee.MOBILE = dr["MOBILE"] != DBNull.Value ? Convert.ToString(dr["MOBILE"]) : "";
+                    employee.EMAIL = dr["EMAIL"] != DBNull.Value ? Convert.ToString(dr["EMAIL"]) : "";
 
                     employee.IS_MALE = dr["IS_MALE"] != DBNull.Value && Convert.ToBoolean(dr["IS_MALE"]);
                     employee.DEPT_ID = dr["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(dr["DEPT_ID"]) : (int?)null;
                     employee.DESG_ID = dr["DESG_ID"] != DBNull.Value ? Convert.ToInt32(dr["DESG_ID"]) : (int?)null;
                     employee.DOJ = dr["DOJ"] != DBNull.Value ? Convert.ToDateTime(dr["DOJ"]) : (DateTime?)null;
 
-                    employee.BANK_CODE = dr["BANK_CODE"] != DBNull.Value ? Convert.ToString(dr["BANK_CODE"]) : null;
-                    employee.BANK_AC_NO = dr["BANK_AC_NO"] != DBNull.Value ? Convert.ToString(dr["BANK_AC_NO"]) : null;
-                    employee.PP_NO = dr["PP_NO"] != DBNull.Value ? Convert.ToString(dr["PP_NO"]) : null;
+                    employee.BANK_CODE = dr["BANK_CODE"] != DBNull.Value ? Convert.ToString(dr["BANK_CODE"]) : "";
+                    employee.BANK_AC_NO = dr["BANK_AC_NO"] != DBNull.Value ? Convert.ToString(dr["BANK_AC_NO"]) : "";
+                    employee.PP_NO = dr["PP_NO"] != DBNull.Value ? Convert.ToString(dr["PP_NO"]) : "";
                     employee.PP_EXPIRY = dr["PP_EXPIRY"] != DBNull.Value ? Convert.ToDateTime(dr["PP_EXPIRY"]) : (DateTime?)null;
 
-                    employee.VISA_NO = dr["VISA_NO"] != DBNull.Value ? Convert.ToString(dr["VISA_NO"]) : null;
+                    employee.VISA_NO = dr["VISA_NO"] != DBNull.Value ? Convert.ToString(dr["VISA_NO"]) : "";
                     employee.VISA_EXPIRY = dr["VISA_EXPIRY"] != DBNull.Value ? Convert.ToDateTime(dr["VISA_EXPIRY"]) : (DateTime?)null;
 
-                    employee.LICENSE_NO = dr["LICENSE_NO"] != DBNull.Value ? Convert.ToString(dr["LICENSE_NO"]) : null;
+                    employee.LICENSE_NO = dr["LICENSE_NO"] != DBNull.Value ? Convert.ToString(dr["LICENSE_NO"]) : "";
                     employee.LICENSE_EXPIRY = dr["LICENSE_EXPIRY"] != DBNull.Value ? Convert.ToDateTime(dr["LICENSE_EXPIRY"]) : (DateTime?)null;
 
                     employee.IS_SALESMAN = dr["IS_SALESMAN"] != DBNull.Value && Convert.ToBoolean(dr["IS_SALESMAN"]);
-                    employee.IMAGE_NAME = dr["IMAGE_NAME"] != DBNull.Value ? Convert.ToString(dr["IMAGE_NAME"]) : null;
+                    employee.IMAGE_NAME = dr["IMAGE_NAME"] != DBNull.Value ? Convert.ToString(dr["IMAGE_NAME"]) : "";
 
-                    employee.WORK_PERMIT_NO = dr["WORK_PERMIT_NO"] != DBNull.Value ? Convert.ToString(dr["WORK_PERMIT_NO"]) : null;
+                    employee.WORK_PERMIT_NO = dr["WORK_PERMIT_NO"] != DBNull.Value ? Convert.ToString(dr["WORK_PERMIT_NO"]) : "";
                     employee.WORK_PERMIT_EXPIRY = dr["WORK_PERMIT_EXPIRY"] != DBNull.Value ? Convert.ToDateTime(dr["WORK_PERMIT_EXPIRY"]) : (DateTime?)null;
 
-                    employee.IBAN_NO = dr["IBAN_NO"] != DBNull.Value ? Convert.ToString(dr["IBAN_NO"]) : null;
-                    employee.DAMAN_NO = dr["DAMAN_NO"] != DBNull.Value ? Convert.ToString(dr["DAMAN_NO"]) : null;
-                    employee.DAMAN_CATEGORY = dr["DAMAN_CATEGORY"] != DBNull.Value ? Convert.ToString(dr["DAMAN_CATEGORY"]) : null;
-                    employee.MOL_NUMBER = dr["MOL_NUMBER"] != DBNull.Value ? Convert.ToString(dr["MOL_NUMBER"]) : null;
+                    employee.IBAN_NO = dr["IBAN_NO"] != DBNull.Value ? Convert.ToString(dr["IBAN_NO"]) : "";
+                    employee.DAMAN_NO = dr["DAMAN_NO"] != DBNull.Value ? Convert.ToString(dr["DAMAN_NO"]) : "";
+                    employee.DAMAN_CATEGORY = dr["DAMAN_CATEGORY"] != DBNull.Value ? Convert.ToString(dr["DAMAN_CATEGORY"]) : "";
+                    employee.MOL_NUMBER = dr["MOL_NUMBER"] != DBNull.Value ? Convert.ToString(dr["MOL_NUMBER"]) : "";
 
                     employee.LAST_REJOIN_DATE = dr["LAST_REJOIN_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["LAST_REJOIN_DATE"]) : (DateTime?)null;
 
                     employee.IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]);
 
                     //employee.STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null;
-                    employee.STATE_NAME = dr["STATE_NAME"] != DBNull.Value ? Convert.ToString(dr["STATE_NAME"]) : null;
-                    employee.DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : null;
-                    employee.DESG_NAME = dr["DESG_NAME"] != DBNull.Value ? Convert.ToString(dr["DESG_NAME"]) : null;
-                    employee.BANK_NAME = dr["BANK_NAME"] != DBNull.Value ? Convert.ToString(dr["BANK_NAME"]) : null;
+                    employee.STATE_NAME = dr["STATE_NAME"] != DBNull.Value ? Convert.ToString(dr["STATE_NAME"]) : "";
+                    employee.DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : "";
+                    employee.DESG_NAME = dr["DESG_NAME"] != DBNull.Value ? Convert.ToString(dr["DESG_NAME"]) : "";
+                    employee.BANK_NAME = dr["BANK_NAME"] != DBNull.Value ? Convert.ToString(dr["BANK_NAME"]) : "";
 
                     employee.PAYMENT_TYPE = dr["PAYMENT_TYPE"] != DBNull.Value ? Convert.ToInt32(dr["PAYMENT_TYPE"]) : (int?)null;
                     employee.IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(dr["IS_INACTIVE"]);
 
                     employee.LEAVE_DAY_BALANCE = dr["LEAVE_DAY_BALANCE"] != DBNull.Value ? Convert.ToDecimal(dr["LEAVE_DAY_BALANCE"]) : 0;
                     employee.DAYS_DEDUCTED = dr["DAYS_DEDUCTED"] != DBNull.Value ? Convert.ToDecimal(dr["DAYS_DEDUCTED"]) : 0;
+                    //employee.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : (int?)null;
+
 
 
                 }

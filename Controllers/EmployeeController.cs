@@ -72,8 +72,35 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-
         [HttpPost]
+        [Route("update")]
+        public IActionResult Update([FromBody] Employee employee)
+        {
+            if (employee == null || employee.ID <= 0)
+            {
+                return BadRequest(new { Message = "Invalid employee data" });
+            }
+
+            try
+            {
+                bool isUpdated = _employeeService.UpdateEmployee(employee);
+                if (isUpdated)
+                {
+                    return Ok(new { Message = "Employee updated successfully" });
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to update employee" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while updating the employee", Error = ex.Message });
+            }
+        }
+
+
+            [HttpPost]
         [Route("delete/{id:int}")]
         public EmployeeResponse Delete(int id)
         {

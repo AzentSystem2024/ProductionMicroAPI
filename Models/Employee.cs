@@ -45,7 +45,7 @@
             public DateTime? LAST_REJOIN_DATE { get; set; }
 
             public string DEPT_NAME { get; set; }
-            public string DESG_NAME { get; set; }
+            public string? DESG_NAME { get; set; }
             public string STATE_NAME { get; set; }
             //public string? STORE_NAME { get; set; }
 
@@ -56,10 +56,11 @@
             public decimal DAYS_DEDUCTED { get; set; }
             public bool IS_DELETED { get; set; }
             public decimal LEAVE_CREDIT { get; set; }
+            public int? COMPANY_ID { get; set; }
 
 
         //public List<EmployeeSalary> EmployeeSalary { get; set; }
-        //public List<EmpAttachment> Attachment { get; set; }
+       // public List<EmpAttachment> Attachments { get; set; }
     }
     public class EmpAttachment
     {
