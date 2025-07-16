@@ -541,7 +541,7 @@ namespace MicroApi.DataLayer.Service
                         OT_HOURS = reader["OT_HOURS"] != DBNull.Value ? Convert.ToSingle(reader["OT_HOURS"]) : (float?)null,
                         STATUS = reader["STATUS"].ToString(),
                         SALARY_ID = reader["SALARY_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALARY_ID"]) : (int?)null,
-                        AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : (decimal?)null
+                        //AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : (decimal?)null
                     });
                 }
             }

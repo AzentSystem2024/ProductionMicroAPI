@@ -86,7 +86,7 @@ namespace MicroApi.Models
         public object OT_HOURS { get; set; }
         public object STATUS { get; set; }
         public object SALARY_ID { get; set; } 
-        public object AMOUNT { get; set; }
+       // public object AMOUNT { get; set; }
 
     }
     public class TimeSheetHeaderListResponseData

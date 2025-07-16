@@ -75,6 +75,7 @@ namespace MicroApi.DataLayer.Service
                         LEAVE_DAY_BALANCE = Convert.IsDBNull(dr["LEAVE_DAY_BALANCE"]) ? 0 : Convert.ToDecimal(dr["LEAVE_DAY_BALANCE"]),
                         DAYS_DEDUCTED = Convert.IsDBNull(dr["DAYS_DEDUCTED"]) ? 0 : Convert.ToDecimal(dr["DAYS_DEDUCTED"]),
                         LEAVE_CREDIT = Convert.IsDBNull(dr["LEAVE_CREDIT"]) ? 0 : Convert.ToDecimal(dr["LEAVE_CREDIT"]),
+                        //COMPANY_ID = Convert.IsDBNull(dr["COMPANY_ID"]) ? 0 : Convert.ToInt32(dr["COMPANY_ID"]),
                     });
                 }
                 connection.Close();
@@ -246,6 +247,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@IS_INACTIVE", (object)employee.IS_INACTIVE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@LEAVE_DAY_BALANCE", (object)employee.LEAVE_DAY_BALANCE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DAYS_DEDUCTED", (object)employee.DAYS_DEDUCTED ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object)employee.COMPANY_ID ?? DBNull.Value);
 
                     Int32 employeeID = Convert.ToInt32(cmd.ExecuteScalar());
                     return employeeID;
@@ -256,6 +258,44 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
+        public bool UpdateEmployee(Employee employee)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 1); // Update action
+                cmd.Parameters.AddWithValue("@ID", employee.ID);
+
+                // Add parameters for employee fields as before...
+
+                // Handle attachments
+                //if (employee.Attachments != null && employee.Attachments.Any())
+                //{
+                //    DataTable attachmentTable = new DataTable();
+                //    attachmentTable.Columns.Add("FILE_NAME", typeof(string));
+                //    attachmentTable.Columns.Add("FILE_DATA", typeof(byte[]));
+                //    attachmentTable.Columns.Add("REMARKS", typeof(string));
+
+                //    foreach (var attachment in employee.Attachments)
+                //    {
+                //        DataRow row = attachmentTable.NewRow();
+                //        row["FILE_NAME"] = attachment.FILE_NAME;
+                //        row["FILE_DATA"] = attachment.FILE_DATA; // Ensure this is byte[]
+                //        row["REMARKS"] = attachment.REMARKS;
+                //        attachmentTable.Rows.Add(row);
+                //    }
+
+                   // SqlParameter attachmentParam = cmd.Parameters.AddWithValue("@UDT_TB_ATTACHMENTS", attachmentTable);
+                    //attachmentParam.SqlDbType = SqlDbType.Structured;
+                //}
+
+                connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            return true;
+        }
+
 
 
         public Employee GetItems(int id)
@@ -406,6 +446,8 @@ namespace MicroApi.DataLayer.Service
 
                     employee.LEAVE_DAY_BALANCE = dr["LEAVE_DAY_BALANCE"] != DBNull.Value ? Convert.ToDecimal(dr["LEAVE_DAY_BALANCE"]) : 0;
                     employee.DAYS_DEDUCTED = dr["DAYS_DEDUCTED"] != DBNull.Value ? Convert.ToDecimal(dr["DAYS_DEDUCTED"]) : 0;
+                    //employee.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : (int?)null;
+
 
 
                 }

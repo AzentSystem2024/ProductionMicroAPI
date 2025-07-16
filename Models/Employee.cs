@@ -56,10 +56,11 @@
             public decimal DAYS_DEDUCTED { get; set; }
             public bool IS_DELETED { get; set; }
             public decimal LEAVE_CREDIT { get; set; }
+            public int? COMPANY_ID { get; set; }
 
 
         //public List<EmployeeSalary> EmployeeSalary { get; set; }
-        //public List<EmpAttachment> Attachment { get; set; }
+       // public List<EmpAttachment> Attachments { get; set; }
     }
     public class EmpAttachment
     {
