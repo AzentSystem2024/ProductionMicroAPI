@@ -214,5 +214,61 @@ namespace MicroApi.DataLayer.Service
             }
         }
 
+        public EmployeeSalarySettingsListResponse GetEmployeeSalarySettings(int filterAction)
+        {
+            EmployeeSalarySettingsListResponse response = new EmployeeSalarySettingsListResponse();
+            response.Data = new List<EmployeeSalarySettingsList>();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed) connection.Open();
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", filterAction); 
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response.Data.Add(new EmployeeSalarySettingsList
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? reader["EMP_CODE"].ToString() : string.Empty,
+                                    EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? reader["EMP_NAME"].ToString() : string.Empty,
+                                    DESG_NAME = reader["Designation"] != DBNull.Value ? reader["Designation"].ToString() : string.Empty,
+                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
+                                    SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : 0,
+                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null
+                                });
+                            }
+                        }
+                        
+                    }
+                    response.flag = 1;
+                    response.Message = "Success";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+            return response;
+        }
+        //private int GetActionForFilter(string filter)
+        //{
+        //    switch (filter?.ToLower())
+        //    {
+        //        case "latest":
+        //            return 4; // Action for latest salaries
+        //        case "pending":
+        //            return 5; // Action for pending salaries
+        //        default:
+        //            return 6; // Action for all salaries
+        //    }
+        //}
+
     }
 }

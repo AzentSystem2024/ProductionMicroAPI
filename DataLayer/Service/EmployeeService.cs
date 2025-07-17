@@ -378,10 +378,10 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public Employee GetItems(int id)
+        public EmployeeUpdate GetItems(int id)
         {
-            Employee employee = new Employee();
-            List<EmployeeSalary> employeeSalary = new List<EmployeeSalary>();
+            EmployeeUpdate employee = new EmployeeUpdate();
+            //List<EmployeeSalary> employeeSalary = new List<EmployeeSalary>();
             List<EmpAttachment> empAttachments = new List<EmpAttachment>();
 
             try
@@ -442,28 +442,28 @@ namespace MicroApi.DataLayer.Service
 
                 DataTable tblAttachments = ADO.GetDataTable(strAttachmentsSQL, "EmployeeAttachments");
 
-                //if (tblAttachments.Rows.Count > 0)
-                //{
-                //    foreach (DataRow drAttachment in tblAttachments.Rows)
-                //    {
-                //        empAttachments.Add(new EmpAttachment
-                //        {
-                //            ID = ADO.ToInt32(drAttachment["ID"]),
-                //            DOC_TYPE = ADO.ToInt32(drAttachment["TRANS_TYPE"]),
-                //            DOC_ID = ADO.ToInt32(drAttachment["TRANS_ID"]),
-                //            FILE_NAME = ADO.ToString(drAttachment["FILE_NAME"]),
-                //            FILE_DATA = drAttachment["FILE_DATA"] as byte[],
-                //            REMARKS = ADO.ToString(drAttachment["REMARKS"]),
-                //            USER_ID = ADO.ToInt32(drAttachment["CREATED_USER_ID"]),
-                //            CREATED_DATE_TIME = Convert.ToDateTime(drAttachment["CREATED_TIME"]),
-                //        });
-                //    }
+                if (tblAttachments.Rows.Count > 0)
+                {
+                    foreach (DataRow drAttachment in tblAttachments.Rows)
+                    {
+                        empAttachments.Add(new EmpAttachment
+                        {
+                            ID = ADO.ToInt32(drAttachment["ID"]),
+                            DOC_TYPE = ADO.ToInt32(drAttachment["TRANS_TYPE"]),
+                            DOC_ID = ADO.ToInt32(drAttachment["TRANS_ID"]),
+                            FILE_NAME = ADO.ToString(drAttachment["FILE_NAME"]),
+                            FILE_DATA = drAttachment["FILE_DATA"] as byte[],
+                            REMARKS = ADO.ToString(drAttachment["REMARKS"]),
+                            USER_ID = ADO.ToInt32(drAttachment["CREATED_USER_ID"]),
+                            CREATED_DATE_TIME = Convert.ToDateTime(drAttachment["CREATED_TIME"]),
+                        });
+                    }
 
-                //    employee.Attachment = empAttachments;
-                //}
+                    employee.Attachments = empAttachments;
+                }
 
 
-                DataTable tbl = ADO.GetDataTable(strSQL, "Employee");
+                DataTable tbl = ADO.GetDataTable(strSQL, "EmployeeUpdate");
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];

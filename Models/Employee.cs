@@ -147,7 +147,7 @@
     {
         public string flag { get; set; }
         public string message { get; set; }
-        public Employee data { get; set; }
+        public EmployeeUpdate data { get; set; }
     }
     public class CompanyRequest
     {

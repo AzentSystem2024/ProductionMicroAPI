@@ -35,4 +35,28 @@
         public string Message { get; set; }
         public List<EmployeeSalaryUpdate> Data { get; set; }
     }
+
+    public class EmployeeSalarySettingsList
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public string EMP_CODE { get; set; }
+        public string EMP_NAME { get; set; }
+        public string DESG_NAME { get; set; }
+        public DateTime? EFFECT_FROM { get; set; }
+        public bool? IS_INACTIVE { get; set; }
+        public decimal SALARY { get; set; }
+
+    }
+    public class EmployeeSalarySettingsListResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<EmployeeSalarySettingsList> Data { get; set; }
+    }
+    public class EmployeeSalaryFilterRequest
+    {
+       // public int? CompanyId { get; set; }
+        public int FilterAction { get; set; }
+    }
 }

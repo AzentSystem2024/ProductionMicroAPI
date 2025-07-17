@@ -37,9 +37,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("select/{id:int}")]
-        public Employee Select(int id)
+        public EmployeeUpdate Select(int id)
         {
-            Employee objEmployees = new Employee();
+            EmployeeUpdate objEmployees = new EmployeeUpdate();
             try
             {
                 

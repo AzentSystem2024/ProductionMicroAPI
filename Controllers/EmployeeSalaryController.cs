@@ -121,5 +121,20 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("ListSalarySettings")]
+        public EmployeeSalarySettingsListResponse ListSalarySettings([FromBody] EmployeeSalaryFilterRequest request)
+        {
+            EmployeeSalarySettingsListResponse res = new EmployeeSalarySettingsListResponse();
+            try
+            {
+                res = _EmployeeSalaryService.GetEmployeeSalarySettings(request.FilterAction);
+            }
+            catch (Exception ex)
+            {
+                res = new EmployeeSalarySettingsListResponse { flag = 0, Message = ex.Message, Data = null };
+            }
+            return res;
+        }
     }
 }

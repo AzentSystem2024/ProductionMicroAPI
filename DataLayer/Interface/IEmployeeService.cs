@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         public List<Employee> GetAllEmployees(int? companyId);
         public int SaveEmployee(Employee employee);
         bool UpdateEmployee(EmployeeUpdate employee);
-        public Employee GetItems(int id);
+        public EmployeeUpdate GetItems(int id);
         public bool DeleteEmployees(int id);
     }
 }
