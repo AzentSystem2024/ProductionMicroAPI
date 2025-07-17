@@ -44,7 +44,7 @@
         public string EMP_NAME { get; set; }
         public string DESG_NAME { get; set; }
         public DateTime? EFFECT_FROM { get; set; }
-        public bool? IS_INACTIVE { get; set; }
+       // public bool? IS_INACTIVE { get; set; }
         public decimal SALARY { get; set; }
 
     }
