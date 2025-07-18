@@ -65,6 +65,7 @@ namespace MicroApi.Controllers
             try
             {
                 Int32 ID = _EmployeeSalaryService.SaveData(salary);
+                var updatedList = _EmployeeSalaryService.GetAllEmployeeSalaries();
 
                 res.flag = "1";
                 res.message = "Success";
@@ -80,25 +81,18 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("edit")]
-        public EmployeeSalaryResponse EditData(EmployeeSalaryUpdate salary)
+        public IActionResult EditData([FromBody] EmployeeSalaryUpdate salary)
         {
-            EmployeeSalaryResponse res = new EmployeeSalaryResponse();
-
             try
             {
                 Int32 ID = _EmployeeSalaryService.EditData(salary);
-
-                res.flag = "1";
-                res.message = "Success";
-                res.data = _EmployeeSalaryService.GetItem(ID);
+                var updatedSalary = _EmployeeSalaryService.GetItem(ID);
+                return Ok(new { flag = "1", message = "Success", data = updatedSalary });
             }
             catch (Exception ex)
             {
-                res.flag = "0";
-                res.message = ex.Message;
+                return BadRequest(new { flag = "0", message = ex.Message });
             }
-
-            return res;
         }
 
         [HttpPost]

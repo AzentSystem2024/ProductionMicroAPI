@@ -54,16 +54,15 @@ namespace MicroApi.DataLayer.Service
                 {
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
-
                     foreach (var detail in salary.Details)
                     {
                         using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 2); // Update action
-                            cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ID", salary.ID);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
-                            cmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE); // Use EMP_CODE to fetch EMP_ID
+                            cmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
                             cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
                             cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
                             cmd.Parameters.AddWithValue("@HEAD_PERCENT", detail.HEAD_PERCENT);
@@ -71,20 +70,27 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@EFFECT_FROM", salary.EFFECT_FROM);
                             cmd.Parameters.AddWithValue("@IS_INACTIVE", detail.IS_INACTIVE);
 
-                            object result = cmd.ExecuteScalar();
-                            if (result != DBNull.Value)
+                            using (SqlDataReader reader = cmd.ExecuteReader())
                             {
-                                return Convert.ToInt32(result);
+                                if (reader.Read())
+                                {
+                                    salary.ID = reader["EMP_ID"] != DBNull.Value ? Convert.ToInt32(reader["EMP_ID"]) : (int?)null;
+                                    salary.COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null;
+                                    salary.EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? reader["EMP_CODE"].ToString() : null;
+                                    salary.SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : (decimal?)null;
+                                    salary.EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null;
+                                    salary.IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null;
+                                }
                             }
                         }
                     }
                 }
             }
-            catch (Exception ex)
+                catch (Exception ex)
             {
                 throw new Exception("Error updating data: " + ex.Message);
             }
-            return 0; // Return a default value if no records are processed
+            return salary.ID ?? 0;
         }
 
         public EmployeeListResponse GetAllEmployeeSalaries()
@@ -131,6 +137,7 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     HEAD_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
                                     HEAD_NAME = reader["HEAD_NAME"] != DBNull.Value ? reader["HEAD_NAME"].ToString() : null,
+                                    HEAD_NATURE = reader["HEAD_NATURE"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_NATURE"]) : (int?)null,
                                     HEAD_AMOUNT = reader["Amount"] != DBNull.Value ? Convert.ToSingle(reader["Amount"]) : (float?)null,
                                     HEAD_PERCENT = reader["Percentage"] != DBNull.Value ? Convert.ToSingle(reader["Percentage"]) : (float?)null,
                                     IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null,
@@ -200,6 +207,7 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : (int?)null,
                                     HEAD_NAME = reader["HEAD_NAME"] != DBNull.Value ? reader["HEAD_NAME"].ToString() : null,
+                                    HEAD_NATURE = reader["HEAD_NATURE"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_NATURE"]) : (int?)null,
                                     HEAD_AMOUNT = reader["Amount"] != DBNull.Value ? Convert.ToSingle(reader["Amount"]) : (float?)null,
                                     HEAD_PERCENT = reader["Percentage"] != DBNull.Value ? Convert.ToSingle(reader["Percentage"]) : (float?)null,
                                     IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null,

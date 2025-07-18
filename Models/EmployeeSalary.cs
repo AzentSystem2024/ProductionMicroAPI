@@ -14,6 +14,7 @@
     {
        // public int? ID { get; set; }
         public int? HEAD_ID { get; set; }
+        public int? HEAD_NATURE { get; set; }
         public string? HEAD_NAME { get; set; }
         public float? HEAD_PERCENT { get; set; }
         public float? HEAD_AMOUNT { get; set; }
