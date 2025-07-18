@@ -17,37 +17,35 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
+                    foreach (var detail in salary.Details)
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        object GetDbValue(object? val)
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                         {
-                            return val == null || (val is string s && string.IsNullOrWhiteSpace(s))
-                                ? DBNull.Value
-                                : val;
+
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 1);
+                            cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
+                            cmd.Parameters.AddWithValue("@EMP_ID", salary.EMP_CODE);
+                            cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
+                            cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
+                            cmd.Parameters.AddWithValue("@HEAD_PERCENT", detail.HEAD_PERCENT);
+                            cmd.Parameters.AddWithValue("@HEAD_AMOUNT", detail.HEAD_AMOUNT);
+                            //cmd.Parameters.AddWithValue("@FIN_ID", detail.FIN_ID);
+                            cmd.Parameters.AddWithValue("@EFFECT_FROM", detail.EFFECT_FROM);
+                            cmd.Parameters.AddWithValue("@IS_INACTIVE", detail.IS_INACTIVE);
+
+                            Int32 result = Convert.ToInt32(cmd.ExecuteScalar());
+                            return result;
                         }
-
-                        cmd.Parameters.AddWithValue("@ACTION", 1); 
-                        cmd.Parameters.AddWithValue("@ID", DBNull.Value); 
-
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", GetDbValue(salary.COMPANY_ID));
-                        cmd.Parameters.AddWithValue("@EMP_ID", GetDbValue(salary.EMP_ID));
-                        cmd.Parameters.AddWithValue("@HEAD_ID", GetDbValue(salary.HEAD_ID));
-                        cmd.Parameters.AddWithValue("@HEAD_PERCENT", GetDbValue(salary.HEAD_PERCENT));
-                        cmd.Parameters.AddWithValue("@HEAD_AMOUNT", GetDbValue(salary.HEAD_AMOUNT));
-                        cmd.Parameters.AddWithValue("@FIN_ID", GetDbValue(salary.FIN_ID));
-                        cmd.Parameters.AddWithValue("@EFFECT_FROM", GetDbValue(salary.EFFECT_FROM));
-                        cmd.Parameters.AddWithValue("@IS_INACTIVE", GetDbValue(salary.IS_INACTIVE));
-
-                        Int32 result = Convert.ToInt32(cmd.ExecuteScalar());
-                        return result;
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error saving data: " + ex.Message);
             }
+            return 0; // Return a default value if no records are processed
         }
         public Int32 EditData(EmployeeSalaryUpdate salary)
         {
@@ -58,44 +56,42 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
+                    foreach (var detail in salary.Details)
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        object GetDbValue(object? val)
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                         {
-                            return val == null || (val is string s && string.IsNullOrWhiteSpace(s))
-                                ? DBNull.Value
-                                : val;
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 2); // Update action
+                            cmd.Parameters.AddWithValue("@ID", salary.ID); // Assuming each detail has an ID
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
+                            cmd.Parameters.AddWithValue("@EMP_ID", salary.EMP_CODE);
+                            cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
+                            cmd.Parameters.AddWithValue("@HEAD_PERCENT", detail.HEAD_PERCENT);
+                            cmd.Parameters.AddWithValue("@HEAD_AMOUNT", detail.HEAD_AMOUNT);
+                            //cmd.Parameters.AddWithValue("@FIN_ID", detail.FIN_ID);
+                            cmd.Parameters.AddWithValue("@EFFECT_FROM", detail.EFFECT_FROM);
+                            cmd.Parameters.AddWithValue("@IS_INACTIVE", detail.IS_INACTIVE);
+
+                            object result = cmd.ExecuteScalar();
+                            if (result != DBNull.Value)
+                            {
+                                return Convert.ToInt32(result);
+                            }
                         }
-
-                        cmd.Parameters.AddWithValue("@ACTION", 2); // Update
-                        cmd.Parameters.AddWithValue("@ID", salary.ID);
-
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", GetDbValue(salary.COMPANY_ID));
-                        cmd.Parameters.AddWithValue("@EMP_ID", GetDbValue(salary.EMP_ID));
-                        cmd.Parameters.AddWithValue("@HEAD_ID", GetDbValue(salary.HEAD_ID));
-                        cmd.Parameters.AddWithValue("@HEAD_PERCENT", GetDbValue(salary.HEAD_PERCENT));
-                        cmd.Parameters.AddWithValue("@HEAD_AMOUNT", GetDbValue(salary.HEAD_AMOUNT));
-                        cmd.Parameters.AddWithValue("@FIN_ID", GetDbValue(salary.FIN_ID));
-                        cmd.Parameters.AddWithValue("@EFFECT_FROM", GetDbValue(salary.EFFECT_FROM));
-                        cmd.Parameters.AddWithValue("@IS_INACTIVE", GetDbValue(salary.IS_INACTIVE));
-
-                        object result = cmd.ExecuteScalar();
-                        return result != DBNull.Value ? Convert.ToInt32(result) : 0;
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error updating data: " + ex.Message);
             }
+            return 0; // Return a default value if no records are processed
         }
 
         public EmployeeListResponse GetAllEmployeeSalaries()
         {
-            EmployeeListResponse response = new EmployeeListResponse();
-            response.Data = new List<EmployeeSalaryUpdate>();
+            EmployeeListResponse response = new EmployeeListResponse { Data = new List<EmployeeSalaryUpdate>() };
+            Dictionary<int, EmployeeSalaryUpdate> employeeDict = new Dictionary<int, EmployeeSalaryUpdate>();
 
             try
             {
@@ -107,33 +103,47 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 0);
-                        cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ACTION", 8); // List action
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                response.Data.Add(new EmployeeSalaryUpdate
+                                int empId = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0;
+
+                                if (!employeeDict.ContainsKey(empId))
                                 {
-                                    ID = reader["ID"] as int?,
-                                    COMPANY_ID = reader["COMPANY_ID"] as int?,
-                                    EMP_ID = reader["EMP_ID"] as int?,
-                                    HEAD_ID = reader["HEAD_ID"] as int?,
-                                    HEAD_PERCENT = reader["HEAD_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_PERCENT"]) : 0,
-                                    HEAD_AMOUNT = reader["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_AMOUNT"]) : 0,
-                                    FIN_ID = reader["FIN_ID"] as int?,
-                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]).ToString("yyyy-MM-dd") : null,
-                                    IS_INACTIVE = reader["IS_INACTIVE"] as bool?
-                                });
+                                    var employeeSalaryUpdate = new EmployeeSalaryUpdate
+                                    {
+                                        ID = empId,
+                                        COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
+                                        EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : null,
+                                        SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : (decimal?)null,
+                                        EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null,
+                                        IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null,
+                                        Details = new List<SalaryHeadDetail>()
+                                    };
+                                    employeeDict[empId] = employeeSalaryUpdate;
+                                }
+
+                                var detail = new SalaryHeadDetail
+                                {
+                                    HEAD_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    HEAD_NAME = reader["HEAD_NAME"] != DBNull.Value ? reader["HEAD_NAME"].ToString() : null,
+                                    HEAD_AMOUNT = reader["Amount"] != DBNull.Value ? Convert.ToSingle(reader["Amount"]) : (float?)null,
+                                    HEAD_PERCENT = reader["Percentage"] != DBNull.Value ? Convert.ToSingle(reader["Percentage"]) : (float?)null
+                                };
+
+                                employeeDict[empId].Details.Add(detail);
                             }
                         }
                     }
-
-                    // Set success response
-                    response.flag = 1;
-                    response.Message = "Success";
                 }
+
+
+                response.Data = employeeDict.Values.ToList();
+                response.flag = 1;
+                response.Message = "Success";
             }
             catch (Exception ex)
             {
@@ -159,22 +169,26 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 0); // SELECT
+                        cmd.Parameters.AddWithValue("@ACTION", 7); 
                         cmd.Parameters.AddWithValue("@ID", id);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                salary.ID = reader["ID"] as int?;
-                                salary.COMPANY_ID = reader["COMPANY_ID"] as int?;
-                                salary.EMP_ID = reader["EMP_ID"] as int?;
-                                salary.HEAD_ID = reader["HEAD_ID"] as int?;
-                                salary.HEAD_PERCENT = reader["HEAD_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_PERCENT"]) : 0;
-                                salary.HEAD_AMOUNT = reader["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_AMOUNT"]) : 0;
-                                salary.FIN_ID = reader["FIN_ID"] as int?;
-                                salary.EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]).ToString("yyyy-MM-dd") : null;
-                                salary.IS_INACTIVE = reader["IS_INACTIVE"] as bool?;
+                                salary.ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null;
+                                salary.COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null;
+                                salary.EMP_CODE = reader["EMP_ID"] != DBNull.Value ? Convert.ToString(reader["EMP_ID"]) : null;
+                                salary.SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : (decimal?)null;
+                                salary.EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null;
+                                salary.IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null;
+
+                                // Assuming you have a JSON column for details
+                                if (reader["Details"] != DBNull.Value)
+                                {
+                                    string detailsJson = reader["Details"].ToString();
+                                    salary.Details = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SalaryHeadDetail>>(detailsJson);
+                                }
                             }
                         }
                     }
@@ -257,18 +271,7 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
-        //private int GetActionForFilter(string filter)
-        //{
-        //    switch (filter?.ToLower())
-        //    {
-        //        case "latest":
-        //            return 4; // Action for latest salaries
-        //        case "pending":
-        //            return 5; // Action for pending salaries
-        //        default:
-        //            return 6; // Action for all salaries
-        //    }
-        //}
+       
 
     }
 }
