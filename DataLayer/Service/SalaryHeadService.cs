@@ -6,7 +6,7 @@ using MicroApi.DataLayer.Interface;
 
 namespace MicroApi.DataLayer.Service
 {
-    public class SalaryHeadService:ISalaryHeadService
+    public class SalaryHeadService : ISalaryHeadService
     {
         public SalaryHeadListResponse GetAllSalaryHead()
         {
@@ -31,13 +31,12 @@ namespace MicroApi.DataLayer.Service
                         {
                             ID = Convert.ToInt32(dr["ID"]),
                             HEAD_NAME = dr["HEAD_NAME"]?.ToString(),
-                            HEAD_TITLE = dr["HEAD_TITLE"]?.ToString(),
-                            HEAD_GROSS = dr["HEAD_GROSS"] != DBNull.Value ? Convert.ToBoolean(dr["HEAD_GROSS"]) : (bool?)null,
+                            PAYSLIP_TITLE = dr["HEAD_TITLE"]?.ToString(),
                             HEAD_ACTIVE = dr["HEAD_ACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["HEAD_ACTIVE"]) : (bool?)null,
                             HEAD_TYPE = dr["HEAD_TYPE"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_TYPE"]) : (int?)null,
                             AFFECT_LEAVE = dr["AFFECT_LEAVE"] != DBNull.Value ? Convert.ToBoolean(dr["AFFECT_LEAVE"]) : (bool?)null,
                             HEAD_NATURE = dr["HEAD_NATURE"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_NATURE"]) : (int?)null,
-                            HEAD_AMOUNT = dr["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToDouble(dr["HEAD_AMOUNT"]) : (double?)null,
+                            FIXED_AMOUNT = dr["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToDouble(dr["HEAD_AMOUNT"]) : (double?)null,
                             HEAD_PERCENT = dr["HEAD_PERCENT"] != DBNull.Value ? Convert.ToDouble(dr["HEAD_PERCENT"]) : (double?)null,
                             RANGE_EXISTS = dr["RANGE_EXISTS"] != DBNull.Value ? Convert.ToBoolean(dr["RANGE_EXISTS"]) : (bool?)null,
                             RANGE_FROM = dr["RANGE_FROM"] != DBNull.Value ? Convert.ToDouble(dr["RANGE_FROM"]) : (double?)null,
@@ -45,7 +44,8 @@ namespace MicroApi.DataLayer.Service
                             HEAD_PERCENT_INCLUDE_OT = dr["HEAD_PERCENT_INCLUDE_OT"] != DBNull.Value ? Convert.ToBoolean(dr["HEAD_PERCENT_INCLUDE_OT"]) : (bool?)null,
                             INSTALLMENT_RECOVERY = dr["INSTALLMENT_RECOVERY"] != DBNull.Value ? Convert.ToBoolean(dr["INSTALLMENT_RECOVERY"]) : (bool?)null,
                             IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : false,
-                            AC_HEAD_ID = dr.Table.Columns.Contains("AC_HEAD_ID") && dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : (int?)null
+                            AC_HEAD_ID = dr.Table.Columns.Contains("AC_HEAD_ID") && dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : (int?)null,
+                            HEAD_ORDER = dr["HEAD_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ORDER"]) : (int?)null
                         };
 
                         response.Data.Add(salaryHead);
@@ -77,47 +77,46 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        object GetDbValue(object? val)
+                        object DbValue(object? val)
                         {
-                            return val == null || val.Equals(0) || (val is string s && string.IsNullOrWhiteSpace(s))
-                                ? DBNull.Value
-                                : val;
+                            return val == null ? (object)string.Empty : val;
                         }
 
                         cmd.Parameters.AddWithValue("@ACTION", 1);
-                        cmd.Parameters.AddWithValue("@ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@HEAD_NAME", GetDbValue(salaryHead.HEAD_NAME));
-                        cmd.Parameters.AddWithValue("@HEAD_TITLE", GetDbValue(salaryHead.HEAD_TITLE));
-                        cmd.Parameters.AddWithValue("@HEAD_GROSS", GetDbValue(salaryHead.HEAD_GROSS));
-                        cmd.Parameters.AddWithValue("@HEAD_ACTIVE", GetDbValue(salaryHead.HEAD_ACTIVE));
-                        cmd.Parameters.AddWithValue("@HEAD_TYPE", GetDbValue(salaryHead.HEAD_TYPE));
-                        cmd.Parameters.AddWithValue("@AFFECT_LEAVE", GetDbValue(salaryHead.AFFECT_LEAVE));
-                        cmd.Parameters.AddWithValue("@HEAD_NATURE", GetDbValue(salaryHead.HEAD_NATURE));
-                        cmd.Parameters.AddWithValue("@HEAD_AMOUNT", GetDbValue(salaryHead.HEAD_AMOUNT));
-                        cmd.Parameters.AddWithValue("@HEAD_PERCENT", GetDbValue(salaryHead.HEAD_PERCENT));
-                        cmd.Parameters.AddWithValue("@RANGE_EXISTS", GetDbValue(salaryHead.RANGE_EXISTS));
-                        cmd.Parameters.AddWithValue("@RANGE_FROM", GetDbValue(salaryHead.RANGE_FROM));
-                        cmd.Parameters.AddWithValue("@RANGE_TO", GetDbValue(salaryHead.RANGE_TO));
-                        cmd.Parameters.AddWithValue("@HEAD_PERCENT_INCLUDE_OT", GetDbValue(salaryHead.HEAD_PERCENT_INCLUDE_OT));
-                        cmd.Parameters.AddWithValue("@INSTALLMENT_RECOVERY", GetDbValue(salaryHead.INSTALLMENT_RECOVERY));
-                        cmd.Parameters.AddWithValue("@IS_INACTIVE", GetDbValue(salaryHead.IS_INACTIVE));
-                        cmd.Parameters.AddWithValue("@AC_HEAD_ID", GetDbValue(salaryHead.AC_HEAD_ID));
-
+                        cmd.Parameters.AddWithValue("@ID", string.Empty);  // Pass empty instead of 0 or null
+                        cmd.Parameters.AddWithValue("@HEAD_NAME", salaryHead.HEAD_NAME ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_TITLE", salaryHead.PAYSLIP_TITLE ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_ACTIVE", salaryHead.HEAD_ACTIVE?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_TYPE", salaryHead.HEAD_TYPE?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@AFFECT_LEAVE", salaryHead.AFFECT_LEAVE?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_ORDER", salaryHead.HEAD_ORDER?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_NATURE", salaryHead.HEAD_NATURE?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_AMOUNT", salaryHead.FIXED_AMOUNT?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_PERCENT", salaryHead.HEAD_PERCENT?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@RANGE_EXISTS", salaryHead.RANGE_EXISTS?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@RANGE_FROM", salaryHead.RANGE_FROM?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@RANGE_TO", salaryHead.RANGE_TO?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@HEAD_PERCENT_INCLUDE_OT", salaryHead.HEAD_PERCENT_INCLUDE_OT?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@INSTALLMENT_RECOVERY", salaryHead.INSTALLMENT_RECOVERY?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@IS_INACTIVE", salaryHead.IS_INACTIVE.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@AC_HEAD_ID", salaryHead.AC_HEAD_ID?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", salaryHead.PERCENT_HEAD_ID?.ToString() ?? "");
 
                         Int32 result = Convert.ToInt32(cmd.ExecuteScalar());
                         return result;
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
         }
 
+
         public Int32 EditData(SalaryHeadUpdate salaryHead)
         {
-           try
+            try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
@@ -138,13 +137,12 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@ID", salaryHead.ID);
                         cmd.Parameters.AddWithValue("@HEAD_NAME", GetDbValue(salaryHead.HEAD_NAME));
-                        cmd.Parameters.AddWithValue("@HEAD_TITLE", GetDbValue(salaryHead.HEAD_TITLE));
-                        cmd.Parameters.AddWithValue("@HEAD_GROSS", GetDbValue(salaryHead.HEAD_GROSS));
+                        cmd.Parameters.AddWithValue("@HEAD_TITLE", GetDbValue(salaryHead.PAYSLIP_TITLE));
                         cmd.Parameters.AddWithValue("@HEAD_ACTIVE", GetDbValue(salaryHead.HEAD_ACTIVE));
                         cmd.Parameters.AddWithValue("@HEAD_TYPE", GetDbValue(salaryHead.HEAD_TYPE));
                         cmd.Parameters.AddWithValue("@AFFECT_LEAVE", GetDbValue(salaryHead.AFFECT_LEAVE));
                         cmd.Parameters.AddWithValue("@HEAD_NATURE", GetDbValue(salaryHead.HEAD_NATURE));
-                        cmd.Parameters.AddWithValue("@HEAD_AMOUNT", GetDbValue(salaryHead.HEAD_AMOUNT));
+                        cmd.Parameters.AddWithValue("@HEAD_AMOUNT", GetDbValue(salaryHead.FIXED_AMOUNT));
                         cmd.Parameters.AddWithValue("@HEAD_PERCENT", GetDbValue(salaryHead.HEAD_PERCENT));
                         cmd.Parameters.AddWithValue("@RANGE_EXISTS", GetDbValue(salaryHead.RANGE_EXISTS));
                         cmd.Parameters.AddWithValue("@RANGE_FROM", GetDbValue(salaryHead.RANGE_FROM));
@@ -153,6 +151,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@INSTALLMENT_RECOVERY", GetDbValue(salaryHead.INSTALLMENT_RECOVERY));
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", GetDbValue(salaryHead.IS_INACTIVE));
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", GetDbValue(salaryHead.AC_HEAD_ID));
+                        cmd.Parameters.AddWithValue("@HEAD_ORDER", GetDbValue(salaryHead.HEAD_ORDER));
+                        cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", GetDbValue(salaryHead.PERCENT_HEAD_ID));
 
                         Int32 result = Convert.ToInt32(cmd.ExecuteScalar());
                         return result;
@@ -193,13 +193,12 @@ namespace MicroApi.DataLayer.Service
 
                                 salaryHead.ID = Convert.ToInt32(dr["ID"]);
                                 salaryHead.HEAD_NAME = Convert.ToString(dr["HEAD_NAME"]);
-                                salaryHead.HEAD_TITLE = Convert.ToString(dr["HEAD_TITLE"]);
-                                salaryHead.HEAD_GROSS = dr["HEAD_GROSS"] != DBNull.Value ? Convert.ToBoolean(dr["HEAD_GROSS"]) : (bool?)null;
+                                salaryHead.PAYSLIP_TITLE = Convert.ToString(dr["HEAD_TITLE"]);
                                 salaryHead.HEAD_ACTIVE = dr["HEAD_ACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["HEAD_ACTIVE"]) : (bool?)null;
                                 salaryHead.HEAD_TYPE = dr["HEAD_TYPE"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_TYPE"]) : (int?)null;
                                 salaryHead.AFFECT_LEAVE = dr["AFFECT_LEAVE"] != DBNull.Value ? Convert.ToBoolean(dr["AFFECT_LEAVE"]) : (bool?)null;
                                 salaryHead.HEAD_NATURE = dr["HEAD_NATURE"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_NATURE"]) : (int?)null;
-                                salaryHead.HEAD_AMOUNT = dr["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToDouble(dr["HEAD_AMOUNT"]) : (double?)null;
+                                salaryHead.FIXED_AMOUNT = dr["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToDouble(dr["HEAD_AMOUNT"]) : (double?)null;
                                 salaryHead.HEAD_PERCENT = dr["HEAD_PERCENT"] != DBNull.Value ? Convert.ToDouble(dr["HEAD_PERCENT"]) : (double?)null;
                                 salaryHead.RANGE_EXISTS = dr["RANGE_EXISTS"] != DBNull.Value ? Convert.ToBoolean(dr["RANGE_EXISTS"]) : (bool?)null;
                                 salaryHead.RANGE_FROM = dr["RANGE_FROM"] != DBNull.Value ? Convert.ToDouble(dr["RANGE_FROM"]) : (double?)null;
@@ -208,6 +207,7 @@ namespace MicroApi.DataLayer.Service
                                 salaryHead.INSTALLMENT_RECOVERY = dr["INSTALLMENT_RECOVERY"] != DBNull.Value ? Convert.ToBoolean(dr["INSTALLMENT_RECOVERY"]) : (bool?)null;
                                 salaryHead.IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : false;
                                 salaryHead.AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : (int?)null;
+                                salaryHead.HEAD_ORDER = dr["HEAD_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ORDER"]) : (int?)null;
                             }
                         }
                     }
@@ -220,7 +220,7 @@ namespace MicroApi.DataLayer.Service
 
             return salaryHead;
         }
-      
+
 
         public bool DeleteSalaryHead(int id)
         {
@@ -244,7 +244,7 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
-      
+
 
     }
 }
