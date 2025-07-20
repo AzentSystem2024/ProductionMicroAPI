@@ -16,13 +16,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public EmployeeListResponse List()
+        public EmployeeListResponse List([FromBody] EmployeeSalaryRequest request)
         {
             EmployeeListResponse res = new EmployeeListResponse();
 
             try
             {
-                res = _EmployeeSalaryService.GetAllEmployeeSalaries();
+                res = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID,request.COMPANY_ID);
             }
             catch (Exception ex)
             {
@@ -65,7 +65,7 @@ namespace MicroApi.Controllers
             try
             {
                 Int32 ID = _EmployeeSalaryService.SaveData(salary);
-                var updatedList = _EmployeeSalaryService.GetAllEmployeeSalaries();
+                //var updatedList = _EmployeeSalaryService.GetAllEmployeeSalaries();
 
                 res.flag = "1";
                 res.message = "Success";

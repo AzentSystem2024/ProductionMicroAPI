@@ -386,7 +386,7 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                string strSQL = "SELECT TB_EMPLOYEE.ID, TB_EMPLOYEE.EMP_CODE, TB_EMPLOYEE.EMP_NAME, TB_EMPLOYEE.DOB, " +
+                string strSQL = @"SELECT TB_EMPLOYEE.ID, TB_EMPLOYEE.EMP_CODE, TB_EMPLOYEE.EMP_NAME, TB_EMPLOYEE.DOB, " +
                 "TB_EMPLOYEE.ADDRESS1, TB_EMPLOYEE.ADDRESS2, TB_EMPLOYEE.ADDRESS3, TB_EMPLOYEE.CITY, TB_EMPLOYEE.STATE_ID, " +
                 "TB_EMPLOYEE.COUNTRY_ID, TB_EMPLOYEE.MOBILE, TB_EMPLOYEE.EMAIL,TB_EMPLOYEE.IS_MALE,  " +
                 "TB_EMPLOYEE.DEPT_ID, TB_EMPLOYEE.DESG_ID, TB_EMPLOYEE.DOJ, TB_EMPLOYEE.BANK_CODE, TB_EMPLOYEE.BANK_AC_NO, " +
@@ -411,12 +411,12 @@ namespace MicroApi.DataLayer.Service
                 "LEFT JOIN TB_STORES ON TB_EMPLOYEE.STORE_ID = TB_STORES.ID " +
                 "WHERE TB_EMPLOYEE.ID = " + id;
 
-                string strSalarySQL = "SELECT TB_EMPLOYEE_SALARY.ID,TB_EMPLOYEE_SALARY.EMP_ID,TB_EMPLOYEE_SALARY.HEAD_ID,TB_SALARY_HEAD.HEAD_NAME,TB_EMPLOYEE_SALARY.HEAD_AMOUNT " +
-                    "FROM TB_EMPLOYEE_SALARY " +
-                    "LEFT JOIN TB_SALARY_HEAD ON TB_EMPLOYEE_SALARY.HEAD_ID = TB_SALARY_HEAD.ID " +
-                    "WHERE EMP_ID = " + id;
+                //string strSalarySQL = "SELECT TB_EMPLOYEE_SALARY.ID,TB_EMPLOYEE_SALARY.EMP_ID,TB_EMPLOYEE_SALARY.HEAD_ID,TB_SALARY_HEAD.HEAD_NAME,TB_EMPLOYEE_SALARY.HEAD_AMOUNT " +
+                //    "FROM TB_EMPLOYEE_SALARY " +
+                //    "LEFT JOIN TB_SALARY_HEAD ON TB_EMPLOYEE_SALARY.HEAD_ID = TB_SALARY_HEAD.ID " +
+                //    "WHERE EMP_ID = " + id;
 
-                DataTable tblsalary = ADO.GetDataTable(strSalarySQL, "EmployeeSalary");
+                //DataTable tblsalary = ADO.GetDataTable(strSalarySQL, "EmployeeSalary");
 
                 //if (tblsalary.Rows.Count > 0)
                 //{
@@ -434,33 +434,6 @@ namespace MicroApi.DataLayer.Service
 
                 //    employee.EmployeeSalary = employeeSalary;
                 //}
-
-                string strAttachmentsSQL = "SELECT ID, TRANS_TYPE, TRANS_ID, FILE_NAME, FILE_DATA, REMARKS, " +
-    "CREATED_USER_ID, CREATED_TIME, IS_DELETED, DELETED_USER_ID, DELETED_TIME " +
-    "FROM TB_ATTACHEMENTS " +
-    "WHERE TRANS_ID = " + id;
-
-                DataTable tblAttachments = ADO.GetDataTable(strAttachmentsSQL, "EmployeeAttachments");
-
-                if (tblAttachments.Rows.Count > 0)
-                {
-                    foreach (DataRow drAttachment in tblAttachments.Rows)
-                    {
-                        empAttachments.Add(new EmpAttachment
-                        {
-                            ID = ADO.ToInt32(drAttachment["ID"]),
-                            DOC_TYPE = ADO.ToInt32(drAttachment["TRANS_TYPE"]),
-                            DOC_ID = ADO.ToInt32(drAttachment["TRANS_ID"]),
-                            FILE_NAME = ADO.ToString(drAttachment["FILE_NAME"]),
-                            FILE_DATA = drAttachment["FILE_DATA"] as byte[],
-                            REMARKS = ADO.ToString(drAttachment["REMARKS"]),
-                            USER_ID = ADO.ToInt32(drAttachment["CREATED_USER_ID"]),
-                            CREATED_DATE_TIME = Convert.ToDateTime(drAttachment["CREATED_TIME"]),
-                        });
-                    }
-
-                    employee.Attachments = empAttachments;
-                }
 
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "EmployeeUpdate");
@@ -531,11 +504,33 @@ namespace MicroApi.DataLayer.Service
 
 
                 }
+                string strAttachmentsSQL = @"SELECT ID, TRANS_TYPE, TRANS_ID, FILE_NAME, FILE_DATA, REMARKS, CREATED_USER_ID, CREATED_TIME, IS_DELETED, DELETED_USER_ID, DELETED_TIME FROM TB_ATTACHEMENTS WHERE TRANS_ID = " + id;
+                DataTable tblAttachments = ADO.GetDataTable(strAttachmentsSQL, "EmployeeAttachments");
+
+                if (tblAttachments.Rows.Count > 0)
+                {
+                    foreach (DataRow drAttachment in tblAttachments.Rows)
+                    {
+                        empAttachments.Add(new EmpAttachment
+                        {
+                            ID = ADO.ToInt32(drAttachment["ID"]),
+                            DOC_TYPE = ADO.ToInt32(drAttachment["TRANS_TYPE"]),
+                            DOC_ID = ADO.ToInt32(drAttachment["TRANS_ID"]),
+                            FILE_NAME = ADO.ToString(drAttachment["FILE_NAME"]),
+                            FILE_DATA = drAttachment["FILE_DATA"] as byte[],
+                            REMARKS = ADO.ToString(drAttachment["REMARKS"]),
+                            USER_ID = ADO.ToInt32(drAttachment["CREATED_USER_ID"]),
+                            CREATED_DATE_TIME = Convert.ToDateTime(drAttachment["CREATED_TIME"])
+                        });
+                    }
+                    employee.Attachments = empAttachments;
+                }
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+
             return employee;
         }
 

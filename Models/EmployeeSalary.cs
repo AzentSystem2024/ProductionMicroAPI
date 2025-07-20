@@ -14,7 +14,7 @@
     {
        // public int? ID { get; set; }
         public int? HEAD_ID { get; set; }
-        public int? HEAD_NATURE { get; set; }
+        public string? HEAD_NATURE { get; set; }
         public string? HEAD_NAME { get; set; }
         public float? HEAD_PERCENT { get; set; }
         public float? HEAD_AMOUNT { get; set; }
@@ -64,6 +64,11 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public List<EmployeeSalarySettingsList> Data { get; set; }
+    }
+    public class EmployeeSalaryRequest
+    {
+        public int EMP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class EmployeeSalaryFilterRequest
     {
