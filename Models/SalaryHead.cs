@@ -20,7 +20,8 @@
         public bool? INSTALLMENT_RECOVERY { get; set; }
         public bool IS_INACTIVE { get; set; } = false;
         public int? AC_HEAD_ID { get; set; }
-        public int? PERCENT_HEAD_ID { get; set; }
+        //public int? PERCENT_HEAD_ID { get; set; }
+        public List<int>? PERCENT_HEAD_ID { get; set; }
 
 
     }
@@ -43,8 +44,8 @@
         public bool? INSTALLMENT_RECOVERY { get; set; }
         public bool IS_INACTIVE { get; set; } = false;
         public int? AC_HEAD_ID { get; set; }
-        public int? PERCENT_HEAD_ID { get; set; }
-        public List<int> PERCENT_HEAD_IDS { get; set; } = new List<int>();
+        //public int? PERCENT_HEAD_ID { get; set; }
+        public List<int>? PERCENT_HEAD_ID { get; set; }
 
 
     }

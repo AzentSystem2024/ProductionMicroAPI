@@ -3,6 +3,7 @@ using MicroApi.Models;
 using System.Data.SqlClient;
 using System.Data;
 using MicroApi.DataLayer.Interface;
+using System.Reflection;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -45,7 +46,13 @@ namespace MicroApi.DataLayer.Service
                             INSTALLMENT_RECOVERY = dr["INSTALLMENT_RECOVERY"] != DBNull.Value ? Convert.ToBoolean(dr["INSTALLMENT_RECOVERY"]) : (bool?)null,
                             IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : false,
                             AC_HEAD_ID = dr.Table.Columns.Contains("AC_HEAD_ID") && dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : (int?)null,
-                            HEAD_ORDER = dr["HEAD_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ORDER"]) : (int?)null
+                            HEAD_ORDER = dr["HEAD_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ORDER"]) : (int?)null,
+                            PERCENT_HEAD_ID = dr.Table.Columns.Contains("PERCENT_HEAD_ID") && dr["PERCENT_HEAD_ID"] != DBNull.Value
+                                ? dr["PERCENT_HEAD_ID"].ToString().Split(',').Select(x => int.TryParse(x, out int val) ? val : (int?)null)
+                                    .Where(x => x.HasValue)
+                                    .Select(x => x.Value)
+                                    .ToList()
+                                : new List<int>()
                         };
 
                         response.Data.Add(salaryHead);
@@ -83,7 +90,7 @@ namespace MicroApi.DataLayer.Service
                         }
 
                         cmd.Parameters.AddWithValue("@ACTION", 1);
-                        cmd.Parameters.AddWithValue("@ID", string.Empty);  // Pass empty instead of 0 or null
+                        cmd.Parameters.AddWithValue("@ID", string.Empty);  
                         cmd.Parameters.AddWithValue("@HEAD_NAME", salaryHead.HEAD_NAME ?? "");
                         cmd.Parameters.AddWithValue("@HEAD_TITLE", salaryHead.PAYSLIP_TITLE ?? "");
                         cmd.Parameters.AddWithValue("@HEAD_ACTIVE", salaryHead.HEAD_ACTIVE?.ToString() ?? "");
@@ -100,7 +107,14 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@INSTALLMENT_RECOVERY", salaryHead.INSTALLMENT_RECOVERY?.ToString() ?? "");
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", salaryHead.IS_INACTIVE.ToString() ?? "");
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", salaryHead.AC_HEAD_ID?.ToString() ?? "");
-                        cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", salaryHead.PERCENT_HEAD_ID?.ToString() ?? "");
+                        //cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", salaryHead.PERCENT_HEAD_ID?.ToString() ?? "");
+                        string percentHeadIds = salaryHead.PERCENT_HEAD_ID != null
+                             ? string.Join(",", salaryHead.PERCENT_HEAD_ID)
+                             : "";
+
+                        cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", percentHeadIds);
+                        //string percentHeadIds = CommaList(salaryHead.PERCENT_HEAD_ID); // returns "2,3"
+                        //cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", percentHeadIds ?? "");
 
                         Int32 result = Convert.ToInt32(cmd.ExecuteScalar());
                         return result;
@@ -112,7 +126,12 @@ namespace MicroApi.DataLayer.Service
                 throw;
             }
         }
-
+        private string CommaList(List<int>? items)
+        {
+            return items != null && items.Count > 0
+                ? string.Join(",", items)
+                : string.Empty;
+        }
 
         public Int32 EditData(SalaryHeadUpdate salaryHead)
         {
@@ -152,8 +171,9 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", GetDbValue(salaryHead.IS_INACTIVE));
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", GetDbValue(salaryHead.AC_HEAD_ID));
                         cmd.Parameters.AddWithValue("@HEAD_ORDER", GetDbValue(salaryHead.HEAD_ORDER));
-                        cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", GetDbValue(salaryHead.PERCENT_HEAD_ID));
-
+                        //cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", GetDbValue(salaryHead.PERCENT_HEAD_ID));
+                        string percentHeadIds = CommaList(salaryHead.PERCENT_HEAD_ID);
+                        cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", percentHeadIds);
                         Int32 result = Convert.ToInt32(cmd.ExecuteScalar());
                         return result;
                     }
@@ -208,12 +228,27 @@ namespace MicroApi.DataLayer.Service
                                 salaryHead.IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : false;
                                 salaryHead.AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : (int?)null;
                                 salaryHead.HEAD_ORDER = dr["HEAD_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ORDER"]) : (int?)null;
+
+                                // ✅ Correct parsing of comma-separated PERCENT_HEAD_ID
+                                if (dr["PERCENT_HEAD_ID"] != DBNull.Value)
+                                {
+                                    string ids = dr["PERCENT_HEAD_ID"].ToString();
+                                    salaryHead.PERCENT_HEAD_ID = ids
+                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(x => int.TryParse(x.Trim(), out int val) ? val : 0)
+                                        .Where(x => x != 0)
+                                        .ToList();
+                                }
+                                else
+                                {
+                                    salaryHead.PERCENT_HEAD_ID = new List<int>();
+                                }
                             }
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -232,7 +267,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "SP_TB_SALARY_HEAD";
-                    cmd.Parameters.AddWithValue("ACTION", 3); // 3 for Delete
+                    cmd.Parameters.AddWithValue("ACTION", 3); 
                     cmd.Parameters.AddWithValue("ID", id);
                     cmd.ExecuteNonQuery();
                     connection.Close();
