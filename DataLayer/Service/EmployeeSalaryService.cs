@@ -46,7 +46,7 @@ namespace MicroApi.DataLayer.Service
             return 0;
         }
 
-        public Int32 EditData(EmployeeSalaryUpdate salary)
+        public Int32 EditData(EmployeeSalarySave salary)
         {
             try
             {
@@ -62,6 +62,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ACTION", 2); // Update action
                             cmd.Parameters.AddWithValue("@ID", salary.ID);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
+                            cmd.Parameters.AddWithValue("@FIN_ID", salary.FIN_ID);
                             cmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
                             cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
                             cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
@@ -79,7 +80,7 @@ namespace MicroApi.DataLayer.Service
                                    // salary.EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? reader["EMP_CODE"].ToString() : null;
                                     salary.SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : (decimal?)null;
                                     salary.EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null;
-                                    salary.IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null;
+                                    //salary.IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null;
                                 }
                             }
                         }
