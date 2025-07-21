@@ -69,7 +69,7 @@ namespace MicroApi.Controllers
 
                 res.flag = "1";
                 res.message = "Success";
-                res.data = _EmployeeSalaryService.GetItem(ID);
+                //res.data = _EmployeeSalaryService.GetItem(ID);
             }
             catch (Exception ex)
             {
@@ -81,13 +81,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("edit")]
-        public IActionResult EditData([FromBody] EmployeeSalaryUpdate salary)
+        public IActionResult EditData([FromBody] EmployeeSalarySave salaryUpdate)
         {
             try
-            {
-                Int32 ID = _EmployeeSalaryService.EditData(salary);
-                var updatedSalary = _EmployeeSalaryService.GetItem(ID);
-                return Ok(new { flag = "1", message = "Success", data = updatedSalary });
+            {   
+                Int32 ID = _EmployeeSalaryService.EditData(salaryUpdate);
+                //var updatedSalary = _EmployeeSalaryService.GetItem(ID);
+                return Ok(new { flag = "1", message = "Success" });
             }
             catch (Exception ex)
             {

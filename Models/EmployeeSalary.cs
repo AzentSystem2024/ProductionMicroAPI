@@ -2,6 +2,7 @@
 {
     public class EmployeeSalarySave
     {
+        public int? ID { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
         public string? EMP_CODE { get; set; }
