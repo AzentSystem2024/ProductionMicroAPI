@@ -4,6 +4,7 @@ using System.Data;
 using MicroApi.Models;
 using MicroApi.DataLayer.Interface;
 using System.Reflection;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -57,12 +58,13 @@ namespace MicroApi.DataLayer.Service
                 using (SqlConnection connection = ADO.GetConnection())
                 {
                     if (connection.State == ConnectionState.Closed)
-                        connection.Open();
+                       connection.Open();
 
                     using (SqlCommand cmd = new SqlCommand("SP_SALARY_LIST", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -93,6 +95,154 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public PayrollViewResponse GetPayrollDetails(int id)
+        {
+            PayrollViewResponse response = null;
+
+            using (SqlConnection con = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_SALARY_LIST", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 2);
+                    cmd.Parameters.AddWithValue("@PAYDETAIL_ID", id);
+
+                    //con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                if (response == null)
+                                {
+                                    response = new PayrollViewResponse
+                                    {
+                                        PAYDETAIL_ID = Convert.ToInt32(reader["PAYDETAIL_ID"]),
+                                        EMPLOYEE_ID = Convert.ToInt32(reader["EMP_ID"]),
+                                        EMPLOYEE_CODE = reader["EMP_CODE"].ToString(),
+                                        EMPLOYEE_NAME = reader["EMP_NAME"].ToString(),
+                                        MONTH = Convert.ToDateTime(reader["SAL_MONTH"]).ToString("dd-MM-yyyy"),
+                                        BASIC_SALARY = Convert.ToDecimal(reader["BASIC_PAY"]),
+                                        WORKED_DAYS = Convert.ToDecimal(reader["WORKED_DAYS"]),
+                                        OT_HOURS = Convert.ToDecimal(reader["NOT_HOURS"]),
+                                        LESS_HOURS = Convert.ToDecimal(reader["LESS_HOURS"]),
+                                        DATA = new List<SalaryHeadData>()
+                                    };
+                                }
+
+                                SalaryHeadData head = new SalaryHeadData
+                                {
+                                    HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
+                                    HEAD_NAME = reader["HEAD_NAME"].ToString(),
+                                    HEAD_TYPE = Convert.ToInt32(reader["HEAD_TYPE"]),
+                                    GROSS_AMOUNT = Convert.ToDecimal(reader["GROSS_AMOUNT"]),
+                                    DEDUCTION_AMOUNT = Convert.ToDecimal(reader["DEDUCTION_AMOUNT"])
+                                };
+
+                                response.DATA.Add(head);
+                            }
+
+                            // ✅ Set flag and message after successful read
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                    }
+                }
+            }
+
+            // If no data found, return a response with flag = 0
+            return response ?? new PayrollViewResponse
+            {
+                flag = 0,
+                Message = "No data found"
+            };
+        }
+
+        public PayrollResponse Edit(UpdateItemRequest model)
+        {
+            PayrollResponse response = new PayrollResponse();
+
+            try
+            {
+                using (SqlConnection conn = ADO.GetConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    // Step 1: Fetch existing LOAN_ID and REMARKS
+                    Dictionary<int, (int loanId, string remarks)> existingData = new Dictionary<int, (int, string)>();
+
+                    using (SqlCommand fetchCmd = new SqlCommand(@"
+                SELECT HEAD_ID, LOAN_ID, REMARKS 
+                FROM TB_PAY_SALARY_ITEMS 
+                WHERE PAY_DETAIL_ID = @PayDetailId", conn))
+                    {
+                        fetchCmd.Parameters.AddWithValue("@PayDetailId", model.PAYDETAIL_ID);
+
+                        using (SqlDataReader reader = fetchCmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int headId = Convert.ToInt32(reader["HEAD_ID"]);
+                                int loanId = reader["LOAN_ID"] != DBNull.Value ? Convert.ToInt32(reader["LOAN_ID"]) : 0;
+                                string remarks = reader["REMARKS"]?.ToString() ?? "";
+                                existingData[headId] = (loanId, remarks);
+                            }
+                        }
+                    }
+
+                    // Step 2: Prepare UDT with preserved LOAN_ID and REMARKS
+                    using (SqlCommand cmd = new SqlCommand("SP_SALARY_LIST", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@PAYDETAIL_ID", model.PAYDETAIL_ID);
+
+                        // Define UDT structure
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("PAY_DETAIL_ID", typeof(int));
+                        dt.Columns.Add("HEAD_ID", typeof(int));
+                        dt.Columns.Add("AMOUNT", typeof(decimal));
+                        dt.Columns.Add("LOAN_ID", typeof(int));
+                        dt.Columns.Add("REMARKS", typeof(string));
+
+                        foreach (var item in model.SALARY)
+                        {
+                            int loanId = 0;
+                            string remarks = "";
+
+                            // If existing data has entry, use it
+                            if (existingData.TryGetValue(item.HEAD_ID, out var existing))
+                            {
+                                loanId = existing.loanId;
+                                remarks = existing.remarks;
+                            }
+
+                            dt.Rows.Add(model.PAYDETAIL_ID, item.HEAD_ID, item.AMOUNT, loanId, remarks);
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_SALARY_ITEMS", dt);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_SALARY_ITEMS";
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    response.flag = 1;
+                    response.Message = "Salary items updated successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error updating salary items: " + ex.Message;
+            }
+
+            return response;
+        }
+
 
     }
 }

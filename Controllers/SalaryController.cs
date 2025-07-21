@@ -2,6 +2,7 @@
 using MicroApi.DataLayer.Service;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using static MicroApi.DataLayer.Service.SalaryService;
 
 namespace MicroApi.Controllers
 {
@@ -51,6 +52,47 @@ namespace MicroApi.Controllers
 
             return response;
         }
+
+        [HttpPost]
+        [Route("view")]
+        public PayrollViewResponse GetPayrollDetails(PayrollViewRequest request)
+        {
+            PayrollViewResponse response = new PayrollViewResponse();
+
+            try
+            {
+                response = _SalaryService.GetPayrollDetails(request.PAYDETAIL_ID);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+        [HttpPost]
+        [Route("edit")]
+        public PayrollResponse UpdateGrossOrDeduction(UpdateItemRequest request)
+        {
+            PayrollResponse response = new PayrollResponse();
+
+            try
+            {
+                response = _SalaryService.Edit(request);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
+
+
+
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using MicroApi.Models;
+using static MicroApi.DataLayer.Service.SalaryService;
 
 namespace MicroApi.DataLayer.Interface
 {
@@ -6,7 +7,8 @@ namespace MicroApi.DataLayer.Interface
     {
         GenerateSalaryResponse GenerateSalary(List<Salary> salaryList);
         SalaryLookupResponse GetSalaryLookup(SalaryLookupRequest request);
-
+        PayrollViewResponse GetPayrollDetails(int id);
+        public PayrollResponse Edit(UpdateItemRequest model);
 
     }
 }
