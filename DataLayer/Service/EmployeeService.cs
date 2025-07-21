@@ -353,16 +353,24 @@ namespace MicroApi.DataLayer.Service
                 if (employee.Attachment != null && employee.Attachment.Any())
                 {
                     DataTable attachmentTable = new DataTable();
+                    attachmentTable.Columns.Add("TRANS_TYPE", typeof(short));
+                    attachmentTable.Columns.Add("TRANS_ID", typeof(int));
                     attachmentTable.Columns.Add("FILE_NAME", typeof(string));
                     attachmentTable.Columns.Add("FILE_DATA", typeof(byte[]));
                     attachmentTable.Columns.Add("REMARKS", typeof(string));
+                    attachmentTable.Columns.Add("CREATED_USER_ID", typeof(int));
+                    attachmentTable.Columns.Add("CREATED_TIME", typeof(DateTime));
 
                     foreach (var attachment in employee.Attachment)
                     {
                         DataRow row = attachmentTable.NewRow();
+                        row["TRANS_TYPE"] = 100; 
+                        row["TRANS_ID"] = employee.ID; 
                         row["FILE_NAME"] = attachment.FILE_NAME;
-                        row["FILE_DATA"] = attachment.FILE_DATA; // Ensure this is byte[]
+                        row["FILE_DATA"] = attachment.FILE_DATA; 
                         row["REMARKS"] = attachment.REMARKS;
+                        row["CREATED_USER_ID"] = 1; 
+                        row["CREATED_TIME"] = DateTime.Now; 
                         attachmentTable.Rows.Add(row);
                     }
 
