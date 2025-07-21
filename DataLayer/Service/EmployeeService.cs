@@ -350,14 +350,14 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@COMPANY_ID", employee.COMPANY_ID);
 
                 // Handle attachments only during update
-                if (employee.Attachments != null && employee.Attachments.Any())
+                if (employee.Attachment != null && employee.Attachment.Any())
                 {
                     DataTable attachmentTable = new DataTable();
                     attachmentTable.Columns.Add("FILE_NAME", typeof(string));
                     attachmentTable.Columns.Add("FILE_DATA", typeof(byte[]));
                     attachmentTable.Columns.Add("REMARKS", typeof(string));
 
-                    foreach (var attachment in employee.Attachments)
+                    foreach (var attachment in employee.Attachment)
                     {
                         DataRow row = attachmentTable.NewRow();
                         row["FILE_NAME"] = attachment.FILE_NAME;
@@ -382,7 +382,7 @@ namespace MicroApi.DataLayer.Service
         {
             EmployeeUpdate employee = new EmployeeUpdate();
             //List<EmployeeSalary> employeeSalary = new List<EmployeeSalary>();
-            List<EmpAttachment> empAttachments = new List<EmpAttachment>();
+            List<EmpAttachment> empAttachment = new List<EmpAttachment>();
 
             try
             {
@@ -511,7 +511,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     foreach (DataRow drAttachment in tblAttachments.Rows)
                     {
-                        empAttachments.Add(new EmpAttachment
+                        empAttachment.Add(new EmpAttachment
                         {
                             ID = ADO.ToInt32(drAttachment["ID"]),
                             DOC_TYPE = ADO.ToInt32(drAttachment["TRANS_TYPE"]),
@@ -523,7 +523,7 @@ namespace MicroApi.DataLayer.Service
                             CREATED_DATE_TIME = Convert.ToDateTime(drAttachment["CREATED_TIME"])
                         });
                     }
-                    employee.Attachments = empAttachments;
+                    employee.Attachment = empAttachment;
                 }
             }
             catch (Exception ex)

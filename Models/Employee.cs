@@ -122,7 +122,7 @@
 
 
         //public List<EmployeeSalary> EmployeeSalary { get; set; }
-        public List<EmpAttachment> Attachments { get; set; }
+        public List<EmpAttachment> Attachment { get; set; }
     }
     public class EmpAttachment
     {
