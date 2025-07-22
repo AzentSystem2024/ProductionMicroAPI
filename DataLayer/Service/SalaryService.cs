@@ -174,9 +174,9 @@ namespace MicroApi.DataLayer.Service
                     Dictionary<int, (int loanId, string remarks)> existingData = new Dictionary<int, (int, string)>();
 
                     using (SqlCommand fetchCmd = new SqlCommand(@"
-                SELECT HEAD_ID, LOAN_ID, REMARKS 
-                FROM TB_PAY_SALARY_ITEMS 
-                WHERE PAY_DETAIL_ID = @PayDetailId", conn))
+                        SELECT HEAD_ID, LOAN_ID, REMARKS 
+                        FROM TB_PAY_SALARY_ITEMS 
+                        WHERE PAY_DETAIL_ID = @PayDetailId", conn))
                     {
                         fetchCmd.Parameters.AddWithValue("@PayDetailId", model.PAYDETAIL_ID);
 
@@ -231,7 +231,7 @@ namespace MicroApi.DataLayer.Service
                     }
 
                     response.flag = 1;
-                    response.Message = "Salary items updated successfully";
+                    response.Message = "Salary updated";
                 }
             }
             catch (Exception ex)

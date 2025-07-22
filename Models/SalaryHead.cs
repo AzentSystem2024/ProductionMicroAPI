@@ -46,7 +46,8 @@
         public int? AC_HEAD_ID { get; set; }
         //public int? PERCENT_HEAD_ID { get; set; }
         public List<int>? PERCENT_HEAD_ID { get; set; }
-
+        public DateTime? DATE_FROM { get; set; }
+        public DateTime? DATE_TO { get; set; }
 
     }
     public class SalaryHeadResponse
