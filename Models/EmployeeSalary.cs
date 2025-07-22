@@ -22,6 +22,7 @@
        // public int? FIN_ID { get; set; }
        // public DateTime? EFFECT_FROM { get; set; }
         public bool? IS_INACTIVE { get; set; }
+        public bool Selected { get; set; }
     }
     public class EmployeeSalaryUpdate
     {
