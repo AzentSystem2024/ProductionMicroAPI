@@ -90,6 +90,22 @@ namespace MicroApi.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("approve")]
+        public SalaryApproveResponse CommitGenerateSalary(SalaryApprove request)
+        {
+            SalaryApproveResponse response = new SalaryApproveResponse();
+            try
+            {
+                response = _SalaryService.CommitGenerateSalary(request);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
 
 
 
