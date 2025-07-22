@@ -16,25 +16,17 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public EmployeeListResponse List([FromBody] EmployeeSalaryRequest request)
+        public IActionResult List([FromBody] EmployeeSalaryRequest request)
         {
-            EmployeeListResponse res = new EmployeeListResponse();
-
             try
             {
-                res = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID,request.COMPANY_ID);
+                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID, request.COMPANY_ID);
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                res = new EmployeeListResponse
-                {
-                    flag = 0,
-                    Message = ex.Message,
-                    Data = null
-                };
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
             }
-
-            return res;
         }
 
 

@@ -20,7 +20,7 @@
         public float? HEAD_PERCENT { get; set; }
         public float? HEAD_AMOUNT { get; set; }
        // public int? FIN_ID { get; set; }
-       // public DateTime? EFFECT_FROM { get; set; }
+        public DateTime? EFFECT_FROM { get; set; }
         public bool? IS_INACTIVE { get; set; }
         //public bool Selected { get; set; }
     }
