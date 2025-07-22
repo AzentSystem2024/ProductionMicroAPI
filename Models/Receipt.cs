@@ -60,7 +60,7 @@
 
     public class PendingInvoiceItem
     {
-        public int SL_NO { get; set; }
+       // public int SL_NO { get; set; }
         public string INVOICE_NO { get; set; }
         public string INVOICE_DATE { get; set; }
         public string REF_NO { get; set; }
