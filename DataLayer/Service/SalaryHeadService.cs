@@ -48,7 +48,13 @@ namespace MicroApi.DataLayer.Service
                             AC_HEAD_ID = dr.Table.Columns.Contains("AC_HEAD_ID") && dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : (int?)null,
                             HEAD_ORDER = dr["HEAD_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ORDER"]) : (int?)null,
                             PERCENT_HEAD_ID = dr.Table.Columns.Contains("PERCENT_HEAD_ID") && dr["PERCENT_HEAD_ID"] != DBNull.Value
-                            ? dr["PERCENT_HEAD_ID"].ToString().Split(',').Select(x => int.TryParse(x, out int val) ? val : (int?)null) .Select(x => x.Value) .ToList() : new List<int>()
+                                ? dr["PERCENT_HEAD_ID"].ToString()
+                                    .Split(',')
+                                    .Select(x => int.TryParse(x, out int val) ? (int?)val : null)
+                                    .Where(x => x.HasValue)
+                                    .Select(x => x.Value)
+                                    .ToList()
+                                : new List<int>()
                         };
 
                         response.Data.Add(salaryHead);
