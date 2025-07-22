@@ -239,8 +239,6 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    // Retrieve employee details and salary heads
-                    EmployeeSalaryUpdate employeeSalaryUpdate = null;
                     using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
@@ -250,38 +248,22 @@ namespace MicroApi.DataLayer.Service
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
+                            // Retrieve employee details
                             if (reader.Read())
                             {
-                                employeeSalaryUpdate = new EmployeeSalaryUpdate
+                                EmployeeSalaryUpdate employeeSalaryUpdate = new EmployeeSalaryUpdate
                                 {
                                     ID = reader["EmployeeID"] != DBNull.Value ? Convert.ToInt32(reader["EmployeeID"]) : (int?)null,
                                     COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : null,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? Convert.ToString(reader["EMP_NAME"]) : null,
                                     DESG_NAME = reader["Designation"] != DBNull.Value ? Convert.ToString(reader["Designation"]) : null,
+                                    //SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : null,
                                     Details = new List<SalaryHeadDetail>()
                                 };
-                            }
-                        }
 
-                        // Fetch salary head details
-                        if (employeeSalaryUpdate != null)
-                        {
-                            using (SqlCommand cmdDetails = new SqlCommand(@"
-                        SELECT
-                            SH.ID AS HEAD_ID, SH.HEAD_NAME,
-                            CASE SH.HEAD_NATURE WHEN 1 THEN 'FixedAmount' WHEN 2 THEN 'Percentage' END AS HEAD_NATURE,
-                            SH.HEAD_AMOUNT AS Amount, SH.HEAD_PERCENT AS Percentage,
-                            SH.IS_INACTIVE AS HEAD_IS_INACTIVE,
-                            CASE WHEN ESH.HEAD_ID IS NOT NULL THEN 1 ELSE 0 END AS Selected
-                        FROM TB_SALARY_HEAD SH
-                        LEFT JOIN TB_EMPLOYEE_SALARY ESH ON SH.ID = ESH.HEAD_ID AND ESH.EMP_ID = @EMP_ID AND ESH.IS_DELETED = 0
-                        WHERE SH.IS_DELETED = 0 AND SH.HEAD_NATURE IN (1, 2)
-                        ORDER BY SH.HEAD_ORDER", connection))
-                            {
-                                cmdDetails.Parameters.AddWithValue("@EMP_ID", EMPID);
-
-                                using (SqlDataReader reader = cmdDetails.ExecuteReader())
+                                // Move to the next result set for salary head details
+                                if (reader.NextResult())
                                 {
                                     while (reader.Read())
                                     {
@@ -290,23 +272,23 @@ namespace MicroApi.DataLayer.Service
                                             HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : (int?)null,
                                             HEAD_NAME = reader["HEAD_NAME"] != DBNull.Value ? reader["HEAD_NAME"].ToString() : null,
                                             HEAD_NATURE = reader["HEAD_NATURE"] != DBNull.Value ? reader["HEAD_NATURE"].ToString() : null,
-                                            HEAD_AMOUNT = reader["Amount"] != DBNull.Value ? Convert.ToSingle(reader["Amount"]) : (float?)null,
-                                            HEAD_PERCENT = reader["Percentage"] != DBNull.Value ? Convert.ToSingle(reader["Percentage"]) : (float?)null,
-                                            IS_INACTIVE = reader["HEAD_IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["HEAD_IS_INACTIVE"]) : (bool?)null,
-                                            Selected = reader["Selected"] != DBNull.Value ? Convert.ToBoolean(reader["Selected"]) : false
+                                            HEAD_AMOUNT = reader["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_AMOUNT"]) : (float?)null,
+                                            HEAD_PERCENT = reader["HEAD_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_PERCENT"]) : (float?)null,
+                                            //Selected = reader["Selected"] != DBNull.Value ? Convert.ToBoolean(reader["Selected"]) : false
                                         };
+
                                         employeeSalaryUpdate.Details.Add(detail);
                                     }
                                 }
+
+                                response.Data.Add(employeeSalaryUpdate);
                             }
-
-                            response.Data.Add(employeeSalaryUpdate);
                         }
-
-                        response.flag = 1;
-                        response.Message = "Success";
                     }
                 }
+
+                response.flag = 1;
+                response.Message = "Success";
             }
             catch (Exception ex)
             {
@@ -320,13 +302,9 @@ namespace MicroApi.DataLayer.Service
 
 
 
-
         public EmployeeSalaryUpdate GetItem(int id)
         {
-            EmployeeSalaryUpdate salary = new EmployeeSalaryUpdate
-            {
-                Details = new List<SalaryHeadDetail>() // Initialize the Details list
-            };
+            EmployeeSalaryUpdate salary = new EmployeeSalaryUpdate { Details = new List<SalaryHeadDetail>() };
 
             try
             {
@@ -338,39 +316,41 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 7); // Select by ID action
+                        cmd.Parameters.AddWithValue("@ACTION", 7);
                         cmd.Parameters.AddWithValue("@EMP_ID", id);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            // Retrieve employee details and their salary settings
+                            if (reader.Read())
                             {
-                                // Initialize salary object properties if not already set
-                                if (salary.ID == null)
+                                salary.ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null;
+                                salary.EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? reader["EMP_CODE"].ToString() : null;
+                                salary.EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? reader["EMP_NAME"].ToString() : null;
+                                salary.COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null;
+                                salary.DESG_NAME = reader["Designation"] != DBNull.Value ? reader["Designation"].ToString() : null;
+                                salary.SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : (decimal?)null;
+                                salary.EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null;
+                                //salary.IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null;
+                            }
+
+                            // Move to the next result set for salary head details
+                            if (reader.NextResult())
+                            {
+                                while (reader.Read())
                                 {
-                                    salary.ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null;
-                                    salary.EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? reader["EMP_CODE"].ToString() : null;
-                                    salary.EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? reader["EMP_NAME"].ToString() : null;
-                                    salary.COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null;
-                                    salary.DESG_NAME = reader["Designation"] != DBNull.Value ? reader["Designation"].ToString() : null;
-                                    salary.SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : (decimal?)null;
-                                    salary.EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null;
-                                    salary.IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null;
+                                    var detail = new SalaryHeadDetail
+                                    {
+                                        HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : (int?)null,
+                                        HEAD_NAME = reader["HEAD_NAME"] != DBNull.Value ? reader["HEAD_NAME"].ToString() : null,
+                                        HEAD_NATURE = reader["HEAD_NATURE"] != DBNull.Value ? reader["HEAD_NATURE"].ToString() : null,
+                                        HEAD_AMOUNT = reader["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_AMOUNT"]) : (float?)null,
+                                        HEAD_PERCENT = reader["HEAD_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["HEAD_PERCENT"]) : (float?)null,
+                                        //Selected = reader["Selected"] != DBNull.Value ? Convert.ToBoolean(reader["Selected"]) : false
+                                    };
+
+                                    salary.Details.Add(detail);
                                 }
-
-                                // Add each detail to the Details list
-                                var detail = new SalaryHeadDetail
-                                {
-                                    HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : (int?)null,
-                                    HEAD_NAME = reader["HEAD_NAME"] != DBNull.Value ? reader["HEAD_NAME"].ToString() : null,
-                                    HEAD_NATURE = reader["HEAD_NATURE"] != DBNull.Value ? reader["HEAD_NATURE"].ToString() : null,
-                                    HEAD_AMOUNT = reader["Amount"] != DBNull.Value ? Convert.ToSingle(reader["Amount"]) : (float?)null,
-                                    HEAD_PERCENT = reader["Percentage"] != DBNull.Value ? Convert.ToSingle(reader["Percentage"]) : (float?)null,
-                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : (bool?)null,
-
-                                };
-
-                                salary.Details.Add(detail);
                             }
                         }
                     }
@@ -378,14 +358,12 @@ namespace MicroApi.DataLayer.Service
             }
             catch (Exception ex)
             {
-                // Log the exception details for debugging purposes
                 Console.WriteLine(ex.ToString());
                 throw new Exception("Error retrieving data: " + ex.Message);
             }
 
             return salary;
         }
-
 
         public bool DeleteEmployeeSalary(int id)
         {
