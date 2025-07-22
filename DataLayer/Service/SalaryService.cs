@@ -242,7 +242,49 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public SalaryApproveResponse CommitGenerateSalary(SalaryApprove request)
+        {
+            SalaryApproveResponse response = new SalaryApproveResponse();
 
+            try
+            {
+                using (SqlConnection conn = ADO.GetConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_SALARY_LIST", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 4);
+                        cmd.Parameters.AddWithValue("@TS_ID", request.TS_ID);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                response.flag = 1;
+                                response.Message = "Approve Successfully";
+                                if (reader["TRANS_ID"] != DBNull.Value)
+                                    response.TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]);
+                            }
+                            else
+                            {
+                                response.flag = 0;
+                                response.Message = "No data returned.";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
 
     }
 }

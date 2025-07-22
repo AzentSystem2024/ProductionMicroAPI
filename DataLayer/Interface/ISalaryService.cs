@@ -9,6 +9,8 @@ namespace MicroApi.DataLayer.Interface
         SalaryLookupResponse GetSalaryLookup(SalaryLookupRequest request);
         PayrollViewResponse GetPayrollDetails(int id);
         public PayrollResponse Edit(UpdateItemRequest model);
+        SalaryApproveResponse CommitGenerateSalary(SalaryApprove request);
+
 
     }
 }
