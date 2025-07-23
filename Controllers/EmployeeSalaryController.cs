@@ -32,9 +32,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("select/{id:int}")]
-        public EmployeeSalaryUpdate Select(int id)
+        public EmployeeListResponse Select(int id)
         {
-            EmployeeSalaryUpdate salaryHead = new EmployeeSalaryUpdate();
+            EmployeeListResponse salaryHead = new EmployeeListResponse();
 
             try
             {
@@ -89,21 +89,18 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("delete/{id:int}")]
-        public EmployeeSalaryResponse Delete(int id)
+        public EmployeeListResponse Delete(int id)
         {
-            EmployeeSalaryResponse res = new EmployeeSalaryResponse();
+            EmployeeListResponse res = new EmployeeListResponse();
 
             try
             {
                 _EmployeeSalaryService.DeleteEmployeeSalary(id);
-                res.flag = "1";
-                res.message = "Success";
-                res.data = _EmployeeSalaryService.GetItem(id);
+                 _EmployeeSalaryService.GetItem(id);
             }
             catch (Exception ex)
             {
-                res.flag = "0";
-                res.message = ex.Message;
+               
             }
             return res;
         }
