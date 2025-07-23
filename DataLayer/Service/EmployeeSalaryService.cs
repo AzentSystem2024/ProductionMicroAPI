@@ -78,32 +78,57 @@ namespace MicroApi.DataLayer.Service
                 {
                     try
                     {
-                        // Fetch EMP_ID based on EMP_CODE
+                        // Step 1: Get Employee ID using EMP_CODE
                         int employeeId = 0;
                         using (SqlCommand fetchCmd = new SqlCommand("SELECT ID FROM TB_EMPLOYEE WHERE EMP_CODE = @EMP_CODE", connection, transaction))
                         {
                             fetchCmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
-                            employeeId = (int)fetchCmd.ExecuteScalar();
+                            var result = fetchCmd.ExecuteScalar();
+                            if (result != null)
+                                employeeId = Convert.ToInt32(result);
+                            else
+                                throw new Exception("Employee not found.");
                         }
+
+                        // Step 2: Prepare DataTable for UDT
+                        DataTable headDetailsTable = new DataTable();
+                        headDetailsTable.Columns.Add("HEAD_ID", typeof(int));
+                        headDetailsTable.Columns.Add("HEAD_PERCENT", typeof(decimal));
+                        headDetailsTable.Columns.Add("HEAD_AMOUNT", typeof(decimal));
+                        headDetailsTable.Columns.Add("HEAD_NATURE", typeof(int));
+                        headDetailsTable.Columns.Add("IS_INACTIVE", typeof(bool));
+
                         foreach (var detail in salary.Details)
                         {
+                            headDetailsTable.Rows.Add(
+                                detail.HEAD_ID,
+                                detail.HEAD_PERCENT,
+                                detail.HEAD_AMOUNT,
+                                detail.HEAD_NATURE,
+                                detail.IS_INACTIVE
+                            );
+                        }
 
-                            using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection, transaction))
-                            {
-                                cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.AddWithValue("@ACTION", 2); // Action for update
-                                cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
-                                cmd.Parameters.AddWithValue("@FIN_ID", salary.FIN_ID);
-                                cmd.Parameters.AddWithValue("@EMP_ID", employeeId); 
-                                cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
-                                cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
-                                cmd.Parameters.AddWithValue("@HEAD_PERCENT", detail.HEAD_PERCENT);
-                                cmd.Parameters.AddWithValue("@HEAD_AMOUNT", detail.HEAD_AMOUNT);
-                                cmd.Parameters.AddWithValue("@EFFECT_FROM", salary.EFFECT_FROM);
-                                cmd.Parameters.AddWithValue("@IS_INACTIVE", detail.IS_INACTIVE);
+                        // Step 3: Call Stored Procedure once
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 2);
+                            cmd.Parameters.AddWithValue("@ID", salary.ID);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
+                            cmd.Parameters.AddWithValue("@FIN_ID", salary.FIN_ID);
+                            cmd.Parameters.AddWithValue("@EMP_ID", employeeId);
+                            cmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
+                            cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
+                            cmd.Parameters.AddWithValue("@EFFECT_FROM", salary.EFFECT_FROM);
+                            cmd.Parameters.AddWithValue("@IS_INACTIVE", false);
 
-                                cmd.ExecuteNonQuery();
-                            }
+                            // TVP parameter
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@HEAD_DETAILS", headDetailsTable);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_TB_SALARY_HEAD_DETAIL"; // Ensure this matches the SQL type
+
+                            cmd.ExecuteNonQuery();
                         }
 
                         transaction.Commit();
@@ -117,6 +142,7 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
+
 
 
 
