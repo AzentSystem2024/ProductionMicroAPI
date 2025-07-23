@@ -85,17 +85,16 @@ namespace MicroApi.DataLayer.Service
                             fetchCmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
                             employeeId = (int)fetchCmd.ExecuteScalar();
                         }
-
                         foreach (var detail in salary.Details)
                         {
+
                             using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection, transaction))
                             {
                                 cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.AddWithValue("@ACTION", 2); // Action for insert
-                                cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@ACTION", 2); // Action for update
                                 cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
                                 cmd.Parameters.AddWithValue("@FIN_ID", salary.FIN_ID);
-                                cmd.Parameters.AddWithValue("@EMP_ID", employeeId); // Use the fetched EMP_ID
+                                cmd.Parameters.AddWithValue("@EMP_ID", employeeId); 
                                 cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
                                 cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
                                 cmd.Parameters.AddWithValue("@HEAD_PERCENT", detail.HEAD_PERCENT);
