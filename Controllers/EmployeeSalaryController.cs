@@ -16,33 +16,25 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public EmployeeListResponse List([FromBody] EmployeeSalaryRequest request)
+        public IActionResult List([FromBody] EmployeeSalaryRequest request)
         {
-            EmployeeListResponse res = new EmployeeListResponse();
-
             try
             {
-                res = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID,request.COMPANY_ID);
+                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID, request.COMPANY_ID);
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                res = new EmployeeListResponse
-                {
-                    flag = 0,
-                    Message = ex.Message,
-                    Data = null
-                };
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
             }
-
-            return res;
         }
 
 
         [HttpPost]
         [Route("select/{id:int}")]
-        public EmployeeSalaryUpdate Select(int id)
+        public EmployeeListResponse Select(int id)
         {
-            EmployeeSalaryUpdate salaryHead = new EmployeeSalaryUpdate();
+            EmployeeListResponse salaryHead = new EmployeeListResponse();
 
             try
             {
@@ -97,21 +89,18 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("delete/{id:int}")]
-        public EmployeeSalaryResponse Delete(int id)
+        public EmployeeListResponse Delete(int id)
         {
-            EmployeeSalaryResponse res = new EmployeeSalaryResponse();
+            EmployeeListResponse res = new EmployeeListResponse();
 
             try
             {
                 _EmployeeSalaryService.DeleteEmployeeSalary(id);
-                res.flag = "1";
-                res.message = "Success";
-                res.data = _EmployeeSalaryService.GetItem(id);
+                 _EmployeeSalaryService.GetItem(id);
             }
             catch (Exception ex)
             {
-                res.flag = "0";
-                res.message = ex.Message;
+               
             }
             return res;
         }
@@ -122,7 +111,7 @@ namespace MicroApi.Controllers
             EmployeeSalarySettingsListResponse res = new EmployeeSalarySettingsListResponse();
             try
             {
-                res = _EmployeeSalaryService.GetEmployeeSalarySettings(request.FilterAction);
+                res = _EmployeeSalaryService.GetEmployeeSalarySettings(request.FilterAction, request.CompanyId);
             }
             catch (Exception ex)
             {
