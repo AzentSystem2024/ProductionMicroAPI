@@ -111,7 +111,7 @@ namespace MicroApi.Controllers
             EmployeeSalarySettingsListResponse res = new EmployeeSalarySettingsListResponse();
             try
             {
-                res = _EmployeeSalaryService.GetEmployeeSalarySettings(request.FilterAction);
+                res = _EmployeeSalaryService.GetEmployeeSalarySettings(request.FilterAction, request.CompanyId);
             }
             catch (Exception ex)
             {

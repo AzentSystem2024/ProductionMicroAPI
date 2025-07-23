@@ -74,7 +74,7 @@
     }
     public class EmployeeSalaryFilterRequest
     {
-       // public int? CompanyId { get; set; }
+        public int CompanyId { get; set; }
         public int FilterAction { get; set; }
     }
 }

@@ -382,41 +382,45 @@ namespace MicroApi.DataLayer.Service
             }
         }
 
-        public EmployeeSalarySettingsListResponse GetEmployeeSalarySettings(int filterAction)
+        public EmployeeSalarySettingsListResponse GetEmployeeSalarySettings(int filterAction, int companyId)
         {
             EmployeeSalarySettingsListResponse response = new EmployeeSalarySettingsListResponse();
             response.Data = new List<EmployeeSalarySettingsList>();
+
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    if (connection.State == ConnectionState.Closed) connection.Open();
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
                     using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_SALARY", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", filterAction); 
+                        cmd.Parameters.AddWithValue("@ACTION", filterAction);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
+
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                response.Data.Add(new EmployeeSalarySettingsList
+                                var item = new EmployeeSalarySettingsList
                                 {
-                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? reader["EMP_CODE"].ToString() : string.Empty,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? reader["EMP_NAME"].ToString() : string.Empty,
                                     DESG_NAME = reader["Designation"] != DBNull.Value ? reader["Designation"].ToString() : string.Empty,
-                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
+                                    //COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                     SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : 0,
                                     EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null
-                                });
-
+                                };
+                                response.Data.Add(item);
                             }
                         }
-                        
                     }
-                    response.flag = 1;
-                    response.Message = "Success";
                 }
+                response.flag = 1;
+                response.Message = "Success";
             }
             catch (Exception ex)
             {
@@ -424,9 +428,11 @@ namespace MicroApi.DataLayer.Service
                 response.Message = "Error: " + ex.Message;
                 response.Data = null;
             }
+
             return response;
         }
-       
+
+
 
     }
 }

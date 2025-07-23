@@ -9,6 +9,6 @@ namespace MicroApi.DataLayer.Interface
         public Int32 EditData(EmployeeSalarySave salary);
         public EmployeeListResponse GetItem(int id);
         public bool DeleteEmployeeSalary(int id);
-        public EmployeeSalarySettingsListResponse GetEmployeeSalarySettings(int filterAction);
+        public EmployeeSalarySettingsListResponse GetEmployeeSalarySettings(int filterAction, int companyId);
     }
 }
