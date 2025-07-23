@@ -199,6 +199,8 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 3);
                         cmd.Parameters.AddWithValue("@PAYDETAIL_ID", model.PAYDETAIL_ID);
+                        cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT);
+
 
                         // Define UDT structure
                         DataTable dt = new DataTable();

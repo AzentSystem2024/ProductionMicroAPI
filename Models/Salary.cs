@@ -71,6 +71,7 @@
     public class UpdateItemRequest
     {
         public int PAYDETAIL_ID { get; set; }
+        public decimal NET_AMOUNT { get; set; }
         public List<SalaryItemUpdate> SALARY { get; set; }
     }
     public class PayrollResponse
