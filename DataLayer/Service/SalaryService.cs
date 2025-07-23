@@ -248,43 +248,55 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                using (SqlConnection conn = ADO.GetConnection())
+                using (SqlConnection connection = ADO.GetConnection())
                 {
-                    if (conn.State == ConnectionState.Closed)
-                        conn.Open();
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("SP_SALARY_LIST", conn))
+                    using (SqlCommand cmd = new SqlCommand("SP_SALARY_APPROVE", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 4);
-                        cmd.Parameters.AddWithValue("@TS_ID", request.TS_ID);
 
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        // Create UDT
+                        DataTable payDetailTable = new DataTable();
+                        payDetailTable.Columns.Add("PAYDETAIL_ID", typeof(int));
+
+                        foreach (int id in request.PAYDETAIL_ID)
                         {
-                            if (reader.Read())
-                            {
-                                response.flag = 1;
-                                response.Message = "Approve Successfully";
-                                if (reader["TRANS_ID"] != DBNull.Value)
-                                    response.TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]);
-                            }
-                            else
-                            {
-                                response.flag = 0;
-                                response.Message = "No data returned.";
-                            }
+                            payDetailTable.Rows.Add(id);
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_SALARY_DETAIL_ID", payDetailTable);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_SALARY_DETAIL_ID";
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                        else
+                        {
+                            response.flag = 0;
+                            response.Message = "No Data Processed";
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                response.flag = 0;
-                response.Message = "Error: " + ex.Message;
+                response.flag = -1;
+                response.Message = ex.Message;
             }
 
             return response;
         }
+
 
     }
 }

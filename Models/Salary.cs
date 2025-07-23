@@ -78,14 +78,13 @@
         public int flag { get; set; }          
         public string Message { get; set; }   
     }
-    public class SalaryApprove
+       public class SalaryApprove
     {
-        public int TS_ID { get; set; }
+        public List<int> PAYDETAIL_ID { get; set; }
     }
     public class SalaryApproveResponse
     {
         public int flag { get; set; }        
         public string Message { get; set; }
-        public int? TRANS_ID { get; set; }   
     }
 }
