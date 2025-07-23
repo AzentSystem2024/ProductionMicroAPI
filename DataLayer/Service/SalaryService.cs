@@ -77,7 +77,8 @@ namespace MicroApi.DataLayer.Service
                                     EMPLOYEE_NO = Convert.ToString(reader["EMP_CODE"]),
                                     EMPLOYEE_NAME = Convert.ToString(reader["EMP_NAME"]),
                                     WORKED_DAYS = Convert.ToDecimal(reader["WORKED_DAYS"]),
-                                    NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"])
+                                    NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
+                                    STATUS = Convert.ToString(reader["STATUS"]),
                                 });
                             }
                         }
