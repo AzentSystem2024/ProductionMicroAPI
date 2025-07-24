@@ -303,6 +303,38 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        public DeleteSalaryResponse DeleteGeneratedSalary(DeleteSalaryRequest request)
+        {
+            DeleteSalaryResponse response = new DeleteSalaryResponse();
+
+            try
+            {
+                using (SqlConnection conn = ADO.GetConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_SALARY_LIST", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 4);
+                        cmd.Parameters.AddWithValue("@TS_ID", request.TS_ID);
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Salary deleted successfully";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = -1;
+                response.Message = "Error deleting salary: " + ex.Message;
+            }
+
+            return response;
+        }
 
     }
 }

@@ -93,4 +93,13 @@
         public int flag { get; set; }        
         public string Message { get; set; }
     }
+    public class DeleteSalaryRequest
+    {
+        public int TS_ID { get; set; }      
+    }
+    public class DeleteSalaryResponse
+    {
+        public int flag { get; set; }              
+        public string Message { get; set; }        
+    }
 }

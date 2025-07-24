@@ -107,7 +107,22 @@ namespace MicroApi.Controllers
             return response;
         }
 
-
+        [HttpPost]
+        [Route("delete")]
+        public DeleteSalaryResponse DeleteGeneratedSalary(DeleteSalaryRequest request)
+        {
+            DeleteSalaryResponse response = new DeleteSalaryResponse();
+            try
+            {
+                response = _SalaryService.DeleteGeneratedSalary(request);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
 
 
 
