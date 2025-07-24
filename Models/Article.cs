@@ -44,7 +44,7 @@
         public string PART_NO { get; set; }
         public string ALIAS_NO { get; set; }
         public int UNIT_ID { get; set; }
-        public string UnitCode { get; set; }
+        //public string? UnitCode { get; set; }
         public int ARTICLE_TYPE { get; set; }
         public string ARTICLE_TYPE_NAME { get; set; }
         public int CATEGORY_ID { get; set; }
