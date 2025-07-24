@@ -1,0 +1,93 @@
+﻿using System.Globalization;
+using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Mvc;
+
+namespace MicroApi.Models
+{
+    
+
+    //public class GetSalaryHead
+    //{
+    //    public string CODE { get; set; }
+    //    public string DESCRIPTION { get; set; }
+    //    public int HEAD_ID { get; set; }
+    //    public string PRESENT_AMOUNT { get; set; }
+    //}
+
+    //public class GetSalaryRevision
+    //{
+    //    public string EMP_CODE { get; set; }
+    //    public string PREV_REVISION_DATE { get; set; }
+    //    public List<GetSalaryHead> SALARY_HEAD { get; set; }
+    //}
+
+    //public class GetEmployeeDetailsResponse
+    //{
+    //    public string flag { get; set; }
+    //    public string message { get; set; }
+    //    public List<GetSalaryRevision> data { get; set; }
+    //}
+
+    //public class EmpDetail
+    //{
+    //    public int EMP_ID { get; set; }
+    //    public int UserID { get; set; }
+    //}
+
+    public class AdvanceLogListData
+    {
+        public int ID { get; set; }
+        public object ADV_NO { get; set; }
+        public object DATE { get; set; }
+        public object EMP_NO { get; set; }
+        public object EMP_NAME { get; set; }
+        public object ADV_TYPES { get; set; }
+        public object AMOUNT { get; set; }
+        public object REMARKS { get; set; }
+        public object STATUS { get; set; }
+    }
+
+    public class AdvanceLogListResponseData
+    {
+        public string flag { get; set; }
+        public string message { get; set; }
+        public List<AdvanceLogListData> data { get; set; }
+    }
+
+    public class saveAdvanceResponseData
+    {
+        public string flag { get; set; }
+        public string message { get; set; }
+    }
+
+    public class saveAdvanceData
+    {
+        public object ID { get; set; }
+
+        public object ADV_NO { get; set; }
+        public object EMP_ID { get; set; }
+        public object EMP_NAME { get; set; }
+        public object DATE { get; set; }
+        public object ADV_TYPE_ID { get; set; }
+        public object ADV_TYPE_NAME { get; set; }
+        public object ADVANCE_AMOUNT { get; set; }
+        public object REC_AMOUNT { get; set; }
+        public object REC_START_MONTH { get; set; }
+        public object REC_INSTALL_COUNT { get; set; }
+        public object REC_INSTALL_AMOUNT { get; set; }
+        public object RECOVERED_AMOUNT { get; set; }
+        public object REMARKS { get; set; }
+        public object STATUS { get; set; }
+        public object PAY_TRANS_ID { get; set; }
+        public object TRANS_ID { get; set; }
+
+    }
+
+
+    //public class saveRevisionDataResponse
+    //{
+    //    public string flag { get; set; }
+    //    public string message { get; set; }
+    //}
+
+}
