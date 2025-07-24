@@ -274,7 +274,8 @@ namespace MicroApi.DataLayer.Service
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_SALARY_DETAIL_ID", payDetailTable);
                         tvpParam.SqlDbType = SqlDbType.Structured;
                         tvpParam.TypeName = "UDT_SALARY_DETAIL_ID";
-                        cmd.Parameters.AddWithValue("@ACTION", 1);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@USER_ID", request.USER_ID);
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();

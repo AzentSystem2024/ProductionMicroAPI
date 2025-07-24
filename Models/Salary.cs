@@ -84,6 +84,8 @@
     }
        public class SalaryApprove
     {
+        public int COMPANY_ID { get; set; }
+        public int USER_ID { get; set; }
         public List<int> PAYDETAIL_ID { get; set; }
     }
     public class SalaryApproveResponse
