@@ -51,6 +51,7 @@
         public decimal OT_HOURS { get; set; }
         public decimal LESS_HOURS { get; set; }
         public decimal NET_AMOUNT { get; set; }
+        public string STATUS { get; set; }
         public List<SalaryHeadData> DATA { get; set; }
     }
 

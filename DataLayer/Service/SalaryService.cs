@@ -129,6 +129,7 @@ namespace MicroApi.DataLayer.Service
                                         OT_HOURS = Convert.ToDecimal(reader["NOT_HOURS"]),
                                         LESS_HOURS = Convert.ToDecimal(reader["LESS_HOURS"]),
                                         NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
+                                        STATUS = Convert.ToString(reader["STATUS"]),
                                         DATA = new List<SalaryHeadData>()
                                     };
                                 }
