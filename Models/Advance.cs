@@ -62,24 +62,24 @@ namespace MicroApi.Models
 
     public class saveAdvanceData
     {
-        public object ID { get; set; }
+        public int ID { get; set; }
 
-        public object ADV_NO { get; set; }
-        public object EMP_ID { get; set; }
-        public object EMP_NAME { get; set; }
-        public object DATE { get; set; }
-        public object ADV_TYPE_ID { get; set; }
-        public object ADV_TYPE_NAME { get; set; }
-        public object ADVANCE_AMOUNT { get; set; }
-        public object REC_AMOUNT { get; set; }
-        public object REC_START_MONTH { get; set; }
-        public object REC_INSTALL_COUNT { get; set; }
-        public object REC_INSTALL_AMOUNT { get; set; }
-        public object RECOVERED_AMOUNT { get; set; }
-        public object REMARKS { get; set; }
-        public object STATUS { get; set; }
-        public object PAY_TRANS_ID { get; set; }
-        public object TRANS_ID { get; set; }
+        public string ADV_NO { get; set; }
+        public int EMP_ID { get; set; }
+        public string EMP_NAME { get; set; }
+        public DateTime? DATE { get; set; }
+        public int? ADV_TYPE_ID { get; set; }
+        public string ADV_TYPE_NAME { get; set; }
+        public float? ADVANCE_AMOUNT { get; set; }
+        public float? REC_AMOUNT { get; set; }
+        public DateTime? REC_START_MONTH { get; set; }
+        public int? REC_INSTALL_COUNT { get; set; }
+        public float? REC_INSTALL_AMOUNT { get; set; }
+        public decimal RECOVERED_AMOUNT { get; set; }
+        public string REMARKS { get; set; }
+        public string STATUS { get; set; }
+        public int PAY_TRANS_ID { get; set; }
+        public int TRANS_ID { get; set; }
 
     }
 

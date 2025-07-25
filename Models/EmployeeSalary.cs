@@ -3,12 +3,12 @@
     public class EmployeeSalarySave
     {
         public int? ID { get; set; }
+        public int? EMP_ID { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
-        public string? EMP_CODE { get; set; }
         public decimal? SALARY { get; set; }
         public DateTime? EFFECT_FROM { get; set; }
-        public List<SalaryHeadDetail> Details { get; set; }              
+        public List<SalaryHeadDetail> Details { get; set; }
         //public bool? IS_INACTIVE { get; set; }
     }
     public class SalaryHeadDetail
