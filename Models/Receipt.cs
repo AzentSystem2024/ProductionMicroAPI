@@ -2,7 +2,7 @@
 {
     public class Receipt
     {
-     
+
         public int? TRANS_TYPE { get; set; }
         public string? REC_NO { get; set; }
         public string? REC_DATE { get; set; }
@@ -49,7 +49,7 @@
     {
         public int flag { get; set; }
         public string Message { get; set; }
-      
+
     }
     public class PendingInvoiceListResponse
     {
@@ -60,7 +60,7 @@
 
     public class PendingInvoiceItem
     {
-       // public int SL_NO { get; set; }
+        // public int SL_NO { get; set; }
         public string INVOICE_NO { get; set; }
         public string INVOICE_DATE { get; set; }
         public string REF_NO { get; set; }
@@ -150,7 +150,7 @@
         public double? SETTLED_TILL_DATE { get; set; }
         public double? PENDING_AMOUNT { get; set; }
     }
-   
+
     public class ReceiptSelect
     {
         public int TRANS_ID { get; set; }
@@ -175,7 +175,7 @@
 
     }
     public class ReceiptSelectResponse
-   {
+    {
         public int flag { get; set; }
         public string Message { get; set; }
         public List<ReceiptSelect> Data { get; set; }
@@ -190,5 +190,17 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int RECEIPT_NO { get; set; }
+    }
+    public class ReceiptLedgerList
+    {
+        public int HEAD_ID { get; set; }
+        public string HEAD_NAME { get; set; }
+        public int GROUP_ID { get; set; }
+    }
+    public class ReceiptLedgerListResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<ReceiptLedgerList> Data { get; set; }
     }
 }

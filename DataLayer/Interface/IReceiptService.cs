@@ -14,6 +14,7 @@ namespace MicroApi.DataLayer.Interface
         ReceiptResponse CommitReceipt(CommitReceiptRequest request);
         RecResponse GetReceiptNo();
         ReceiptResponse Delete(int id);
+        ReceiptLedgerListResponse GetLedgerList();
 
 
     }
