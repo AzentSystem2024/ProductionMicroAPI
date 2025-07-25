@@ -2,6 +2,17 @@
 {
     public class PurchaseInvoice
     {
+        public int ID { get; set; }
+        public string PURCH_NO { get; set; }
+        public DateTime PURCH_DATE { get; set; }
+        public int SUPP_ID { get; set; }
+        public int STORE_ID { get; set; }
+        public string STORE_NAME { get; set; }
+        public string SUPPPLIER_NAME { get; set; }
+        public float NET_AMOUNT { get; set; }
+        public string NARRATION { get; set; }
+        public string STATUS { get; set; }
+        public string PO_NO { get; set; }
     }
     public class PIDropdownInput
     {
@@ -136,7 +147,10 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public PurchHeader? Data { get; set; }
-        public List<PurchHeader>? PurchHeaders { get; set; }
-        public int? UserId { get; set; }
+        //public List<PurchHeader>? PurchHeaders { get; set; }
+        //public int? UserId { get; set; }
+        public List<PurchaseInvoice> PurchHeaders { get; set; }
+
     }
+
 }

@@ -778,22 +778,23 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
-        public List<PurchHeader> GetPurchaseInvoiceList(Int32 intUserID)
+        public List<PurchaseInvoice> GetPurchaseInvoiceList()
         {
-            List<PurchHeader> worksheetList = new List<PurchHeader>();
+            List<PurchaseInvoice> invoiceList = new List<PurchaseInvoice>();
             SqlConnection connection = ADO.GetConnection();
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = connection;
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_TB_PURCH";
-            cmd.Parameters.AddWithValue("@ACTION", 0);
+            cmd.Parameters.AddWithValue("@ACTION", 0);  
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
             da.Fill(tbl);
+
             foreach (DataRow dr in tbl.Rows)
             {
-                worksheetList.Add(new PurchHeader
+                invoiceList.Add(new PurchaseInvoice
                 {
                     ID = ADO.ToInt32(dr["ID"]),
                     PURCH_NO = ADO.ToString(dr["PURCH_NO"]),
@@ -806,12 +807,12 @@ namespace MicroApi.DataLayer.Service
                     NARRATION = ADO.ToString(dr["NARRATION"]),
                     STATUS = ADO.ToString(dr["STATUS"]),
                     PO_NO = ADO.ToString(dr["PO_NO"])
-
                 });
             }
-            connection.Close();
 
-            return worksheetList;
+            connection.Close();
+            return invoiceList;
         }
+
     }
 }

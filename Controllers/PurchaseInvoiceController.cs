@@ -183,15 +183,10 @@ namespace MicroApi.Controllers
         public PurchResponce List()
         {
             PurchResponce res = new PurchResponce();
-            List<PurchHeader> purchInvoice = new List<PurchHeader>();
 
             try
             {
-                string apiKey = "";
-                Int32 intUserID = 1;
-
-
-                purchInvoice = _PurchaseInvoiceService.GetPurchaseInvoiceList(intUserID);
+                List<PurchaseInvoice> purchInvoice = _PurchaseInvoiceService.GetPurchaseInvoiceList(); 
 
                 res.Flag = 1;
                 res.Message = "Success";
@@ -200,11 +195,13 @@ namespace MicroApi.Controllers
             catch (Exception ex)
             {
                 res.Flag = 0;
-                res.Message = ex.Message;
+                res.Message = "Error: " + ex.Message;
+                res.PurchHeaders = new List<PurchaseInvoice>();
             }
 
             return res;
         }
+
 
         [HttpPost]
         [Route("approve")]
