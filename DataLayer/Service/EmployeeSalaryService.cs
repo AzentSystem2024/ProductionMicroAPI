@@ -22,13 +22,13 @@ namespace MicroApi.DataLayer.Service
                 {
                     try
                     {
-                        // Fetch EMP_ID based on EMP_CODE
-                        int employeeId = 0;
-                        using (SqlCommand fetchCmd = new SqlCommand("SELECT ID FROM TB_EMPLOYEE WHERE EMP_CODE = @EMP_CODE", connection, transaction))
-                        {
-                            fetchCmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
-                            employeeId = (int)fetchCmd.ExecuteScalar();
-                        }
+                        //// Fetch EMP_ID based on EMP_CODE
+                        //int employeeId = 0;
+                        //using (SqlCommand fetchCmd = new SqlCommand("SELECT ID FROM TB_EMPLOYEE WHERE EMP_CODE = @EMP_CODE", connection, transaction))
+                        //{
+                        //    fetchCmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
+                        //    employeeId = (int)fetchCmd.ExecuteScalar();
+                        //}
 
                         // Insert each HEAD_ID detail as a new row in TB_EMPLOYEE_SALARY
                         foreach (var detail in salary.Details)
@@ -40,7 +40,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                                 cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
                                 cmd.Parameters.AddWithValue("@FIN_ID", salary.FIN_ID);
-                                cmd.Parameters.AddWithValue("@EMP_ID", employeeId); // Use the fetched EMP_ID
+                                cmd.Parameters.AddWithValue("@EMP_ID", salary.EMP_ID);
                                 cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
                                 cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
                                 cmd.Parameters.AddWithValue("@HEAD_PERCENT", detail.HEAD_PERCENT);
@@ -53,7 +53,7 @@ namespace MicroApi.DataLayer.Service
                         }
 
                         transaction.Commit();
-                        return employeeId;
+                        return salary.EMP_ID ?? 0;
                     }
                     catch (Exception ex)
                     {
@@ -78,17 +78,17 @@ namespace MicroApi.DataLayer.Service
                 {
                     try
                     {
-                        // Step 1: Get Employee ID using EMP_CODE
-                        int employeeId = 0;
-                        using (SqlCommand fetchCmd = new SqlCommand("SELECT ID FROM TB_EMPLOYEE WHERE EMP_CODE = @EMP_CODE", connection, transaction))
-                        {
-                            fetchCmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
-                            var result = fetchCmd.ExecuteScalar();
-                            if (result != null)
-                                employeeId = Convert.ToInt32(result);
-                            else
-                                throw new Exception("Employee not found.");
-                        }
+                        //// Step 1: Get Employee ID using EMP_CODE
+                        //int employeeId = 0;
+                        //using (SqlCommand fetchCmd = new SqlCommand("SELECT ID FROM TB_EMPLOYEE WHERE EMP_CODE = @EMP_CODE", connection, transaction))
+                        //{
+                        //    fetchCmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
+                        //    var result = fetchCmd.ExecuteScalar();
+                        //    if (result != null)
+                        //        employeeId = Convert.ToInt32(result);
+                        //    else
+                        //        throw new Exception("Employee not found.");
+                        //}
 
                         // Step 2: Prepare DataTable for UDT
                         DataTable headDetailsTable = new DataTable();
@@ -117,8 +117,8 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ID", salary.ID);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", salary.COMPANY_ID);
                             cmd.Parameters.AddWithValue("@FIN_ID", salary.FIN_ID);
-                            cmd.Parameters.AddWithValue("@EMP_ID", employeeId);
-                            cmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
+                            cmd.Parameters.AddWithValue("@EMP_ID", salary.EMP_ID);
+                            //cmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
                             cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
                             cmd.Parameters.AddWithValue("@EFFECT_FROM", salary.EFFECT_FROM);
                             cmd.Parameters.AddWithValue("@IS_INACTIVE", false);
@@ -132,7 +132,7 @@ namespace MicroApi.DataLayer.Service
                         }
 
                         transaction.Commit();
-                        return employeeId;
+                        return salary.EMP_ID ?? 0;
                     }
                     catch (Exception ex)
                     {
