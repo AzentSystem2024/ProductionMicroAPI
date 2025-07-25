@@ -12,6 +12,6 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Verify(PurchHeader purchHeader);
         public Int32 Approve(PurchHeader purchHeader);
         public bool Delete(int id);
-        public List<PurchHeader> GetPurchaseInvoiceList(Int32 intUserID);
+        public List<PurchaseInvoice> GetPurchaseInvoiceList();
     }
 }

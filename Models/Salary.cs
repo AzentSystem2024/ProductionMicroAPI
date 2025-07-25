@@ -25,6 +25,7 @@
         public string EMPLOYEE_NAME { get; set; }
         public decimal WORKED_DAYS { get; set; }
         public decimal NET_AMOUNT { get; set; }
+        public int TIMESHEET_ID { get; set; }
         public string STATUS { get; set; }
     }
     public class SalaryLookupResponse
