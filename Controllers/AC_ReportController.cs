@@ -52,5 +52,24 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost("articleproduction")]
+        public ArticleProductionResponse GetArticleProductionReport(ArticleProductionFilter request)
+        {
+            var res = new ArticleProductionResponse();
+            try
+            {
+                res = _ReportService.GetArticleProductionReport(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+
     }
 }

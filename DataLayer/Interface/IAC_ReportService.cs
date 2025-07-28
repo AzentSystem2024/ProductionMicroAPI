@@ -6,6 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         LedgerReportInitData GetInitData(int companyId);
         LedgerStatementResponse GetLedgerStatement(AC_Report request);
+        ArticleProductionResponse GetArticleProductionReport(ArticleProductionFilter request);
 
 
     }
