@@ -64,12 +64,12 @@ namespace MicroApi.Models
     {
         public int ID { get; set; }
 
-        public string ADV_NO { get; set; }
+        public string? ADV_NO { get; set; }
         public int EMP_ID { get; set; }
-        public string EMP_NAME { get; set; }
+        public string? EMP_NAME { get; set; }
         public DateTime? DATE { get; set; }
         public int? ADV_TYPE_ID { get; set; }
-        public string ADV_TYPE_NAME { get; set; }
+        public string? ADV_TYPE_NAME { get; set; }
         public float? ADVANCE_AMOUNT { get; set; }
         public float? REC_AMOUNT { get; set; }
         public DateTime? REC_START_MONTH { get; set; }

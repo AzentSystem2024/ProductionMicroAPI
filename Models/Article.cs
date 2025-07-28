@@ -48,7 +48,7 @@
         public int ARTICLE_TYPE { get; set; }
         public string? ARTICLE_TYPE_NAME { get; set; }
         public int CATEGORY_ID { get; set; }
-        public string CATEGORY_NAME { get; set; }
+        public string? CATEGORY_NAME { get; set; }
         public int BRAND_ID { get; set; }
         public string? BRAND_NAME { get; set; }
         public int NEXT_SERIAL { get; set; }
