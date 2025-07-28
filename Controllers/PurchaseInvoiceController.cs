@@ -112,11 +112,11 @@ namespace MicroApi.Controllers
             return res;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("select/{id:int}")]
-        public PurchResponce select(int id)
+        public PurchSelectResponce select(int id)
         {
-            PurchResponce res = new PurchResponce();
+            PurchSelectResponce res = new PurchSelectResponce();
             try
             {
 

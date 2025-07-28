@@ -152,5 +152,13 @@
         public List<PurchaseInvoice> PurchHeaders { get; set; }
 
     }
+    public class PurchSelectResponce
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public PurchHeader? Data { get; set; }
+        
+
+    }
 
 }

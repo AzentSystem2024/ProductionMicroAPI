@@ -264,6 +264,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("REC_INSTALL_COUNT", (object)adv.REC_INSTALL_COUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("REC_INSTALL_AMOUNT", (object)adv.REC_INSTALL_AMOUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("REMARKS", (object)adv.REMARKS ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PAY_HEAD_ID", adv.PAY_HEAD_ID);
 
                     cmd.ExecuteNonQuery();
                 }

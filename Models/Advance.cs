@@ -80,6 +80,7 @@ namespace MicroApi.Models
         public string STATUS { get; set; }
         public int PAY_TRANS_ID { get; set; }
         public int TRANS_ID { get; set; }
+        public int? PAY_HEAD_ID { get; set; }
 
     }
 

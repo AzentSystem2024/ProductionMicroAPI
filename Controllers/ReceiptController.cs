@@ -155,5 +155,24 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("ledgerlist")]
+        public ReceiptLedgerListResponse GetLedgerList()
+        {
+            ReceiptLedgerListResponse res = new ReceiptLedgerListResponse();
+
+            try
+            {
+                res = _receiptService.GetLedgerList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<ReceiptLedgerList>();
+            }
+
+            return res;
+        }
     }
 }

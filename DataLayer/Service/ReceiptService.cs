@@ -537,5 +537,58 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
+        public ReceiptLedgerListResponse GetLedgerList()
+        {
+            ReceiptLedgerListResponse response = new ReceiptLedgerListResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<ReceiptLedgerList>()
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_CUST_RECEIPT", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 6);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 27);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ReceiptLedgerList item = new ReceiptLedgerList
+                                {
+                                    HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
+                                    HEAD_NAME = reader["HEAD_NAME"]?.ToString(),
+                                    GROUP_ID = reader["GROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["GROUP_ID"]) : 0
+                                   
+                                };
+
+                                response.Data.Add(item);
+                            }
+
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = new List<ReceiptLedgerList>();
+            }
+
+            return response;
+        }
     }
 }
