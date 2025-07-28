@@ -75,11 +75,11 @@ namespace MicroApi.Models
         public DateTime? REC_START_MONTH { get; set; }
         public int? REC_INSTALL_COUNT { get; set; }
         public float? REC_INSTALL_AMOUNT { get; set; }
-        public decimal RECOVERED_AMOUNT { get; set; }
-        public string REMARKS { get; set; }
-        public string STATUS { get; set; }
-        public int PAY_TRANS_ID { get; set; }
-        public int TRANS_ID { get; set; }
+        public decimal? RECOVERED_AMOUNT { get; set; }
+        public string? REMARKS { get; set; }
+        public string? STATUS { get; set; }
+        public int? PAY_TRANS_ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
 
     }
