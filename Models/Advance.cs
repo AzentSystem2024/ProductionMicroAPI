@@ -64,22 +64,22 @@ namespace MicroApi.Models
     {
         public int ID { get; set; }
 
-        public string ADV_NO { get; set; }
+        public string? ADV_NO { get; set; }
         public int EMP_ID { get; set; }
-        public string EMP_NAME { get; set; }
+        public string? EMP_NAME { get; set; }
         public DateTime? DATE { get; set; }
         public int? ADV_TYPE_ID { get; set; }
-        public string ADV_TYPE_NAME { get; set; }
+        public string? ADV_TYPE_NAME { get; set; }
         public float? ADVANCE_AMOUNT { get; set; }
         public float? REC_AMOUNT { get; set; }
         public DateTime? REC_START_MONTH { get; set; }
         public int? REC_INSTALL_COUNT { get; set; }
         public float? REC_INSTALL_AMOUNT { get; set; }
-        public decimal RECOVERED_AMOUNT { get; set; }
-        public string REMARKS { get; set; }
-        public string STATUS { get; set; }
-        public int PAY_TRANS_ID { get; set; }
-        public int TRANS_ID { get; set; }
+        public decimal? RECOVERED_AMOUNT { get; set; }
+        public string? REMARKS { get; set; }
+        public string? STATUS { get; set; }
+        public int? PAY_TRANS_ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
 
     }
