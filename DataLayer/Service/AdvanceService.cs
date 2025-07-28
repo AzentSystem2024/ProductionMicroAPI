@@ -100,7 +100,10 @@ namespace MicroApi.DataLayer.Services
                 salheader.HEAD_NAME, 
                 emp.EMP_NAME, 
                 trans.NARRATION AS REMARKS, 
-                stat.STATUS_DESC AS STATUS
+                stat.STATUS_DESC AS STATUS,
+                trans.CHEQUE_NO,
+	            trans.CHEQUE_DATE,
+	            trans.PAY_HEAD_ID
             FROM TB_PAY_ADVANCE adv
             LEFT JOIN TB_AC_TRANS_HEADER trans ON adv.TRANS_ID = trans.TRANS_ID
             LEFT JOIN TB_STATUS stat ON trans.TRANS_STATUS = stat.ID
@@ -130,6 +133,9 @@ namespace MicroApi.DataLayer.Services
                     rev.PAY_TRANS_ID = ADO.ToInt32(dr["PAY_TRANS_ID"]);
                     rev.TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]);
                     rev.STATUS = ADO.ToString(dr["STATUS"]);
+                    rev.CHEQUE_NO = ADO.ToString(dr["CHEQUE_NO"]);
+                    rev.CHEQUE_DATE = ADO.ToString(dr["CHEQUE_DATE"]);
+                    rev.PAY_HEAD_ID = ADO.ToInt32(dr["PAY_HEAD_ID"]);
                 }
             }
             catch (Exception ex)
@@ -164,6 +170,9 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("REC_INSTALL_COUNT", (object)adv.REC_INSTALL_COUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("REC_INSTALL_AMOUNT", (object)adv.REC_INSTALL_AMOUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("REMARKS", (object)adv.REMARKS ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PAY_HEAD_ID", adv.PAY_HEAD_ID);
+                    cmd.Parameters.AddWithValue("CHEQUE_NO", (object)adv.CHEQUE_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("CHEQUE_DATE", (object)adv.CHEQUE_DATE ?? DBNull.Value);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -265,7 +274,8 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("REC_INSTALL_AMOUNT", (object)adv.REC_INSTALL_AMOUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("REMARKS", (object)adv.REMARKS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@PAY_HEAD_ID", adv.PAY_HEAD_ID);
-
+                    cmd.Parameters.AddWithValue("CHEQUE_NO", (object)adv.CHEQUE_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("CHEQUE_DATE", (object)adv.CHEQUE_DATE ?? DBNull.Value);
                     cmd.ExecuteNonQuery();
                 }
 

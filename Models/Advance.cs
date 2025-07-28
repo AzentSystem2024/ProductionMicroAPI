@@ -81,7 +81,8 @@ namespace MicroApi.Models
         public int? PAY_TRANS_ID { get; set; }
         public int? TRANS_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-
+        public string? CHEQUE_NO { get; set; }
+        public string? CHEQUE_DATE { get; set; }
     }
 
 
