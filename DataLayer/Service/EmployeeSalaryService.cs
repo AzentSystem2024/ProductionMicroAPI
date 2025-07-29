@@ -405,7 +405,7 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public bool DeleteEmployeeSalary(int id)
+        public bool DeleteEmployeeSalary(int id, string effectFrom)
         {
             try
             {
@@ -419,6 +419,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 3);
                         cmd.Parameters.AddWithValue("@EMP_ID", id);
+                        cmd.Parameters.AddWithValue("@EFFECT_FROM", effectFrom);
 
                         cmd.ExecuteNonQuery();
                         return true;

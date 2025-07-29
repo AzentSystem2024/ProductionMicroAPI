@@ -89,13 +89,13 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("delete/{id:int}")]
-        public EmployeeListResponse Delete(int id)
+        public EmployeeListResponse Delete(int id, string effectFrom)
         {
             EmployeeListResponse res = new EmployeeListResponse();
 
             try
             {
-                _EmployeeSalaryService.DeleteEmployeeSalary(id);
+                _EmployeeSalaryService.DeleteEmployeeSalary(id, effectFrom);
                  _EmployeeSalaryService.GetItem(id);
             }
             catch (Exception ex)
