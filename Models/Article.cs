@@ -1,12 +1,13 @@
-﻿namespace MicroApi.Models
+﻿using System.Drawing;
+
+namespace MicroApi.Models
 {
     public class Article
     {
         public string ART_NO { get; set; }
-        public string ORDER_NO { get; set; }
+       // public string ORDER_NO { get; set; }
         public string DESCRIPTION { get; set; }
         public string COLOR { get; set; }
-        public string SIZE { get; set; }
         public float PRICE { get; set; }
         public int PACK_QTY { get; set; }
         public string PART_NO { get; set; }
@@ -21,6 +22,7 @@
         public int SUPPLIER_ID { get; set; }
         public bool IS_COMPONENT { get; set; }
         public int? COMPONENT_ARTICLE_ID { get; set; }
+        public List<Sizes> Sizes { get; set; }
     }
 
     public class ArticleResponse
@@ -34,11 +36,10 @@
     {
         public long ID { get; set; }
         public string ART_NO { get; set; }
-        public string ORDER_NO { get; set; }
+        //public string ORDER_NO { get; set; }
         public string LAST_ORDER_NO { get; set; }
         public string DESCRIPTION { get; set; }
         public string COLOR { get; set; }
-        public string SIZE { get; set; }
         public float PRICE { get; set; }
         public int PACK_QTY { get; set; }
         public string PART_NO { get; set; }
@@ -51,7 +52,7 @@
         public string? CATEGORY_NAME { get; set; }
         public int BRAND_ID { get; set; }
         public string? BRAND_NAME { get; set; }
-        public int NEXT_SERIAL { get; set; }
+        public int? NEXT_SERIAL { get; set; }
         public string IMAGE_NAME { get; set; }
         public int NEW_ARRIVAL_DAYS { get; set; }
         public bool IS_STOPPED { get; set; }
@@ -59,10 +60,11 @@
         public string? SupplierName { get; set; }
         public bool IS_COMPONENT { get; set; }
         public int? COMPONENT_ARTICLE_ID { get; set; }
-        public string ComponentArticleNo { get; set; }
-        public string ComponentArticleName { get; set; }
+        public string? ComponentArticleNo { get; set; }
+        public string? ComponentArticleName { get; set; }
         public DateTime CreatedDate { get; set; }
-        public List<Sizes> Sizes { get; set; }
+        public List<Sizes> SIZES { get; set; }
+ 
     }
 
 
@@ -74,9 +76,8 @@
     }
     public class Sizes
     {
-        public int ID { get; set; }
-        public string Size { get; set; }
-        public string OrderNo { get; set; }
+        public int SizeValue { get; set; }
+        public string OrderNo { get; set; } // Optional; filled during select
     }
     public class ArticleSelectRequest
     {
@@ -84,7 +85,7 @@
         public string ArtNo { get; set; }
         public string Color { get; set; }
         public int CategoryID { get; set; }
-        public decimal Price { get; set; }
+        public float Price { get; set; }
     }
 
 

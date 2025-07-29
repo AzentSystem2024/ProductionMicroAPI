@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Interface
     {
         ArticleResponse Insert(Article article);
         ArticleResponse Update(ArticleUpdate article);
-        ArticleResponse GetArticleById(int id, int Unit_id, string Art_no, string Color, int CategoryId, float Price);
+        ArticleResponse GetArticleById(ArticleSelectRequest request);
         ArticleListResponse GetLogList();
         ArticleResponse DeleteArticleData(int id);
         string GetLastOrderNoByUnitId(int unitId);
