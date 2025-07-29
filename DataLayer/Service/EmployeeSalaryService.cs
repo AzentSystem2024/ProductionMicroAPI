@@ -5,12 +5,34 @@ using System.ComponentModel.Design;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Transactions;
 
 namespace MicroApi.DataLayer.Service
 {
     public class EmployeeSalaryService:IEmployeeSalaryService
     {
+        private static object ParseDate(string? dateStr)
+        {
+            if (string.IsNullOrWhiteSpace(dateStr))
+                return DBNull.Value;
+
+            string[] formats = new[]
+            {
+            "dd-MM-yyyy HH:mm:ss",
+            "dd-MM-yyyy",
+            "yyyy-MM-ddTHH:mm:ss.fffZ",
+            "yyyy-MM-ddTHH:mm:ss",
+            "yyyy-MM-dd",
+            "MM/dd/yyyy HH:mm:ss",
+            "MM/dd/yyyy"
+            };
+
+            if (DateTime.TryParseExact(dateStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+                return dt;
+
+            return DBNull.Value;
+        }
         public Int32 SaveData(EmployeeSalarySave salary)
         {
             using (SqlConnection connection = ADO.GetConnection())
@@ -45,7 +67,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@HEAD_ID", detail.HEAD_ID);
                                 cmd.Parameters.AddWithValue("@HEAD_PERCENT", detail.HEAD_PERCENT);
                                 cmd.Parameters.AddWithValue("@HEAD_AMOUNT", detail.HEAD_AMOUNT);
-                                cmd.Parameters.AddWithValue("@EFFECT_FROM", salary.EFFECT_FROM);
+                                cmd.Parameters.AddWithValue("@EFFECT_FROM", ParseDate(salary.EFFECT_FROM));
                                 cmd.Parameters.AddWithValue("@IS_INACTIVE", detail.IS_INACTIVE);
 
                                 cmd.ExecuteNonQuery();
@@ -120,7 +142,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@EMP_ID", salary.EMP_ID);
                             //cmd.Parameters.AddWithValue("@EMP_CODE", salary.EMP_CODE);
                             cmd.Parameters.AddWithValue("@SALARY", salary.SALARY);
-                            cmd.Parameters.AddWithValue("@EFFECT_FROM", salary.EFFECT_FROM);
+                            cmd.Parameters.AddWithValue("@EFFECT_FROM", ParseDate(salary.EFFECT_FROM));
                             cmd.Parameters.AddWithValue("@IS_INACTIVE", false);
 
                             // TVP parameter
@@ -175,7 +197,7 @@ namespace MicroApi.DataLayer.Service
                                     COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : null,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? Convert.ToString(reader["EMP_NAME"]) : null,
-                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : null,
+                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToString(reader["EFFECT_FROM"]) : null,
                                     DESG_NAME = reader["Designation"] != DBNull.Value ? Convert.ToString(reader["Designation"]) : null,
                                     SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : (decimal?)null,
                                     Details = new List<SalaryHeadDetail>()
@@ -293,7 +315,7 @@ namespace MicroApi.DataLayer.Service
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : null,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? Convert.ToString(reader["EMP_NAME"]) : null,
                                     DESG_NAME = reader["Designation"] != DBNull.Value ? Convert.ToString(reader["Designation"]) : null,
-                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : null,
+                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToString(reader["EFFECT_FROM"]) : null,
                                     SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : 0,
                                     Details = new List<SalaryHeadDetail>()
                                 };
@@ -439,7 +461,7 @@ namespace MicroApi.DataLayer.Service
                                     DESG_NAME = reader["Designation"] != DBNull.Value ? reader["Designation"].ToString() : string.Empty,
                                     COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                     SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : 0,
-                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["EFFECT_FROM"]) : (DateTime?)null
+                                    EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToString(reader["EFFECT_FROM"]) : null
                                 };
                                 response.Data.Add(item);
                             }

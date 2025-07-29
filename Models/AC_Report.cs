@@ -66,5 +66,29 @@
         public string message { get; set; }
         public List<ArticleProductionItem> data { get; set; }
     }
+    public class BoxProductionFilter
+    {
+        public DateTime DATE_FROM { get; set; } = DateTime.Today;
+        public DateTime DATE_TO { get; set; } = DateTime.Today;
+        public string COMPANY_ID { get; set; }
+    }
+
+    public class BoxProductionItem
+    {
+        public string ART_NO { get; set; }
+        public string COLOR { get; set; }
+        public string CATEGORY { get; set; }
+        public string BRAND { get; set; }
+        public string SIZE { get; set; }
+        public string PRODUCTION_UNIT { get; set; }
+        public int QUANTITY { get; set; }
+    }
+
+    public class BoxProductionResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<BoxProductionItem> data { get; set; }
+    }
 
 }

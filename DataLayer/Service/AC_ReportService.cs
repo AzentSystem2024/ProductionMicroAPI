@@ -150,6 +150,57 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        public BoxProductionResponse GetBoxProductionReport(BoxProductionFilter request)
+        {
+            var response = new BoxProductionResponse
+            {
+                data = new List<BoxProductionItem>()
+            };
+
+            try
+            {
+                request.DATE_FROM = request.DATE_FROM.Date;
+                request.DATE_TO = request.DATE_TO.Date.AddDays(1).AddMilliseconds(-3);
+
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_BOX_PRODUCTION", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            response.data.Add(new BoxProductionItem
+                            {
+                                ART_NO = rdr["ART_NO"].ToString(),
+                                COLOR = rdr["COLOR"].ToString(),
+                                CATEGORY = rdr["CATEGORY"].ToString(),
+                                BRAND = rdr["BRAND"].ToString(),
+                                SIZE = rdr["SIZE"].ToString(),
+                                PRODUCTION_UNIT = rdr["UNIT"].ToString(),
+                                QUANTITY = Convert.ToInt32(rdr["QUANTITY"])
+                            });
+                        }
+                    }
+
+                    response.flag = 1;
+                    response.message = "Success";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = ex.Message;
+            }
+
+            return response;
+        }
+
 
     }
 }
