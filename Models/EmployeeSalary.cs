@@ -67,11 +67,11 @@
         public string Message { get; set; }
         public List<EmployeeSalarySettingsList> Data { get; set; }
     }
-    public class EmployeeSalaryRequest
-    {
-        public int EMP_ID { get; set; }
-        public int COMPANY_ID { get; set; }
-    }
+    //public class EmployeeSalaryRequest
+    //{
+    //    public int EMP_ID { get; set; }
+    //    public int COMPANY_ID { get; set; }
+    //}
     public class EmployeeSalaryFilterRequest
     {
         public int CompanyId { get; set; }
