@@ -40,7 +40,8 @@ namespace MicroApi.DataLayer.Service
                                     LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : (decimal?)null,
-                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : (decimal?)null
+                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : (decimal?)null,
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : null
                                 });
                             }
 
@@ -69,6 +70,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+
 
         public OBResponse Insert(AcOpeningBalanceInsertRequest request)
         {
@@ -146,7 +148,38 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        public OBResponse CommitOpeningBalance(OBCommitRequest request)
+        {
+            OBResponse response = new OBResponse();
 
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand("SP_AC_OPENING_BALANCE", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 2); 
+                    cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value); 
+                    cmd.Parameters.AddWithValue("@FIN_ID", DBNull.Value);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    response.flag = 1;
+                    response.Message = "Committed successfully";
+                    response.Data = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+
+            return response;
+        }
 
     }
 }

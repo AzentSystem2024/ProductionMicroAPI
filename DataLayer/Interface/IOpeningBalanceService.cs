@@ -6,6 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         OBResponse GetopeningBalance(OBRequest request);
         OBResponse Insert(AcOpeningBalanceInsertRequest request);
+        OBResponse CommitOpeningBalance(OBCommitRequest request);
 
     }
 }

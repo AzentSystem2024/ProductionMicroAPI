@@ -29,6 +29,7 @@
         public string? LEDGER_NAME { get; set; }
         public decimal? DEBIT_AMOUNT { get; set; }
         public decimal? CREDIT_AMOUNT { get; set; }
+        public int? TRANS_ID { get; set; }
     }
     public class OBRequest
     {
@@ -41,5 +42,9 @@
         public string Message { get; set; }
         public object Data { get; set; }
 
+    }
+    public class OBCommitRequest
+    {
+        public int TRANS_ID { get; set; }
     }
 }

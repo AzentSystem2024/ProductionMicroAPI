@@ -17,26 +17,44 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("save")]
-        public PayTimeResponse Save(PayTimeEntry payData)
+        public PayTimeResponse Save(PayTimeEntryInsert request)
         {
             PayTimeResponse res = new PayTimeResponse();
 
             try
             {
 
-                _PayTimeEntryService.Save(payData);
-
-                res.flag = "1";
-                res.message = "Success";
+                res = _PayTimeEntryService.Save(request);
+                               
 
             }
             catch (Exception ex)
             {
-                res.flag = "0";
+                res.flag = 0;
                 res.message = ex.Message;
             }
 
             return res;
         }
+        [HttpPost]
+        [Route("select")]
+        public PayTimeSelectResponse GetPayTimeEntry(PayTimeEntryRequest request)
+        {
+            PayTimeSelectResponse res = new PayTimeSelectResponse();
+
+            try
+            {
+                res = _PayTimeEntryService.GetPayTimeEntry(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = "Error: " + ex.Message;
+                res.data = null;
+            }
+
+            return res;
+        }
+
     }
 }
