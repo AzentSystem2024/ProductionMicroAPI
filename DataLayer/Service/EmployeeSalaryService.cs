@@ -246,6 +246,7 @@ namespace MicroApi.DataLayer.Service
                                 EmployeeSalaryUpdate defaultEmployeeSalaryUpdate = new EmployeeSalaryUpdate
                                 {
                                     ID = null,
+                                    BATCH_ID = 0,
                                     COMPANY_ID = null,
                                     EMP_CODE = null,
                                     EMP_NAME = null,
