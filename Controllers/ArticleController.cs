@@ -75,7 +75,7 @@ namespace MicroApi.Controllers
             ArticleListResponse res = new ArticleListResponse();
             try
             {
-                res = _articleService.GetLogList();
+                res = _articleService.GetArticleList();
             }
             catch (Exception ex)
             {

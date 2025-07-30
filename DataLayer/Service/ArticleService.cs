@@ -241,9 +241,89 @@ namespace MicroApi.Service
             return res;
         }
 
-        public ArticleListResponse GetLogList()
+        //public ArticleListResponse GetLogList()
+        //{
+        //    ArticleListResponse res = new ArticleListResponse();
+        //    try
+        //    {
+        //        using (var connection = ADO.GetConnection())
+        //        {
+        //            if (connection.State == ConnectionState.Closed)
+        //                connection.Open();
+
+        //            using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
+        //            {
+        //                cmd.CommandType = CommandType.StoredProcedure;
+        //                cmd.Parameters.AddWithValue("@ACTION", 0);
+
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    res.Data = MapArticles(reader).ToList();
+        //                    res.flag = 1;
+        //                    res.Message = "Success";
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = 0;
+        //        res.Message = "Error: " + ex.Message;
+        //        res.Data = null;
+        //    }
+        //    return res;
+        //}
+
+
+        //private IEnumerable<ArticleUpdate> MapArticles(SqlDataReader reader)
+        //{
+        //    while (reader.Read())
+        //    {
+        //        var articleUpdate = new ArticleUpdate
+        //        {
+        //            ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
+        //            ART_NO = reader["ART_NO"]?.ToString(),
+        //            DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+        //            COLOR = reader["COLOR"]?.ToString(),
+        //            PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
+        //            PACK_QTY = reader["PACK_QTY"] != DBNull.Value ? Convert.ToInt32(reader["PACK_QTY"]) : 0,
+        //            PART_NO = reader["PART_NO"]?.ToString(),
+        //            ALIAS_NO = reader["ALIAS_NO"]?.ToString(),
+        //            UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
+        //            ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
+        //            ARTICLE_TYPE_NAME = reader["ARTICLE_TYPE_NAME"]?.ToString(),
+        //            CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
+        //            CATEGORY_NAME = reader["CATEGORY_NAME"]?.ToString(),
+        //            BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
+        //            BRAND_NAME = reader["BRAND_NAME"]?.ToString(),
+        //            NEW_ARRIVAL_DAYS = reader["NEW_ARRIVAL_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NEW_ARRIVAL_DAYS"]) : 0,
+        //            IS_STOPPED = reader["IS_STOPPED"] != DBNull.Value && Convert.ToBoolean(reader["IS_STOPPED"]),
+        //            IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
+        //            ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
+        //            ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString()
+        //        };
+
+        //        if (reader["SIZES"] != DBNull.Value)
+        //        {
+        //            var sizesJson = reader["SIZES"].ToString();
+        //            try
+        //            {
+        //                articleUpdate.SIZES = JsonConvert.DeserializeObject<List<Sizes>>(sizesJson);
+        //            }
+        //            catch
+        //            {
+        //                articleUpdate.SIZES = new List<Sizes>(); // fallback
+        //            }
+        //        }
+
+        //        yield return articleUpdate;
+        //    }
+        //}
+        public ArticleListResponse GetArticleList()
         {
             ArticleListResponse res = new ArticleListResponse();
+            res.Data = new List<ArticleUpdate>();
+
             try
             {
                 using (var connection = ADO.GetConnection())
@@ -254,11 +334,71 @@ namespace MicroApi.Service
                     using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.CommandTimeout = 300; // Set timeout to 5 minutes
+
+                        cmd.Parameters.AddWithValue("@ACTION", 0); // List
 
                         using (var reader = cmd.ExecuteReader())
                         {
-                            res.Data = MapArticles(reader).ToList();
+                            var articles = new List<ArticleUpdate>();
+
+                            // Step 1: Read article data
+                            while (reader.Read())
+                            {
+                                var article = new ArticleUpdate
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
+                                    ART_NO = reader["ART_NO"]?.ToString(),
+                                    UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
+                                    COLOR = reader["COLOR"]?.ToString(),
+                                    CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
+                                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
+                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                    ARTICLE_TYPE_NAME = reader["ARTICLE_TYPE_NAME"]?.ToString(),
+                                    CATEGORY_NAME = reader["CATEGORY_NAME"]?.ToString(),
+                                    BRAND_NAME = reader["BRAND_NAME"]?.ToString(),
+                                    IS_STOPPED = reader["IS_STOPPED"] != DBNull.Value && Convert.ToBoolean(reader["IS_STOPPED"]),
+                                    IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
+                                    ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
+                                    ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
+                                    SIZES = new List<Sizes>()
+                                };
+
+                                articles.Add(article);
+                            }
+
+                            // Step 2: Read sizes (second result set)
+                            if (reader.NextResult())
+                            {
+                                while (reader.Read())
+                                {
+                                    var size = new Sizes
+                                    {
+                                        SizeValue = reader["SizeValue"] != DBNull.Value ? Convert.ToInt32(reader["SizeValue"]) : 0,
+                                        OrderNo = reader["ORDER_NO"]?.ToString()
+                                    };
+
+                                    // Identify which article this size belongs to
+                                    string artNo = reader["ART_NO"]?.ToString();
+                                    string color = reader["COLOR"]?.ToString();
+                                    int unitId = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0;
+                                    int catId = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0;
+                                    float price = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0;
+
+                                    var match = articles.FirstOrDefault(a =>
+                                        a.ART_NO == artNo &&
+                                        a.UNIT_ID == unitId &&
+                                        a.COLOR == color &&
+                                        a.CATEGORY_ID == catId &&
+                                        a.PRICE == price
+                                    );
+
+                                    if (match != null)
+                                        match.SIZES.Add(size);
+                                }
+                            }
+
+                            res.Data = articles;
                             res.flag = 1;
                             res.Message = "Success";
                         }
@@ -271,46 +411,10 @@ namespace MicroApi.Service
                 res.Message = "Error: " + ex.Message;
                 res.Data = null;
             }
+
             return res;
         }
 
-        private IEnumerable<ArticleUpdate> MapArticles(SqlDataReader reader)
-        {
-            while (reader.Read())
-            {
-                var articleUpdate = new ArticleUpdate
-                {
-                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
-                    ART_NO = reader["ART_NO"] != DBNull.Value ? reader["ART_NO"].ToString() : string.Empty,
-                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
-                    COLOR = reader["COLOR"] != DBNull.Value ? reader["COLOR"].ToString() : string.Empty,
-                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
-                    PACK_QTY = reader["PACK_QTY"] != DBNull.Value ? Convert.ToInt32(reader["PACK_QTY"]) : 0,
-                    PART_NO = reader["PART_NO"] != DBNull.Value ? reader["PART_NO"].ToString() : string.Empty,
-                    ALIAS_NO = reader["ALIAS_NO"] != DBNull.Value ? reader["ALIAS_NO"].ToString() : string.Empty,
-                    UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                    ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
-                    ARTICLE_TYPE_NAME = reader["ARTICLE_TYPE_NAME"] != DBNull.Value ? reader["ARTICLE_TYPE_NAME"].ToString() : string.Empty,
-                    CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
-                    CATEGORY_NAME = reader["CATEGORY_NAME"] != DBNull.Value ? reader["CATEGORY_NAME"].ToString() : string.Empty,
-                    BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
-                    BRAND_NAME = reader["BRAND_NAME"] != DBNull.Value ? reader["BRAND_NAME"].ToString() : string.Empty,
-                    NEW_ARRIVAL_DAYS = reader["NEW_ARRIVAL_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NEW_ARRIVAL_DAYS"]) : 0,
-                    IS_STOPPED = reader["IS_STOPPED"] != DBNull.Value && Convert.ToBoolean(reader["IS_STOPPED"]),
-                    IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
-                    ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NO"].ToString() : string.Empty,
-                    ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"] != DBNull.Value ? reader["COMPONENT_ARTICLE_NAME"].ToString() : string.Empty
-                };
-
-                if (reader["SIZES"] != DBNull.Value)
-                {
-                    var sizesJson = reader["SIZES"].ToString();
-                    articleUpdate.SIZES = JsonConvert.DeserializeObject<List<Sizes>>(sizesJson);
-                }
-
-                yield return articleUpdate;
-            }
-        }
 
 
 

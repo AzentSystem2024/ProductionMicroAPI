@@ -87,6 +87,8 @@ namespace MicroApi.Models
         public int CategoryID { get; set; }
         public float Price { get; set; }
     }
+    
+
 
 
 }
