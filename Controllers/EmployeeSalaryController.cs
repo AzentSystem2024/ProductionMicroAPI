@@ -16,11 +16,11 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public IActionResult List([FromBody] EmployeeSalaryRequest request)
+        public IActionResult List(int BATCHID)
         {
             try
             {
-                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID, request.COMPANY_ID);
+                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(BATCHID);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -88,22 +88,27 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("delete/{id:int}")]
-        public EmployeeListResponse Delete(int id, string effectFrom)
+        [Route("delete")]
+        public EmployeeListResponse Delete(int BATCHID)
         {
             EmployeeListResponse res = new EmployeeListResponse();
 
             try
             {
-                _EmployeeSalaryService.DeleteEmployeeSalary(id, effectFrom);
-                 _EmployeeSalaryService.GetItem(id);
+                _EmployeeSalaryService.DeleteEmployeeSalary(BATCHID);
+                //_EmployeeSalaryService.GetItem(id);
+                res.flag = 1;
+                res.Message = "Deleted successfully";
             }
             catch (Exception ex)
             {
-               
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+
             }
             return res;
         }
+
         [HttpPost]
         [Route("ListSalarySettings")]
         public EmployeeSalarySettingsListResponse ListSalarySettings([FromBody] EmployeeSalaryFilterRequest request)

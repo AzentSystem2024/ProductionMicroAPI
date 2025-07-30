@@ -168,7 +168,7 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public EmployeeListResponse GetAllEmployeeSalaries(int EMPID, int COMPANYID)
+        public EmployeeListResponse GetAllEmployeeSalaries(int BATCHID)
         {
             EmployeeListResponse response = new EmployeeListResponse { Data = new List<EmployeeSalaryUpdate>() };
 
@@ -184,8 +184,8 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 8);
-                        cmd.Parameters.AddWithValue("@EMP_ID", EMPID);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", COMPANYID);
+                        cmd.Parameters.AddWithValue("@BATCH_ID", BATCHID);
+                        //cmd.Parameters.AddWithValue("@COMPANY_ID", COMPANYID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -244,8 +244,8 @@ namespace MicroApi.DataLayer.Service
                             {
                                 EmployeeSalaryUpdate defaultEmployeeSalaryUpdate = new EmployeeSalaryUpdate
                                 {
-                                    ID = EMPID,
-                                    COMPANY_ID = COMPANYID,
+                                    ID = null,
+                                    COMPANY_ID = null,
                                     EMP_CODE = null,
                                     EMP_NAME = null,
                                     DESG_NAME = null,
@@ -302,7 +302,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 7);
-                        cmd.Parameters.AddWithValue("@EMP_ID", id);
+                        cmd.Parameters.AddWithValue("@BATCH_ID", id);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -405,7 +405,7 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public bool DeleteEmployeeSalary(int id, string effectFrom)
+        public bool DeleteEmployeeSalary(int BATCHID)
         {
             try
             {
@@ -418,8 +418,8 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 3);
-                        cmd.Parameters.AddWithValue("@EMP_ID", id);
-                        cmd.Parameters.AddWithValue("@EFFECT_FROM", effectFrom);
+                        cmd.Parameters.AddWithValue("@BATCH_ID", BATCHID);
+                 
 
                         cmd.ExecuteNonQuery();
                         return true;
