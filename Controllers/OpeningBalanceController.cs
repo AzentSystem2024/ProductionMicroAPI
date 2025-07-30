@@ -49,7 +49,26 @@ namespace MicroApi.Controllers
 
                 return res;
         }
+        [HttpPost]
+        [Route("commit")]
+        public OBResponse CommitOpeningBalance(OBCommitRequest request)
+        {
+            OBResponse res = new OBResponse();
 
+            try
+            {
+                res = _OpeningService.CommitOpeningBalance(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = null;
+            }
 
+            return res;
         }
+
+
     }
+}

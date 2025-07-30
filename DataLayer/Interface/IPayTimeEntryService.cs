@@ -4,6 +4,8 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IPayTimeEntryService
     {
-        public PayTimeResponse Save(PayTimeEntry payData);
+        public PayTimeResponse Save(PayTimeEntryInsert request);
+        PayTimeSelectResponse GetPayTimeEntry(PayTimeEntryRequest request);
+
     }
 }
