@@ -459,6 +459,7 @@ namespace MicroApi.DataLayer.Service
                                 var item = new EmployeeSalarySettingsList
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    BATCH_ID = reader["BATCH_ID"] != DBNull.Value ? Convert.ToInt32(reader["BATCH_ID"]) : (int?)null,
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? reader["EMP_CODE"].ToString() : string.Empty,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? reader["EMP_NAME"].ToString() : string.Empty,
                                     DESG_NAME = reader["Designation"] != DBNull.Value ? reader["Designation"].ToString() : string.Empty,

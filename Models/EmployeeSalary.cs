@@ -54,6 +54,7 @@
     public class EmployeeSalarySettingsList
     {
         public int? ID { get; set; }
+        public int? BATCH_ID { get; set; }
         public int? COMPANY_ID { get; set; }
         public string EMP_CODE { get; set; }
         public string EMP_NAME { get; set; }
