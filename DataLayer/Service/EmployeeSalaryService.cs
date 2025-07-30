@@ -194,6 +194,7 @@ namespace MicroApi.DataLayer.Service
                                 EmployeeSalaryUpdate employeeSalaryUpdate = new EmployeeSalaryUpdate
                                 {
                                     ID = reader["EmployeeID"] != DBNull.Value ? Convert.ToInt32(reader["EmployeeID"]) : (int?)null,
+                                    BATCH_ID = reader["BATCH_ID"] != DBNull.Value ? Convert.ToInt32(reader["BATCH_ID"]) : (int?)null,
                                     COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : null,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? Convert.ToString(reader["EMP_NAME"]) : null,
@@ -311,6 +312,7 @@ namespace MicroApi.DataLayer.Service
                                 EmployeeSalaryUpdate employeeSalaryUpdate = new EmployeeSalaryUpdate
                                 {
                                     ID = reader["EmployeeID"] != DBNull.Value ? Convert.ToInt32(reader["EmployeeID"]) : (int?)null,
+                                    BATCH_ID = reader["BATCH_ID"] != DBNull.Value ? Convert.ToInt32(reader["BATCH_ID"]) : (int?)null,
                                     COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : null,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? Convert.ToString(reader["EMP_NAME"]) : null,
