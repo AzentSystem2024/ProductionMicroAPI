@@ -89,13 +89,13 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("delete")]
-        public EmployeeListResponse Delete([FromBody] EmployeeSalarySelectRequest request)
+        public EmployeeListResponse Delete(int batchId)
         {
             EmployeeListResponse res = new EmployeeListResponse();
 
             try
             {
-                _EmployeeSalaryService.DeleteEmployeeSalary(request.EMP_ID,request.EFFECT_FROM);
+                _EmployeeSalaryService.DeleteEmployeeSalary(batchId);
                 //_EmployeeSalaryService.GetItem(id);
                 res.flag = 1;
                 res.Message = "Deleted successfully";
