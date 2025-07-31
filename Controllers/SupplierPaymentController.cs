@@ -71,5 +71,56 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public SupplierSelectResponse Select(int id)
+        {
+            SupplierSelectResponse response = new SupplierSelectResponse();
+            try
+            {
+                response = _supplierService.GetSupplierById(id);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("invoicelist")]
+        public PendingInvoiceResponse GetPendingInvoiceList()
+        {
+            PendingInvoiceResponse res = new PendingInvoiceResponse();
+
+            try
+            {
+                res = _supplierService.GetPendingInvoiceList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<PendingInvoicelist>();
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("commit")]
+        public SupplierPaymentResponse Commit(CommitRequest request)
+        {
+            SupplierPaymentResponse response = new SupplierPaymentResponse();
+            try
+            {
+                response = _supplierService.Commit(request);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
     }
 }

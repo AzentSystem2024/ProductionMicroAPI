@@ -160,5 +160,20 @@
         
 
     }
+    public class GrnPendingQty
+    {
+        public int GRN_ID { get; set; }
+        public int GRN_NO { get; set; }
+        public DateTime GRN_DATE { get; set; }
+        public int ITEM_ID { get; set; }
+        public decimal INVOICE_QTY { get; set; }
+        public decimal PENDING_QTY { get; set; }
+    }
+    public class GrnPendingQtyResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<GrnPendingQty> Data { get; set; }
+    }
 
 }

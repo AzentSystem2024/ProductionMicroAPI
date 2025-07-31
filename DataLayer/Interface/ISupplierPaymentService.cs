@@ -7,7 +7,9 @@ namespace MicroApi.DataLayer.Interface
         SupplierPaymentResponse insert(SupplierPayment model);
         SupplierPaymentResponse Update(SupplierPaymentUpdate model);
         SupplierPaymentListResponse GetPaymentList();
-
+        SupplierSelectResponse GetSupplierById(int id);
+        PendingInvoiceResponse GetPendingInvoiceList();
+        SupplierPaymentResponse Commit(CommitRequest request);
 
     }
 }

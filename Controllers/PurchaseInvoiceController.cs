@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using System.Data.SqlClient;
+using MicroApi.DataLayer.Service;
 
 namespace MicroApi.Controllers
 {
@@ -224,5 +225,25 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("invoicelist")]
+        public GrnPendingQtyResponse GetGrnPendingList()
+        {
+            GrnPendingQtyResponse res = new GrnPendingQtyResponse();
+
+            try
+            {
+                res = _PurchaseInvoiceService.GetGrnPendingQty();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = "Error: " + ex.Message;
+                res.Data = new List<GrnPendingQty>();
+            }
+
+            return res;
+        }
+
     }
 }

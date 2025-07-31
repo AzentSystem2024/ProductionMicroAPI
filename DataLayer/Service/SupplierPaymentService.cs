@@ -256,5 +256,227 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public SupplierSelectResponse GetSupplierById(int id)
+        {
+            var response = new SupplierSelectResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<SupplierPaymentSelect>()
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_SUPP_PAYMENT", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 21); // adjust if dynamic
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            SupplierPaymentSelect receipt = null;
+                            var detailList = new List<SupplierDetail>();
+
+                            while (reader.Read())
+                            {
+                                if (receipt == null)
+                                {
+                                    receipt = new SupplierPaymentSelect
+                                    {
+                                        TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                        TRANS_TYPE = reader["TRANS_TYPE"] as int? ?? 0,
+                                        PAY_DATE = reader["PAY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PAY_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        COMPANY_ID = reader["COMPANY_ID"] as int? ?? 0,
+                                        FIN_ID = reader["FIN_ID"] as int? ?? 0,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] as int? ?? 0,
+                                        REF_NO = reader["REF_NO"]?.ToString(),
+                                        SUPP_ID = reader["SUPP_ID"] as int? ?? 0,
+                                        NARRATION = reader["NARRATION"]?.ToString(),
+                                        PAY_TYPE_ID = reader["PAY_TYPE_ID"] as int? ?? 0,
+                                        PAY_HEAD_ID = reader["PAY_HEAD_ID"] as int? ?? 0,
+                                        ADD_TIME = reader["ADD_TIME"] != DBNull.Value ? Convert.ToDateTime(reader["ADD_TIME"]).ToString("dd-MM-yyyy") : null,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] as decimal? ?? 0,
+                                        CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
+                                        CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        BANK_NAME = reader["BANK_NAME"]?.ToString(),
+                                        PAY_DETAIL = new List<SupplierDetail>()
+                                    };
+                                }
+
+                                if (reader["BILL_ID"] != DBNull.Value)
+                                {
+                                    var detail = new SupplierDetail
+                                    {
+                                        BILL_ID = reader["BILL_ID"] as int? ?? 0,
+                                        AMOUNT = reader["AMOUNT"] as double? ?? 0,
+                                        DOC_NO = reader["DOC_NO"]?.ToString(),
+                                        PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] as double? ?? 0,
+                                        PENDING_AMOUNT = reader["PENDING_AMOUNT"] as double? ?? 0
+                                    };
+
+                                    detailList.Add(detail);
+                                }
+                            }
+
+                            if (receipt != null)
+                            {
+                                receipt.PAY_DETAIL = detailList;
+                                response.Data.Add(receipt);
+                                response.flag = 1;
+                                response.Message = "Success";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+        public PendingInvoiceResponse GetPendingInvoiceList()
+        {
+            PendingInvoiceResponse response = new PendingInvoiceResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<PendingInvoicelist>()
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_SUPP_PAYMENT", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 19);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                PendingInvoicelist item = new PendingInvoicelist
+                                {
+                                    BILL_ID = reader["BILL_ID"] != DBNull.Value ? Convert.ToInt32(reader["BILL_ID"]) : 0,
+                                    DOC_NO = reader["DOC_NO"]?.ToString(),
+                                    PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value
+                                        ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy")
+                                        : null,
+                                    SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
+                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["NET_AMOUNT"]) : 0,
+                                    PENDING_AMOUNT = reader["PENDING_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["PENDING_AMOUNT"]) : 0,
+                                    
+                                };
+
+                                response.Data.Add(item);
+                            }
+
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = new List<PendingInvoicelist>();
+            }
+
+            return response;
+        }
+        public SupplierPaymentResponse Commit(CommitRequest request)
+        {
+            SupplierPaymentResponse response = new SupplierPaymentResponse();
+
+            try
+            {
+                if (request.TRANS_ID > 0)
+                {
+                    using (SqlConnection con = ADO.GetConnection())
+                    {
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
+
+                        using (SqlCommand cmd = new SqlCommand("SP_SUPP_PAYMENT", con))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@ACTION", 3);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+
+                            cmd.ExecuteNonQuery();
+
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                    }
+                }
+                else
+                {
+                    response.flag = 0;
+                    response.Message = "Invalid TRANS_ID .";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+        public SupplierVoucherResponse GetSupplierNo()
+        {
+            SupplierVoucherResponse res = new SupplierVoucherResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                    SELECT TOP 1 VOUCHER_NO 
+                    FROM TB_AC_TRANS_HEADER 
+                    WHERE TRANS_TYPE = 21 
+                    ORDER BY TRANS_ID DESC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        res.flag = 1;
+                        res.SUPPLIER_PAYMENT = result != null ? Convert.ToInt32(result) : 0;
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
