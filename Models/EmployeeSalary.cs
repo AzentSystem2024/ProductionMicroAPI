@@ -73,6 +73,11 @@
     public class EmployeeSalaryRequest
     {
         public int EMP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
+    }
+    public class EmployeeSalarySelectRequest
+    {
+        public int EMP_ID { get; set; }
         public string EFFECT_FROM { get; set; }
     }
     public class EmployeeSalaryFilterRequest
