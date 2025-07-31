@@ -1,6 +1,8 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -128,7 +130,7 @@ namespace MicroApi.DataLayer.Service
                         ID = Convert.ToInt32(dr["ID"]),
                         COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
                         STORE_ID = Convert.ToInt32(dr["STORE_ID"]),
-                        PURCH_NO = dr["PURCH_NO"] != DBNull.Value ? dr["PURCH_NO"].ToString() : null,
+                        PURCH_NO = dr["DOC_NO"] != DBNull.Value ? dr["DOC_NO"].ToString() : null,
                         STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? dr["STORE_NAME"].ToString() : null,
                         SUPPPLIER_NAME = dr["SUPP_NAME"] != DBNull.Value ? dr["SUPP_NAME"].ToString() : null,
                         NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
@@ -813,6 +815,52 @@ namespace MicroApi.DataLayer.Service
             connection.Close();
             return invoiceList;
         }
+
+        public GrnPendingQtyResponse GetGrnPendingQty()
+        {
+            GrnPendingQtyResponse res = new GrnPendingQtyResponse();
+            res.Data = new List<GrnPendingQty>();
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand("SP_TB_PURCH", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 7);
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        res.Data.Add(new GrnPendingQty
+                        {
+                            GRN_ID = row["ID"] != DBNull.Value ? Convert.ToInt32(row["ID"]) : 0,
+                            GRN_NO = row["GRN_NO"] != DBNull.Value ? Convert.ToInt32(row["GRN_NO"]) : 0,
+                            GRN_DATE = row["GRN_DATE"] != DBNull.Value ? Convert.ToDateTime(row["GRN_DATE"]) : DateTime.MinValue,
+                            ITEM_ID = row["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(row["ITEM_ID"]) : 0,
+                            INVOICE_QTY = row["INVOICE_QTY"] != DBNull.Value ? Convert.ToDecimal(row["INVOICE_QTY"]) : 0,
+                            PENDING_QTY = row["PENDING_QTY"] != DBNull.Value ? Convert.ToDecimal(row["PENDING_QTY"]) : 0
+                        });
+                    }
+
+                    res.flag = 1;
+                    res.message = "Success";
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = "Error: " + ex.Message;
+                res.Data = new List<GrnPendingQty>();
+            }
+
+            return res;
+        }
+
+
 
     }
 }
