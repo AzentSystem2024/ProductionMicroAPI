@@ -20,7 +20,7 @@ namespace MicroApi.Controllers
         {
             try
             {
-                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID,request.EFFECT_FROM);
+                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID,request.COMPANY_ID);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -31,14 +31,14 @@ namespace MicroApi.Controllers
 
 
         [HttpPost]
-        [Route("select/{id:int}")]
-        public EmployeeListResponse Select(int id)
+        [Route("select")]
+        public EmployeeListResponse Select([FromBody]EmployeeSalarySelectRequest request)
         {
             EmployeeListResponse salaryHead = new EmployeeListResponse();
 
             try
             {
-                salaryHead = _EmployeeSalaryService.GetItem(id);
+                salaryHead = _EmployeeSalaryService.GetItem(request.EMP_ID,request.EFFECT_FROM);
             }
             catch (Exception ex)
             {
@@ -89,13 +89,13 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("delete")]
-        public EmployeeListResponse Delete(int BATCHID)
+        public EmployeeListResponse Delete([FromBody] EmployeeSalarySelectRequest request)
         {
             EmployeeListResponse res = new EmployeeListResponse();
 
             try
             {
-                _EmployeeSalaryService.DeleteEmployeeSalary(BATCHID);
+                _EmployeeSalaryService.DeleteEmployeeSalary(request.EMP_ID,request.EFFECT_FROM);
                 //_EmployeeSalaryService.GetItem(id);
                 res.flag = 1;
                 res.Message = "Deleted successfully";
