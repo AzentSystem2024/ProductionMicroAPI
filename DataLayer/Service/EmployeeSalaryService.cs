@@ -168,7 +168,7 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public EmployeeListResponse GetAllEmployeeSalaries(int BATCHID)
+        public EmployeeListResponse GetAllEmployeeSalaries(int empId, string effectFrom)
         {
             EmployeeListResponse response = new EmployeeListResponse { Data = new List<EmployeeSalaryUpdate>() };
 
@@ -184,7 +184,9 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 8);
-                        cmd.Parameters.AddWithValue("@BATCH_ID", BATCHID);
+                        cmd.Parameters.AddWithValue("@EMP_ID", empId);
+                        cmd.Parameters.AddWithValue("@EFFECT_FROM", effectFrom);
+                        //cmd.Parameters.AddWithValue("@BATCH_ID", BATCHID);
                         //cmd.Parameters.AddWithValue("@COMPANY_ID", COMPANYID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())

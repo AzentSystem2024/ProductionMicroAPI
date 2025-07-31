@@ -16,11 +16,11 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public IActionResult List(int BATCHID)
+        public IActionResult List([FromBody] EmployeeSalaryRequest request)
         {
             try
             {
-                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(BATCHID);
+                var response = _EmployeeSalaryService.GetAllEmployeeSalaries(request.EMP_ID,request.EFFECT_FROM);
                 return Ok(response);
             }
             catch (Exception ex)
