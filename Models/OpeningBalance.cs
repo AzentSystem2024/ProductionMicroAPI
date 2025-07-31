@@ -47,5 +47,8 @@
     public class OBCommitRequest
     {
         public int TRANS_ID { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int FIN_ID { get; set; }
+        public List<OpeningBalance> Details { get; set; }
     }
 }
