@@ -35,6 +35,7 @@
         public string? DESG_NAME { get; set; }
         public decimal? SALARY { get; set; }
         public String? EFFECT_FROM { get; set; }
+        public string? PREVIOUS_EFFECT_FROM { get; set; }
         public bool? IS_INACTIVE { get; set; }
         public List<SalaryHeadDetail> Details { get; set; }
     }
