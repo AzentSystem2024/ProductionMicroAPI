@@ -57,7 +57,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                res = _OpeningService.CommitOpeningBalance(request);
+                res = _OpeningService.Commit(request);
             }
             catch (Exception ex)
             {

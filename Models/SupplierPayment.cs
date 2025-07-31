@@ -109,4 +109,45 @@
         public string CHEQUE_DATE { get; set; }
         public string BANK_NAME { get; set; }
     }
+    public class SupplierPaymentSelect
+    {
+        public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public string PAY_DATE { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int STORE_ID { get; set; }
+        public int FIN_ID { get; set; }
+        public int TRANS_STATUS { get; set; }
+        public string REF_NO { get; set; }
+        public string CHEQUE_NO { get; set; }
+        public string CHEQUE_DATE { get; set; }
+        public string BANK_NAME { get; set; }
+        public int SUPP_ID { get; set; }
+        public string NARRATION { get; set; }
+        public int PAY_TYPE_ID { get; set; }
+        public int PAY_HEAD_ID { get; set; }
+        public string ADD_TIME { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+        public List<SupplierDetail> PAY_DETAIL { get; set; }
+
+    }
+    public class SupplierDetail
+    {
+        public int BILL_ID { get; set; }
+        public double AMOUNT { get; set; }
+        public int? SL_NO { get; set; }
+        public string? INVOICE_NO { get; set; }
+        public string? INVOICE_DATE { get; set; }
+        public string? REF_NO { get; set; }
+        public string? NARRATION { get; set; }
+        public double? NET_AMOUNT { get; set; }
+        public double? SETTLED_TILL_DATE { get; set; }
+        public double? PENDING_AMOUNT { get; set; }
+    }
+    public class SupplierSelectResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<SupplierPaymentSelect> Data { get; set; }
+    }
 }
