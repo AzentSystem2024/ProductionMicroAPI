@@ -30,6 +30,7 @@
         public decimal? DEBIT_AMOUNT { get; set; }
         public decimal? CREDIT_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
+        public int? TRANS_STATUS { get; set; }
     }
     public class OBRequest
     {
