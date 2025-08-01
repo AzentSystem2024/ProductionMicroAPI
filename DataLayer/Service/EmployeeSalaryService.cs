@@ -251,7 +251,7 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public EmployeeListResponse GetItem(int empId, string effectfrom)
+        public EmployeeListResponse GetItem(int empId, string effectfrom, int batchId)
         {
             EmployeeListResponse responses = new EmployeeListResponse { Data = new List<EmployeeSalaryUpdate>() };
 
@@ -269,6 +269,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 7);
                         cmd.Parameters.AddWithValue("@EMP_ID", empId);
                         cmd.Parameters.AddWithValue("@EFFECT_FROM", effectfrom);
+                        cmd.Parameters.AddWithValue("@BATCH_ID", batchId);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -281,7 +282,7 @@ namespace MicroApi.DataLayer.Service
                                     COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                     EMP_CODE = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : null,
                                     EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? Convert.ToString(reader["EMP_NAME"]) : null,
-                                    DESG_NAME = reader["DESG_NAME"] != DBNull.Value ? Convert.ToString(reader["DESG_NAME"]) : null,
+                                    DESG_NAME = reader["Designation"] != DBNull.Value ? Convert.ToString(reader["Designation"]) : null,
                                     EFFECT_FROM = reader["EFFECT_FROM"] != DBNull.Value ? Convert.ToString(reader["EFFECT_FROM"]) : null,
                                     PREVIOUS_EFFECT_FROM = reader["PREVIOUS_EFFECT_FROM"] != DBNull.Value ? Convert.ToString(reader["PREVIOUS_EFFECT_FROM"]) : null,
                                     SALARY = reader["SALARY"] != DBNull.Value ? Convert.ToDecimal(reader["SALARY"]) : 0,
