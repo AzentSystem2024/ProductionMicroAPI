@@ -129,30 +129,22 @@ namespace MicroApi.DataLayer.Service
                     {
                         ID = Convert.ToInt32(dr["ID"]),
                         COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        STORE_ID = Convert.ToInt32(dr["STORE_ID"]),
                         PURCH_NO = dr["DOC_NO"] != DBNull.Value ? dr["DOC_NO"].ToString() : null,
-                        STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? dr["STORE_NAME"].ToString() : null,
                         SUPPPLIER_NAME = dr["SUPP_NAME"] != DBNull.Value ? dr["SUPP_NAME"].ToString() : null,
                         NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
-                        STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : null,
                         PURCH_DATE = dr["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PURCH_DATE"]) : null,
-                        IS_CREDIT = dr["IS_CREDIT"] != DBNull.Value && Convert.ToBoolean(dr["IS_CREDIT"]),
                         SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_ID"]) : (int?)null,
                         SUPP_INV_NO = dr["SUPP_INV_NO"] != DBNull.Value ? dr["SUPP_INV_NO"].ToString() : null,
                         SUPP_INV_DATE = dr["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["SUPP_INV_DATE"]) : null,
-                        PO_ID = dr["PO_ID"] != DBNull.Value ? Convert.ToInt32(dr["PO_ID"]) : (int?)null,
-                        PO_NO = dr["PO_NO"] != DBNull.Value ? dr["PO_NO"].ToString() : null,
                         FIN_ID = dr["FIN_ID"] != DBNull.Value ? Convert.ToInt32(dr["FIN_ID"]) : (int?)null,
                         TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt64(dr["TRANS_ID"]) : (long?)null,
                         PURCH_TYPE = dr["PURCH_TYPE"] != DBNull.Value ? Convert.ToInt16(dr["PURCH_TYPE"]) : (short?)null,
                         DISCOUNT_AMOUNT = dr["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["DISCOUNT_AMOUNT"]) : (float?)null,
                         SUPP_GROSS_AMOUNT = dr["SUPP_GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["SUPP_GROSS_AMOUNT"]) : (float?)null,
                         SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["SUPP_NET_AMOUNT"]) : (float?)null,
-                        EXCHANGE_RATE = dr["EXCHANGE_RATE"] != DBNull.Value ? Convert.ToSingle(dr["EXCHANGE_RATE"]) : (float?)null,
                         GROSS_AMOUNT = dr["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["GROSS_AMOUNT"]) : (float?)null,
                         CHARGE_DESCRIPTION = dr["CHARGE_DESCRIPTION"] != DBNull.Value ? dr["CHARGE_DESCRIPTION"].ToString() : null,
-                        CHARGE_AMOUNT = dr["CHARGE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["CHARGE_AMOUNT"]) : (float?)null,
-                        VAT_AMOUNT = dr["VAT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["VAT_AMOUNT"]) : (decimal?)null,
+                        TAX_AMOUNT = dr["VAT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["VAT_AMOUNT"]) : (decimal?)null,
                         NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["NET_AMOUNT"]) : (float?)null,
                         RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["RETURN_AMOUNT"]) : (decimal?)null,
                         ADJ_AMOUNT = dr["ADJ_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["ADJ_AMOUNT"]) : (float?)null,
@@ -181,7 +173,6 @@ namespace MicroApi.DataLayer.Service
                     {
                         ID = dr["ID"] != DBNull.Value ? Convert.ToInt64(dr["ID"]) : 0,
                         COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
-                        STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : 0,
                         PURCH_ID = dr["PURCH_ID"] != DBNull.Value ? Convert.ToInt32(dr["PURCH_ID"]) : 0,
                         GRN_DET_ID = dr["GRN_DET_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["GRN_DET_ID"]) : null,
                         ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["ITEM_ID"]) : null,
@@ -259,8 +250,6 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["PURCH_ID"] = ur.PURCH_ID;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -295,24 +284,18 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("ACTION", 1);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
-                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@IS_CREDIT", purchHeader.IS_CREDIT);
                 cmd.Parameters.AddWithValue("@SUPP_ID", purchHeader.SUPP_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_NO", purchHeader.SUPP_INV_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_DATE", purchHeader.SUPP_INV_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_ID", purchHeader.PO_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_NO", purchHeader.PO_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchHeader.FIN_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PURCH_TYPE", purchHeader.PURCH_TYPE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", purchHeader.DISCOUNT_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_GROSS_AMOUNT", purchHeader.SUPP_GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@EXCHANGE_RATE", purchHeader.EXCHANGE_RATE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", purchHeader.CHARGE_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.VAT_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
@@ -392,8 +375,6 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["PURCH_ID"] = ur.PURCH_ID;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -429,24 +410,18 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ID", purchHeader.ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
-                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@IS_CREDIT", purchHeader.IS_CREDIT);
                 cmd.Parameters.AddWithValue("@SUPP_ID", purchHeader.SUPP_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_NO", purchHeader.SUPP_INV_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_DATE", purchHeader.SUPP_INV_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_ID", purchHeader.PO_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_NO", purchHeader.PO_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchHeader.FIN_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PURCH_TYPE", purchHeader.PURCH_TYPE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", purchHeader.DISCOUNT_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_GROSS_AMOUNT", purchHeader.SUPP_GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@EXCHANGE_RATE", purchHeader.EXCHANGE_RATE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", purchHeader.CHARGE_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.VAT_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
@@ -526,8 +501,6 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["PURCH_ID"] = ur.PURCH_ID;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -563,24 +536,18 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ID", purchHeader.ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
-                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@IS_CREDIT", purchHeader.IS_CREDIT);
                 cmd.Parameters.AddWithValue("@SUPP_ID", purchHeader.SUPP_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_NO", purchHeader.SUPP_INV_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_DATE", purchHeader.SUPP_INV_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_ID", purchHeader.PO_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_NO", purchHeader.PO_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchHeader.FIN_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PURCH_TYPE", purchHeader.PURCH_TYPE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", purchHeader.DISCOUNT_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_GROSS_AMOUNT", purchHeader.SUPP_GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@EXCHANGE_RATE", purchHeader.EXCHANGE_RATE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", purchHeader.CHARGE_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.VAT_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
@@ -661,8 +628,6 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["PURCH_ID"] = ur.PURCH_ID;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -698,24 +663,18 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ID", purchHeader.ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
-                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@IS_CREDIT", purchHeader.IS_CREDIT);
                 cmd.Parameters.AddWithValue("@SUPP_ID", purchHeader.SUPP_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_NO", purchHeader.SUPP_INV_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_INV_DATE", purchHeader.SUPP_INV_DATE ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_ID", purchHeader.PO_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@PO_NO", purchHeader.PO_NO ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchHeader.FIN_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PURCH_TYPE", purchHeader.PURCH_TYPE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", purchHeader.DISCOUNT_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_GROSS_AMOUNT", purchHeader.SUPP_GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@EXCHANGE_RATE", purchHeader.EXCHANGE_RATE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", purchHeader.CHARGE_AMOUNT ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.VAT_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);

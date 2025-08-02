@@ -12,54 +12,61 @@ namespace MicroApi.DataLayer.Service
         public List<Suppliers> GetAllSuppliers()
         {
             List<Suppliers> supplierList = new List<Suppliers>();
+
             using (SqlConnection connection = ADO.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = connection;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "SP_TB_SUPPLIER";
-                cmd.Parameters.AddWithValue("ACTION", 0);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable tbl = new DataTable();
-                da.Fill(tbl);
-
-                foreach (DataRow dr in tbl.Rows)
+                using (SqlCommand cmd = new SqlCommand("SP_TB_SUPPLIER", connection))
                 {
-                    supplierList.Add(new Suppliers
-                    {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        HQID = Convert.ToInt32(dr["HQID"]),
-                        AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
-                        SUPP_CODE = Convert.ToString(dr["SUPP_CODE"]),
-                        SUPP_NAME = Convert.ToString(dr["SUPP_NAME"]),
-                        CONTACT_NAME = Convert.ToString(dr["CONTACT_NAME"]),
-                        ADDRESS1 = Convert.ToString(dr["ADDRESS1"]),
-                        ADDRESS2 = Convert.ToString(dr["ADDRESS2"]),
-                        ADDRESS3 = Convert.ToString(dr["ADDRESS3"]),
-                        ZIP = Convert.ToString(dr["ZIP"]),
-                        STATE_ID = Convert.ToInt32(dr["STATE_ID"]),
-                        CITY = Convert.ToString(dr["CITY"]),
-                        COUNTRY_ID = Convert.ToInt32(dr["COUNTRY_ID"]),
-                        PHONE = Convert.ToString(dr["PHONE"]),
-                        EMAIL = Convert.ToString(dr["EMAIL"]),
-                        IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]),
-                        MOBILE_NO = Convert.ToString(dr["MOBILE_NO"]),
-                        NOTES = Convert.ToString(dr["NOTES"]),
-                        FAX_NO = Convert.ToString(dr["FAX_NO"]),
-                        VAT_REGNO = Convert.ToString(dr["VAT_REGNO"]),
-                        CURRENCY_ID = Convert.ToInt32(dr["CURRENCY_ID"]),
-                        PAY_TERM_ID = Convert.ToInt32(dr["PAY_TERM_ID"]),
-                        VAT_RULE_ID = Convert.ToInt32(dr["VAT_RULE_ID"]),
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 0);
 
-                        COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]),
-                        CURRENCY_CODE = Convert.ToString(dr["CURRENCY_CODE"]),
-                        PAYMENT_CODE = Convert.ToString(dr["PAYMENT_CODE"]),
-                        DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]),
-                        STATE_NAME = Convert.ToString(dr["STATE_NAME"]),
-                    });
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable tbl = new DataTable();
+                    da.Fill(tbl);
+
+                    foreach (DataRow dr in tbl.Rows)
+                    {
+                        Suppliers supplier = new Suppliers
+                        {
+                            ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : null,
+                            HQID = dr["HQID"] != DBNull.Value ? Convert.ToInt32(dr["HQID"]) : null,
+                            AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : null,
+                            SUPP_CODE = dr["SUPP_CODE"]?.ToString(),
+                            SUPP_NAME = dr["SUPP_NAME"]?.ToString(),
+                            CONTACT_NAME = dr["CONTACT_NAME"]?.ToString(),
+                            ADDRESS1 = dr["ADDRESS1"]?.ToString(),
+                            ADDRESS2 = dr["ADDRESS2"]?.ToString(),
+                            ADDRESS3 = dr["ADDRESS3"]?.ToString(),
+                            ZIP = dr["ZIP"]?.ToString(),
+                            STATE_ID = dr["STATE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STATE_ID"]) : null,
+                            CITY = dr["CITY"]?.ToString(),
+                            COUNTRY_ID = dr["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COUNTRY_ID"]) : null,
+                            PHONE = dr["PHONE"]?.ToString(),
+                            EMAIL = dr["EMAIL"]?.ToString(),
+                            IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : null,
+                            MOBILE_NO = dr["MOBILE_NO"]?.ToString(),
+                            NOTES = dr["NOTES"]?.ToString(),
+                            FAX_NO = dr["FAX_NO"]?.ToString(),
+                            VAT_REGNO = dr["VAT_REGNO"]?.ToString(),
+                            CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : null,
+                            PAY_TERM_ID = dr["PAY_TERM_ID"] != DBNull.Value ? Convert.ToInt32(dr["PAY_TERM_ID"]) : null,
+                            VAT_RULE_ID = dr["VAT_RULE_ID"] != DBNull.Value ? Convert.ToInt32(dr["VAT_RULE_ID"]) : null,
+                            COUNTRY_NAME = dr["COUNTRY_NAME"]?.ToString(),
+                            CURRENCY_CODE = dr["CURRENCY_CODE"]?.ToString(),
+                            PAYMENT_CODE = dr["PAYMENT_CODE"]?.ToString(),
+                            DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
+                            STATE_NAME = dr["STATE_NAME"]?.ToString(),
+                            IS_DELETED = dr.Table.Columns.Contains("IS_DELETED") ? dr["IS_DELETED"]?.ToString() : null,
+
+                            // Always initialize the list to avoid null reference exceptions
+                            Supplier_cost = new List<SupplierCost>()
+                        };
+
+                        supplierList.Add(supplier);
+                    }
                 }
-                connection.Close();
             }
+
             return supplierList;
         }
 
@@ -96,7 +103,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("ACTION", 1);
                 cmd.Parameters.AddWithValue("ID", supplier.ID);
                 cmd.Parameters.AddWithValue("HQID", supplier.HQID);
-
+                cmd.Parameters.AddWithValue("COMPANY_ID", (object)supplier.COMPANY_ID ?? DBNull.Value);
                 //cmd.Parameters.AddWithValue("ID", (object)suppliers.ID ?? DBNull.Value);
                 //cmd.Parameters.AddWithValue("HQID", (object)suppliers.HQID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("SUPP_CODE", (object)supplier.SUPP_CODE ?? DBNull.Value);
