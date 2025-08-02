@@ -38,7 +38,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                salaryHead = _EmployeeSalaryService.GetItem(request.EMP_ID,request.EFFECT_FROM);
+                salaryHead = _EmployeeSalaryService.GetItem(request.EMP_ID,request.EFFECT_FROM,request.BATCH_ID);
             }
             catch (Exception ex)
             {

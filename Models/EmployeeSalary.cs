@@ -80,6 +80,7 @@
     {
         public int EMP_ID { get; set; }
         public string EFFECT_FROM { get; set; }
+        public int BATCH_ID { get; set; }
     }
     public class EmployeeSalaryFilterRequest
     {
