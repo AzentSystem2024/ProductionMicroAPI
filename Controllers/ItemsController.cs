@@ -5,7 +5,7 @@ using MicroApi.Models;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ItemsController : ControllerBase
@@ -98,9 +98,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("insert")]
-        public Items Insert(Items itemsData)
+        public ItemResponse Insert(Items itemsData)
         {
-            Items res = new Items();
+            ItemResponse res = new ItemResponse();
 
             try
             {
@@ -126,9 +126,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("update")]
-        public Items Update(Items itemsData)
+        public ItemResponse Update(Items itemsData)
         {
-            Items res = new Items();
+            ItemResponse res = new ItemResponse();
 
             try
             {

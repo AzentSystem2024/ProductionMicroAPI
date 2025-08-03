@@ -135,7 +135,9 @@ namespace MicroApi.DataLayer.Services
                     rev.TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]);
                     rev.STATUS = ADO.ToString(dr["STATUS"]);
                     rev.CHEQUE_NO = ADO.ToString(dr["CHEQUE_NO"]);
-                    rev.CHEQUE_DATE = ADO.ToString(dr["CHEQUE_DATE"]);
+                    rev.CHEQUE_DATE = dr["CHEQUE_DATE"] != DBNull.Value && Convert.ToDateTime(dr["CHEQUE_DATE"]) != DateTime.MinValue
+                        ? Convert.ToDateTime(dr["CHEQUE_DATE"]).ToString("yyyy-MM-dd")
+                        : null;
                     rev.PAY_HEAD_ID = ADO.ToInt32(dr["PAY_HEAD_ID"]);
                     rev.PAY_TYPE_ID = ADO.ToInt32(dr["PAY_TYPE_ID"]);
                 }
