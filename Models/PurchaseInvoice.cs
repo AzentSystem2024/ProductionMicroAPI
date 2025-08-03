@@ -72,7 +72,7 @@
         public float SUPP_PRICE { get; set; }
         public float SUPP_AMOUNT { get; set; }
         public decimal VAT_PERC { get; set; }
-        public decimal VAT_AMOUNT { get; set; }
+        public decimal TAX_AMOUNT { get; set; }
         public int GRN_STORE_ID { get; set; }
         public float RETURN_AMOUNT { get; set; }
     }
@@ -124,7 +124,7 @@
         public float? SUPP_PRICE { get; set; }
         public float? SUPP_AMOUNT { get; set; }
         public decimal? VAT_PERC { get; set; }
-        public decimal? VAT_AMOUNT { get; set; }
+        public decimal? TAX_AMOUNT { get; set; }
         public int? GRN_STORE_ID { get; set; }
         public float RETURN_AMOUNT { get; set; }
         public string STORE_NAME { get; set; }
@@ -157,6 +157,15 @@
         public int GRN_NO { get; set; }
         public DateTime GRN_DATE { get; set; }
         public int ITEM_ID { get; set; }
+        public decimal QUANTITY { get; set; }
+        public decimal RATE { get; set; }
+        public decimal RETURN_QTY { get; set; }
+        public int PO_DET_ID { get; set; }
+        public decimal COST { get; set; }
+        public decimal SUPP_PRICE { get; set; }
+        public decimal SUPP_AMOUNT { get; set; }
+        public int GRN_DET_ID { get; set; }
+        public string UOM { get; set; }
         public decimal INVOICE_QTY { get; set; }
         public decimal PENDING_QTY { get; set; }
     }

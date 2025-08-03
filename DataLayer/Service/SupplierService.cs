@@ -24,45 +24,47 @@ namespace MicroApi.DataLayer.Service
                     DataTable tbl = new DataTable();
                     da.Fill(tbl);
 
-                    foreach (DataRow dr in tbl.Rows)
+                    if (tbl.Rows.Count > 0)
                     {
-                        Suppliers supplier = new Suppliers
+                        foreach (DataRow dr in tbl.Rows)
                         {
-                            ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : null,
-                            HQID = dr["HQID"] != DBNull.Value ? Convert.ToInt32(dr["HQID"]) : null,
-                            AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : null,
-                            SUPP_CODE = dr["SUPP_CODE"]?.ToString(),
-                            SUPP_NAME = dr["SUPP_NAME"]?.ToString(),
-                            CONTACT_NAME = dr["CONTACT_NAME"]?.ToString(),
-                            ADDRESS1 = dr["ADDRESS1"]?.ToString(),
-                            ADDRESS2 = dr["ADDRESS2"]?.ToString(),
-                            ADDRESS3 = dr["ADDRESS3"]?.ToString(),
-                            ZIP = dr["ZIP"]?.ToString(),
-                            STATE_ID = dr["STATE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STATE_ID"]) : null,
-                            CITY = dr["CITY"]?.ToString(),
-                            COUNTRY_ID = dr["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COUNTRY_ID"]) : null,
-                            PHONE = dr["PHONE"]?.ToString(),
-                            EMAIL = dr["EMAIL"]?.ToString(),
-                            IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : null,
-                            MOBILE_NO = dr["MOBILE_NO"]?.ToString(),
-                            NOTES = dr["NOTES"]?.ToString(),
-                            FAX_NO = dr["FAX_NO"]?.ToString(),
-                            VAT_REGNO = dr["VAT_REGNO"]?.ToString(),
-                            CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : null,
-                            PAY_TERM_ID = dr["PAY_TERM_ID"] != DBNull.Value ? Convert.ToInt32(dr["PAY_TERM_ID"]) : null,
-                            VAT_RULE_ID = dr["VAT_RULE_ID"] != DBNull.Value ? Convert.ToInt32(dr["VAT_RULE_ID"]) : null,
-                            COUNTRY_NAME = dr["COUNTRY_NAME"]?.ToString(),
-                            CURRENCY_CODE = dr["CURRENCY_CODE"]?.ToString(),
-                            PAYMENT_CODE = dr["PAYMENT_CODE"]?.ToString(),
-                            DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
-                            STATE_NAME = dr["STATE_NAME"]?.ToString(),
-                            IS_DELETED = dr.Table.Columns.Contains("IS_DELETED") ? dr["IS_DELETED"]?.ToString() : null,
+                            Suppliers supplier = new Suppliers
+                            {
+                                ID = dr.Table.Columns.Contains("ID") && dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                                HQID = dr.Table.Columns.Contains("HQID") && dr["HQID"] != DBNull.Value ? Convert.ToInt32(dr["HQID"]) : 0,
+                                AC_HEAD_ID = dr.Table.Columns.Contains("AC_HEAD_ID") && dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : 0,
+                                SUPP_CODE = dr.Table.Columns.Contains("SUPP_CODE") ? dr["SUPP_CODE"]?.ToString() : null,
+                                SUPP_NAME = dr.Table.Columns.Contains("SUPP_NAME") ? dr["SUPP_NAME"]?.ToString() : null,
+                                CONTACT_NAME = dr.Table.Columns.Contains("CONTACT_NAME") ? dr["CONTACT_NAME"]?.ToString() : null,
+                                ADDRESS1 = dr.Table.Columns.Contains("ADDRESS1") ? dr["ADDRESS1"]?.ToString() : null,
+                                ADDRESS2 = dr.Table.Columns.Contains("ADDRESS2") ? dr["ADDRESS2"]?.ToString() : null,
+                                ADDRESS3 = dr.Table.Columns.Contains("ADDRESS3") ? dr["ADDRESS3"]?.ToString() : null,
+                                ZIP = dr.Table.Columns.Contains("ZIP") ? dr["ZIP"]?.ToString() : null,
+                                STATE_ID = dr.Table.Columns.Contains("STATE_ID") && dr["STATE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STATE_ID"]) : 0,
+                                CITY = dr.Table.Columns.Contains("CITY") ? dr["CITY"]?.ToString() : null,
+                                COUNTRY_ID = dr.Table.Columns.Contains("COUNTRY_ID") && dr["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COUNTRY_ID"]) : 0,
+                                PHONE = dr.Table.Columns.Contains("PHONE") ? dr["PHONE"]?.ToString() : null,
+                                EMAIL = dr.Table.Columns.Contains("EMAIL") ? dr["EMAIL"]?.ToString() : null,
+                                IS_INACTIVE = dr.Table.Columns.Contains("IS_INACTIVE") && dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : false,
+                                MOBILE_NO = dr.Table.Columns.Contains("MOBILE_NO") ? dr["MOBILE_NO"]?.ToString() : null,
+                                NOTES = dr.Table.Columns.Contains("NOTES") ? dr["NOTES"]?.ToString() : null,
+                                FAX_NO = dr.Table.Columns.Contains("FAX_NO") ? dr["FAX_NO"]?.ToString() : null,
+                                VAT_REGNO = dr.Table.Columns.Contains("VAT_REGNO") ? dr["VAT_REGNO"]?.ToString() : null,
+                                CURRENCY_ID = dr.Table.Columns.Contains("CURRENCY_ID") && dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : 0,
+                                PAY_TERM_ID = dr.Table.Columns.Contains("PAY_TERM_ID") && dr["PAY_TERM_ID"] != DBNull.Value ? Convert.ToInt32(dr["PAY_TERM_ID"]) : 0,
+                                VAT_RULE_ID = dr.Table.Columns.Contains("VAT_RULE_ID") && dr["VAT_RULE_ID"] != DBNull.Value ? Convert.ToInt32(dr["VAT_RULE_ID"]) : 0,
+                                COUNTRY_NAME = dr.Table.Columns.Contains("COUNTRY_NAME") ? dr["COUNTRY_NAME"]?.ToString() : null,
+                                CURRENCY_CODE = dr.Table.Columns.Contains("CURRENCY_CODE") ? dr["CURRENCY_CODE"]?.ToString() : null,
+                                PAYMENT_CODE = dr.Table.Columns.Contains("PAYMENT_CODE") ? dr["PAYMENT_CODE"]?.ToString() : null,
+                                DESCRIPTION = dr.Table.Columns.Contains("DESCRIPTION") ? dr["DESCRIPTION"]?.ToString() : null,
+                                STATE_NAME = dr.Table.Columns.Contains("STATE_NAME") ? dr["STATE_NAME"]?.ToString() : null,
+                                IS_DELETED = dr.Table.Columns.Contains("IS_DELETED") ? dr["IS_DELETED"]?.ToString() : null,
 
-                            // Always initialize the list to avoid null reference exceptions
-                            Supplier_cost = new List<SupplierCost>()
-                        };
+                                Supplier_cost = new List<SupplierCost>()  // Initialize as empty list
+                            };
 
-                        supplierList.Add(supplier);
+                            supplierList.Add(supplier);
+                        }
                     }
                 }
             }

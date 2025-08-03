@@ -144,7 +144,7 @@ namespace MicroApi.DataLayer.Service
                         SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["SUPP_NET_AMOUNT"]) : (float?)null,
                         GROSS_AMOUNT = dr["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["GROSS_AMOUNT"]) : (float?)null,
                         CHARGE_DESCRIPTION = dr["CHARGE_DESCRIPTION"] != DBNull.Value ? dr["CHARGE_DESCRIPTION"].ToString() : null,
-                        TAX_AMOUNT = dr["VAT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["VAT_AMOUNT"]) : (decimal?)null,
+                        TAX_AMOUNT = dr["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["TAX_AMOUNT"]) : (decimal?)null,
                         NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["NET_AMOUNT"]) : (float?)null,
                         RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["RETURN_AMOUNT"]) : (decimal?)null,
                         ADJ_AMOUNT = dr["ADJ_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["ADJ_AMOUNT"]) : (float?)null,
@@ -189,7 +189,7 @@ namespace MicroApi.DataLayer.Service
                         SUPP_PRICE = dr["SUPP_PRICE"] != DBNull.Value ? (float?)Convert.ToSingle(dr["SUPP_PRICE"]) : null,
                         SUPP_AMOUNT = dr["SUPP_AMOUNT"] != DBNull.Value ? (float?)Convert.ToSingle(dr["SUPP_AMOUNT"]) : null,
                         VAT_PERC = dr["VAT_PERC"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["VAT_PERC"]) : null,
-                        VAT_AMOUNT = dr["VAT_AMOUNT"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["VAT_AMOUNT"]) : null,
+                        TAX_AMOUNT = dr["TAX_AMOUNT"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["TAX_AMOUNT"]) : null,
                         GRN_STORE_ID = dr["GRN_STORE_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["GRN_STORE_ID"]) : null,
                         RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["RETURN_AMOUNT"]) : 0f,
 
@@ -239,7 +239,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("VAT_PERC", typeof(decimal));
-                tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                tbl.Columns.Add("TAX_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
 
@@ -265,7 +265,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["SUPP_PRICE"] = (object?)ur.SUPP_PRICE ?? DBNull.Value;
                         dRow["SUPP_AMOUNT"] = (object?)ur.SUPP_AMOUNT ?? DBNull.Value;
                         dRow["VAT_PERC"] = (object?)ur.VAT_PERC ?? DBNull.Value;
-                        dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
+                        dRow["TAX_AMOUNT"] = (object?)ur.TAX_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
 
@@ -295,7 +295,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@TAX_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
@@ -364,7 +364,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("VAT_PERC", typeof(decimal));
-                tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                tbl.Columns.Add("TAX_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
 
@@ -390,7 +390,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["SUPP_PRICE"] = (object?)ur.SUPP_PRICE ?? DBNull.Value;
                         dRow["SUPP_AMOUNT"] = (object?)ur.SUPP_AMOUNT ?? DBNull.Value;
                         dRow["VAT_PERC"] = (object?)ur.VAT_PERC ?? DBNull.Value;
-                        dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
+                        dRow["TAX_AMOUNT"] = (object?)ur.TAX_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
 
@@ -421,7 +421,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@TAX_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
@@ -490,7 +490,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("VAT_PERC", typeof(decimal));
-                tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                tbl.Columns.Add("TAX_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
 
@@ -516,7 +516,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["SUPP_PRICE"] = (object?)ur.SUPP_PRICE ?? DBNull.Value;
                         dRow["SUPP_AMOUNT"] = (object?)ur.SUPP_AMOUNT ?? DBNull.Value;
                         dRow["VAT_PERC"] = (object?)ur.VAT_PERC ?? DBNull.Value;
-                        dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
+                        dRow["TAX_AMOUNT"] = (object?)ur.TAX_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
 
@@ -547,7 +547,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@TAX_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
@@ -617,7 +617,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("VAT_PERC", typeof(decimal));
-                tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                tbl.Columns.Add("TAX_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
 
@@ -643,7 +643,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["SUPP_PRICE"] = (object?)ur.SUPP_PRICE ?? DBNull.Value;
                         dRow["SUPP_AMOUNT"] = (object?)ur.SUPP_AMOUNT ?? DBNull.Value;
                         dRow["VAT_PERC"] = (object?)ur.VAT_PERC ?? DBNull.Value;
-                        dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
+                        dRow["TAX_AMOUNT"] = (object?)ur.TAX_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
 
@@ -674,7 +674,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", purchHeader.SUPP_NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@GROSS_AMOUNT", purchHeader.GROSS_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", purchHeader.CHARGE_DESCRIPTION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@VAT_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@TAX_AMOUNT", purchHeader.TAX_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@NET_AMOUNT", purchHeader.NET_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
@@ -786,7 +786,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SP_TB_PURCH", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ACTION", 7);
+                    cmd.Parameters.AddWithValue("@ACTION", 7); // Use appropriate action for this SELECT
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
@@ -800,7 +800,15 @@ namespace MicroApi.DataLayer.Service
                             GRN_NO = row["GRN_NO"] != DBNull.Value ? Convert.ToInt32(row["GRN_NO"]) : 0,
                             GRN_DATE = row["GRN_DATE"] != DBNull.Value ? Convert.ToDateTime(row["GRN_DATE"]) : DateTime.MinValue,
                             ITEM_ID = row["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(row["ITEM_ID"]) : 0,
-                            INVOICE_QTY = row["INVOICE_QTY"] != DBNull.Value ? Convert.ToDecimal(row["INVOICE_QTY"]) : 0,
+                            QUANTITY = row["QUANTITY"] != DBNull.Value ? Convert.ToDecimal(row["QUANTITY"]) : 0,
+                            RATE = row["RATE"] != DBNull.Value ? Convert.ToDecimal(row["RATE"]) : 0,
+                            RETURN_QTY = row["RETURN_QTY"] != DBNull.Value ? Convert.ToDecimal(row["RETURN_QTY"]) : 0,
+                            PO_DET_ID = row["PO_DET_ID"] != DBNull.Value ? Convert.ToInt32(row["PO_DET_ID"]) : 0,
+                            COST = row["COST"] != DBNull.Value ? Convert.ToDecimal(row["COST"]) : 0,
+                            SUPP_PRICE = row["SUPP_PRICE"] != DBNull.Value ? Convert.ToDecimal(row["SUPP_PRICE"]) : 0,
+                            SUPP_AMOUNT = row["SUPP_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(row["SUPP_AMOUNT"]) : 0,
+                            GRN_DET_ID = row["GRN_DET_ID"] != DBNull.Value ? Convert.ToInt32(row["GRN_DET_ID"]) : 0,
+                            UOM = row["UOM"] != DBNull.Value ? row["UOM"].ToString() : "",
                             PENDING_QTY = row["PENDING_QTY"] != DBNull.Value ? Convert.ToDecimal(row["PENDING_QTY"]) : 0
                         });
                     }
