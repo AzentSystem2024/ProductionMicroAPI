@@ -254,7 +254,7 @@ namespace MicroApi.DataLayer.Services
                    " TB_STATE.STATE_NAME, TB_COUNTRY.COUNTRY_NAME, TB_EMPLOYEE.EMP_NAME, " +
                    " TB_PAYMENT_TERMS.CODE, TB_PRICE_CLASS.CLASS_NAME,   " +
                    " TB_COMPANY.COMPANY_NAME, TB_STORES.STORE_NAME," +
-                   " TB_VAT_RULE_CUSTOMER.DESCRIPTION AS VAT_RULE_DESCRIPTION" +
+                   " TB_VAT_RULE_CUSTOMER.DESCRIPTION AS VAT_RULE_DESCRIPTION,TB_CUSTOMER.CUST_VAT_RULE_ID,TB_CUSTOMER.IS_COMPANY_BRANCH" +
                    " FROM TB_CUSTOMER " +
                    " LEFT JOIN TB_STATE ON TB_CUSTOMER.STATE_ID = TB_STATE.ID " +
                    " LEFT JOIN TB_COUNTRY ON TB_CUSTOMER.COUNTRY_ID = TB_COUNTRY.ID " +
@@ -314,7 +314,7 @@ namespace MicroApi.DataLayer.Services
                     customer.VAT_REGNO = Convert.ToString(dr["VAT_REGNO"]);
                     customer.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
                     customer.LOYALTY_POINT = Convert.ToDecimal(dr["LOYALTY_POINT"]);
-
+                    customer.IS_COMPANY_BRANCH = Convert.ToBoolean(dr["IS_COMPANY_BRANCH"]);
                     customer.STATE_NAME = Convert.ToString(dr["STATE_NAME"]);
                     customer.COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]);
                     customer.EMP_NAME = Convert.ToString(dr["EMP_NAME"]);
@@ -322,6 +322,7 @@ namespace MicroApi.DataLayer.Services
                     customer.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
                     customer.STORE_NAME = Convert.ToString(dr["STORE_NAME"]);
                     customer.VAT_RULE_DESCRIPTION = Convert.ToString(dr["VAT_RULE_DESCRIPTION"]);
+                    customer.CUST_VAT_RULE_ID = Convert.ToInt32(dr["CUST_VAT_RULE_ID"]);
 
                 }
             }

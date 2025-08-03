@@ -157,6 +157,7 @@
         public int GRN_NO { get; set; }
         public DateTime GRN_DATE { get; set; }
         public int ITEM_ID { get; set; }
+        public string ITEM_NAME { get; set; }
         public decimal QUANTITY { get; set; }
         public decimal RATE { get; set; }
         public decimal RETURN_QTY { get; set; }

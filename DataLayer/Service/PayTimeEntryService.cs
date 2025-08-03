@@ -78,6 +78,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@HEAD_ID", request.HEAD_ID);
                         cmd.Parameters.AddWithValue("@SAL_MONTH", request.SAL_MONTH);
 
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())

@@ -800,6 +800,7 @@ namespace MicroApi.DataLayer.Service
                             GRN_NO = row["GRN_NO"] != DBNull.Value ? Convert.ToInt32(row["GRN_NO"]) : 0,
                             GRN_DATE = row["GRN_DATE"] != DBNull.Value ? Convert.ToDateTime(row["GRN_DATE"]) : DateTime.MinValue,
                             ITEM_ID = row["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(row["ITEM_ID"]) : 0,
+                            ITEM_NAME = row["DESCRIPTION"] != DBNull.Value ? row["DESCRIPTION"].ToString() : "",
                             QUANTITY = row["QUANTITY"] != DBNull.Value ? Convert.ToDecimal(row["QUANTITY"]) : 0,
                             RATE = row["RATE"] != DBNull.Value ? Convert.ToDecimal(row["RATE"]) : 0,
                             RETURN_QTY = row["RETURN_QTY"] != DBNull.Value ? Convert.ToDecimal(row["RETURN_QTY"]) : 0,
