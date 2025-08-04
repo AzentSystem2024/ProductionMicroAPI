@@ -88,8 +88,8 @@ namespace MicroApi.DataLayer.Service
                                     EMP_ID = Convert.ToInt32(reader["ID"]),
                                     EMP_CODE = reader["EMP_CODE"]?.ToString(),
                                     EMP_NAME = reader["EMP_NAME"]?.ToString(),
-                                    DAYS = reader["DAYS"] != DBNull.Value ? Convert.ToInt32(reader["DAYS"]) : (int?)null,
-                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : (float?)null
+                                    DAYS = reader["DAYS"] != DBNull.Value ? Convert.ToInt32(reader["DAYS"]) : (int?)null
+                                    //AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : (float?)null
                                 });
                             }
                         }

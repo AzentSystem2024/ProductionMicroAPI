@@ -95,6 +95,122 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        //public PurchHeader GetPurchaseInvoiceById(int id)
+        //{
+        //    PurchHeader header = new PurchHeader();
+        //    List<PurchDetails> detail = new List<PurchDetails>();
+
+        //    try
+        //    {
+        //        string strSQL = "SELECT TB_PURCH_HEADER.*, " +
+        //          "TB_STORES.STORE_NAME, " +
+        //          "TB_SUPPLIER.SUPP_NAME, " +
+        //          "TB_PO_HEADER.PO_NO, " +
+        //          "TB_CURRENCY.ID AS CURRENCY_ID, " +
+        //          "TB_CURRENCY.SYMBOL, " +
+        //          "TB_STATUS.STATUS_DESC AS STATUS, " +
+        //          "TB_AC_TRANS_HEADER.NARRATION AS NARRATION " +
+        //          "FROM TB_PURCH_HEADER " +
+        //          "LEFT JOIN TB_STORES ON TB_PURCH_HEADER.STORE_ID = TB_STORES.ID " +
+        //          "LEFT JOIN TB_SUPPLIER ON TB_PURCH_HEADER.SUPP_ID = TB_SUPPLIER.ID " +
+        //          "LEFT JOIN TB_AC_TRANS_HEADER ON TB_PURCH_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID " +
+        //           "LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID " +
+        //          "LEFT JOIN TB_PO_HEADER ON TB_PURCH_HEADER.PO_ID = TB_PO_HEADER.ID " +
+        //          "LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.ID " +
+        //          "WHERE TB_PURCH_HEADER.ID = " + id + ";";
+
+        //        DataTable tbl = ADO.GetDataTable(strSQL, "PurchHeader");
+
+        //        if (tbl.Rows.Count > 0)
+        //        {
+        //            DataRow dr = tbl.Rows[0];
+
+        //             header = new PurchHeader
+        //            {
+        //                ID = Convert.ToInt32(dr["ID"]),
+        //                COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
+        //                PURCH_NO = dr["DOC_NO"] != DBNull.Value ? dr["DOC_NO"].ToString() : null,
+        //                SUPPPLIER_NAME = dr["SUPP_NAME"] != DBNull.Value ? dr["SUPP_NAME"].ToString() : null,
+        //                NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
+        //                PURCH_DATE = dr["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PURCH_DATE"]) : null,
+        //                SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_ID"]) : (int?)null,
+        //                SUPP_INV_NO = dr["SUPP_INV_NO"] != DBNull.Value ? dr["SUPP_INV_NO"].ToString() : null,
+        //                SUPP_INV_DATE = dr["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["SUPP_INV_DATE"]) : null,
+        //                FIN_ID = dr["FIN_ID"] != DBNull.Value ? Convert.ToInt32(dr["FIN_ID"]) : (int?)null,
+        //                TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt64(dr["TRANS_ID"]) : (long?)null,
+        //                PURCH_TYPE = dr["PURCH_TYPE"] != DBNull.Value ? Convert.ToInt16(dr["PURCH_TYPE"]) : (short?)null,
+        //                DISCOUNT_AMOUNT = dr["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["DISCOUNT_AMOUNT"]) : (float?)null,
+        //                SUPP_GROSS_AMOUNT = dr["SUPP_GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["SUPP_GROSS_AMOUNT"]) : (float?)null,
+        //                SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["SUPP_NET_AMOUNT"]) : (float?)null,
+        //                GROSS_AMOUNT = dr["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["GROSS_AMOUNT"]) : (float?)null,
+        //                CHARGE_DESCRIPTION = dr["CHARGE_DESCRIPTION"] != DBNull.Value ? dr["CHARGE_DESCRIPTION"].ToString() : null,
+        //                TAX_AMOUNT = dr["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["TAX_AMOUNT"]) : (decimal?)null,
+        //                NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["NET_AMOUNT"]) : (float?)null,
+        //                RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["RETURN_AMOUNT"]) : (decimal?)null,
+        //                ADJ_AMOUNT = dr["ADJ_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["ADJ_AMOUNT"]) : (float?)null,
+        //                PAID_AMOUNT = dr["PAID_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["PAID_AMOUNT"]) : 0f
+        //            };
+        //        }
+
+        //        string strDetailSQL = "SELECT " +
+        //              "TB_PURCH_DETAIL.*, " +
+        //              "TB_STORES.STORE_NAME, " +
+        //              "TB_ITEMS.DESCRIPTION, " +
+        //              "TB_ITEMS.ITEM_CODE, " +
+        //              "TB_PO_DETAIL.GRN_QTY, " +
+        //              "TB_PO_DETAIL.QUANTITY AS PO_QUANTITY " +
+        //               "FROM TB_PURCH_DETAIL " +
+        //               "LEFT JOIN TB_STORES ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID " +
+        //               "LEFT JOIN TB_ITEMS ON TB_PURCH_DETAIL.ITEM_ID = TB_ITEMS.ID " +
+        //                "LEFT JOIN TB_PO_DETAIL ON TB_PURCH_DETAIL.PO_DET_ID = TB_PO_DETAIL.ID " +
+        //                "WHERE TB_PURCH_DETAIL.PURCH_ID = " + id + ";";
+
+        //        DataTable tblpurchdetail = ADO.GetDataTable(strDetailSQL, "PurchDetails");
+
+        //        foreach (DataRow dr in tblpurchdetail.Rows)
+        //        {
+        //            detail.Add(new PurchDetails
+        //            {
+        //                ID = dr["ID"] != DBNull.Value ? Convert.ToInt64(dr["ID"]) : 0,
+        //                COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
+        //                PURCH_ID = dr["PURCH_ID"] != DBNull.Value ? Convert.ToInt32(dr["PURCH_ID"]) : 0,
+        //                GRN_DET_ID = dr["GRN_DET_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["GRN_DET_ID"]) : null,
+        //                ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["ITEM_ID"]) : null,
+        //                PACKING = dr["PACKING"] != DBNull.Value ? Convert.ToString(dr["PACKING"]) : null,
+        //                QUANTITY = dr["QUANTITY"] != DBNull.Value ? (float?)Convert.ToSingle(dr["QUANTITY"]) : null,
+        //                RATE = dr["RATE"] != DBNull.Value ? (float?)Convert.ToSingle(dr["RATE"]) : null,
+        //                AMOUNT = dr["AMOUNT"] != DBNull.Value ? (float?)Convert.ToSingle(dr["AMOUNT"]) : null,
+        //                RETURN_QTY = dr["RETURN_QTY"] != DBNull.Value ? (float?)Convert.ToSingle(dr["RETURN_QTY"]) : null,
+        //                ITEM_DESC = dr["ITEM_DESC"] != DBNull.Value ? Convert.ToString(dr["ITEM_DESC"]) : null,
+        //                PO_DET_ID = dr["PO_DET_ID"] != DBNull.Value ? (long?)Convert.ToInt64(dr["PO_DET_ID"]) : null,
+        //                UOM = dr["UOM"] != DBNull.Value ? Convert.ToString(dr["UOM"]) : null,
+        //                DISC_PERCENT = dr["DISC_PERCENT"] != DBNull.Value ? (float?)Convert.ToSingle(dr["DISC_PERCENT"]) : null,
+        //                COST = dr["COST"] != DBNull.Value ? (float?)Convert.ToSingle(dr["COST"]) : null,
+        //                SUPP_PRICE = dr["SUPP_PRICE"] != DBNull.Value ? (float?)Convert.ToSingle(dr["SUPP_PRICE"]) : null,
+        //                SUPP_AMOUNT = dr["SUPP_AMOUNT"] != DBNull.Value ? (float?)Convert.ToSingle(dr["SUPP_AMOUNT"]) : null,
+        //                VAT_PERC = dr["VAT_PERC"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["VAT_PERC"]) : null,
+        //                TAX_AMOUNT = dr["TAX_AMOUNT"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["TAX_AMOUNT"]) : null,
+        //                GRN_STORE_ID = dr["GRN_STORE_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["GRN_STORE_ID"]) : null,
+        //                RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["RETURN_AMOUNT"]) : 0f,
+
+        //                // New fields from JOINs
+        //                STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null,
+        //                ITEM_NAME = dr["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["DESCRIPTION"]) : null,
+        //                ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? Convert.ToString(dr["ITEM_CODE"]) : null,
+        //                PO_QUANTITY = dr["PO_QUANTITY"] != DBNull.Value ? Convert.ToDecimal(dr["PO_QUANTITY"]) : 0,
+        //                GRN_QUANTITY = dr["GRN_QTY"] != DBNull.Value ? Convert.ToDecimal(dr["GRN_QTY"]) : 0
+        //            });
+        //        }
+
+        //        header.PurchDetails = detail;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+
+        //    return header;
+        //}
         public PurchHeader GetPurchaseInvoiceById(int id)
         {
             PurchHeader header = new PurchHeader();
@@ -102,22 +218,22 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                string strSQL = "SELECT TB_PURCH_HEADER.*, " +
-                  "TB_STORES.STORE_NAME, " +
-                  "TB_SUPPLIER.SUPP_NAME, " +
-                  "TB_PO_HEADER.PO_NO, " +
-                  "TB_CURRENCY.ID AS CURRENCY_ID, " +
-                  "TB_CURRENCY.SYMBOL, " +
-                  "TB_STATUS.STATUS_DESC AS STATUS, " +
-                  "TB_AC_TRANS_HEADER.NARRATION AS NARRATION " +
-                  "FROM TB_PURCH_HEADER " +
-                  "LEFT JOIN TB_STORES ON TB_PURCH_HEADER.STORE_ID = TB_STORES.ID " +
-                  "LEFT JOIN TB_SUPPLIER ON TB_PURCH_HEADER.SUPP_ID = TB_SUPPLIER.ID " +
-                  "LEFT JOIN TB_AC_TRANS_HEADER ON TB_PURCH_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID " +
-                   "LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID " +
-                  "LEFT JOIN TB_PO_HEADER ON TB_PURCH_HEADER.PO_ID = TB_PO_HEADER.ID " +
-                  "LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.ID " +
-                  "WHERE TB_PURCH_HEADER.ID = " + id + ";";
+                string strSQL = @"SELECT TB_PURCH_HEADER.*, 
+                             TB_STORES.STORE_NAME, 
+                             TB_SUPPLIER.SUPP_NAME, 
+                             TB_PO_HEADER.PO_NO, 
+                             TB_CURRENCY.ID AS CURRENCY_ID, 
+                             TB_CURRENCY.SYMBOL, 
+                             TB_STATUS.STATUS_DESC AS STATUS, 
+                             TB_AC_TRANS_HEADER.NARRATION AS NARRATION 
+                          FROM TB_PURCH_HEADER 
+                          LEFT JOIN TB_STORES ON TB_PURCH_HEADER.STORE_ID = TB_STORES.ID 
+                          LEFT JOIN TB_SUPPLIER ON TB_PURCH_HEADER.SUPP_ID = TB_SUPPLIER.ID 
+                          LEFT JOIN TB_AC_TRANS_HEADER ON TB_PURCH_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID 
+                          LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID 
+                          LEFT JOIN TB_PO_HEADER ON TB_PURCH_HEADER.PO_ID = TB_PO_HEADER.ID 
+                          LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.ID 
+                          WHERE TB_PURCH_HEADER.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "PurchHeader");
 
@@ -125,17 +241,17 @@ namespace MicroApi.DataLayer.Service
                 {
                     DataRow dr = tbl.Rows[0];
 
-                     header = new PurchHeader
+                    header = new PurchHeader
                     {
                         ID = Convert.ToInt32(dr["ID"]),
                         COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        PURCH_NO = dr["DOC_NO"] != DBNull.Value ? dr["DOC_NO"].ToString() : null,
-                        SUPPPLIER_NAME = dr["SUPP_NAME"] != DBNull.Value ? dr["SUPP_NAME"].ToString() : null,
-                        NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
-                        PURCH_DATE = dr["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PURCH_DATE"]) : null,
+                        PURCH_NO = dr["DOC_NO"]?.ToString(),
+                        SUPPPLIER_NAME = dr["SUPP_NAME"]?.ToString(),
+                        NARRATION = dr["NARRATION"]?.ToString(),
+                        PURCH_DATE = dr["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PURCH_DATE"]) : (DateTime?)null,
                         SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_ID"]) : (int?)null,
-                        SUPP_INV_NO = dr["SUPP_INV_NO"] != DBNull.Value ? dr["SUPP_INV_NO"].ToString() : null,
-                        SUPP_INV_DATE = dr["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["SUPP_INV_DATE"]) : null,
+                        SUPP_INV_NO = dr["SUPP_INV_NO"]?.ToString(),
+                        SUPP_INV_DATE = dr["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["SUPP_INV_DATE"]) : (DateTime?)null,
                         FIN_ID = dr["FIN_ID"] != DBNull.Value ? Convert.ToInt32(dr["FIN_ID"]) : (int?)null,
                         TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt64(dr["TRANS_ID"]) : (long?)null,
                         PURCH_TYPE = dr["PURCH_TYPE"] != DBNull.Value ? Convert.ToInt16(dr["PURCH_TYPE"]) : (short?)null,
@@ -143,7 +259,7 @@ namespace MicroApi.DataLayer.Service
                         SUPP_GROSS_AMOUNT = dr["SUPP_GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["SUPP_GROSS_AMOUNT"]) : (float?)null,
                         SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["SUPP_NET_AMOUNT"]) : (float?)null,
                         GROSS_AMOUNT = dr["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["GROSS_AMOUNT"]) : (float?)null,
-                        CHARGE_DESCRIPTION = dr["CHARGE_DESCRIPTION"] != DBNull.Value ? dr["CHARGE_DESCRIPTION"].ToString() : null,
+                        CHARGE_DESCRIPTION = dr["CHARGE_DESCRIPTION"]?.ToString(),
                         TAX_AMOUNT = dr["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["TAX_AMOUNT"]) : (decimal?)null,
                         NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["NET_AMOUNT"]) : (float?)null,
                         RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["RETURN_AMOUNT"]) : (decimal?)null,
@@ -152,18 +268,25 @@ namespace MicroApi.DataLayer.Service
                     };
                 }
 
-                string strDetailSQL = "SELECT " +
-                      "TB_PURCH_DETAIL.*, " +
-                      "TB_STORES.STORE_NAME, " +
-                      "TB_ITEMS.DESCRIPTION, " +
-                      "TB_ITEMS.ITEM_CODE, " +
-                      "TB_PO_DETAIL.GRN_QTY, " +
-                      "TB_PO_DETAIL.QUANTITY AS PO_QUANTITY " +
-                       "FROM TB_PURCH_DETAIL " +
-                       "LEFT JOIN TB_STORES ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID " +
-                       "LEFT JOIN TB_ITEMS ON TB_PURCH_DETAIL.ITEM_ID = TB_ITEMS.ID " +
-                        "LEFT JOIN TB_PO_DETAIL ON TB_PURCH_DETAIL.PO_DET_ID = TB_PO_DETAIL.ID " +
-                        "WHERE TB_PURCH_DETAIL.PURCH_ID = " + id + ";";
+                string strDetailSQL = @"SELECT 
+                                  TB_PURCH_DETAIL.*, 
+                                  TB_STORES.STORE_NAME, 
+                                  TB_ITEMS.DESCRIPTION, 
+                                  TB_ITEMS.ITEM_CODE, 
+                                  TB_PO_DETAIL.GRN_QTY, 
+                                  TB_PO_DETAIL.QUANTITY AS PO_QUANTITY,
+                                  TB_GRN_DETAIL.QUANTITY AS GRN_QTY,
+                                  TB_GRN_DETAIL.INVOICE_QTY,
+                                  TB_GRN_DETAIL.UOM,
+                                  TB_GRN_HEADER.GRN_NO,
+                                  TB_GRN_HEADER.GRN_DATE
+                                FROM TB_PURCH_DETAIL
+                                LEFT JOIN TB_STORES ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID 
+                                LEFT JOIN TB_ITEMS ON TB_PURCH_DETAIL.ITEM_ID = TB_ITEMS.ID 
+                                LEFT JOIN TB_PO_DETAIL ON TB_PURCH_DETAIL.PO_DET_ID = TB_PO_DETAIL.ID 
+                                LEFT JOIN TB_GRN_DETAIL ON TB_PURCH_DETAIL.GRN_DET_ID = TB_GRN_DETAIL.ID
+                                LEFT JOIN TB_GRN_HEADER ON TB_GRN_DETAIL.GRN_ID = TB_GRN_HEADER.ID
+                                WHERE TB_PURCH_DETAIL.PURCH_ID = " + id;
 
                 DataTable tblpurchdetail = ADO.GetDataTable(strDetailSQL, "PurchDetails");
 
@@ -176,14 +299,14 @@ namespace MicroApi.DataLayer.Service
                         PURCH_ID = dr["PURCH_ID"] != DBNull.Value ? Convert.ToInt32(dr["PURCH_ID"]) : 0,
                         GRN_DET_ID = dr["GRN_DET_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["GRN_DET_ID"]) : null,
                         ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["ITEM_ID"]) : null,
-                        PACKING = dr["PACKING"] != DBNull.Value ? Convert.ToString(dr["PACKING"]) : null,
+                        PACKING = dr["PACKING"]?.ToString(),
                         QUANTITY = dr["QUANTITY"] != DBNull.Value ? (float?)Convert.ToSingle(dr["QUANTITY"]) : null,
                         RATE = dr["RATE"] != DBNull.Value ? (float?)Convert.ToSingle(dr["RATE"]) : null,
                         AMOUNT = dr["AMOUNT"] != DBNull.Value ? (float?)Convert.ToSingle(dr["AMOUNT"]) : null,
                         RETURN_QTY = dr["RETURN_QTY"] != DBNull.Value ? (float?)Convert.ToSingle(dr["RETURN_QTY"]) : null,
-                        ITEM_DESC = dr["ITEM_DESC"] != DBNull.Value ? Convert.ToString(dr["ITEM_DESC"]) : null,
+                        ITEM_DESC = dr["ITEM_DESC"]?.ToString(),
                         PO_DET_ID = dr["PO_DET_ID"] != DBNull.Value ? (long?)Convert.ToInt64(dr["PO_DET_ID"]) : null,
-                        UOM = dr["UOM"] != DBNull.Value ? Convert.ToString(dr["UOM"]) : null,
+                        UOM = dr["UOM"]?.ToString(),
                         DISC_PERCENT = dr["DISC_PERCENT"] != DBNull.Value ? (float?)Convert.ToSingle(dr["DISC_PERCENT"]) : null,
                         COST = dr["COST"] != DBNull.Value ? (float?)Convert.ToSingle(dr["COST"]) : null,
                         SUPP_PRICE = dr["SUPP_PRICE"] != DBNull.Value ? (float?)Convert.ToSingle(dr["SUPP_PRICE"]) : null,
@@ -193,12 +316,18 @@ namespace MicroApi.DataLayer.Service
                         GRN_STORE_ID = dr["GRN_STORE_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["GRN_STORE_ID"]) : null,
                         RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["RETURN_AMOUNT"]) : 0f,
 
-                        // New fields from JOINs
-                        STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null,
-                        ITEM_NAME = dr["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["DESCRIPTION"]) : null,
-                        ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? Convert.ToString(dr["ITEM_CODE"]) : null,
+                        STORE_NAME = dr["STORE_NAME"]?.ToString(),
+                        ITEM_NAME = dr["DESCRIPTION"]?.ToString(),
+                        ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
                         PO_QUANTITY = dr["PO_QUANTITY"] != DBNull.Value ? Convert.ToDecimal(dr["PO_QUANTITY"]) : 0,
-                        GRN_QUANTITY = dr["GRN_QTY"] != DBNull.Value ? Convert.ToDecimal(dr["GRN_QTY"]) : 0
+                        GRN_QUANTITY = dr["GRN_QTY"] != DBNull.Value ? Convert.ToDecimal(dr["GRN_QTY"]) : 0,
+
+                        GRN_NO = dr["GRN_NO"]?.ToString(),
+                        GRN_DATE = dr["GRN_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["GRN_DATE"]) : (DateTime?)null,
+                        PENDING_QTY = dr["PO_QUANTITY"] != DBNull.Value && dr["GRN_QTY"] != DBNull.Value
+                            ? Convert.ToDecimal(dr["PO_QUANTITY"]) - Convert.ToDecimal(dr["GRN_QTY"])
+                            : 0,
+                        TOTAL_AMOUNT = dr["AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["AMOUNT"]) : 0f
                     });
                 }
 
@@ -211,6 +340,7 @@ namespace MicroApi.DataLayer.Service
 
             return header;
         }
+
         public Int32 Insert(PurchHeader purchHeader)
         {
             SqlConnection connection = ADO.GetConnection();

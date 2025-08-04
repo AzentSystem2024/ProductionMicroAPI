@@ -18,42 +18,21 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-
-        public ItemsResponse List(MasterFilter objFilter)
+        public ItemsResponse List(MasterFilter? objFilter)
         {
             ItemsResponse res = new ItemsResponse();
             List<Items> items = new List<Items>();
             try
             {
                 string apiKey = "";
-                Int32 intUserID = 1;
+                int intUserID = 1;
 
-                /*
-                foreach (var header in Request.Headers)
-                {
-                    if (header.Key == "x-api-key")
-                        apiKey = header.Value.ToList()[0];
-                }
-
-                User_DAL userDAL = new User_DAL();
-                Int32 intUserID = userDAL.GetUserIDWithToken(apiKey);
-                if (intUserID < 1)
-                {
-                    res.flag = "0";
-                    res.message = "Invalid authorization key";
-                    return res;
-                }
-                */
-
-                
-
-                // Handle null objFilter
                 if (objFilter == null)
                 {
                     objFilter = new MasterFilter
                     {
-                        MASTER_TYPE = "All", // Or any default value you need
-                        MASTER_VALUE = string.Empty
+                        MASTER_TYPE = "All",
+                        MASTER_VALUE = ""
                     };
                 }
 

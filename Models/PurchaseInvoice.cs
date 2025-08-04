@@ -132,6 +132,10 @@
         public string ITEM_CODE { get; set; }
         public decimal PO_QUANTITY { get; set; }
         public decimal GRN_QUANTITY { get; set; }
+        public string? GRN_NO { get; set; }
+        public DateTime? GRN_DATE { get; set; }
+        public decimal? PENDING_QTY { get; set; }
+        public float? TOTAL_AMOUNT { get; set; }
     }
     public class PurchResponce
     {
