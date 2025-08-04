@@ -31,7 +31,7 @@
     }
     public class PayTimeEntryRequest
     {
-        public int COMAPNY_ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public int HEAD_ID { get; set; }
         public string SAL_MONTH { get; set; }
     }

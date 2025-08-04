@@ -74,9 +74,10 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue("@ACTION", 0); // SELECT case
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMAPNY_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@HEAD_ID", request.HEAD_ID);
                         cmd.Parameters.AddWithValue("@SAL_MONTH", request.SAL_MONTH);
+
 
                         using (var reader = cmd.ExecuteReader())
                         {
