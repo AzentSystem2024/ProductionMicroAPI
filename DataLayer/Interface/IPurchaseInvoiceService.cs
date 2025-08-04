@@ -14,6 +14,8 @@ namespace MicroApi.DataLayer.Interface
         public bool Delete(int id);
         public List<PurchaseInvoice> GetPurchaseInvoiceList();
         GrnPendingQtyResponse GetGrnPendingQty();
+        PurchaseVoucherResponse GetPurchaseNo();
+
 
     }
 }

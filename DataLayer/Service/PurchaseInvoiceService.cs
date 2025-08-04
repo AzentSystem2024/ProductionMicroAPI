@@ -430,6 +430,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
+                cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
@@ -556,7 +557,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
-
+                cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
 
@@ -957,7 +958,40 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public PurchaseVoucherResponse GetPurchaseNo()
+        {
+            PurchaseVoucherResponse res = new PurchaseVoucherResponse();
 
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                    SELECT TOP 1 VOUCHER_NO 
+                    FROM TB_AC_TRANS_HEADER 
+                    WHERE TRANS_TYPE = 19
+                    ORDER BY TRANS_ID DESC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        res.flag = 1;
+                        res.PURCHASE_NO = result != null ? Convert.ToInt32(result) : 0;
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
 
 
     }

@@ -32,9 +32,7 @@ namespace MicroApi.DataLayer.Services
             if (ActiveOnly == true)
                 strSQL += " TB_ITEMS.IS_INACTIVE  = 0";
 
-            if (objFilter != null &&
-                !string.IsNullOrWhiteSpace(objFilter.MASTER_TYPE) &&
-                !string.IsNullOrWhiteSpace(objFilter.MASTER_VALUE))
+            if (objFilter != null)
             {
                 if (objFilter.MASTER_TYPE == "Department")
                     strSQL += " AND TB_ITEMS.DEPT_ID IN (" + objFilter.MASTER_VALUE + ")";

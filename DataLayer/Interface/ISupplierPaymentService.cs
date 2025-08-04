@@ -10,6 +10,8 @@ namespace MicroApi.DataLayer.Interface
         SupplierSelectResponse GetSupplierById(int id);
         PendingInvoiceResponse GetPendingInvoiceList();
         SupplierPaymentResponse Commit(CommitRequest request);
+        SupplierVoucherResponse GetSupplierNo();
+
 
     }
 }

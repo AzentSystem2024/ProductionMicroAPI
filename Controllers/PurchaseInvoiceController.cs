@@ -244,6 +244,23 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("purchaseno")]
+        public PurchaseVoucherResponse GetPurchaseNo()
+        {
+            PurchaseVoucherResponse res = new PurchaseVoucherResponse();
 
+            try
+            {
+                res = _PurchaseInvoiceService.GetPurchaseNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
