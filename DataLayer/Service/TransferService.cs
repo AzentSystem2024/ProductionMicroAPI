@@ -24,6 +24,8 @@ namespace MicroApi.DataLayer.Service
             TB_PACKING.COLOR,
             TB_ARTICLE_CATEGORY.DESCRIPTION AS CATEGORY,
             TB_PACKING.DESCRIPTION AS PACKING,
+            TB_TROUT_ENTRY.RECEVED_TIME,
+            TB_TROUT_ENTRY.IS_RECEIVED,
             TB_TROUT_SUMMARY.QUANTITY,
             TB_TROUT_SUMMARY.PAIR_QTY,
             SUM(TB_TROUT_SUMMARY.QUANTITY * TB_TROUT_SUMMARY.PAIR_QTY) AS TOTAL_PAIR_QUANTITY
@@ -35,6 +37,8 @@ namespace MicroApi.DataLayer.Service
             TB_PACKING ON TB_PACKING.ID = TB_TROUT_SUMMARY.PACKING_ID
         INNER JOIN 
             TB_ARTICLE_CATEGORY ON TB_ARTICLE_CATEGORY.ID = TB_PACKING.CATEGORY_ID
+        INNER JOIN
+            TB_TROUT_ENTRY ON TB_TROUT_ENTRY.TRANSFER_ID = TB_TROUT_SUMMARY.TRANSFER_ID
             WHERE TB_TROUT_SUMMARY.INVOICE_ID=0
         GROUP BY 
             TB_TROUT_SUMMARY.TRANSFER_NO,
@@ -44,6 +48,8 @@ namespace MicroApi.DataLayer.Service
             TB_PACKING.COLOR,
             TB_ARTICLE_CATEGORY.DESCRIPTION,
             TB_PACKING.DESCRIPTION,
+            TB_TROUT_ENTRY.RECEVED_TIME,
+            TB_TROUT_ENTRY.IS_RECEIVED,
             TB_TROUT_SUMMARY.QUANTITY,
             TB_TROUT_SUMMARY.PAIR_QTY";
 
@@ -67,6 +73,8 @@ namespace MicroApi.DataLayer.Service
                                 COLOR = reader["COLOR"].ToString(),
                                 CATEGORY = reader["CATEGORY"].ToString(),
                                 PACKING = reader["PACKING"].ToString(),
+                                RECEIVED_TIME = reader["RECEVED_TIME"].ToString(),
+                                IS_RECEIVED =  Convert.ToBoolean(reader["IS_RECEIVED"]),
                                 TRANSFER_QTY = Convert.ToInt32(reader["QUANTITY"]),
                                 PAIR_QTY = Convert.ToInt32(reader["PAIR_QTY"]),
                                 TOTAL_PAIR_QTY = Convert.ToInt32(reader["TOTAL_PAIR_QUANTITY"])
