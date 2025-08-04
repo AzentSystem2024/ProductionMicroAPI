@@ -41,7 +41,7 @@
         public string EMP_CODE { get; set; }
         public string EMP_NAME { get; set; }
         public int? DAYS { get; set; }  
-        //public float? AMOUNT { get; set; }
+        public float? AMOUNT { get; set; }
     }
 
     public class PayTimeSelectResponse
