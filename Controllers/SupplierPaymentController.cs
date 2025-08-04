@@ -122,5 +122,23 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("supplierno")]
+        public SupplierVoucherResponse GetSupplierNo()
+        {
+            SupplierVoucherResponse res = new SupplierVoucherResponse();
+
+            try
+            {
+                res = _supplierService.GetSupplierNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }

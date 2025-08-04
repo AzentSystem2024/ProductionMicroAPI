@@ -180,5 +180,11 @@
         public string message { get; set; }
         public List<GrnPendingQty> Data { get; set; }
     }
+    public class PurchaseVoucherResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int PURCHASE_NO { get; set; }
+    }
 
 }
