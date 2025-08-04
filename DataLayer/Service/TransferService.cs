@@ -26,9 +26,11 @@ namespace MicroApi.DataLayer.Service
             TB_PACKING.DESCRIPTION AS PACKING,
             TB_TROUT_ENTRY.RECEVED_TIME,
             TB_TROUT_ENTRY.IS_RECEIVED,
-            TB_TROUT_SUMMARY.QUANTITY,
-            TB_TROUT_SUMMARY.PAIR_QTY,
-            SUM(TB_TROUT_SUMMARY.QUANTITY * TB_TROUT_SUMMARY.PAIR_QTY) AS TOTAL_PAIR_QUANTITY
+             TB_TROUT_SUMMARY.QUANTITY,
+             TB_TROUT_SUMMARY.PAIR_QTY,
+             SUM(TB_TROUT_SUMMARY.QUANTITY * TB_TROUT_SUMMARY.PAIR_QTY) AS TOTAL_PAIR_QUANTITY,
+	         COUNT(TB_TROUT_ENTRY.ID) AS QUANTITY,
+            SUM(CASE WHEN TB_TROUT_ENTRY.IS_RECEIVED = 1 THEN TB_TROUT_SUMMARY.QUANTITY ELSE 0 END) AS RECEIVED_QUANTITY
         FROM 
             TB_TROUT_SUMMARY
         INNER JOIN 
@@ -75,6 +77,7 @@ namespace MicroApi.DataLayer.Service
                                 PACKING = reader["PACKING"].ToString(),
                                 RECEIVED_TIME = reader["RECEVED_TIME"].ToString(),
                                 IS_RECEIVED =  Convert.ToBoolean(reader["IS_RECEIVED"]),
+                                RECEIVED_QUANTITY = Convert.ToInt32(reader["RECEIVED_QUANTITY"]),
                                 TRANSFER_QTY = Convert.ToInt32(reader["QUANTITY"]),
                                 PAIR_QTY = Convert.ToInt32(reader["PAIR_QTY"]),
                                 TOTAL_PAIR_QTY = Convert.ToInt32(reader["TOTAL_PAIR_QUANTITY"])
