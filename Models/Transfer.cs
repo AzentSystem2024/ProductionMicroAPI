@@ -10,6 +10,8 @@
         public string COLOR { get; set; }
         public string CATEGORY { get; set; }
         public string PACKING { get; set; }
+        public string RECEIVED_TIME { get; set; }
+        public bool IS_RECEIVED { get; set; }
         public int TRANSFER_QTY { get; set; }
         public int PAIR_QTY { get; set; }
         public int TOTAL_PAIR_QTY { get; set; }
