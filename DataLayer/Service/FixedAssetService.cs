@@ -70,7 +70,7 @@ namespace MicroApi.DataLayer.Service
                                     //LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["LAST_DEPR_DATE"]).ToString("dd/MM/yyyy") : null,
                                     NET_DEPRECIATION = reader["TOTAL_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_DEPRECIATION"]) : 0f,
                                     CURRENT_VALUE = reader["NET_ASSET_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["NET_ASSET_VALUE"]) : 0f,
-                                    //IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
                                 };
                                 response.Data.Add(asset);
                             }
@@ -208,14 +208,17 @@ namespace MicroApi.DataLayer.Service
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     CODE = reader["CODE"] != DBNull.Value ? reader["CODE"].ToString() : null,
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
+                                    ASSET_TYPE_ID = reader["ASSET_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_TYPE_ID"]) : 0,
                                     ASSET_TYPE = reader["ASSET_TYPE"] != DBNull.Value ? reader["ASSET_TYPE"].ToString() : null,
                                     PURCH_DATE = reader["PURCHASE_DATE"] != DBNull.Value ? reader["PURCHASE_DATE"].ToString() : null,
                                     ASSET_VALUE = reader["PURCHASE_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["PURCHASE_VALUE"]) : 0,
+                                    ASSET_LEDGER_ID = reader["ASSET_LEDGER_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_LEDGER_ID"]) : 0,
                                     RESIDUAL_VALUE = reader["RESIDUAL_VALUE"] != DBNull.Value ? Convert.ToDecimal(reader["RESIDUAL_VALUE"]) :0,
                                     DEPR_PERCENT = reader["DEPR_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DEPR_PERCENT"]) : 0,
                                     USEFUL_LIFE = reader["USEFUL_LIFE"] != DBNull.Value ? Convert.ToInt32(reader["USEFUL_LIFE"]) : 0,
-                                    NET_DEPRECIATION = reader["TOTAL_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_DEPRECIATION"]) : 0f,
-                                    CURRENT_VALUE = reader["NET_ASSET_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["NET_ASSET_VALUE"]) : 0f,
+                                    LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? reader["LAST_DEPR_DATE"].ToString() : null,
+                                    NET_DEPRECIATION = reader["NET_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["NET_DEPRECIATION"]) : 0f,
+                                    CURRENT_VALUE = reader["CURRENT_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["CURRENT_VALUE"]) : 0f,
                                     IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
                                 };
                                 response.Data.Add(asset);
