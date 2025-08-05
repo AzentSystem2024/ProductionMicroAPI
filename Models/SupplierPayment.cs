@@ -158,6 +158,7 @@
         public int BILL_ID { get; set; }
         public string DOC_NO { get; set; }
         public string PURCH_DATE { get; set; }
+        public string SUPP_INV_DATE { get; set; }
         public string SUPP_INV_NO { get; set; }
         public double NET_AMOUNT { get; set; }
         public double PENDING_AMOUNT { get; set; }
@@ -172,5 +173,9 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int SUPPLIER_PAYMENT { get; set; }
+    }
+    public class PendingInvoiceRequest
+    {
+        public int SUPP_ID { get; set; }
     }
 }

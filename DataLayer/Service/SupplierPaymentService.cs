@@ -345,7 +345,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public PendingInvoiceResponse GetPendingInvoiceList()
+        public PendingInvoiceResponse GetPendingInvoiceList(PendingInvoiceRequest request)
         {
             PendingInvoiceResponse response = new PendingInvoiceResponse
             {
@@ -367,7 +367,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 19);
-
+                        cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -376,9 +376,8 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     BILL_ID = reader["BILL_ID"] != DBNull.Value ? Convert.ToInt32(reader["BILL_ID"]) : 0,
                                     DOC_NO = reader["DOC_NO"]?.ToString(),
-                                    PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value
-                                        ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy")
-                                        : null,
+                                    PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy"): null,
+                                    SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
                                     SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["NET_AMOUNT"]) : 0,
                                     PENDING_AMOUNT = reader["PENDING_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["PENDING_AMOUNT"]) : 0,
