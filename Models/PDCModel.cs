@@ -44,6 +44,7 @@
         public string? CHEQUE_DATE { get; set; }
         public decimal? AMOUNT { get; set; }
         public string REMARKS { get; set; }
+        public string ENTRY_STATUS { get; set; }
     }
     public class PDCResponse
     {

@@ -214,6 +214,7 @@ namespace MicroApi.DataLayer.Service
                                     ASSET_VALUE = reader["PURCHASE_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["PURCHASE_VALUE"]) : 0,
                                     ASSET_LEDGER_ID = reader["ASSET_LEDGER_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_LEDGER_ID"]) : 0,
                                     RESIDUAL_VALUE = reader["RESIDUAL_VALUE"] != DBNull.Value ? Convert.ToDecimal(reader["RESIDUAL_VALUE"]) :0,
+                                    DEPR_LEDGER_ID = reader["DEPR_LEDGER_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPR_LEDGER_ID"]) : 0,
                                     DEPR_PERCENT = reader["DEPR_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DEPR_PERCENT"]) : 0,
                                     USEFUL_LIFE = reader["USEFUL_LIFE"] != DBNull.Value ? Convert.ToInt32(reader["USEFUL_LIFE"]) : 0,
                                     LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? reader["LAST_DEPR_DATE"].ToString() : null,
