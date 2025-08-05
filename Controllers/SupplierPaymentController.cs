@@ -89,13 +89,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("invoicelist")]
-        public PendingInvoiceResponse GetPendingInvoiceList()
+        public PendingInvoiceResponse GetPendingInvoiceList(PendingInvoiceRequest request)
         {
             PendingInvoiceResponse res = new PendingInvoiceResponse();
 
             try
             {
-                res = _supplierService.GetPendingInvoiceList();
+                res = _supplierService.GetPendingInvoiceList(request);
             }
             catch (Exception ex)
             {
