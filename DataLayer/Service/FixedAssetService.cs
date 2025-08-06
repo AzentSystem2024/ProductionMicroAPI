@@ -70,7 +70,7 @@ namespace MicroApi.DataLayer.Service
                                     //LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["LAST_DEPR_DATE"]).ToString("dd/MM/yyyy") : null,
                                     NET_DEPRECIATION = reader["TOTAL_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_DEPRECIATION"]) : 0f,
                                     CURRENT_VALUE = reader["NET_ASSET_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["NET_ASSET_VALUE"]) : 0f,
-                                    //IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
                                 };
                                 response.Data.Add(asset);
                             }
@@ -100,21 +100,19 @@ namespace MicroApi.DataLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SP_TB_AC_FIXEDASSET", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     cmd.Parameters.AddWithValue("@ACTION", 1);
-                    cmd.Parameters.AddWithValue("@CODE", fixedAsset.CODE);
-                    cmd.Parameters.AddWithValue("@DESCRIPTION", fixedAsset.DESCRIPTION);
-                    cmd.Parameters.AddWithValue("@ASSET_TYPE_NAME", fixedAsset.ASSET_TYPE);
-                    cmd.Parameters.AddWithValue("@ASSET_LEDGER_ID", fixedAsset.ASSET_LEDGER_ID);
-                    cmd.Parameters.AddWithValue("@ASSET_VALUE", fixedAsset.ASSET_VALUE);
-                    cmd.Parameters.AddWithValue("@USEFUL_LIFE", fixedAsset.USEFUL_LIFE);
-                    cmd.Parameters.AddWithValue("@RESIDUAL_VALUE", fixedAsset.RESIDUAL_VALUE);
-                    cmd.Parameters.AddWithValue("@DEPR_LEDGER_ID", fixedAsset.DEPR_LEDGER_ID);
-                    cmd.Parameters.AddWithValue("@DEPR_PERCENT", fixedAsset.DEPR_PERCENT);
-                    cmd.Parameters.AddWithValue("@PURCH_DATE", fixedAsset.PURCH_DATE);
-                    cmd.Parameters.AddWithValue("@IS_INACTIVE", fixedAsset.IS_INACTIVE);
+                    cmd.Parameters.AddWithValue("@CODE", (object)fixedAsset.CODE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DESCRIPTION", (object)fixedAsset.DESCRIPTION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ASSET_TYPE_NAME", (object)fixedAsset.ASSET_TYPE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ASSET_LEDGER_ID", (object)fixedAsset.ASSET_LEDGER_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ASSET_VALUE", (object)fixedAsset.ASSET_VALUE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@USEFUL_LIFE", (object)fixedAsset.USEFUL_LIFE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RESIDUAL_VALUE", (object)fixedAsset.RESIDUAL_VALUE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DEPR_LEDGER_ID", (object)fixedAsset.DEPR_LEDGER_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DEPR_PERCENT", (object)fixedAsset.DEPR_PERCENT ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PURCH_DATE", (object)fixedAsset.PURCH_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IS_INACTIVE", (object)fixedAsset.IS_INACTIVE ?? DBNull.Value);
 
-                    //connection.Open();
                     cmd.ExecuteNonQuery();
 
                 }
@@ -208,14 +206,18 @@ namespace MicroApi.DataLayer.Service
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     CODE = reader["CODE"] != DBNull.Value ? reader["CODE"].ToString() : null,
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
+                                    ASSET_TYPE_ID = reader["ASSET_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_TYPE_ID"]) : 0,
                                     ASSET_TYPE = reader["ASSET_TYPE"] != DBNull.Value ? reader["ASSET_TYPE"].ToString() : null,
                                     PURCH_DATE = reader["PURCHASE_DATE"] != DBNull.Value ? reader["PURCHASE_DATE"].ToString() : null,
                                     ASSET_VALUE = reader["PURCHASE_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["PURCHASE_VALUE"]) : 0,
+                                    ASSET_LEDGER_ID = reader["ASSET_LEDGER_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_LEDGER_ID"]) : 0,
                                     RESIDUAL_VALUE = reader["RESIDUAL_VALUE"] != DBNull.Value ? Convert.ToDecimal(reader["RESIDUAL_VALUE"]) :0,
+                                    DEPR_LEDGER_ID = reader["DEPR_LEDGER_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPR_LEDGER_ID"]) : 0,
                                     DEPR_PERCENT = reader["DEPR_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DEPR_PERCENT"]) : 0,
                                     USEFUL_LIFE = reader["USEFUL_LIFE"] != DBNull.Value ? Convert.ToInt32(reader["USEFUL_LIFE"]) : 0,
-                                    NET_DEPRECIATION = reader["TOTAL_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_DEPRECIATION"]) : 0f,
-                                    CURRENT_VALUE = reader["NET_ASSET_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["NET_ASSET_VALUE"]) : 0f,
+                                    LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? reader["LAST_DEPR_DATE"].ToString() : null,
+                                    NET_DEPRECIATION = reader["NET_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["NET_DEPRECIATION"]) : 0f,
+                                    CURRENT_VALUE = reader["CURRENT_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["CURRENT_VALUE"]) : 0f,
                                     IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
                                 };
                                 response.Data.Add(asset);
