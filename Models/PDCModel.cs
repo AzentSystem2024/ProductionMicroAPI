@@ -37,6 +37,7 @@
 
     public class PDCList
     {
+        public int ID { get; set; }
         public string ENTRY_NO { get; set; }
         public string? ENTRY_DATE { get; set; }
         public string BENEFICIARY_NAME { get; set; }
@@ -44,6 +45,7 @@
         public string? CHEQUE_DATE { get; set; }
         public decimal? AMOUNT { get; set; }
         public string REMARKS { get; set; }
+        public bool? IS_PAYMENT { get; set; }
         public string ENTRY_STATUS { get; set; }
     }
     public class PDCResponse

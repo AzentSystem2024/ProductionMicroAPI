@@ -43,6 +43,7 @@ namespace MicroApi.DataLayer.Service
                             {
                                 response.Data.Add(new PDCList
                                 {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     ENTRY_NO = reader["ENTRY_NO"] != DBNull.Value ? reader["ENTRY_NO"].ToString() : null,
                                     ENTRY_DATE = reader["ENTRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["ENTRY_DATE"]).ToString("dd/MM/yyyy") : null,
                                     BENEFICIARY_NAME = reader["BENEFICIARY_NAME"] != DBNull.Value ? reader["BENEFICIARY_NAME"].ToString() : null,
@@ -50,6 +51,7 @@ namespace MicroApi.DataLayer.Service
                                     CHEQUE_DATE = reader["DUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DUE_DATE"]).ToString("dd/MM/yyyy") : null,
                                     AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : 0m,
                                     REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
+                                    IS_PAYMENT = reader["IS_PAYMENT"] != DBNull.Value ? Convert.ToBoolean(reader["IS_PAYMENT"]) : (bool?)null,
                                     ENTRY_STATUS = reader["ENTRY_STATUS"] != DBNull.Value ? reader["ENTRY_STATUS"].ToString() : null
                                 });
                             }
