@@ -102,19 +102,19 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 1);
-                    cmd.Parameters.AddWithValue("@CODE", fixedAsset.CODE);
-                    cmd.Parameters.AddWithValue("@DESCRIPTION", fixedAsset.DESCRIPTION);
-                    cmd.Parameters.AddWithValue("@ASSET_TYPE_NAME", fixedAsset.ASSET_TYPE);
-                    cmd.Parameters.AddWithValue("@ASSET_LEDGER_ID", fixedAsset.ASSET_LEDGER_ID);
-                    cmd.Parameters.AddWithValue("@ASSET_VALUE", fixedAsset.ASSET_VALUE);
-                    cmd.Parameters.AddWithValue("@USEFUL_LIFE", fixedAsset.USEFUL_LIFE);
-                    cmd.Parameters.AddWithValue("@RESIDUAL_VALUE", fixedAsset.RESIDUAL_VALUE);
-                    cmd.Parameters.AddWithValue("@DEPR_LEDGER_ID", fixedAsset.DEPR_LEDGER_ID);
-                    cmd.Parameters.AddWithValue("@DEPR_PERCENT", fixedAsset.DEPR_PERCENT);
-                    cmd.Parameters.AddWithValue("@PURCH_DATE", fixedAsset.PURCH_DATE);
-                    cmd.Parameters.AddWithValue("@IS_INACTIVE", fixedAsset.IS_INACTIVE);
+                    cmd.Parameters.AddWithValue("@CODE", (object)fixedAsset.CODE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DESCRIPTION", (object)fixedAsset.DESCRIPTION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ASSET_TYPE_NAME", (object)fixedAsset.ASSET_TYPE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ASSET_LEDGER_ID", (object)fixedAsset.ASSET_LEDGER_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ASSET_VALUE", (object)fixedAsset.ASSET_VALUE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@USEFUL_LIFE", (object)fixedAsset.USEFUL_LIFE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RESIDUAL_VALUE", (object)fixedAsset.RESIDUAL_VALUE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DEPR_LEDGER_ID", (object)fixedAsset.DEPR_LEDGER_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DEPR_PERCENT", (object)fixedAsset.DEPR_PERCENT ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PURCH_DATE", (object)fixedAsset.PURCH_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IS_INACTIVE", (object)fixedAsset.IS_INACTIVE ?? DBNull.Value);
+                    //cmd.Parameters.AddWithValue("@IS_DELETED", (object)fixedAsset.IS_DELETED ?? DBNull.Value);
 
-                    //connection.Open();
                     cmd.ExecuteNonQuery();
 
                 }

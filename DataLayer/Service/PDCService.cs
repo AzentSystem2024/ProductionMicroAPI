@@ -50,7 +50,7 @@ namespace MicroApi.DataLayer.Service
                                     CHEQUE_DATE = reader["DUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DUE_DATE"]).ToString("dd/MM/yyyy") : null,
                                     AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : 0m,
                                     REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
-                                    ENTRY_STATUS = reader["STATUS"] != DBNull.Value ? reader.ToString() : null,
+                                    ENTRY_STATUS = reader["ENTRY_STATUS"] != DBNull.Value ? reader["ENTRY_STATUS"].ToString() : null
                                 });
                             }
                         }

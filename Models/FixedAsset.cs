@@ -15,6 +15,7 @@
         public float DEPR_PERCENT {  get; set; }
         public string PURCH_DATE { get; set; }
         public bool IS_INACTIVE { get; set; }
+       // public bool IS_DELETED { get; set; }
     }
     public class FixedAssetList
     {
