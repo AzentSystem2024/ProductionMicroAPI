@@ -113,6 +113,7 @@
     {
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
+        public int SUPPLIER_NO { get; set; }
         public string PAY_DATE { get; set; }
         public int COMPANY_ID { get; set; }
         public int FIN_ID { get; set; }
