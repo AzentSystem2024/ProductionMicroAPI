@@ -7,6 +7,7 @@
         public int? CUST_ID { get; set; }
         public int? SUPP_ID { get; set; }
         public string BENEFICIARY_NAME { get; set; }
+        public int? BENEFICIARY_TYPE { get; set; }
         //public string ENTRY_NO { get; set; }
         public string? ENTRY_DATE { get; set; }
         public string? CHEQUE_NO { get; set; }
@@ -24,6 +25,7 @@
         public int? CUST_ID { get; set; }
         public int? SUPP_ID { get; set; }
         public string BENEFICIARY_NAME { get; set; }
+        public int? BENEFICIARY_TYPE { get; set; }
         public string ENTRY_NO { get; set; }
         public string? ENTRY_DATE { get; set; }
         public string CHEQUE_NO { get; set; }
@@ -31,7 +33,7 @@
         public decimal? AMOUNT { get; set; }
         public string REMARKS { get; set; }
         public bool? IS_PAYMENT { get; set; }
-        public int? ENTRY_STATUS { get; set; }
+        public string? ENTRY_STATUS { get; set; }
         public int? AC_TRANS_ID { get; set; }
     }
 
@@ -41,6 +43,7 @@
         public string ENTRY_NO { get; set; }
         public string? ENTRY_DATE { get; set; }
         public string BENEFICIARY_NAME { get; set; }
+        public int? BENEFICIARY_TYPE { get; set; }
         public string CHEQUE_NO { get; set; }
         public string? CHEQUE_DATE { get; set; }
         public decimal? AMOUNT { get; set; }

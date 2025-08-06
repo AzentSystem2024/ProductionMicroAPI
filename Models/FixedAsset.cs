@@ -5,8 +5,8 @@
         public int ID { get; set; }
         public string CODE { get; set; }
         public string? DESCRIPTION { get; set; }
-        public int ASSET_TYPE_ID { get; set; }
-        public string ASSET_TYPE { get; set; }
+        public int? ASSET_TYPE_ID { get; set; }
+        public string? ASSET_TYPE { get; set; }
         public int? ASSET_LEDGER_ID { get; set; }
         public float? ASSET_VALUE {  get; set; }
         public int? USEFUL_LIFE {  get; set; }

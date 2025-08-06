@@ -100,7 +100,6 @@ namespace MicroApi.DataLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SP_TB_AC_FIXEDASSET", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     cmd.Parameters.AddWithValue("@ACTION", 1);
                     cmd.Parameters.AddWithValue("@CODE", (object)fixedAsset.CODE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DESCRIPTION", (object)fixedAsset.DESCRIPTION ?? DBNull.Value);
@@ -113,7 +112,6 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@DEPR_PERCENT", (object)fixedAsset.DEPR_PERCENT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@PURCH_DATE", (object)fixedAsset.PURCH_DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@IS_INACTIVE", (object)fixedAsset.IS_INACTIVE ?? DBNull.Value);
-                    //cmd.Parameters.AddWithValue("@IS_DELETED", (object)fixedAsset.IS_DELETED ?? DBNull.Value);
 
                     cmd.ExecuteNonQuery();
 

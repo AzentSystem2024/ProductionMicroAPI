@@ -86,6 +86,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CUST_ID", (object)pdc.CUST_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@SUPP_ID", (object)pdc.SUPP_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@BENEFICIARY_NAME", (object)pdc.BENEFICIARY_NAME ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BENEFICIARY_TYPE", (object)pdc.BENEFICIARY_TYPE ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@ENTRY_DATE", ParseDate(pdc.ENTRY_DATE));
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", (object)pdc.CHEQUE_NO ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(pdc.CHEQUE_DATE));
@@ -129,6 +130,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CUST_ID", (object)pdc.CUST_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@SUPP_ID", (object)pdc.SUPP_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@BENEFICIARY_NAME", (object)pdc.BENEFICIARY_NAME ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BENEFICIARY_TYPE", (object)pdc.BENEFICIARY_TYPE ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@ENTRY_DATE", ParseDate(pdc.ENTRY_DATE));
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", (object)pdc.CHEQUE_NO ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(pdc.CHEQUE_DATE));
@@ -182,6 +184,7 @@ namespace MicroApi.DataLayer.Service
                                     CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : (int?)null,
                                     SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : (int?)null,
                                     BENEFICIARY_NAME = reader["BENEFICIARY_NAME"] != DBNull.Value ? reader["BENEFICIARY_NAME"].ToString() : null,
+                                    BENEFICIARY_TYPE = reader["BENEFICIARY_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["BENEFICIARY_TYPE"]) : 0,
                                     ENTRY_NO = reader["ENTRY_NO"] != DBNull.Value ? reader["ENTRY_NO"].ToString() : null,
                                     ENTRY_DATE = reader["ENTRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["ENTRY_DATE"]).ToString("dd/MM/yyyy") : null,
                                     CHEQUE_NO = reader["CHEQUE_NO"] != DBNull.Value ? reader["CHEQUE_NO"].ToString() : null,
@@ -189,7 +192,7 @@ namespace MicroApi.DataLayer.Service
                                     AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : (decimal?)null,
                                     REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
                                     IS_PAYMENT = reader["IS_PAYMENT"] != DBNull.Value ? Convert.ToBoolean(reader["IS_PAYMENT"]) : (bool?)null,
-                                    ENTRY_STATUS = reader["ENTRY_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["ENTRY_STATUS"]) : (int?)null,
+                                    ENTRY_STATUS = reader["ENTRY_STATUS"] != DBNull.Value ? reader["ENTRY_STATUS"].ToString() : null,
                                     AC_TRANS_ID = reader["AC_TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["AC_TRANS_ID"]) : (int?)null
                                 });
                             }
