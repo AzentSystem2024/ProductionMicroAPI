@@ -35,7 +35,7 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_PDC", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 3); // List action
+                        cmd.Parameters.AddWithValue("@ACTION", 3); 
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -81,7 +81,7 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_PDC", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 1); // Insert action
+                        cmd.Parameters.AddWithValue("@ACTION", 1); 
                         cmd.Parameters.AddWithValue("@BANK_HEAD_ID", (object)pdc.BANK_HEAD_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CUST_ID", (object)pdc.CUST_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@SUPP_ID", (object)pdc.SUPP_ID ?? DBNull.Value);
@@ -124,7 +124,7 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_PDC", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 2); // Update action
+                        cmd.Parameters.AddWithValue("@ACTION", 2); 
                         cmd.Parameters.AddWithValue("@ID", pdc.ID);
                         cmd.Parameters.AddWithValue("@BANK_HEAD_ID", (object)pdc.BANK_HEAD_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CUST_ID", (object)pdc.CUST_ID ?? DBNull.Value);
@@ -170,7 +170,7 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_PDC", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 0); // Select action
+                        cmd.Parameters.AddWithValue("@ACTION", 0); 
                         cmd.Parameters.AddWithValue("@ID", (object)id ?? DBNull.Value);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -223,10 +223,9 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_PDC", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 4); // Delete action
+                        cmd.Parameters.AddWithValue("@ACTION", 4); 
                         cmd.Parameters.AddWithValue("@ID", id);
 
-                        connection.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }
