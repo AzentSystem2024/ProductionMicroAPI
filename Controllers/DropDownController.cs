@@ -25,7 +25,8 @@ namespace MicroApi.Controllers
                     vInput.NAME,
                     vInput.COUNTRY_ID,
                     vInput.STATE_ID,
-                    vInput.DISTRICT_ID
+                    vInput.DISTRICT_ID,
+                    vInput.COMPANY_ID
                   
                 );
             }

@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Service
 {
         public class DropDownService : IDropDownService
         {
-        public List<DropDown> GetDropDownData(string vName, int countryId = 0, int stateId = 0, int districtId = 0)
+        public List<DropDown> GetDropDownData(string vName, int countryId = 0, int stateId = 0, int districtId = 0, int? companyId = 0)
         {
             List<DropDown> vList = new List<DropDown>();
 
@@ -22,6 +22,7 @@ namespace MicroApi.DataLayer.Service
                 };
 
                 cmd.Parameters.AddWithValue("@NAME", vName);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", (object)companyId ?? DBNull.Value);
 
                 if (vName == "STATE_NAME")
                 {
@@ -36,7 +37,11 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.Parameters.AddWithValue("@DISTRICT_ID", districtId);
                 }
-               
+                if (vName == "COMPANY_ID")
+                {
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
+                }
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);

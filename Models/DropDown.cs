@@ -11,6 +11,7 @@
         public int COUNTRY_ID { get; set; } = 0;  
         public int STATE_ID { get; set; } = 0;
         public int DISTRICT_ID { get; set; } = 0;
+        public int? COMPANY_ID { get; set; } 
        
     }
 }
