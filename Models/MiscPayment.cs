@@ -19,6 +19,7 @@
     }
     public class MiscPaymentUpdate
     {
+        public int TRANS_ID { get; set; }
         public int? TRANS_TYPE { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
@@ -79,4 +80,28 @@
         public string Message { get; set; }
         public List<MiscPaymentListItem> Data { get; set; }
     }
+    public class MiscPaymentSelect
+    {
+        public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public string TRANS_DATE { get; set; }
+        public string VOUCHER_NO { get; set; }
+        public int PAY_HEAD_ID { get; set; }
+        public int PAY_TYPE_ID { get; set; }
+        public string CHEQUE_NO { get; set; }
+        public string CHEQUE_DATE { get; set; }
+        public string BANK_NAME { get; set; }
+        public float AMOUNT { get; set; }
+        public string NARRATION { get; set; }
+        public int TRANS_STATUS { get; set; }
+
+        public List<MiscPaymentDetail> DetailList { get; set; }
+    }
+    public class MiscPaymentSelectedView
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public MiscPaymentSelect Data { get; set; }
+    }
+
 }

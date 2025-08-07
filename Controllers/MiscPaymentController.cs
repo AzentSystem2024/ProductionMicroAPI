@@ -35,6 +35,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("update")]
+        public MiscpaymentResponse Update(MiscPaymentUpdate model)
+        {
+            MiscpaymentResponse res = new MiscpaymentResponse();
+
+            try
+            {
+                res = _miscpaymentService.Edit(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Update Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("list")]
         public MiscPaymentListResponse GetMiscPaymentList()
         {
@@ -52,6 +70,22 @@ namespace MicroApi.Controllers
             }
 
             return res;
+        }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public MiscPaymentSelectedView Select(int id)
+        {
+            MiscPaymentSelectedView response = new MiscPaymentSelectedView();
+            try
+            {
+                response = _miscpaymentService.GetMiscPaymentById(id);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
         }
     }
 }
