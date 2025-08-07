@@ -42,13 +42,13 @@
     }
     public class MiscPaymentDetail
     {
-        public int SL_NO { get; set; }
-        public int HEAD_ID { get; set; }
-        public string REMARKS { get; set; }
-        public double AMOUNT { get; set; }
-        public double VAT_AMOUNT { get; set; }
-        public double VAT_REGN { get; set; }
-        public float VAT_PERCENT { get; set; }
+        public int? SL_NO { get; set; }
+        public int? HEAD_ID { get; set; }
+        public string? REMARKS { get; set; }
+        public double? AMOUNT { get; set; }
+        public double? VAT_AMOUNT { get; set; }
+        public double? VAT_REGN { get; set; }
+        public float? VAT_PERCENT { get; set; }
 
     }
     public class MiscPaymentListItem
@@ -102,6 +102,12 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public MiscPaymentSelect Data { get; set; }
+    }
+    public class MiscLastDocno
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int PAYMENT_NO { get; set; }
     }
 
 }
