@@ -50,6 +50,7 @@ namespace MicroApi.DataLayer.Service
                                     USEFUL_LIFE = reader["USEFUL_LIFE"] != DBNull.Value ? Convert.ToInt32(reader["USEFUL_LIFE"]) : 0,
                                     RESIDUAL_VALUE = reader["RESIDUAL_VALUE"] != DBNull.Value ? Convert.ToDecimal(reader["RESIDUAL_VALUE"]) : 0m,                                   
                                     PURCH_DATE = reader["PURCHASE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCHASE_DATE"]).ToString("dd/MM/yyyy") : null,
+                                    DEPR_PERCENT = reader["DEPR_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DEPR_PERCENT"]) : 0f,
                                     LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["LAST_DEPR_DATE"]).ToString("dd/MM/yyyy") : null,
                                     NET_DEPRECIATION = reader["NET_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["NET_DEPRECIATION"]) : 0f,
                                     CURRENT_VALUE = reader["CURRENT_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["CURRENT_VALUE"]) : 0f,

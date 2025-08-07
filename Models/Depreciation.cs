@@ -15,6 +15,7 @@
         public decimal RESIDUAL_VALUE { get; set; }
         public string PURCH_DATE { get; set; }
         public string LAST_DEPR_DATE { get; set; }
+        public float? DEPR_PERCENT { get; set; }
         public float NET_DEPRECIATION { get; set; }
         public float CURRENT_VALUE { get; set; }
         public bool IS_INACTIVE { get; set; }
