@@ -46,7 +46,7 @@
             public double AMOUNT { get; set; }
             public double GST_AMOUNT { get; set; }
             public string REMARKS { get; set; }
-    }
+         }
 
         public class CreditNoteResponse
         {
