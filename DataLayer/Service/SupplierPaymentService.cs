@@ -277,7 +277,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", id);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 21); // adjust if dynamic
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 21); 
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -292,6 +292,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
                                         TRANS_TYPE = reader["TRANS_TYPE"] as int? ?? 0,
+                                        SUPPLIER_NO = reader["VOUCHER_NO"] != DBNull.Value ? Convert.ToInt32(reader["VOUCHER_NO"]) : 0,
                                         PAY_DATE = reader["PAY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PAY_DATE"]).ToString("dd-MM-yyyy") : null,
                                         COMPANY_ID = reader["COMPANY_ID"] as int? ?? 0,
                                         FIN_ID = reader["FIN_ID"] as int? ?? 0,
