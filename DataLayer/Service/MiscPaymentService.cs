@@ -245,8 +245,7 @@ namespace MicroApi.DataLayer.Service
                                     PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                     PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
                                     REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
-                                    OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
-                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
+                                    
                                 });
                             }
                         }
@@ -329,9 +328,7 @@ namespace MicroApi.DataLayer.Service
                                     VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToDouble(reader["VAT_REGN"]) : 0,
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
-                                    LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
-                                    OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
-                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
+                                    LEDGER_NAME = reader["LEDGER_NAME"]?.ToString()
                                 });
                             }
 

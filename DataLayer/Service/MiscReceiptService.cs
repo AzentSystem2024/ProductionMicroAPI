@@ -290,6 +290,11 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]): 0,
                                         TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"])  : 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),
+                                        CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
+                                        CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("yyyy-MM-dd") : null,
+                                        BANK_NAME = reader["BANK_NAME"]?.ToString(),
+                                        PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
+                                        PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
                                         DETAILS = new List<MiscListDetail>()
                                     };
                                 }
@@ -302,7 +307,9 @@ namespace MicroApi.DataLayer.Service
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
-                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0
+                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
+                                    OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
+                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
                                 });
                             }
 
@@ -371,6 +378,11 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
                                         TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),
+                                        CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
+                                        CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("yyyy-MM-dd") : null,
+                                        BANK_NAME = reader["BANK_NAME"]?.ToString(),
+                                        PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
+                                        PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
                                         DETAILS = new List<MiscListDetail>()
                                     };
                                 }
@@ -383,7 +395,9 @@ namespace MicroApi.DataLayer.Service
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
-                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0
+                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
+                                    OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
+                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
                                 });
                             }
 
