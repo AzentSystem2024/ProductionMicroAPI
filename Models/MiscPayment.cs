@@ -51,6 +51,8 @@
         public float? VAT_PERCENT { get; set; }
         public string? LEDGER_CODE { get; set; }
         public string? LEDGER_NAME { get; set; }
+        public int? OPP_HEAD_ID { get; set; }
+        public string? OPP_HEAD_NAME { get; set; }
 
     }
     public class MiscPaymentListItem
@@ -73,8 +75,10 @@
         public float VAT_AMOUNT { get; set; }
         public float VAT_PERCENT { get; set; }
         public float VAT_REGN { get; set; }
-        
-        
+        public int? OPP_HEAD_ID { get; set; }
+        public string? OPP_HEAD_NAME { get; set; }
+
+
     }
     public class MiscPaymentListResponse
     {
@@ -99,6 +103,7 @@
         public int TRANS_STATUS { get; set; }
         public string LEDGER_CODE { get; set; }
         public string LEDGER_NAME { get; set; }
+        public double VAT_REGN { get; set; }
 
         public List<MiscPaymentDetail> DetailList { get; set; }
     }

@@ -58,7 +58,7 @@ namespace MicroApi.DataLayer.Service
                         foreach (var item in model.MISC_DETAIL)
                         {
                             dt.Rows.Add( 0,
-                                slno++,
+                                slno++,0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
                                 item.AMOUNT,
@@ -122,6 +122,7 @@ namespace MicroApi.DataLayer.Service
                         DataTable dt = new DataTable();
 
                         dt.Columns.Add("TRANS_ID", typeof(int));
+                        dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("REMARKS", typeof(string));
@@ -134,7 +135,7 @@ namespace MicroApi.DataLayer.Service
                         // Add rows from your model
                         foreach (var item in model.MISC_DETAIL)
                         {
-                            dt.Rows.Add(0, slno++,
+                            dt.Rows.Add(0, slno++,0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
                                 item.AMOUNT,
@@ -243,7 +244,9 @@ namespace MicroApi.DataLayer.Service
                                     TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
                                     PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                     PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
-                                    REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null
+                                    REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
+                                    OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
+                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
                                 });
                             }
                         }
@@ -310,6 +313,7 @@ namespace MicroApi.DataLayer.Service
                                         AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
                                         LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                         LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
+                                        VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToDouble(reader["VAT_REGN"]) : 0,
                                         DetailList = new List<MiscPaymentDetail>()
                                     };
                                 }
@@ -326,6 +330,8 @@ namespace MicroApi.DataLayer.Service
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
+                                    OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
+                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
                                 });
                             }
 

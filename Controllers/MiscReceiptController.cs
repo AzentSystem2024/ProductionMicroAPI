@@ -85,5 +85,40 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("voucherno")]
+        public LasrVoucherResponse GetLastVoucherNo()
+        {
+            LasrVoucherResponse res = new LasrVoucherResponse();
+
+            try
+            {
+                res = _miscreceiptService.GetLastVoucherNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.VOUCHER_NO = null;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public MiscReceiptResponse Delete(int id)
+        {
+            MiscReceiptResponse res = new MiscReceiptResponse();
+            try
+            {
+                res = _miscreceiptService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
   }

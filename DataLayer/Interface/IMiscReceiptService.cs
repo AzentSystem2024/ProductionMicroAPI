@@ -8,7 +8,8 @@ namespace MicroApi.DataLayer.Interface
         MiscReceiptResponse Update(MiscReceiptUpdate model);
         MiscReceiptListResponse GetReceiptList();
         MiscReceiptResponse GetMiscReceiptById(int id);
-
+        LasrVoucherResponse GetLastVoucherNo();
+        MiscReceiptResponse Delete(int id);
 
     }
 }
