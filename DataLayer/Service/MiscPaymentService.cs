@@ -304,6 +304,7 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
+                                        PARTY_NAME = reader["PARTY_NAME"] != DBNull.Value ? reader["PARTY_NAME"].ToString() : null,
                                         AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
                                         DetailList = new List<MiscPaymentDetail>()
                                     };

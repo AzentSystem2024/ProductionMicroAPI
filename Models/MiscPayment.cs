@@ -91,6 +91,7 @@
         public string CHEQUE_NO { get; set; }
         public string CHEQUE_DATE { get; set; }
         public string BANK_NAME { get; set; }
+        public string? PARTY_NAME { get; set; }
         public float AMOUNT { get; set; }
         public string NARRATION { get; set; }
         public int TRANS_STATUS { get; set; }
