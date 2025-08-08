@@ -306,6 +306,8 @@ namespace MicroApi.DataLayer.Service
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
                                         PARTY_NAME = reader["PARTY_NAME"] != DBNull.Value ? reader["PARTY_NAME"].ToString() : null,
                                         AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
+                                        LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
+                                        LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                         DetailList = new List<MiscPaymentDetail>()
                                     };
                                 }
@@ -319,7 +321,9 @@ namespace MicroApi.DataLayer.Service
                                     VAT_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["VAT_AMOUNT"]) : 0,
                                     VAT_PERCENT = reader["VAT_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_PERCENT"]) : 0,
                                     VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToDouble(reader["VAT_REGN"]) : 0,
-                                    REMARKS = reader["REMARKS"]?.ToString()
+                                    REMARKS = reader["REMARKS"]?.ToString(),
+                                    LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
+                                    LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                 });
                             }
 

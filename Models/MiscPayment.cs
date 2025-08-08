@@ -49,6 +49,8 @@
         public double? VAT_AMOUNT { get; set; }
         public double? VAT_REGN { get; set; }
         public float? VAT_PERCENT { get; set; }
+        public string? LEDGER_CODE { get; set; }
+        public string? LEDGER_NAME { get; set; }
 
     }
     public class MiscPaymentListItem
@@ -95,6 +97,8 @@
         public float AMOUNT { get; set; }
         public string NARRATION { get; set; }
         public int TRANS_STATUS { get; set; }
+        public string LEDGER_CODE { get; set; }
+        public string LEDGER_NAME { get; set; }
 
         public List<MiscPaymentDetail> DetailList { get; set; }
     }
