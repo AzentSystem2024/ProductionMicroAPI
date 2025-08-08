@@ -44,6 +44,7 @@ namespace MicroApi.DataLayer.Service
                         DataTable dt = new DataTable();
 
                         dt.Columns.Add("TRANS_ID", typeof(int));
+                        dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("REMARKS", typeof(string));
@@ -56,7 +57,8 @@ namespace MicroApi.DataLayer.Service
                         // Add rows from your model
                         foreach (var item in model.MISC_DETAIL)
                         {
-                            dt.Rows.Add( 0, slno++,
+                            dt.Rows.Add( 0,
+                                slno++,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
                                 item.AMOUNT,

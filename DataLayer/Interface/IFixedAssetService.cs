@@ -9,5 +9,7 @@ namespace MicroApi.DataLayer.Interface
         FixedAssetSaveResponse UpdateData(FixedAsset fixedAsset);
         FixedAssetSelectResponse GetFixedAssetbyId(int? id = null);
         FixedAssetSaveResponse Delete(int id);
+        FixedResponse Save(ASSET asset);
+
     }
 }

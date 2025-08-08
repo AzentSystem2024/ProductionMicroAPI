@@ -14,7 +14,76 @@ namespace MicroApi.Controllers
         {
             _miscreceiptService = miscreceiptService;
         }
-        
-    
+        [HttpPost]
+        [Route("insert")]
+        public MiscReceiptResponse Insert(MiscReceipt model)
+        {
+            MiscReceiptResponse res = new MiscReceiptResponse();
+
+            try
+            {
+                res = _miscreceiptService.Insert(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("update")]
+        public MiscReceiptResponse Update(MiscReceiptUpdate model)
+        {
+            MiscReceiptResponse res = new MiscReceiptResponse();
+            try
+            {
+                res = _miscreceiptService.Update(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("list")]
+        public MiscReceiptListResponse GetReceiptList()
+        {
+            MiscReceiptListResponse res = new MiscReceiptListResponse();
+            try
+            {
+                res = _miscreceiptService.GetReceiptList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+                res.Data = new List<MiscReceiptListItem>();
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public MiscReceiptResponse GetMiscReceiptById(int id)
+        {
+            MiscReceiptResponse res = new MiscReceiptResponse();
+
+            try
+            {
+                res = _miscreceiptService.GetMiscReceiptById(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = null;
+            }
+
+            return res;
         }
     }
+  }
