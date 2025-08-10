@@ -10,6 +10,7 @@ namespace MicroApi.DataLayer.Interface
         MiscReceiptResponse GetMiscReceiptById(int id);
         LasrVoucherResponse GetLastVoucherNo();
         MiscReceiptResponse Delete(int id);
+        MiscReceiptResponse commit(MiscReceiptUpdate model);
 
     }
 }

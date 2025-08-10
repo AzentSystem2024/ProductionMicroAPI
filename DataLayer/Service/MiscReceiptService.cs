@@ -80,7 +80,7 @@ namespace MicroApi.DataLayer.Service
                                 detail.CREDIT_AMOUNT ?? 0,
                                 detail.REMARKS ?? "",
                                 detail.OPP_HEAD_ID ?? 0,
-                                detail.OPP_HEAD_NAME ?? "",
+                                0,
                                 DBNull.Value,
                                 DBNull.Value,
                                 DBNull.Value,
@@ -204,7 +204,7 @@ namespace MicroApi.DataLayer.Service
                                 detail.CREDIT_AMOUNT ?? 0,
                                 detail.REMARKS ?? "",
                                 detail.OPP_HEAD_ID ?? 0,
-                                detail.OPP_HEAD_NAME ?? "",
+                                0,
                                 DBNull.Value,
                                 DBNull.Value,
                                 DBNull.Value,
@@ -494,6 +494,99 @@ namespace MicroApi.DataLayer.Service
             }
 
             return res;
+        }
+        public MiscReceiptResponse commit(MiscReceiptUpdate model)
+        {
+            MiscReceiptResponse response = new MiscReceiptResponse();
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_MISC_RECEIPT", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Header parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 4);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
+                        cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+
+
+                        // === UDT Table ===
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("ID", typeof(int));
+                        dt.Columns.Add("TRANS_ID", typeof(int));
+                        dt.Columns.Add("COMPANY_ID", typeof(int));
+                        dt.Columns.Add("STORE_ID", typeof(string));
+                        dt.Columns.Add("SL_NO", typeof(int));
+                        dt.Columns.Add("HEAD_ID", typeof(int));
+                        dt.Columns.Add("DR_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("CR_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("REMARKS", typeof(string));
+                        dt.Columns.Add("OPP_HEAD_ID", typeof(int));
+                        dt.Columns.Add("OPP_HEAD_NAME", typeof(string));
+                        dt.Columns.Add("BILL_NO", typeof(string));
+                        dt.Columns.Add("JOB_ID", typeof(int));
+                        dt.Columns.Add("CREATED_STORE_ID", typeof(string));
+                        dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+
+                        int slno = 1;
+
+                        foreach (var detail in model.DETAILS)
+                        {
+                            dt.Rows.Add(
+                                DBNull.Value,
+                                0,
+                                model.COMPANY_ID ?? 0,
+                                DBNull.Value,
+                                slno++,
+                                detail.HEAD_ID ?? 0,
+                                detail.DEBIT_AMOUNT ?? 0,
+                                detail.CREDIT_AMOUNT ?? 0,
+                                detail.REMARKS ?? "",
+                                detail.OPP_HEAD_ID ?? 0,
+                                0,
+                                DBNull.Value,
+                                DBNull.Value,
+                                DBNull.Value,
+                                DBNull.Value
+                            );
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_TB_AC_TRANS_DETAIL";
+
+                        // Execute
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
         }
     }
 }

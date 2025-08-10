@@ -120,5 +120,21 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("commit")]
+        public MiscReceiptResponse commit(MiscReceiptUpdate model)
+        {
+            MiscReceiptResponse res = new MiscReceiptResponse();
+            try
+            {
+                res = _miscreceiptService.commit(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
   }
