@@ -76,6 +76,23 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = $"Error updating data: {ex.Message}" });
             }
         }
+        [HttpPost("select/{id}")]
+        public IActionResult GetDepreciationById(int id)
+        {
+            try
+            {
+                var response = _depreciationService.GetDepreciationById(id);
+                if (response.Flag == 1)
+                {
+                    return Ok(response);
+                }
+                return NotFound(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
 

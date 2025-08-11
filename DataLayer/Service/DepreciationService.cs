@@ -219,23 +219,77 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
-        private DataTable CreateAssetIdsDataTable(List<AssetDepreciationDetail> assetDetails)
+        public DepreciationDetailsResponse GetDepreciationById(int id)
         {
-            DataTable table = new DataTable();
-            table.Columns.Add("Asset_ID", typeof(int));
-            table.Columns.Add("Days", typeof(int));
-            table.Columns.Add("Depr_Amount", typeof(float));
-
-            foreach (var detail in assetDetails)
+            DepreciationDetailsResponse response = new DepreciationDetailsResponse
             {
-                table.Rows.Add(detail.Asset_ID, detail.Days, detail.Depr_Amount);
+                Data = new DepreciationDetails(),
+                AssetDetails = new List<AssetDepreciationDetail>()
+            };
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_DEPRECIATION", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 5); 
+                        cmd.Parameters.AddWithValue("@ID", id);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            // Read header information
+                            if (reader.Read())
+                            {
+                                response.Data = new DepreciationDetails
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    DOC_NO = reader["DOC_NO"] != DBNull.Value ? reader["DOC_NO"].ToString() : null,
+                                    DEPR_DATE = reader["DEPR_DATE"] != DBNull.Value ? reader["DEPR_DATE"].ToString() : null,
+                                    NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
+                                    AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0m,
+                                    VOUCHER_NO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
+                                    TRANS_STATUS = reader["STATUS"] != DBNull.Value ? reader["STATUS"].ToString() : null,
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0
+                                };
+                            }
+
+                            // Move to the next result set for asset details
+                            reader.NextResult();
+
+                            // Read asset details
+                            while (reader.Read())
+                            {
+                                response.AssetDetails.Add(new AssetDepreciationDetail
+                                {
+                                    Asset_ID = reader["ASSET_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_ID"]) : 0,
+                                    Days = reader["DAYS"] != DBNull.Value ? Convert.ToInt32(reader["DAYS"]) : 0,
+                                    Depr_Amount = reader["DEPR_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["DEPR_AMOUNT"]) : 0f
+                                });
+                            }
+                        }
+                    }
+                    response.Flag = 1;
+                    response.Message = "Success";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "An error occurred: " + ex.Message;
             }
 
-            return table;
+            return response;
         }
-
-
     }
 }
+
+
+    
+
     
 

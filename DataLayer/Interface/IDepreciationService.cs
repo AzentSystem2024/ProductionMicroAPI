@@ -9,6 +9,7 @@ namespace MicroApi.DataLayer.Interface
         //DepreciationResponse InsertDepreciation();
         public int InsertDepreciation(DepreciationInsertRequest request);
        public int UpdateDepreciation(DepreciationUpdateRequest request);
+        DepreciationDetailsResponse GetDepreciationById(int id);
 
     }
 }
