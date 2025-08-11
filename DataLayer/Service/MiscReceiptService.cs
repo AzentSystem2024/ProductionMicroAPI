@@ -476,7 +476,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 3);
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
