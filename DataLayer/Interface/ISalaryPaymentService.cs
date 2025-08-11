@@ -6,5 +6,9 @@ namespace MicroApi.DataLayer.Interface
     {
         SalaryPaymentResponse Insert(SalaryPayment model);
         SalaryPendingResponse GetPendingSalaryList(SalaryPendingRequest request);
+        SalaryPaymentListResponse GetsalaryPaymentList();
+        SalPayLastDocno GetLastDocNo();
+
+
     }
 }

@@ -142,6 +142,112 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public SalaryPaymentListResponse GetsalaryPaymentList()
+        {
+            SalaryPaymentListResponse response = new SalaryPaymentListResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<SalaryPaymentListItem>()
+            };
 
+            try
+            {
+                using (SqlConnection conn = ADO.GetConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_SALARY_PAYMENT", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Add required parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 30);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FIN_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@SUPP_ID", DBNull.Value);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response.Data.Add(new SalaryPaymentListItem
+                                {
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                    TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    VOUCHER_NO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
+                                    CHEQUE_NO = reader["CHEQUE_NO"] != DBNull.Value ? reader["CHEQUE_NO"].ToString() : null,
+                                    CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? reader["CHEQUE_DATE"].ToString() : null,
+                                    BANK_NAME = reader["BANK_NAME"] != DBNull.Value ? reader["BANK_NAME"].ToString() : null,
+                                    PARTY_NAME = reader["PARTY_NAME"] != DBNull.Value ? reader["PARTY_NAME"].ToString() : null,
+                                    NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
+                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
+                                    PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
+                                    PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0
+
+                                });
+                            }
+                        }
+
+                        response.flag = 1;
+                        response.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+        public SalPayLastDocno GetLastDocNo()
+        {
+            SalPayLastDocno res = new SalPayLastDocno();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                    SELECT TOP 1 VOUCHER_NO 
+                    FROM TB_AC_TRANS_HEADER 
+                    WHERE TRANS_TYPE = 30
+                    ORDER BY TRANS_ID DESC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        res.flag = 1;
+                        res.VOUCHER_NO = result != null ? Convert.ToInt32(result) : 0;
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }

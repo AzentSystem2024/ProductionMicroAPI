@@ -52,6 +52,42 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("view")]
+        public SalaryPaymentListResponse GetsalaryPaymentList()
+        {
+            SalaryPaymentListResponse res = new SalaryPaymentListResponse();
 
+            try
+            {
+                res = _salaryService.GetsalaryPaymentList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<SalaryPaymentListItem>();
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("paymentno")]
+        public SalPayLastDocno GetLastDocNo()
+        {
+            SalPayLastDocno res = new SalPayLastDocno();
+
+            try
+            {
+                res = _salaryService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
