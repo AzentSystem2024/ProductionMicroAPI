@@ -262,5 +262,54 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
+        public FixedResponse Save(ASSET asset)
+        {
+            FixedResponse res = new FixedResponse();
+
+            try
+            {
+                // ✅ 1. Validate DISTRICT_NAME
+                if (string.IsNullOrWhiteSpace(asset.ASSET_TYPE))
+                {
+                    res.flag = 0;
+                    res.Message = "Asset name is required.";
+                    return res;
+                }
+
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string sql = @"INSERT INTO TB_AC_ASSET_TYPE (ASSET_TYPE)
+                           VALUES (@ASSET_TYPE)";
+
+                    using (var cmd = new SqlCommand(sql, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@ASSET_TYPE", asset.ASSET_TYPE);
+
+                        int rows = cmd.ExecuteNonQuery();
+
+                        if (rows > 0)
+                        {
+                            res.flag = 1;
+                            res.Message = "Success";
+                        }
+                        else
+                        {
+                            res.flag = 0;
+                            res.Message = "Failed ";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error inserting Asset Type: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }

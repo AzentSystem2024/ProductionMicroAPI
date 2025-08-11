@@ -1,4 +1,5 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.DataLayer.Services;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -111,7 +112,24 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("assetsave")]
+        public FixedResponse Save(ASSET asset)
+        {
+            FixedResponse res = new FixedResponse();
 
+            try
+            {
+                res = _fixedAssetService.Save(asset);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
     }
 }
 

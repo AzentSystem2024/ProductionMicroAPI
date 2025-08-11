@@ -74,4 +74,14 @@
         public List<FixedAssetSelect> Data { get; set; }
 
     }
+    public class FixedResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+    }
+    public class ASSET
+    {
+        public string ASSET_TYPE { get; set; }
+      
+    }
 }
