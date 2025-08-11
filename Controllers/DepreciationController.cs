@@ -49,16 +49,49 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-        [HttpPost]
-        [Route("Insert")]
+        [HttpPost("Insert")]
         public IActionResult InsertDepreciation([FromBody] DepreciationInsertRequest request)
         {
-            var response = _depreciationService.InsertDepreciation(request);
-            if (response.Flag == 1)
+            try
             {
-                return Ok(response);
+                var result = _depreciationService.InsertDepreciation(request);
+                return Ok(new { Flag = 1, Message = "Success", Data = result });
             }
-            return BadRequest(response);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = $"Error inserting data: {ex.Message}" });
+            }
+        }
+
+        [HttpPost("update")]
+        public IActionResult UpdateDepreciation([FromBody] DepreciationUpdateRequest request)
+        {
+            try
+            {
+                var result = _depreciationService.UpdateDepreciation(request);
+                return Ok(new { Flag = 1, Message = "Success", Data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = $"Error updating data: {ex.Message}" });
+            }
+        }
+        [HttpPost("select/{id}")]
+        public IActionResult GetDepreciationById(int id)
+        {
+            try
+            {
+                var response = _depreciationService.GetDepreciationById(id);
+                if (response.Flag == 1)
+                {
+                    return Ok(response);
+                }
+                return NotFound(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

@@ -7,7 +7,9 @@ namespace MicroApi.DataLayer.Interface
         DepreciationResponse GetFixedAssetsList();
         DepreciationListResponse GetList();
         //DepreciationResponse InsertDepreciation();
-        DepreciationResponse InsertDepreciation(DepreciationInsertRequest request);
+        public int InsertDepreciation(DepreciationInsertRequest request);
+       public int UpdateDepreciation(DepreciationUpdateRequest request);
+        DepreciationDetailsResponse GetDepreciationById(int id);
 
     }
 }
