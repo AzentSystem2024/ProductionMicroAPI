@@ -119,61 +119,122 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public DepreciationResponse InsertDepreciation(DepreciationInsertRequest request)
+        public int InsertDepreciation(DepreciationInsertRequest request)
         {
-            DepreciationResponse response = new DepreciationResponse();
-            try
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                using (SqlConnection connection = ADO.GetConnection())
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
                 {
-                    if (connection.State == ConnectionState.Closed)
-                        connection.Open();
-
-                    using (SqlCommand cmd = new SqlCommand("SP_DEPRECIATION", connection))
+                    try
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 2);
-                        cmd.Parameters.AddWithValue("@DEPR_DATE", ParseDate(request.DEPR_DATE));
-                        cmd.Parameters.AddWithValue("@NARRATION", request.NARRATION);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                        cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                        // Prepare DataTable for TVP
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("Asset_ID", typeof(int));
+                        tvp.Columns.Add("Days", typeof(int));
+                        tvp.Columns.Add("Depr_Amount", typeof(float));
 
-                        // Create a DataTable for the Table-Valued Parameter
-                        DataTable assetIdsTable = new DataTable();
-                        assetIdsTable.Columns.Add("AssetID", typeof(int));
-
-                        // Add the asset IDs to the DataTable
-                        foreach (var assetId in request.ASSET_IDS)
+                        foreach (var detail in request.ASSET_IDS)
                         {
-                            assetIdsTable.Rows.Add(assetId);
+                            tvp.Rows.Add(detail.Asset_ID, detail.Days, detail.Depr_Amount);
                         }
 
-                        // Add the Table-Valued Parameter to the command
-                        SqlParameter assetIdsParam = new SqlParameter("@ASSET_IDS", SqlDbType.Structured);
-                        assetIdsParam.TypeName = "dbo.UDT_ASSETID_LIST";
-                        assetIdsParam.Value = assetIdsTable;
-                        cmd.Parameters.Add(assetIdsParam);
-
-                        SqlParameter transIdParam = new SqlParameter("@TRANS_ID", SqlDbType.BigInt)
+                        using (SqlCommand cmd = new SqlCommand("SP_DEPRECIATION", connection, transaction))
                         {
-                            Direction = ParameterDirection.Output
-                        };
-                        cmd.Parameters.Add(transIdParam);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 2);
+                            cmd.Parameters.AddWithValue("@DEPR_DATE", request.DEPR_DATE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NARRATION", request.NARRATION ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
 
-                        cmd.ExecuteNonQuery();
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_ASSETID_LIST";
 
-                        response.Flag = 1;
-                        response.Message = "Depreciation inserted successfully.";
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        return request.COMPANY_ID ?? 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Error saving data: " + ex.Message);
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                response.Flag = 0;
-                response.Message = "An error occurred: " + ex.Message;
-            }
-            return response;
         }
+        public int UpdateDepreciation(DepreciationUpdateRequest request)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Prepare DataTable for TVP
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("Asset_ID", typeof(int));
+                        tvp.Columns.Add("Days", typeof(int));
+                        tvp.Columns.Add("Depr_Amount", typeof(float));
+
+                        foreach (var detail in request.ASSET_IDS)
+                        {
+                            tvp.Rows.Add(detail.Asset_ID, detail.Days, detail.Depr_Amount);
+                        }
+
+                        using (SqlCommand cmd = new SqlCommand("SP_DEPRECIATION", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 3);
+                            cmd.Parameters.AddWithValue("@ID", request.ID);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+                            cmd.Parameters.AddWithValue("@DEPR_DATE", request.DEPR_DATE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NARRATION", request.NARRATION ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_ASSETID_LIST";
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        return request.ID ?? 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Error updating data: " + ex.Message);
+                    }
+                }
+            }
+        }
+        private DataTable CreateAssetIdsDataTable(List<AssetDepreciationDetail> assetDetails)
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("Asset_ID", typeof(int));
+            table.Columns.Add("Days", typeof(int));
+            table.Columns.Add("Depr_Amount", typeof(float));
+
+            foreach (var detail in assetDetails)
+            {
+                table.Rows.Add(detail.Asset_ID, detail.Days, detail.Depr_Amount);
+            }
+
+            return table;
+        }
+
+
     }
 }
     
