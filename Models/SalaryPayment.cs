@@ -11,8 +11,8 @@
         public int? TRANS_ID { get; set; } 
         public int? TRANS_TYPE { get; set; }
         public string? CHEQUE_NO { get; set; }
-        public DateTime? CHEQUE_DATE { get; set; }
-        public string BANK_NAME { get; set; }
+        public string? CHEQUE_DATE { get; set; }
+        public string? BANK_NAME { get; set; }
         public int? CREATE_USER_ID { get; set; }
         public int? SUPP_ID { get; set; }
 
