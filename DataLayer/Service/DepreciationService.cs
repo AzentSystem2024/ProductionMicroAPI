@@ -71,5 +71,110 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public DepreciationListResponse GetList()
+        {
+            DepreciationListResponse response = new DepreciationListResponse { Data = new List<DepreciationList>() };
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_DEPRECIATION", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response.Data.Add(new DepreciationList
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    DOC_NO = reader["DOC_NO"] != DBNull.Value ? reader["DOC_NO"].ToString() : null,
+                                    DEPR_DATE = reader["DEPR_DATE"] != DBNull.Value ? reader["DEPR_DATE"].ToString() : null,
+                                    NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
+                                    AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0m,
+                                    VOUCHER_NO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
+                                    TRANS_STATUS = reader["STATUS"] != DBNull.Value ? reader["STATUS"].ToString() : null
+                                });
+                            }
+                        }
+                    }
+                }
+
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "An error occurred: " + ex.Message;
+            }
+
+            return response;
+        }
+
+        public DepreciationResponse InsertDepreciation(DepreciationInsertRequest request)
+        {
+            DepreciationResponse response = new DepreciationResponse();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_DEPRECIATION", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 2);
+                        cmd.Parameters.AddWithValue("@DEPR_DATE", ParseDate(request.DEPR_DATE));
+                        cmd.Parameters.AddWithValue("@NARRATION", request.NARRATION);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+
+                        // Create a DataTable for the Table-Valued Parameter
+                        DataTable assetIdsTable = new DataTable();
+                        assetIdsTable.Columns.Add("AssetID", typeof(int));
+
+                        // Add the asset IDs to the DataTable
+                        foreach (var assetId in request.ASSET_IDS)
+                        {
+                            assetIdsTable.Rows.Add(assetId);
+                        }
+
+                        // Add the Table-Valued Parameter to the command
+                        SqlParameter assetIdsParam = new SqlParameter("@ASSET_IDS", SqlDbType.Structured);
+                        assetIdsParam.TypeName = "dbo.UDT_ASSETID_LIST";
+                        assetIdsParam.Value = assetIdsTable;
+                        cmd.Parameters.Add(assetIdsParam);
+
+                        SqlParameter transIdParam = new SqlParameter("@TRANS_ID", SqlDbType.BigInt)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(transIdParam);
+
+                        cmd.ExecuteNonQuery();
+
+                        response.Flag = 1;
+                        response.Message = "Depreciation inserted successfully.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "An error occurred: " + ex.Message;
+            }
+            return response;
+        }
     }
 }
+    
+

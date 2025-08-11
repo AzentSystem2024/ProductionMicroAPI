@@ -32,5 +32,34 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("DepreciationList/List")]
+        public DepreciationListResponse DepreciationList()
+        {
+            DepreciationListResponse res = new DepreciationListResponse();
+            try
+            {
+                res = _depreciationService.GetList();
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+                res.Data = new List<DepreciationList>();
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("Insert")]
+        public IActionResult InsertDepreciation([FromBody] DepreciationInsertRequest request)
+        {
+            var response = _depreciationService.InsertDepreciation(request);
+            if (response.Flag == 1)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
     }
 }
+

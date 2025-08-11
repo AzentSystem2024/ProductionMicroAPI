@@ -78,6 +78,27 @@ namespace MicroApi.DataLayer.Service
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    // Fetch the beneficiary name based on the beneficiary type
+                    if (pdc.BENEFICIARY_TYPE == 1 && pdc.SUPP_ID.HasValue)
+                    {
+                        using (SqlCommand cmd = new SqlCommand("SELECT SUPP_NAME FROM TB_SUPPLIER WHERE ID = @SUPP_ID", connection))
+                        {
+                            cmd.Parameters.AddWithValue("@SUPP_ID", pdc.SUPP_ID.Value);
+                            pdc.BENEFICIARY_NAME = cmd.ExecuteScalar()?.ToString();
+                        }
+                    }
+                    else if (pdc.BENEFICIARY_TYPE == 2 && pdc.CUST_ID.HasValue)
+                    {
+                        using (SqlCommand cmd = new SqlCommand("SELECT CUST_NAME FROM TB_CUSTOMER WHERE ID = @CUST_ID", connection))
+                        {
+                            cmd.Parameters.AddWithValue("@CUST_ID", pdc.CUST_ID.Value);
+                            pdc.BENEFICIARY_NAME = cmd.ExecuteScalar()?.ToString();
+                        }
+                    }
+
                     using (SqlCommand cmd = new SqlCommand("SP_TB_PDC", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
