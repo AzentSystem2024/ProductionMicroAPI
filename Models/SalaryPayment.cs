@@ -21,12 +21,30 @@
     public class SalaryPayDetail
     {
         public int PAYDETAIL_ID { get; set; }
-        public decimal NET_AMOUNT { get; set; }
+        //public decimal NET_AMOUNT { get; set; }
     }
     public class SalaryPaymentResponse
     {
         public int flag { get; set; }
         public string Message { get; set; }
 
+    }
+    public class SalaryPaymentPending
+    {
+        public int ID { get; set; }
+        public int EMP_ID { get; set; }
+        public string EMP_NAME { get; set; }
+        public string EMP_CODE { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+    }
+    public class SalaryPendingRequest
+    {
+        public string SAL_MONTH { get; set; }
+    }
+    public class SalaryPendingResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<SalaryPaymentPending> data { get; set; }
     }
 }
