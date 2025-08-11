@@ -223,8 +223,10 @@ namespace MicroApi.DataLayer.Service
         {
             DepreciationDetailsResponse response = new DepreciationDetailsResponse
             {
-                Data = new DepreciationDetails(),
-                AssetDetails = new List<AssetDepreciationDetail>()
+                Data = new DepreciationDetails
+                {
+                    AssetDetails = new List<AssetDepreciationDetail>()
+                }
             };
 
             try
@@ -254,7 +256,8 @@ namespace MicroApi.DataLayer.Service
                                     AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0m,
                                     VOUCHER_NO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
                                     TRANS_STATUS = reader["STATUS"] != DBNull.Value ? reader["STATUS"].ToString() : null,
-                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    AssetDetails = new List<AssetDepreciationDetail>()
                                 };
                             }
 
@@ -264,7 +267,7 @@ namespace MicroApi.DataLayer.Service
                             // Read asset details
                             while (reader.Read())
                             {
-                                response.AssetDetails.Add(new AssetDepreciationDetail
+                                response.Data.AssetDetails.Add(new AssetDepreciationDetail
                                 {
                                     Asset_ID = reader["ASSET_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_ID"]) : 0,
                                     Days = reader["DAYS"] != DBNull.Value ? Convert.ToInt32(reader["DAYS"]) : 0,

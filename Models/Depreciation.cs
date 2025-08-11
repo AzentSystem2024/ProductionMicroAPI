@@ -72,6 +72,7 @@
         public string VOUCHER_NO { get; set; }
         public string TRANS_STATUS { get; set; }
         public int TRANS_ID { get; set; }
+        public List<AssetDepreciationDetail> AssetDetails { get; set; }
     }
     public class AssetDepreciationDetail
     {
@@ -84,7 +85,7 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public DepreciationDetails Data { get; set; }
-        public List<AssetDepreciationDetail> AssetDetails { get; set; }
+        //public List<AssetDepreciationDetail> AssetDetails { get; set; }
     }
     public class DepreciationSaveResponse
     {
