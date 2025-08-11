@@ -207,7 +207,7 @@ namespace MicroApi.DataLayer.Service
 
                         // Add required parameters
                         cmd.Parameters.AddWithValue("@ACTION", 0);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 31); // or your transaction type
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 3); // or your transaction type
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@COMPANY_ID",0);
                         cmd.Parameters.AddWithValue("@FIN_ID",  0);
@@ -285,7 +285,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", id);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 31);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 3);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

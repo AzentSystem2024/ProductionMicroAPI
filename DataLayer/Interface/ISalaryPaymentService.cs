@@ -4,7 +4,11 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface ISalaryPaymentService
     {
-        SalaryPaymentResponse insert(SalaryPayment model);
+        SalaryPaymentResponse Insert(SalaryPayment model);
+        SalaryPendingResponse GetPendingSalaryList(SalaryPendingRequest request);
+        SalaryPaymentListResponse GetsalaryPaymentList();
+        SalPayLastDocno GetLastDocNo();
+
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                res = _salaryService.insert(model); 
+                res = _salaryService.Insert(model); 
             }
             catch (Exception ex)
             {
@@ -32,6 +33,61 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("list")]
+        public SalaryPendingResponse GetPendingSalaryList(SalaryPendingRequest request)
+        {
+            SalaryPendingResponse res = new SalaryPendingResponse();
 
+            try
+            {
+                res = _salaryService.GetPendingSalaryList(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = "Error: " + ex.Message;
+                res.data = null;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("view")]
+        public SalaryPaymentListResponse GetsalaryPaymentList()
+        {
+            SalaryPaymentListResponse res = new SalaryPaymentListResponse();
+
+            try
+            {
+                res = _salaryService.GetsalaryPaymentList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<SalaryPaymentListItem>();
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("paymentno")]
+        public SalPayLastDocno GetLastDocNo()
+        {
+            SalPayLastDocno res = new SalPayLastDocno();
+
+            try
+            {
+                res = _salaryService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
