@@ -219,13 +219,42 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
+        //public int ApproveDatas(Depreciation data)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection connection = ADO.GetConnection())
+        //        {
+        //            SqlCommand cmd = new SqlCommand
+        //            {
+        //                Connection = connection,
+        //                CommandType = CommandType.StoredProcedure,
+        //                CommandText = "SP_DEPRECIATION"
+        //            };
+
+        //            cmd.Parameters.AddWithValue("@ACTION", 4);
+        //            cmd.Parameters.AddWithValue("@ASSET_ID", data.ASSET_ID);
+        //            cmd.Parameters.AddWithValue("@DEPR_AMOUNT", data.DEPR_AMOUNT);
+        //            cmd.Parameters.AddWithValue("@DEPR_DATE", data.DEPR_DATE);
+        //            cmd.Parameters.AddWithValue("@NARRATION", (object)data.NARRATION ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("@TRANS_STATUS", (object)data.TRANS_STATUS ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("@TRANS_ID", data.TRANS_ID);
+
+        //            cmd.ExecuteNonQuery();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
         public DepreciationDetailsResponse GetDepreciationById(int id)
         {
             DepreciationDetailsResponse response = new DepreciationDetailsResponse
             {
                 Data = new DepreciationDetails
                 {
-                    AssetDetails = new List<AssetDepreciationDetail>()
+                    ASSET_IDS = new List<AssetDepreciationDetail>()
                 }
             };
 
@@ -257,7 +286,7 @@ namespace MicroApi.DataLayer.Service
                                     VOUCHER_NO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
                                     TRANS_STATUS = reader["STATUS"] != DBNull.Value ? reader["STATUS"].ToString() : null,
                                     TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                    AssetDetails = new List<AssetDepreciationDetail>()
+                                    ASSET_IDS = new List<AssetDepreciationDetail>()
                                 };
                             }
 
@@ -267,11 +296,11 @@ namespace MicroApi.DataLayer.Service
                             // Read asset details
                             while (reader.Read())
                             {
-                                response.Data.AssetDetails.Add(new AssetDepreciationDetail
+                                response.Data.ASSET_IDS.Add(new AssetDepreciationDetail
                                 {
-                                    Asset_ID = reader["ASSET_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_ID"]) : 0,
-                                    Days = reader["DAYS"] != DBNull.Value ? Convert.ToInt32(reader["DAYS"]) : 0,
-                                    Depr_Amount = reader["DEPR_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["DEPR_AMOUNT"]) : 0f
+                                    Asset_ID = reader["Asset_ID"] != DBNull.Value ? Convert.ToInt32(reader["Asset_ID"]) : 0,
+                                    Days = reader["Days"] != DBNull.Value ? Convert.ToInt32(reader["Days"]) : 0,
+                                    Depr_Amount = reader["Depr_Amount"] != DBNull.Value ? Convert.ToSingle(reader["Depr_Amount"]) : 0f
                                 });
                             }
                         }

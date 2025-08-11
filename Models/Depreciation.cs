@@ -7,6 +7,7 @@
         public string NARRATION { get; set; }
         public int COMPANY_ID { get; set; }
         public int TRANS_ID { get; set; }
+        public int? TRANS_STATUS { get; set; }
         public int FIN_ID { get; set; }
         public int ASSET_ID { get; set; }
         public string LAST_DEPR_DATE { get; set; }
@@ -65,14 +66,14 @@
     public class DepreciationDetails
     {
         public int ID { get; set; }
-        public string DOC_NO { get; set; }
-        public string DEPR_DATE { get; set; }
-        public string NARRATION { get; set; }
-        public decimal AMOUNT { get; set; }
-        public string VOUCHER_NO { get; set; }
-        public string TRANS_STATUS { get; set; }
-        public int TRANS_ID { get; set; }
-        public List<AssetDepreciationDetail> AssetDetails { get; set; }
+        public string? DOC_NO { get; set; }
+        public string? DEPR_DATE { get; set; }
+        public string? NARRATION { get; set; }
+        public decimal? AMOUNT { get; set; }
+        public string? VOUCHER_NO { get; set; }
+        public string? TRANS_STATUS { get; set; }
+        public int? TRANS_ID { get; set; }
+        public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
     public class AssetDepreciationDetail
     {
@@ -105,5 +106,11 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<DepreciationList> Data { get; set; }
+    }
+    public class DepreciationApproveData
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<Depreciation> Data { get; set; }
     }
 }
