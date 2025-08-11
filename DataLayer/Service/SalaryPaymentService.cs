@@ -33,10 +33,9 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? string.Empty);
                         cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@SUPP_ID", model.SUPP_ID ?? (object)DBNull.Value);
 
                         // Prepare table-valued parameter with only PAYDETAIL_ID
                         DataTable dtDetail = new DataTable();
@@ -98,7 +97,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@SUPP_ID", DBNull.Value);
 
                         // Parse SAL_MONTH string into DateTime
                         if (DateTime.TryParse(request.SAL_MONTH, out DateTime salMonth))
@@ -177,7 +175,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@SUPP_ID", DBNull.Value);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
