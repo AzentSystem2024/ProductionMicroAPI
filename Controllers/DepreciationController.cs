@@ -1,7 +1,9 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
+using MicroApi.DataLayer.Services;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.Controllers
 {
@@ -76,6 +78,20 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = $"Error updating data: {ex.Message}" });
             }
         }
+        //[HttpPost]
+        //[Route("approve")]
+        //public IActionResult ApproveData(Depreciation data)
+        //{
+        //    try
+        //    {
+        //        var result = _depreciationService.ApproveDatas(data);
+        //        return Ok(new { Flag = 1, Message = "Success", Data = result });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { Flag = 0, Message = $"Error updating data: {ex.Message}" });
+        //    }
+        //}
         [HttpPost("select/{id}")]
         public IActionResult GetDepreciationById(int id)
         {
