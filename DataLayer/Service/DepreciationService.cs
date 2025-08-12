@@ -276,12 +276,6 @@ namespace MicroApi.DataLayer.Service
             }
         }
 
-
-
-
-
-
-
         public DepreciationDetailsResponse GetDepreciationById(int id)
         {
             DepreciationDetailsResponse response = new DepreciationDetailsResponse
@@ -320,6 +314,7 @@ namespace MicroApi.DataLayer.Service
                                     VOUCHER_NO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
                                     TRANS_STATUS = reader["STATUS"] != DBNull.Value ? reader["STATUS"].ToString() : null,
                                     TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? reader["LAST_DEPR_DATE"].ToString(): null,
                                     ASSET_IDS = new List<AssetDepreciationDetail>()
                                 };
                             }
