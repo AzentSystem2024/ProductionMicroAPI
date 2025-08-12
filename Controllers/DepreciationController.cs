@@ -78,20 +78,19 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = $"Error updating data: {ex.Message}" });
             }
         }
-        //[HttpPost]
-        //[Route("approve")]
-        //public IActionResult ApproveData(Depreciation data)
-        //{
-        //    try
-        //    {
-        //        var result = _depreciationService.ApproveDatas(data);
-        //        return Ok(new { Flag = 1, Message = "Success", Data = result });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { Flag = 0, Message = $"Error updating data: {ex.Message}" });
-        //    }
-        //}
+        [HttpPost("approve")]
+        public IActionResult ApproveDepreciation([FromBody] DepreciationApproveRequest request)
+        {
+            try
+            {
+                var result = _depreciationService.ApproveDepreciation(request);
+                return Ok(new { Flag = 1, Message = "Success", Data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = $"Error approving data: {ex.Message}" });
+            }
+        }
         [HttpPost("select/{id}")]
         public IActionResult GetDepreciationById(int id)
         {
@@ -107,6 +106,19 @@ namespace MicroApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("delete/{id}")]
+        public IActionResult DeleteDepreciation(int id)
+        {
+            try
+            {
+                var result = _depreciationService.DeleteDepreciation(id);
+                return Ok(new { Flag = 1, Message = "Success", Data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = $"Error deleting data: {ex.Message}" });
             }
         }
     }

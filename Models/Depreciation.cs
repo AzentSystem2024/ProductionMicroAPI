@@ -21,6 +21,7 @@
         public string? DEPR_DATE { get; set; }
         public string? NARRATION { get; set; }
         public int? COMPANY_ID { get; set; }
+        public float? AMOUNT { get; set; }
         public int? FIN_ID { get; set; }
         public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
@@ -31,6 +32,7 @@
         public string? DEPR_DATE { get; set; }
         public string? NARRATION { get; set; }
         public int? COMPANY_ID { get; set; }
+        public float? AMOUNT { get; set; }
         public int? FIN_ID { get; set; }
         public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
@@ -107,10 +109,17 @@
         public string Message { get; set; }
         public List<DepreciationList> Data { get; set; }
     }
-    public class DepreciationApproveData
+    public class DepreciationApproveRequest
     {
-        public int Flag { get; set; }
-        public string Message { get; set; }
-        public List<Depreciation> Data { get; set; }
+        public int TRANS_ID { get; set; }
+        public int TRANS_STATUS { get; set; }
+        public DateTime LAST_DEPR_DATE { get; set; }
+        public string NARRATION { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public float? AMOUNT { get; set; }
+        public int? FIN_ID { get; set; }
+        public float? NET_DEPRECIATION { get; set; }
+        public float? CURRENT_VALUE { get; set; }
+        public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
 }
