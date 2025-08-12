@@ -63,7 +63,7 @@ namespace MicroApi.Controllers
             {
                 res.flag = 0;
                 res.Message = "Error: " + ex.Message;
-                res.Data = new List<PrePaymentList>();
+                res.Data = new List<PrePaymentListHeader>();
             }
 
             return res;

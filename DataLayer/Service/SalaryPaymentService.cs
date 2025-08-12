@@ -108,6 +108,8 @@ namespace MicroApi.DataLayer.Service
                         // Empty UDT
                         var emptyUDT = new DataTable();
                         emptyUDT.Columns.Add("PAYDETAIL_ID", typeof(int));
+                        emptyUDT.Columns.Add("NET_AMOUNT", typeof(decimal));
+
                         var tvpParam = cmd.Parameters.AddWithValue("@UDT_SALARY_PAY_DETAIL", emptyUDT);
                         tvpParam.SqlDbType = SqlDbType.Structured;
                         tvpParam.TypeName = "UDT_SALARY_PAY_DETAIL";
@@ -264,7 +266,7 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
                                         VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
-                                        SAL_MONTH = reader["SAL_MONTH"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("MM-yyyy") : null,
+                                        SAL_MONTH = reader["SAL_MONTH"] != DBNull.Value ? Convert.ToDateTime(reader["SAL_MONTH"]).ToString("MM-yyyy") : null,
                                         CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
