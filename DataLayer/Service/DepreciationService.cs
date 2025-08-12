@@ -234,23 +234,27 @@ namespace MicroApi.DataLayer.Service
                     CommandText = "SP_DEPRECIATION"
                 };
 
-                cmd.Parameters.AddWithValue("@ACTION", 4); 
+                cmd.Parameters.AddWithValue("@ACTION", 4);
+                cmd.Parameters.AddWithValue("@ID", request.ID);
                 cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
-                cmd.Parameters.AddWithValue("@TRANS_STATUS", request.TRANS_STATUS);
-                cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", request.LAST_DEPR_DATE);
-                cmd.Parameters.AddWithValue("@EXISTING_NARRATION", request.NARRATION ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@NET_DEPRECIATION", request.NET_DEPRECIATION ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@DEPR_DATE", string.IsNullOrEmpty(request.DEPR_DATE) ? (object)DBNull.Value : request.DEPR_DATE);
+                cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", string.IsNullOrEmpty(request.LAST_DEPR_DATE) ? (object)DBNull.Value : request.LAST_DEPR_DATE);
+                cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(request.NARRATION) ? (object)DBNull.Value : request.NARRATION);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+                //cmd.Parameters.AddWithValue("@NET_DEPRECIATION", request.NET_DEPRECIATION ?? (object)DBNull.Value);
+                //cmd.Parameters.AddWithValue("@CURRENT_VALUE", request.CURRENT_VALUE ?? (object)DBNull.Value);
+
                 // Prepare DataTable for TVP
                 DataTable tvp = new DataTable();
                 tvp.Columns.Add("Asset_ID", typeof(int));
+                tvp.Columns.Add("Days", typeof(int));
                 tvp.Columns.Add("Depr_Amount", typeof(float));
 
                 foreach (var detail in request.ASSET_IDS)
                 {
-                    tvp.Rows.Add(detail.Asset_ID, detail.Depr_Amount);
+                    tvp.Rows.Add(detail.Asset_ID, detail.Days, detail.Depr_Amount);
                 }
 
                 SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
@@ -263,15 +267,20 @@ namespace MicroApi.DataLayer.Service
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    return 1; 
+                    return 1;
                 }
                 catch (Exception ex)
                 {
-
                     throw new Exception("Error approving data: " + ex.Message);
                 }
             }
         }
+
+
+
+
+
+
 
         public DepreciationDetailsResponse GetDepreciationById(int id)
         {

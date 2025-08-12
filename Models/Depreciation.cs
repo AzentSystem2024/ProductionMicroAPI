@@ -10,7 +10,7 @@
         public int? TRANS_STATUS { get; set; }
         public int FIN_ID { get; set; }
         public int ASSET_ID { get; set; }
-        public string LAST_DEPR_DATE { get; set; }
+        public string? LAST_DEPR_DATE { get; set; }
         public float CURRENT_VALUE { get; set; }
         public int DAYS { get; set; }
         public float DEPR_AMOUNT { get; set; }
@@ -49,7 +49,7 @@
         public int USEFUL_LIFE { get; set; }
         public decimal RESIDUAL_VALUE { get; set; }
         public string PURCH_DATE { get; set; }
-        public string LAST_DEPR_DATE { get; set; }
+        public string? LAST_DEPR_DATE { get; set; }
         public float? DEPR_PERCENT { get; set; }
         public float NET_DEPRECIATION { get; set; }
         public float CURRENT_VALUE { get; set; }
@@ -113,9 +113,11 @@
     }
     public class DepreciationApproveRequest
     {
+        public int? ID { get; set; }
         public int TRANS_ID { get; set; }
-        public int TRANS_STATUS { get; set; }
-        public DateTime LAST_DEPR_DATE { get; set; }
+        // public int TRANS_STATUS { get; set; }
+        public string? DEPR_DATE { get; set; }
+        public string? LAST_DEPR_DATE { get; set; }
         public string NARRATION { get; set; }
         public int? COMPANY_ID { get; set; }
         public float? AMOUNT { get; set; }
