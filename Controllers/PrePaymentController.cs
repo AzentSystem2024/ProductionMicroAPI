@@ -84,5 +84,21 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("commit")]
+        public PrePaymentResponse commit(PrePaymentUpdate model)
+        {
+            PrePaymentResponse res = new PrePaymentResponse();
+            try
+            {
+                res = _prepaymentService.commit(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
 }

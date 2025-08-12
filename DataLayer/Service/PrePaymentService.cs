@@ -217,6 +217,7 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_STATUS = reader["TRANS_STATUS"]?.ToString(),
                                         ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                         SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
+                                        SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
                                         EXP_HEAD_ID = reader["EXP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["EXP_HEAD_ID"]) : 0,
                                         PREPAY_HEAD_ID = reader["PREPAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PREPAY_HEAD_ID"]) : 0,
                                         DATE_FROM = reader["DATE_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["DATE_FROM"]).ToString("dd-MM-yyyy") : null,
@@ -367,6 +368,79 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public PrePaymentResponse commit(PrePaymentUpdate model)
+        {
+            PrePaymentResponse response = new PrePaymentResponse();
 
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_PREPAYMENT", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Main parameters for ACTION = 2
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", model.TRANS_DATE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TAX_PERCENT", model.TAX_PERCENT ?? 0);
+                        cmd.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
+                        cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
+                        cmd.Parameters.AddWithValue("@SUPP_ID", model.SUPP_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@EXP_HEAD_ID", model.EXP_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PREPAY_HEAD_ID", model.PREPAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", model.DATE_FROM ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DATE_TO", model.DATE_TO ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@NO_OF_DAYS", model.NO_OF_DAYS ?? 0);
+                        cmd.Parameters.AddWithValue("@EXPENSE_AMOUNT", model.EXPENSE_AMOUNT ?? 0);
+                        cmd.Parameters.AddWithValue("@NO_OF_MONTHS", model.NO_OF_MONTHS ?? 0);
+                        cmd.Parameters.AddWithValue("@PREPAY_ID", DBNull.Value);
+
+
+                        // UDT for TB_PREPAY_DETAIL
+                        DataTable dtPrepayDetail = new DataTable();
+                        dtPrepayDetail.Columns.Add("DUE_DATE", typeof(DateTime));
+                        dtPrepayDetail.Columns.Add("DUE_AMOUNT", typeof(decimal));
+
+                        if (model.PREPAY_DETAIL != null)
+                        {
+                            foreach (var item in model.PREPAY_DETAIL)
+                            {
+                                dtPrepayDetail.Rows.Add(
+                                    item.DUE_DATE ?? DateTime.MinValue,
+                                    item.DUE_AMOUNT ?? 0);
+                            }
+                        }
+
+                        SqlParameter tvpPrepayDetail = cmd.Parameters.AddWithValue("@UDT_TB_PREPAY_DETAIL", dtPrepayDetail);
+                        tvpPrepayDetail.SqlDbType = SqlDbType.Structured;
+                        tvpPrepayDetail.TypeName = "UDT_TB_PREPAY_DETAIL";
+
+                        // Execute update
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Commit successfully.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
     }
 }

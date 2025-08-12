@@ -73,6 +73,7 @@
         public string TRANS_STATUS { get; set; }
         public int ID { get; set; }
         public int SUPP_ID { get; set; }
+        public string SUPP_NAME { get; set; }
         public int EXP_HEAD_ID { get; set; }
         public int PREPAY_HEAD_ID { get; set; }
         public string? DATE_FROM { get; set; }
