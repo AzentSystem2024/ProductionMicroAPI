@@ -464,5 +464,41 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public SalaryPaymentResponse Delete(int id)
+        {
+            SalaryPaymentResponse res = new SalaryPaymentResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == System.Data.ConnectionState.Closed)
+                        connection.Open();
+
+                    string procedureName = "SP_SALARY_PAYMENT";
+
+                    using (var cmd = new SqlCommand(procedureName, connection))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+
+                    }
+
+                }
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }

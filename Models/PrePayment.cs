@@ -100,4 +100,10 @@
         public string Message { get; set; }
         public PrePaymentListHeader Data { get; set; }
     }
+    public class PrePaymentLastDocno
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int INVOICE_NO { get; set; }
+    }
 }

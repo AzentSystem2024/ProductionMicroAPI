@@ -100,5 +100,39 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public PrePaymentResponse Delete(int id)
+        {
+            PrePaymentResponse res = new PrePaymentResponse();
+            try
+            {
+                res = _prepaymentService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("invoiceno")]
+        public PrePaymentLastDocno GetLastDocNo()
+        {
+            PrePaymentLastDocno res = new PrePaymentLastDocno();
+
+            try
+            {
+                res = _prepaymentService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
