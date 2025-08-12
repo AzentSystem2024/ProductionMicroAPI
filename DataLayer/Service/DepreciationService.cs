@@ -148,7 +148,9 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@DEPR_DATE", request.DEPR_DATE ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@NARRATION", request.NARRATION ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", request.LAST_DEPR_DATE ?? (object)DBNull.Value);
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
@@ -199,7 +201,9 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@DEPR_DATE", request.DEPR_DATE ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@NARRATION", request.NARRATION ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", request.LAST_DEPR_DATE ?? (object)DBNull.Value);
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
@@ -219,35 +223,65 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
-        //public int ApproveDatas(Depreciation data)
-        //{
-        //    try
-        //    {
-        //        using (SqlConnection connection = ADO.GetConnection())
-        //        {
-        //            SqlCommand cmd = new SqlCommand
-        //            {
-        //                Connection = connection,
-        //                CommandType = CommandType.StoredProcedure,
-        //                CommandText = "SP_DEPRECIATION"
-        //            };
+        public int ApproveDepreciation(DepreciationApproveRequest request)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand
+                {
+                    Connection = connection,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_DEPRECIATION"
+                };
 
-        //            cmd.Parameters.AddWithValue("@ACTION", 4);
-        //            cmd.Parameters.AddWithValue("@ASSET_ID", data.ASSET_ID);
-        //            cmd.Parameters.AddWithValue("@DEPR_AMOUNT", data.DEPR_AMOUNT);
-        //            cmd.Parameters.AddWithValue("@DEPR_DATE", data.DEPR_DATE);
-        //            cmd.Parameters.AddWithValue("@NARRATION", (object)data.NARRATION ?? DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@TRANS_STATUS", (object)data.TRANS_STATUS ?? DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@TRANS_ID", data.TRANS_ID);
+                cmd.Parameters.AddWithValue("@ACTION", 4);
+                cmd.Parameters.AddWithValue("@ID", request.ID);
+                cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+                cmd.Parameters.AddWithValue("@DEPR_DATE", string.IsNullOrEmpty(request.DEPR_DATE) ? (object)DBNull.Value : request.DEPR_DATE);
+                cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", string.IsNullOrEmpty(request.LAST_DEPR_DATE) ? (object)DBNull.Value : request.LAST_DEPR_DATE);
+                cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(request.NARRATION) ? (object)DBNull.Value : request.NARRATION);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+                //cmd.Parameters.AddWithValue("@NET_DEPRECIATION", request.NET_DEPRECIATION ?? (object)DBNull.Value);
+                //cmd.Parameters.AddWithValue("@CURRENT_VALUE", request.CURRENT_VALUE ?? (object)DBNull.Value);
 
-        //            cmd.ExecuteNonQuery();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+                // Prepare DataTable for TVP
+                DataTable tvp = new DataTable();
+                tvp.Columns.Add("Asset_ID", typeof(int));
+                tvp.Columns.Add("Days", typeof(int));
+                tvp.Columns.Add("Depr_Amount", typeof(float));
+
+                foreach (var detail in request.ASSET_IDS)
+                {
+                    tvp.Rows.Add(detail.Asset_ID, detail.Days, detail.Depr_Amount);
+                }
+
+                SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
+                tvpParam.SqlDbType = SqlDbType.Structured;
+                tvpParam.TypeName = "dbo.UDT_ASSETID_LIST";
+
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error approving data: " + ex.Message);
+                }
+            }
+        }
+
+
+
+
+
+
+
         public DepreciationDetailsResponse GetDepreciationById(int id)
         {
             DepreciationDetailsResponse response = new DepreciationDetailsResponse
@@ -317,6 +351,34 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public int DeleteDepreciation(int id)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand
+                {
+                    Connection = connection,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_DEPRECIATION"
+                };
+                cmd.Parameters.AddWithValue("@ACTION", 6); 
+                cmd.Parameters.AddWithValue("@ID", id);
+
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    return 1; 
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error deleting data: " + ex.Message);
+                }
+            }
+        }
+
     }
 }
 
