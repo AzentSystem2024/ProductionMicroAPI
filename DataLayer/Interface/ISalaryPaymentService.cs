@@ -8,6 +8,9 @@ namespace MicroApi.DataLayer.Interface
         SalaryPendingResponse GetPendingSalaryList(SalaryPendingRequest request);
         SalaryPaymentListResponse GetsalaryPaymentList();
         SalPayLastDocno GetLastDocNo();
+        SalaryPaymentDetailResponse GetSalaryPaymentById(int id);
+        SalaryPaymentResponse update(SalaryPaymentUpdate model);
+        SalaryPaymentResponse commit(SalaryPaymentUpdate model);
 
 
     }

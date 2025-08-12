@@ -89,5 +89,57 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public SalaryPaymentDetailResponse Select(int id)
+        {
+            SalaryPaymentDetailResponse response = new SalaryPaymentDetailResponse();
+            try
+            {
+                response = _salaryService.GetSalaryPaymentById(id);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("update")]
+        public SalaryPaymentResponse update(SalaryPaymentUpdate model)
+        {
+            SalaryPaymentResponse res = new SalaryPaymentResponse();
+
+            try
+            {
+                res = _salaryService.update(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("commit")]
+        public SalaryPaymentResponse commit(SalaryPaymentUpdate model)
+        {
+            SalaryPaymentResponse res = new SalaryPaymentResponse();
+
+            try
+            {
+                res = _salaryService.commit(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
