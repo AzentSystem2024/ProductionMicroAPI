@@ -85,4 +85,37 @@
         public string Message { get; set; }  
         public List<PrePaymentList> Data { get; set; }  
     }
+    public class PrePaymentListHeader
+    {
+        public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public string VOUCHER_NO { get; set; }
+        public string? TRANS_DATE { get; set; }
+        public int TRANS_STATUS { get; set; }
+        public int ID { get; set; }
+        public int SUPP_ID { get; set; }
+        public int EXP_HEAD_ID { get; set; }
+        public int PREPAY_HEAD_ID { get; set; }
+        public string? DATE_FROM { get; set; }
+        public int NO_OF_MONTHS { get; set; }
+        public int NO_OF_DAYS { get; set; }
+        public string? DATE_TO { get; set; }
+        public decimal EXPENSE_AMOUNT { get; set; }
+        public double TAX_PERCENT { get; set; }
+        public decimal TAX_AMOUNT { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+        public List<PrePaymentListDetail> Details { get; set; }
+    }
+
+    public class PrePaymentListDetail
+    {
+        public string DUE_DATE { get; set; }
+        public decimal DUE_AMOUNT { get; set; }
+    }
+    public class PrePaymentListHeaderResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public PrePaymentListHeader Data { get; set; }
+    }
 }

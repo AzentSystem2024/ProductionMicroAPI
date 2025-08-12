@@ -68,5 +68,21 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public PrePaymentListHeaderResponse Select(int id)
+        {
+            PrePaymentListHeaderResponse response = new PrePaymentListHeaderResponse();
+            try
+            {
+                response = _prepaymentService.GetPrePaymentById(id);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
     }
 }

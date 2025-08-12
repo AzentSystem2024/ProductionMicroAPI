@@ -254,6 +254,114 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public PrePaymentListHeaderResponse GetPrePaymentById(int id)
+        {
+            var response = new PrePaymentListHeaderResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = null
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_PREPAYMENT", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 0); 
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FIN_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 38);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TAX_PERCENT", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TAX_AMOUNT", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@NET_AMOUNT", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PREPAY_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@SUPP_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@EXP_HEAD_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PREPAY_HEAD_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DATE_TO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@NO_OF_DAYS", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@EXPENSE_AMOUNT", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@NO_OF_MONTHS", DBNull.Value);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            PrePaymentListHeader header = null;
+
+                            while (reader.Read())
+                            {
+                                if (header == null)
+                                {
+                                    header = new PrePaymentListHeader
+                                    {
+                                        TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                        TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
+                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ?
+                                                     Convert.ToDateTime(reader["TRANS_DATE"]).ToString("yyyy-MM-dd") : null,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
+                                        ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                        SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
+                                        EXP_HEAD_ID = reader["EXP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["EXP_HEAD_ID"]) : 0,
+                                        PREPAY_HEAD_ID = reader["PREPAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PREPAY_HEAD_ID"]) : 0,
+                                        DATE_FROM = reader["DATE_FROM"] != DBNull.Value ?
+                                                    Convert.ToDateTime(reader["DATE_FROM"]).ToString("yyyy-MM-dd") : null,
+                                        NO_OF_MONTHS = reader["NO_OF_MONTHS"] != DBNull.Value ? Convert.ToInt32(reader["NO_OF_MONTHS"]) : 0,
+                                        NO_OF_DAYS = reader["NO_OF_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NO_OF_DAYS"]) : 0,
+                                        DATE_TO = reader["DATE_TO"] != DBNull.Value ?
+                                                  Convert.ToDateTime(reader["DATE_TO"]).ToString("yyyy-MM-dd") : null,
+                                        EXPENSE_AMOUNT = reader["EXPENSE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["EXPENSE_AMOUNT"]) : 0,
+                                        TAX_PERCENT = reader["TAX_PERCENT"] != DBNull.Value ? Convert.ToDouble(reader["TAX_PERCENT"]) : 0,
+                                        TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
+                                        Details = new List<PrePaymentListDetail>()
+                                    };
+                                }
+
+                                // Add detail row
+                                header.Details.Add(new PrePaymentListDetail
+                                {
+                                    DUE_DATE = reader["DUE_DATE"] != DBNull.Value ?
+                                               Convert.ToDateTime(reader["DUE_DATE"]).ToString("yyyy-MM-dd") : null,
+                                    DUE_AMOUNT = reader["DUE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DUE_AMOUNT"]) : 0
+                                });
+                            }
+
+                            if (header != null)
+                            {
+                                response.Data = header;
+                                response.flag = 1;
+                                response.Message = "Success";
+                            }
+                            else
+                            {
+                                response.flag = 0;
+                                response.Message = "No record found.";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
 
     }
 }
