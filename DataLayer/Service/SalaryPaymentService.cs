@@ -234,10 +234,10 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 30);  
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 30);
                         cmd.Parameters.AddWithValue("@TRANS_ID", id);
 
-                        // Other params not required for this select
+                        // Fill unused params with NULL
                         cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@FIN_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
@@ -252,33 +252,52 @@ namespace MicroApi.DataLayer.Service
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
+                            SalaryPaymentDetail header = null;
+
                             while (reader.Read())
                             {
-                                response.Data.Add(new SalaryPaymentDetail
+                                if (header == null)
+                                {
+                                    header = new SalaryPaymentDetail
+                                    {
+                                        TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                        TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                        TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        SAL_MONTH = reader["SAL_MONTH"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("MM-yyyy") : null,
+                                        CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
+                                        CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        BANK_NAME = reader["BANK_NAME"]?.ToString(),
+                                        PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
+                                        NARRATION = reader["NARRATION"]?.ToString(),
+                                        PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
+                                        PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
+                                        DetailList = new List<SalaryPaymentDetailRow>()
+                                    };
+                                }
+
+                                header.DetailList.Add(new SalaryPaymentDetailRow
                                 {
                                     EMP_ID = reader["EMP_ID"] != DBNull.Value ? Convert.ToInt32(reader["EMP_ID"]) : 0,
                                     EMP_NAME = reader["EMP_NAME"]?.ToString(),
                                     EMP_CODE = reader["EMP_CODE"]?.ToString(),
-                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
-
-                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                    TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
-                                    TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
-                                    VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
-                                    CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
-                                    CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
-                                    BANK_NAME = reader["BANK_NAME"]?.ToString(),
-                                    PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
-                                    NARRATION = reader["NARRATION"]?.ToString(),
-                                    PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
-                                    PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
-                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
+                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0
                                 });
                             }
-                        }
 
-                        response.flag = 1;
-                        response.Message = "Success";
+                            if (header != null)
+                            {
+                                response.Data.Add(header); 
+                                response.flag = 1;
+                                response.Message = "Success";
+                            }
+                            else
+                            {
+                                response.flag = 0;
+                                response.Message = "No record found.";
+                            }
+                        }
                     }
                 }
             }
@@ -290,6 +309,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
 
         public SalPayLastDocno GetLastDocNo()
         {

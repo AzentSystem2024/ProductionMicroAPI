@@ -93,11 +93,7 @@
     }
     public class SalaryPaymentDetail
     {
-        public int EMP_ID { get; set; }
-        public string EMP_NAME { get; set; }
-        public string EMP_CODE { get; set; }
-        public decimal NET_AMOUNT { get; set; }
-
+        public string SAL_MONTH { get; set; }
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
         public string TRANS_DATE { get; set; }
@@ -110,11 +106,20 @@
         public int PAY_TYPE_ID { get; set; }
         public int PAY_HEAD_ID { get; set; }
         public int TRANS_STATUS { get; set; }
+        public List<SalaryPaymentDetailRow> DetailList { get; set; }
+
     }
     public class SalaryPaymentDetailResponse
     {
         public int flag { get; set; }
         public string Message { get; set; }
         public List<SalaryPaymentDetail> Data { get; set; } = new List<SalaryPaymentDetail>();
+    }
+    public class SalaryPaymentDetailRow
+    {
+        public int EMP_ID { get; set; }
+        public string EMP_NAME { get; set; }
+        public string EMP_CODE { get; set; }
+        public decimal NET_AMOUNT { get; set; }
     }
 }
