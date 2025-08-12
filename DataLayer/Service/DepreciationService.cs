@@ -150,6 +150,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", request.LAST_DEPR_DATE ?? (object)DBNull.Value);
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
@@ -202,6 +203,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", request.LAST_DEPR_DATE ?? (object)DBNull.Value);
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;

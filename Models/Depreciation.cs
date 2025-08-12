@@ -23,6 +23,7 @@
         public int? COMPANY_ID { get; set; }
         public float? AMOUNT { get; set; }
         public int? FIN_ID { get; set; }
+        public string? LAST_DEPR_DATE { get; set; }
         public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
     public class DepreciationUpdateRequest
@@ -34,6 +35,7 @@
         public int? COMPANY_ID { get; set; }
         public float? AMOUNT { get; set; }
         public int? FIN_ID { get; set; }
+        public string? LAST_DEPR_DATE { get; set; }
         public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
     public class FixedAssetLists
