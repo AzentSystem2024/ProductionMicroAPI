@@ -127,17 +127,17 @@ namespace MicroApi.DataLayer.Service
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
 
-                // Check for open records before proceeding
-                using (SqlCommand checkCmd = new SqlCommand(
-                    "SELECT 1 FROM TB_AC_TRANS_HEADER th JOIN TB_AC_DEPRECIATION_HEADER dh ON th.TRANS_ID = dh.TRANS_ID " +
-                    " WHERE th.TRANS_TYPE = 9   AND th.TRANS_STATUS != 5   AND th.COMPANY_ID = @COMPANY_ID", connection))
-                {
-                    var exists = checkCmd.ExecuteScalar();
-                    if (exists != null)
-                    {
-                        throw new Exception("Cannot insert: An open depreciation record already exists.");
-                    }
-                }
+                //// Check for open records before proceeding
+                //using (SqlCommand checkCmd = new SqlCommand(
+                //    "SELECT 1 FROM TB_AC_TRANS_HEADER th JOIN TB_AC_DEPRECIATION_HEADER dh ON th.TRANS_ID = dh.TRANS_ID " +
+                //    " WHERE th.TRANS_TYPE = 9   AND th.TRANS_STATUS != 5   AND th.COMPANY_ID = @COMPANY_ID", connection))
+                //{
+                //    var exists = checkCmd.ExecuteScalar();
+                //    if (exists != null)
+                //    {
+                //        throw new Exception("Cannot insert: An open depreciation record already exists.");
+                //    }
+                //}
 
                 using (SqlTransaction transaction = connection.BeginTransaction())
                 {
