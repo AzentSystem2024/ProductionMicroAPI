@@ -8,6 +8,9 @@ namespace MicroApi.DataLayer.Interface
         PrePaymentResponse Update(PrePaymentUpdate model);
         PrePaymentListResponse GetPrePaymentList();
         PrePaymentListHeaderResponse GetPrePaymentById(int id);
+        PrePaymentResponse commit(PrePaymentUpdate model);
+        PrePaymentResponse Delete(int id);
+        PrePaymentLastDocno GetLastDocNo();
 
     }
 }

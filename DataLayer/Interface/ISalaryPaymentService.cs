@@ -11,7 +11,6 @@ namespace MicroApi.DataLayer.Interface
         SalaryPaymentDetailResponse GetSalaryPaymentById(int id);
         SalaryPaymentResponse update(SalaryPaymentUpdate model);
         SalaryPaymentResponse commit(SalaryPaymentUpdate model);
-
-
+        SalaryPaymentResponse Delete(int id);
     }
 }

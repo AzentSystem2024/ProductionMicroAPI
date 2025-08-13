@@ -141,5 +141,21 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public SalaryPaymentResponse Delete(int id)
+        {
+            SalaryPaymentResponse res = new SalaryPaymentResponse();
+            try
+            {
+                res = _salaryService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
 }

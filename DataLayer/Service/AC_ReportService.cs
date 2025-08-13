@@ -289,6 +289,48 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public ProfitlossReportResponse GetProfitlossReport(ProfitlossReportRequest request)
+        {
+            ProfitlossReportResponse response = new ProfitlossReportResponse();
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_JOURNAL_BOOK", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ProfitlossReport report = new ProfitlossReport
+                            {
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]) : DateTime.MinValue,
+                                TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                OPP_HEAD_NAME = reader["OPP_HEAD_NAME"]?.ToString(),
+                                REMARKS = reader["REMARKS"]?.ToString(),
+                                DR_AMOUNT = reader["DR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DR_AMOUNT"]) : 0,
+                                CR_AMOUNT = reader["CR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CR_AMOUNT"]) : 0
+                            };
+
+                            response.data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.data.Count > 0 ? 1 : 0;
+            response.message = response.data.Count > 0 ? "Success" : "No records found";
+
+            return response;
+        }
 
 
     }

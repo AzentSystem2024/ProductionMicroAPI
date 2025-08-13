@@ -108,6 +108,8 @@ namespace MicroApi.DataLayer.Service
                         // Empty UDT
                         var emptyUDT = new DataTable();
                         emptyUDT.Columns.Add("PAYDETAIL_ID", typeof(int));
+                        emptyUDT.Columns.Add("NET_AMOUNT", typeof(decimal));
+
                         var tvpParam = cmd.Parameters.AddWithValue("@UDT_SALARY_PAY_DETAIL", emptyUDT);
                         tvpParam.SqlDbType = SqlDbType.Structured;
                         tvpParam.TypeName = "UDT_SALARY_PAY_DETAIL";
@@ -185,7 +187,7 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
                                     TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
-                                    TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value  ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
                                     VOUCHER_NO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
                                     CHEQUE_NO = reader["CHEQUE_NO"] != DBNull.Value ? reader["CHEQUE_NO"].ToString() : null,
                                     CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? reader["CHEQUE_DATE"].ToString() : null,
@@ -264,7 +266,7 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
                                         VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
-                                        SAL_MONTH = reader["SAL_MONTH"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("MM-yyyy") : null,
+                                        SAL_MONTH = reader["SAL_MONTH"] != DBNull.Value ? Convert.ToDateTime(reader["SAL_MONTH"]).ToString("MM-yyyy") : null,
                                         CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
@@ -279,6 +281,7 @@ namespace MicroApi.DataLayer.Service
 
                                 header.DetailList.Add(new SalaryPaymentDetailRow
                                 {
+                                    ID = Convert.ToInt32(reader["ID"]),
                                     EMP_ID = reader["EMP_ID"] != DBNull.Value ? Convert.ToInt32(reader["EMP_ID"]) : 0,
                                     EMP_NAME = reader["EMP_NAME"]?.ToString(),
                                     EMP_CODE = reader["EMP_CODE"]?.ToString(),
@@ -460,6 +463,42 @@ namespace MicroApi.DataLayer.Service
             }
 
             return response;
+        }
+        public SalaryPaymentResponse Delete(int id)
+        {
+            SalaryPaymentResponse res = new SalaryPaymentResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == System.Data.ConnectionState.Closed)
+                        connection.Open();
+
+                    string procedureName = "SP_SALARY_PAYMENT";
+
+                    using (var cmd = new SqlCommand(procedureName, connection))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+
+                    }
+
+                }
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
         }
     }
 }

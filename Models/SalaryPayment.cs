@@ -117,6 +117,7 @@
     }
     public class SalaryPaymentDetailRow
     {
+        public int ID { get; set; }
         public int EMP_ID { get; set; }
         public string EMP_NAME { get; set; }
         public string EMP_CODE { get; set; }
