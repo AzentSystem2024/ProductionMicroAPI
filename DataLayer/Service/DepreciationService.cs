@@ -127,6 +127,17 @@ namespace MicroApi.DataLayer.Service
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
 
+                // Check for open records before proceeding
+                using (SqlCommand checkCmd = new SqlCommand(
+                    "SELECT 1 FROM TB_AC_TRANS_HEADER WHERE TRANS_TYPE = 9 AND TRANS_STATUS != 5", connection))
+                {
+                    var exists = checkCmd.ExecuteScalar();
+                    if (exists != null)
+                    {
+                        throw new Exception("Cannot insert: An open depreciation record already exists.");
+                    }
+                }
+
                 using (SqlTransaction transaction = connection.BeginTransaction())
                 {
                     try
