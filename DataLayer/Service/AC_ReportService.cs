@@ -200,6 +200,95 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public CashBookResponse GetCashBookReport(CashBookFilter request)
+        {
+            var response = new CashBookResponse { data = new List<CashBookItem>() };
+            try
+            {
+                request.DATE_FROM = request.DATE_FROM.Date;
+                request.DATE_TO = request.DATE_TO.Date.AddDays(1).AddMilliseconds(-3);
+
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_CASH_BOOK", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            response.data.Add(new CashBookItem
+                            {
+                                TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),
+                                TRANS_TYPE = Convert.ToInt32(rdr["TRANS_TYPE"]),
+                                TRANS_DATE = rdr["TRANS_DATE"] as DateTime?,
+                                VOUCHER_NO = rdr["VOUCHER_NO"].ToString(),
+                                PARTICULARS = rdr["OPP_HEAD_NAME"].ToString(),
+                                REMARKS = rdr["NARRATION"].ToString(),
+                                DR_AMOUNT = Convert.ToDecimal(rdr["DR_AMOUNT"]),
+                                CR_AMOUNT = Convert.ToDecimal(rdr["CR_AMOUNT"])
+                            });
+                        }
+                    }
+                }
+                response.flag = 1;
+                response.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = ex.Message;
+            }
+            return response;
+        }
+        public BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request)
+        {
+            var response = new BalanceSheetResponse { data = new List<BalanceSheetItem>() };
+            try
+            {
+                request.DATE_FROM = request.DATE_FROM.Date;
+                request.DATE_TO = request.DATE_TO.Date.AddDays(1).AddMilliseconds(-3);
+
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_BALANCE_SHEET", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            response.data.Add(new BalanceSheetItem
+                            {
+                                TYPE_ID = Convert.ToInt32(rdr["TYPE_ID"]),
+                                TYPE_NAME = rdr["TYPE_NAME"].ToString(),
+                                MAIN_GROUP_ID = Convert.ToInt32(rdr["MAIN_GROUP_ID"]),
+                                MAIN_GROUP_NAME = rdr["MAIN_GROUP_NAME"].ToString(),
+                                HEAD_ID = Convert.ToInt32(rdr["HEAD_ID"]),
+                                PARTICULARS = rdr["HEAD_NAME"].ToString(),
+                                AMOUNT = Convert.ToDecimal(rdr["AMOUNT"])
+                            });
+                        }
+                    }
+                }
+                response.flag = 1;
+                response.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = ex.Message;
+            }
+            return response;
+        }
 
 
     }

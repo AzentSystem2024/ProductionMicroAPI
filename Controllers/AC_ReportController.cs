@@ -88,6 +88,40 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost("CashBook")]
+        public CashBookResponse GetCashBookReport(CashBookFilter request)
+        {
+            var res = new CashBookResponse();
+            try
+            {
+                res = _ReportService.GetCashBookReport(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost("BalanceSheet")]
+        public BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request)
+        {
+            var res = new BalanceSheetResponse();
+            try
+            {
+                res = _ReportService.GetBalanceSheetReport(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
 
     }
 }

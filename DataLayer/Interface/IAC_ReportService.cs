@@ -8,6 +8,8 @@ namespace MicroApi.DataLayer.Interface
         LedgerStatementResponse GetLedgerStatement(AC_Report request);
         ArticleProductionResponse GetArticleProductionReport(ArticleProductionFilter request);
         BoxProductionResponse GetBoxProductionReport(BoxProductionFilter request);
+        CashBookResponse GetCashBookReport(CashBookFilter request);
+        BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request);
 
 
     }

@@ -48,7 +48,7 @@ namespace MicroApi.DataLayer.Service
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                     ASSET_VALUE = reader["PURCHASE_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["PURCHASE_VALUE"]) : 0f,
                                     USEFUL_LIFE = reader["USEFUL_LIFE"] != DBNull.Value ? Convert.ToInt32(reader["USEFUL_LIFE"]) : 0,
-                                    RESIDUAL_VALUE = reader["RESIDUAL_VALUE"] != DBNull.Value ? Convert.ToDecimal(reader["RESIDUAL_VALUE"]) : 0m,                                   
+                                    RESIDUAL_VALUE = reader["RESIDUAL_VALUE"] != DBNull.Value ? Convert.ToDecimal(reader["RESIDUAL_VALUE"]) : 0m,
                                     PURCH_DATE = reader["PURCHASE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCHASE_DATE"]).ToString("dd/MM/yyyy") : null,
                                     DEPR_PERCENT = reader["DEPR_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DEPR_PERCENT"]) : 0f,
                                     LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["LAST_DEPR_DATE"]).ToString("dd/MM/yyyy") : null,
@@ -71,6 +71,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
         public DepreciationListResponse GetList()
         {
             DepreciationListResponse response = new DepreciationListResponse { Data = new List<DepreciationList>() };
@@ -238,7 +239,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ID", request.ID);
                 cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
                 cmd.Parameters.AddWithValue("@DEPR_DATE", string.IsNullOrEmpty(request.DEPR_DATE) ? (object)DBNull.Value : request.DEPR_DATE);
-                cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", string.IsNullOrEmpty(request.LAST_DEPR_DATE) ? (object)DBNull.Value : request.LAST_DEPR_DATE);
+                //cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", string.IsNullOrEmpty(request.LAST_DEPR_DATE) ? (object)DBNull.Value : request.LAST_DEPR_DATE);
                 cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(request.NARRATION) ? (object)DBNull.Value : request.NARRATION);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
