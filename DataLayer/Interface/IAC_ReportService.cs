@@ -10,7 +10,7 @@ namespace MicroApi.DataLayer.Interface
         BoxProductionResponse GetBoxProductionReport(BoxProductionFilter request);
         CashBookResponse GetCashBookReport(CashBookFilter request);
         BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request);
-        ProfitlossReportResponse GetProfitlossReport(ProfitlossReportRequest request);
+        ProfitLossReportResponse GetProfitLossReport(ProfitLossReportRequest request);
 
 
     }

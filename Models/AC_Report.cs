@@ -142,29 +142,28 @@
         public List<BalanceSheetItem> data { get; set; } = new List<BalanceSheetItem>();
     }
 
-    public class ProfitlossReport
+    public class ProfitLossReport
     {
-        public int TRANS_ID { get; set; }
-        public DateTime TRANS_DATE { get; set; }
-        public int TRANS_TYPE { get; set; }
-        public string DESCRIPTION { get; set; }
-        public string VOUCHER_NO { get; set; }
-        public string OPP_HEAD_NAME { get; set; }
-        public string REMARKS { get; set; }
-        public decimal DR_AMOUNT { get; set; }
-        public decimal CR_AMOUNT { get; set; }
+        public int TYPE_ID { get; set; }
+        public string TYPE_NAME { get; set; }
+        public int MAIN_GROUP_ID { get; set; }
+        public string MAIN_GROUP_NAME { get; set; }
+        public int HEAD_ID { get; set; }
+        public string HEAD_NAME { get; set; }
+        public double AMOUNT { get; set; }
+        public double BL_ORDER { get; set; }
     }
-    public class ProfitlossReportRequest
+    public class ProfitLossReportRequest
     {
         public int COMPANY_ID { get; set; }
         public int FIN_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
     }
-    public class ProfitlossReportResponse
+    public class ProfitLossReportResponse
     {
         public int flag { get; set; }
         public string message { get; set; }
-        public List<ProfitlossReport> data { get; set; } = new List<ProfitlossReport>();
+        public List<ProfitLossReport> data { get; set; } = new List<ProfitLossReport>();
     }
 }

@@ -289,13 +289,16 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
-        public ProfitlossReportResponse GetProfitlossReport(ProfitlossReportRequest request)
+        public ProfitLossReportResponse GetProfitLossReport(ProfitLossReportRequest request)
         {
-            ProfitlossReportResponse response = new ProfitlossReportResponse();
+            ProfitLossReportResponse response = new ProfitLossReportResponse
+            {
+                data = new List<ProfitLossReport>()
+            };
 
             using (SqlConnection conn = ADO.GetConnection())
             {
-                using (SqlCommand cmd = new SqlCommand("SP_RPT_JOURNAL_BOOK", conn))
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_PROFIT_LOSS", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
@@ -307,17 +310,16 @@ namespace MicroApi.DataLayer.Service
                     {
                         while (reader.Read())
                         {
-                            ProfitlossReport report = new ProfitlossReport
+                            ProfitLossReport report = new ProfitLossReport
                             {
-                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]) : DateTime.MinValue,
-                                TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
-                                DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
-                                VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
-                                OPP_HEAD_NAME = reader["OPP_HEAD_NAME"]?.ToString(),
-                                REMARKS = reader["REMARKS"]?.ToString(),
-                                DR_AMOUNT = reader["DR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DR_AMOUNT"]) : 0,
-                                CR_AMOUNT = reader["CR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CR_AMOUNT"]) : 0
+                                TYPE_ID = reader["TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["TYPE_ID"]) : 0,
+                                TYPE_NAME = reader["TYPE_NAME"]?.ToString(),
+                                MAIN_GROUP_ID = reader["MAIN_GROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["MAIN_GROUP_ID"]) : 0,
+                                MAIN_GROUP_NAME = reader["MAIN_GROUP_NAME"]?.ToString(),
+                                HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
+                                HEAD_NAME = reader["HEAD_NAME"]?.ToString(),
+                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["AMOUNT"]) : 0,
+                                BL_ORDER = reader["BL_ORDER"] != DBNull.Value ? Convert.ToDouble(reader["BL_ORDER"]) : 0
                             };
 
                             response.data.Add(report);

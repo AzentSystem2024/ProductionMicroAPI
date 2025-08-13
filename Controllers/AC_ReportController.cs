@@ -124,12 +124,12 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost("profitloss")]
-        public ProfitlossReportResponse GetProfitlossReport(ProfitlossReportRequest request)
+        public ProfitLossReportResponse GetProfitlossReport(ProfitLossReportRequest request)
         {
-            var res = new ProfitlossReportResponse();
+            var res = new ProfitLossReportResponse();
             try
             {
-                res = _ReportService.GetProfitlossReport(request);
+                res = _ReportService.GetProfitLossReport(request);
                 res.flag = 1;
                 res.message = "Success";
             }
