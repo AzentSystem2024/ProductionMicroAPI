@@ -69,7 +69,7 @@ namespace MicroApi.DataLayer.Service
                                     PURCH_DATE = reader["PURCHASE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCHASE_DATE"]).ToString("dd/MM/yyyy") : null,
                                     //LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["LAST_DEPR_DATE"]).ToString("dd/MM/yyyy") : null,
                                     NET_DEPRECIATION = reader["TOTAL_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_DEPRECIATION"]) : 0f,
-                                    CURRENT_VALUE = reader["NET_ASSET_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["NET_ASSET_VALUE"]) : 0f,
+                                   // CURRENT_VALUE = reader["NET_ASSET_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["NET_ASSET_VALUE"]) : 0f,
                                     IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
                                 };
                                 response.Data.Add(asset);
@@ -217,7 +217,7 @@ namespace MicroApi.DataLayer.Service
                                     USEFUL_LIFE = reader["USEFUL_LIFE"] != DBNull.Value ? Convert.ToInt32(reader["USEFUL_LIFE"]) : 0,
                                     LAST_DEPR_DATE = reader["LAST_DEPR_DATE"] != DBNull.Value ? reader["LAST_DEPR_DATE"].ToString() : null,
                                     NET_DEPRECIATION = reader["NET_DEPRECIATION"] != DBNull.Value ? Convert.ToSingle(reader["NET_DEPRECIATION"]) : 0f,
-                                    CURRENT_VALUE = reader["CURRENT_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["CURRENT_VALUE"]) : 0f,
+                                   // CURRENT_VALUE = reader["CURRENT_VALUE"] != DBNull.Value ? Convert.ToSingle(reader["CURRENT_VALUE"]) : 0f,
                                     IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"])
                                 };
                                 response.Data.Add(asset);
