@@ -123,7 +123,23 @@ namespace MicroApi.Controllers
             return res;
         }
 
+        [HttpPost("profitloss")]
+        public ProfitlossReportResponse GetProfitlossReport(ProfitlossReportRequest request)
+        {
+            var res = new ProfitlossReportResponse();
+            try
+            {
+                res = _ReportService.GetProfitlossReport(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
             return res;
         }
     }
-}
+    }
+
