@@ -230,7 +230,8 @@ namespace MicroApi.DataLayer.Service
                                 PARTICULARS = rdr["OPP_HEAD_NAME"].ToString(),
                                 REMARKS = rdr["NARRATION"].ToString(),
                                 DR_AMOUNT = Convert.ToDecimal(rdr["DR_AMOUNT"]),
-                                CR_AMOUNT = Convert.ToDecimal(rdr["CR_AMOUNT"])
+                                CR_AMOUNT = Convert.ToDecimal(rdr["CR_AMOUNT"]),
+                                TRANS_DESCRIPTION = Convert.ToString(rdr["TRANS_DESCRIPTION"])
                             });
                         }
                     }

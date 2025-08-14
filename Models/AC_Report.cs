@@ -108,6 +108,7 @@
         public string REMARKS { get; set; }
         public decimal DR_AMOUNT { get; set; }
         public decimal CR_AMOUNT { get; set; }
+        public string TRANS_DESCRIPTION { get; set; }
     }
 
     public class CashBookResponse
