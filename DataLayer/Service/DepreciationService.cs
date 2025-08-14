@@ -310,7 +310,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 5); 
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
