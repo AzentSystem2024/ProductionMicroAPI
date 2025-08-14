@@ -386,10 +386,12 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
 
 
-                        // UDT setup
+                        
+
                         DataTable dt = new DataTable();
 
                         dt.Columns.Add("TRANS_ID", typeof(int));
+                        dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("REMARKS", typeof(string));
@@ -402,7 +404,7 @@ namespace MicroApi.DataLayer.Service
                         // Add rows from your model
                         foreach (var item in model.MISC_DETAIL)
                         {
-                            dt.Rows.Add(0, slno++,
+                            dt.Rows.Add(0, slno++, 0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
                                 item.AMOUNT,
@@ -414,7 +416,6 @@ namespace MicroApi.DataLayer.Service
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_PAYMENT", dt);
                         tvpParam.SqlDbType = SqlDbType.Structured;
                         tvpParam.TypeName = "UDT_TB_AC_PAYMENT";
-
                         // Execute
                         cmd.ExecuteNonQuery();
 
