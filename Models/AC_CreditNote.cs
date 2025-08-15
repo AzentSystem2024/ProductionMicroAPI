@@ -164,6 +164,7 @@
     public class CreditNoteInvlist
     {
         public int TRANS_ID { get; set; }
+        public int INVOICE_ID { get; set; }
         public string INVOICE_NO { get; set; }
         public string DATE { get; set; }
         public float NET_AMOUNT { get; set; }
