@@ -208,6 +208,7 @@
     public class Customer_Aging_Rpt
     {
         public string CUSTOMER_NAME { get; set; }
+        public int TRANS_ID { get; set; }
         public decimal AGE_0_30 { get; set; }
         public decimal AGE_31_60 { get; set; }
         public decimal AGE_61_90 { get; set; }

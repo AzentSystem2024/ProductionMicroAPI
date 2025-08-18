@@ -411,6 +411,7 @@ namespace MicroApi.DataLayer.Service
                             Customer_Aging_Rpt report = new Customer_Aging_Rpt
                             {
                                 CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
                                 AGE_0_30 = reader["AGE_0_30"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_0_30"]) : 0,
                                 AGE_31_60 = reader["AGE_31_60"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_31_60"]) : 0,
                                 AGE_61_90 = reader["AGE_61_90"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_61_90"]) : 0,
