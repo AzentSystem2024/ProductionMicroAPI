@@ -140,6 +140,40 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost("custrpt")]
+        public CustomerStatementResponse GetCustomerStatement(Customer_Statement_Request request)
+        {
+            var res = new CustomerStatementResponse();
+            try
+            {
+                res = _ReportService.GetCustomerStatement(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost("custaging")]
+        public CustomerAgingResult GetCustomerAging(Customer_Aging request)
+        {
+            var res = new CustomerAgingResult();
+            try
+            {
+                res = _ReportService.GetCustomerAging(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
     }
 }
 

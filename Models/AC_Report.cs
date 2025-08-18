@@ -167,4 +167,57 @@
         public string message { get; set; }
         public List<ProfitLossReport> data { get; set; } = new List<ProfitLossReport>();
     }
+    public class Customer_Statement_Request
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public int? CUSTOMER_ID { get; set; }
+    }
+
+    public class Customer_Statement_Rpt
+    {
+        public int CUSTOMER_ID { get; set; }
+        public string CUSTOMER_NAME { get; set; }
+        public DateTime INVOICE_DATE { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string REFERENCE_NO { get; set; }
+        public string NARRATION { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+        public decimal RECEIVED_AMOUNT { get; set; }
+        public decimal RETURN_AMOUNT { get; set; }
+        public decimal ADJUSTED_AMOUNT { get; set; }
+        public decimal BALANCE { get; set; }
+        public int AGE { get; set; }
+
+    }
+    public class CustomerStatementResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<Customer_Statement_Rpt> Data { get; set; } 
+    }
+    public class Customer_Aging
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public int? CUSTOMER_ID { get; set; } 
+    }
+    public class Customer_Aging_Rpt
+    {
+        public string CUSTOMER_NAME { get; set; }
+        public decimal AGE_0_30 { get; set; }
+        public decimal AGE_31_60 { get; set; }
+        public decimal AGE_61_90 { get; set; }
+        public decimal AGE_ABOVE_90 { get; set; }
+        public decimal TOTAL_BALANCE { get; set; }
+    }
+
+    public class CustomerAgingResult
+    {
+        public int flag { get; set; }  
+        public string message { get; set; }
+        public List<Customer_Aging_Rpt> Data { get; set; }
+    }
 }

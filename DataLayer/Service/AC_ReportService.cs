@@ -3,6 +3,7 @@ using MicroApi.Models;
 using System.Data.SqlClient;
 using System.Data;
 using MicroApi.DataLayer.Interface;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -335,6 +336,97 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        public CustomerStatementResponse GetCustomerStatement(Customer_Statement_Request request)
+        {
+            CustomerStatementResponse response = new CustomerStatementResponse
+            {
+                Data = new List<Customer_Statement_Rpt>()
+            }
+            ;
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_CUSTOMER_STATEMENT", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUSTOMER_ID ?? 0);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Customer_Statement_Rpt report = new Customer_Statement_Rpt
+                            {
+                                CUSTOMER_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
+                                CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
+                                INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]) : DateTime.MinValue,
+                                INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
+                                NARRATION = reader["NARRATION"]?.ToString(),
+                                REFERENCE_NO = reader["REFERENCE_NO"]?.ToString(),
+                                RETURN_AMOUNT = reader["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["RETURN_AMOUNT"]) : 0,
+                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
+                                RECEIVED_AMOUNT = reader["RECEIVED_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["RECEIVED_AMOUNT"]) : 0,
+                                ADJUSTED_AMOUNT = reader["ADJUSTED_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["ADJUSTED_AMOUNT"]) : 0,
+                                BALANCE = reader["BALANCE"] != DBNull.Value ? Convert.ToDecimal(reader["BALANCE"]) : 0,
+                                AGE = reader["AGE"] != DBNull.Value ? Convert.ToInt32(reader["AGE"]) : 0
+                            };
+
+                            response.Data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.Data.Count > 0 ? 1 : 0;
+            response.message = response.Data.Count > 0 ? "Success" : "No records found";
+
+            return response;
+        }
+        public CustomerAgingResult GetCustomerAging(Customer_Aging request)
+        {
+            CustomerAgingResult response = new CustomerAgingResult
+            {
+                Data = new List<Customer_Aging_Rpt>()
+            };
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_CUSTOMER_AGING", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUSTOMER_ID ?? 0);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Customer_Aging_Rpt report = new Customer_Aging_Rpt
+                            {
+                                CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
+                                AGE_0_30 = reader["AGE_0_30"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_0_30"]) : 0,
+                                AGE_31_60 = reader["AGE_31_60"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_31_60"]) : 0,
+                                AGE_61_90 = reader["AGE_61_90"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_61_90"]) : 0,
+                                AGE_ABOVE_90 = reader["AGE_ABOVE_90"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_ABOVE_90"]) : 0,
+                                TOTAL_BALANCE = reader["TOTAL_BALANCE"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_BALANCE"]) : 0
+                            };
+
+                            response.Data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.Data.Count > 0 ? 1 : 0;
+            response.message = response.Data.Count > 0 ? "Success" : "No records found";
+
+            return response;
+        }
 
     }
 }
