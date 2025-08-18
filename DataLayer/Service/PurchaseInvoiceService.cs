@@ -889,6 +889,7 @@ namespace MicroApi.DataLayer.Service
                 invoiceList.Add(new PurchaseInvoice
                 {
                     ID = ADO.ToInt32(dr["ID"]),
+                    TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
                     PURCH_NO = ADO.ToString(dr["PURCH_NO"]),
                     PURCH_DATE = Convert.ToDateTime(dr["PURCH_DATE"]),
                     SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),

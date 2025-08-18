@@ -13,6 +13,8 @@
         public string NARRATION { get; set; }
         public string STATUS { get; set; }
         public string PO_NO { get; set; }
+        public long? TRANS_ID { get; set; }
+
     }
     public class PIDropdownInput
     {
