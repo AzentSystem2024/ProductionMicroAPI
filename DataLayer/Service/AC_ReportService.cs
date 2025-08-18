@@ -362,6 +362,7 @@ namespace MicroApi.DataLayer.Service
                             Customer_Statement_Rpt report = new Customer_Statement_Rpt
                             {
                                 CUSTOMER_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
                                 CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
                                 INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]) : DateTime.MinValue,
                                 INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
