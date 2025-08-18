@@ -235,6 +235,7 @@
         public string DOC_NO { get; set; }
         public DateTime PURCH_DATE { get; set; }
         public string SUPP_INV_NO { get; set; }
+        public int TRANS_ID { get; set; }
         public string PO_NO { get; set; }
         public decimal NET_AMOUNT { get; set; }
         public decimal PAID_AMOUNT { get; set; }
@@ -260,6 +261,7 @@
     {
         public int SUPP_ID { get; set; }
         public string SUPP_NAME { get; set; }
+        public int TRANS_ID { get; set; }
         public decimal NET_AMOUNT { get; set; }
         public decimal PAID_AMOUNT { get; set; }
         public decimal RETURN_AMOUNT { get; set; }
