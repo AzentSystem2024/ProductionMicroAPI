@@ -167,4 +167,65 @@
         public string message { get; set; }
         public List<ProfitLossReport> data { get; set; } = new List<ProfitLossReport>();
     }
+    public class SupplierStatReportRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public int? SUPP_ID { get; set; }
+    }
+    public class SupplierStatementReport
+    {
+        public int SUPP_ID { get; set; }
+        public string SUPP_NAME { get; set; }
+        public int PURCH_ID { get; set; }
+        public string DOC_NO { get; set; }
+        public DateTime PURCH_DATE { get; set; }
+        public string SUPP_INV_NO { get; set; }
+        public string PO_NO { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+        public decimal PAID_AMOUNT { get; set; }
+        public decimal RETURN_AMOUNT { get; set; }
+        public decimal ADJ_AMOUNT { get; set; }
+        public decimal BALANCE { get; set; }
+        public int AGE { get; set; }
+    }
+    public class SupplierStatReportResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<SupplierStatementReport> data { get; set; } = new List<SupplierStatementReport>();
+    }
+
+    public class AgedPayableReportRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public int? SUPP_ID { get; set; } 
+    }
+    public class AgedPayableReport
+    {
+        public int SUPP_ID { get; set; }
+        public string SUPP_NAME { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+        public decimal PAID_AMOUNT { get; set; }
+        public decimal RETURN_AMOUNT { get; set; }
+        public decimal ADJ_AMOUNT { get; set; }
+        public decimal BALANCE { get; set; }
+        public decimal AGE_0_30 { get; set; }
+        public decimal AGE_31_60 { get; set; }
+        public decimal AGE_61_90 { get; set; }
+        public decimal AGE_91_120 { get; set; }
+        public decimal AGE_ABOVE_120 { get; set; }
+    }
+
+    public class AgedPayableReportResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<AgedPayableReport> data { get; set; } = new List<AgedPayableReport>();
+    }
+
+
 }

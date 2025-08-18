@@ -1,12 +1,13 @@
-﻿using MicroApi.Helper;
+﻿using MicroApi.DataLayer.Interface;
+using MicroApi.Helper;
 using MicroApi.Models;
-using System.Data.SqlClient;
 using System.Data;
-using MicroApi.DataLayer.Interface;
+using System.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.DataLayer.Service
 {
-    public class AC_ReportService: IAC_ReportService
+    public class AC_ReportService : IAC_ReportService
     {
         public LedgerReportInitData GetInitData(int id)
         {
@@ -25,7 +26,7 @@ namespace MicroApi.DataLayer.Service
             ORDER BY H.HEAD_NAME", con))
             {
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("@COMPANY_ID", id); 
+                cmd.Parameters.AddWithValue("@COMPANY_ID", id);
 
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
@@ -118,7 +119,7 @@ namespace MicroApi.DataLayer.Service
 
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID); 
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
@@ -335,6 +336,96 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        public SupplierStatReportResponse GetSupplierStateReports(SupplierStatReportRequest request)
+        {
+            var res = new SupplierStatReportResponse();
 
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_SUPP_STATEMENT", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID ?? 0); // Handle nullable SUPP_ID
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var report = new SupplierStatementReport
+                            {
+                                SUPP_ID = Convert.ToInt32(reader["SUPP_ID"]),
+                                SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
+                                PURCH_ID = Convert.ToInt32(reader["PURCH_ID"]),
+                                DOC_NO = reader["DOC_NO"]?.ToString(),
+                                PURCH_DATE = Convert.ToDateTime(reader["PURCH_DATE"]),
+                                SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
+                                PO_NO = reader["PO_NO"]?.ToString(),
+                                NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
+                                PAID_AMOUNT = Convert.ToDecimal(reader["PAID_AMOUNT"]),
+                                RETURN_AMOUNT = Convert.ToDecimal(reader["RETURN_AMOUNT"]),
+                                ADJ_AMOUNT = Convert.ToDecimal(reader["ADJ_AMOUNT"]),
+                                BALANCE = Convert.ToDecimal(reader["BALANCE"]),
+                                AGE = Convert.ToInt32(reader["AGE"])
+                            };
+                            res.data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            res.flag = res.data.Count > 0 ? 1 : 0;
+            res.message = res.data.Count > 0 ? "Success" : "No records found";
+            return res;
+        }
+        public AgedPayableReportResponse GetAgedPayableReports(AgedPayableReportRequest request)
+        {
+            var res = new AgedPayableReportResponse();
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_AGING_PAYABLES", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID ?? 0); // Handle nullable SUPP_ID
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var report = new AgedPayableReport
+                            {
+                                SUPP_ID = Convert.ToInt32(reader["SUPP_ID"]),
+                                SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
+                                NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
+                                PAID_AMOUNT = Convert.ToDecimal(reader["PAID_AMOUNT"]),
+                                RETURN_AMOUNT = Convert.ToDecimal(reader["RETURN_AMOUNT"]),
+                                ADJ_AMOUNT = Convert.ToDecimal(reader["ADJ_AMOUNT"]),
+                                BALANCE = Convert.ToDecimal(reader["BALANCE"]),
+                                AGE_0_30 = Convert.ToDecimal(reader["AGE_0_30"]),
+                                AGE_31_60 = Convert.ToDecimal(reader["AGE_31_60"]),
+                                AGE_61_90 = Convert.ToDecimal(reader["AGE_61_90"]),
+                                AGE_91_120 = Convert.ToDecimal(reader["AGE_91_120"]),
+                                AGE_ABOVE_120 = Convert.ToDecimal(reader["AGE_ABOVE_120"])
+                            };
+                            res.data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            res.flag = res.data.Count > 0 ? 1 : 0;
+            res.message = res.data.Count > 0 ? "Success" : "No records found";
+            return res;
+        }
     }
 }
+        
+
+    
+

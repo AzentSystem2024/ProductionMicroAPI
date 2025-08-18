@@ -11,7 +11,8 @@ namespace MicroApi.DataLayer.Interface
         CashBookResponse GetCashBookReport(CashBookFilter request);
         BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request);
         ProfitLossReportResponse GetProfitLossReport(ProfitLossReportRequest request);
-
+        SupplierStatReportResponse GetSupplierStateReports(SupplierStatReportRequest request);
+        AgedPayableReportResponse GetAgedPayableReports(AgedPayableReportRequest request);
 
     }
 }
