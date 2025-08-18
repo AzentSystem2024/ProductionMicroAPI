@@ -178,6 +178,7 @@
     public class Customer_Statement_Rpt
     {
         public int CUSTOMER_ID { get; set; }
+        public int TRANS_ID { get; set; }
         public string CUSTOMER_NAME { get; set; }
         public DateTime INVOICE_DATE { get; set; }
         public string INVOICE_NO { get; set; }
