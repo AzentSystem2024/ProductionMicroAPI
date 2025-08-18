@@ -281,12 +281,13 @@ namespace MicroApi.DataLayer.Service
                                   TB_GRN_HEADER.GRN_NO,
                                   TB_GRN_HEADER.GRN_DATE
                                 FROM TB_PURCH_DETAIL
+                                LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID
                                 LEFT JOIN TB_STORES ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID 
                                 LEFT JOIN TB_ITEMS ON TB_PURCH_DETAIL.ITEM_ID = TB_ITEMS.ID 
                                 LEFT JOIN TB_PO_DETAIL ON TB_PURCH_DETAIL.PO_DET_ID = TB_PO_DETAIL.ID 
                                 LEFT JOIN TB_GRN_DETAIL ON TB_PURCH_DETAIL.GRN_DET_ID = TB_GRN_DETAIL.ID
                                 LEFT JOIN TB_GRN_HEADER ON TB_GRN_DETAIL.GRN_ID = TB_GRN_HEADER.ID
-                                WHERE TB_PURCH_DETAIL.PURCH_ID = " + id;
+                                WHERE TB_PURCH_HEADER.TRANS_ID = " + id;
 
                 DataTable tblpurchdetail = ADO.GetDataTable(strDetailSQL, "PurchDetails");
 
