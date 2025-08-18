@@ -499,7 +499,7 @@ namespace MicroApi.DataLayer.Service
                                 PAID_AMOUNT = Convert.ToDecimal(reader["PAID_AMOUNT"]),
                                 RETURN_AMOUNT = Convert.ToDecimal(reader["RETURN_AMOUNT"]),
                                 ADJ_AMOUNT = Convert.ToDecimal(reader["ADJ_AMOUNT"]),
-                                BALANCE = Convert.ToDecimal(reader["BALANCE"]),
+                                //BALANCE = Convert.ToDecimal(reader["BALANCE"]),
                                 AGE_0_30 = Convert.ToDecimal(reader["AGE_0_30"]),
                                 AGE_31_60 = Convert.ToDecimal(reader["AGE_31_60"]),
                                 AGE_61_90 = Convert.ToDecimal(reader["AGE_61_90"]),

@@ -264,7 +264,7 @@
         public decimal PAID_AMOUNT { get; set; }
         public decimal RETURN_AMOUNT { get; set; }
         public decimal ADJ_AMOUNT { get; set; }
-        public decimal BALANCE { get; set; }
+        //public decimal BALANCE { get; set; }
         public decimal AGE_0_30 { get; set; }
         public decimal AGE_31_60 { get; set; }
         public decimal AGE_61_90 { get; set; }
