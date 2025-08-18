@@ -233,7 +233,7 @@ namespace MicroApi.DataLayer.Service
                           LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID 
                           LEFT JOIN TB_PO_HEADER ON TB_PURCH_HEADER.PO_ID = TB_PO_HEADER.ID 
                           LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.ID 
-                          WHERE TB_PURCH_HEADER.ID = " + id;
+                          WHERE TB_AC_TRANS_HEADER.TRANS_ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "PurchHeader");
 
