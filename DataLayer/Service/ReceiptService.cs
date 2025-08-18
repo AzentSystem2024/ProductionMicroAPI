@@ -198,7 +198,7 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public PendingInvoiceListResponse GetPendingInvoiceList()
+        public PendingInvoiceListResponse GetPendingInvoiceList(InvoicependingRequest request)
         {
             PendingInvoiceListResponse response = new PendingInvoiceListResponse
             {
@@ -220,6 +220,8 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
+
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

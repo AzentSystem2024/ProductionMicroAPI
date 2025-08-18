@@ -203,4 +203,8 @@
         public string Message { get; set; }
         public List<ReceiptLedgerList> Data { get; set; }
     }
+    public class InvoicependingRequest
+    {
+        public int CUST_ID { get; set; }
+    }
 }
