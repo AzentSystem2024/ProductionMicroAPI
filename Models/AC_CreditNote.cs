@@ -115,7 +115,7 @@
         public int TRANS_STATUS { get; set; }
         public int UNIT_ID { get; set; }      
         public int DISTRIBUTOR_ID { get; set; }
-
+        public string CUST_NAME { get; set; }
     }
     public class CreditNoteListResponse
     {
@@ -177,6 +177,10 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public List<CreditNoteInvlist> Data { get; set; }
+    }
+    public class Pendingrequest
+    {
+        public int CUST_ID { get; set; }
     }
 }
 

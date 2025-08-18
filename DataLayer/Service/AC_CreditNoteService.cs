@@ -280,7 +280,9 @@ namespace MicroApi.DataLayer.Service
                                     NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
                                     //UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
                                     DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
-                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0
+                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
+                                    CUST_NAME = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : null,
+
 
                                 });
                             }
@@ -504,7 +506,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public CreditNoteInvoiceListResponse GetCreditNoteInvoiceList()
+        public CreditNoteInvoiceListResponse GetCreditNoteInvoiceList(Pendingrequest request)
         {
             CreditNoteInvoiceListResponse response = new CreditNoteInvoiceListResponse
             {
@@ -528,6 +530,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

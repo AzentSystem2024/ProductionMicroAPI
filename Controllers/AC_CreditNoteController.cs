@@ -139,13 +139,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("invoicelist")]
-        public CreditNoteInvoiceListResponse GetCreditNoteInvoiceList()
+        public CreditNoteInvoiceListResponse GetCreditNoteInvoiceList(Pendingrequest request)
         {
             CreditNoteInvoiceListResponse res = new CreditNoteInvoiceListResponse();
 
             try
             {
-                res = _creditNoteService.GetCreditNoteInvoiceList();
+                res = _creditNoteService.GetCreditNoteInvoiceList(request);
             }
             catch (Exception ex)
             {

@@ -94,6 +94,8 @@
         public string CHEQUE_NO { get; set; }
         public string CHEQUE_DATE { get; set; }
         public string BANK_NAME { get; set; }
+        public string CUST_NAME { get; set; }
+
     }
     public class ReceiptUpdate
     {
