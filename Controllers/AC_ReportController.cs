@@ -1,4 +1,5 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -140,6 +141,40 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost("SupplierStatement")]
+        public IActionResult GetSupplierStateReports(SupplierStatReportRequest request)
+        {
+            var res = new SupplierStatReportResponse();
+            try
+            {
+                res = _ReportService.GetSupplierStateReports(request);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+                return BadRequest(res);
+            }
+        }
+        [HttpPost("AgedPayable")]
+        public AgedPayableReportResponse GetAgedPayableReport(AgedPayableReportRequest request)
+        {
+            var res = new AgedPayableReportResponse();
+            try
+            {
+                res = _ReportService.GetAgedPayableReports(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+
         [HttpPost("custrpt")]
         public CustomerStatementResponse GetCustomerStatement(Customer_Statement_Request request)
         {
