@@ -180,6 +180,7 @@
         public int CUSTOMER_ID { get; set; }
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
+        public int INVOICE_ID { get; set; }
         public string CUSTOMER_NAME { get; set; }
         public DateTime INVOICE_DATE { get; set; }
         public string INVOICE_NO { get; set; }
@@ -302,5 +303,30 @@
         public int flag { get; set; }
         public string message { get; set; }
         public List<AgedPayableReport> data { get; set; } = new List<AgedPayableReport>();
+    }
+    public class CustomerStatementRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public int CUSTOMER_ID { get; set; }
+        public int SALE_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+    }
+    public class CustomerStatementDetail
+    {
+        public int TRANS_ID { get; set; }
+        public DateTime TRANS_DATE { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public string DOC_NAME { get; set; }
+        public string DOC_NO { get; set; }
+        public string NARRATION { get; set; }
+        public decimal DR_AMOUNT { get; set; }
+        public decimal CR_AMOUNT { get; set; }
+    }
+    public class CustomerStatementDetailResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<CustomerStatementDetail> Data { get; set; }
     }
 }

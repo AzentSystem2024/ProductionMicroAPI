@@ -225,6 +225,23 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost("customerdtl")]
+        public CustomerStatementDetailResponse GetCustomerStatementDetail(CustomerStatementRequest request)
+        {
+            var res = new CustomerStatementDetailResponse();
+            try
+            {
+                res = _ReportService.GetCustomerStatementDetail(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
     }
 }
 

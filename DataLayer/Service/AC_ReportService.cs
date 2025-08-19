@@ -364,6 +364,7 @@ namespace MicroApi.DataLayer.Service
                                 CUSTOMER_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                 TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
                                 TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                INVOICE_ID = reader["SALE_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALE_ID"]) : 0,
                                 CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
                                 INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]) : DateTime.MinValue,
                                 INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
@@ -562,6 +563,60 @@ namespace MicroApi.DataLayer.Service
             res.flag = res.data.Count > 0 ? 1 : 0;
             res.message = res.data.Count > 0 ? "Success" : "No records found";
             return res;
+        }
+        public CustomerStatementDetailResponse GetCustomerStatementDetail(CustomerStatementRequest request)
+        {
+            CustomerStatementDetailResponse response = new CustomerStatementDetailResponse
+            {
+                Data = new List<CustomerStatementDetail>()
+            };
+
+            try
+            {
+                using (SqlConnection conn = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_CUSTOMER_STATEMENT_DETAIL", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUSTOMER_ID);
+                        cmd.Parameters.AddWithValue("@SALE_ID", request.SALE_ID);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var detail = new CustomerStatementDetail
+                                {
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]) : DateTime.MinValue,
+                                    TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                    DOC_NAME = reader["DOC_NAME"]?.ToString(),
+                                    DOC_NO = reader["DOC_NO"]?.ToString(),
+                                    NARRATION = reader["NARRATION"]?.ToString(),
+                                    DR_AMOUNT = reader["DR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DR_AMOUNT"]) : 0,
+                                    CR_AMOUNT = reader["CR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CR_AMOUNT"]) : 0
+                                };
+
+                                response.Data.Add(detail);
+                            }
+                        }
+                    }
+                }
+
+                response.flag = response.Data.Count > 0 ? 1 : 0;
+                response.message = response.Data.Count > 0 ? "Success" : "No records found";
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = "Error: " + ex.Message;
+            }
+
+            return response;
         }
     }
 }
