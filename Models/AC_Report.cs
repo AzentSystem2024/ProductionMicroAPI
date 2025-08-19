@@ -286,16 +286,22 @@
         public int SUPP_ID { get; set; }
         public string SUPP_NAME { get; set; }
         public int TRANS_ID { get; set; }
-        public decimal NET_AMOUNT { get; set; }
-        public decimal PAID_AMOUNT { get; set; }
-        public decimal RETURN_AMOUNT { get; set; }
-        public decimal ADJ_AMOUNT { get; set; }
-        //public decimal BALANCE { get; set; }
+        public int PURCH_ID { get; set; }
+        public DateTime PURCH_DATE { get; set; }
+        //public decimal NET_AMOUNT { get; set; }
+        //public decimal PAID_AMOUNT { get; set; }
+        //public decimal RETURN_AMOUNT { get; set; }
+        //public decimal ADJ_AMOUNT { get; set; }
         public decimal AGE_0_30 { get; set; }
         public decimal AGE_31_60 { get; set; }
         public decimal AGE_61_90 { get; set; }
         public decimal AGE_91_120 { get; set; }
-        public decimal AGE_ABOVE_120 { get; set; }
+        public decimal AGE_121_150 { get; set; }
+        public decimal AGE_151_180 { get; set; }
+
+        public decimal AGE_ABOVE_180 { get; set; }
+        public decimal BALANCE { get; set; }
+
     }
 
     public class AgedPayableReportResponse
