@@ -212,10 +212,15 @@
         public string CUSTOMER_NAME { get; set; }
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
+        public DateTime INVOICE_DATE { get; set; }
+        public int BILL_ID { get; set; }
         public decimal AGE_0_30 { get; set; }
         public decimal AGE_31_60 { get; set; }
         public decimal AGE_61_90 { get; set; }
-        public decimal AGE_ABOVE_90 { get; set; }
+        public decimal AGE_91_120 { get; set; }
+        public decimal AGE_121_150 { get; set; }
+        public decimal AGE_151_180 { get; set; }
+        public decimal AGE_ABOVE_180 { get; set; }
         public decimal TOTAL_BALANCE { get; set; }
     }
 

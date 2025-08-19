@@ -415,10 +415,15 @@ namespace MicroApi.DataLayer.Service
                                 CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
                                 TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
                                 TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                BILL_ID = reader["BILL_ID"] != DBNull.Value ? Convert.ToInt32(reader["BILL_ID"]) : 0,
+                                INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]) : DateTime.MinValue,
                                 AGE_0_30 = reader["AGE_0_30"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_0_30"]) : 0,
                                 AGE_31_60 = reader["AGE_31_60"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_31_60"]) : 0,
                                 AGE_61_90 = reader["AGE_61_90"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_61_90"]) : 0,
-                                AGE_ABOVE_90 = reader["AGE_ABOVE_90"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_ABOVE_90"]) : 0,
+                                AGE_91_120 = reader["AGE_91_120"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_91_120"]) : 0,
+                                AGE_121_150 = reader["AGE_121_150"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_121_150"]) : 0,
+                                AGE_151_180 = reader["AGE_151_180"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_151_180"]) : 0,
+                                AGE_ABOVE_180 = reader["AGE_ABOVE_180"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_ABOVE_180"]) : 0,
                                 TOTAL_BALANCE = reader["TOTAL_BALANCE"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_BALANCE"]) : 0
                             };
 
