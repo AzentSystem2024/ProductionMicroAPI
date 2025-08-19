@@ -811,7 +811,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
-
+                cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
 
