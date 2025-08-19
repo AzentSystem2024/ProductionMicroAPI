@@ -15,6 +15,7 @@ namespace MicroApi.DataLayer.Interface
         AgedPayableReportResponse GetAgedPayableReports(AgedPayableReportRequest request);
         CustomerStatementResponse GetCustomerStatement(Customer_Statement_Request request);
         CustomerAgingResult GetCustomerAging(Customer_Aging request);
+        CustomerStatementDetailResponse GetCustomerStatementDetail(CustomerStatementRequest request);
 
     }
 }
