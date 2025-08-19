@@ -12,6 +12,7 @@ namespace MicroApi.DataLayer.Interface
         BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request);
         ProfitLossReportResponse GetProfitLossReport(ProfitLossReportRequest request);
         SupplierStatReportResponse GetSupplierStateReports(SupplierStatReportRequest request);
+        SupplierStatDetailReportResponse GetSupplierStateDetailReports(SupplierStatReportRequest request);
         AgedPayableReportResponse GetAgedPayableReports(AgedPayableReportRequest request);
         CustomerStatementResponse GetCustomerStatement(Customer_Statement_Request request);
         CustomerAgingResult GetCustomerAging(Customer_Aging request);
