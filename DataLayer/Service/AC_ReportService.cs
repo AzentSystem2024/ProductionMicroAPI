@@ -548,16 +548,21 @@ namespace MicroApi.DataLayer.Service
                                 SUPP_ID = Convert.ToInt32(reader["SUPP_ID"]),
                                 SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
                                 TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
-                                NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
-                                PAID_AMOUNT = Convert.ToDecimal(reader["PAID_AMOUNT"]),
-                                RETURN_AMOUNT = Convert.ToDecimal(reader["RETURN_AMOUNT"]),
-                                ADJ_AMOUNT = Convert.ToDecimal(reader["ADJ_AMOUNT"]),
-                                //BALANCE = Convert.ToDecimal(reader["BALANCE"]),
+                                //NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
+                                //PAID_AMOUNT = Convert.ToDecimal(reader["PAID_AMOUNT"]),
+                                //RETURN_AMOUNT = Convert.ToDecimal(reader["RETURN_AMOUNT"]),
+                                //ADJ_AMOUNT = Convert.ToDecimal(reader["ADJ_AMOUNT"]),
+                                PURCH_ID = Convert.ToInt32(reader["PURCH_ID"]),
+                                PURCH_DATE = Convert.ToDateTime(reader["PURCH_DATE"]),
                                 AGE_0_30 = Convert.ToDecimal(reader["AGE_0_30"]),
                                 AGE_31_60 = Convert.ToDecimal(reader["AGE_31_60"]),
                                 AGE_61_90 = Convert.ToDecimal(reader["AGE_61_90"]),
                                 AGE_91_120 = Convert.ToDecimal(reader["AGE_91_120"]),
-                                AGE_ABOVE_120 = Convert.ToDecimal(reader["AGE_ABOVE_120"])
+                                AGE_121_150 = Convert.ToDecimal(reader["AGE_121_150"]),
+                                AGE_151_180 = Convert.ToDecimal(reader["AGE_151_180"]),
+                                AGE_ABOVE_180 = Convert.ToDecimal(reader["AGE_ABOVE_180"]),
+                                BALANCE = Convert.ToDecimal(reader["BALANCE"])
+
                             };
                             res.data.Add(report);
                         }
