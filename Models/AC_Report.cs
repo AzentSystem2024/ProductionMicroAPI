@@ -179,6 +179,7 @@
     {
         public int CUSTOMER_ID { get; set; }
         public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
         public string CUSTOMER_NAME { get; set; }
         public DateTime INVOICE_DATE { get; set; }
         public string INVOICE_NO { get; set; }
@@ -209,6 +210,7 @@
     {
         public string CUSTOMER_NAME { get; set; }
         public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
         public decimal AGE_0_30 { get; set; }
         public decimal AGE_31_60 { get; set; }
         public decimal AGE_61_90 { get; set; }

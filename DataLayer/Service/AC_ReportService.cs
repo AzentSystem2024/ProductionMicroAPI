@@ -363,6 +363,7 @@ namespace MicroApi.DataLayer.Service
                             {
                                 CUSTOMER_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                 TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
                                 CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
                                 INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]) : DateTime.MinValue,
                                 INVOICE_NO = reader["INVOICE_NO"]?.ToString(),
@@ -412,6 +413,7 @@ namespace MicroApi.DataLayer.Service
                             {
                                 CUSTOMER_NAME = reader["CUSTOMER_NAME"]?.ToString(),
                                 TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
                                 AGE_0_30 = reader["AGE_0_30"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_0_30"]) : 0,
                                 AGE_31_60 = reader["AGE_31_60"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_31_60"]) : 0,
                                 AGE_61_90 = reader["AGE_61_90"] != DBNull.Value ? Convert.ToDecimal(reader["AGE_61_90"]) : 0,
