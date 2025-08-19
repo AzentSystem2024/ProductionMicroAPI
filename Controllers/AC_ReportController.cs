@@ -157,6 +157,22 @@ namespace MicroApi.Controllers
                 return BadRequest(res);
             }
         }
+        [HttpPost("SupplierStatementDetail")]
+        public IActionResult GetSupplierStateDetailReports(SupplierStatReportRequest request)
+        {
+            var res = new SupplierStatDetailReportResponse();
+            try
+            {
+                res = _ReportService.GetSupplierStateDetailReports(request);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+                return BadRequest(res);
+            }
+        }
         [HttpPost("AgedPayable")]
         public AgedPayableReportResponse GetAgedPayableReport(AgedPayableReportRequest request)
         {

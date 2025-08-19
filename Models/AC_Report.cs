@@ -231,6 +231,7 @@
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
         public int? SUPP_ID { get; set; }
+        public int ? PURCH_ID { get; set; }
     }
     public class SupplierStatementReport
     {
@@ -254,6 +255,24 @@
         public int flag { get; set; }
         public string message { get; set; }
         public List<SupplierStatementReport> data { get; set; } = new List<SupplierStatementReport>();
+    }
+    public class SupplierStatementDetailReport
+    {
+        public int TRANS_ID { get; set; }
+        public DateTime TRANS_DATE { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public string TRANS_TYPE_NAME { get; set; }
+        public int BILL_ID { get; set; }
+        public string DOC_NO { get; set; }
+        public string NARRATION { get; set; }
+        public decimal DR_AMOUNT { get; set; }
+        public decimal CR_AMOUNT { get; set; }
+    }
+    public class SupplierStatDetailReportResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<SupplierStatementDetailReport> data { get; set; } = new List<SupplierStatementDetailReport>();
     }
     public class AgedPayableReportRequest
     {

@@ -447,6 +447,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
                     cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID ?? 0); // Handle nullable SUPP_ID
+                    cmd.Parameters.AddWithValue("@PURCH_ID", request.PURCH_ID ?? 0);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -479,6 +480,46 @@ namespace MicroApi.DataLayer.Service
             res.message = res.data.Count > 0 ? "Success" : "No records found";
             return res;
         }
+        public SupplierStatDetailReportResponse GetSupplierStateDetailReports(SupplierStatReportRequest request)
+        {
+            var res = new SupplierStatDetailReportResponse();
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_SUPP_STATEMENT_DETAIL", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID ?? 0);
+                    cmd.Parameters.AddWithValue("@PURCH_ID", request.PURCH_ID ?? 0);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var report = new SupplierStatementDetailReport
+                            {
+                                TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                TRANS_DATE = Convert.ToDateTime(reader["TRANS_DATE"]),
+                                TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
+                                TRANS_TYPE_NAME = reader["TRANS_TYPE_NAME"].ToString(),
+                                BILL_ID = Convert.ToInt32(reader["BILL_ID"]),
+                                DOC_NO = reader["DOC_NO"].ToString(),
+                                NARRATION = reader["NARRATION"].ToString(),
+                                DR_AMOUNT = Convert.ToDecimal(reader["DR_AMOUNT"]),
+                                CR_AMOUNT = Convert.ToDecimal(reader["CR_AMOUNT"])
+                            };
+                            res.data.Add(report);
+                        }
+                    }
+                }
+            }
+            res.flag = res.data.Count > 0 ? 1 : 0;
+            res.message = res.data.Count > 0 ? "Success" : "No records found";
+            return res;
+        }
+    
         public AgedPayableReportResponse GetAgedPayableReports(AgedPayableReportRequest request)
         {
             var res = new AgedPayableReportResponse();
