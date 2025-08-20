@@ -10,13 +10,13 @@ namespace MicroApi.DataLayer.Interface
         JournalResponse GetJournalById(int id);
         VoucherResponse GetLastVoucherNo();
         JournalResponse DeleteJournal(int id);
-        JournalResponse JournalApproval(int transId, bool isApproved);
+        JournalResponse commit(JournalUpdateHeader header);
 
         DebitNoteResponse SaveDebitNote(AC_DebitNote model);
         DebitNoteResponse UpdateDebitNote(AC_DebitNoteUpdate model);
         DebitNoteListResponse GetDebitNoteList();
         AC_DebitNoteSelect GetDebitNoteById(int id);
-        DebitNoteResponse CommitDebitNote(DebitNoteCommitRequest request);
+        DebitNoteResponse Commit(AC_DebitNoteUpdate model);
         DocNoResponse GetLastDocNo();
         DebitNoteResponse Delete(int id);
 

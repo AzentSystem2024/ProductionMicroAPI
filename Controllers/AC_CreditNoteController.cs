@@ -89,12 +89,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("commit")]
-        public CreditNoteResponse Commit(CreditNoteCommitRequest request)
+        public CreditNoteResponse Commit(AC_CreditNoteUpdate model)
         {
             CreditNoteResponse response = new CreditNoteResponse();
             try
             {
-                response = _creditNoteService.CommitCreditNote(request);
+                response = _creditNoteService.Commit(model);
             }
             catch (Exception ex)
             {

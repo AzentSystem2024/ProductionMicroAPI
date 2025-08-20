@@ -124,13 +124,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("approve")]
-        public JournalResponse UpdateApprovalStatus(ApprovalRequest request)
+        public JournalResponse commit(JournalUpdateHeader header)
         {
             JournalResponse res = new JournalResponse();
 
             try
             {
-                res = _journalService.JournalApproval(request.TRANS_ID, request.IS_APPROVED ?? false);
+                res = _journalService.commit(header);
             }
             catch (Exception ex)
             {
@@ -218,12 +218,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("commit")]
-        public DebitNoteResponse Commit(DebitNoteCommitRequest request)
+        public DebitNoteResponse Commit(AC_DebitNoteUpdate model)
         {
             DebitNoteResponse response = new DebitNoteResponse();
             try
             {
-                response = _journalService.CommitDebitNote(request);
+                response = _journalService.Commit(model);
             }
             catch (Exception ex)
             {

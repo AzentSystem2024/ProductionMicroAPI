@@ -429,43 +429,85 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public ReceiptResponse CommitReceipt(CommitReceiptRequest request)
+        public ReceiptResponse Commit(ReceiptUpdate model)
         {
             ReceiptResponse response = new ReceiptResponse();
 
             try
             {
-                if (request.IS_APPROVED && request.TRANS_ID > 0)
+                using (SqlConnection conn = ADO.GetConnection())
                 {
-                    using (SqlConnection con = ADO.GetConnection())
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_CUST_RECEIPT", conn))
                     {
-                        if (con.State == ConnectionState.Closed)
-                            con.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlCommand cmd = new SqlCommand("SP_CUST_RECEIPT", con))
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
+                        cmd.Parameters.AddWithValue("@REC_ID", model.REC_ID ?? 0);
+
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@REC_NO", model.REC_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@REC_DATE", ParseDate(model.REC_DATE));
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
+                        cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? false);
+                        cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
+                        cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@RECON_DATE", ParseDate(model.RECON_DATE));
+                        cmd.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
+                        cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
+                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", model.APPROVE3_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
+                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
+
+                        // UDT: UDT_CUST_REC_DETAIL
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("BILL_ID", typeof(int));
+                        dt.Columns.Add("AMOUNT", typeof(double));
+
+                        foreach (var item in model.REC_DETAIL)
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
-
-                            cmd.Parameters.AddWithValue("@ACTION", 3);
-                            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
-
-                            cmd.ExecuteNonQuery();
-
-                            response.flag = 1;
-                            response.Message = "Receipt committed successfully.";
+                            dt.Rows.Add(item.BILL_ID, item.AMOUNT);
                         }
+
+                        SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_CUST_REC_DETAIL", dt);
+                        tvp.SqlDbType = SqlDbType.Structured;
+                        tvp.TypeName = "UDT_CUST_REC_DETAIL";
+
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Receipt committed successfully.";
                     }
-                }
-                else
-                {
-                    response.flag = 0;
-                    response.Message = "Invalid TRANS_ID or IS_APPROVED is false.";
                 }
             }
             catch (Exception ex)
             {
                 response.flag = 0;
-                response.Message = "Error: " + ex.Message;
+                response.Message = "ERROR: " + ex.Message;
             }
 
             return response;

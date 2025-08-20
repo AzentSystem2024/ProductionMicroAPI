@@ -11,7 +11,7 @@ namespace MicroApi.DataLayer.Interface
         ReceiptListResponse GetReceiptList();
         ReceiptResponse Update(ReceiptUpdate model);
         ReceiptSelectResponse GetReceiptById(int id);
-        ReceiptResponse CommitReceipt(CommitReceiptRequest request);
+        ReceiptResponse Commit(ReceiptUpdate model);
         RecResponse GetReceiptNo();
         ReceiptResponse Delete(int id);
         ReceiptLedgerListResponse GetLedgerList();

@@ -393,37 +393,82 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public CreditNoteResponse CommitCreditNote(CreditNoteCommitRequest request)
+        public CreditNoteResponse Commit(AC_CreditNoteUpdate model)
         {
             CreditNoteResponse response = new CreditNoteResponse();
 
             try
             {
-                if (request.IS_APPROVED && request.TRANS_ID > 0)
+                using (SqlConnection connection = ADO.GetConnection())
                 {
-                    using (SqlConnection con = ADO.GetConnection())
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_AC_CREDIT_NOTE", connection))
                     {
-                        if (con.State == ConnectionState.Closed)
-                            con.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlCommand cmd = new SqlCommand("SP_AC_CREDIT_NOTE", con))
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
+                        cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);
+                        cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
+                        cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@RECON_DATE", model.RECON_DATE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
+                        cmd.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
+                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", model.APPROVE3_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
+                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@INVOICE_ID", model.INVOICE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@INVOICE_NO", model.INVOICE_NO ?? string.Empty);
+
+                        // Distributor/Unit logic
+                        cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
+
+                        // Table-valued parameter
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("SL_NO", typeof(int));
+                        dt.Columns.Add("HEAD_ID", typeof(int));
+                        dt.Columns.Add("AMOUNT", typeof(float));
+                        dt.Columns.Add("VAT_AMOUNT", typeof(float));
+                        dt.Columns.Add("REMARKS", typeof(string));
+
+                        foreach (var item in model.NOTE_DETAIL)
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
-
-                            cmd.Parameters.AddWithValue("@ACTION", 3);
-                            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
-
-                            cmd.ExecuteNonQuery();
-
-                            response.flag = 1;
-                            response.Message = "Credit note committed successfully.";
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty);
                         }
+
+                        SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
+                        tvp.SqlDbType = SqlDbType.Structured;
+                        tvp.TypeName = "UDT_TB_AC_NOTE_DETAIL";
+
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Credit note updated successfully.";
                     }
-                }
-                else
-                {
-                    response.flag = 0;
-                    response.Message = "Invalid TRANS_ID or IS_APPROVED is false.";
                 }
             }
             catch (Exception ex)
