@@ -32,6 +32,7 @@ namespace MicroApi.DataLayer.Services
                     loglist.data.Add(new AdvanceLogListData
                     {
                         ID = Convert.IsDBNull(dr["ID"]) ? 0 : Convert.ToInt32(dr["ID"]),
+                        TRANS_ID = Convert.IsDBNull(dr["TRANS_ID"]) ? 0 : Convert.ToInt32(dr["TRANS_ID"]),
                         ADV_NO = Convert.IsDBNull(dr["ADV_NO"]) ? null : Convert.ToString(dr["ADV_NO"]),
                         EMP_NO = Convert.IsDBNull(dr["EMP_CODE"]) ? null : Convert.ToString(dr["EMP_CODE"]),
                         EMP_NAME = Convert.IsDBNull(dr["EMP_NAME"]) ? null : Convert.ToString(dr["EMP_NAME"]),
