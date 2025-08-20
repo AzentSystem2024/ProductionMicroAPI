@@ -110,7 +110,7 @@ namespace MicroApi.Controllers
             InvoiceResponse response = new InvoiceResponse();
             try
             {
-                response = _invoiceService.CommitInvoice(model);
+                response = _invoiceService.commit(model);
             }
             catch (Exception ex)
             {

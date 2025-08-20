@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Interface
         TransferGridResponse GetTransferData(TransferInvoiceRequest request);
         InvoiceHeaderResponse GetSaleInvoiceHeaderData();
         InvoiceHeaderSelectResponse GetSaleInvoiceById(int id);
-        InvoiceResponse CommitInvoice(InvoiceUpdate model);
+        InvoiceResponse commit(InvoiceUpdate model);
         InvResponse GetInvoiceNo();
         InvoiceResponse Delete(int id);
     }
