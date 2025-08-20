@@ -291,6 +291,7 @@
         public int SUPP_ID { get; set; }
         public string SUPP_NAME { get; set; }
         public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
         public int PURCH_ID { get; set; }
         public DateTime PURCH_DATE { get; set; }
         //public decimal NET_AMOUNT { get; set; }
