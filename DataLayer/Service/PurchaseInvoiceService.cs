@@ -856,7 +856,7 @@ namespace MicroApi.DataLayer.Service
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
-                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure; 
                 cmd.CommandText = "SP_TB_PURCH";
                 cmd.Parameters.AddWithValue("ACTION", 4);
                 cmd.Parameters.AddWithValue("@ID", id);
@@ -900,6 +900,7 @@ namespace MicroApi.DataLayer.Service
                         NARRATION = ADO.ToString(dr["NARRATION"]),
                         STATUS = ADO.ToString(dr["STATUS"]),
                         PO_NO = ADO.ToString(dr["PO_NO"])
+
                     });
                 }
             }
