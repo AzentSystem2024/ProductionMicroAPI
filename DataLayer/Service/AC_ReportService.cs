@@ -468,6 +468,7 @@ namespace MicroApi.DataLayer.Service
                                 PURCH_DATE = Convert.ToDateTime(reader["PURCH_DATE"]),
                                 SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
                                 TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
                                 PO_NO = reader["PO_NO"]?.ToString(),
                                 NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
                                 PAID_AMOUNT = Convert.ToDecimal(reader["PAID_AMOUNT"]),
