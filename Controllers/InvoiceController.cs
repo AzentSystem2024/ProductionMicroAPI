@@ -105,12 +105,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("commit")]
-        public InvoiceResponse Commit(CommitInvoiceRequest request)
+        public InvoiceResponse Commit(InvoiceUpdate model)
         {
             InvoiceResponse response = new InvoiceResponse();
             try
             {
-                response = _invoiceService.CommitInvoice(request);
+                response = _invoiceService.CommitInvoice(model);
             }
             catch (Exception ex)
             {

@@ -209,6 +209,7 @@
     }
     public class Customer_Aging_Rpt
     {
+        public int CUSTOMER_ID { get; set; }
         public string CUSTOMER_NAME { get; set; }
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
