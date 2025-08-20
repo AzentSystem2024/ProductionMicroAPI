@@ -223,7 +223,7 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public TransferGridResponse GetTransferData()
+        public TransferGridResponse GetTransferData(TransferInvoiceRequest request)
         {
             var response = new TransferGridResponse
             {
@@ -264,7 +264,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_CLOSED", false);
                         cmd.Parameters.AddWithValue("@PARTY_ID", 0);
                         cmd.Parameters.AddWithValue("@UNIT_ID", 0);
-                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
                         cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_PASSED", false);
@@ -287,7 +287,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@GROSS_AMOUNT", 0);
                         cmd.Parameters.AddWithValue("@TAX_AMOUNT", 0);
                         cmd.Parameters.AddWithValue("@NET_AMOUNT", 0);
-                        // cmd.Parameters.AddWithValue("@UDT_SALE_DETAIL", DBNull.Value);
                         DataTable dt = new DataTable();
                         dt.Columns.Add("TRANSFER_SUMMARY_ID", typeof(int));
                         dt.Columns.Add("QUANTITY", typeof(double));
@@ -435,7 +434,8 @@ namespace MicroApi.DataLayer.Service
                                     AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAXABLE_AMOUNT"]) : 0,
                                     GST = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
                                     TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
-                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0
+                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0,
+                                    CUST_NAME = reader["CUST_NAME"]?.ToString()
                                 };
 
                                 response.Data.Add(header);

@@ -97,7 +97,7 @@
         public decimal GST { get; set; }
         public decimal TAX_AMOUNT { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
-        public List<SaleDetail> SALE_DETAILS { get; set; }
+        public string CUST_NAME { get; set; }
 
     }
     public class InvoiceHeaderResponse
@@ -197,5 +197,9 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int INVOICE_NO { get; set; }
+    }
+    public class TransferInvoiceRequest
+    {
+        public int CUST_ID { get; set; }
     }
 }

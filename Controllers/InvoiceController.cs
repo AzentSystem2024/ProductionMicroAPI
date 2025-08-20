@@ -51,13 +51,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public TransferGridResponse GetCreditNoteList()
+        public TransferGridResponse GetCreditNoteList(TransferInvoiceRequest request)
         {
             TransferGridResponse res = new TransferGridResponse();
 
             try
             {
-                res = _invoiceService.GetTransferData();
+                res = _invoiceService.GetTransferData(request);
             }
             catch (Exception ex)
             {
