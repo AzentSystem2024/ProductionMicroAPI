@@ -17,6 +17,8 @@ namespace MicroApi.DataLayer.Interface
         CustomerStatementResponse GetCustomerStatement(Customer_Statement_Request request);
         CustomerAgingResult GetCustomerAging(Customer_Aging request);
         CustomerStatementDetailResponse GetCustomerStatementDetail(CustomerStatementRequest request);
+        InputVatWorksheetReportResponse GetInputVatWorksheetReport(InputVatWorksheetReportRequest request);
+        OutputVatWorksheetReportResponse GetOutputVatWorksheetReport(OutputVatWorksheetReportRequest request);
 
     }
 }

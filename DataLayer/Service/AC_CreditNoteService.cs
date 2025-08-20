@@ -355,6 +355,7 @@ namespace MicroApi.DataLayer.Service
                                         ADJUSTED_AMOUNT = reader["ADJUSTED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["ADJUSTED_AMOUNT"]) : 0,
                                         RECEIVED_AMOUNT = reader["RECEIVED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["RECEIVED_AMOUNT"]) : 0,
                                         BALANCE_AMOUNT = reader["BALANCE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["BALANCE_AMOUNT"]) : 0,
+                                        DUE_AMOUNT = reader["DUE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["DUE_AMOUNT"]) : 0,
                                         NOTE_DETAIL = new List<CreditNoteDetailUpdate>()
                                     };
                                 }

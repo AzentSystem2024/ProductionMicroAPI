@@ -60,7 +60,6 @@
 
     public class PendingInvoiceItem
     {
-        // public int SL_NO { get; set; }
         public string INVOICE_NO { get; set; }
         public string INVOICE_DATE { get; set; }
         public string REF_NO { get; set; }
@@ -156,6 +155,7 @@
     public class ReceiptSelect
     {
         public int TRANS_ID { get; set; }
+        public string VOUCHER_NO { get; set; }
         public int TRANS_TYPE { get; set; }
         public string REC_DATE { get; set; }
         public int COMPANY_ID { get; set; }

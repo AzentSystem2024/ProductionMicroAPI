@@ -314,6 +314,7 @@
         public string NARRATION { get; set; }
         public int SUPP_ID { get; set; }
         public float NET_AMOUNT { get; set; }
+        public float DUE_AMOUNT { get; set; }
         public string DOC_NO { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }

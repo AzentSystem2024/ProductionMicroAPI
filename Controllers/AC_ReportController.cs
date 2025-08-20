@@ -242,6 +242,40 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost("inputvat")]
+        public InputVatWorksheetReportResponse GetInputVatWorksheetReport(InputVatWorksheetReportRequest request)
+        {
+            var res = new InputVatWorksheetReportResponse();
+            try
+            {
+                res = _ReportService.GetInputVatWorksheetReport(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost("outputvat")]
+        public OutputVatWorksheetReportResponse GetOutputVatWorksheetReport(OutputVatWorksheetReportRequest request)
+        {
+            var res = new OutputVatWorksheetReportResponse();
+            try
+            {
+                res = _ReportService.GetOutputVatWorksheetReport(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
     }
 }
 

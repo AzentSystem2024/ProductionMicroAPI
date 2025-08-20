@@ -147,6 +147,7 @@
         public float ADJUSTED_AMOUNT { get; set; }
         public float RECEIVED_AMOUNT { get; set; }
         public float BALANCE_AMOUNT { get; set; }
+        public float DUE_AMOUNT { get; set; }
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteCommitRequest

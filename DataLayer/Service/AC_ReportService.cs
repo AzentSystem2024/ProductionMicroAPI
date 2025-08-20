@@ -630,6 +630,97 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public InputVatWorksheetReportResponse GetInputVatWorksheetReport(InputVatWorksheetReportRequest request)
+        {
+            InputVatWorksheetReportResponse response = new InputVatWorksheetReportResponse
+            {
+                Data = new List<InputVatWorksheetReport>()
+            };
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_INPUT_VAT_WORKSHEET", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMP_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            InputVatWorksheetReport report = new InputVatWorksheetReport
+                            {
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                DOC_TYPE = reader["DOC_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["DOC_TYPE"]) : 0,
+                                PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]) : DateTime.MinValue,
+                                DOC_NO = reader["DOC_NO"]?.ToString(),
+                                VAT_REG_NO = reader["VAT_REGN_NO"]?.ToString(),
+                                SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
+                                TAXABLE_AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["TAXABLE_AMOUNT"]) : 0,
+                                TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["TAX_AMOUNT"]) : 0,
+                                NARRATION = reader["NARRATION"]?.ToString(),
+                                TOTAL = reader["TOTAL"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL"]) : 0
+                            };
+
+                            response.Data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.Data.Count > 0 ? 1 : 0;
+            response.message = response.Data.Count > 0 ? "Success" : "No records found";
+
+            return response;
+        }
+        public OutputVatWorksheetReportResponse GetOutputVatWorksheetReport(OutputVatWorksheetReportRequest request)
+        {
+            OutputVatWorksheetReportResponse response = new OutputVatWorksheetReportResponse
+            {
+                Data = new List<OutputVatWorksheetReport>()
+            };
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_OUTPUT_VAT_WORKSHEET", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMP_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            OutputVatWorksheetReport report = new OutputVatWorksheetReport
+                            {
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                DOC_TYPE = reader["DOC_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["DOC_TYPE"]) : 0,
+                                SALE_DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]) : DateTime.MinValue,
+                                DOC_NO = reader["DOC_NO"]?.ToString(),
+                                VAT_REGN_NO = reader["VAT_REGN_NO"]?.ToString(),
+                                CUST_NAME = reader["CUST_NAME"]?.ToString(),
+                                TAXABLE_AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["TAXABLE_AMOUNT"]) : 0,
+                                TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["TAX_AMOUNT"]) : 0,
+                                NARRATION = reader["NARRATION"]?.ToString(),
+                                TOTAL = reader["TOTAL"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL"]) : 0
+                            };
+
+                            response.Data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.Data.Count > 0 ? 1 : 0;
+            response.message = response.Data.Count > 0 ? "Success" : "No records found";
+
+            return response;
+        }
+
     }
 }
         

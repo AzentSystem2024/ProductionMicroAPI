@@ -342,4 +342,55 @@
         public string message { get; set; }
         public List<CustomerStatementDetail> Data { get; set; }
     }
+    public class InputVatWorksheetReportRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+    }
+    public class InputVatWorksheetReport
+    {
+        public int TRANS_ID { get; set; }
+        public int DOC_TYPE { get; set; }
+        public DateTime PURCH_DATE { get; set; }
+        public string DOC_NO { get; set; }
+        public string VAT_REG_NO { get; set; }
+        public string SUPP_NAME { get; set; }
+        public double TAXABLE_AMOUNT { get; set; }
+        public double TAX_AMOUNT { get; set; }
+        public string NARRATION { get; set; }
+        public double TOTAL { get; set; }
+    }
+    public class InputVatWorksheetReportResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<InputVatWorksheetReport> Data { get; set; }
+    }
+    public class OutputVatWorksheetReportRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+    }
+    public class OutputVatWorksheetReport
+    {
+        public int TRANS_ID { get; set; }
+        public int DOC_TYPE { get; set; }
+        public DateTime SALE_DATE { get; set; }
+        public string DOC_NO { get; set; }
+        public string VAT_REGN_NO { get; set; }
+        public string CUST_NAME { get; set; }
+        public double TAXABLE_AMOUNT { get; set; }
+        public double TAX_AMOUNT { get; set; }
+        public string NARRATION { get; set; }
+        public double TOTAL { get; set; }
+    }
+    public class OutputVatWorksheetReportResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<OutputVatWorksheetReport> Data { get; set; }
+    }
+
 }

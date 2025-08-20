@@ -993,7 +993,6 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
                                         TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
-                                        //TRANS_TYPE = 38,
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]): null,
                                         TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value? Convert.ToInt32(reader["TRANS_STATUS"]): (int?)null,
                                         INVOICE_ID = reader["INVOICE_ID"] != DBNull.Value? Convert.ToInt32(reader["INVOICE_ID"]): (int?)null,
@@ -1001,6 +1000,7 @@ namespace MicroApi.DataLayer.Service
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value? Convert.ToSingle(reader["NET_AMOUNT"]): 0,
+                                        DUE_AMOUNT = reader["DUE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["DUE_AMOUNT"]) : 0,
                                         DOC_NO = reader["VOUCHER_NO"] != DBNull.Value? Convert.ToString(reader["VOUCHER_NO"]): null,
                                         NOTE_DETAIL = new List<DebitNoteDetail>()
                                     };

@@ -377,6 +377,7 @@ namespace MicroApi.DataLayer.Service
                                         CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
+                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
                                         REC_DETAIL = new List<ReceiptDetail>(),
                                     };
                                 }
