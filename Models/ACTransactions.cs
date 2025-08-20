@@ -339,4 +339,26 @@
         public int COMPANY_ID { get; set; }
         public int TRANS_TYPE { get; set; }
     }
+    public class DebitInvoiceResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<DebitInvoicelist> Data { get; set; }
+    }
+
+    public class DebitInvoicelist
+    {
+        public int BILL_ID { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string PURCH_DATE { get; set; }
+        public string SUPP_INV_DATE { get; set; }
+        public string SUPP_INV_NO { get; set; }
+        public double NET_AMOUNT { get; set; }
+        public double PENDING_AMOUNT { get; set; }
+
+    }
+    public class DebitInvoiceRequest
+    {
+        public int SUPP_ID { get; set; }
+    }
 }

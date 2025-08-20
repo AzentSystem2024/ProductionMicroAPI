@@ -1196,6 +1196,62 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public DebitInvoiceResponse GetPendingInvoiceList(DebitInvoiceRequest request)
+        {
+            DebitInvoiceResponse response = new DebitInvoiceResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<DebitInvoicelist>()
+            };
 
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_AC_DEBIT_NOTE", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 19);
+                        cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                DebitInvoicelist item = new DebitInvoicelist
+                                {
+                                    BILL_ID = reader["BILL_ID"] != DBNull.Value ? Convert.ToInt32(reader["BILL_ID"]) : 0,
+                                    INVOICE_NO = reader["DOC_NO"]?.ToString(),
+                                    PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
+                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["NET_AMOUNT"]) : 0,
+                                    PENDING_AMOUNT = reader["PENDING_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["PENDING_AMOUNT"]) : 0,
+
+                                };
+
+                                response.Data.Add(item);
+                            }
+
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = new List<DebitInvoicelist>();
+            }
+
+            return response;
+        }
     }
 }

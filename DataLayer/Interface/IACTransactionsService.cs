@@ -19,7 +19,7 @@ namespace MicroApi.DataLayer.Interface
         DebitNoteResponse Commit(AC_DebitNoteUpdate model);
         DocNoResponse GetLastDocNo();
         DebitNoteResponse Delete(int id);
-
+        DebitInvoiceResponse GetPendingInvoiceList(DebitInvoiceRequest request);
 
     }
 }

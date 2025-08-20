@@ -266,6 +266,25 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("invoicelist")]
+        public DebitInvoiceResponse GetPendingInvoiceList(DebitInvoiceRequest request)
+        {
+            DebitInvoiceResponse res = new DebitInvoiceResponse();
+
+            try
+            {
+                res = _journalService.GetPendingInvoiceList(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<DebitInvoicelist>();
+            }
+
+            return res;
+        }
     }
 }
 
