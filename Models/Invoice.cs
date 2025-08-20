@@ -168,6 +168,7 @@
         public float GROSS_AMOUNT { get; set; }
         public float TAX_AMOUNT { get; set; }
         public float NET_AMOUNT { get; set; }
+        public string? REF_NO { get; set; }
         public List<SaleDetailUpdate> SALE_DETAILS { get; set; }
 
     }
