@@ -548,6 +548,7 @@ namespace MicroApi.DataLayer.Service
                                 SUPP_ID = Convert.ToInt32(reader["SUPP_ID"]),
                                 SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
                                 TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
                                 //NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
                                 //PAID_AMOUNT = Convert.ToDecimal(reader["PAID_AMOUNT"]),
                                 //RETURN_AMOUNT = Convert.ToDecimal(reader["RETURN_AMOUNT"]),
