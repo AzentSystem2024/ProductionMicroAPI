@@ -51,13 +51,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public TransferGridResponse GetCreditNoteList()
+        public TransferGridResponse GetCreditNoteList(TransferInvoiceRequest request)
         {
             TransferGridResponse res = new TransferGridResponse();
 
             try
             {
-                res = _invoiceService.GetTransferData();
+                res = _invoiceService.GetTransferData(request);
             }
             catch (Exception ex)
             {
@@ -105,12 +105,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("commit")]
-        public InvoiceResponse Commit(CommitInvoiceRequest request)
+        public InvoiceResponse Commit(InvoiceUpdate model)
         {
             InvoiceResponse response = new InvoiceResponse();
             try
             {
-                response = _invoiceService.CommitInvoice(request);
+                response = _invoiceService.commit(model);
             }
             catch (Exception ex)
             {

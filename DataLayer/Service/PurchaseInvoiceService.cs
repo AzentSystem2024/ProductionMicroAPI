@@ -856,7 +856,7 @@ namespace MicroApi.DataLayer.Service
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
-                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure; 
                 cmd.CommandText = "SP_TB_PURCH";
                 cmd.Parameters.AddWithValue("ACTION", 4);
                 cmd.Parameters.AddWithValue("@ID", id);
@@ -874,39 +874,39 @@ namespace MicroApi.DataLayer.Service
         public List<PurchaseInvoice> GetPurchaseInvoiceList()
         {
             List<PurchaseInvoice> invoiceList = new List<PurchaseInvoice>();
-            SqlConnection connection = ADO.GetConnection();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = connection;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SP_TB_PURCH";
-            cmd.Parameters.AddWithValue("@ACTION", 0);  
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable tbl = new DataTable();
-            da.Fill(tbl);
-
-            foreach (DataRow dr in tbl.Rows)
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_TB_PURCH", connection))
             {
-                invoiceList.Add(new PurchaseInvoice
-                {
-                    ID = ADO.ToInt32(dr["ID"]),
-                    TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
-                    PURCH_NO = ADO.ToString(dr["PURCH_NO"]),
-                    PURCH_DATE = Convert.ToDateTime(dr["PURCH_DATE"]),
-                    SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
-                    STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                    STORE_NAME = ADO.ToString(dr["STORE"]),
-                    SUPPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
-                    NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
-                    NARRATION = ADO.ToString(dr["NARRATION"]),
-                    STATUS = ADO.ToString(dr["STATUS"]),
-                    PO_NO = ADO.ToString(dr["PO_NO"])
-                });
-            }
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 0);
 
-            connection.Close();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                foreach (DataRow dr in tbl.Rows)
+                {
+                    invoiceList.Add(new PurchaseInvoice
+                    {
+                        ID = dr["ID"] != DBNull.Value ? ADO.ToInt32(dr["ID"]) : 0,
+                        TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? ADO.ToInt32(dr["TRANS_ID"]) : 0,
+                        PURCH_NO = ADO.ToString(dr["PURCH_NO"]),
+                        PURCH_DATE = dr["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PURCH_DATE"]) : (DateTime?) null,
+                        SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? ADO.ToInt32(dr["SUPP_ID"]) : 0,
+                        STORE_ID = dr["STORE_ID"] != DBNull.Value ? ADO.ToInt32(dr["STORE_ID"]) : 0,
+                        STORE_NAME = ADO.ToString(dr["STORE"]),
+                        SUPPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
+                        NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? ADO.ToFloat(dr["NET_AMOUNT"]) : 0f,
+                        NARRATION = ADO.ToString(dr["NARRATION"]),
+                        STATUS = ADO.ToString(dr["STATUS"]),
+                        PO_NO = ADO.ToString(dr["PO_NO"])
+
+                    });
+                }
+            }
             return invoiceList;
         }
+
 
         public GrnPendingQtyResponse GetGrnPendingQty()
         {

@@ -107,12 +107,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("commit")]
-        public ReceiptResponse Commit(CommitReceiptRequest request)
+        public ReceiptResponse Commit(ReceiptUpdate model)
         {
             ReceiptResponse response = new ReceiptResponse();
             try
             {
-                response = _receiptService.CommitReceipt(request);
+                response = _receiptService.Commit(model);
             }
             catch (Exception ex)
             {

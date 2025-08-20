@@ -4,7 +4,7 @@
     {
         public int ID { get; set; }
         public string PURCH_NO { get; set; }
-        public DateTime PURCH_DATE { get; set; }
+        public DateTime? PURCH_DATE { get; set; }
         public int SUPP_ID { get; set; }
         public int STORE_ID { get; set; }
         public string STORE_NAME { get; set; }

@@ -108,12 +108,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("commit")]
-        public SupplierPaymentResponse Commit(CommitRequest request)
+        public SupplierPaymentResponse Commit(SupplierPaymentUpdate model)
         {
             SupplierPaymentResponse response = new SupplierPaymentResponse();
             try
             {
-                response = _supplierService.Commit(request);
+                response = _supplierService.commit(model);
             }
             catch (Exception ex)
             {
