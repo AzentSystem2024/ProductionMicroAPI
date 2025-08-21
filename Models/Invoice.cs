@@ -98,6 +98,8 @@
         public decimal TAX_AMOUNT { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
         public string CUST_NAME { get; set; }
+        public List<SaleDetailUpdate> SALE_DETAILS { get; set; } = new List<SaleDetailUpdate>();
+
 
     }
     public class InvoiceHeaderResponse

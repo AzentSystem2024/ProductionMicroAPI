@@ -351,11 +351,8 @@ namespace MicroApi.DataLayer.Service
                     using (var cmd = new SqlCommand("SP_SALE_INVOICE", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@ACTION", 0); 
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
-
-                        // Dummy/default values for remaining SP params
                         cmd.Parameters.AddWithValue("@TRANSFER_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
@@ -399,7 +396,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TAX_AMOUNT", 0);
                         cmd.Parameters.AddWithValue("@NET_AMOUNT", 0);
 
-                        // UDT: empty structure
+                        // Empty UDT
                         DataTable dt = new DataTable();
                         dt.Columns.Add("TRANSFER_SUMMARY_ID", typeof(int));
                         dt.Columns.Add("QUANTITY", typeof(double));
@@ -415,31 +412,50 @@ namespace MicroApi.DataLayer.Service
 
                         using (var reader = cmd.ExecuteReader())
                         {
+                            Dictionary<int, InvoiceHeader> invoiceMap = new Dictionary<int, InvoiceHeader>();
+
                             while (reader.Read())
                             {
-                                var header = new InvoiceHeader
-                                {
-                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                    TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
-                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
-                                    SALE_NO = reader["SALE_NO"]?.ToString(),
-                                    SALE_DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy") : null,
-                                    //UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                    DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
-                                    GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
-                                    GST_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
-                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                int transId = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
 
+                                // Create header if not exists
+                                if (!invoiceMap.ContainsKey(transId))
+                                {
+                                    var header = new InvoiceHeader
+                                    {
+                                        TRANS_ID = transId,
+                                        TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
+                                        SALE_NO = reader["SALE_NO"]?.ToString(),
+                                        SALE_DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
+                                        GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
+                                        GST_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                        CUST_NAME = reader["CUST_NAME"]?.ToString(),
+                                        SALE_DETAILS = new List<SaleDetailUpdate>()
+                                    };
+
+                                    invoiceMap[transId] = header;
+                                }
+
+                                // Add detail row
+                                invoiceMap[transId].SALE_DETAILS.Add(new SaleDetailUpdate
+                                {
+                                    TRANSFER_SUMMARY_ID = reader["TRANSFER_SUMMARY_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANSFER_SUMMARY_ID"]) : (int?)null,
+                                    TRANSFER_NO = reader["TRANSFER_NO"]?.ToString(),
+                                    TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    ARTICLE = reader["ARTICLE"]?.ToString(),
+                                    TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0,
                                     PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToDouble(reader["PRICE"]) : 0,
                                     AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAXABLE_AMOUNT"]) : 0,
                                     GST = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
                                     TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
-                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0,
-                                    CUST_NAME = reader["CUST_NAME"]?.ToString()
-                                };
-
-                                response.Data.Add(header);
+                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0
+                                });
                             }
+
+                            response.Data = invoiceMap.Values.ToList();
                         }
 
                         response.flag = 1;
@@ -455,6 +471,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
 
         public InvoiceHeaderSelectResponse GetSaleInvoiceById(int id)
         {
