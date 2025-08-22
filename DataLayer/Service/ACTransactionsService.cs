@@ -1114,7 +1114,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.ExecuteNonQuery();
 
                         response.flag = 1;
-                        response.Message = "Debit note updated successfully.";
+                        response.Message = "Debit note committed successfully.";
                     }
                 }
             }
@@ -1226,7 +1226,7 @@ namespace MicroApi.DataLayer.Service
                                 DebitInvoicelist item = new DebitInvoicelist
                                 {
                                     BILL_ID = reader["BILL_ID"] != DBNull.Value ? Convert.ToInt32(reader["BILL_ID"]) : 0,
-                                    INVOICE_NO = reader["DOC_NO"]?.ToString(),
+                                    INVOICE_NO = reader["DOC_NO"] != DBNull.Value ? Convert.ToInt32(reader["DOC_NO"]) : 0,
                                     PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
                                     SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
                                     SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
