@@ -3,6 +3,7 @@
     public class FixedAsset
     {
         public int ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public string CODE { get; set; }
         public string? DESCRIPTION { get; set; }
         public int? ASSET_TYPE_ID { get; set; }
@@ -39,6 +40,7 @@
     public class FixedAssetSelect
     {
         public int ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public string CODE { get; set; }
         public string DESCRIPTION { get; set; }
         public int ASSET_TYPE_ID { get; set; }

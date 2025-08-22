@@ -101,6 +101,7 @@ namespace MicroApi.DataLayer.Service
                     SqlCommand cmd = new SqlCommand("SP_TB_AC_FIXEDASSET", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 1);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object)fixedAsset.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@CODE", (object)fixedAsset.CODE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DESCRIPTION", (object)fixedAsset.DESCRIPTION ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@ASSET_TYPE_NAME", (object)fixedAsset.ASSET_TYPE ?? DBNull.Value);
@@ -145,6 +146,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@ID", fixedAsset.ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", (object)fixedAsset.COMPANY_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CODE", (object)fixedAsset.CODE ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", (object)fixedAsset.DESCRIPTION ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@ASSET_TYPE_NAME", (object)fixedAsset.ASSET_TYPE ?? DBNull.Value);
@@ -204,6 +206,7 @@ namespace MicroApi.DataLayer.Service
                                 var asset = new FixedAssetSelect
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                     CODE = reader["CODE"] != DBNull.Value ? reader["CODE"].ToString() : null,
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                     ASSET_TYPE_ID = reader["ASSET_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ASSET_TYPE_ID"]) : 0,
