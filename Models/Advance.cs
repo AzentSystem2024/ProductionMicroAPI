@@ -37,6 +37,7 @@ namespace MicroApi.Models
     public class AdvanceLogListData
     {
         public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public int TRANS_ID { get; set; }
         public object ADV_NO { get; set; }
         public object DATE { get; set; }
@@ -67,6 +68,7 @@ namespace MicroApi.Models
 
         public string? ADV_NO { get; set; }
         public int EMP_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public string? EMP_NAME { get; set; }
         public DateTime? DATE { get; set; }
         public int? ADV_TYPE_ID { get; set; }

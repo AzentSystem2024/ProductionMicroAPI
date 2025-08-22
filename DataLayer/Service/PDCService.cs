@@ -44,6 +44,7 @@ namespace MicroApi.DataLayer.Service
                                 response.Data.Add(new PDCList
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                     ENTRY_NO = reader["ENTRY_NO"] != DBNull.Value ? reader["ENTRY_NO"].ToString() : null,
                                     ENTRY_DATE = reader["ENTRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["ENTRY_DATE"]).ToString("dd/MM/yyyy") : null,
                                     BENEFICIARY_NAME = reader["BENEFICIARY_NAME"] != DBNull.Value ? reader["BENEFICIARY_NAME"].ToString() : null,
@@ -103,6 +104,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 1); 
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", (object)pdc.COMPANY_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@BANK_HEAD_ID", (object)pdc.BANK_HEAD_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CUST_ID", (object)pdc.CUST_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@SUPP_ID", (object)pdc.SUPP_ID ?? DBNull.Value);
@@ -147,6 +149,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 2); 
                         cmd.Parameters.AddWithValue("@ID", pdc.ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", (object)pdc.COMPANY_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@BANK_HEAD_ID", (object)pdc.BANK_HEAD_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CUST_ID", (object)pdc.CUST_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@SUPP_ID", (object)pdc.SUPP_ID ?? DBNull.Value);
@@ -192,7 +195,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 0); 
-                        cmd.Parameters.AddWithValue("@ID", (object)id ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ID", id);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -201,6 +204,7 @@ namespace MicroApi.DataLayer.Service
                                 response.Data.Add(new PDCModelSelect
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                     BANK_HEAD_ID = reader["BANK_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["BANK_HEAD_ID"]) : (int?)null,
                                     CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : (int?)null,
                                     SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : (int?)null,

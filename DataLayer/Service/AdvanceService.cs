@@ -32,6 +32,7 @@ namespace MicroApi.DataLayer.Services
                     loglist.data.Add(new AdvanceLogListData
                     {
                         ID = Convert.IsDBNull(dr["ID"]) ? 0 : Convert.ToInt32(dr["ID"]),
+                        COMPANY_ID = Convert.IsDBNull(dr["COMPANY_ID"]) ? 0 : Convert.ToInt32(dr["COMPANY_ID"]),
                         TRANS_ID = Convert.IsDBNull(dr["TRANS_ID"]) ? 0 : Convert.ToInt32(dr["TRANS_ID"]),
                         ADV_NO = Convert.IsDBNull(dr["ADV_NO"]) ? null : Convert.ToString(dr["ADV_NO"]),
                         EMP_NO = Convert.IsDBNull(dr["EMP_CODE"]) ? null : Convert.ToString(dr["EMP_CODE"]),
@@ -68,6 +69,7 @@ namespace MicroApi.DataLayer.Services
                     //cmd.Parameters.AddWithValue("ID", employee.ID);
 
                     cmd.Parameters.AddWithValue("@EMP_ID", adv.EMP_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", adv.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@DATE", (object)adv.DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@ADV_TYPE_ID", (object)adv.ADV_TYPE_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@ADVANCE_AMOUNT", (object)adv.ADVANCE_AMOUNT ?? DBNull.Value);
@@ -122,6 +124,7 @@ namespace MicroApi.DataLayer.Services
                     rev.ADV_NO = Convert.ToString(dr["ADV_NO"]);
                     rev.DATE = dr["ADV_DATE"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(dr["ADV_DATE"]) : null;
                     rev.EMP_ID = ADO.ToInt32(dr["EMP_ID"]);
+                    rev.COMPANY_ID = ADO.ToInt32(dr["COMAPNY_ID"]);
                     rev.EMP_NAME = ADO.ToString(dr["EMP_NAME"]);
                     rev.ADV_TYPE_ID = ADO.ToInt32(dr["ADV_HEAD_ID"]);
                     rev.ADV_TYPE_NAME = ADO.ToString(dr["HEAD_NAME"]);
@@ -166,6 +169,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@ACTION", 2);
 
                     cmd.Parameters.AddWithValue("ID", adv.ID);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)adv.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("EMP_ID", (object)adv.EMP_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("DATE", (object)adv.DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("ADV_TYPE_ID", (object)adv.ADV_TYPE_ID ?? DBNull.Value);
@@ -233,6 +237,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@ACTION", 4);
 
                     cmd.Parameters.AddWithValue("ID", adv.ID);
+                    cmd.Parameters.AddWithValue("COMPANY_ID" ,(object)adv.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("EMP_ID", (object)adv.EMP_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("DATE", (object)adv.DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("ADV_TYPE_ID", (object)adv.ADV_TYPE_ID ?? DBNull.Value);
@@ -270,6 +275,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@ACTION", 5);
 
                     cmd.Parameters.AddWithValue("ID", adv.ID);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)adv.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("EMP_ID", (object)adv.EMP_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("DATE", (object)adv.DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("ADV_TYPE_ID", (object)adv.ADV_TYPE_ID ?? DBNull.Value);
