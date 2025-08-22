@@ -57,11 +57,11 @@ namespace MicroApi.Controllers
             try
             {
                 var result = _depreciationService.InsertDepreciation(request);
-                return Ok(new { Flag = 1, Message = "Success", Data = result });
+                return Ok(new { success = true, data = result });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Flag = 0, Message = $"Error inserting data: {ex.Message}" });
+                return Ok(new { success = false, message = ex.Message });
             }
         }
 
