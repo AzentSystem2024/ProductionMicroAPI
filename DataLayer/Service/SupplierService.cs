@@ -59,6 +59,7 @@ namespace MicroApi.DataLayer.Service
                                 DESCRIPTION = dr.Table.Columns.Contains("DESCRIPTION") ? dr["DESCRIPTION"]?.ToString() : null,
                                 STATE_NAME = dr.Table.Columns.Contains("STATE_NAME") ? dr["STATE_NAME"]?.ToString() : null,
                                 IS_DELETED = dr.Table.Columns.Contains("IS_DELETED") ? dr["IS_DELETED"]?.ToString() : null,
+                                IS_COMPANY_BRANCH = dr.Table.Columns.Contains("IS_COMPANY_BRANCH") && dr["IS_COMPANY_BRANCH"] != DBNull.Value ? Convert.ToBoolean(dr["IS_COMPANY_BRANCH"]) : false,
 
                                 Supplier_cost = new List<SupplierCost>()  // Initialize as empty list
                             };
@@ -128,7 +129,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("PAY_TERM_ID", (object)supplier.PAY_TERM_ID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("VAT_RULE_ID", (object)supplier.VAT_RULE_ID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("VAT_REGNO", (object)supplier.VAT_REGNO ?? DBNull.Value);
-
+                cmd.Parameters.AddWithValue("IS_COMPANY_BRANCH", (object)supplier.IS_COMPANY_BRANCH ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@UDT_TB_SUPPLIER_COST", tbl);
 
                 cmd.ExecuteNonQuery();
@@ -164,7 +165,7 @@ namespace MicroApi.DataLayer.Service
                    "TB_SUPPLIER.CITY, TB_SUPPLIER.PHONE, TB_SUPPLIER.EMAIL, TB_SUPPLIER.IS_INACTIVE, TB_SUPPLIER.MOBILE_NO, " +
                    "TB_SUPPLIER.NOTES, TB_SUPPLIER.FAX_NO, TB_SUPPLIER.VAT_REGNO,TB_SUPPLIER.IS_DELETED," +
                    "TB_SUPPLIER.COUNTRY_ID,TB_SUPPLIER.CURRENCY_ID,TB_SUPPLIER.PAY_TERM_ID,TB_SUPPLIER.VAT_RULE_ID," +
-                   "TB_SUPPLIER.STATE_ID," +
+                   "TB_SUPPLIER.STATE_ID,TB_SUPPLIER.IS_COMPANY_BRANCH," +
 
                    "TB_COUNTRY.COUNTRY_NAME,TB_CURRENCY.CODE AS CURRENCY_CODE,TB_PAYMENT_TERMS.CODE AS PAYMENT_CODE," +
                    "TB_VAT_RULE_SUPPLIER.DESCRIPTION ,TB_STATE.STATE_NAME " +
@@ -212,6 +213,7 @@ namespace MicroApi.DataLayer.Service
                     supplier.DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]);
                     supplier.STATE_NAME = Convert.ToString(dr["STATE_NAME"]);
                     supplier.COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]);
+                    supplier.IS_COMPANY_BRANCH = Convert.ToBoolean(dr["IS_COMPANY_BRANCH"]);
                 }
 
                 strSQL = "SELECT * FROM TB_SUPPLIER_COSTS WHERE SUPP_ID = " + id;

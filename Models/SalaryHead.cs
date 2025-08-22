@@ -2,8 +2,8 @@
 {
     public class SalaryHead
     {
-        public int? ID { get; set; }  
-
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public string? HEAD_NAME { get; set; }
         public string? PAYSLIP_TITLE { get; set; }
         public bool? HEAD_ACTIVE { get; set; }
@@ -28,6 +28,7 @@
     public class SalaryHeadUpdate
     {
         public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public string? HEAD_NAME { get; set; }
         public string? PAYSLIP_TITLE { get; set; }
         public bool? HEAD_ACTIVE { get; set; }

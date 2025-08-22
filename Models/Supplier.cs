@@ -32,6 +32,7 @@
         public string? DESCRIPTION { get; set; }
         public string? STATE_NAME { get; set; }
         public string? IS_DELETED { get; set; }
+        public bool? IS_COMPANY_BRANCH { get; set; }
         public List<SupplierCost> Supplier_cost { get; set; }
     }
     public class SupplierCost

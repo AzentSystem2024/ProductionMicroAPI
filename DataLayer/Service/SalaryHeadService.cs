@@ -109,6 +109,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@INSTALLMENT_RECOVERY", salaryHead.INSTALLMENT_RECOVERY?.ToString() ?? "");
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", salaryHead.IS_INACTIVE.ToString() ?? "");
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", salaryHead.AC_HEAD_ID?.ToString() ?? "");
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", salaryHead.COMPANY_ID);
                         //cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", salaryHead.PERCENT_HEAD_ID?.ToString() ?? "");
                         string percentHeadIds = salaryHead.PERCENT_HEAD_ID != null
                              ? string.Join(",", salaryHead.PERCENT_HEAD_ID)
@@ -173,6 +174,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", GetDbValue(salaryHead.IS_INACTIVE));
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", GetDbValue(salaryHead.AC_HEAD_ID));
                         cmd.Parameters.AddWithValue("@HEAD_ORDER", GetDbValue(salaryHead.HEAD_ORDER));
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", GetDbValue(salaryHead.COMPANY_ID));
                         //cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", GetDbValue(salaryHead.PERCENT_HEAD_ID));
                         string percentHeadIds = salaryHead.PERCENT_HEAD_ID != null
                             ? string.Join(",", salaryHead.PERCENT_HEAD_ID)
