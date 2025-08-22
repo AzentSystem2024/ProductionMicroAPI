@@ -165,7 +165,7 @@ namespace MicroApi.DataLayer.Service
                    "TB_SUPPLIER.CITY, TB_SUPPLIER.PHONE, TB_SUPPLIER.EMAIL, TB_SUPPLIER.IS_INACTIVE, TB_SUPPLIER.MOBILE_NO, " +
                    "TB_SUPPLIER.NOTES, TB_SUPPLIER.FAX_NO, TB_SUPPLIER.VAT_REGNO,TB_SUPPLIER.IS_DELETED," +
                    "TB_SUPPLIER.COUNTRY_ID,TB_SUPPLIER.CURRENCY_ID,TB_SUPPLIER.PAY_TERM_ID,TB_SUPPLIER.VAT_RULE_ID," +
-                   "TB_SUPPLIER.STATE_ID,TB_SUPPLIER.IS_COMPANY_BRANCH," +
+                   "TB_SUPPLIER.STATE_ID,TB_SUPPLIER.IS_COMPANY_BRANCH,TB_SUPPLIER.COMPANY_ID," +
 
                    "TB_COUNTRY.COUNTRY_NAME,TB_CURRENCY.CODE AS CURRENCY_CODE,TB_PAYMENT_TERMS.CODE AS PAYMENT_CODE," +
                    "TB_VAT_RULE_SUPPLIER.DESCRIPTION ,TB_STATE.STATE_NAME " +
@@ -214,6 +214,7 @@ namespace MicroApi.DataLayer.Service
                     supplier.STATE_NAME = Convert.ToString(dr["STATE_NAME"]);
                     supplier.COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]);
                     supplier.IS_COMPANY_BRANCH = Convert.ToBoolean(dr["IS_COMPANY_BRANCH"]);
+                    supplier.COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]);
                 }
 
                 strSQL = "SELECT * FROM TB_SUPPLIER_COSTS WHERE SUPP_ID = " + id;
