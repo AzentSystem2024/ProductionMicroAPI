@@ -195,7 +195,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 0); 
-                        cmd.Parameters.AddWithValue("@ID", (object)id ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ID", id);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
