@@ -3,6 +3,7 @@
     public class PDCModel
     {
         public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public int? BANK_HEAD_ID { get; set; }
         public int? CUST_ID { get; set; }
         public int? SUPP_ID { get; set; }
@@ -21,6 +22,7 @@
      public class PDCModelSelect
     {
         public int ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public int? BANK_HEAD_ID { get; set; }
         public int? CUST_ID { get; set; }
         public int? SUPP_ID { get; set; }
@@ -40,6 +42,7 @@
     public class PDCList
     {
         public int ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public string ENTRY_NO { get; set; }
         public string? ENTRY_DATE { get; set; }
         public string BENEFICIARY_NAME { get; set; }
