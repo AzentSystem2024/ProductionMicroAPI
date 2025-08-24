@@ -908,7 +908,7 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public GrnPendingQtyResponse GetGrnPendingQty()
+        public GrnPendingQtyResponse GetGrnPendingQty(PendingGRNRequest request)
         {
             GrnPendingQtyResponse res = new GrnPendingQtyResponse();
             res.Data = new List<GrnPendingQty>();
@@ -919,7 +919,9 @@ namespace MicroApi.DataLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SP_TB_PURCH", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ACTION", 7); // Use appropriate action for this SELECT
+                    cmd.Parameters.AddWithValue("@ACTION", 7);
+                    cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
+
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();

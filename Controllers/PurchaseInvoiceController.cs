@@ -227,13 +227,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("invoicelist")]
-        public GrnPendingQtyResponse GetGrnPendingList()
+        public GrnPendingQtyResponse GetGrnPendingList(PendingGRNRequest request)
         {
             GrnPendingQtyResponse res = new GrnPendingQtyResponse();
 
             try
             {
-                res = _PurchaseInvoiceService.GetGrnPendingQty();
+                res = _PurchaseInvoiceService.GetGrnPendingQty(request);
             }
             catch (Exception ex)
             {
