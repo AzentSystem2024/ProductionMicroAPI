@@ -50,6 +50,11 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : (int?)null;
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
+                                    response.DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString();
+                                    response.COUNTRY_NAME = reader["COUNTRY_NAME"]?.ToString();
+                                   // response.FLAG_URL = reader["FLAG_URL"]?.ToString();
+                                    //response.VAT_ID = reader["VAT_ID"] != DBNull.Value ? Convert.ToInt32(reader["VAT_ID"]) : (int?)null;
+                                    //response.VAT_NAME = reader["VAT_NAME"]?.ToString();
                                 }
 
                                 // Result 3: Assigned Companies
@@ -130,6 +135,23 @@ namespace MicroApi.DataLayer.Service
                                             DATE_TO = reader["DATE_TO"] != DBNull.Value ? Convert.ToDateTime(reader["DATE_TO"]) : DateTime.MinValue,
                                             IS_CLOSED = reader["IS_CLOSED"] != DBNull.Value && Convert.ToBoolean(reader["IS_CLOSED"])
                                         });
+                                    }
+                                }
+                                while (reader.NextResult())
+                                {
+                                    if (reader.FieldCount > 0 && reader.GetName(0) == "VAT_ID")
+                                    {
+                                        if (reader.Read())
+                                        {
+                                            response.VAT_ID = !reader.IsDBNull(reader.GetOrdinal("VAT_ID"))
+                                                                ? reader.GetInt32(reader.GetOrdinal("VAT_ID"))
+                                                                : (int?)null;
+
+                                            response.VAT_NAME = !reader.IsDBNull(reader.GetOrdinal("VAT_NAME"))
+                                                                ? reader.GetString(reader.GetOrdinal("VAT_NAME"))
+                                                                : null;
+                                        }
+                                        break;
                                     }
                                 }
                             }
