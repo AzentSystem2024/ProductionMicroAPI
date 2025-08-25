@@ -127,7 +127,7 @@ namespace MicroApi.DataLayer.Service
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
 
-                //// Check for open records before proceeding
+                // Check for open records before proceeding
                 using (SqlCommand checkCmd = new SqlCommand(@"
                 SELECT 1
                 FROM TB_AC_TRANS_HEADER th

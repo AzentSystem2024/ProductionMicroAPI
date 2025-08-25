@@ -15,10 +15,16 @@
 
         public int? USER_ID { get; set; }
         public string USER_NAME { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public string DEFAULT_COUNTRY_CODE { get; set; }
+        public string COUNTRY_NAME { get; set; }
+        //public string FLAG_URL { get; set; }
         public List<FinancialYear> FINANCIAL_YEARS { get; set; } = new();
         public CompanyList SELECTED_COMPANY { get; set; } = new CompanyList();
         public List<CompanyList> Companies { get; set; } = new List<CompanyList>();
         public List<MenuGroup> MenuGroups { get; set; } = new List<MenuGroup>();
+        public int? VAT_ID { get; set; }
+        public string VAT_NAME { get; set; }
     }
 
     public class CompanyList
@@ -57,6 +63,8 @@
         public int? USER_ID { get; set; }
         public string USER_NAME { get; set; }
         public List<CompanyList> Companies { get; set; } = new List<CompanyList>();
+        public int? VAT_ID { get; set; }
+        public string VAT_NAME { get; set; }
     }
     public class FinancialYear
     {
