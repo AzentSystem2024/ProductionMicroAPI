@@ -188,5 +188,10 @@
         public string Message { get; set; }
         public int PURCHASE_NO { get; set; }
     }
+    public class PendingGRNRequest
+    {
+        public int SUPP_ID { get; set; }
+       
+    }
 
 }

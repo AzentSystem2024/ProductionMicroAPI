@@ -13,7 +13,7 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Approve(PurchHeader purchHeader);
         public bool Delete(int id);
         public List<PurchaseInvoice> GetPurchaseInvoiceList();
-        GrnPendingQtyResponse GetGrnPendingQty();
+        GrnPendingQtyResponse GetGrnPendingQty(PendingGRNRequest request);
         PurchaseVoucherResponse GetPurchaseNo();
 
 

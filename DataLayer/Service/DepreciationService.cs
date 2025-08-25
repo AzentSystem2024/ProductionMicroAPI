@@ -259,7 +259,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@DEPR_DATE", string.IsNullOrEmpty(request.DEPR_DATE) ? (object)DBNull.Value : request.DEPR_DATE);
                 //cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", string.IsNullOrEmpty(request.LAST_DEPR_DATE) ? (object)DBNull.Value : request.LAST_DEPR_DATE);
                 cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(request.NARRATION) ? (object)DBNull.Value : request.NARRATION);
-                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
                 //cmd.Parameters.AddWithValue("@NET_DEPRECIATION", request.NET_DEPRECIATION ?? (object)DBNull.Value);
