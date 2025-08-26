@@ -58,6 +58,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
                         cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
                         cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
                         // === UDT Table ===
                         DataTable dt = new DataTable();
@@ -121,40 +122,7 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-
-
-
-        private static void AddParam(SqlCommand cmd, string name, object? value)
-        {
-            cmd.Parameters.AddWithValue(name, value ?? DBNull.Value);
-        }
-
-        private static object ParseDate(string? dateStr)
-        {
-            if (string.IsNullOrWhiteSpace(dateStr))
-                return DBNull.Value;
-
-            string[] formats = new[]
-            {
-                "dd-MM-yyyy HH:mm:ss",
-                "dd-MM-yyyy",
-                "yyyy-MM-ddTHH:mm:ss.fffZ",
-                "yyyy-MM-ddTHH:mm:ss",
-                "yyyy-MM-dd",
-                "MM/dd/yyyy HH:mm:ss",
-                "MM/dd/yyyy"
-    };
-
-            if (DateTime.TryParseExact(dateStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
-                return dt;
-
-            return DBNull.Value;
-        }
-
-
-
-
-        public JournalResponse UpdateJournal(JournalUpdateHeader header)
+    public JournalResponse UpdateJournal(JournalUpdateHeader header)
         {
             JournalResponse res = new JournalResponse();
 
@@ -169,9 +137,10 @@ namespace MicroApi.DataLayer.Service
                     {
                         try
                         {
-                            DateTime parsedDate;
-                            if (!DateTime.TryParseExact(header.TRANS_DATE, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
-                                throw new Exception("Invalid TRANS_DATE format. Expected dd-MM-yyyy.");
+                            var parsedDate = ParseDate(header.TRANS_DATE);
+                            if (parsedDate == DBNull.Value)
+                                throw new Exception("Invalid TRANS_DATE format. Expected formats: dd-MM-yyyy, yyyy-MM-dd, or MM/dd/yyyy.");
+
 
                             // 🔁 Prepare DataTable for UDT
                             DataTable dt = new DataTable();
@@ -251,6 +220,7 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@PAY_HEAD_ID", header.PAY_HEAD_ID ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@ADD_TIME", DateTime.Now);
                                 cmd.Parameters.AddWithValue("@CREATED_STORE_ID", header.CREATED_STORE_ID ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@DEPT_ID", header.DEPT_ID ?? (object)DBNull.Value);
 
                                 var tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
                                 tvp.SqlDbType = SqlDbType.Structured;
@@ -286,7 +256,32 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        private static void AddParam(SqlCommand cmd, string name, object? value)
+        {
+            cmd.Parameters.AddWithValue(name, value ?? DBNull.Value);
+        }
 
+        private static object ParseDate(string? dateStr)
+        {
+            if (string.IsNullOrWhiteSpace(dateStr))
+                return DBNull.Value;
+
+            string[] formats = new[]
+            {
+                "dd-MM-yyyy HH:mm:ss",
+                "dd-MM-yyyy",
+                "yyyy-MM-ddTHH:mm:ss.fffZ",
+                "yyyy-MM-ddTHH:mm:ss",
+                "yyyy-MM-dd",
+                "MM/dd/yyyy HH:mm:ss",
+                "MM/dd/yyyy"
+    };
+
+            if (DateTime.TryParseExact(dateStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+                return dt;
+
+            return DBNull.Value;
+        }
 
         public JournalListResponse GetJournalVoucherList()
         {
@@ -343,6 +338,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
                         cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
+                        cmd.Parameters.AddWithValue("@DEPT_ID", 0);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -368,6 +364,7 @@ namespace MicroApi.DataLayer.Service
                                     ? Convert.ToInt32(reader["TRANS_STATUS"])
                                     : 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),
+                                        DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DETAILS = new List<JournalListDetail>()
                                     };
                                 }
@@ -443,6 +440,7 @@ namespace MicroApi.DataLayer.Service
                                         TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         IS_APPROVED = reader["TRANS_STATUS"] != DBNull.Value && Convert.ToInt32(reader["TRANS_STATUS"]) == 5,
+                                        DEPT_ID = Convert.ToInt32(reader["DEPT_ID"]),
                                         DETAILS = new List<JournalListDetail>()
                                     };
                                 }
