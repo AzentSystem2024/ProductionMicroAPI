@@ -163,6 +163,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         insertCmd.CommandType = CommandType.StoredProcedure;
                         insertCmd.Parameters.AddWithValue("@ActionType", "InsertPacking");
+                        insertCmd.Parameters.AddWithValue("@COMPANY_ID", packing.COMPANY_ID);
                         insertCmd.Parameters.AddWithValue("@ART_NO", packing.ART_NO);
                         //insertCmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO);
                         insertCmd.Parameters.AddWithValue("@DESCRIPTION", packing.DESCRIPTION);
@@ -215,6 +216,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ActionType", "UpdatePacking");
                         cmd.Parameters.AddWithValue("@ID", packing.ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", packing.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@ART_NO", packing.ART_NO);
                         cmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", packing.DESCRIPTION);
@@ -276,6 +278,7 @@ namespace MicroApi.DataLayer.Service
                                 response.Data = new PackingUpdate
                                 {
                                     ID = reader.GetInt64(reader.GetOrdinal("ID")),
+                                    COMPANY_ID = reader.IsDBNull(reader.GetOrdinal("COMPANY_ID")) ? 0 : reader.GetInt32(reader.GetOrdinal("COMPANY_ID")),
                                     ART_NO = reader.IsDBNull(reader.GetOrdinal("ArtNo")) ? null : reader.GetString(reader.GetOrdinal("ArtNo")),
                                     ORDER_NO = reader.IsDBNull(reader.GetOrdinal("OrderNo")) ? null : reader.GetString(reader.GetOrdinal("OrderNo")),
                                     DESCRIPTION = reader.IsDBNull(reader.GetOrdinal("PackingName")) ? null : reader.GetString(reader.GetOrdinal("PackingName")),
@@ -345,6 +348,7 @@ namespace MicroApi.DataLayer.Service
                                 packingList.Add(new PackingListItem
                                 {
                                     ID = reader.IsDBNull(reader.GetOrdinal("ID")) ? 0 : reader.GetInt64(reader.GetOrdinal("ID")),
+                                   COMPANY_ID = reader.IsDBNull(reader.GetOrdinal("COMPANY_ID")) ? 0 : reader.GetInt32(reader.GetOrdinal("COMPANY_ID")),
                                     ArtNo = reader.IsDBNull(reader.GetOrdinal("ArtNo")) ? null : reader.GetString(reader.GetOrdinal("ArtNo")),
                                     Color = reader.IsDBNull(reader.GetOrdinal("Color")) ? null : reader.GetString(reader.GetOrdinal("Color")),
                                     OrderNo = reader.IsDBNull(reader.GetOrdinal("OrderNo")) ? null : reader.GetString(reader.GetOrdinal("OrderNo")),

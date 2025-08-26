@@ -2,6 +2,7 @@
 {
     public class PackingMasters
     {
+        public int COMPANY_ID { get; set; }
         public string ART_NO { get; set; }
        // public string ORDER_NO { get; set; }
         public string DESCRIPTION { get; set; }
@@ -41,6 +42,8 @@
     public class PackingUpdate
     {
         public long ID { get; set; }
+        public int COMPANY_ID { get; set; }
+
         public string ART_NO { get; set; }
         public string ORDER_NO { get; set; }
         //public string LAST_ORDER_NO { get; set; }
@@ -76,6 +79,7 @@
     public class PackingListItem
     {
         public long ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public string ArtNo { get; set; }
         public string Color { get; set; }
         public string OrderNo { get; set; }
