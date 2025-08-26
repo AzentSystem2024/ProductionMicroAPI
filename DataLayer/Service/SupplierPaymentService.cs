@@ -321,7 +321,10 @@ namespace MicroApi.DataLayer.Service
                                         DOC_NO = reader["DOC_NO"]?.ToString(),
                                         PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
                                         TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] as double? ?? 0,
-                                        PENDING_AMOUNT = reader["PENDING_AMOUNT"] as double? ?? 0
+                                        PENDING_AMOUNT = reader["PENDING_AMOUNT"] as double? ?? 0,
+                                        SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SUPP_INV_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["NET_AMOUNT"]) : 0,
                                     };
 
                                     detailList.Add(detail);
@@ -379,7 +382,7 @@ namespace MicroApi.DataLayer.Service
                                     BILL_ID = reader["BILL_ID"] != DBNull.Value ? Convert.ToInt32(reader["BILL_ID"]) : 0,
                                     DOC_NO = reader["DOC_NO"]?.ToString(),
                                     PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy"): null,
-                                    SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SUPP_INV_DATE"]).ToString("dd-MM-yyyy") : null,
                                     SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["NET_AMOUNT"]) : 0,
                                     PENDING_AMOUNT = reader["PENDING_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["PENDING_AMOUNT"]) : 0,
