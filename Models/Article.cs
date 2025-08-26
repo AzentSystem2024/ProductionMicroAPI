@@ -87,8 +87,12 @@ namespace MicroApi.Models
         public int CategoryID { get; set; }
         public float Price { get; set; }
     }
-    
 
+    public class ArticleListRequest
+    {
+        public DateTime? DATE_FROM { get; set; }
+        public DateTime? DATE_TO { get; set; }
+    }
 
 
 }
