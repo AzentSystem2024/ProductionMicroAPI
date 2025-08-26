@@ -276,6 +276,24 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+
+        [HttpPost("vatreturn")]
+        public VatReturnReportResponse GetVatReturnReport(VatReturnReportRequest request)
+        {
+            var res = new VatReturnReportResponse();
+            try
+            {
+                res = _ReportService.GetVatReturnReport(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
     }
 }
 

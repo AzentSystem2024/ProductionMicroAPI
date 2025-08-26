@@ -19,6 +19,7 @@ namespace MicroApi.DataLayer.Interface
         CustomerStatementDetailResponse GetCustomerStatementDetail(CustomerStatementRequest request);
         InputVatWorksheetReportResponse GetInputVatWorksheetReport(InputVatWorksheetReportRequest request);
         OutputVatWorksheetReportResponse GetOutputVatWorksheetReport(OutputVatWorksheetReportRequest request);
+        VatReturnReportResponse GetVatReturnReport(VatReturnReportRequest request);
 
     }
 }
