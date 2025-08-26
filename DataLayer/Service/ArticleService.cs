@@ -49,6 +49,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@SUPPLIER_ID", article.SUPPLIER_ID);
                         cmd.Parameters.AddWithValue("@IS_COMPONENT", article.IS_COMPONENT);
                         cmd.Parameters.AddWithValue("@COMPONENT_ARTICLE_ID", (object)article.COMPONENT_ARTICLE_ID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
 
                         var sizeTable = new DataTable();
                         sizeTable.Columns.Add("SIZE", typeof(string));
@@ -139,6 +140,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IS_COMPONENT", article.IS_COMPONENT);
                         cmd.Parameters.AddWithValue("@COMPONENT_ARTICLE_ID", (object)article.COMPONENT_ARTICLE_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME);
+                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
 
                         var sizeTable = new DataTable();
                         sizeTable.Columns.Add("SIZE", typeof(string));
@@ -211,6 +213,8 @@ namespace MicroApi.Service
                                     COMPONENT_ARTICLE_ID = reader["COMPONENT_ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPONENT_ARTICLE_ID"]) : (int?)null,
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString() ?? string.Empty,
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString() ?? string.Empty,
+                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])) : (DateTime?)null
+
                                 };
 
                                 if (reader["SIZES"] != DBNull.Value)
@@ -365,6 +369,7 @@ namespace MicroApi.Service
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
+                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])): (DateTime?)null,
                                     SIZES = new List<Sizes>()
                                 };
 

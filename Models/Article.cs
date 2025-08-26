@@ -22,6 +22,7 @@ namespace MicroApi.Models
         public int SUPPLIER_ID { get; set; }
         public bool IS_COMPONENT { get; set; }
         public int? COMPONENT_ARTICLE_ID { get; set; }
+        public DateTime? CREATED_DATE { get; set; }
         public List<Sizes> Sizes { get; set; }
     }
 
@@ -62,7 +63,7 @@ namespace MicroApi.Models
         public int? COMPONENT_ARTICLE_ID { get; set; }
         public string? ComponentArticleNo { get; set; }
         public string? ComponentArticleName { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CREATED_DATE { get; set; }
         public List<Sizes> SIZES { get; set; }
  
     }
