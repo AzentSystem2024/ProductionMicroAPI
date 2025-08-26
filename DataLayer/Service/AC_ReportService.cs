@@ -722,6 +722,44 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        public VatReturnReportResponse GetVatReturnReport(VatReturnReportRequest request)
+        {
+            VatReturnReportResponse response = new VatReturnReportResponse { Data = new List<VatReturnReport>() };
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_VAT_RETURN", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            VatReturnReport report = new VatReturnReport
+                            {
+                                ID = reader["ID"]?.ToString(),
+                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : 0,
+                                VAT = reader["VAT"] != DBNull.Value ? Convert.ToDecimal(reader["VAT"]) : 0,
+                                ADJUSTMENT = reader["ADJUSTMENT"] != DBNull.Value ? Convert.ToDecimal(reader["ADJUSTMENT"]) : 0,
+                                COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                ADDRESS = reader["ADDRESS"]?.ToString(),
+                                ARABIC_NAME = reader["ARABIC_NAME"]?.ToString(),
+                                TRN = reader["TRN"]?.ToString()
+                            };
+                            response.Data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.Data.Count > 0 ? 1 : 0;
+            response.message = response.flag == 1 ? "Success" : "No records found";
+            return response;
+        }
     }
 }
         

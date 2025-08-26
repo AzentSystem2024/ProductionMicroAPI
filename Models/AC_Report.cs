@@ -393,5 +393,27 @@
         public string message { get; set; }
         public List<OutputVatWorksheetReport> Data { get; set; }
     }
-
+    public class VatReturnReportRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+    }
+    public class VatReturnReport
+    {
+        public string ID { get; set; }
+        public decimal AMOUNT { get; set; }
+        public decimal VAT { get; set; }
+        public decimal ADJUSTMENT { get; set; }
+        public string COMPANY_NAME { get; set; }
+        public string ADDRESS { get; set; }
+        public string ARABIC_NAME { get; set; }
+        public string TRN { get; set; }
+    }
+    public class VatReturnReportResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<VatReturnReport> Data { get; set; } 
+    }
 }
