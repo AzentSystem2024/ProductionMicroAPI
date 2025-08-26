@@ -32,6 +32,7 @@
         public int? CREATE_USER_ID { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<MiscPaymentDetail> MISC_DETAIL { get; set; }
 
     }
@@ -74,7 +75,8 @@
         public float VAT_AMOUNT { get; set; }
         public float VAT_PERCENT { get; set; }
         public float VAT_REGN { get; set; }
-       
+        public int DEPT_ID { get; set; }
+
     }
     public class MiscPaymentListResponse
     {
@@ -100,7 +102,7 @@
         public string LEDGER_CODE { get; set; }
         public string LEDGER_NAME { get; set; }
         public double VAT_REGN { get; set; }
-
+        public int DEPT_ID { get; set; }
         public List<MiscPaymentDetail> DetailList { get; set; }
     }
     public class MiscPaymentSelectedView

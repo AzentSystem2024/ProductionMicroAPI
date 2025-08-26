@@ -245,7 +245,8 @@ namespace MicroApi.DataLayer.Service
                                     PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                     PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
                                     REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
-                                    
+                                    //DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+
                                 });
                             }
                         }
@@ -313,6 +314,7 @@ namespace MicroApi.DataLayer.Service
                                         LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                         LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                         VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToDouble(reader["VAT_REGN"]) : 0,
+                                        DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DetailList = new List<MiscPaymentDetail>()
                                     };
                                 }
@@ -384,9 +386,10 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
 
-                        
+
 
                         DataTable dt = new DataTable();
 

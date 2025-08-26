@@ -14,6 +14,7 @@
         public int? CREATE_USER_ID { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<MiscReceiptDetail> DETAILS { get; set; }
     }
     public class MiscReceiptDetail
@@ -51,7 +52,7 @@
         public int? CREATE_USER_ID { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-
+        public int? DEPT_ID { get; set; }
         public List<MiscReceiptDetail> DETAILS { get; set; }
     }
     public class MiscReceiptListResponse
@@ -74,6 +75,7 @@
         public string? BANK_NAME { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<MiscListDetail> DETAILS { get; set; }
     }
     public class MiscListDetail
@@ -102,6 +104,7 @@
         public string? BANK_NAME { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<MiscListDetail> DETAILS { get; set; }
     }
     public class LasrVoucherResponse
