@@ -319,7 +319,7 @@ namespace MicroApi.Service
         //        yield return articleUpdate;
         //    }
         //}
-        public ArticleListResponse GetArticleList()
+        public ArticleListResponse GetArticleList(ArticleListRequest request)
         {
             ArticleListResponse res = new ArticleListResponse();
             res.Data = new List<ArticleUpdate>();
@@ -334,9 +334,13 @@ namespace MicroApi.Service
                     using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.CommandTimeout = 300; // Set timeout to 5 minutes
+                        cmd.CommandTimeout = 300; // 5 minutes timeout
 
                         cmd.Parameters.AddWithValue("@ACTION", 0); // List
+
+                        // ✅ Pass filter values
+                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO ?? (object)DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -367,7 +371,7 @@ namespace MicroApi.Service
                                 articles.Add(article);
                             }
 
-                            // Step 2: Read sizes (second result set)
+                            // Step 2: Read sizes
                             if (reader.NextResult())
                             {
                                 while (reader.Read())
@@ -378,7 +382,6 @@ namespace MicroApi.Service
                                         OrderNo = reader["ORDER_NO"]?.ToString()
                                     };
 
-                                    // Identify which article this size belongs to
                                     string artNo = reader["ART_NO"]?.ToString();
                                     string color = reader["COLOR"]?.ToString();
                                     int unitId = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0;
