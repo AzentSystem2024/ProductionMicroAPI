@@ -44,8 +44,9 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
-                      
+
 
                         // === UDT Table ===
                         DataTable dt = new DataTable();
@@ -169,6 +170,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
 
                         // === UDT Table ===
@@ -295,6 +297,7 @@ namespace MicroApi.DataLayer.Service
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
+                                        DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DETAILS = new List<MiscListDetail>()
                                     };
                                 }
@@ -383,6 +386,7 @@ namespace MicroApi.DataLayer.Service
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
+                                        DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DETAILS = new List<MiscListDetail>()
                                     };
                                 }
@@ -525,6 +529,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
 
                         // === UDT Table ===
