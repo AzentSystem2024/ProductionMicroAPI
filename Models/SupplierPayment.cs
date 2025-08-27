@@ -203,5 +203,9 @@
         public string ENTRY_STATUS { get; set; }
         public string BANK_NAME { get; set; }
     }
+    public class SupplierIdRequest
+    {
+        public int SUPP_ID { get; set; }
+    }
 
 }

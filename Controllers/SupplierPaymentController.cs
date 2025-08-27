@@ -140,10 +140,10 @@ namespace MicroApi.Controllers
 
             return res;
         }
-        [HttpPost("GetPDCListBySupplierId/{supplierId}")]
-        public IActionResult GetPDCListBySupplierId(int supplierId)
+        [HttpPost("GetPDCListBySupplierId")]
+        public IActionResult GetPDCListBySupplierId([FromBody] SupplierIdRequest request)
         {
-            var response = _supplierService.GetPDCListBySupplierId(supplierId);
+            var response = _supplierService.GetPDCListBySupplierId(request);
             if (response.flag == 1)
             {
                 return Ok(response);

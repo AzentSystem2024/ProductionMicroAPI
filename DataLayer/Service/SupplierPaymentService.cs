@@ -522,7 +522,7 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
-        public PDCListResponse GetPDCListBySupplierId(int supplierId)
+        public PDCListResponse GetPDCListBySupplierId(SupplierIdRequest request)
         {
             PDCListResponse response = new PDCListResponse
             {
@@ -541,8 +541,8 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_SUPP_PAYMENT", con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 6); // Action 6 for PDC list
-                        cmd.Parameters.AddWithValue("@SUPP_ID", supplierId);
+                        cmd.Parameters.AddWithValue("@ACTION", 6); //  PDC list
+                        cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
