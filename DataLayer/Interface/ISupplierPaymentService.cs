@@ -11,6 +11,7 @@ namespace MicroApi.DataLayer.Interface
         PendingInvoiceResponse GetPendingInvoiceList(PendingInvoiceRequest request);
         SupplierPaymentResponse commit(SupplierPaymentUpdate model);
         SupplierVoucherResponse GetSupplierNo();
+        PDCListResponse GetPDCListBySupplierId(int supplierId);
 
 
     }

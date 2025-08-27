@@ -140,5 +140,19 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost("GetPDCListBySupplierId/{supplierId}")]
+        public IActionResult GetPDCListBySupplierId(int supplierId)
+        {
+            var response = _supplierService.GetPDCListBySupplierId(supplierId);
+            if (response.flag == 1)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
+
     }
 }

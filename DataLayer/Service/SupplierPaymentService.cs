@@ -521,5 +521,64 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+
+        public PDCListResponse GetPDCListBySupplierId(int supplierId)
+        {
+            PDCListResponse response = new PDCListResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<PDCListItem>()
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_SUPP_PAYMENT", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 6); // Action 6 for PDC list
+                        cmd.Parameters.AddWithValue("@SUPP_ID", supplierId);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                PDCListItem item = new PDCListItem
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
+                                    ENTRY_NO = reader["ENTRY_NO"]?.ToString(),
+                                    ENTRY_DATE = reader["ENTRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["ENTRY_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
+                                    DUE_DATE = reader["DUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DUE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["AMOUNT"]) : 0,
+                                    REMARKS = reader["REMARKS"]?.ToString(),
+                                    ENTRY_STATUS = reader["ENTRY_STATUS"]?.ToString(),
+                                    BANK_NAME = reader["BANK_NAME"]?.ToString()
+                                };
+                                response.Data.Add(item);
+                            }
+                        }
+
+                        response.flag = 1;
+                        response.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = new List<PDCListItem>();
+            }
+
+            return response;
+        }
+
     }
 }
