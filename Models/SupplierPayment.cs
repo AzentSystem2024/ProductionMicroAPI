@@ -208,6 +208,7 @@
     public class SupplierIdRequest
     {
         public int SUPP_ID { get; set; }
+        public int LEDGER_ID { get; set; }
     }
 
 }

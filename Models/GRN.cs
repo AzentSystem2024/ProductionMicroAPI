@@ -27,6 +27,11 @@
         public List<GRN_COST> GRN_Cost { get; set; }
 
     }
+    public class GRNSaveResponse
+    {
+        public string Flag { get; set; }
+        public string Message { get; set; }
+    }
     public class GRN_COST
     {
         public int ID { get; set; }
