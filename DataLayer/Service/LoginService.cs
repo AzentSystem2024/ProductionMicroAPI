@@ -52,7 +52,7 @@ namespace MicroApi.DataLayer.Service
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
                                     response.DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString();
                                     response.COUNTRY_NAME = reader["COUNTRY_NAME"]?.ToString();
-                                   // response.FLAG_URL = reader["FLAG_URL"]?.ToString();
+                                    // response.FLAG_URL = reader["FLAG_URL"]?.ToString();
                                     //response.VAT_ID = reader["VAT_ID"] != DBNull.Value ? Convert.ToInt32(reader["VAT_ID"]) : (int?)null;
                                     //response.VAT_NAME = reader["VAT_NAME"]?.ToString();
                                 }

@@ -109,6 +109,7 @@
         public string CHEQUE_DATE { get; set; }
         public string BANK_NAME { get; set; }
         public string SUPP_NAME { get; set; }
+        public int? PDC_ID { get; set; }
     }
     public class SupplierPaymentSelect
     {
@@ -129,6 +130,7 @@
         public string CHEQUE_NO { get; set; }
         public string CHEQUE_DATE { get; set; }
         public string BANK_NAME { get; set; }
+        public int? PDC_ID { get; set; }
         public List<SupplierDetail> PAY_DETAIL { get; set; }
 
     }
