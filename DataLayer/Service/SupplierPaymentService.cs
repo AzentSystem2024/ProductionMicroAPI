@@ -552,6 +552,8 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
+                                    SUPP_ID = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
+                                    BENEFICIARY_NAME = reader["BENEFICIARY_NAME"]?.ToString(),
                                     ENTRY_NO = reader["ENTRY_NO"]?.ToString(),
                                     ENTRY_DATE = reader["ENTRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["ENTRY_DATE"]).ToString("dd-MM-yyyy") : null,
                                     CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
