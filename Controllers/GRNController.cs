@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MicroApi.DataLayer.Interface;
-using MicroApi.Helper;
+﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace RetailApi.Controllers
+namespace MicroApi.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class GRNController : ControllerBase

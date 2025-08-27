@@ -185,4 +185,31 @@
     {
         public int SUPP_ID { get; set; }
     }
+    public class PDCListResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<PDCListItem> Data { get; set; }
+    }
+
+    public class PDCListItem
+    {
+        public int ID { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int SUPP_ID { get; set; }
+        public string BENEFICIARY_NAME { get; set; }
+        public string ENTRY_NO { get; set; }
+        public string ENTRY_DATE { get; set; }
+        public string CHEQUE_NO { get; set; }
+        public string DUE_DATE { get; set; }
+        public double AMOUNT { get; set; }
+        public string REMARKS { get; set; }
+        public string ENTRY_STATUS { get; set; }
+        public string BANK_NAME { get; set; }
+    }
+    public class SupplierIdRequest
+    {
+        public int SUPP_ID { get; set; }
+    }
+
 }

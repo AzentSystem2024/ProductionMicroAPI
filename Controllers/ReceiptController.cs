@@ -174,5 +174,18 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost("GetPDCListByCustomerId")]
+        public IActionResult GetPDCListByCustomerId([FromBody] CustomerIdRequest request)
+        {
+            var response = _receiptService.GetPDCListByCustomerId(request);
+            if (response.flag == 1)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
     }
 }
