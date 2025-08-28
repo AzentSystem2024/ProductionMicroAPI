@@ -220,6 +220,7 @@
         public int ID { get; set; }
         public int COMPANY_ID { get; set; }
         public int CUST_ID { get; set; }
+        public int LEDGER_ID { get; set; }
         public string BENEFICIARY_NAME { get; set; }
         public string ENTRY_NO { get; set; }
         public string ENTRY_DATE { get; set; }
