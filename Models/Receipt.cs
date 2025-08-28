@@ -94,6 +94,7 @@
         public string CHEQUE_DATE { get; set; }
         public string BANK_NAME { get; set; }
         public string CUST_NAME { get; set; }
+        public int? PDC_ID { get; set; }
 
     }
     public class ReceiptUpdate
@@ -173,6 +174,7 @@
         public int PAY_HEAD_ID { get; set; }
         public string ADD_TIME { get; set; }
         public decimal NET_AMOUNT { get; set; }
+        public int? PDC_ID { get; set; }
         public List<ReceiptDetail> REC_DETAIL { get; set; }
 
     }

@@ -105,7 +105,7 @@
         public string Message { get; set; }
         public List<PO> data { get; set; }
         public List<PODetails> Podetails { get; set; }
-        public List<LandedCost> LandedCost { get; set; }
+        public List<LandedCosts> LandedCosts { get; set; }
         public List<GRN> grnheader { get; set; }
     }
     public class PODetails
@@ -128,7 +128,7 @@
         public int PO_DETAIL_ID { get; set; }
 
     }
-    public class LandedCost
+    public class LandedCosts
     {
       public int ID { get; set; }
       public string DESCRIPTION { get; set; }= string.Empty;
