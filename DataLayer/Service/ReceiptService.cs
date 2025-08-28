@@ -658,6 +658,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 7); //  PDC list
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
+                        cmd.Parameters.AddWithValue("@LEDGER_ID", request.LEDGER_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

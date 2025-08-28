@@ -233,5 +233,6 @@
     public class CustomerIdRequest
     {
         public int CUST_ID { get; set; }
+        public int LEDGER_ID { get; set; }
     }
 }
