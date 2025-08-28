@@ -50,8 +50,14 @@ namespace MicroApi.Services
                                 {
                                     ID = roleId,
                                     UserRoles = row["UserRole"].ToString(),
-                                    LastModifiedTime = row["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["LastModifiedTime"]),
-                                    CreateTime = row["CreatedTime"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["CreatedTime"]),
+                                    //LastModifiedTime = row["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["LastModifiedTime"]),
+                                    //CreateTime = row["CreatedTime"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["CreatedTime"]),
+                                    LastModifiedTime = row["LastModifiedTime"] == DBNull.Value
+                                        ? (DateTime?)null
+                                        : DateTime.SpecifyKind((DateTime)row["LastModifiedTime"], DateTimeKind.Utc).ToLocalTime(),
+                                    CreateTime = row["CreatedTime"] == DBNull.Value
+                                        ? (DateTime?)null
+                                        : DateTime.SpecifyKind((DateTime)row["CreatedTime"], DateTimeKind.Utc).ToLocalTime(),
                                     IsInactive = row["IsInactive"] != DBNull.Value && Convert.ToBoolean(row["IsInactive"]),
                                     usermenulist = new List<UserMenuList>()
                                 };
@@ -309,8 +315,14 @@ namespace MicroApi.Services
 
                             userRole.ID = id;
                             userRole.UserRoles = combinedTable.Rows[0]["UserRole"].ToString();
-                            userRole.LastModifiedTime = combinedTable.Rows[0]["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)combinedTable.Rows[0]["LastModifiedTime"]).ToLocalTime();
-                            userRole.CreateTime = combinedTable.Rows[0]["CreatedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)combinedTable.Rows[0]["CreatedTime"]).ToLocalTime();
+                            //userRole.LastModifiedTime = combinedTable.Rows[0]["LastModifiedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)combinedTable.Rows[0]["LastModifiedTime"]).ToLocalTime();
+                            //userRole.CreateTime = combinedTable.Rows[0]["CreatedTime"] == DBNull.Value ? (DateTime?)null : ((DateTime)combinedTable.Rows[0]["CreatedTime"]).ToLocalTime();
+                            userRole.LastModifiedTime = combinedTable.Rows[0]["LastModifiedTime"] == DBNull.Value
+                                ? (DateTime?)null
+                                : DateTime.SpecifyKind((DateTime)combinedTable.Rows[0]["LastModifiedTime"], DateTimeKind.Utc).ToLocalTime();
+                            userRole.CreateTime = combinedTable.Rows[0]["CreatedTime"] == DBNull.Value
+                                ? (DateTime?)null
+                                : DateTime.SpecifyKind((DateTime)combinedTable.Rows[0]["CreatedTime"], DateTimeKind.Utc).ToLocalTime();
                             userRole.IsInactive = combinedTable.Rows[0]["IsInactive"] != DBNull.Value && Convert.ToBoolean(combinedTable.Rows[0]["IsInactive"]);
 
                             foreach (DataRow row in combinedTable.Rows)

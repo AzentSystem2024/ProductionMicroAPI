@@ -75,13 +75,13 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("insert")]
-        public GRNResponse Insert(GRN Data)
+        public GRNSaveResponse Insert(GRN Data)
         {
-            GRNResponse res = new GRNResponse();
+            GRNSaveResponse res = new GRNSaveResponse();
 
             try
             {
-                
+
                 _grnService.Insert(Data);
                 res.Flag = 1;
                 res.Message = "Success";
@@ -98,9 +98,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("update")]
-        public GRNResponse Update(GRN Data)
+        public GRNSaveResponse Update(GRN Data)
         {
-            GRNResponse res = new GRNResponse();
+            GRNSaveResponse res = new GRNSaveResponse();
 
             try
             {
@@ -138,9 +138,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("delete/{id:int}")]
-        public GRNResponse Delete(int id)
+        public GRNSaveResponse Delete(int id)
         {
-            GRNResponse res = new GRNResponse();
+            GRNSaveResponse res = new GRNSaveResponse();
 
             try
             {

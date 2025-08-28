@@ -122,136 +122,163 @@ namespace MicroApi.DataLayer.Service
             connection.Close();
             return response;
         }
-        public GRNResponse Insert(GRN grnHeader)
+        public Int32 Insert(GRN grnHeader)
         {
-            GRNResponse response = new GRNResponse();
+            SqlConnection connection = ADO.GetConnection();
+            SqlTransaction objtrans = connection.BeginTransaction();
+
             try
             {
-                using (SqlConnection conn = ADO.GetConnection())
+                DataTable tbl = new DataTable();
+                tbl.Columns.Add("ID", typeof(Int32));
+                tbl.Columns.Add("COMPANY_ID", typeof(Int32));
+                tbl.Columns.Add("STORE_ID", typeof(Int32));
+                tbl.Columns.Add("GRN_ID", typeof(Int32));
+                tbl.Columns.Add("PO_DETAIL_ID", typeof(Int32));
+                tbl.Columns.Add("ITEM_ID", typeof(Int32));
+                tbl.Columns.Add("QUANTITY", typeof(float));
+                tbl.Columns.Add("RATE", typeof(float));
+                tbl.Columns.Add("AMOUNT", typeof(float));
+                tbl.Columns.Add("INVOICE_QTY", typeof(float));
+                tbl.Columns.Add("DISC_PERCENT", typeof(float));
+                tbl.Columns.Add("COST", typeof(float));
+                tbl.Columns.Add("SUPP_PRICE", typeof(float));
+                tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
+                tbl.Columns.Add("RETURN_QTY", typeof(float));
+                tbl.Columns.Add("UOM_PURCH", typeof(string));
+                tbl.Columns.Add("UOM", typeof(string));
+                tbl.Columns.Add("UOM_MULTIPLE", typeof(Int32));
+
+                if (grnHeader.GRNDetails != null && grnHeader.GRNDetails.Any())
                 {
-                    if (conn.State == ConnectionState.Closed)
-                        conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand("SP_TB_GRN", conn))
+                    foreach (GRNDetail ur in grnHeader.GRNDetails)
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 1);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", grnHeader.COMPANY_ID);
-                        cmd.Parameters.AddWithValue("@STORE_ID", grnHeader.STORE_ID);
-                        cmd.Parameters.AddWithValue("@PO_ID", grnHeader.PO_ID);
-                        cmd.Parameters.AddWithValue("@GRN_DATE", grnHeader.GRN_DATE);
-                        cmd.Parameters.AddWithValue("@SUPP_ID", grnHeader.SUPP_ID);
-                        cmd.Parameters.AddWithValue("@NET_AMOUNT", grnHeader.NET_AMOUNT);
-                        cmd.Parameters.AddWithValue("@TOTAL_COST", grnHeader.TOTAL_COST ?? 0);
-                        cmd.Parameters.AddWithValue("@SUPP_GROSS_AMOUNT", grnHeader.SUPP_GROSS_AMOUNT);
-                        cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", grnHeader.SUPP_NET_AMOUNT);
-                        cmd.Parameters.AddWithValue("@EXCHANGE_RATE", grnHeader.EXCHANGE_RATE);
-                        cmd.Parameters.AddWithValue("@NARRATION", grnHeader.NARRATION ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@USER_ID", grnHeader.USER_ID);
+                        DataRow dRow = tbl.NewRow();
 
-                        // Add output parameters
-                        SqlParameter outGRNID = new SqlParameter("@ID", SqlDbType.Int)
-                        {
-                            Direction = ParameterDirection.Output
-                        };
-                        cmd.Parameters.Add(outGRNID);
-
-                        SqlParameter outGRNNo = new SqlParameter("@GRN_NO", SqlDbType.NVarChar, 50)
-                        {
-                            Direction = ParameterDirection.Output
-                        };
-                        cmd.Parameters.Add(outGRNNo);
-
-                        SqlParameter outTransID = new SqlParameter("@TRANS_ID", SqlDbType.Int)
-                        {
-                            Direction = ParameterDirection.Output
-                        };
-                        cmd.Parameters.Add(outTransID);
-
-                        // Create and populate UDT_TB_GRN_DETAIL
-                        DataTable dtGRNDetail = new DataTable();
-                        dtGRNDetail.Columns.Add("COMPANY_ID", typeof(int));
-                        dtGRNDetail.Columns.Add("STORE_ID", typeof(int));
-                        dtGRNDetail.Columns.Add("PO_DETAIL_ID", typeof(int));
-                        dtGRNDetail.Columns.Add("ITEM_ID", typeof(int));
-                        dtGRNDetail.Columns.Add("QUANTITY", typeof(float));
-                        dtGRNDetail.Columns.Add("RATE", typeof(float));
-                        dtGRNDetail.Columns.Add("AMOUNT", typeof(float));
-                        dtGRNDetail.Columns.Add("INVOICE_QTY", typeof(float));
-                        dtGRNDetail.Columns.Add("DISC_PERCENT", typeof(float));
-                        dtGRNDetail.Columns.Add("COST", typeof(float));
-                        dtGRNDetail.Columns.Add("SUPP_PRICE", typeof(float));
-                        dtGRNDetail.Columns.Add("SUPP_AMOUNT", typeof(float));
-                        dtGRNDetail.Columns.Add("RETURN_QTY", typeof(float));
-                        dtGRNDetail.Columns.Add("UOM_PURCH", typeof(string));
-                        dtGRNDetail.Columns.Add("UOM", typeof(string));
-                        dtGRNDetail.Columns.Add("UOM_MULTIPLE", typeof(int));
-
-                        foreach (var item in grnHeader.GRNDetails)
-                        {
-                            dtGRNDetail.Rows.Add(
-                                item.COMPANY_ID, item.STORE_ID, item.PO_DETAIL_ID, item.ITEM_ID,
-                                item.QUANTITY, item.RATE, item.AMOUNT, item.INVOICE_QTY,
-                                item.DISC_PERCENT, item.COST, item.SUPP_PRICE, item.SUPP_AMOUNT,
-                                item.RETURN_QTY, item.UOM_PURCH, item.UOM, item.UOM_MULTIPLE
-                            );
-                        }
-                        SqlParameter tvpGRNDetail = cmd.Parameters.AddWithValue("@UDT_TB_GRN_DETAIL", dtGRNDetail);
-                        tvpGRNDetail.SqlDbType = SqlDbType.Structured;
-                        tvpGRNDetail.TypeName = "UDT_TB_GRN_DETAIL";
-
-                        // Create and populate UDT_TB_GRN_ITEM_COST
-                        DataTable dtGRNItemCost = new DataTable();
-                        dtGRNItemCost.Columns.Add("GRN_ID", typeof(int));
-                        dtGRNItemCost.Columns.Add("STORE_ID", typeof(int));
-                        dtGRNItemCost.Columns.Add("ITEM_ID", typeof(int));
-                        dtGRNItemCost.Columns.Add("COST_ID", typeof(int));
-                        dtGRNItemCost.Columns.Add("AMOUNT", typeof(float));
-
-                        foreach (var item in grnHeader.GRN_Item_Cost)
-                        {
-                            dtGRNItemCost.Rows.Add(
-                                item.GRN_ID, item.STORE_ID, item.ITEM_ID, item.COST_ID, item.AMOUNT
-                            );
-                        }
-                        SqlParameter tvpGRNItemCost = cmd.Parameters.AddWithValue("@UDT_TB_GRN_ITEM_COST", dtGRNItemCost);
-                        tvpGRNItemCost.SqlDbType = SqlDbType.Structured;
-                        tvpGRNItemCost.TypeName = "UDT_TB_GRN_ITEM_COST";
-
-                        // Create and populate UDT_TB_GRN_COST
-                        DataTable dtGRNCost = new DataTable();
-                        dtGRNCost.Columns.Add("STORE_ID", typeof(int));
-                        dtGRNCost.Columns.Add("GRN_ID", typeof(int));
-                        dtGRNCost.Columns.Add("COST_ID", typeof(int));
-                        dtGRNCost.Columns.Add("PERCENT", typeof(float));
-                        dtGRNCost.Columns.Add("AMOUNT_FC", typeof(float));
-                        dtGRNCost.Columns.Add("AMOUNT", typeof(float));
-
-                        foreach (var item in grnHeader.GRN_Cost)
-                        {
-                            dtGRNCost.Rows.Add(
-                                item.STORE_ID, item.GRN_ID, item.COST_ID, item.PERCENT, item.AMOUNT_FC, item.AMOUNT
-                            );
-                        }
-                        SqlParameter tvpGRNCost = cmd.Parameters.AddWithValue("@UDT_TB_GRN_COST", dtGRNCost);
-                        tvpGRNCost.SqlDbType = SqlDbType.Structured;
-                        tvpGRNCost.TypeName = "UDT_TB_GRN_COST";
-
-                        // Execute the command
-                        cmd.ExecuteNonQuery();
-
-                        // On success
-                        response.Flag = 1;
-                        response.Message = "Success";
+                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["STORE_ID"] = ur.STORE_ID;
+                        dRow["GRN_ID"] = ur.GRN_ID;
+                        dRow["PO_DETAIL_ID"] = ur.PO_DETAIL_ID;
+                        dRow["ITEM_ID"] = ur.ITEM_ID;
+                        dRow["QUANTITY"] = ur.QUANTITY;
+                        dRow["RATE"] = ur.RATE;
+                        dRow["AMOUNT"] = ur.AMOUNT;
+                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
+                        dRow["DISC_PERCENT"] = ur.DISC_PERCENT;
+                        dRow["COST"] = ur.COST;
+                        dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
+                        dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
+                        dRow["RETURN_QTY"] = ur.RETURN_QTY;
+                        dRow["UOM_PURCH"] = ur.UOM_PURCH;
+                        dRow["UOM"] = ur.UOM;
+                        dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
+                        tbl.Rows.Add(dRow);
                     }
                 }
+
+                DataTable tbl1 = new DataTable();
+
+                tbl1.Columns.Add("GRN_ID", typeof(Int32));
+                tbl1.Columns.Add("STORE_ID", typeof(Int32));
+                tbl1.Columns.Add("ITEM_ID", typeof(Int32));
+                tbl1.Columns.Add("COST_ID", typeof(Int32));
+                tbl1.Columns.Add("AMOUNT", typeof(float));
+
+                if (grnHeader.GRN_Item_Cost != null && grnHeader.GRN_Item_Cost.Any())
+                {
+                    foreach (GRN_ITEM_COST ur1 in grnHeader.GRN_Item_Cost)
+                    {
+                        DataRow dRow1 = tbl1.NewRow();
+                        dRow1["GRN_ID"] = ur1.GRN_ID;
+                        dRow1["STORE_ID"] = ur1.STORE_ID;
+                        dRow1["ITEM_ID"] = ur1.ITEM_ID;
+                        dRow1["COST_ID"] = ur1.COST_ID;
+                        dRow1["AMOUNT"] = ur1.AMOUNT;
+                        tbl1.Rows.Add(dRow1);
+                    }
+                }
+                DataTable tbl2 = new DataTable();
+
+                tbl2.Columns.Add("STORE_ID", typeof(Int32));
+                tbl2.Columns.Add("GRN_ID", typeof(Int32));
+                tbl2.Columns.Add("COST_ID", typeof(Int32));
+                tbl2.Columns.Add("PERCENT", typeof(float));
+                tbl2.Columns.Add("AMOUNT_FC", typeof(float));
+                tbl2.Columns.Add("AMOUNT", typeof(float));
+
+                if (grnHeader.GRN_Cost != null && grnHeader.GRN_Cost.Any())
+                {
+                    foreach (GRN_COST ur2 in grnHeader.GRN_Cost)
+                    {
+                        DataRow dRow2 = tbl2.NewRow();
+                        dRow2["STORE_ID"] = ur2.STORE_ID;
+                        dRow2["GRN_ID"] = ur2.GRN_ID;
+                        dRow2["COST_ID"] = ur2.COST_ID;
+                        dRow2["PERCENT"] = ur2.PERCENT;
+                        dRow2["AMOUNT_FC"] = ur2.AMOUNT_FC;
+                        dRow2["AMOUNT"] = ur2.AMOUNT;
+                        tbl2.Rows.Add(dRow2);
+                    }
+                }
+
+
+                SqlCommand cmd = new SqlCommand();
+
+                cmd.Connection = connection;
+                cmd.Transaction = objtrans;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "SP_TB_GRN";
+
+                cmd.Parameters.AddWithValue("ACTION", 1);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", grnHeader.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", grnHeader.STORE_ID);
+                cmd.Parameters.AddWithValue("@PO_ID", grnHeader.PO_ID);
+                cmd.Parameters.AddWithValue("@GRN_DATE", grnHeader.GRN_DATE);
+                cmd.Parameters.AddWithValue("@SUPP_ID", grnHeader.SUPP_ID);
+                cmd.Parameters.AddWithValue("@NET_AMOUNT", grnHeader.NET_AMOUNT);
+                cmd.Parameters.AddWithValue("@TOTAL_COST", grnHeader.TOTAL_COST);
+                cmd.Parameters.AddWithValue("@SUPP_GROSS_AMOUNT", grnHeader.SUPP_GROSS_AMOUNT);
+                cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", grnHeader.SUPP_NET_AMOUNT);
+                cmd.Parameters.AddWithValue("@EXCHANGE_RATE", grnHeader.EXCHANGE_RATE);
+                cmd.Parameters.AddWithValue("@NARRATION", grnHeader.NARRATION);
+                cmd.Parameters.AddWithValue("@USER_ID", grnHeader.USER_ID);
+
+                cmd.Parameters.AddWithValue("@UDT_TB_GRN_DETAIL", tbl);
+                cmd.Parameters.AddWithValue("@UDT_TB_GRN_ITEM_COST", tbl1);
+                cmd.Parameters.AddWithValue("@UDT_TB_GRN_COST", tbl2);
+
+
+                cmd.ExecuteNonQuery();
+
+                SqlCommand cmd1 = new SqlCommand();
+
+                cmd1.Connection = connection;
+                cmd1.Transaction = objtrans;
+                cmd1.CommandType = CommandType.Text;
+                cmd1.CommandText = "SELECT MAX(ID) FROM TB_WORKSHEET";
+
+
+                Int32 UserID = ADO.ToInt32(cmd1.ExecuteScalar());
+
+                // Commit the transaction if everything is successful
+                objtrans.Commit();
+
+                return UserID;
             }
             catch (Exception ex)
             {
-                response.Flag = 0;
-                response.Message = "ERROR: " + ex.Message;
+                // Rollback the transaction if an error occurs
+                objtrans.Rollback();
+                throw;
             }
-            return response;
+            finally
+            {
+                // Close the connection
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
         }
         public Int32 Update(GRN grnHeader)
         {
