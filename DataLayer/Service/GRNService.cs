@@ -47,7 +47,7 @@ namespace MicroApi.DataLayer.Service
         {
             GRNResponse response = new GRNResponse();
             List<PODetails> poDetailsList = new List<PODetails>();
-            List<LandedCost> landedCostList = new List<LandedCost>();
+            List<LandedCosts> LandedCostsList = new List<LandedCosts>();
 
             SqlConnection connection = ADO.GetConnection();
             SqlCommand cmd = new SqlCommand();
@@ -85,7 +85,7 @@ namespace MicroApi.DataLayer.Service
                 poDetailsList.Add(poDetail);
             }
 
-            // Populate LandedCosts from separate query
+            // Populate LandedCostss from separate query
             SqlCommand cmd1 = new SqlCommand();
             cmd1.Connection = connection;
             cmd1.CommandType = CommandType.Text;
@@ -95,14 +95,14 @@ namespace MicroApi.DataLayer.Service
             "LEFT JOIN TB_SUPPLIER_COSTS ON TB_PO_HEADER.SUPP_ID = TB_SUPPLIER_COSTS.SUPP_ID " +
             "LEFT JOIN TB_LANDED_COSTS ON TB_SUPPLIER_COSTS.COST_ID = TB_LANDED_COSTS.ID ";
 
-            SqlDataAdapter landedCostDa = new SqlDataAdapter(cmd1);
-            DataTable landedCostTbl = new DataTable();
-            landedCostDa.Fill(landedCostTbl);
+            SqlDataAdapter LandedCostsDa = new SqlDataAdapter(cmd1);
+            DataTable LandedCostsTbl = new DataTable();
+            LandedCostsDa.Fill(LandedCostsTbl);
 
-            // Populate LandedCosts
-            foreach (DataRow lcDr in landedCostTbl.Rows)
+            // Populate LandedCostss
+            foreach (DataRow lcDr in LandedCostsTbl.Rows)
             {
-                LandedCost landedCost = new LandedCost
+                LandedCosts LandedCosts = new LandedCosts
                 {
                     ID = ADO.ToInt32(lcDr["COST_ID"]),
                     DESCRIPTION = ADO.ToString(lcDr["LANDED_COST"]),
@@ -110,14 +110,14 @@ namespace MicroApi.DataLayer.Service
                     IS_FIXED_AMOUNT = ADO.Toboolean(lcDr["IS_FIXED_AMOUNT"]),
                     VALUE = ADO.ToFloat(lcDr["VALUE"])
                 };
-                landedCostList.Add(landedCost);
+                LandedCostsList.Add(LandedCosts);
             }
 
             // Assign the populated data to the response object
             response.Flag = 1; // Or any flag you want to return
             response.Message = "Success"; // Any message you want to include
             response.Podetails = poDetailsList; // List of PODetails
-            response.LandedCost = landedCostList; // List of LandedCosts
+            response.LandedCosts = LandedCostsList; // List of LandedCostss
 
             connection.Close();
             return response;

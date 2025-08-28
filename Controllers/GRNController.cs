@@ -57,7 +57,7 @@ namespace MicroApi.Controllers
                 res.Flag = 1;
                 res.Message = "Success";
                 res.Podetails = result.Podetails;
-                res.LandedCost = result.LandedCost;
+                res.LandedCosts = result.LandedCosts;
 
                 return res; // Return the response
             }

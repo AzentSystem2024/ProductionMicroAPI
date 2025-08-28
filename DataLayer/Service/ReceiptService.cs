@@ -304,7 +304,7 @@ namespace MicroApi.DataLayer.Service
                                     CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                     BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                     CUST_NAME = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : null,
-
+                                    PDC_ID = reader["PDC_ID"] != DBNull.Value ? Convert.ToInt32(reader["PDC_ID"]) : 0
                                 };
 
                                 response.Data.Add(item);
@@ -378,6 +378,7 @@ namespace MicroApi.DataLayer.Service
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                         VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        PDC_ID = reader["PDC_ID"] != DBNull.Value ? Convert.ToInt32(reader["PDC_ID"]) : 0,
                                         REC_DETAIL = new List<ReceiptDetail>(),
                                     };
                                 }

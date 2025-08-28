@@ -54,6 +54,7 @@
         public bool CanDelete { get; set; }
         public bool CanPrint { get; set; }
         public string Path { get; set; }
+        public List<Menu> SubMenus { get; set; } = new List<Menu>();
     }
 
     public class InitLoginResponse
