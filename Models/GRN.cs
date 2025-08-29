@@ -27,11 +27,6 @@
         public List<GRN_COST> GRN_Cost { get; set; }
 
     }
-    public class GRNSaveResponse
-    {
-        public string Flag { get; set; }
-        public string Message { get; set; }
-    }
     public class GRN_COST
     {
         public int ID { get; set; }
@@ -108,6 +103,12 @@
         public List<LandedCosts> LandedCosts { get; set; }
         public List<GRN> grnheader { get; set; }
     }
+    public class GRNSaveResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+
+    }
     public class PODetails
     {
         public string ITEM_CODE { get; set; }
@@ -130,11 +131,11 @@
     }
     public class LandedCosts
     {
-      public int ID { get; set; }
-      public string DESCRIPTION { get; set; }= string.Empty;
-      public bool IS_LOCAL_CURRENCY { get; set; }
-      public bool IS_FIXED_AMOUNT { get; set; }
-       public float VALUE { get; set; }
+        public int ID { get; set; }
+        public string DESCRIPTION { get; set; } = string.Empty;
+        public bool IS_LOCAL_CURRENCY { get; set; }
+        public bool IS_FIXED_AMOUNT { get; set; }
+        public float VALUE { get; set; }
 
     }
     public class PODetailsInput
