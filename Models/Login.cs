@@ -39,6 +39,8 @@
         public string Icon { get; set; }
         public decimal MenuGroupOrder { get; set; }
         public List<Menu> Menus { get; set; } = new List<Menu>();
+        public List<MenuGroup> SubGroups { get; set; } = new List<MenuGroup>();
+
     }
 
     public class Menu
