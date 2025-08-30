@@ -304,12 +304,12 @@ namespace MicroApi.DataLayer.Service
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
-                                        Details = new List<PostingSelectDetail>()
+                                        PREPAY_DETAIL = new List<PostingSelectDetail>()
                                     };
                                 }
 
                                 // Add each detail row
-                                header.Details.Add(new PostingSelectDetail
+                                header.PREPAY_DETAIL.Add(new PostingSelectDetail
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     DUE_DATE = reader["DUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DUE_DATE"]).ToString("yyyy-MM-dd") : null,

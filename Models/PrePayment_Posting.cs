@@ -82,7 +82,7 @@
         public string? NARRATION { get; set; }
         public string SUPP_NAME { get; set; }
         public decimal? NET_AMOUNT { get; set; }
-        public List<PostingSelectDetail> Details { get; set; }
+        public List<PostingSelectDetail> PREPAY_DETAIL { get; set; }
     }
     public class PostingSelectResponse
     {
