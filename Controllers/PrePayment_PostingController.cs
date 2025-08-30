@@ -53,6 +53,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Edit")]
+        public PrepaymentPostingResponse Edit(PrePayment_PostingEdit model)
+        {
+            PrepaymentPostingResponse res = new PrepaymentPostingResponse();
+
+            try
+            {
+                res = _prePayment_PostingService.Edit(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("prepaylist")]
         public PrePayment_PostingListResponse GetPrePaymentList()
         {
@@ -69,6 +87,56 @@ namespace MicroApi.Controllers
                 res.Data = new List<PrePayment_PostingListHeader>();
             }
 
+            return res;
+        }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public PostingSelectResponse Select(int id)
+        {
+            PostingSelectResponse response = new PostingSelectResponse();
+            try
+            {
+                response = _prePayment_PostingService.GetPrePaymentById(id);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("commit")]
+        public PrepaymentPostingResponse commit(PrePayment_PostingEdit model)
+        {
+            PrepaymentPostingResponse res = new PrepaymentPostingResponse();
+
+            try
+            {
+                res = _prePayment_PostingService.commit(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public PrepaymentPostingResponse Delete(int id)
+        {
+            PrepaymentPostingResponse res = new PrepaymentPostingResponse();
+            try
+            {
+                res = _prePayment_PostingService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
             return res;
         }
     }

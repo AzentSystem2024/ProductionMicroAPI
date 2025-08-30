@@ -153,6 +153,21 @@ namespace MicroApi.Controllers
                 return BadRequest(response);
             }
         }
-
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public SupplierPaymentResponse Delete(int id)
+        {
+            SupplierPaymentResponse res = new SupplierPaymentResponse();
+            try
+            {
+                res = _supplierService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
 }
