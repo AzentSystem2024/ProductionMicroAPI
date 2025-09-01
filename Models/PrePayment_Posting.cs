@@ -19,7 +19,15 @@
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? CREATE_USER_ID { get; set; }
-        public List<PrepaymentPostingDetail>? PREPAY_DETAIL { get; set; }
+        public List<PrepaymentPostingEditDetail>? PREPAY_DETAIL { get; set; }
+    }
+    public class PrepaymentPostingEditDetail
+    {
+        public int? ID { get; set; }
+        public DateTime? DUE_DATE { get; set; }
+        public double? DUE_AMOUNT { get; set; }
+        public decimal? DR_AMOUNT { get; set; }
+        public decimal? CR_AMOUNT { get; set; }
     }
     public class PrepaymentPostingResponse
     {
@@ -95,5 +103,7 @@
         public int ID { get; set; }
         public string DUE_DATE { get; set; }
         public decimal DUE_AMOUNT { get; set; }
+        public decimal DR_AMOUNT { get; set; }
+        public decimal CR_AMOUNT { get; set; }
     }
 }

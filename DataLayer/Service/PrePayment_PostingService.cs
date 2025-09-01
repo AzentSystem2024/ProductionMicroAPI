@@ -93,7 +93,9 @@ namespace MicroApi.DataLayer.Service
                         dtPrepayDetail.Columns.Add("ID", typeof(int));
                         dtPrepayDetail.Columns.Add("DUE_AMOUNT", typeof(decimal));
                         dtPrepayDetail.Columns.Add("DUE_DATE", typeof(DateTime));
-                        dtPrepayDetail.Columns.Add("SL_NO", typeof(int)); 
+                        dtPrepayDetail.Columns.Add("SL_NO", typeof(int));
+                        dtPrepayDetail.Columns.Add("DR_AMOUNT", typeof(decimal));
+                        dtPrepayDetail.Columns.Add("CR_AMOUNT", typeof(decimal));
 
                         int slNo = 1;
                         if (model.PREPAY_DETAIL != null)
@@ -104,7 +106,9 @@ namespace MicroApi.DataLayer.Service
                                     item.ID,
                                     item.DUE_AMOUNT,
                                     item.DUE_DATE,
-                                    slNo++
+                                    slNo++,
+                                    0M,
+                                    0M
                                 );
                             }
                         }
@@ -156,6 +160,8 @@ namespace MicroApi.DataLayer.Service
                         dtPrepayDetail.Columns.Add("DUE_AMOUNT", typeof(decimal));
                         dtPrepayDetail.Columns.Add("DUE_DATE", typeof(DateTime));
                         dtPrepayDetail.Columns.Add("SL_NO", typeof(int));
+                        dtPrepayDetail.Columns.Add("DR_AMOUNT", typeof(decimal)); 
+                        dtPrepayDetail.Columns.Add("CR_AMOUNT", typeof(decimal)); 
 
                         int slNo = 1;
                         if (model.PREPAY_DETAIL != null)
@@ -166,7 +172,9 @@ namespace MicroApi.DataLayer.Service
                                     item.ID,
                                     item.DUE_AMOUNT,
                                     item.DUE_DATE,
-                                    slNo++
+                                    slNo++,
+                                    item.DR_AMOUNT,
+                                    item.CR_AMOUNT
                                 );
                             }
                         }
@@ -313,7 +321,9 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     DUE_DATE = reader["DUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DUE_DATE"]).ToString("yyyy-MM-dd") : null,
-                                    DUE_AMOUNT = reader["DUE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DUE_AMOUNT"]) : 0
+                                    DUE_AMOUNT = reader["DUE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DUE_AMOUNT"]) : 0,
+                                    DR_AMOUNT = reader["DR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DR_AMOUNT"]) : 0,
+                                    CR_AMOUNT = reader["CR_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CR_AMOUNT"]) : 0
                                 });
                             }
 
@@ -368,6 +378,8 @@ namespace MicroApi.DataLayer.Service
                         dtPrepayDetail.Columns.Add("DUE_AMOUNT", typeof(decimal));
                         dtPrepayDetail.Columns.Add("DUE_DATE", typeof(DateTime));
                         dtPrepayDetail.Columns.Add("SL_NO", typeof(int));
+                        dtPrepayDetail.Columns.Add("DR_AMOUNT", typeof(decimal));
+                        dtPrepayDetail.Columns.Add("CR_AMOUNT", typeof(decimal));
 
                         int slNo = 1;
                         if (model.PREPAY_DETAIL != null)
@@ -378,7 +390,9 @@ namespace MicroApi.DataLayer.Service
                                     item.ID,
                                     item.DUE_AMOUNT,
                                     item.DUE_DATE,
-                                    slNo++
+                                    slNo++,
+                                    item.DR_AMOUNT,
+                                    item.CR_AMOUNT
                                 );
                             }
                         }
