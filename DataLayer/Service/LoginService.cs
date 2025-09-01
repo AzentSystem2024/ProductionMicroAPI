@@ -11,7 +11,6 @@ namespace MicroApi.DataLayer.Service
         public LoginResponse VerifyLogin(Login loginInput)
         {
             var response = new LoginResponse();
-
             if (string.IsNullOrWhiteSpace(loginInput.LOGIN_NAME) || string.IsNullOrWhiteSpace(loginInput.PASSWORD))
             {
                 response.flag = 0;
@@ -52,9 +51,6 @@ namespace MicroApi.DataLayer.Service
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
                                     response.DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString();
                                     response.COUNTRY_NAME = reader["COUNTRY_NAME"]?.ToString();
-                                    // response.FLAG_URL = reader["FLAG_URL"]?.ToString();
-                                    //response.VAT_ID = reader["VAT_ID"] != DBNull.Value ? Convert.ToInt32(reader["VAT_ID"]) : (int?)null;
-                                    //response.VAT_NAME = reader["VAT_NAME"]?.ToString();
                                 }
 
                                 // Result 3: Assigned Companies
@@ -83,12 +79,10 @@ namespace MicroApi.DataLayer.Service
                                 // Result 5: Menu Permissions
                                 if (reader.NextResult())
                                 {
-                                    Dictionary<int, MenuGroup> menuGroups = new Dictionary<int, MenuGroup>();
-
+                                    var menuGroups = new Dictionary<int, MenuGroup>();
                                     while (reader.Read())
                                     {
                                         int menuGroupId = reader["MenuGroupID"] != DBNull.Value ? Convert.ToInt32(reader["MenuGroupID"]) : 0;
-
                                         if (!menuGroups.ContainsKey(menuGroupId))
                                         {
                                             menuGroups[menuGroupId] = new MenuGroup
@@ -100,9 +94,7 @@ namespace MicroApi.DataLayer.Service
                                                 Menus = new List<Menu>()
                                             };
                                         }
-
-                                        MenuGroup group = menuGroups[menuGroupId];
-
+                                        var group = menuGroups[menuGroupId];
                                         group.Menus.Add(new Menu
                                         {
                                             MenuID = reader["MenuID"] != DBNull.Value ? Convert.ToInt32(reader["MenuID"]) : 0,
@@ -118,7 +110,6 @@ namespace MicroApi.DataLayer.Service
                                             Path = reader["Path"]?.ToString()
                                         });
                                     }
-
                                     response.MenuGroups = menuGroups.Values.ToList();
                                 }
 
@@ -137,22 +128,44 @@ namespace MicroApi.DataLayer.Service
                                         });
                                     }
                                 }
-                                while (reader.NextResult())
-                                {
-                                    if (reader.FieldCount > 0 && reader.GetName(0) == "VAT_ID")
-                                    {
-                                        if (reader.Read())
-                                        {
-                                            response.VAT_ID = !reader.IsDBNull(reader.GetOrdinal("VAT_ID"))
-                                                                ? reader.GetInt32(reader.GetOrdinal("VAT_ID"))
-                                                                : (int?)null;
 
-                                            response.VAT_NAME = !reader.IsDBNull(reader.GetOrdinal("VAT_NAME"))
-                                                                ? reader.GetString(reader.GetOrdinal("VAT_NAME"))
-                                                                : null;
-                                        }
-                                        break;
-                                    }
+                                // Result 7: PRIVILEGE (Skip this result set as we don't need it in the response)
+                                if (reader.NextResult())
+                                {
+                                    // Just skip this result set
+                                }
+
+                                // Result 8: GENERAL SETTINGS
+                                if (reader.NextResult() && reader.Read())
+                                {
+                                    response.GeneralSettings = new GeneralSettings
+                                    {
+                                        ID_PREFIX = reader["ID_PREFIX"]?.ToString() ?? "",
+                                        DateFormat = reader["DateFormat"]?.ToString() ?? "dd-mm-yyyy",
+                                        CURRENCY_NAME = reader["CURRENCY_NAME"]?.ToString() ?? "",
+                                        SYMBOL = reader["SYMBOL"]?.ToString() ?? "",
+                                        CODE = reader["CODE"]?.ToString() ?? "",
+                                        CUST_CODE_AUTO = reader["CUST_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["CUST_CODE_AUTO"]),
+                                        SUPP_CODE_AUTO = reader["SUPP_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["SUPP_CODE_AUTO"]),
+                                        EMP_CODE_AUTO = reader["EMP_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["EMP_CODE_AUTO"]),
+                                        ITEM_CODE_AUTO = reader["ITEM_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["ITEM_CODE_AUTO"]),
+                                        DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString() ?? "",
+                                        ITEM_PROPERTY1 = reader["ITEM_PROPERTY1"]?.ToString() ?? "",
+                                        ITEM_PROPERTY2 = reader["ITEM_PROPERTY2"]?.ToString() ?? "",
+                                        ITEM_PROPERTY3 = reader["ITEM_PROPERTY3"]?.ToString() ?? "",
+                                        ITEM_PROPERTY4 = reader["ITEM_PROPERTY4"]?.ToString() ?? "",
+                                        ITEM_PROPERTY5 = reader["ITEM_PROPERTY5"]?.ToString() ?? "",
+                                        REFERENCE_LABEL = reader["REFERENCE_LABEL"]?.ToString() ?? "",
+                                        COMMENT_LABEL = reader["COMMENT_LABEL"]?.ToString() ?? "",
+                                        STATE_LABEL = reader["STATE_LABEL"]?.ToString() ?? ""
+                                    };
+                                }
+
+                                // Result 9: VAT Info
+                                if (reader.NextResult() && reader.Read())
+                                {
+                                    response.VAT_ID = reader["VAT_ID"] != DBNull.Value ? Convert.ToInt32(reader["VAT_ID"]) : (int?)null;
+                                    response.VAT_NAME = reader["VAT_NAME"]?.ToString();
                                 }
                             }
                         }
@@ -165,10 +178,11 @@ namespace MicroApi.DataLayer.Service
                 response.Message = "An error occurred: " + ex.Message;
             }
 
+            // Ensure GeneralSettings is never null
+            response.GeneralSettings ??= new GeneralSettings();
+
             return response;
         }
-
-
         public InitLoginResponse InitLoginData(string loginName)
         {
             var response = new InitLoginResponse();

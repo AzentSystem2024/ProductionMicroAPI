@@ -25,6 +25,7 @@
         public List<MenuGroup> MenuGroups { get; set; } = new List<MenuGroup>();
         public int? VAT_ID { get; set; }
         public string VAT_NAME { get; set; }
+        public GeneralSettings GeneralSettings { get; set; }
     }
 
     public class CompanyList
@@ -78,4 +79,25 @@
         public bool IS_CLOSED { get; set; }
     }
 
+    public class GeneralSettings
+    {
+        public string ID_PREFIX { get; set; } = "";
+        public string DateFormat { get; set; } = "dd-mm-yyyy";
+        public string CURRENCY_NAME { get; set; } = "";
+        public string SYMBOL { get; set; } = "";
+        public string CODE { get; set; } = "";
+        public bool CUST_CODE_AUTO { get; set; }
+        public bool SUPP_CODE_AUTO { get; set; }
+        public bool EMP_CODE_AUTO { get; set; }
+        public bool ITEM_CODE_AUTO { get; set; }
+        public string DEFAULT_COUNTRY_CODE { get; set; } = "";
+        public string ITEM_PROPERTY1 { get; set; } = "";
+        public string ITEM_PROPERTY2 { get; set; } = "";
+        public string ITEM_PROPERTY3 { get; set; } = "";
+        public string ITEM_PROPERTY4 { get; set; } = "";
+        public string ITEM_PROPERTY5 { get; set; } = "";
+        public string REFERENCE_LABEL { get; set; } = "";
+        public string COMMENT_LABEL { get; set; } = "";
+        public string STATE_LABEL { get; set; } = "";
+    }
 }
