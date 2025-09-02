@@ -18,46 +18,32 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-
         public ItemsResponse List(MasterFilter objFilter)
         {
             ItemsResponse res = new ItemsResponse();
             List<Items> items = new List<Items>();
+
             try
             {
-                string apiKey = "";
-                Int32 intUserID = 1;
-
-                /*
-                foreach (var header in Request.Headers)
-                {
-                    if (header.Key == "x-api-key")
-                        apiKey = header.Value.ToList()[0];
-                }
-
-                User_DAL userDAL = new User_DAL();
-                Int32 intUserID = userDAL.GetUserIDWithToken(apiKey);
-                if (intUserID < 1)
-                {
-                    res.flag = "0";
-                    res.message = "Invalid authorization key";
-                    return res;
-                }
-                */
-
-                
-
-                // Handle null objFilter
+                // Handle null filter
                 if (objFilter == null)
                 {
                     objFilter = new MasterFilter
                     {
-                        MASTER_TYPE = "All", // Or any default value you need
-                        MASTER_VALUE = string.Empty
+                        FROM_DATE = null,
+                        TO_DATE = null
                     };
                 }
 
-                items = _itemsService.GetAllItems(intUserID, objFilter.MASTER_TYPE == "ActiveOnly", objFilter);
+                // Convert MasterFilter to DateRequest
+                DateRequest request = new DateRequest
+                {
+                    DATE_FROM = objFilter.FROM_DATE ?? DateTime.MinValue,
+                    DATE_TO = objFilter.TO_DATE ?? DateTime.MinValue
+                };
+
+                // Call the GetAllItems method
+                items = _itemsService.GetAllItems(request);
 
                 res.flag = "1";
                 res.message = "Success";
@@ -71,7 +57,6 @@ namespace MicroApi.Controllers
 
             return res;
         }
-
 
 
         [HttpPost]

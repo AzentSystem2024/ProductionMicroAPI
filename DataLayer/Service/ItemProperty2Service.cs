@@ -86,7 +86,7 @@ namespace MicroApi.DataLayer.Services
                "INNER JOIN TB_COMPANY_MASTER ON TB_ITEM_PROPERTY2.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                "WHERE TB_ITEM_PROPERTY2.ID =" + id;
 
-                DataTable tbl = ADO.GetDataTable(strSQL, "ItemProperty1");
+                DataTable tbl = ADO.GetDataTable(strSQL, "ItemProperty2");
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];

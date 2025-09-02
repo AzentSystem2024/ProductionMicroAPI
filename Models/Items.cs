@@ -153,8 +153,8 @@
     }
     public class MasterFilter
     {
-        public string MASTER_TYPE { get; set; }
-        public string MASTER_VALUE { get; set; }
+        public DateTime? FROM_DATE { get; set; }
+        public DateTime? TO_DATE { get; set; }
 
     }
     public class ItemResponse
@@ -163,9 +163,10 @@
         public string message { get; set; }
         public Items data { get; set; }
     }
-    public class DateFilter
+    public class DateRequest
     {
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
     }
+
 }

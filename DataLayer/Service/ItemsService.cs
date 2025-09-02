@@ -8,46 +8,38 @@ namespace MicroApi.DataLayer.Services
 {
     public class ItemsService:IItemsService
     {
-        public List<Items> GetAllItems(int intUserID, bool ActiveOnly = false, MasterFilter objFilter = null)
+        public List<Items> GetAllItems(DateRequest request)
         {
             List<ITEM_STORES> itemstores = new List<ITEM_STORES>();
             List<ITEM_SUPPLIERS> itemsuppliers = new List<ITEM_SUPPLIERS>();
             List<ITEM_ALIAS> itemalias = new List<ITEM_ALIAS>();
 
-            string strSQL = "";
-            strSQL = "SELECT TB_ITEMS.*, TB_ITEM_DEPARTMENT.DEPT_NAME, TB_ITEM_CATEGORY.CAT_NAME, " +
-                     "TB_ITEM_SUBCATEGORY.SUBCAT_NAME,TB_ITEM_BRAND.BRAND_NAME, TB_ITEM_TYPE.TYPE_NAME, " +
-                     "TB_COUNTRY.COUNTRY_NAME, TB_VAT_CLASS.VAT_NAME, TB_COSTING_METHOD.COSTING_METHOD " +
-                     "FROM TB_ITEMS " +
-                     "LEFT JOIN TB_ITEM_DEPARTMENT ON TB_ITEMS.DEPT_ID = TB_ITEM_DEPARTMENT.ID " +
-                     "LEFT JOIN TB_ITEM_CATEGORY ON TB_ITEMS.CAT_ID = TB_ITEM_CATEGORY.ID " +
-                     "LEFT JOIN TB_ITEM_SUBCATEGORY ON TB_ITEMS.SUBCAT_ID = TB_ITEM_SUBCATEGORY.ID " +
-                     "LEFT JOIN TB_ITEM_BRAND ON TB_ITEMS.BRAND_ID = TB_ITEM_BRAND.ID " +
-                     "INNER JOIN TB_ITEM_TYPE ON TB_ITEMS.TYPE_ID = TB_ITEM_TYPE.ID " +
-                     "LEFT JOIN TB_COUNTRY ON TB_ITEMS.ORIGIN_COUNTRY  = TB_COUNTRY.ID " +
-                     "LEFT JOIN TB_VAT_CLASS ON TB_ITEMS.VAT_CLASS_ID = TB_VAT_CLASS.ID " +
-                     "INNER JOIN TB_COSTING_METHOD ON TB_ITEMS.COSTING_METHOD = TB_COSTING_METHOD.ID " +
-                     "WHERE TB_ITEMS.IS_DELETED = 0 ";
+            string strSQL = @"
+                SELECT TB_ITEMS.*,
+               TB_ITEM_DEPARTMENT.DEPT_NAME,
+               TB_ITEM_CATEGORY.CAT_NAME,
+               TB_ITEM_SUBCATEGORY.SUBCAT_NAME,
+               TB_ITEM_BRAND.BRAND_NAME,
+               TB_ITEM_TYPE.TYPE_NAME,
+               TB_COUNTRY.COUNTRY_NAME,
+               TB_VAT_CLASS.VAT_NAME,
+               TB_COSTING_METHOD.COSTING_METHOD
+                FROM TB_ITEMS
+                LEFT JOIN TB_ITEM_DEPARTMENT ON TB_ITEMS.DEPT_ID = TB_ITEM_DEPARTMENT.ID
+                LEFT JOIN TB_ITEM_CATEGORY ON TB_ITEMS.CAT_ID = TB_ITEM_CATEGORY.ID
+                LEFT JOIN TB_ITEM_SUBCATEGORY ON TB_ITEMS.SUBCAT_ID = TB_ITEM_SUBCATEGORY.ID
+                LEFT JOIN TB_ITEM_BRAND ON TB_ITEMS.BRAND_ID = TB_ITEM_BRAND.ID
+                INNER JOIN TB_ITEM_TYPE ON TB_ITEMS.TYPE_ID = TB_ITEM_TYPE.ID
+                LEFT JOIN TB_COUNTRY ON TB_ITEMS.ORIGIN_COUNTRY = TB_COUNTRY.ID
+                LEFT JOIN TB_VAT_CLASS ON TB_ITEMS.VAT_CLASS_ID = TB_VAT_CLASS.ID
+                INNER JOIN TB_COSTING_METHOD ON TB_ITEMS.COSTING_METHOD = TB_COSTING_METHOD.ID
+                WHERE TB_ITEMS.IS_DELETED = 0
+    ";
 
-            if (ActiveOnly == true)
-                strSQL += " TB_ITEMS.IS_INACTIVE  = 0";
-
-            if (objFilter != null)
+            // Date range filter
+            if (request.DATE_FROM != DateTime.MinValue && request.DATE_TO != DateTime.MinValue)
             {
-                if (objFilter.MASTER_TYPE == "Department")
-                    strSQL += " AND TB_ITEMS.DEPT_ID IN (" + objFilter.MASTER_VALUE + ")";
-
-                else if (objFilter.MASTER_TYPE == "Category")
-                    strSQL += " AND TB_ITEMS.CAT_ID IN (" + objFilter.MASTER_VALUE + ")";
-
-                else if (objFilter.MASTER_TYPE == "SubCategory")
-                    strSQL += " AND TB_ITEMS.SUBCAT_ID IN (" + objFilter.MASTER_VALUE + ")";
-
-                else if (objFilter.MASTER_TYPE == "Brand")
-                    strSQL += " AND TB_ITEMS.BRAND_ID IN (" + objFilter.MASTER_VALUE + ")";
-
-                else if (objFilter.MASTER_TYPE == "Supplier")
-                    strSQL += " AND TB_ITEMS.ID IN (SELECT ITEM_ID FROM TB_ITEM_SUPPLIER WHERE SUPP_ID (" + objFilter.MASTER_VALUE + "))";
+                strSQL += $" AND TB_ITEMS.CREATED_DATE BETWEEN '{request.DATE_FROM:yyyy-MM-dd}' AND '{request.DATE_TO:yyyy-MM-dd}'";
             }
 
             DataTable itemsTable = ADO.GetDataTable(strSQL, "TB_ITEMS");
@@ -79,7 +71,7 @@ namespace MicroApi.DataLayer.Services
                 COST = Convert.IsDBNull(dr["COST"]) ? (float?)null : Convert.ToSingle(dr["COST"]),
                 PROFIT_MARGIN = Convert.IsDBNull(dr["PROFIT_MARGIN"]) ? (float?)null : Convert.ToSingle(dr["PROFIT_MARGIN"]),
                 QTY_STOCK = Convert.IsDBNull(dr["QTY_STOCK"]) ? (float?)null : Convert.ToSingle(dr["QTY_STOCK"]),
-                QTY_COMMITTED = Convert.IsDBNull(dr["SALE_PRICE"]) ? (float?)null : Convert.ToSingle(dr["SALE_PRICE"]),
+                QTY_COMMITTED = Convert.IsDBNull(dr["QTY_COMMITTED"]) ? (float?)null : Convert.ToSingle(dr["QTY_COMMITTED"]),
                 CREATED_DATE = Convert.IsDBNull(dr["CREATED_DATE"]) ? (DateTime?)null : Convert.ToDateTime(dr["CREATED_DATE"]),
                 LAST_PO_DATE = Convert.IsDBNull(dr["LAST_PO_DATE"]) ? (DateTime?)null : Convert.ToDateTime(dr["LAST_PO_DATE"]),
                 LAST_GRN_DATE = Convert.IsDBNull(dr["LAST_GRN_DATE"]) ? (DateTime?)null : Convert.ToDateTime(dr["LAST_GRN_DATE"]),
@@ -88,9 +80,9 @@ namespace MicroApi.DataLayer.Services
                 REORDER_POINT = Convert.IsDBNull(dr["REORDER_POINT"]) ? (float?)null : Convert.ToSingle(dr["REORDER_POINT"]),
                 PARENT_ITEM_ID = dr["PARENT_ITEM_ID"] != DBNull.Value ? Convert.ToInt32(dr["PARENT_ITEM_ID"]) : 0,
                 CHILD_QTY = Convert.IsDBNull(dr["CHILD_QTY"]) ? (float?)null : Convert.ToSingle(dr["CHILD_QTY"]),
-                ORIGIN_COUNTRY = dr["ORIGIN_COUNTRY"] != DBNull.Value ? Convert.ToInt32(dr["ORIGIN_COUNTRY"]) : 0, // or some default value
+                ORIGIN_COUNTRY = dr["ORIGIN_COUNTRY"] != DBNull.Value ? Convert.ToInt32(dr["ORIGIN_COUNTRY"]) : 0,
                 COUNTRY_NAME = dr["COUNTRY_NAME"] != DBNull.Value ? Convert.ToString(dr["COUNTRY_NAME"]) : string.Empty,
-                SHELF_LIFE = dr["SHELF_LIFE"] != DBNull.Value ? Convert.ToInt32(dr["SHELF_LIFE"]) : 0, // or some default value
+                SHELF_LIFE = dr["SHELF_LIFE"] != DBNull.Value ? Convert.ToInt32(dr["SHELF_LIFE"]) : 0,
                 BIN_LOCATION = dr["BIN_LOCATION"] != DBNull.Value ? Convert.ToString(dr["BIN_LOCATION"]) : string.Empty,
                 NOTES = dr["NOTES"] != DBNull.Value ? Convert.ToString(dr["NOTES"]) : string.Empty,
                 IS_INACTIVE = Convert.IsDBNull(dr["IS_INACTIVE"]) ? (bool?)null : Convert.ToBoolean(dr["IS_INACTIVE"]),
@@ -120,11 +112,9 @@ namespace MicroApi.DataLayer.Services
                 COSTING_METHOD = dr["COSTING_METHOD"] != DBNull.Value ? Convert.ToInt32(dr["COSTING_METHOD"]) : 0,
                 COSTINGMETHOD = dr["COSTING_METHOD"] != DBNull.Value ? Convert.ToString(dr["COSTING_METHOD"]) : string.Empty,
                 POS_DESCRIPTION = dr["POS_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["POS_DESCRIPTION"]) : string.Empty,
-
                 IS_DIFFERENT_UOM_PURCH = Convert.IsDBNull(dr["IS_DIFFERENT_UOM_PURCH"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DIFFERENT_UOM_PURCH"]),
                 UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
                 UOM_MULTPLE = dr["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(dr["UOM_MULTPLE"]) : 0,
-
                 item_stores = itemstores,
                 item_alias = itemalias,
                 item_suppliers = itemsuppliers
@@ -132,7 +122,8 @@ namespace MicroApi.DataLayer.Services
 
             return itemsList;
         }
-       
+
+
         public bool Insert(Items items)
         {
             SqlConnection connection = ADO.GetConnection();

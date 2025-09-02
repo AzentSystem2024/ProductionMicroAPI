@@ -16,7 +16,7 @@ namespace MicroApi.DataLayer.Services
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "SP_TB_ITEM_PROPERTY2";
+                cmd.CommandText = "SP_TB_ITEM_PROPERTY5";
                 cmd.Parameters.AddWithValue("ACTION", 0);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -50,7 +50,7 @@ namespace MicroApi.DataLayer.Services
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "SP_TB_ITEM_PROPERTY2";
+                    cmd.CommandText = "SP_TB_ITEM_PROPERTY5";
 
                     cmd.Parameters.AddWithValue("ACTION", 1);
                     cmd.Parameters.AddWithValue("ID", itemProperty2.ID);
@@ -72,32 +72,32 @@ namespace MicroApi.DataLayer.Services
 
         public ItemProperty5 GetItems(int id)
         {
-            ItemProperty5 itemProperty2 = new ItemProperty5();
+            ItemProperty5 itemProperty5 = new ItemProperty5();
 
             try
             {
 
 
-                string strSQL = "SELECT TB_ITEM_PROPERTY2.ID,TB_ITEM_PROPERTY2.CODE,TB_ITEM_PROPERTY2.DESCRIPTION, " +
+                string strSQL = "SELECT TB_ITEM_PROPERTY5.ID,TB_ITEM_PROPERTY5.CODE,TB_ITEM_PROPERTY5.DESCRIPTION, " +
 
-                "TB_ITEM_PROPERTY2.IS_DELETED,TB_ITEM_PROPERTY2.COMPANY_ID," +
+                "TB_ITEM_PROPERTY5.IS_DELETED,TB_ITEM_PROPERTY5.COMPANY_ID," +
                "TB_COMPANY_MASTER.COMPANY_NAME " +
-               "FROM TB_ITEM_PROPERTY2 " +
-               "INNER JOIN TB_COMPANY_MASTER ON TB_ITEM_PROPERTY2.COMPANY_ID = TB_COMPANY_MASTER.ID " +
-               "WHERE TB_ITEM_PROPERTY2.ID =" + id;
+               "FROM TB_ITEM_PROPERTY5 " +
+               "INNER JOIN TB_COMPANY_MASTER ON TB_ITEM_PROPERTY5.COMPANY_ID = TB_COMPANY_MASTER.ID " +
+               "WHERE TB_ITEM_PROPERTY5.ID =" + id;
 
-                DataTable tbl = ADO.GetDataTable(strSQL, "ItemProperty1");
+                DataTable tbl = ADO.GetDataTable(strSQL, "ItemProperty5");
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];
 
-                    itemProperty2.ID = Convert.ToInt32(dr["ID"]);
-                    itemProperty2.CODE = Convert.ToString(dr["CODE"]);
-                    itemProperty2.DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]);
+                    itemProperty5.ID = Convert.ToInt32(dr["ID"]);
+                    itemProperty5.CODE = Convert.ToString(dr["CODE"]);
+                    itemProperty5.DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]);
 
-                    itemProperty2.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    itemProperty2.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
-                    itemProperty2.IS_DELETED = Convert.ToString(dr["IS_DELETED"]);
+                    itemProperty5.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
+                    itemProperty5.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
+                    itemProperty5.IS_DELETED = Convert.ToString(dr["IS_DELETED"]);
 
                 }
             }
@@ -105,7 +105,7 @@ namespace MicroApi.DataLayer.Services
             {
 
             }
-            return itemProperty2;
+            return itemProperty5;
         }
 
         public bool DeleteItemProperty5(int id)
@@ -117,7 +117,7 @@ namespace MicroApi.DataLayer.Services
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "SP_TB_ITEM_PROPERTY2";
+                    cmd.CommandText = "SP_TB_ITEM_PROPERTY5";
                     cmd.Parameters.AddWithValue("ACTION", 4);
                     cmd.Parameters.AddWithValue("@ID", id);
                     cmd.ExecuteNonQuery();

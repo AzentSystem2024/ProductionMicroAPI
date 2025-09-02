@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IItemsService
     {
-        public List<Items> GetAllItems(int intUserID, bool ActiveOnly = false, MasterFilter objFilter = null);
+        public List<Items> GetAllItems(DateRequest request);
         public bool Insert(Items company);
         public bool Update(Items company);
         public Items GetItems(int id);
