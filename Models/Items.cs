@@ -163,4 +163,9 @@
         public string message { get; set; }
         public Items data { get; set; }
     }
+    public class DateFilter
+    {
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+    }
 }
