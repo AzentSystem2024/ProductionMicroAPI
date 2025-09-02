@@ -89,7 +89,7 @@ namespace MicroApi.DataLayer.Services
                         DataRow dRow = tbl.NewRow();
                         dRow["ID"] = ur.ID;
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
+                        dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
                         dRow["PO_ID"] = ur.PO_ID;
                         dRow["JOB_ID"] = ur.JOB_ID;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
@@ -107,7 +107,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID;
+                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -122,7 +122,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ACTION", 1);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", worksheet.COMPANY_ID);
-                cmd.Parameters.AddWithValue("@STORE_ID", worksheet.STORE_ID);
+                //cmd.Parameters.AddWithValue("@STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("@PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("@SUPP_ID", worksheet.SUPP_ID);
@@ -215,7 +215,7 @@ namespace MicroApi.DataLayer.Services
                     PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
                     SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                     CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
-                    STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
+                    //STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                     STATUS_ID = ADO.ToInt32(dr["STATUS_ID"]),
                     SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
                     NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
@@ -267,7 +267,7 @@ namespace MicroApi.DataLayer.Services
                         DataRow dRow = tbl.NewRow();
                         dRow["ID"] = ur.ID;
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
+                        dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
                         dRow["PO_ID"] = ur.PO_ID;
                         dRow["JOB_ID"] = ur.JOB_ID;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
@@ -285,7 +285,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID;
+                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -302,7 +302,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                //cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("SUPP_ID", worksheet.SUPP_ID);
@@ -445,7 +445,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+               // cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("SUPP_ID", worksheet.SUPP_ID);
@@ -554,7 +554,7 @@ namespace MicroApi.DataLayer.Services
                         DataRow dRow = tbl.NewRow();
                         dRow["ID"] = ur.ID;
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
+                        dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
                         dRow["PO_ID"] = ur.PO_ID;
                         dRow["JOB_ID"] = ur.JOB_ID;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
@@ -572,7 +572,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID;
+                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -589,7 +589,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                //cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("SUPP_ID", worksheet.SUPP_ID);
@@ -724,7 +724,7 @@ namespace MicroApi.DataLayer.Services
                     {
                         ID = ADO.ToInt32(dr["ID"]),
                         COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
-                        STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
+                        //STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE = ADO.ToString(dr["STORE_NAME"]),
                         PO_NO = ADO.ToString(dr["PO_NO"]),
                         PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
