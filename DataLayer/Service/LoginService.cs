@@ -129,10 +129,8 @@ namespace MicroApi.DataLayer.Service
                                     }
                                 }
 
-                                // Result 7: PRIVILEGE (Skip this result set as we don't need it in the response)
                                 if (reader.NextResult())
                                 {
-                                    // Just skip this result set
                                 }
 
                                 // Result 8: GENERAL SETTINGS
@@ -178,7 +176,6 @@ namespace MicroApi.DataLayer.Service
                 response.Message = "An error occurred: " + ex.Message;
             }
 
-            // Ensure GeneralSettings is never null
             response.GeneralSettings ??= new GeneralSettings();
 
             return response;
@@ -211,22 +208,18 @@ namespace MicroApi.DataLayer.Service
 
                         using (var reader = cmd.ExecuteReader())
                         {
-                            // First result: FLAG and MESSAGE
                             if (reader.Read())
                             {
                                 response.flag = reader["FLAG"] != DBNull.Value ? Convert.ToInt32(reader["FLAG"]) : 0;
                                 response.Message = reader["MESSAGE"]?.ToString();
                             }
 
-                            // Skip second result (USER INFO)
                             if (reader.NextResult()) { }
 
-                            // Third result: company list
                             if (reader.NextResult())
                             {
                                 while (reader.Read())
                                 {
-                                    // ✅ Correct check for nullable int (int?)
                                     if (response.USER_ID == null && reader["USER_ID"] != DBNull.Value)
                                     {
                                         response.USER_ID = Convert.ToInt32(reader["USER_ID"]);
