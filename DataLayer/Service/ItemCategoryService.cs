@@ -35,7 +35,6 @@ namespace MicroApi.DataLayer.Services
                         COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]),
                         DEPT_ID = Convert.ToInt32(dr["DEPT_ID"]),
                         DEPT_NAME = Convert.ToString(dr["DEPT_NAME"])
-
                     });
                 }
                 connection.Close();
@@ -85,7 +84,7 @@ namespace MicroApi.DataLayer.Services
 
                 string strSQL = "SELECT TB_ITEM_CATEGORY.ID, TB_ITEM_CATEGORY.CODE, TB_ITEM_CATEGORY.CAT_NAME, " +
                   "TB_ITEM_CATEGORY.LOYALTY_POINT, TB_ITEM_CATEGORY.COST_HEAD_ID,TB_ITEM_CATEGORY.COMPANY_ID, TB_ITEM_CATEGORY.DEPT_ID, " +
-                  "TB_COMPANY.COMPANY_NAME, TB_DEPARTMENT.DEPT_NAME " +
+                  "TB_COMPANY_MASTER.COMPANY_NAME, TB_DEPARTMENT.DEPT_NAME,TB_ITEM_CATEGORY.IS_DELETED " +
                   "FROM TB_ITEM_CATEGORY " +
                   "INNER JOIN TB_COMPANY_MASTER ON TB_ITEM_CATEGORY.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                   "INNER JOIN TB_DEPARTMENT ON TB_ITEM_CATEGORY.DEPT_ID = TB_DEPARTMENT.ID " +
@@ -106,6 +105,7 @@ namespace MicroApi.DataLayer.Services
                     itemCategory.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
                     itemCategory.DEPT_ID = Convert.ToInt32(dr["DEPT_ID"]);
                     itemCategory.DEPT_NAME = Convert.ToString(dr["DEPT_NAME"]);
+                    itemCategory.IS_DELETED = Convert.ToString(dr["IS_DELETED"]);
 
 
                 }

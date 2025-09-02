@@ -79,7 +79,7 @@ namespace MicroApi.DataLayer.Services
                "TB_ITEM_DEPARTMENT.COMPANY_ID," +
                "TB_COMPANY_MASTER.COMPANY_NAME " +
                "FROM TB_ITEM_DEPARTMENT " +
-               "INNER JOIN TB_COMPANY ON TB_ITEM_DEPARTMENT.COMPANY_ID = TB_COMPANY_MASTER.ID " +
+               "INNER JOIN TB_COMPANY_MASTER ON TB_ITEM_DEPARTMENT.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                "WHERE TB_ITEM_DEPARTMENT.ID =" + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Department");
