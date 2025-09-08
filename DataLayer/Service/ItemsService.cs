@@ -153,7 +153,7 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dRow = tbl.NewRow();
 
-                    dRow["ID"] = ur.ID;
+                    dRow["ID"] = DBNull.Value;
                     dRow["STORE_ID"] = ur.STORE_ID;
                     dRow["SALE_PRICE"] = ur.SALE_PRICE;
                     dRow["SALE_PRICE1"] = ur.SALE_PRICE1;
@@ -176,15 +176,17 @@ namespace MicroApi.DataLayer.Services
                 tbl1.Columns.Add("ID", typeof(Int32));
                 tbl1.Columns.Add("ALIAS", typeof(string));
                 tbl1.Columns.Add("IS_DEFAULT", typeof(bool));
+                tbl1.Columns.Add("ALIAS_TYPE_ID", typeof(Int32));
 
                 if (items.item_alias != null && items.item_alias.Any())
                 {
                     foreach (ITEM_ALIAS ur in items.item_alias)
                     {
                         DataRow dRow1 = tbl1.NewRow();
-                        dRow1["ID"] = ur.ID;
+                        dRow1["ID"] = DBNull.Value;
                         dRow1["ALIAS"] = ur.ALIAS;
                         dRow1["IS_DEFAULT"] = 0;
+                        dRow1["ALIAS_TYPE_ID"] = ur.ALIAS_TYPE_ID;
                         tbl1.Rows.Add(dRow1);
                         tbl1.AcceptChanges();
                     }
@@ -204,7 +206,7 @@ namespace MicroApi.DataLayer.Services
                     {
                         DataRow dRow2 = tbl2.NewRow();
 
-                        dRow2["ID"] = ur.ID;
+                        dRow2["ID"] = DBNull.Value;
                         dRow2["SUPP_ID"] = ur.SUPP_ID;
                         dRow2["REORDER_NO"] = ur.REORDER_NO;
                         dRow2["COST"] = ur.COST;
@@ -231,8 +233,8 @@ namespace MicroApi.DataLayer.Services
                     {
                         DataRow dRow3 = tbl3.NewRow();
 
-                        dRow3["ID"] = ur.ID;
-                        dRow3["ITEM_ID"] = ur.ITEM_ID;
+                        dRow3["ID"] = DBNull.Value;
+                        dRow3["ITEM_ID"] = DBNull.Value;
                         dRow3["COMPONENT_ITEM_ID"] = ur.COMPONENT_ITEM_ID;
                         dRow3["QUANTITY"] = ur.QUANTITY;
                         dRow3["UOM"] = ur.UOM;
@@ -387,6 +389,7 @@ namespace MicroApi.DataLayer.Services
                 tbl1.Columns.Add("ID", typeof(Int32));
                 tbl1.Columns.Add("ALIAS", typeof(string));
                 tbl1.Columns.Add("IS_DEFAULT", typeof(bool));
+                tbl1.Columns.Add("ALIAS_TYPE_ID", typeof(Int32));
 
                 if (items.item_alias != null && items.item_alias.Any())
                 {
@@ -396,6 +399,7 @@ namespace MicroApi.DataLayer.Services
                         dRow1["ID"] = ur.ID;
                         dRow1["ALIAS"] = ur.ALIAS;
                         dRow1["IS_DEFAULT"] = 0;
+                        dRow1["ALIAS_TYPE_ID"] = ur.ALIAS_TYPE_ID;
                         tbl1.Rows.Add(dRow1);
                         tbl1.AcceptChanges();
                     }
@@ -747,7 +751,8 @@ namespace MicroApi.DataLayer.Services
                     {
                         ID = Convert.ToInt32(dr1["ID"]),
                         ALIAS = Convert.ToString(dr1["ALIAS"]),
-                        IS_DEFAULT = Convert.ToBoolean(dr1["IS_DEFAULT"])
+                        IS_DEFAULT = Convert.ToBoolean(dr1["IS_DEFAULT"]),
+                        ALIAS_TYPE_ID = Convert.ToInt32(dr1["ALIAS_TYPE_ID"])
                         //IS_DEFAULT = Convert.IsDBNull(dr["IS_DEFAULT"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DEFAULT"])
                     });
                 }
