@@ -8,8 +8,8 @@ namespace MicroApi.Models
         public int ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int COMPANY_ID { get; set; }
-        public int STORE_ID { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        //public int STORE_ID { get; set; }
+        //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string PO_NO { get; set; }
         public DateTime PO_DATE { get; set; }
         public int SUPP_ID { get; set; }
@@ -63,7 +63,7 @@ namespace MicroApi.Models
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public float EXCHANGE_RATE { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public int CREATED_STORE_ID { get; set; }
+        public int? CREATED_STORE_ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int CURRENCY_ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -92,7 +92,7 @@ namespace MicroApi.Models
     {
         public int ID { get; set; }
         public int COMPANY_ID { get; set; }
-        public int STORE_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public int PO_ID { get; set; }
         public int JOB_ID { get; set; }
         public int ITEM_ID { get; set; }
@@ -110,7 +110,7 @@ namespace MicroApi.Models
         public float INVOICE_QTY { get; set; }
         public float SUPP_PRICE { get; set; }
         public float SUPP_AMOUNT { get; set; }
-        public int CREATE_STORE_ID { get; set; }
+        public int? CREATE_STORE_ID { get; set; }
         public string? ITEM_CODE { get; set; }
     }
 

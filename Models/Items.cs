@@ -71,7 +71,7 @@
         public int? UNIT_ID { get; set; }
         public string? UOM { get; set; }
         public bool? IS_DIFFERENT_UOM_PURCH { get; set; }
-        public string? UOM_PURCH { get; set; }
+        public int? UOM_PURCH { get; set; }
         public int? UOM_MULTPLE { get; set; }
 
         public List<ITEM_STORES> item_stores { get; set; }
@@ -93,7 +93,7 @@
     public class ITEM_STORES
     {
         public int? ID { get; set; }
-        public string? STORE_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public float SALE_PRICE { get; set; }
         public float? SALE_PRICE1 { get; set; }
         public float? SALE_PRICE2 { get; set; }
@@ -153,8 +153,8 @@
     }
     public class MasterFilter
     {
-        public string MASTER_TYPE { get; set; }
-        public string MASTER_VALUE { get; set; }
+        public DateTime? FROM_DATE { get; set; }
+        public DateTime? TO_DATE { get; set; }
 
     }
     public class ItemResponse
@@ -163,4 +163,10 @@
         public string message { get; set; }
         public Items data { get; set; }
     }
+    public class DateRequest
+    {
+        public DateTime? DATE_FROM { get; set; }
+        public DateTime? DATE_TO { get; set; }
+    }
+
 }
