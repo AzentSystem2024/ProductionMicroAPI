@@ -691,7 +691,7 @@ namespace MicroApi.DataLayer.Services
                     itemstores.Add(new ITEM_STORES
                     {
                         ID = dr1["ID"] != DBNull.Value ? Convert.ToInt32(dr1["ID"]) : 0,
-                        STORE_ID = dr1["STORE_ID"] != DBNull.Value ? Convert.ToString(dr1["STORE_ID"]) : string.Empty,
+                        STORE_ID = dr1["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr1["STORE_ID"]) : 0,
                         SALE_PRICE = dr1["SALE_PRICE"] != DBNull.Value ? float.Parse(dr1["SALE_PRICE"].ToString()) : 0f,
                         SALE_PRICE1 = dr1["SALE_PRICE1"] != DBNull.Value ? float.Parse(dr1["SALE_PRICE1"].ToString()) : 0f,
                         SALE_PRICE2 = dr1["SALE_PRICE2"] != DBNull.Value ? float.Parse(dr1["SALE_PRICE2"].ToString()) : 0f,
