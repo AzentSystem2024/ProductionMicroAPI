@@ -9,7 +9,7 @@
         public byte[] FILE_DATA { get; set; }
         public string REMARKS { get; set; }
         public int USER_ID { get; set; }
-        public string USER_NAME { get; set; }
+        public string? USER_NAME { get; set; }
         public DateTime CREATED_DATE_TIME { get; set; }
     }
 
