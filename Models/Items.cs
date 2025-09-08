@@ -165,8 +165,8 @@
     }
     public class DateRequest
     {
-        public DateTime DATE_FROM { get; set; }
-        public DateTime DATE_TO { get; set; }
+        public DateTime? DATE_FROM { get; set; }
+        public DateTime? DATE_TO { get; set; }
     }
 
 }
