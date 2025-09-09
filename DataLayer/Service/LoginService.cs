@@ -155,7 +155,9 @@ namespace MicroApi.DataLayer.Service
                                         ITEM_PROPERTY5 = reader["ITEM_PROPERTY5"]?.ToString() ?? "",
                                         REFERENCE_LABEL = reader["REFERENCE_LABEL"]?.ToString() ?? "",
                                         COMMENT_LABEL = reader["COMMENT_LABEL"]?.ToString() ?? "",
-                                        STATE_LABEL = reader["STATE_LABEL"]?.ToString() ?? ""
+                                        STATE_LABEL = reader["STATE_LABEL"]?.ToString() ?? "",
+                                        VAT_TITLE = reader["VAT_TITLE"]?.ToString() ?? "",
+                                        STORE_TITLE = reader["STORE_TITLE"]?.ToString() ?? ""
                                     };
                                 }
 
