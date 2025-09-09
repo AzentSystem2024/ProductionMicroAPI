@@ -222,7 +222,8 @@ namespace MicroApi.DataLayer.Services
                     CURRENCY = ADO.ToString(dr["CURRENCY"]),
                     STORE = ADO.ToString(dr["STORE"]),
                     NARRATION = ADO.ToString(dr["NARRATION"]),
-                    STATUS = ADO.ToString(dr["STATUS"])
+                    STATUS = ADO.ToString(dr["STATUS"]),
+                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : 0
                 });
             }
             connection.Close();
@@ -760,7 +761,8 @@ namespace MicroApi.DataLayer.Services
                         DELIVERY_DATE = Convert.ToDateTime(dr["DELIVERY_DATE"]),
                         PAY_TERM = ADO.ToString(dr["PAYMENT_NAME"]),
                         DELIVERY_TERM = ADO.ToString(dr["DELIVERY_TERM"]),
-                        NARRATION = ADO.ToString(dr["NARRATION"])
+                        NARRATION = ADO.ToString(dr["NARRATION"]),
+                        TRANS_ID = ADO.ToInt32(dr["TRANS_ID"])
 
                     };
                 }
