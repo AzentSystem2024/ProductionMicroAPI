@@ -8,8 +8,8 @@ namespace MicroApi.Models
         public int ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int COMPANY_ID { get; set; }
-        //public int STORE_ID { get; set; }
-        //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int STORE_ID { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string PO_NO { get; set; }
         public DateTime PO_DATE { get; set; }
         public int SUPP_ID { get; set; }
