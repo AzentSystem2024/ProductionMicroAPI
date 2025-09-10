@@ -75,7 +75,7 @@ namespace MicroApi.Controllers
             return res;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("delete/{id:int}")]
         public CountryResponse Delete(int id)
         {

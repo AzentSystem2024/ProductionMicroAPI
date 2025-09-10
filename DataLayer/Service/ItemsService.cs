@@ -39,7 +39,11 @@ namespace MicroApi.DataLayer.Services
             // Date range filter
             if (request.DATE_FROM != DateTime.MinValue && request.DATE_TO != DateTime.MinValue)
             {
-                strSQL += $" AND TB_ITEMS.CREATED_DATE BETWEEN '{request.DATE_FROM:yyyy-MM-dd}' AND '{request.DATE_TO:yyyy-MM-dd}'";
+                DateTime dateFrom = request.DATE_FROM.Value.Date;
+                DateTime dateTo = request.DATE_TO.Value.Date.AddDays(1);
+
+                strSQL += $" AND TB_ITEMS.CREATED_DATE >= '{dateFrom:yyyy-MM-dd}'" +
+                          $" AND TB_ITEMS.CREATED_DATE < '{dateTo:yyyy-MM-dd}'";
             }
 
             DataTable itemsTable = ADO.GetDataTable(strSQL, "TB_ITEMS");
