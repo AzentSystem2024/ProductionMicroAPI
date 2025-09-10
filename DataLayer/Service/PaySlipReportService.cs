@@ -14,7 +14,7 @@ namespace MicroApi.DataLayer.Service
             PayslipReportResponse response = new PayslipReportResponse
             {
                 PaySlipDetails = new List<PaySlipReport>(),
-                Details = new List<PaySlipReportData>()
+                //Details = new List<PaySlipReportData>()
             };
 
             using (SqlConnection conn = ADO.GetConnection())
@@ -23,7 +23,18 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Month", request.Month);
-                    cmd.Parameters.AddWithValue("@EmployeeID", (object)request.EmployeeID ?? DBNull.Value);
+                    //cmd.Parameters.AddWithValue("@EmployeeID", (object)request.EmployeeID ?? DBNull.Value);
+
+                    // If list is null or empty, pass DBNull
+                    if (request.EmployeeIDs != null && request.EmployeeIDs.Any())
+                    {
+                        string employeeIdCsv = string.Join(",", request.EmployeeIDs);
+                        cmd.Parameters.AddWithValue("@EmployeeIDs", employeeIdCsv);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@EmployeeIDs", DBNull.Value);
+                    }
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -38,7 +49,7 @@ namespace MicroApi.DataLayer.Service
                                 PP_NO = reader["PFAccountNo"]?.ToString(),
                                 DAMAN_NO = reader["DAMAN_NO"]?.ToString(),
                                 BANK_AC_NO = reader["BankAcNo"]?.ToString(),
-                                BASIC_SALARY = reader["BasicSalary"] != DBNull.Value ? Convert.ToSingle(reader["BasicSalary"]) : 0f,
+                                BASIC_SALARY = reader["BasicSalary"] != DBNull.Value ? Convert.ToSingle(reader["BasicSalary"]) : 0f
                                 // TS_MONTH, TOTAL_DAYS, OT_HOURS, LESS_HOURS, SALARY_ID are NOT in this result set
                             });
                         }
@@ -48,14 +59,15 @@ namespace MicroApi.DataLayer.Service
                         {
                             while (reader.Read())
                             {
-                                // Update PaySlipDetails with timesheet info
-                                foreach (var item in response.PaySlipDetails)
+                                int empId = Convert.ToInt32(reader["EMP_ID"]);
+                                var emp = response.PaySlipDetails.FirstOrDefault(e => e.EMP_ID == empId);
+                                if (emp != null)
                                 {
-                                    item.TS_MONTH = Convert.ToDateTime(reader["TS_MONTH"]);
-                                    item.TOTAL_DAYS = Convert.ToSingle(reader["TOTAL_DAYS"]);
-                                    item.OT_HOURS = Convert.ToSingle(reader["OT_HOURS"]);
-                                    item.LESS_HOURS = Convert.ToSingle(reader["LESS_HOURS"]);
-                                    item.SALARY_ID = Convert.ToInt32(reader["SALARY_ID"]);
+                                    emp.TS_MONTH = Convert.ToDateTime(reader["TS_MONTH"]);
+                                    emp.TOTAL_DAYS = Convert.ToSingle(reader["TOTAL_DAYS"]);
+                                    emp.OT_HOURS = Convert.ToSingle(reader["OT_HOURS"]);
+                                    emp.LESS_HOURS = Convert.ToSingle(reader["LESS_HOURS"]);
+                                    emp.SALARY_ID = Convert.ToInt32(reader["SALARY_ID"]);
                                 }
                             }
                         }
@@ -65,21 +77,26 @@ namespace MicroApi.DataLayer.Service
                         {
                             while (reader.Read())
                             {
-                                response.Details.Add(new PaySlipReportData
+                                int empId = Convert.ToInt32(reader["EMP_ID"]); // <-- You need EMP_ID in SP here
+                                var emp = response.PaySlipDetails.FirstOrDefault(e => e.EMP_ID == empId);
+                                if (emp != null)
                                 {
-                                    HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
-                                    HEAD_NAME = reader["HEAD_NAME"]?.ToString(),
-                                    HEAD_TYPE = Convert.ToInt32(reader["HEAD_TYPE"]),
-                                    HEAD_AMOUNT = Convert.ToDecimal(reader["HEAD_AMOUNT"]),
-                                    SALARY = Convert.ToDecimal(reader["SALARY"])
-                                });
+                                    emp.SalaryHeads.Add(new PaySlipReportData
+                                    {
+                                        HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
+                                        HEAD_NAME = reader["HEAD_NAME"]?.ToString(),
+                                        HEAD_TYPE = Convert.ToInt32(reader["HEAD_TYPE"]),
+                                        HEAD_AMOUNT = Convert.ToDecimal(reader["HEAD_AMOUNT"]),
+                                        SALARY = Convert.ToDecimal(reader["SALARY"])
+                                    });
+                                }
                             }
                         }
                     }
                 }
             }
 
-            response.flag = (response.PaySlipDetails.Count > 0 || response.Details.Count > 0) ? 1 : 0;
+            response.flag = (response.PaySlipDetails.Count > 0) ? 1 : 0;
             response.message = response.flag == 1 ? "Success" : "No records found";
             return response;
         }

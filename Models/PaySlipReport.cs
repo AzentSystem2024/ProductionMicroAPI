@@ -14,9 +14,7 @@
         public float OT_HOURS { get; set; }
         public float LESS_HOURS { get; set; }
         public int SALARY_ID { get; set; }
-        
-        
-
+        public List<PaySlipReportData> SalaryHeads { get; set; } = new List<PaySlipReportData>();
     }
     public class PaySlipReportData
     {
@@ -29,14 +27,14 @@
     public class PayslipReportRequest
     {
         public DateTime Month { get; set; }
-        public int? EmployeeID { get; set; } 
+        public List<int> EmployeeIDs { get; set; }
     }
     public class PayslipReportResponse
     {
         public int flag { get; set; }
         public string message { get; set; }
         public List<PaySlipReport> PaySlipDetails { get; set; }
-        public List<PaySlipReportData> Details { get; set; }
+       // public List<PaySlipReportData> Details { get; set; }
         //public List<PaySlipReport> SalaryHeadDetails { get; set; }
     }
 }
