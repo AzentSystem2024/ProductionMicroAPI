@@ -73,7 +73,7 @@
         public bool? IS_DIFFERENT_UOM_PURCH { get; set; }
         public int? UOM_PURCH { get; set; }
         public int? UOM_MULTPLE { get; set; }
-
+        public string? MATRIX_CODE {get; set; }
         public List<ITEM_STORES> item_stores { get; set; }
         public List<ITEM_ALIAS> item_alias { get; set; }
         public List<ITEM_SUPPLIERS> item_suppliers { get; set; }
@@ -88,6 +88,7 @@
         public int? ID { get; set; }
         public string? ALIAS { get; set; }
         public bool? IS_DEFAULT { get; set; }
+        public int? ALIAS_TYPE_ID { get; set; }
 
     }
     public class ITEM_STORES
@@ -126,7 +127,7 @@
     public class ITEM_COMPONENTS
     {
         public int? ID { get; set; }
-        public int? ITEM_ID { get; set; }
+        public int ITEM_ID { get; set; }
         public int? COMPONENT_ITEM_ID { get; set; }
         public float? QUANTITY { get; set; }
         public string? UOM { get; set; }

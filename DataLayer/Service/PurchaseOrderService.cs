@@ -122,7 +122,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ACTION", 1);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", worksheet.COMPANY_ID);
-                //cmd.Parameters.AddWithValue("@STORE_ID", worksheet.STORE_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("@PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("@SUPP_ID", worksheet.SUPP_ID);
@@ -215,14 +215,15 @@ namespace MicroApi.DataLayer.Services
                     PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
                     SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                     CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
-                    //STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
+                    STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                     STATUS_ID = ADO.ToInt32(dr["STATUS_ID"]),
                     SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
                     NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
                     CURRENCY = ADO.ToString(dr["CURRENCY"]),
                     STORE = ADO.ToString(dr["STORE"]),
                     NARRATION = ADO.ToString(dr["NARRATION"]),
-                    STATUS = ADO.ToString(dr["STATUS"])
+                    STATUS = ADO.ToString(dr["STATUS"]),
+                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : 0
                 });
             }
             connection.Close();
@@ -302,7 +303,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
-                //cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("SUPP_ID", worksheet.SUPP_ID);
@@ -445,7 +446,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
-               // cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("SUPP_ID", worksheet.SUPP_ID);
@@ -589,7 +590,7 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
-                //cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
                 cmd.Parameters.AddWithValue("PO_DATE", worksheet.PO_DATE);
                 cmd.Parameters.AddWithValue("SUPP_ID", worksheet.SUPP_ID);
@@ -724,7 +725,7 @@ namespace MicroApi.DataLayer.Services
                     {
                         ID = ADO.ToInt32(dr["ID"]),
                         COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
-                        //STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
+                        STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE = ADO.ToString(dr["STORE_NAME"]),
                         PO_NO = ADO.ToString(dr["PO_NO"]),
                         PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
@@ -760,7 +761,8 @@ namespace MicroApi.DataLayer.Services
                         DELIVERY_DATE = Convert.ToDateTime(dr["DELIVERY_DATE"]),
                         PAY_TERM = ADO.ToString(dr["PAYMENT_NAME"]),
                         DELIVERY_TERM = ADO.ToString(dr["DELIVERY_TERM"]),
-                        NARRATION = ADO.ToString(dr["NARRATION"])
+                        NARRATION = ADO.ToString(dr["NARRATION"]),
+                        TRANS_ID = ADO.ToInt32(dr["TRANS_ID"])
 
                     };
                 }
