@@ -77,7 +77,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             while (reader.Read())
                             {
-                                int empId = Convert.ToInt32(reader["EMP_ID"]); // <-- You need EMP_ID in SP here
+                                int empId = Convert.ToInt32(reader["EMP_ID"]); 
                                 var emp = response.PaySlipDetails.FirstOrDefault(e => e.EMP_ID == empId);
                                 if (emp != null)
                                 {
