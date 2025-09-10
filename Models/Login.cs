@@ -101,6 +101,6 @@
         public string STATE_LABEL { get; set; } = "";
         public string VAT_TITLE { get; set; } = "";
         public string STORE_TITLE { get; set; } = "";
-
+        public bool ENABLE_MATRIX_CODE { get; set; }
     }
 }

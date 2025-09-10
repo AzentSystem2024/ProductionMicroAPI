@@ -116,7 +116,7 @@ namespace MicroApi.DataLayer.Services
                 IS_DIFFERENT_UOM_PURCH = bool.TryParse(dr["IS_DIFFERENT_UOM_PURCH"]?.ToString(), out var isDifferentUomPurch) ? isDifferentUomPurch : (bool?)null,
                 UOM_PURCH = int.TryParse(dr["UOM_PURCH"]?.ToString(), out var uomPurch) ? uomPurch : 0,
                 UOM_MULTPLE = int.TryParse(dr["UOM_MULTPLE"]?.ToString(), out var uomMultiple) ? uomMultiple : 0,
-                METRICS_CODE = dr["METRICS_CODE"] != DBNull.Value ? Convert.ToString(dr["METRICS_CODE"]) : string.Empty,
+                MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
                 item_stores = itemstores,
                 item_alias = itemalias,
                 item_suppliers = itemsuppliers
@@ -312,7 +312,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("IS_DIFFERENT_UOM_PURCH", items.IS_DIFFERENT_UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
-                cmd.Parameters.AddWithValue("METRICS_CODE", items.METRICS_CODE);
+                cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
@@ -526,7 +526,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("IS_DIFFERENT_UOM_PURCH", items.IS_DIFFERENT_UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
-                cmd.Parameters.AddWithValue("METRICS_CODE", items.METRICS_CODE);
+                cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
@@ -577,7 +577,7 @@ namespace MicroApi.DataLayer.Services
                                 "TB_ITEMS.COSTING_METHOD, " +
                                 "TB_ITEMS.RESTOCK_LEVEL, TB_ITEMS.REORDER_POINT, TB_ITEMS.BIN_LOCATION, TB_ITEMS.POS_DESCRIPTION, " +
 
-                                "TB_ITEMS.IS_DIFFERENT_UOM_PURCH, TB_ITEMS.UOM_PURCH, TB_ITEMS.UOM_MULTPLE,TB_ITEMS.METRICS_CODE, " +
+                                "TB_ITEMS.IS_DIFFERENT_UOM_PURCH, TB_ITEMS.UOM_PURCH, TB_ITEMS.UOM_MULTPLE,TB_ITEMS.MATRIX_CODE, " +
 
                                 "TB_ITEM_TYPE.TYPE_NAME, TB_ITEM_DEPARTMENT.DEPT_NAME, TB_ITEM_CATEGORY.CAT_NAME, " +
                                 "TB_ITEM_SUBCATEGORY.SUBCAT_NAME, TB_ITEM_BRAND.BRAND_NAME, TB_COUNTRY.COUNTRY_NAME, TB_VAT_CLASS.VAT_NAME, " +
@@ -674,7 +674,7 @@ namespace MicroApi.DataLayer.Services
                         IS_DIFFERENT_UOM_PURCH = Convert.IsDBNull(dr["IS_DIFFERENT_UOM_PURCH"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DIFFERENT_UOM_PURCH"]),
                         UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToInt32(dr["UOM_PURCH"]) : 0,
                         UOM_MULTPLE = dr["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(dr["UOM_MULTPLE"]) : 0,
-                        METRICS_CODE = dr["METRICS_CODE"] != DBNull.Value ? Convert.ToString(dr["METRICS_CODE"]) : string.Empty,
+                        MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
 
 
                     };
