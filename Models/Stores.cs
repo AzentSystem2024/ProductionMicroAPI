@@ -14,7 +14,7 @@
 
         public bool IS_ACTIVE { get; set; }
 
-        public bool IS_PRODUCTION { get; set; }
+        public bool? IS_PRODUCTION { get; set; }
 
         public string ADDRESS1 { get; set; }
 
