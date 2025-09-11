@@ -33,4 +33,10 @@
         public string STORE_ID { get; set; }
 
     }
+    public class Response
+    {
+        public string flag { get; set; }
+        public string message { get; set; }
+        public Reasons data { get; set; }
+    }
 }
