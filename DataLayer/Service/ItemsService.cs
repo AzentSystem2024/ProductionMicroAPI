@@ -129,7 +129,7 @@ namespace MicroApi.DataLayer.Services
             return itemsList;
         }
 
-        public bool Insert(Items items)
+        public (int flag, string message) Insert(Items items)
         {
             SqlConnection connection = ADO.GetConnection();
             SqlTransaction objtrans = connection.BeginTransaction();
@@ -327,18 +327,13 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.Add("@message", SqlDbType.NVarChar, 200).Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
-
                 objtrans.Commit();
+
                 int flag = Convert.ToInt32(cmd.Parameters["@flag"].Value);
                 string msg = Convert.ToString(cmd.Parameters["@message"].Value);
+
                 connection.Close();
-                return flag == 1;
-
-                //Int32 CountryID = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
-                //return CountryID;
+                return (flag, msg);
             }
             catch (Exception ex)
             {

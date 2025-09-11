@@ -87,23 +87,15 @@ namespace MicroApi.Controllers
         [Route("insert")]
         public ItemResponse Insert(Items itemsData)
         {
-            ItemResponse res = new ItemResponse();
+            var (flag, msg) = _itemsService.Insert(itemsData);
 
-            try
+            return new ItemResponse
             {
-                
-                _itemsService.Insert(itemsData);
-                res.flag = "1";
-                res.message = "Success";
-            }
-            catch (Exception ex)
-            {
-                res.flag = "0";
-                res.message = ex.Message;
-            }
-
-            return res;
+                flag = flag.ToString(),
+                message = msg
+            };
         }
+
 
 
 
