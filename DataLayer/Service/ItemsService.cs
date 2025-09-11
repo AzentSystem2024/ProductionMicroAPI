@@ -118,7 +118,7 @@ namespace MicroApi.DataLayer.Services
                 COSTINGMETHOD = dr["COSTING_METHOD"] != DBNull.Value ? Convert.ToString(dr["COSTING_METHOD"]) : string.Empty,
                 POS_DESCRIPTION = dr["POS_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["POS_DESCRIPTION"]) : string.Empty,
                 IS_DIFFERENT_UOM_PURCH = bool.TryParse(dr["IS_DIFFERENT_UOM_PURCH"]?.ToString(), out var isDifferentUomPurch) ? isDifferentUomPurch : (bool?)null,
-                UOM_PURCH = int.TryParse(dr["UOM_PURCH"]?.ToString(), out var uomPurch) ? uomPurch : 0,
+                UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
                 UOM_MULTPLE = int.TryParse(dr["UOM_MULTPLE"]?.ToString(), out var uomMultiple) ? uomMultiple : 0,
                 MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
                 item_stores = itemstores,
@@ -676,7 +676,7 @@ namespace MicroApi.DataLayer.Services
                         POS_DESCRIPTION = dr["POS_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["POS_DESCRIPTION"]) : string.Empty,
 
                         IS_DIFFERENT_UOM_PURCH = Convert.IsDBNull(dr["IS_DIFFERENT_UOM_PURCH"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DIFFERENT_UOM_PURCH"]),
-                        UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToInt32(dr["UOM_PURCH"]) : 0,
+                        UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
                         UOM_MULTPLE = dr["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(dr["UOM_MULTPLE"]) : 0,
                         MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
 
