@@ -1,6 +1,12 @@
-﻿namespace MicroApi.DataLayer.Interface
+﻿using MicroApi.Models;
+using MicroApi.Models;
+
+namespace MicroApi.DataLayer.Interface
 {
-    public class ITransferOutInvService
+    public interface ITransferOutInvService
     {
+        public Int32 Insert(TransferOutInv transferOut);
+        public List<ItemInfo> GetItemInfo(ItemRequest request);
+
     }
 }

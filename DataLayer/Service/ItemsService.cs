@@ -323,12 +323,16 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_SUPPLIER", tbl2);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_COMPONENT", tbl3);
 
+                cmd.Parameters.Add("@flag", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@message", SqlDbType.NVarChar, 200).Direction = ParameterDirection.Output;
+
                 cmd.ExecuteNonQuery();
 
                 objtrans.Commit();
-
+                int flag = Convert.ToInt32(cmd.Parameters["@flag"].Value);
+                string msg = Convert.ToString(cmd.Parameters["@message"].Value);
                 connection.Close();
-                return true;
+                return flag == 1;
 
                 //Int32 CountryID = Convert.ToInt32(cmd.ExecuteScalar());
 
