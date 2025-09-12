@@ -41,6 +41,7 @@
             public string DAMAN_NO { get; set; }
             public string PF_AC_NO { get; set; }
             public string ESI_NO { get; set; }
+            public decimal ESI_PERCENT { get; set; }
             public string DAMAN_CATEGORY { get; set; }
 
             public string MOL_NUMBER { get; set; }
@@ -105,6 +106,7 @@
         public string DAMAN_NO { get; set; }
         public string PF_AC_NO { get; set; }
         public string ESI_NO { get; set; }
+        public decimal ESI_PERCENT { get; set; }
         public string DAMAN_CATEGORY { get; set; }
 
         public string MOL_NUMBER { get; set; }
