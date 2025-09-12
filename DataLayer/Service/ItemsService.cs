@@ -335,11 +335,24 @@ namespace MicroApi.DataLayer.Services
                 connection.Close();
                 return (flag, msg);
             }
+            catch (SqlException sqlEx)
+            {
+                objtrans.Rollback();
+                connection.Close();
+                if (sqlEx.Number == 2627 || sqlEx.Number == 2601)
+                {
+                    return (0, "Duplicate entry: The alias you are trying to insert already exists.");
+                }
+                else
+                {
+                    return (0, "Database error: " + sqlEx.Message);
+                }
+            }
             catch (Exception ex)
             {
                 objtrans.Rollback();
                 connection.Close();
-                throw ex;
+                return (0, "Error: " + ex.Message);
             }
         }
         public bool Update(Items items)

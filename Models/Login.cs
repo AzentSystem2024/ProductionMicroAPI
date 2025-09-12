@@ -26,6 +26,8 @@
         public int? VAT_ID { get; set; }
         public string VAT_NAME { get; set; }
         public GeneralSettings GeneralSettings { get; set; }
+        public List<StoreInfo> Configuration { get; set; } = new List<StoreInfo>();
+
     }
 
     public class CompanyList
@@ -102,5 +104,10 @@
         public string VAT_TITLE { get; set; } = "";
         public string STORE_TITLE { get; set; } = "";
         public bool ENABLE_MATRIX_CODE { get; set; }
+    }
+    public class StoreInfo
+    {
+        public int STORE_ID { get; set; }
+        public string STORE_NAME { get; set; }
     }
 }

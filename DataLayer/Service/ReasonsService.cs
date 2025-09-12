@@ -189,29 +189,37 @@ namespace MicroApi.DataLayer.Services
         public Reasons GetItems(int id)
         {
             Reasons reasons = new Reasons();
-
             List<REASON_STORES> reasonstores = new List<REASON_STORES>();
+
             try
             {
-                string strSQL = "SELECT TB_REASONS.ID, TB_REASONS.COMPANY_ID, TB_REASONS.CODE, TB_REASONS.DESCRIPTION, " +
-                  "TB_REASONS.REASON_TYPE, TB_REASONS.START_DATE, TB_REASONS.END_DATE, TB_REASONS.ARABIC_DESCRIPTION, " +
-                  "TB_REASONS.DISCOUNT_TYPE, TB_REASONS.DISCOUNT_PERCENT, TB_REASONS.IS_DELETED, " +
-                  "TB_COMPANY.COMPANY_NAME, " +
-                  "TB_REASON_TYPES.DESCRIPTION, " +
-                  "TB_DISCOUNT_TYPES.DISCOUNT_TYPE " +
-
-                  "FROM TB_REASONS " +
-                  "LEFT JOIN TB_COMPANY ON TB_REASONS.COMPANY_ID = TB_COMPANY.ID " +
-                  "LEFT JOIN TB_REASON_TYPES ON TB_REASONS.REASON_TYPE = TB_REASON_TYPES.ID " +
-                  "LEFT JOIN TB_DISCOUNT_TYPES ON TB_REASONS.DISCOUNT_TYPE = TB_DISCOUNT_TYPES.ID " +
-
-                  "WHERE TB_REASONS.ID =" + id;
+                string strSQL = @"
+            SELECT 
+                R.ID,
+                R.COMPANY_ID,
+                R.CODE,
+                R.DESCRIPTION,
+                R.REASON_TYPE,
+                R.START_DATE,
+                R.END_DATE,
+                R.ARABIC_DESCRIPTION,
+                R.DISCOUNT_TYPE,
+                R.DISCOUNT_PERCENT,
+                R.IS_DELETED,
+                C.COMPANY_NAME,
+                RT.DESCRIPTION AS REASON_TYPE_NAME,
+                DT.DISCOUNT_TYPE AS DISCOUNT_TYPE_NAME
+            FROM TB_REASONS R
+            LEFT JOIN TB_COMPANY C ON R.COMPANY_ID = C.ID
+            LEFT JOIN TB_REASON_TYPES RT ON R.REASON_TYPE = RT.ID
+            LEFT JOIN TB_DISCOUNT_TYPES DT ON R.DISCOUNT_TYPE = DT.ID
+            WHERE R.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Products");
+
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];
-
                     reasons.ID = Convert.ToInt32(dr["ID"]);
                     reasons.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
                     reasons.CODE = Convert.ToString(dr["CODE"]);
@@ -224,24 +232,25 @@ namespace MicroApi.DataLayer.Services
                     reasons.DISCOUNT_PERCENT = float.Parse(dr["DISCOUNT_PERCENT"].ToString());
                     reasons.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
 
-
-                    strSQL = "SELECT ID, CODE, STORE_NAME, " +
-                "CASE WHEN EXISTS(SELECT * FROM TB_REASON_STORES WHERE STORE_ID = TB_STORES.ID AND REASON_ID = 1) " +
-                "THEN 1 ELSE 0 END AS SELECTED FROM TB_STORES WHERE IS_DELETED = 0 AND COMPANY_ID = 1 ORDER BY CODE";
-
-
+                    strSQL = @"
+                SELECT 
+                    RS.ID,
+                    RS.STORE_ID,
+                    S.STORE_NAME
+                FROM TB_REASON_STORES RS
+                INNER JOIN TB_STORES S ON RS.STORE_ID = S.ID
+                WHERE RS.REASON_ID = " + id + " AND S.IS_DELETED = 0";
 
                     DataTable tblDetail = ADO.GetDataTable(strSQL, "ReasonStores");
+
                     if (tblDetail.Rows.Count > 0)
                     {
                         foreach (DataRow dr1 in tblDetail.Rows)
                         {
                             reasonstores.Add(new REASON_STORES
                             {
-
-                                ID = Convert.ToInt32(dr1["ID"])
-
-                                // STORE_ID = Convert.ToString(dr1["STORE_ID"]),
+                                ID = Convert.ToInt32(dr1["ID"]),
+                                STORE_ID = Convert.ToString(dr1["STORE_ID"]), 
                             });
                         }
                     }
@@ -251,9 +260,12 @@ namespace MicroApi.DataLayer.Services
             }
             catch (Exception ex)
             {
-
+                // log ex if needed
             }
+
             return reasons;
         }
+
+
     }
 }

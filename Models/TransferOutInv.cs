@@ -25,6 +25,33 @@
         public string? BATCH_NO { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
+    public class TransferOutInvUpdate
+    {
+        public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public DateTime? TRANSFER_DATE { get; set; }
+        public int? DEST_STORE_ID { get; set; }
+        public double? NET_AMOUNT { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? USER_ID { get; set; }
+        public string? NARRATION { get; set; }
+        public int? REASON_ID { get; set; }
+
+        // Detail rows
+        public List<TransferOutDetail>? DETAILS { get; set; }
+    }
+    public class TransferOutDetailUpdate
+    {
+        public int ID { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? UOM { get; set; }
+        public double? QUANTITY { get; set; }
+        public double? COST { get; set; }
+        public double? AMOUNT { get; set; }
+        public string? BATCH_NO { get; set; }
+        public DateTime? EXPIRY_DATE { get; set; }
+    }
     public class TransferSaveResponse
     {
         public int flag { get; set; }
