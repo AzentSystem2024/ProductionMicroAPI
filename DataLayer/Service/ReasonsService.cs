@@ -36,6 +36,7 @@ namespace MicroApi.DataLayer.Services
                         ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]),
                         DISCOUNT_TYPE = Convert.ToInt32(dr["DISCOUNT_TYPE"]),
                         DISCOUNT_PERCENT = float.Parse(dr["DISCOUNT_PERCENT"].ToString()),
+                        AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
                         //IS_DELETED=Convert.ToBoolean(dr["IS_DELETED"])
                     });
                 }
@@ -86,6 +87,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("ARABIC_DESCRIPTION", reasons.ARABIC_DESCRIPTION);
                 cmd.Parameters.AddWithValue("DISCOUNT_TYPE", reasons.DISCOUNT_TYPE);
                 cmd.Parameters.AddWithValue("DISCOUNT_PERCENT", reasons.DISCOUNT_PERCENT);
+                cmd.Parameters.AddWithValue("AC_HEAD_ID", reasons.AC_HEAD_ID);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_REASON_STORES", tbl);
 
@@ -146,7 +148,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("ARABIC_DESCRIPTION", reasons.ARABIC_DESCRIPTION);
                 cmd.Parameters.AddWithValue("DISCOUNT_TYPE", reasons.DISCOUNT_TYPE);
                 cmd.Parameters.AddWithValue("DISCOUNT_PERCENT", reasons.DISCOUNT_PERCENT);
-
+                cmd.Parameters.AddWithValue("AC_HEAD_ID", reasons.AC_HEAD_ID);
                 cmd.Parameters.AddWithValue("@UDT_TB_REASON_STORES", tbl);
 
                 cmd.ExecuteNonQuery();
@@ -208,7 +210,8 @@ namespace MicroApi.DataLayer.Services
                 R.IS_DELETED,
                 C.COMPANY_NAME,
                 RT.DESCRIPTION AS REASON_TYPE_NAME,
-                DT.DISCOUNT_TYPE AS DISCOUNT_TYPE_NAME
+                DT.DISCOUNT_TYPE AS DISCOUNT_TYPE_NAME,
+                R.AC_HEAD_ID
             FROM TB_REASONS R
             LEFT JOIN TB_COMPANY C ON R.COMPANY_ID = C.ID
             LEFT JOIN TB_REASON_TYPES RT ON R.REASON_TYPE = RT.ID
@@ -231,6 +234,7 @@ namespace MicroApi.DataLayer.Services
                     reasons.DISCOUNT_TYPE = Convert.ToInt32(dr["DISCOUNT_TYPE"]);
                     reasons.DISCOUNT_PERCENT = float.Parse(dr["DISCOUNT_PERCENT"].ToString());
                     reasons.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
+                    reasons.AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]);
 
                     strSQL = @"
                 SELECT 

@@ -23,6 +23,7 @@
         public double COST { get; set; }
         public double AMOUNT { get; set; }
         public string? BATCH_NO { get; set; }
+        public double REQ_QTY { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
     public class TransferOutInvUpdate
@@ -50,6 +51,7 @@
         public double? COST { get; set; }
         public double? AMOUNT { get; set; }
         public string? BATCH_NO { get; set; }
+        public double REQ_QTY { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
     public class TransferSaveResponse
@@ -77,5 +79,12 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<ItemInfo> Data { get; set; }
+    }
+    public class TransferoutinvResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<TransferOutInvUpdate> Header { get; set; }
+
     }
 }
