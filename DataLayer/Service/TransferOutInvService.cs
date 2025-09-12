@@ -220,11 +220,11 @@ namespace MicroApi.DataLayer.Service
                         ID = ADO.ToInt32(dr["DETAIL_ID"]),
                         ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
                         UOM = ADO.ToString(dr["UOM"]),
-                        QUANTITY = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
+                        QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
                         COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
                         AMOUNT = dr["DETAIL_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["DETAIL_NET_AMOUNT"]),
                         BATCH_NO = ADO.ToString(dr["BATCH_NO"]),
-                        REQ_QTY = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
+                        QUANTITY = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
                         EXPIRY_DATE = dr["EXPIRY_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["EXPIRY_DATE"])
                     };
 
@@ -235,6 +235,63 @@ namespace MicroApi.DataLayer.Service
             }
 
             return list;
+        }
+        public TransferOutInvUpdate GetTransferOutById(int id)
+        {
+            TransferOutInvUpdate result = null;
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 0); 
+                cmd.Parameters.AddWithValue("@ID", id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    // Create header
+                    DataRow firstRow = dt.Rows[0];
+                    result = new TransferOutInvUpdate
+                    {
+                        ID = ADO.ToInt32(firstRow["TRANSFER_ID"]),
+                        COMPANY_ID = ADO.ToInt32(firstRow["COMPANY_ID"]),
+                        STORE_ID = ADO.ToInt32(firstRow["STORE_ID"]),
+                        TRANSFER_DATE = firstRow["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(firstRow["TRANSFER_DATE"]),
+                        DEST_STORE_ID = ADO.ToInt32(firstRow["DEST_STORE_ID"]),
+                        NET_AMOUNT = firstRow["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(firstRow["NET_AMOUNT"]),
+                        FIN_ID = ADO.ToInt32(firstRow["FIN_ID"]),
+                        USER_ID = ADO.ToInt32(firstRow["USER_ID"]),
+                        NARRATION = ADO.ToString(firstRow["NARRATION"]),
+                        REASON_ID = ADO.ToInt32(firstRow["REASON_ID"]),
+                        DETAILS = new List<TransferOutDetailUpdate>()
+                    };
+
+                    // Add details
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        TransferOutDetailUpdate detail = new TransferOutDetailUpdate
+                        {
+                            ID = ADO.ToInt32(dr["DETAIL_ID"]),
+                            ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
+                            UOM = ADO.ToString(dr["UOM"]),
+                            QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
+                            COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
+                            AMOUNT = dr["DETAIL_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["DETAIL_NET_AMOUNT"]),
+                            BATCH_NO = ADO.ToString(dr["BATCH_NO"]),
+                            QUANTITY = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
+                            EXPIRY_DATE = dr["EXPIRY_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["EXPIRY_DATE"])
+                        };
+
+                        result.DETAILS.Add(detail);
+                    }
+                }
+            }
+
+            return result;
         }
 
     }

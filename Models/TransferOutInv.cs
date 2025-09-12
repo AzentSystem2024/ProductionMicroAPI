@@ -21,9 +21,8 @@
         public string UOM { get; set; }
         public double QUANTITY { get; set; }
         public double COST { get; set; }
-        public double AMOUNT { get; set; }
+        //public double AMOUNT { get; set; }
         public string? BATCH_NO { get; set; }
-        public double REQ_QTY { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
     public class TransferOutInvUpdate
@@ -51,7 +50,7 @@
         public double? COST { get; set; }
         public double? AMOUNT { get; set; }
         public string? BATCH_NO { get; set; }
-        public double REQ_QTY { get; set; }
+        public double? QUANTITY_AVAILABLE { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
     public class TransferSaveResponse
