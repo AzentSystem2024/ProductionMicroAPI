@@ -118,7 +118,7 @@ namespace MicroApi.DataLayer.Services
                 COSTINGMETHOD = dr["COSTING_METHOD"] != DBNull.Value ? Convert.ToString(dr["COSTING_METHOD"]) : string.Empty,
                 POS_DESCRIPTION = dr["POS_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["POS_DESCRIPTION"]) : string.Empty,
                 IS_DIFFERENT_UOM_PURCH = bool.TryParse(dr["IS_DIFFERENT_UOM_PURCH"]?.ToString(), out var isDifferentUomPurch) ? isDifferentUomPurch : (bool?)null,
-                UOM_PURCH = int.TryParse(dr["UOM_PURCH"]?.ToString(), out var uomPurch) ? uomPurch : 0,
+                UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
                 UOM_MULTPLE = int.TryParse(dr["UOM_MULTPLE"]?.ToString(), out var uomMultiple) ? uomMultiple : 0,
                 MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
                 item_stores = itemstores,
@@ -129,7 +129,7 @@ namespace MicroApi.DataLayer.Services
             return itemsList;
         }
 
-        public bool Insert(Items items)
+        public (int flag, string message) Insert(Items items)
         {
             SqlConnection connection = ADO.GetConnection();
             SqlTransaction objtrans = connection.BeginTransaction();
@@ -323,24 +323,36 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_SUPPLIER", tbl2);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_COMPONENT", tbl3);
 
-                cmd.ExecuteNonQuery();
+                cmd.Parameters.Add("@flag", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@message", SqlDbType.NVarChar, 200).Direction = ParameterDirection.Output;
 
+                cmd.ExecuteNonQuery();
                 objtrans.Commit();
 
+                int flag = Convert.ToInt32(cmd.Parameters["@flag"].Value);
+                string msg = Convert.ToString(cmd.Parameters["@message"].Value);
+
                 connection.Close();
-                return true;
-
-                //Int32 CountryID = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
-                //return CountryID;
+                return (flag, msg);
+            }
+            catch (SqlException sqlEx)
+            {
+                objtrans.Rollback();
+                connection.Close();
+                if (sqlEx.Number == 2627 || sqlEx.Number == 2601)
+                {
+                    return (0, "Duplicate entry: The alias you are trying to insert already exists.");
+                }
+                else
+                {
+                    return (0, "Database error: " + sqlEx.Message);
+                }
             }
             catch (Exception ex)
             {
                 objtrans.Rollback();
                 connection.Close();
-                throw ex;
+                return (0, "Error: " + ex.Message);
             }
         }
         public bool Update(Items items)
@@ -676,7 +688,7 @@ namespace MicroApi.DataLayer.Services
                         POS_DESCRIPTION = dr["POS_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["POS_DESCRIPTION"]) : string.Empty,
 
                         IS_DIFFERENT_UOM_PURCH = Convert.IsDBNull(dr["IS_DIFFERENT_UOM_PURCH"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DIFFERENT_UOM_PURCH"]),
-                        UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToInt32(dr["UOM_PURCH"]) : 0,
+                        UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
                         UOM_MULTPLE = dr["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(dr["UOM_MULTPLE"]) : 0,
                         MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
 

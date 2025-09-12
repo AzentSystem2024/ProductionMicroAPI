@@ -168,7 +168,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["COST"] = ur.COST;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["RETURN_QTY"] = ur.RETURN_QTY;
+                        dRow["RETURN_QTY"] = ur.RECEIVED_QTY;
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM"] = ur.UOM;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
@@ -326,7 +326,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["COST"] = ur.COST;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["RETURN_QTY"] = ur.RETURN_QTY;
+                        dRow["RETURN_QTY"] = ur.RECEIVED_QTY;
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM"] = ur.UOM;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
@@ -484,7 +484,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["COST"] = ur.COST;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["RETURN_QTY"] = ur.RETURN_QTY;
+                        dRow["RETURN_QTY"] = ur.RECEIVED_QTY;
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM"] = ur.UOM;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
@@ -674,7 +674,7 @@ namespace MicroApi.DataLayer.Service
                         COST = ADO.ToFloat(dr3["COST"]),
                         SUPP_PRICE = ADO.ToFloat(dr3["SUPP_PRICE"]),
                         SUPP_AMOUNT = ADO.ToFloat(dr3["SUPP_AMOUNT"]),
-                        RETURN_QTY = ADO.ToFloat(dr3["RETURN_QTY"]),
+                        RECEIVED_QTY = ADO.ToFloat(dr3["RETURN_QTY"]),
                         UOM_PURCH = ADO.ToString(dr3["UOM_PURCH"]),
                         UOM = ADO.ToString(dr3["UOM"]),
                         UOM_MULTIPLE = ADO.ToInt32(dr3["UOM_MULTIPLE"]),
@@ -847,7 +847,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["COST"] = ur.COST;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["RETURN_QTY"] = ur.RETURN_QTY;
+                        dRow["RETURN_QTY"] = ur.RECEIVED_QTY;
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM"] = ur.UOM;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;

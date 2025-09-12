@@ -168,6 +168,17 @@ namespace MicroApi.DataLayer.Service
                                     response.VAT_ID = reader["VAT_ID"] != DBNull.Value ? Convert.ToInt32(reader["VAT_ID"]) : (int?)null;
                                     response.VAT_NAME = reader["VAT_NAME"]?.ToString();
                                 }
+                                if (reader.NextResult())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        response.Configuration.Add(new StoreInfo
+                                        {
+                                            STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                            STORE_NAME = reader["STORE_NAME"]?.ToString()
+                                        });
+                                    }
+                                }
                             }
                         }
                     }

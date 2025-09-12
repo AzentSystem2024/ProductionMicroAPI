@@ -71,7 +71,7 @@
         public int? UNIT_ID { get; set; }
         public string? UOM { get; set; }
         public bool? IS_DIFFERENT_UOM_PURCH { get; set; }
-        public int? UOM_PURCH { get; set; }
+        public string? UOM_PURCH { get; set; }
         public int? UOM_MULTPLE { get; set; }
         public string? MATRIX_CODE {get; set; }
         public List<ITEM_STORES> item_stores { get; set; }

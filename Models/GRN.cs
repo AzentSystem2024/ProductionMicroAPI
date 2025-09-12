@@ -69,7 +69,7 @@
         public float COST { get; set; }
         public float SUPP_PRICE { get; set; }
         public float SUPP_AMOUNT { get; set; }
-        public float RETURN_QTY { get; set; }
+        public float RECEIVED_QTY { get; set; }
         public string UOM_PURCH { get; set; }
         public string UOM { get; set; }
         public int UOM_MULTIPLE { get; set; }
