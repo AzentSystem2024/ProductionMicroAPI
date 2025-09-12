@@ -78,6 +78,27 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("list")]
+        public TransferoutinvResponse List()
+        {
+            var res = new TransferoutinvResponse();
+            try
+            {
+                List<TransferOutInvUpdate> transferList = _transferOutInv.GetTransferOutList();
+
+                res.flag = 1;
+                res.Message = "Success";
+                res.Header = transferList;
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
 
     }
 }

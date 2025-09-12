@@ -19,7 +19,7 @@
         public string ARABIC_DESCRIPTION { get; set; }
 
         public int DISCOUNT_TYPE { get; set; }
-
+        public int? AC_HEAD_ID { get; set; }
         public float DISCOUNT_PERCENT { get; set; }
 
         public bool IS_DELETED { get; set; }
