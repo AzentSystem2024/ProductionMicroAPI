@@ -39,7 +39,7 @@
         public int? REASON_ID { get; set; }
 
         // Detail rows
-        public List<TransferOutDetail>? DETAILS { get; set; }
+        public List<TransferOutDetailUpdate>? DETAILS { get; set; }
     }
     public class TransferOutDetailUpdate
     {
@@ -69,8 +69,8 @@
     }
     public class ItemRequest
     {
-        public string ITEM_CODE { get; set; }
-        public string MATRIX_CODE { get; set; }
+        public int STORE_ID { get; set; }
+        
     }
     public class ItemInfoResponse
     {
