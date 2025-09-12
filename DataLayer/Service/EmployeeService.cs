@@ -61,6 +61,8 @@ namespace MicroApi.DataLayer.Service
                         WORK_PERMIT_EXPIRY = Convert.IsDBNull(dr["WORK_PERMIT_EXPIRY"]) ? (DateTime?)null : Convert.ToDateTime(dr["WORK_PERMIT_EXPIRY"]),
                         IBAN_NO = Convert.IsDBNull(dr["IBAN_NO"]) ? null : Convert.ToString(dr["IBAN_NO"]),
                         DAMAN_NO = Convert.IsDBNull(dr["DAMAN_NO"]) ? null : Convert.ToString(dr["DAMAN_NO"]),
+                        PF_AC_NO = Convert.IsDBNull(dr["PF_AC_NO"]) ? null : Convert.ToString(dr["PF_AC_NO"]),
+                        ESI_NO = Convert.IsDBNull(dr["ESI_NO"]) ? null : Convert.ToString(dr["ESI_NO"]),
                         DAMAN_CATEGORY = Convert.IsDBNull(dr["DAMAN_CATEGORY"]) ? null : Convert.ToString(dr["DAMAN_CATEGORY"]),
                         MOL_NUMBER = Convert.IsDBNull(dr["MOL_NUMBER"]) ? null : Convert.ToString(dr["MOL_NUMBER"]),
                         LAST_REJOIN_DATE = Convert.IsDBNull(dr["LAST_REJOIN_DATE"]) ? (DateTime?)null : Convert.ToDateTime(dr["LAST_REJOIN_DATE"]),
@@ -241,6 +243,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@WORK_PERMIT_EXPIRY", (object)employee.WORK_PERMIT_EXPIRY ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@IBAN_NO", (object)employee.IBAN_NO ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DAMAN_NO", (object)employee.DAMAN_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PF_AC_NO", (object)employee.PF_AC_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ESI_NO", (object)employee.ESI_NO ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DAMAN_CATEGORY", (object)employee.DAMAN_CATEGORY ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@MOL_NUMBER", (object)employee.MOL_NUMBER ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@LAST_REJOIN_DATE", (object)employee.LAST_REJOIN_DATE ?? DBNull.Value);
@@ -328,6 +332,10 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@IBAN_NO", employee.IBAN_NO);
                 if (!string.IsNullOrEmpty(employee.DAMAN_NO))
                     cmd.Parameters.AddWithValue("@DAMAN_NO", employee.DAMAN_NO);
+                if (!string.IsNullOrEmpty(employee.PF_AC_NO))
+                    cmd.Parameters.AddWithValue("@PF_AC_NO", employee.PF_AC_NO);
+                if (!string.IsNullOrEmpty(employee.ESI_NO))
+                    cmd.Parameters.AddWithValue("@ESI_NO", employee.ESI_NO);
                 if (!string.IsNullOrEmpty(employee.DAMAN_CATEGORY))
                     cmd.Parameters.AddWithValue("@DAMAN_CATEGORY", employee.DAMAN_CATEGORY);
                 if (employee.LEAVE_CREDIT != default(decimal))
@@ -402,7 +410,7 @@ namespace MicroApi.DataLayer.Service
                 "TB_EMPLOYEE.VISA_NO, TB_EMPLOYEE.VISA_EXPIRY, TB_EMPLOYEE.LICENSE_NO, " +
                 "TB_EMPLOYEE.LICENSE_EXPIRY, TB_EMPLOYEE.EMP_STATUS, TB_EMPLOYEE.IS_SALESMAN, " +
                 "TB_EMPLOYEE.IMAGE_NAME, TB_EMPLOYEE.WORK_PERMIT_NO, TB_EMPLOYEE.WORK_PERMIT_EXPIRY, " +
-                "TB_EMPLOYEE.IBAN_NO, TB_EMPLOYEE.DAMAN_NO, TB_EMPLOYEE.DAMAN_CATEGORY, " +
+                "TB_EMPLOYEE.IBAN_NO, TB_EMPLOYEE.DAMAN_NO,TB_EMPLOYEE.PF_AC_NO,TB_EMPLOYEE.ESI_NO, TB_EMPLOYEE.DAMAN_CATEGORY, " +
                 "TB_EMPLOYEE.LEAVE_CREDIT, TB_EMPLOYEE.LESS_SERVICE_DAYS, TB_EMPLOYEE.HOLD_SALARY, " +
                 "TB_EMPLOYEE.MOL_NUMBER, TB_EMPLOYEE.LAST_REJOIN_DATE, TB_EMPLOYEE.INCENTIVE_PERCENT, " +
                 "TB_EMPLOYEE.IS_DELETED, " +
@@ -489,6 +497,8 @@ namespace MicroApi.DataLayer.Service
 
                     employee.IBAN_NO = dr["IBAN_NO"] != DBNull.Value ? Convert.ToString(dr["IBAN_NO"]) : "";
                     employee.DAMAN_NO = dr["DAMAN_NO"] != DBNull.Value ? Convert.ToString(dr["DAMAN_NO"]) : "";
+                    employee.PF_AC_NO = dr["PF_AC_NO"] != DBNull.Value ? Convert.ToString(dr["PF_AC_NO"]) : "";
+                    employee.ESI_NO = dr["ESI_NO"] != DBNull.Value ? Convert.ToString(dr["ESI_NO"]) : "";
                     employee.DAMAN_CATEGORY = dr["DAMAN_CATEGORY"] != DBNull.Value ? Convert.ToString(dr["DAMAN_CATEGORY"]) : "";
                     employee.MOL_NUMBER = dr["MOL_NUMBER"] != DBNull.Value ? Convert.ToString(dr["MOL_NUMBER"]) : "";
 
