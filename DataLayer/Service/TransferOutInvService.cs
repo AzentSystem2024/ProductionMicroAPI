@@ -162,80 +162,57 @@ namespace MicroApi.DataLayer.Service
                 {
                     items.Add(new ItemInfo
                     {
+                        ID = ADO.ToInt32(dr["ID"]),
                         BARCODE = ADO.ToString(dr["BARCODE"]),
                         DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
                         UOM = ADO.ToString(dr["UOM"]),
-                        UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
+                        COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
                         QTY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"])
                     });
                 }
             }
             return items;
         }
-        public List<TransferOutInvUpdate> GetTransferOutList()
+        public List<TransferOutDetailList> GetTransferOutList()
         {
-            List<TransferOutInvUpdate> list = new List<TransferOutInvUpdate>();
+            List<TransferOutDetailList> list = new List<TransferOutDetailList>();
 
             using (SqlConnection connection = ADO.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@ACTION", 0);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                // Use dictionary to group header and details
-                Dictionary<int, TransferOutInvUpdate> headerMap = new Dictionary<int, TransferOutInvUpdate>();
-
-                foreach (DataRow dr in dt.Rows)
+                using (SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection))
                 {
-                    int transferId = ADO.ToInt32(dr["TRANSFER_ID"]);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 0); // Action=0 to get list
 
-                    // Check if header already exists
-                    if (!headerMap.ContainsKey(transferId))
+                    DataTable dt = new DataTable();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        TransferOutInvUpdate header = new TransferOutInvUpdate
+                        var header = new TransferOutDetailList
                         {
-                            ID = transferId,
+                            ID = ADO.ToInt32(dr["TRANSFER_ID"]),
                             COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
                             STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                             TRANSFER_DATE = dr["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["TRANSFER_DATE"]),
                             DEST_STORE_ID = ADO.ToInt32(dr["DEST_STORE_ID"]),
                             NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["NET_AMOUNT"]),
-                            FIN_ID = ADO.ToInt32(dr["FIN_ID"]),
-                            USER_ID = ADO.ToInt32(dr["USER_ID"]),
                             NARRATION = ADO.ToString(dr["NARRATION"]),
-                            REASON_ID = ADO.ToInt32(dr["REASON_ID"]),
-                            DETAILS = new List<TransferOutDetailUpdate>()
+                            REASON_ID = dr["REASON_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["REASON_ID"]),
+                            ISSUE_NO = ADO.ToInt32(dr["ISSUE_NO"]),
+                            STORE_NAME = ADO.ToString(dr["STORE_NAME"])
+                            // No DETAILS list needed since only header info
                         };
 
-                        headerMap.Add(transferId, header);
+                        list.Add(header);
                     }
-
-                    // Always add detail row
-                    TransferOutDetailUpdate detail = new TransferOutDetailUpdate
-                    {
-                        ID = ADO.ToInt32(dr["DETAIL_ID"]),
-                        ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
-                        UOM = ADO.ToString(dr["UOM"]),
-                        QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
-                        COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
-                        AMOUNT = dr["DETAIL_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["DETAIL_NET_AMOUNT"]),
-                        BATCH_NO = ADO.ToString(dr["BATCH_NO"]),
-                        QUANTITY = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
-                        EXPIRY_DATE = dr["EXPIRY_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["EXPIRY_DATE"])
-                    };
-
-                    headerMap[transferId].DETAILS.Add(detail);
                 }
-
-                list = headerMap.Values.ToList();
             }
 
             return list;
         }
+
         public TransferOutInvUpdate GetTransferOutById(int id)
         {
             TransferOutInvUpdate result = null;
@@ -292,6 +269,69 @@ namespace MicroApi.DataLayer.Service
             }
 
             return result;
+        }
+        public TransferOutInvUpdate GetTransferOut(int id)
+        {
+            TransferOutInvUpdate transfer = new TransferOutInvUpdate();
+            List<TransferOutDetailUpdate> details = new List<TransferOutDetailUpdate>();
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 0);
+                    cmd.Parameters.AddWithValue("@ID", id);
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable tbl = new DataTable();
+                    da.Fill(tbl);
+
+                    if (tbl.Rows.Count > 0)
+                    {
+                        DataRow dr = tbl.Rows[0];
+                        transfer = new TransferOutInvUpdate
+                        {
+                            ID = ADO.ToInt32(dr["TRANSFER_ID"]),
+                            COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
+                            STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
+                            TRANSFER_DATE = dr["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["TRANSFER_DATE"]),
+                            DEST_STORE_ID = ADO.ToInt32(dr["DEST_STORE_ID"]),
+                            NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["NET_AMOUNT"]),
+                            FIN_ID = ADO.ToInt32(dr["FIN_ID"]),
+                            USER_ID = ADO.ToInt32(dr["USER_ID"]),
+                            NARRATION = ADO.ToString(dr["NARRATION"]),
+                            REASON_ID = ADO.ToInt32(dr["REASON_ID"]),
+                            DETAILS = new List<TransferOutDetailUpdate>()
+                        };
+
+                        foreach (DataRow dr2 in tbl.Rows)
+                        {
+                            TransferOutDetailUpdate d = new TransferOutDetailUpdate
+                            {
+                                ID = ADO.ToInt32(dr2["DETAIL_ID"]),
+                                ITEM_ID = ADO.ToInt32(dr2["ITEM_ID"]),
+                                UOM = ADO.ToString(dr2["UOM"]),
+                                QUANTITY = dr2["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["QTY_ISSUED"]),
+                                COST = dr2["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["UNIT_COST"]),
+                                AMOUNT = dr2["DETAIL_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["DETAIL_NET_AMOUNT"]),
+                                BATCH_NO = ADO.ToString(dr2["BATCH_NO"]),
+                                EXPIRY_DATE = dr2["EXPIRY_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr2["EXPIRY_DATE"]),
+                                QUANTITY_AVAILABLE = dr2["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["QTY_AVAILABLE"])
+                            };
+
+                            transfer.DETAILS.Add(d);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return transfer;
         }
 
     }

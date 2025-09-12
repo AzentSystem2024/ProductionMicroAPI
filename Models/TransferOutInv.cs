@@ -53,6 +53,21 @@
         public double? QUANTITY_AVAILABLE { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
+    public class TransferOutDetailList
+    {
+        public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public DateTime? TRANSFER_DATE { get; set; }
+        public int? DEST_STORE_ID { get; set; }
+        public double? NET_AMOUNT { get; set; }
+        public string? NARRATION { get; set; }
+        public int? REASON_ID { get; set; }
+        public string? STORE_NAME { get; set; }
+        public int? ISSUE_NO { get; set; }
+
+
+    }
     public class TransferSaveResponse
     {
         public int flag { get; set; }
@@ -61,12 +76,12 @@
     }
     public class ItemInfo
     {
+        public int ID { get; set; }
         public string BARCODE { get; set; }
         public string DESCRIPTION { get; set; }
         public string UOM { get; set; }
-        public double UNIT_COST { get; set; }
+        public double COST { get; set; }
         public double QTY_AVAILABLE { get; set; }
-        public double QTY_ISSUED { get; set; }
     }
     public class ItemRequest
     {
@@ -83,7 +98,7 @@
     {
         public int flag { get; set; }
         public string Message { get; set; }
-        public List<TransferOutInvUpdate> Header { get; set; }
+        public List<TransferOutDetailList> Header { get; set; }
 
     }
 }

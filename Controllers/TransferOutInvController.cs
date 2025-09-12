@@ -85,7 +85,7 @@ namespace MicroApi.Controllers
             var res = new TransferoutinvResponse();
             try
             {
-                List<TransferOutInvUpdate> transferList = _transferOutInv.GetTransferOutList();
+                List<TransferOutDetailList> transferList = _transferOutInv.GetTransferOutList();
 
                 res.flag = 1;
                 res.Message = "Success";
@@ -99,6 +99,20 @@ namespace MicroApi.Controllers
 
             return res;
         }
-
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public TransferOutInvUpdate Select(int id)
+        {
+            TransferOutInvUpdate objScheme = new TransferOutInvUpdate();
+            try
+            {
+                objScheme = _transferOutInv.GetTransferOut(id);
+            }
+            catch (Exception ex)
+            {
+                // You may log ex here
+            }
+            return objScheme;
+        }
     }
 }

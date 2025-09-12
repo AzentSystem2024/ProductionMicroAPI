@@ -17,7 +17,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Connection = connection;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_REASONS";
-                cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("@ACTION", 0);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -36,7 +36,7 @@ namespace MicroApi.DataLayer.Services
                         ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]),
                         DISCOUNT_TYPE = Convert.ToInt32(dr["DISCOUNT_TYPE"]),
                         DISCOUNT_PERCENT = float.Parse(dr["DISCOUNT_PERCENT"].ToString()),
-                        AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
+                        AC_HEAD_ID = dr["AC_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AC_HEAD_ID"]),
                         //IS_DELETED=Convert.ToBoolean(dr["IS_DELETED"])
                     });
                 }
