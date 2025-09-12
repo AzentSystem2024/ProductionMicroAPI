@@ -77,6 +77,71 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
+        public Int32 Update(TransferOutInvUpdate transferOut)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlTransaction objtrans = connection.BeginTransaction();
+                try
+                {
+                    // Build DataTable for detail updates
+                    DataTable tbl = new DataTable();
+                    tbl.Columns.Add("ID", typeof(Int32));
+                    tbl.Columns.Add("ITEM_ID", typeof(Int32));
+                    tbl.Columns.Add("UOM", typeof(string));
+                    tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("COST", typeof(double));
+                    tbl.Columns.Add("AMOUNT", typeof(double));
+                    tbl.Columns.Add("BATCH_NO", typeof(string));
+                    tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+
+                    if (transferOut.DETAILS != null && transferOut.DETAILS.Any())
+                    {
+                        foreach (TransferOutDetailUpdate ur in transferOut.DETAILS)
+                        {
+                            DataRow dRow = tbl.NewRow();
+                            dRow["ID"] = ur.ID;
+                            dRow["ITEM_ID"] = ur.ITEM_ID ?? (object)DBNull.Value;
+                            dRow["UOM"] = (object?)ur.UOM ?? DBNull.Value;
+                            dRow["QUANTITY"] = ur.QUANTITY ?? 0;
+                            dRow["COST"] = ur.COST ?? 0;
+                            dRow["AMOUNT"] = ur.AMOUNT ?? 0;
+                            dRow["BATCH_NO"] = (object?)ur.BATCH_NO ?? DBNull.Value;
+                            dRow["EXPIRY_DATE"] = (object?)ur.EXPIRY_DATE ?? DBNull.Value;
+                            tbl.Rows.Add(dRow);
+                        }
+                    }
+
+                    SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection, objtrans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ACTION", 2); 
+                    cmd.Parameters.AddWithValue("@ID", transferOut.ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object?)transferOut.COMPANY_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@STORE_ID", (object?)transferOut.STORE_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@TRANSFER_DATE", (object?)transferOut.TRANSFER_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DEST_STORE_ID", (object?)transferOut.DEST_STORE_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@NET_AMOUNT", (object?)transferOut.NET_AMOUNT ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@FIN_ID", (object?)transferOut.FIN_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@USER_ID", (object?)transferOut.USER_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@NARRATION", (object?)transferOut.NARRATION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@REASON_ID", (object?)transferOut.REASON_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_DETAIL", tbl);
+
+                    object result = cmd.ExecuteScalar();
+                    Int32 updatedId = ADO.ToInt32(result);
+
+                    objtrans.Commit();
+                    return updatedId;
+                }
+                catch (Exception ex)
+                {
+                    objtrans.Rollback();
+                    throw;
+                }
+            }
+        }
+
         public List<ItemInfo> GetItemInfo(ItemRequest request)
         {
             List<ItemInfo> items = new List<ItemInfo>();
@@ -86,8 +151,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@ACTION", 3);
-                cmd.Parameters.AddWithValue("@ITEM_CODE", (object)request.ITEM_CODE ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@MATRIX_CODE", (object)request.MATRIX_CODE ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@STORE_ID", (object)request.STORE_ID ?? DBNull.Value);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -101,8 +165,7 @@ namespace MicroApi.DataLayer.Service
                         DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
                         UOM = ADO.ToString(dr["UOM"]),
                         UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
-                        QTY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
-                        QTY_ISSUED = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"])
+                        QTY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"])
                     });
                 }
             }
