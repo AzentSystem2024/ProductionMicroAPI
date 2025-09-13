@@ -101,4 +101,10 @@
         public List<TransferOutDetailList> Header { get; set; }
 
     }
+    public class TransferDoc
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int TRANSFER_NO { get; set; }
+    }
 }

@@ -9,6 +9,9 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Update(TransferOutInvUpdate transferOut);
         public List<TransferOutDetailList> GetTransferOutList();
         TransferOutInvUpdate GetTransferOut(int id);
+        public bool Delete(int id);
+        TransferDoc GetLastDocNo();
+
 
     }
 }

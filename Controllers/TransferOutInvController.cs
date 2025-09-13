@@ -110,9 +110,48 @@ namespace MicroApi.Controllers
             }
             catch (Exception ex)
             {
-                // You may log ex here
             }
             return objScheme;
+        }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public TransferSaveResponse Delete(int id)
+        {
+            TransferSaveResponse res = new TransferSaveResponse();
+
+            try
+            {
+
+
+                _transferOutInv.Delete(id);
+                res.flag = 1;
+                res.Message = "Success";
+
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("transferno")]
+        public TransferDoc GetLastDocNo()
+        {
+            TransferDoc res = new TransferDoc();
+
+            try
+            {
+                res = _transferOutInv.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
         }
     }
 }

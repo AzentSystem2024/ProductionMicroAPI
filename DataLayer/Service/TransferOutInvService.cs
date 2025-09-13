@@ -273,55 +273,57 @@ namespace MicroApi.DataLayer.Service
         public TransferOutInvUpdate GetTransferOut(int id)
         {
             TransferOutInvUpdate transfer = new TransferOutInvUpdate();
-            List<TransferOutDetailUpdate> details = new List<TransferOutDetailUpdate>();
-
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ACTION", 0);
-                    cmd.Parameters.AddWithValue("@ID", id);
-
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable tbl = new DataTable();
-                    da.Fill(tbl);
-
-                    if (tbl.Rows.Count > 0)
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection))
                     {
-                        DataRow dr = tbl.Rows[0];
-                        transfer = new TransferOutInvUpdate
-                        {
-                            ID = ADO.ToInt32(dr["TRANSFER_ID"]),
-                            COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
-                            STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                            TRANSFER_DATE = dr["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["TRANSFER_DATE"]),
-                            DEST_STORE_ID = ADO.ToInt32(dr["DEST_STORE_ID"]),
-                            NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["NET_AMOUNT"]),
-                            FIN_ID = ADO.ToInt32(dr["FIN_ID"]),
-                            USER_ID = ADO.ToInt32(dr["USER_ID"]),
-                            NARRATION = ADO.ToString(dr["NARRATION"]),
-                            REASON_ID = ADO.ToInt32(dr["REASON_ID"]),
-                            DETAILS = new List<TransferOutDetailUpdate>()
-                        };
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 0); // Fetch by ID
+                        cmd.Parameters.AddWithValue("@ID", id);
 
-                        foreach (DataRow dr2 in tbl.Rows)
+                        DataTable tbl = new DataTable();
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(tbl);
+
+                        if (tbl.Rows.Count > 0)
                         {
-                            TransferOutDetailUpdate d = new TransferOutDetailUpdate
+                            // Initialize header object
+                            DataRow firstRow = tbl.Rows[0];
+                            transfer = new TransferOutInvUpdate
                             {
-                                ID = ADO.ToInt32(dr2["DETAIL_ID"]),
-                                ITEM_ID = ADO.ToInt32(dr2["ITEM_ID"]),
-                                UOM = ADO.ToString(dr2["UOM"]),
-                                QUANTITY = dr2["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["QTY_ISSUED"]),
-                                COST = dr2["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["UNIT_COST"]),
-                                AMOUNT = dr2["DETAIL_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["DETAIL_NET_AMOUNT"]),
-                                BATCH_NO = ADO.ToString(dr2["BATCH_NO"]),
-                                EXPIRY_DATE = dr2["EXPIRY_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr2["EXPIRY_DATE"]),
-                                QUANTITY_AVAILABLE = dr2["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr2["QTY_AVAILABLE"])
+                                ID = ADO.ToInt32(firstRow["TRANSFER_ID"]),
+                                COMPANY_ID = firstRow["COMPANY_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["COMPANY_ID"]),
+                                STORE_ID = firstRow["STORE_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["STORE_ID"]),
+                                TRANSFER_DATE = firstRow["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(firstRow["TRANSFER_DATE"]),
+                                DEST_STORE_ID = firstRow["DEST_STORE_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["DEST_STORE_ID"]),
+                                NET_AMOUNT = firstRow["NET_AMOUNT"] == DBNull.Value ? null : Convert.ToDouble(firstRow["NET_AMOUNT"]),
+                                FIN_ID = firstRow["FIN_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["FIN_ID"]),
+                                USER_ID = firstRow["USER_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["USER_ID"]),
+                                NARRATION = firstRow["NARRATION"] == DBNull.Value ? null : ADO.ToString(firstRow["NARRATION"]),
+                                REASON_ID = firstRow["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["REASON_ID"]),
+                                DETAILS = new List<TransferOutDetailUpdate>()
                             };
 
-                            transfer.DETAILS.Add(d);
+                            // Loop through all rows to populate DETAILS
+                            foreach (DataRow dr in tbl.Rows)
+                            {
+                                var detail = new TransferOutDetailUpdate
+                                {
+                                    ID = dr["DETAIL_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["DETAIL_ID"]),
+                                    ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? null : ADO.ToInt32(dr["ITEM_ID"]),
+                                    UOM = dr["UOM"] == DBNull.Value ? null : ADO.ToString(dr["UOM"]),
+                                    QUANTITY = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
+                                    COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
+                                    AMOUNT = dr["DETAIL_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["DETAIL_NET_AMOUNT"]),
+                                    BATCH_NO = dr["BATCH_NO"] == DBNull.Value ? null : ADO.ToString(dr["BATCH_NO"]),
+                                    EXPIRY_DATE = dr["EXPIRY_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["EXPIRY_DATE"]),
+                                    QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"])
+                                };
+
+                                transfer.DETAILS.Add(detail);
+                            }
                         }
                     }
                 }
@@ -334,5 +336,62 @@ namespace MicroApi.DataLayer.Service
             return transfer;
         }
 
+        public bool Delete(int id)
+        {
+            try
+            {
+                SqlConnection connection = ADO.GetConnection();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "SP_TB_TRANSFER_OUT";
+                cmd.Parameters.AddWithValue("ACTION", 4);
+                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public TransferDoc GetLastDocNo()
+        {
+            TransferDoc res = new TransferDoc();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                    SELECT TOP 1 VOUCHER_NO 
+                    FROM TB_AC_TRANS_HEADER 
+                    WHERE TRANS_TYPE = 14
+                    ORDER BY TRANS_ID DESC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        res.flag = 1;
+                        res.TRANSFER_NO = result != null ? Convert.ToInt32(result) : 0;
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
