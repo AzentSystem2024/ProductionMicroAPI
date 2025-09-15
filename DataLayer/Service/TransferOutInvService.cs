@@ -202,7 +202,9 @@ namespace MicroApi.DataLayer.Service
                             NARRATION = ADO.ToString(dr["NARRATION"]),
                             REASON_ID = dr["REASON_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["REASON_ID"]),
                             ISSUE_NO = ADO.ToInt32(dr["ISSUE_NO"]),
-                            STORE_NAME = ADO.ToString(dr["STORE_NAME"])
+                            STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
+                            STATUS = ADO.ToString(dr["STATUS"])
+
                             // No DETAILS list needed since only header info
                         };
 
