@@ -153,5 +153,26 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("approve")]
+        public TransferSaveResponse approve(TransferOutInvUpdate transferOut)
+        {
+            TransferSaveResponse res = new TransferSaveResponse();
+
+            try
+            {
+
+                _transferOutInv.approve(transferOut);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
     }
 }
