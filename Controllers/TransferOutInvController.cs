@@ -85,7 +85,7 @@ namespace MicroApi.Controllers
             var res = new TransferoutinvResponse();
             try
             {
-                List<TransferOutInvUpdate> transferList = _transferOutInv.GetTransferOutList();
+                List<TransferOutDetailList> transferList = _transferOutInv.GetTransferOutList();
 
                 res.flag = 1;
                 res.Message = "Success";
@@ -99,6 +99,59 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public TransferOutInvUpdate Select(int id)
+        {
+            TransferOutInvUpdate objScheme = new TransferOutInvUpdate();
+            try
+            {
+                objScheme = _transferOutInv.GetTransferOut(id);
+            }
+            catch (Exception ex)
+            {
+            }
+            return objScheme;
+        }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public TransferSaveResponse Delete(int id)
+        {
+            TransferSaveResponse res = new TransferSaveResponse();
 
+            try
+            {
+
+
+                _transferOutInv.Delete(id);
+                res.flag = 1;
+                res.Message = "Success";
+
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("transferno")]
+        public TransferDoc GetLastDocNo()
+        {
+            TransferDoc res = new TransferDoc();
+
+            try
+            {
+                res = _transferOutInv.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
