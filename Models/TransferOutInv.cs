@@ -37,8 +37,7 @@
         public int? USER_ID { get; set; }
         public string? NARRATION { get; set; }
         public int? REASON_ID { get; set; }
-
-        // Detail rows
+        public int? TRANSFER_NO { get; set; }
         public List<TransferOutDetailUpdate>? DETAILS { get; set; }
     }
     public class TransferOutDetailUpdate
@@ -51,7 +50,10 @@
         public double? AMOUNT { get; set; }
         public string? BATCH_NO { get; set; }
         public double? QUANTITY_AVAILABLE { get; set; }
+        public string BARCODE { get; set; }
+        public string DESCRIPTION { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
+
     }
     public class TransferOutDetailList
     {
@@ -81,7 +83,7 @@
         public string DESCRIPTION { get; set; }
         public string UOM { get; set; }
         public double COST { get; set; }
-        public double QTY_AVAILABLE { get; set; }
+        public double QUANTITY_AVAILABLE { get; set; }
     }
     public class ItemRequest
     {
