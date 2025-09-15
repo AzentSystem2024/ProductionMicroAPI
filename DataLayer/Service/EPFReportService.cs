@@ -38,9 +38,9 @@ namespace MicroApi.DataLayer.Service
                                 A_C_10 = Convert.ToDecimal(reader["A/C.10"]),
                                 EPFContributionOfEmployer = Convert.ToDecimal(reader["EPFContributionOfEmployer"]),
                                 EmployeesPensionFund = Convert.ToDecimal(reader["EmployeesPensionFund"]),
-                                A_C_No_21 = Convert.ToDecimal(reader["A/C No. 21"]),
-                                AdministrativeChargesA_C_2 = Convert.ToDecimal(reader["Administrative Charges A/C. 2"]),
-                                A_C_No_22 = Convert.ToDecimal(reader["A/C No. 22"])
+                                A_C_No_21 = Convert.ToDecimal(reader["A/CNo.21"]),
+                                AdministrativeChargesA_C_2 = Convert.ToDecimal(reader["AdministrativeChargesA/C.2"]),
+                                A_C_No_22 = Convert.ToDecimal(reader["A/CNo.22"])
                             });
                         }
                     }
