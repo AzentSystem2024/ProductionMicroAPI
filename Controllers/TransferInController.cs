@@ -1,0 +1,99 @@
+﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
+using MicroApi.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace MicroApi.Controllers
+{
+    //[Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TransferInController : ControllerBase
+    {
+        private readonly ITransferInService _transferInService;
+
+        public TransferInController(ITransferInService transferInService)
+        {
+            _transferInService = transferInService;
+        }
+
+        [HttpPost]
+        [Route("getitem")]
+        public TransferInListResponse GetTransferInItems([FromBody] TransferInInput input)
+        {
+            var res = new TransferInListResponse();
+            try
+            {
+                var result = _transferInService.GetTransferInItems(input);
+                res.Flag = 1;
+                res.Message = "Success";
+                res.data = result;
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+
+        [HttpPost]
+        [Route("insert")]
+        public TransferInResponse Insert(TransferIn transfeIn)
+        {
+            var res = new TransferInResponse();
+            try
+            {
+                _transferInService.Insert(transfeIn);
+                res.Flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+
+        [HttpPost]
+        [Route("update")]
+        public TransferInResponse Update(TransferIn transfeIn)
+        {
+            var res = new TransferInResponse();
+            try
+            {
+                _transferInService.Update(transfeIn);
+                res.Flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+
+      
+
+        [HttpDelete]
+        [Route("delete/{id:int}")]
+        public TransferInResponse Delete(int id)
+        {
+            var res = new TransferInResponse();
+            try
+            {
+                _transferInService.Delete(id);
+                res.Flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+    }
+}
