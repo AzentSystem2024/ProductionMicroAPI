@@ -67,6 +67,7 @@
         public int? REASON_ID { get; set; }
         public string? STORE_NAME { get; set; }
         public int? ISSUE_NO { get; set; }
+        public string? STATUS { get; set; }
 
 
     }

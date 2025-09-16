@@ -16,12 +16,12 @@
         public float SUPP_NET_AMOUNT { get; set; }
         public float EXCHANGE_RATE { get; set; }
         public string NARRATION { get; set; }
-        public string STORE_NAME { get; set; }
-        public string SUPPPLIER_NAME { get; set; }
-        public string STATUS { get; set; }
+        public string? STORE_NAME { get; set; }
+        public string? SUPPPLIER_NAME { get; set; }
+        public string? STATUS { get; set; }
         public int CURRENCY_ID { get; set; }
         public int USER_ID { get; set; }
-        public string CURRENCY_SYMBOL { get; set; }
+        public string? CURRENCY_SYMBOL { get; set; }
         public List<GRNDetail> GRNDetails { get; set; }
         public List<GRN_ITEM_COST> GRN_Item_Cost { get; set; }
         public List<GRN_COST> GRN_Cost { get; set; }
@@ -120,9 +120,9 @@
         public string UOM_PURCH { get; set; }
         public float GRN_QTY { get; set; }
         public int CURRENCY_ID { get; set; }
-        public string CURRENCY_NAME { get; set; }
+        public string? CURRENCY_NAME { get; set; }
         public float DISC_PERCENT { get; set; }
-        public string CURRENCY_SYMBOL { get; set; }
+        public string? CURRENCY_SYMBOL { get; set; }
         public float SUPP_AMOUNT { get; set; }
         public float SUPP_PRICE { get; set; }
         public int ITEM_ID { get; set; }
