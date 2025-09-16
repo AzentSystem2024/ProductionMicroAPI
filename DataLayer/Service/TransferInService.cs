@@ -69,7 +69,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["UOM"] = d.UOM;
                             dRow["COST"] = d.COST;
-                            dRow["ISSUE_QTY"] = d.ISSUE_QTY;
+                            dRow["ISSUE_QTY"] = d.QUANTITY_ISSUED;
                             dRow["QUANTITY"] = d.QUANTITY;
                             dRow["BATCH_NO"] = (object?)d.BATCH_NO ?? DBNull.Value;
                             dRow["EXPIRY_DATE"] = (object?)d.EXPIRY_DATE ?? DBNull.Value;
@@ -141,7 +141,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["UOM"] = d.UOM;
                             dRow["COST"] = d.COST;
-                            dRow["ISSUE_QTY"] = d.ISSUE_QTY;
+                            dRow["ISSUE_QTY"] = d.QUANTITY_ISSUED;
                             dRow["QUANTITY"] = d.QUANTITY;
                             dRow["BATCH_NO"] = (object?)d.BATCH_NO ?? DBNull.Value;
                             dRow["EXPIRY_DATE"] = (object?)d.EXPIRY_DATE ?? DBNull.Value;
@@ -278,6 +278,7 @@ namespace MicroApi.DataLayer.Service
                                 NARRATION = firstRow["NARRATION"] == DBNull.Value ? null : ADO.ToString(firstRow["NARRATION"]),
                                 REASON_ID = firstRow["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["REASON_ID"]),
                                 TRANSFER_NO = ADO.ToInt32(firstRow["TRANSFER_NO"]),
+                                ISSUE_ID = ADO.ToInt32(firstRow["ISSUE_ID"]),
                                 DETAILS = new List<TransferInDetailUpdate>()
                             };
 
@@ -289,13 +290,16 @@ namespace MicroApi.DataLayer.Service
                                     ID = dr["DETAIL_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["DETAIL_ID"]),
                                     ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? null : ADO.ToInt32(dr["ITEM_ID"]),
                                     UOM = dr["UOM"] == DBNull.Value ? null : ADO.ToString(dr["UOM"]),
-                                    QUANTITY_ISSUESD= dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
+                                    QUANTITY_ISSUED= dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
                                     COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
                                     BATCH_NO = dr["BATCH_NO"] == DBNull.Value ? null : ADO.ToString(dr["BATCH_NO"]),
                                     EXPIRY_DATE = dr["EXPIRY_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["EXPIRY_DATE"]),
                                     QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
+                                    QUANTITY = dr["QUANTITY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QUANTITY"]),
                                     BARCODE = dr["BARCODE"] == DBNull.Value ? null : ADO.ToString(dr["BARCODE"]),
-                                    DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : ADO.ToString(dr["DESCRIPTION"])
+                                    DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : ADO.ToString(dr["DESCRIPTION"]),
+                                    ISSUE_DETAIL_ID = ADO.ToInt32(dr["ISSUE_DETAIL_ID"]),
+
                                 };
                                 transfer.DETAILS.Add(detail);
                             }

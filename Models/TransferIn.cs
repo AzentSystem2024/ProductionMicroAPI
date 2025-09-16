@@ -21,7 +21,7 @@
         public int ITEM_ID { get; set; }
         public string UOM { get; set; }
         public double COST { get; set; }
-        public double ISSUE_QTY { get; set; }
+        public double QUANTITY_ISSUED { get; set; }
         public double QUANTITY { get; set; }
         public string BATCH_NO { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
@@ -49,12 +49,11 @@
         public int? ITEM_ID { get; set; }
         public string? UOM { get; set; }
         public double? COST { get; set; }
-        public double? ISSUE_QTY { get; set; }
         public double? QUANTITY { get; set; }
         public string? BATCH_NO { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
         public double? QUANTITY_AVAILABLE { get; set; }
-        public double? QUANTITY_ISSUESD { get; set; }
+        public double? QUANTITY_ISSUED { get; set; }
         public string BARCODE { get; set; }
         public string DESCRIPTION { get; set; }
 
@@ -147,6 +146,8 @@
         public string NARRATION { get; set; }
         public int? REASON_ID { get; set; }
         public int TRANSFER_NO { get; set; }
+        public int ISSUE_ID { get; set; }
+
         public List<TransferInDetailUpdate> DETAILS { get; set; }
     }
 
