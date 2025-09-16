@@ -26,6 +26,39 @@
         public string BATCH_NO { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
+    public class TransferInUpdate
+    {
+        public int ID { get; set; }  
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public DateTime? REC_DATE { get; set; }
+        public int? ORIGIN_STORE_ID { get; set; }
+        public int? ISSUE_ID { get; set; }
+        public string? NARRATION { get; set; }
+        public int USER_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? REASON_ID { get; set; }
+        public double? NET_AMOUNT { get; set; }
+        public List<TransferInDetail> DETAILS { get; set; }
+    }
+
+    public class TransferInDetailUpdate
+    {
+        public int ID { get; set; }
+        public int? ISSUE_DETAIL_ID { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? UOM { get; set; }
+        public double? COST { get; set; }
+        public double? ISSUE_QTY { get; set; }
+        public double? QUANTITY { get; set; }
+        public string? BATCH_NO { get; set; }
+        public DateTime? EXPIRY_DATE { get; set; }
+        public double? QUANTITY_AVAILABLE { get; set; }
+        public double? QUANTITY_ISSUESD { get; set; }
+        public string BARCODE { get; set; }
+        public string DESCRIPTION { get; set; }
+
+    }
     public class TransferList
     {
         public int TransferOut_ID { get; set; }
@@ -100,6 +133,21 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<TransferInList> data { get; set; }
+    }
+    public class TransferInInvUpdate
+    {
+        public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public DateTime? TRANSFER_DATE { get; set; }
+        public int? ORIGIN_STORE_ID { get; set; }
+        public double? NET_AMOUNT { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? USER_ID { get; set; }
+        public string NARRATION { get; set; }
+        public int? REASON_ID { get; set; }
+        public int TRANSFER_NO { get; set; }
+        public List<TransferInDetailUpdate> DETAILS { get; set; }
     }
 
 }

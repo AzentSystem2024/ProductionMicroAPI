@@ -10,7 +10,7 @@ namespace MicroApi.DataLayer.Interface
          int EditData(StockAdjustment stockAdjustment);
         //StockAdjustmentListResponse GetStockAdjustment(int adjId);
         // bool DeleteStockAdjustment(int adjId);
-        StockItemListResponse GetStockAdjustmentItems(int storeId);
+        StockItemListResponse GetStockAdjustmentItems(StockAdjustmentRequest request);
     }
 }
 

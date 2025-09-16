@@ -161,7 +161,7 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
-        public StockItemListResponse GetStockAdjustmentItems(int storeId)
+        public StockItemListResponse GetStockAdjustmentItems(StockAdjustmentRequest request)
         {
             StockItemListResponse response = new StockItemListResponse { Data = new List<StockItem>() };
 
@@ -176,7 +176,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 6); // Action for listing items
-                        cmd.Parameters.AddWithValue("@STORE_ID", storeId);
+                        cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
                         //cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())

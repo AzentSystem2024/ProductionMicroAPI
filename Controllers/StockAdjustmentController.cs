@@ -99,11 +99,11 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list-items")]
-        public IActionResult ListItems([FromBody] StockAdjustmentRequest request)
+        public IActionResult ListItems(StockAdjustmentRequest request)
         {
             try
             {
-                var response = _stockAdjustmentService.GetStockAdjustmentItems(request.STORE_ID);
+                var response = _stockAdjustmentService.GetStockAdjustmentItems(request);
                 return Ok(response);
             }
             catch (Exception ex)
