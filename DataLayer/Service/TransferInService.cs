@@ -33,172 +33,146 @@ namespace MicroApi.DataLayer.Service
                     UOM = ADO.ToString(dr["UOM"]),
                     COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
                     QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
-                    QUANTITY_ISSUED = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"])
+                    QUANTITY_ISSUED = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
+                    ISSUE_ID = ADO.ToInt32(dr["ISSUE_ID"]),
+                    ISSUE_DETAIL_ID = ADO.ToInt32(dr["ISSUE_DETAIL_ID"]),
                 }).ToList();
             }
 
             return items;
         }
 
-        public Int32 Insert(TransferIn transfeIn)
+        public Int32 Insert(TransferIn transferIn)
         {
-            SqlConnection connection = ADO.GetConnection();
-            SqlTransaction objtrans = connection.BeginTransaction();
-
-            try
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                DataTable tbl = new DataTable();
-                tbl.Columns.Add("COMPANY_ID", typeof(Int32));
-                tbl.Columns.Add("STORE_ID", typeof(Int32));
-                tbl.Columns.Add("TROUT_DETAIL_ID", typeof(Int32));
-                tbl.Columns.Add("ORIGIN_STORE_ID", typeof(Int32));
-                tbl.Columns.Add("ITEM_ID", typeof(Int32));
-                tbl.Columns.Add("UOM", typeof(string));
-                tbl.Columns.Add("COST", typeof(float));
-                tbl.Columns.Add("ISSUE_QTY", typeof(float));
-                tbl.Columns.Add("QUANTITY", typeof(float));
-                tbl.Columns.Add("BATCH_NO", typeof(string));
-                tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
-
-                if (transfeIn.TransferInDetail != null && transfeIn.TransferInDetail.Any())
+                SqlTransaction objtrans = connection.BeginTransaction();
+                try
                 {
-                    foreach (TransferInDetails ur in transfeIn.TransferInDetail)
+                    // Build DataTable for UDT
+                    DataTable tbl = new DataTable();
+                    tbl.Columns.Add("ISSUE_DETAIL_ID", typeof(Int32));
+                    tbl.Columns.Add("ITEM_ID", typeof(Int32));
+                    tbl.Columns.Add("UOM", typeof(string));
+                    tbl.Columns.Add("COST", typeof(double));
+                    tbl.Columns.Add("ISSUE_QTY", typeof(double));
+                    tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("BATCH_NO", typeof(string));
+                    tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+
+                    if (transferIn.DETAILS != null && transferIn.DETAILS.Any())
                     {
-                        DataRow dRow = tbl.NewRow();
-
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["TROUT_DETAIL_ID"] = ur.TROUT_DETAIL_ID;
-                        dRow["ORIGIN_STORE_ID"] = ur.ORIGIN_STORE_ID;
-                        dRow["ITEM_ID"] = ur.ITEM_ID;
-                        dRow["UOM"] = ur.UOM;
-                        dRow["COST"] = ur.COST;
-                        dRow["ISSUE_QTY"] = ur.ISSUE_QTY;
-                        dRow["QUANTITY"] = ur.QUANTITY;
-                        dRow["BATCH_NO"] = string.IsNullOrEmpty(ur.BATCH_NO) ? string.Empty : ur.BATCH_NO;
-                        dRow["EXPIRY_DATE"] = ur.EXPIRY_DATE ?? new DateTime(1753, 1, 1);
-
-                        tbl.Rows.Add(dRow);
+                        foreach (var d in transferIn.DETAILS)
+                        {
+                            DataRow dRow = tbl.NewRow();
+                            dRow["ISSUE_DETAIL_ID"] = d.ISSUE_DETAIL_ID;
+                            dRow["ITEM_ID"] = d.ITEM_ID;
+                            dRow["UOM"] = d.UOM;
+                            dRow["COST"] = d.COST;
+                            dRow["ISSUE_QTY"] = d.ISSUE_QTY;
+                            dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["BATCH_NO"] = (object?)d.BATCH_NO ?? DBNull.Value;
+                            dRow["EXPIRY_DATE"] = (object?)d.EXPIRY_DATE ?? DBNull.Value;
+                            tbl.Rows.Add(dRow);
+                        }
                     }
+
+                    SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection, objtrans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ACTION", 1);
+                    cmd.Parameters.AddWithValue("@ID", 0);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", transferIn.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", transferIn.STORE_ID);
+                    cmd.Parameters.AddWithValue("@REC_DATE", (object?)transferIn.REC_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ORIGIN_STORE_ID", transferIn.ORIGIN_STORE_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", transferIn.FIN_ID);
+                    cmd.Parameters.AddWithValue("@USER_ID", transferIn.USER_ID);
+                    cmd.Parameters.AddWithValue("@NARRATION", (object?)transferIn.NARRATION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ISSUE_ID",transferIn.ISSUE_ID); 
+                    cmd.Parameters.AddWithValue("@REASON_ID", transferIn.REASON_ID);
+                    cmd.Parameters.AddWithValue("@NET_AMOUNT", transferIn.NET_AMOUNT);
+
+                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFERINV_IN", tbl);
+                    tvpParam.SqlDbType = SqlDbType.Structured;
+
+                    object result = cmd.ExecuteScalar();
+                    Int32 newId = ADO.ToInt32(result);
+
+                    objtrans.Commit();
+                    return newId;
                 }
-                SqlCommand cmd = new SqlCommand();
-
-                cmd.Connection = connection;
-                cmd.Transaction = objtrans;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "SP_TB_TRANSFER_IN";
-
-                cmd.Parameters.AddWithValue("ACTION", 1);
-                cmd.Parameters.AddWithValue("@COMPANY_ID", transfeIn.COMPANY_ID);
-                cmd.Parameters.AddWithValue("@STORE_ID", transfeIn.STORE_ID);
-                cmd.Parameters.AddWithValue("@TRIN_DATE", transfeIn.TRIN_DATE);
-                cmd.Parameters.AddWithValue("@TROUT_ID", transfeIn.TROUT_ID);
-                cmd.Parameters.AddWithValue("@ORIGIN_STORE_ID", transfeIn.ORIGIN_STORE_ID);
-                cmd.Parameters.AddWithValue("@NARRATION", transfeIn.NARRATION);
-                cmd.Parameters.AddWithValue("@USER_ID", transfeIn.USER_ID);
-                cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_IN", tbl);
-
-                cmd.ExecuteNonQuery();
-                objtrans.Commit();
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                // Rollback the transaction if an error occurs
-                objtrans.Rollback();
-                throw;
-            }
-            finally
-            {
-                // Close the connection
-                if (connection.State == ConnectionState.Open)
+                catch (Exception ex)
                 {
-                    connection.Close();
+                    objtrans.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
                 }
             }
         }
-        public Int32 Update(TransferIn transfeIn)
+
+        public TransferInListsResponse List()
         {
-            SqlConnection connection = ADO.GetConnection();
-            SqlTransaction objtrans = connection.BeginTransaction();
+            TransferInListsResponse res = new TransferInListsResponse();
+            List<TransferInList> list = new List<TransferInList>();
 
-            try
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                DataTable tbl = new DataTable();
-                tbl.Columns.Add("COMPANY_ID", typeof(Int32));
-                tbl.Columns.Add("STORE_ID", typeof(Int32));
-                tbl.Columns.Add("TROUT_DETAIL_ID", typeof(Int32));
-                tbl.Columns.Add("ORIGIN_STORE_ID", typeof(Int32));
-                tbl.Columns.Add("ITEM_ID", typeof(Int32));
-                tbl.Columns.Add("UOM", typeof(string));
-                tbl.Columns.Add("COST", typeof(float));
-                tbl.Columns.Add("ISSUE_QTY", typeof(float));
-                tbl.Columns.Add("QUANTITY", typeof(float));
-                tbl.Columns.Add("BATCH_NO", typeof(string));
-                tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
-
-                if (transfeIn.TransferInDetail != null && transfeIn.TransferInDetail.Any())
+                try
                 {
-                    foreach (TransferInDetails ur in transfeIn.TransferInDetail)
+                    SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ACTION", 0); 
+                    cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        DataRow dRow = tbl.NewRow();
-
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["TROUT_DETAIL_ID"] = ur.TROUT_DETAIL_ID;
-                        dRow["ORIGIN_STORE_ID"] = ur.ORIGIN_STORE_ID;
-                        dRow["ITEM_ID"] = ur.ITEM_ID;
-                        dRow["UOM"] = ur.UOM;
-                        dRow["COST"] = ur.COST;
-                        dRow["ISSUE_QTY"] = ur.ISSUE_QTY;
-                        dRow["QUANTITY"] = ur.QUANTITY;
-                        dRow["BATCH_NO"] = string.IsNullOrEmpty(ur.BATCH_NO) ? string.Empty : ur.BATCH_NO;
-                        dRow["EXPIRY_DATE"] = ur.EXPIRY_DATE ?? new DateTime(1753, 1, 1);
-
-                        tbl.Rows.Add(dRow);
+                        TransferInList obj = new TransferInList
+                        {
+                            TRANSFER_ID = ADO.ToInt32(dr["TRANSFER_ID"]),
+                            COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
+                            STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
+                            TRANSFER_DATE = dr["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["TRANSFER_DATE"]),
+                            ORIGIN_STORE_ID = ADO.ToInt32(dr["ORIGIN_STORE_ID"]),
+                            NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["NET_AMOUNT"]),
+                            NARRATION = ADO.ToString(dr["NARRATION"]),
+                            REASON_ID = ADO.ToInt32(dr["REASON_ID"]),
+                            ISSUE_ID = ADO.ToInt32(dr["ISSUE_ID"]),
+                            STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
+                            STATUS = ADO.ToString(dr["STATUS"])
+                        };
+                        list.Add(obj);
                     }
+
+                    res.Flag = 1;
+                    res.Message = "Success";
+                    res.data = list;
                 }
-                SqlCommand cmd = new SqlCommand();
-
-                cmd.Connection = connection;
-                cmd.Transaction = objtrans;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "SP_TB_TRANSFER_IN";
-
-                cmd.Parameters.AddWithValue("ACTION", 2);
-
-                cmd.Parameters.AddWithValue("@ID", transfeIn.ID);
-                cmd.Parameters.AddWithValue("@COMPANY_ID", transfeIn.COMPANY_ID);
-                cmd.Parameters.AddWithValue("@STORE_ID", transfeIn.STORE_ID);
-                cmd.Parameters.AddWithValue("@TRIN_DATE", transfeIn.TRIN_DATE);
-                cmd.Parameters.AddWithValue("@TROUT_ID", transfeIn.TROUT_ID);
-                cmd.Parameters.AddWithValue("@ORIGIN_STORE_ID", transfeIn.ORIGIN_STORE_ID);
-                cmd.Parameters.AddWithValue("@NARRATION", transfeIn.NARRATION);
-                cmd.Parameters.AddWithValue("@USER_ID", transfeIn.USER_ID);
-                cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_IN", tbl);
-
-                cmd.ExecuteNonQuery();
-                objtrans.Commit();
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                // Rollback the transaction if an error occurs
-                objtrans.Rollback();
-                throw;
-            }
-            finally
-            {
-                // Close the connection
-                if (connection.State == ConnectionState.Open)
+                catch (Exception ex)
                 {
-                    connection.Close();
+                    res.Flag = 0;
+                    res.Message = "Error: " + ex.Message;
+                    res.data = new List<TransferInList>();
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
                 }
             }
+
+            return res;
         }
-     
+
         public bool Delete(int id)
         {
             try

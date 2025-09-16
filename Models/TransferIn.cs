@@ -2,31 +2,27 @@
 {
     public class TransferIn
     {
-        public int ID { get; set; }
         public int COMPANY_ID { get; set; }
         public int STORE_ID { get; set; }
-        public string TRIN_NO { get; set; }
-        public DateTime TRIN_DATE { get; set; }
-        public int TROUT_ID { get; set; }
+        public DateTime REC_DATE { get; set; }    
         public int ORIGIN_STORE_ID { get; set; }
+        public int ISSUE_ID { get; set; }
         public string NARRATION { get; set; }
-        public string STATUS { get; set; }
         public int USER_ID { get; set; }
-        public List<TransferInDetails> TransferInDetail { get; set; }
+        public int FIN_ID { get; set; }           
+        public int REASON_ID { get; set; }
+        public double NET_AMOUNT { get; set; }
+
+        public List<TransferInDetail> DETAILS { get; set; }
     }
-    public class TransferInDetails
+    public class TransferInDetail
     {
-        public int ID { get; set; }
-        public int COMPANY_ID { get; set; }
-        public int TRIN_ID { get; set; }
-        public int STORE_ID { get; set; }
-        public int TROUT_DETAIL_ID { get; set; }
-        public int ORIGIN_STORE_ID { get; set; }
+        public int ISSUE_DETAIL_ID { get; set; }  
         public int ITEM_ID { get; set; }
         public string UOM { get; set; }
-        public float COST { get; set; }
-        public float ISSUE_QTY { get; set; }
-        public float QUANTITY { get; set; }
+        public double COST { get; set; }
+        public double ISSUE_QTY { get; set; }
+        public double QUANTITY { get; set; }
         public string BATCH_NO { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
@@ -81,6 +77,29 @@
         public double COST { get; set; }
         public double QUANTITY_AVAILABLE { get; set; }
         public double QUANTITY_ISSUED { get; set; }
+        public int ISSUE_ID { get; set; }
+        public int ISSUE_DETAIL_ID { get; set; }
     }
-  
+    public class TransferInList
+    {
+        public int TRANSFER_ID { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int STORE_ID { get; set; }
+        public DateTime? TRANSFER_DATE { get; set; }
+        public int ORIGIN_STORE_ID { get; set; }
+        public double NET_AMOUNT { get; set; }
+        public string NARRATION { get; set; }
+        public int REASON_ID { get; set; }
+        public int ISSUE_ID { get; set; }
+        public string STORE_NAME { get; set; }
+        public string STATUS { get; set; }
+    }
+
+    public class TransferInListsResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<TransferInList> data { get; set; }
+    }
+
 }
