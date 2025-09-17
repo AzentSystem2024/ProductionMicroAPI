@@ -107,6 +107,24 @@ namespace MicroApi.Controllers
             return objScheme;
         }
         [HttpPost]
+        [Route("approve")]
+        public TransferInResponse approve(TransferInUpdate transferIn)
+        {
+            var res = new TransferInResponse();
+            try
+            {
+                _transferInService.approve(transferIn);
+                res.Flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
         [Route("transferno")]
         public TransferinDoc GetLastDocNo()
         {

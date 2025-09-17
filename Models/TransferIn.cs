@@ -39,12 +39,12 @@
         public int? FIN_ID { get; set; }
         public int? REASON_ID { get; set; }
         public double? NET_AMOUNT { get; set; }
-        public List<TransferInDetail> DETAILS { get; set; }
+        public List<TransferInDetail>? DETAILS { get; set; }
     }
 
     public class TransferInDetailUpdate
     {
-        public int ID { get; set; }
+        public int? ID { get; set; }
         public int? ISSUE_DETAIL_ID { get; set; }
         public int? ITEM_ID { get; set; }
         public string? UOM { get; set; }
@@ -54,18 +54,9 @@
         public DateTime? EXPIRY_DATE { get; set; }
         public double? QUANTITY_AVAILABLE { get; set; }
         public double? QUANTITY_ISSUED { get; set; }
-        public string BARCODE { get; set; }
-        public string DESCRIPTION { get; set; }
+        public string? BARCODE { get; set; }
+        public string? DESCRIPTION { get; set; }
 
-    }
-    public class TransferList
-    {
-        public int TransferOut_ID { get; set; }
-        public string TransferOut_NO { get; set; }
-    }
-    public class StoreInput
-    {
-        public int STORE_ID { get; set; }
     }
     public class TransferInListResponse
     {
@@ -74,10 +65,7 @@
         public string Message { get; set; }
         public List<TransferInItemList> data { get; set; }
     }
-    public class TransferOutInput
-    {
-        public int TransferOut_ID { get; set; }
-    }
+    
     public class TransferOutList
     {
         public int ITEM_ID { get; set; }

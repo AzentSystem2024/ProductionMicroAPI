@@ -50,8 +50,8 @@
         public double? AMOUNT { get; set; }
         public string? BATCH_NO { get; set; }
         public double? QUANTITY_AVAILABLE { get; set; }
-        public string BARCODE { get; set; }
-        public string DESCRIPTION { get; set; }
+        public string? BARCODE { get; set; }
+        public string? DESCRIPTION { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
 
     }
