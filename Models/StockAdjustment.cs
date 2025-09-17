@@ -12,7 +12,7 @@
         public float? NET_AMOUNT { get; set; }
         public int? USER_ID { get; set; }
         public string? NARRATION { get; set; }
-        //public bool? STATUS { get; set; }
+        public bool? STATUS { get; set; }
         public List<StockAdjustmentDetail> Details { get; set; }
     }
     public class StockAdjustmentDetail
@@ -39,7 +39,7 @@
     {
         public int Flag { get; set; }
         public string Message { get; set; }
-        public List<StockAdjustmentDetail> Data { get; set; }
+        public StockAdjustment Data { get; set; }
     }
 
     public class StockAdjustmentResponse
@@ -50,19 +50,14 @@
     public class StockAdjustmentList
     {
         public int? ID { get; set; }
+        public string? ADJ_NO { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
-        public string? ADJ_NO { get; set; }
-        public string? ADJ_DATE { get; set; }
+        public string? STORE_NAME { get; set; }
         public int? REASON_ID { get; set; }
-        public string DESCRIPTION { get; set; }
-        public float? NET_AMOUNT { get; set; }
-        public int? ITEM_ID { get; set; }
-        public string ITEM_CODE { get; set; }
-        public string ITEM_NAME { get; set; }
-        public float? COST { get; set; }
-        public float? STOCK_QTY { get; set; }
-        public float? AMOUNT { get; set; }
+        public string REASON_DESCRIPTION { get; set; }
+        public bool? TRANS_STATUS { get; set; }
+        public string? NARRATION { get; set; }
     }
 
 

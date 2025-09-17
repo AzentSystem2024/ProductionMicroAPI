@@ -3,6 +3,7 @@ using MicroApi.Helper;
 using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -165,7 +166,14 @@ namespace MicroApi.DataLayer.Service
         }
         public StockAdjustmentDetailResponse GetStockAdjustment(int adjId)
         {
-            StockAdjustmentDetailResponse response = new StockAdjustmentDetailResponse { Data = new List<StockAdjustmentDetail>() };
+            StockAdjustmentDetailResponse response = new StockAdjustmentDetailResponse 
+            {
+                Data = new StockAdjustment
+                {
+                    Details = new List<StockAdjustmentDetail>()
+                }
+               }
+            ;
 
             using (SqlConnection connection = ADO.GetConnection())
             {
@@ -175,31 +183,51 @@ namespace MicroApi.DataLayer.Service
                 using (SqlCommand cmd = new SqlCommand("SP_TB_STOCK_ADJUSTMENT", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ACTION", 4);
+                    cmd.Parameters.AddWithValue("@ACTION", 4);  // Action for select by ID
                     cmd.Parameters.AddWithValue("@ADJ_ID", adjId);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
+                        // Read header information (assuming the first row contains header info)
+                        if (reader.Read())
                         {
-                            StockAdjustmentDetail detail = new StockAdjustmentDetail
+                            response.Data.ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0;
+                            response.Data.COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0;
+                            response.Data.STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0;
+                            response.Data.ADJ_NO = reader["ADJ_NO"] != DBNull.Value ? reader["ADJ_NO"].ToString() : null;
+                            response.Data.ADJ_DATE = reader["ADJ_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["ADJ_DATE"]).ToString("yyyy-MM-dd") : null;
+                            response.Data.REASON_ID = reader["REASON_ID"] != DBNull.Value ? Convert.ToInt32(reader["REASON_ID"]) : 0;
+                            response.Data.FIN_ID = reader["FIN_ID"] != DBNull.Value ? Convert.ToInt32(reader["FIN_ID"]) : 0;
+                            //response.Data.TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
+                           // response.Data.CREDIT_HEAD_ID = reader["CREDIT_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["CREDIT_HEAD_ID"]) : 0;
+                            response.Data.NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0;
+                            response.Data.NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null;
+                            response.Data.STATUS = reader["TRANS_STATUS"] != DBNull.Value && Convert.ToBoolean(reader["TRANS_STATUS"]);
+                        }
+
+                        // Read details
+                        if (reader.NextResult())  // Assuming the stored procedure returns a second result set for details
+                        {
+                            while (reader.Read())
                             {
-                                ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
-                                STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : (int?)null,
-                                //ADJ_ID = reader["ADJ_ID"] != DBNull.Value ? Convert.ToInt32(reader["ADJ_ID"]) : (int?)null,
-                                REASON_ID = reader["REASON_ID"] != DBNull.Value ? Convert.ToInt32(reader["REASON_ID"]) : (int?)null,
-                                ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
-                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : (float?)null,
-                                COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)null,
-                                STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)null,
-                                NEW_QTY = reader["NEW_QTY"] != DBNull.Value ? Convert.ToSingle(reader["NEW_QTY"]) : (float?)null,
-                                ADJ_QTY = reader["ADJ_QTY"] != DBNull.Value ? Convert.ToSingle(reader["ADJ_QTY"]) : (float?)null,
-                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : (float?)null,
-                                BATCH_NO = reader["BATCH_NO"] != DBNull.Value ? reader["BATCH_NO"].ToString() : null,
-                                EXPIRY_DATE = reader["EXPIRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["EXPIRY_DATE"]) : (DateTime?)null
-                            };
-                            response.Data.Add(detail);
+                                StockAdjustmentDetail detail = new StockAdjustmentDetail
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
+                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                    ADJ_ID = reader["ADJ_ID"] != DBNull.Value ? Convert.ToInt32(reader["ADJ_ID"]) : 0,
+                                    REASON_ID = reader["REASON_ID"] != DBNull.Value ? Convert.ToInt32(reader["REASON_ID"]) : 0,
+                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
+                                    COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : 0,
+                                    STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : 0,
+                                    NEW_QTY = reader["NEW_QTY"] != DBNull.Value ? Convert.ToSingle(reader["NEW_QTY"]) : 0,
+                                    ADJ_QTY = reader["ADJ_QTY"] != DBNull.Value ? Convert.ToSingle(reader["ADJ_QTY"]) : 0,
+                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
+                                    BATCH_NO = reader["BATCH_NO"] != DBNull.Value ? reader["BATCH_NO"].ToString() : null,
+                                    EXPIRY_DATE = reader["EXPIRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["EXPIRY_DATE"]) : (DateTime?)null
+                                };
+                                response.Data.Details.Add(detail);
+                            }
                         }
                     }
                 }
@@ -209,7 +237,7 @@ namespace MicroApi.DataLayer.Service
             response.Message = "Success";
             return response;
         }
- 
+
 
         public StockAdjustmentListResponse GetAllStockAdjustments()
         {
@@ -237,16 +265,11 @@ namespace MicroApi.DataLayer.Service
                                 ADJ_NO = reader["ADJ_NO"] != DBNull.Value ? reader["ADJ_NO"].ToString() : null,
                                 COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                 STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : (int?)null,
-                                ADJ_DATE = reader["ADJ_DATE"] != DBNull.Value ? Convert.ToString(reader["ADJ_DATE"]) : null,
+                                STORE_NAME = reader["STORE_NAME"] != DBNull.Value ? reader["STORE_NAME"].ToString() : null,
                                 REASON_ID = reader["REASON_ID"] != DBNull.Value ? Convert.ToInt32(reader["REASON_ID"]) : (int?)null,
-                                DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? Convert.ToString(reader["DESCRIPTION"]) : null,
-                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : (float?)null,
-                                ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
-                                ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? Convert.ToString(reader["ITEM_CODE"]) : null,
-                                ITEM_NAME = reader["ITEM_NAME"] != DBNull.Value ? Convert.ToString(reader["ITEM_NAME"]) : null,
-                                COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)null,
-                                STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)null,
-                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : (float?)null,
+                                REASON_DESCRIPTION = reader["REASON_DESCRIPTION"] != DBNull.Value ? Convert.ToString(reader["REASON_DESCRIPTION"]) : null,
+                                TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value && Convert.ToBoolean(reader["TRANS_STATUS"]),
+                                NARRATION = reader["NARRATION"] != DBNull.Value ? Convert.ToString(reader["NARRATION"]) : null,
                             };
 
                             response.Data.Add(adjustment);

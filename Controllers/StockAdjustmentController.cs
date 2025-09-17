@@ -33,20 +33,26 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("select/{adjId:int}")]
-        public StockAdjustmentDetailResponse Select(int adjId)
+        public IActionResult Select(int adjId)
         {
-            StockAdjustmentDetailResponse response = new StockAdjustmentDetailResponse();
             try
             {
-                response = _stockAdjustmentService.GetStockAdjustment(adjId);
+                StockAdjustmentDetailResponse response = _stockAdjustmentService.GetStockAdjustment(adjId);
+                if (response.Flag == 1)
+                    return Ok(response); 
+                else
+                    return BadRequest(response.Message);  
             }
             catch (Exception ex)
             {
-                response.Flag = 0;
-                response.Message = ex.Message;
-                response.Data = new List<StockAdjustmentDetail>();
+
+                return StatusCode(500, new StockAdjustmentDetailResponse
+                {
+                    Flag = 0,
+                    Message = ex.Message,
+                    Data = new StockAdjustment()  
+                });
             }
-            return response;
         }
 
         [HttpPost]
