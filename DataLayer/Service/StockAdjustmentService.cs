@@ -20,8 +20,10 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public int SaveData(StockAdjustment stockAdjustment)
+        public StockAdjustmentResponse SaveData(StockAdjustment stockAdjustment)
         {
+            StockAdjustmentResponse response = new StockAdjustmentResponse();
+
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
@@ -63,35 +65,41 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ACTION", 1);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", stockAdjustment.COMPANY_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", stockAdjustment.STORE_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@ADJ_NO", stockAdjustment.ADJ_NO ?? "");
-                            cmd.Parameters.AddWithValue("@ADJ_DATE", ParseDate(stockAdjustment.ADJ_DATE));
+                            cmd.Parameters.AddWithValue("@ADJ_DATE", stockAdjustment.ADJ_DATE);
                             cmd.Parameters.AddWithValue("@REASON_ID", stockAdjustment.REASON_ID ?? 0);
                             cmd.Parameters.AddWithValue("@FIN_ID", stockAdjustment.FIN_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@TRANS_ID", stockAdjustment.TRANS_ID ?? 0);
+                            //cmd.Parameters.AddWithValue("@TRANS_ID", stockAdjustment.TRANS_ID ?? 0);
                             cmd.Parameters.AddWithValue("@CREDIT_HEAD_ID", stockAdjustment.CREDIT_HEAD_ID ?? 0);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", stockAdjustment.NET_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
-                            cmd.Parameters.AddWithValue("@STATUS", stockAdjustment.STATUS ?? false);
+                            //cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ITEM_ADJ_DETAIL", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
                             tvpParam.TypeName = "dbo.UDT_TB_ITEM_ADJ_DETAIL";
 
+                            SqlParameter adjIdParam = new SqlParameter("@ADJ_ID", SqlDbType.BigInt) { Direction = ParameterDirection.Output };
+                            cmd.Parameters.Add(adjIdParam);
+
                             cmd.ExecuteNonQuery();
                         }
                         transaction.Commit();
-                        return stockAdjustment.ADJ_ID ?? 0;
+                        response.Flag = "1";
+                        response.Message = "Success";
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        throw new Exception("Error saving data: " + ex.Message);
+                        response.Flag = "0";
+                        response.Message = ex.Message;
                     }
                 }
             }
+            return response;
         }
-        public int EditData(StockAdjustment stockAdjustment)
+        public StockAdjustmentResponse EditData(StockAdjustmentUpdate stockAdjustment)
         {
+            StockAdjustmentResponse response = new StockAdjustmentResponse();
+
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
@@ -131,18 +139,16 @@ namespace MicroApi.DataLayer.Service
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 2);
-                            cmd.Parameters.AddWithValue("@ADJ_ID", stockAdjustment.ADJ_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@ADJ_ID", stockAdjustment.ID ?? 0);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", stockAdjustment.COMPANY_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", stockAdjustment.STORE_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@ADJ_NO", stockAdjustment.ADJ_NO ?? "");
-                            cmd.Parameters.AddWithValue("@ADJ_DATE", ParseDate(stockAdjustment.ADJ_DATE));
+                            cmd.Parameters.AddWithValue("@ADJ_DATE", stockAdjustment.ADJ_DATE);
                             cmd.Parameters.AddWithValue("@REASON_ID", stockAdjustment.REASON_ID ?? 0);
                             cmd.Parameters.AddWithValue("@FIN_ID", stockAdjustment.FIN_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@TRANS_ID", stockAdjustment.TRANS_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@CREDIT_HEAD_ID", stockAdjustment.CREDIT_HEAD_ID ?? 0);
+                            //cmd.Parameters.AddWithValue("@TRANS_ID", stockAdjustment.TRANS_ID ?? 0);
+                           // cmd.Parameters.AddWithValue("@CREDIT_HEAD_ID", stockAdjustment.CREDIT_HEAD_ID ?? 0);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", stockAdjustment.NET_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
-                            cmd.Parameters.AddWithValue("@STATUS", stockAdjustment.STATUS ?? false);
+                           // cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ITEM_ADJ_DETAIL", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
@@ -151,15 +157,134 @@ namespace MicroApi.DataLayer.Service
                             cmd.ExecuteNonQuery();
                         }
                         transaction.Commit();
-                        return stockAdjustment.ADJ_ID ?? 0;
+                        response.Flag = "1";
+                        response.Message = "Success";
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        throw new Exception("Error editing data: " + ex.Message);
+                        response.Flag = "0";
+                        response.Message = ex.Message;
                     }
                 }
             }
+            return response;
+        }
+        public StockAdjustmentDetailResponse GetStockAdjustment(int adjId)
+        {
+            StockAdjustmentDetailResponse response = new StockAdjustmentDetailResponse { Data = new List<StockAdjustmentDetail>() };
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SP_TB_STOCK_ADJUSTMENT", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 4);
+                    cmd.Parameters.AddWithValue("@ADJ_ID", adjId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            StockAdjustmentDetail detail = new StockAdjustmentDetail
+                            {
+                                ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
+                                STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : (int?)null,
+                                //ADJ_ID = reader["ADJ_ID"] != DBNull.Value ? Convert.ToInt32(reader["ADJ_ID"]) : (int?)null,
+                                REASON_ID = reader["REASON_ID"] != DBNull.Value ? Convert.ToInt32(reader["REASON_ID"]) : (int?)null,
+                                ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
+                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : (float?)null,
+                                COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)null,
+                                STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)null,
+                                NEW_QTY = reader["NEW_QTY"] != DBNull.Value ? Convert.ToSingle(reader["NEW_QTY"]) : (float?)null,
+                                ADJ_QTY = reader["ADJ_QTY"] != DBNull.Value ? Convert.ToSingle(reader["ADJ_QTY"]) : (float?)null,
+                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : (float?)null,
+                                BATCH_NO = reader["BATCH_NO"] != DBNull.Value ? reader["BATCH_NO"].ToString() : null,
+                                EXPIRY_DATE = reader["EXPIRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["EXPIRY_DATE"]) : (DateTime?)null
+                            };
+                            response.Data.Add(detail);
+                        }
+                    }
+                }
+            }
+
+            response.Flag = 1;
+            response.Message = "Success";
+            return response;
+        }
+ 
+
+        public StockAdjustmentListResponse GetAllStockAdjustments()
+        {
+            StockAdjustmentListResponse response = new StockAdjustmentListResponse { Data = new List<StockAdjustment>() };
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SP_TB_STOCK_ADJUSTMENT", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 5);
+                    //cmd.Parameters.AddWithValue("@STORE_ID");
+                    //cmd.Parameters.AddWithValue("@COMPANY_ID");
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            StockAdjustment adjustment = new StockAdjustment
+                            {
+                                ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
+                                STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : (int?)null,
+                                ADJ_NO = reader["ADJ_NO"] != DBNull.Value ? reader["ADJ_NO"].ToString() : null,
+                                ADJ_DATE = reader["ADJ_DATE"] != DBNull.Value ? Convert.ToString(reader["ADJ_DATE"]) : null,
+                                REASON_ID = reader["REASON_ID"] != DBNull.Value ? Convert.ToInt32(reader["REASON_ID"]) : (int?)null,
+                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : (float?)null,
+                                Details = new List<StockAdjustmentDetail>()
+                            };
+
+                            if (reader["ITEM_ID"] != DBNull.Value)
+                            {
+                                adjustment.Details.Add(new StockAdjustmentDetail
+                                {
+                                    ITEM_ID = Convert.ToInt32(reader["ITEM_ID"])
+                                });
+                            }
+
+                            response.Data.Add(adjustment);
+                        }
+                    }
+                }
+            }
+
+            response.Flag = 1;
+            response.Message = "Success";
+            return response;
+        }
+        public bool DeleteStockAdjustment(int adjId)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SP_TB_STOCK_ADJUSTMENT", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 3);
+                    cmd.Parameters.AddWithValue("@ADJ_ID", adjId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            return true;
         }
         public StockItemListResponse GetStockAdjustmentItems(StockAdjustmentRequest request)
         {
