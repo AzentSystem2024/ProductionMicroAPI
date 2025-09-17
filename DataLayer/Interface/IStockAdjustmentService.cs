@@ -5,11 +5,11 @@ namespace MicroApi.DataLayer.Interface
     public interface IStockAdjustmentService
     {
         
-       // StockAdjustmentListResponse GetAllStockAdjustments(int storeId, int companyId);
-        int SaveData(StockAdjustment stockAdjustment);
-         int EditData(StockAdjustment stockAdjustment);
-        //StockAdjustmentListResponse GetStockAdjustment(int adjId);
-        // bool DeleteStockAdjustment(int adjId);
+        StockAdjustmentListResponse GetAllStockAdjustments();
+        StockAdjustmentResponse SaveData(StockAdjustment stockAdjustment);
+        StockAdjustmentResponse EditData(StockAdjustmentUpdate stockAdjustment);
+        StockAdjustmentDetailResponse GetStockAdjustment(int adjId);
+        bool DeleteStockAdjustment(int adjId);
         StockItemListResponse GetStockAdjustmentItems(int storeId);
     }
 }

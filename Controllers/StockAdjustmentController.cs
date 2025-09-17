@@ -13,36 +13,41 @@ namespace MicroApi.Controllers
         {
             _stockAdjustmentService = stockAdjustmentService;
         }
-        //[HttpPost]
-        //[Route("list")]
-        //public IActionResult List([FromBody] StockAdjustmentRequest request)
-        //{
-        //    try
-        //    {
-        //        var response = _stockAdjustmentService.GetAllStockAdjustments(request.STORE_ID, request.COMPANY_ID);
-        //        return Ok(response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("list")]
+        public StockAdjustmentListResponse List()
+        {
+            StockAdjustmentListResponse response = new StockAdjustmentListResponse();
+            try
+            {
+                response = _stockAdjustmentService.GetAllStockAdjustments();
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+                response.Data = new List<StockAdjustment>();
+            }
+            return response;
+        }
 
-        //[HttpPost]
-        //[Route("select")]
-        //public StockAdjustmentListResponse Select([FromBody] StockAdjustmentSelectRequest request)
-        //{
-        //    StockAdjustmentListResponse response = new StockAdjustmentListResponse();
-        //    try
-        //    {
-        //        response = _stockAdjustmentService.GetStockAdjustment(request.ADJ_ID);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle exception
-        //    }
-        //    return response;
-        //}
+        [HttpPost]
+        [Route("select/{adjId:int}")]
+        public StockAdjustmentDetailResponse Select(int adjId)
+        {
+            StockAdjustmentDetailResponse response = new StockAdjustmentDetailResponse();
+            try
+            {
+                response = _stockAdjustmentService.GetStockAdjustment(adjId);
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+                response.Data = new List<StockAdjustmentDetail>();
+            }
+            return response;
+        }
 
         [HttpPost]
         [Route("save")]
@@ -51,7 +56,7 @@ namespace MicroApi.Controllers
             StockAdjustmentResponse res = new StockAdjustmentResponse();
             try
             {
-                int ID = _stockAdjustmentService.SaveData(stockAdjustment);
+               _stockAdjustmentService.SaveData(stockAdjustment);
                 res.Flag = "1";
                 res.Message = "Success";
             }
@@ -65,11 +70,11 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("edit")]
-        public IActionResult EditData([FromBody] StockAdjustment stockAdjustmentUpdate)
+        public IActionResult EditData([FromBody] StockAdjustmentUpdate stockAdjustmentUpdate)
         {
             try
             {
-                int ID = _stockAdjustmentService.EditData(stockAdjustmentUpdate);
+               _stockAdjustmentService.EditData(stockAdjustmentUpdate);
                 return Ok(new { Flag = "1", Message = "Success" });
             }
             catch (Exception ex)
@@ -78,24 +83,33 @@ namespace MicroApi.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("delete")]
-        //public StockAdjustmentListResponse Delete(int adjId)
-        //{
-        //    StockAdjustmentListResponse res = new StockAdjustmentListResponse();
-        //    try
-        //    {
-        //        _stockAdjustmentService.DeleteStockAdjustment(adjId);
-        //        res.Flag = 1;
-        //        res.Message = "Deleted successfully";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.Flag = 0;
-        //        res.Message = "Error: " + ex.Message;
-        //    }
-        //    return res;
-        //}
+
+        [HttpPost]
+        [Route("delete/{adjId:int}")]
+        public StockAdjustmentResponse Delete(int adjId)
+        {
+            StockAdjustmentResponse response = new StockAdjustmentResponse();
+            try
+            {
+                bool success = _stockAdjustmentService.DeleteStockAdjustment(adjId);
+                if (success)
+                {
+                    response.Flag = "1";
+                    response.Message = "Success";
+                }
+                else
+                {
+                    response.Flag = "0";
+                    response.Message = "Failed to delete";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = "0";
+                response.Message = ex.Message;
+            }
+            return response;
+        }
 
         [HttpPost]
         [Route("list-items")]
