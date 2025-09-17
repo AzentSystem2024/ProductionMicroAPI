@@ -56,8 +56,26 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("update")]
+        public TransferInResponse Update(TransferInUpdate transferIn)
+        {
+            var res = new TransferInResponse();
+            try
+            {
+                _transferInService.Update(transferIn);
+                res.Flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
         [Route("list")]
-        public TransferInListsResponse sList()
+        public TransferInListsResponse List()
         {
             TransferInListsResponse res = new TransferInListsResponse();
 
@@ -74,7 +92,20 @@ namespace MicroApi.Controllers
 
             return res;
         }
-
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public TransferInInvUpdate Select(int id)
+        {
+            TransferInInvUpdate objScheme = new TransferInInvUpdate();
+            try
+            {
+                objScheme = _transferInService.GetTransferIn(id);
+            }
+            catch (Exception ex)
+            {
+            }
+            return objScheme;
+        }
         [HttpDelete]
         [Route("delete/{id:int}")]
         public TransferInResponse Delete(int id)
