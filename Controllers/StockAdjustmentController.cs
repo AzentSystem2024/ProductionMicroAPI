@@ -26,7 +26,7 @@ namespace MicroApi.Controllers
             {
                 response.Flag = 0;
                 response.Message = ex.Message;
-                response.Data = new List<StockAdjustment>();
+                response.Data = new List<StockAdjustmentList>();
             }
             return response;
         }

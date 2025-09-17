@@ -20,10 +20,8 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public StockAdjustmentResponse SaveData(StockAdjustment stockAdjustment)
+        public int SaveData(StockAdjustment stockAdjustment)
         {
-            StockAdjustmentResponse response = new StockAdjustmentResponse();
-
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
@@ -65,36 +63,31 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ACTION", 1);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", stockAdjustment.COMPANY_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", stockAdjustment.STORE_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@ADJ_DATE", stockAdjustment.ADJ_DATE);
+                            cmd.Parameters.AddWithValue("@ADJ_NO", stockAdjustment.ADJ_NO ?? "");
+                            cmd.Parameters.AddWithValue("@ADJ_DATE", ParseDate(stockAdjustment.ADJ_DATE));
                             cmd.Parameters.AddWithValue("@REASON_ID", stockAdjustment.REASON_ID ?? 0);
                             cmd.Parameters.AddWithValue("@FIN_ID", stockAdjustment.FIN_ID ?? 0);
-                            //cmd.Parameters.AddWithValue("@TRANS_ID", stockAdjustment.TRANS_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@CREDIT_HEAD_ID", stockAdjustment.CREDIT_HEAD_ID ?? 0);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", stockAdjustment.NET_AMOUNT ?? 0);
-                            //cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
+                            cmd.Parameters.AddWithValue("@USER_ID", stockAdjustment.USER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
+                            //cmd.Parameters.AddWithValue("@STATUS", stockAdjustment.STATUS ?? false);
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ITEM_ADJ_DETAIL", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
                             tvpParam.TypeName = "dbo.UDT_TB_ITEM_ADJ_DETAIL";
 
-                            SqlParameter adjIdParam = new SqlParameter("@ADJ_ID", SqlDbType.BigInt) { Direction = ParameterDirection.Output };
-                            cmd.Parameters.Add(adjIdParam);
-
                             cmd.ExecuteNonQuery();
                         }
                         transaction.Commit();
-                        response.Flag = "1";
-                        response.Message = "Success";
+                        return stockAdjustment.ID ?? 0;
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        response.Flag = "0";
-                        response.Message = ex.Message;
+                        throw new Exception("Error saving data: " + ex.Message);
                     }
                 }
             }
-            return response;
         }
         public StockAdjustmentResponse EditData(StockAdjustmentUpdate stockAdjustment)
         {
@@ -148,7 +141,7 @@ namespace MicroApi.DataLayer.Service
                             //cmd.Parameters.AddWithValue("@TRANS_ID", stockAdjustment.TRANS_ID ?? 0);
                            // cmd.Parameters.AddWithValue("@CREDIT_HEAD_ID", stockAdjustment.CREDIT_HEAD_ID ?? 0);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", stockAdjustment.NET_AMOUNT ?? 0);
-                           // cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
+                            cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ITEM_ADJ_DETAIL", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
@@ -220,7 +213,7 @@ namespace MicroApi.DataLayer.Service
 
         public StockAdjustmentListResponse GetAllStockAdjustments()
         {
-            StockAdjustmentListResponse response = new StockAdjustmentListResponse { Data = new List<StockAdjustment>() };
+            StockAdjustmentListResponse response = new StockAdjustmentListResponse { Data = new List<StockAdjustmentList>() };
 
             using (SqlConnection connection = ADO.GetConnection())
             {
@@ -238,25 +231,23 @@ namespace MicroApi.DataLayer.Service
                     {
                         while (reader.Read())
                         {
-                            StockAdjustment adjustment = new StockAdjustment
+                            StockAdjustmentList adjustment = new StockAdjustmentList
                             {
                                 ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                ADJ_NO = reader["ADJ_NO"] != DBNull.Value ? reader["ADJ_NO"].ToString() : null,
                                 COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
                                 STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : (int?)null,
-                                ADJ_NO = reader["ADJ_NO"] != DBNull.Value ? reader["ADJ_NO"].ToString() : null,
                                 ADJ_DATE = reader["ADJ_DATE"] != DBNull.Value ? Convert.ToString(reader["ADJ_DATE"]) : null,
                                 REASON_ID = reader["REASON_ID"] != DBNull.Value ? Convert.ToInt32(reader["REASON_ID"]) : (int?)null,
+                                DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? Convert.ToString(reader["DESCRIPTION"]) : null,
                                 NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : (float?)null,
-                                Details = new List<StockAdjustmentDetail>()
+                                ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
+                                ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? Convert.ToString(reader["ITEM_CODE"]) : null,
+                                ITEM_NAME = reader["ITEM_NAME"] != DBNull.Value ? Convert.ToString(reader["ITEM_NAME"]) : null,
+                                COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)null,
+                                STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)null,
+                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : (float?)null,
                             };
-
-                            if (reader["ITEM_ID"] != DBNull.Value)
-                            {
-                                adjustment.Details.Add(new StockAdjustmentDetail
-                                {
-                                    ITEM_ID = Convert.ToInt32(reader["ITEM_ID"])
-                                });
-                            }
 
                             response.Data.Add(adjustment);
                         }
