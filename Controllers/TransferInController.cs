@@ -106,6 +106,24 @@ namespace MicroApi.Controllers
             }
             return objScheme;
         }
+        [HttpPost]
+        [Route("transferno")]
+        public TransferinDoc GetLastDocNo()
+        {
+            TransferinDoc res = new TransferinDoc();
+
+            try
+            {
+                res = _transferInService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
         [HttpDelete]
         [Route("delete/{id:int}")]
         public TransferInResponse Delete(int id)

@@ -10,6 +10,7 @@ namespace MicroApi.DataLayer.Interface
         public bool Delete(int id);
         TransferInListsResponse List();
         TransferInInvUpdate GetTransferIn(int id);
+        TransferinDoc GetLastDocNo();
 
 
     }
