@@ -39,9 +39,9 @@ namespace MicroApi.Controllers
             {
                 StockAdjustmentDetailResponse response = _stockAdjustmentService.GetStockAdjustment(adjId);
                 if (response.Flag == 1)
-                    return Ok(response); 
+                    return Ok(response);
                 else
-                    return BadRequest(response.Message);  
+                    return BadRequest(response.Message);
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace MicroApi.Controllers
                 {
                     Flag = 0,
                     Message = ex.Message,
-                    Data = new StockAdjustment()  
+                    Data = new StockAdjustment()
                 });
             }
         }
@@ -62,7 +62,7 @@ namespace MicroApi.Controllers
             StockAdjustmentResponse res = new StockAdjustmentResponse();
             try
             {
-               _stockAdjustmentService.SaveData(stockAdjustment);
+                _stockAdjustmentService.SaveData(stockAdjustment);
                 res.Flag = "1";
                 res.Message = "Success";
             }
@@ -80,7 +80,7 @@ namespace MicroApi.Controllers
         {
             try
             {
-               _stockAdjustmentService.EditData(stockAdjustmentUpdate);
+                _stockAdjustmentService.EditData(stockAdjustmentUpdate);
                 return Ok(new { Flag = "1", Message = "Success" });
             }
             catch (Exception ex)
@@ -129,6 +129,22 @@ namespace MicroApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
+        [HttpPost("Approve")]
+        public IActionResult ApproveStockAdjustment([FromBody] StockAdjustmentApproval stockAdjustment)
+        {
+            try
+            {
+                StockAdjustmentResponse response = _stockAdjustmentService.ApproveStockAdjustment(stockAdjustment);
+                if (response.Flag == "1")
+                    return Ok(response);
+                else
+                    return BadRequest(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = "0", Message = ex.Message });
             }
         }
     }

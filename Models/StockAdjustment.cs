@@ -9,10 +9,11 @@
         public string? ADJ_DATE { get; set; }
         public int? REASON_ID { get; set; }
         public int? FIN_ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public float? NET_AMOUNT { get; set; }
         public int? USER_ID { get; set; }
         public string? NARRATION { get; set; }
-        public bool? STATUS { get; set; }
+        public int? STATUS { get; set; }
         public List<StockAdjustmentDetail> Details { get; set; }
     }
     public class StockAdjustmentDetail
@@ -27,6 +28,8 @@
         public float? NET_AMOUNT { get; set; }
         //public int? DETAIL_ID { get; set; }
         public int? ITEM_ID { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? ITEM_NAME { get; set; }
         public float? COST { get; set; }
         public float? STOCK_QTY { get; set; }
         public float? NEW_QTY { get; set; }
@@ -50,13 +53,14 @@
     public class StockAdjustmentList
     {
         public int? ID { get; set; }
+        public string? ADJ_DATE { get; set; }
         public string? ADJ_NO { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public string? STORE_NAME { get; set; }
         public int? REASON_ID { get; set; }
         public string REASON_DESCRIPTION { get; set; }
-        public bool? TRANS_STATUS { get; set; }
+        public int? TRANS_STATUS { get; set; }
         public string? NARRATION { get; set; }
     }
 
@@ -75,11 +79,12 @@
         public int? STORE_ID { get; set; }
         //public string? ADJ_NO { get; set; }
         public int? FIN_ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public string? ADJ_DATE { get; set; }
         public int? REASON_ID { get; set; }
         public float? NET_AMOUNT { get; set; }
         public string? NARRATION { get; set; }
-        public bool? STATUS { get; set; }
+       // public bool? STATUS { get; set; }
         public List<StockAdjustmentDetail> Details { get; set; }
     }
 
@@ -119,5 +124,20 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<StockItem> Data { get; set; }
+    }
+    public class StockAdjustmentApproval
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        //public string? ADJ_NO { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? TRANS_ID { get; set; }
+        public string? ADJ_DATE { get; set; }
+        public int? REASON_ID { get; set; }
+        public float? NET_AMOUNT { get; set; }
+        public string? NARRATION { get; set; }
+       // public int? STATUS { get; set; }
+        public List<StockAdjustmentDetail> Details { get; set; }
     }
 }
