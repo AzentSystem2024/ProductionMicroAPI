@@ -77,7 +77,7 @@ namespace MicroApi.DataLayer.Service
                     CURRENCY_NAME = ADO.ToString(dr["CURRENCY_NAME"]),
                     DISC_PERCENT = ADO.ToFloat(dr["DISC_PERCENT"]),
                     CURRENCY_SYMBOL = ADO.ToString(dr["CURRENCY_SYMBOL"]),
-                    SUPP_AMOUNT = ADO.ToFloat(dr["SUPP_AMOUNT"]),
+                    //SUPP_AMOUNT = ADO.ToFloat(dr["SUPP_AMOUNT"]),
                     SUPP_PRICE = ADO.ToFloat(dr["SUPP_PRICE"]),
                     ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
                     PO_DETAIL_ID = ADO.ToInt32(dr["PO_DETAIL_ID"]),
