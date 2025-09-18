@@ -220,7 +220,9 @@ namespace MicroApi.DataLayer.Service
                             REASON_ID = ADO.ToInt32(dr["REASON_ID"]),
                             ISSUE_ID = ADO.ToInt32(dr["ISSUE_ID"]),
                             STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
-                            STATUS = ADO.ToString(dr["STATUS"])
+                            STATUS = ADO.ToString(dr["STATUS"]),
+                            TRANSFER_NO = ADO.ToInt32(dr["TRANSFER_NO"])
+
                         };
                         list.Add(obj);
                     }
