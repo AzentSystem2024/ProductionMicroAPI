@@ -164,4 +164,10 @@ namespace MicroApi.Models
         public string CURRENCY_NAME { get; set; }
 
     }
+    public class PurchaseDoc
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int PURCHASE_NO { get; set; }
+    }
 }

@@ -201,5 +201,23 @@ namespace MicroApi.Controllers
             }
             return itemlist.ToList();
         }
+        [HttpPost]
+        [Route("POno")]
+        public PurchaseDoc GetLastDocNo()
+        {
+            PurchaseDoc res = new PurchaseDoc();
+
+            try
+            {
+                res = _purchaseOrderService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }
