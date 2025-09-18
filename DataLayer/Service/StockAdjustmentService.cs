@@ -332,7 +332,7 @@ namespace MicroApi.DataLayer.Service
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                     MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
                                     COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)0,
-                                    CURRENT_STOCK = reader["CURRENT_STOCK"] != DBNull.Value ? Convert.ToSingle(reader["CURRENT_STOCK"]) : (float?)0
+                                    STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)0
                                 };
                                 response.Data.Add(item);
                             }

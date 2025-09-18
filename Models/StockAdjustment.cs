@@ -116,7 +116,7 @@
         public string DESCRIPTION { get; set; }
         public string? MATRIX_CODE { get; set; }
         public float? COST { get; set; }
-        public float? CURRENT_STOCK { get; set; }
+        public float? STOCK_QTY { get; set; }
     }
 
     public class StockItemListResponse
