@@ -132,7 +132,7 @@ namespace MicroApi.Controllers
             }
         }
         [HttpPost("Approve")]
-        public IActionResult ApproveStockAdjustment([FromBody] StockAdjustmentUpdate stockAdjustment)
+        public IActionResult ApproveStockAdjustment([FromBody] StockAdjustmentApproval stockAdjustment)
         {
             try
             {

@@ -11,7 +11,7 @@ namespace MicroApi.DataLayer.Interface
         StockAdjustmentDetailResponse GetStockAdjustment(int adjId);
         bool DeleteStockAdjustment(int adjId);
         StockItemListResponse GetStockAdjustmentItems(StockAdjustmentRequest request);
-        StockAdjustmentResponse ApproveStockAdjustment(StockAdjustmentUpdate stockAdjustment);
+        StockAdjustmentResponse ApproveStockAdjustment(StockAdjustmentApproval stockAdjustment);
     }
 }
 

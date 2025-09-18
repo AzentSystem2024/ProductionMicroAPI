@@ -351,7 +351,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public StockAdjustmentResponse ApproveStockAdjustment(StockAdjustmentUpdate stockAdjustment)
+        public StockAdjustmentResponse ApproveStockAdjustment(StockAdjustmentApproval stockAdjustment)
         {
             StockAdjustmentResponse response = new StockAdjustmentResponse();
             using (SqlConnection connection = ADO.GetConnection())
@@ -391,7 +391,7 @@ namespace MicroApi.DataLayer.Service
                         using (SqlCommand cmd = new SqlCommand("SP_TB_STOCK_ADJUSTMENT", connection, transaction))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@ACTION", 6);  // Action for approval
+                            cmd.Parameters.AddWithValue("@ACTION", 7);  // Action for approval
                             cmd.Parameters.AddWithValue("@ADJ_ID", stockAdjustment.ID ?? 0);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", stockAdjustment.COMPANY_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", stockAdjustment.STORE_ID ?? 0);
@@ -399,6 +399,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@REASON_ID", stockAdjustment.REASON_ID ?? 0);
                             cmd.Parameters.AddWithValue("@FIN_ID", stockAdjustment.FIN_ID ?? 0);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", stockAdjustment.NET_AMOUNT ?? 0);
+                           // cmd.Parameters.AddWithValue("@STATUS", stockAdjustment.STATUS ?? 0);
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ITEM_ADJ_DETAIL", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
