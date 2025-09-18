@@ -113,6 +113,8 @@
         public int ISSUE_ID { get; set; }
         public string STORE_NAME { get; set; }
         public string STATUS { get; set; }
+        public int TRANSFER_NO { get; set; }
+
     }
 
     public class TransferInListsResponse

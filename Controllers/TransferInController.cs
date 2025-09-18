@@ -142,7 +142,7 @@ namespace MicroApi.Controllers
 
             return res;
         }
-        [HttpDelete]
+        [HttpPost]
         [Route("delete/{id:int}")]
         public TransferInResponse Delete(int id)
         {
