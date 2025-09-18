@@ -12,5 +12,7 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Approval(PurchaseOrderHeader worksheet);
         public List<ItemList> GetItemList(ItemInput input);
         public PurchaseOrderHeader GetPurchaseOrder(int id);
+        PurchaseDoc GetLastDocNo();
+
     }
 }
