@@ -202,7 +202,7 @@ namespace MicroApi.Controllers
             return itemlist.ToList();
         }
         [HttpPost]
-        [Route("POno")]
+        [Route("pono")]
         public PurchaseDoc GetLastDocNo()
         {
             PurchaseDoc res = new PurchaseDoc();
