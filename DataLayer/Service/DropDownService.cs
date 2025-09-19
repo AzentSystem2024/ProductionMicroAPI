@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Service
 {
         public class DropDownService : IDropDownService
         {
-        public List<DropDown> GetDropDownData(string vName, int countryId = 0, int stateId = 0, int districtId = 0, int? companyId = 0)
+        public List<DropDown> GetDropDownData(DropDownInput input)
         {
             List<DropDown> vList = new List<DropDown>();
 
@@ -21,26 +21,19 @@ namespace MicroApi.DataLayer.Service
                     CommandText = "SP_GET_DROPDOWN_DATA"
                 };
 
-                cmd.Parameters.AddWithValue("@NAME", vName);
-                cmd.Parameters.AddWithValue("@COMPANY_ID", (object)companyId ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@NAME", input.NAME);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", (object)input.COMPANY_ID ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@PAGE_NUMBER", input.PAGE_NUMBER);
+                cmd.Parameters.AddWithValue("@PAGE_SIZE", input.PAGE_SIZE);
 
-                if (vName == "STATE_NAME")
-                {
-                    cmd.Parameters.AddWithValue("@COUNTRY_ID", countryId);
-                }
+                if (input.NAME == "STATE_NAME")
+                    cmd.Parameters.AddWithValue("@COUNTRY_ID", input.COUNTRY_ID);
 
-                if (vName == "DISTRICT_NAME")
-                {
-                    cmd.Parameters.AddWithValue("@STATE_ID", stateId);
-                }
-                if (vName == "CITY_NAME")
-                {
-                    cmd.Parameters.AddWithValue("@DISTRICT_ID", districtId);
-                }
-                if (vName == "COMPANY_ID")
-                {
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
-                }
+                if (input.NAME == "DISTRICT_NAME")
+                    cmd.Parameters.AddWithValue("@STATE_ID", input.STATE_ID);
+
+                if (input.NAME == "CITY_NAME")
+                    cmd.Parameters.AddWithValue("@DISTRICT_ID", input.DISTRICT_ID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -54,12 +47,12 @@ namespace MicroApi.DataLayer.Service
                         DESCRIPTION = Convert.ToString(dr["DESCRIPTION"])
                     });
                 }
-
                 connection.Close();
             }
 
             return vList;
         }
+
 
     }
 }

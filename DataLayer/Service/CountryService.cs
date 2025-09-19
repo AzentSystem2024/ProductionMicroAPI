@@ -33,8 +33,9 @@ namespace MicroApi.DataLayer.Services
                         ID = Convert.ToInt32(dr["ID"]),
                         CODE = Convert.ToString(dr["CODE"]),
                         COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]),
-                        FLAG_URL = Convert.ToString(dr["FLAG_URL"]),
-                        IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"])
+                        FLAG_URL = dr["FLAG_URL"] == DBNull.Value ? "N/A" : ADO.ToString(dr["FLAG_URL"]),
+                        IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]),
+                        COMPANY_ID = dr["COMPANY_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["COMPANY_ID"])
 
                     });
                 }
@@ -56,7 +57,7 @@ namespace MicroApi.DataLayer.Services
 
                     cmd.Parameters.AddWithValue("ACTION", 1);
                     cmd.Parameters.AddWithValue("ID", country.ID);
-
+                    cmd.Parameters.AddWithValue("COMPANY_ID", country.COMPANY_ID);
                     cmd.Parameters.AddWithValue("CODE", country.CODE);
                     cmd.Parameters.AddWithValue("COUNTRY_NAME", country.COUNTRY_NAME);
                     cmd.Parameters.AddWithValue("IS_INACTIVE", country.IS_INACTIVE);
@@ -82,7 +83,7 @@ namespace MicroApi.DataLayer.Services
             {
 
 
-                string strSQL = "SELECT ID,CODE,COUNTRY_NAME,FLAG_URL,IS_INACTIVE FROM TB_COUNTRY WHERE TB_COUNTRY.ID =" + id;
+                string strSQL = "SELECT ID,CODE,COUNTRY_NAME,FLAG_URL,IS_INACTIVE,COMPANY_ID FROM TB_COUNTRY WHERE TB_COUNTRY.ID =" + id;
 
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Country");
@@ -93,8 +94,9 @@ namespace MicroApi.DataLayer.Services
                     country.ID = Convert.ToInt32(dr["ID"]);
                     country.CODE = Convert.ToString(dr["CODE"]);
                     country.COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]);
-                    country.FLAG_URL = Convert.ToString(dr["FLAG_URL"]);
+                    country.FLAG_URL = dr["FLAG_URL"] == DBNull.Value ? "N/A" : ADO.ToString(dr["FLAG_URL"]);
                     country.IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]);
+                    country.COMPANY_ID = dr["COMPANY_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["COMPANY_ID"]);
 
                 }
             }
