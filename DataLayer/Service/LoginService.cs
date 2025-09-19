@@ -159,6 +159,8 @@ namespace MicroApi.DataLayer.Service
                                         VAT_TITLE = reader["VAT_TITLE"]?.ToString() ?? "",
                                         STORE_TITLE = reader["STORE_TITLE"]?.ToString() ?? "",
                                         ENABLE_MATRIX_CODE= reader["ENABLE_MATRIX_CODE"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_MATRIX_CODE"]),
+                                        QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString() ?? "",
+                                        SELLING_PRICE_INCL_VAT= reader["SELLING_PRICE_INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
                                     };
                                 }
 
