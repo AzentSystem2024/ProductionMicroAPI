@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class ItemQtyReportService : IItemQtyReportService
     {
-        public ItemQuantityReportResponse GetItemQuantityReport()
+        public ItemQuantityReportResponse GetItemQuantityReport(ItemQuantityReportRequest request)
         {
             ItemQuantityReportResponse response = new ItemQuantityReportResponse
             {
@@ -19,9 +19,8 @@ namespace MicroApi.DataLayer.Service
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_QUTY_REPORT", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandTimeout = 300; 
                     //cmd.Parameters.AddWithValue("@ASONDATE", request.ASONDATE);
-                    //cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {

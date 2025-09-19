@@ -14,12 +14,12 @@ namespace MicroApi.Controllers
             _itemQtyReportService = itemQtyReportService;
         }
         [HttpPost("itemquantityreport")]
-        public ItemQuantityReportResponse GetItemQuantityReport()
+        public ItemQuantityReportResponse GetItemQuantityReport(ItemQuantityReportRequest request)
         {
             var response = new ItemQuantityReportResponse();
             try
             {
-                response = _itemQtyReportService.GetItemQuantityReport();
+                response = _itemQtyReportService.GetItemQuantityReport(request);
             }
             catch (Exception ex)
             {
