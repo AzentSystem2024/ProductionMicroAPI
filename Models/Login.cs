@@ -104,6 +104,8 @@
         public string VAT_TITLE { get; set; } = "";
         public string STORE_TITLE { get; set; } = "";
         public bool ENABLE_MATRIX_CODE { get; set; }
+        public string? QTN_SUBJECT { get; set; }
+        public bool? SELLING_PRICE_INCL_VAT { get; set; }
     }
     public class StoreInfo
     {
