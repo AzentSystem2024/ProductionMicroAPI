@@ -16,19 +16,14 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        public List<DropDown> ListData(DropDownInput vInput)
+        public List<DropDown> ListData(DropDownInput input)
         {
             List<DropDown> vData = new List<DropDown>();
             try
             {
-                vData = _DropDownService.GetDropDownData(
-                    vInput.NAME,
-                    vInput.COUNTRY_ID,
-                    vInput.STATE_ID,
-                    vInput.DISTRICT_ID,
-                    vInput.COMPANY_ID
-                  
-                );
+                vData = _DropDownService.GetDropDownData(input);
+                              
+                
             }
             catch (Exception ex)
             {
