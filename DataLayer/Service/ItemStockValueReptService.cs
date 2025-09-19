@@ -20,7 +20,7 @@ namespace MicroApi.DataLayer.Service
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_STOCK_VALUE_REPORT", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ASONDATE", request.ASONDATE);
+                    //cmd.Parameters.AddWithValue("@ASONDATE", request.ASONDATE);
                     cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())

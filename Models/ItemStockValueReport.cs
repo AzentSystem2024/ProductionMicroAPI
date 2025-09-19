@@ -16,7 +16,7 @@
     }
     public class ItemStockValueReportRequest
     {
-        public DateTime ASONDATE { get; set; }
+       // public DateTime ASONDATE { get; set; }
         public int STORE_ID { get; set; }
     }
 

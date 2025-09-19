@@ -58,6 +58,7 @@
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public string? STORE_NAME { get; set; }
+        public string? MATRIX_CODE { get; set; }
         public int? REASON_ID { get; set; }
         public string REASON_DESCRIPTION { get; set; }
         public int? TRANS_STATUS { get; set; }
@@ -116,7 +117,7 @@
         public string DESCRIPTION { get; set; }
         public string? MATRIX_CODE { get; set; }
         public float? COST { get; set; }
-        public float? CURRENT_STOCK { get; set; }
+        public float? STOCK_QTY { get; set; }
     }
 
     public class StockItemListResponse
