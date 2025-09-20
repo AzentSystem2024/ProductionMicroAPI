@@ -78,6 +78,7 @@
         public string ITEM_CODE { get; set; }
         public float PO_QUANTITY { get; set; }
         public float GRN_QUANTITY { get; set; }
+        public float? PRICE { get; set; }
 
 
     }

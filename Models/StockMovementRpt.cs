@@ -6,6 +6,9 @@
         public string ITEM_CODE { get; set; }
         public string ITEM_NAME { get; set; }
         public string MATRIX_CODE { get; set; }
+        public string COLOR { get; set; }
+        public string SIZE { get; set; }
+        public string STYLE { get; set; }
         public decimal OPENING_QTY { get; set; }
         public decimal GRN_QTY { get; set; }
         public decimal PURCHASE_RETURN_QTY { get; set; }

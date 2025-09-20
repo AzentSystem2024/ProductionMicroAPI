@@ -647,7 +647,7 @@ namespace MicroApi.DataLayer.Service
                 }
 
                 strSQL = "SELECT TB_GRN_DETAIL.*, TB_STORES.STORE_NAME, TB_ITEMS.DESCRIPTION,TB_ITEMS.ITEM_CODE , " +
-                    "TB_PO_DETAIL.GRN_QTY, TB_PO_DETAIL.QUANTITY as PO_QUANTITY " +
+                    "TB_PO_DETAIL.GRN_QTY, TB_PO_DETAIL.QUANTITY as PO_QUANTITY,TB_PO_DETAIL.PRICE " +
                     "FROM TB_GRN_DETAIL " +
                     "LEFT JOIN TB_STORES ON TB_GRN_DETAIL.STORE_ID = TB_STORES.ID " +
                     "LEFT JOIN TB_ITEMS ON TB_GRN_DETAIL.ITEM_ID = TB_ITEMS.ID " +
@@ -682,7 +682,8 @@ namespace MicroApi.DataLayer.Service
                         ITEM_NAME = ADO.ToString(dr3["DESCRIPTION"]),
                         ITEM_CODE = ADO.ToString(dr3["ITEM_CODE"]),
                         PO_QUANTITY = ADO.ToFloat(dr3["PO_QUANTITY"]),
-                        GRN_QUANTITY = ADO.ToFloat(dr3["GRN_QTY"])
+                        GRN_QUANTITY = ADO.ToFloat(dr3["GRN_QTY"]),
+                        PRICE = ADO.ToFloat(dr3["PRICE"])
                     });
                 }
 
