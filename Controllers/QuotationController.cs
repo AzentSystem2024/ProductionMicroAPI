@@ -39,7 +39,7 @@ namespace MicroApi.Controllers
         {
             try
             {
-                QuotationDetailResponse response = _quotationService.GetQuotation(qtnId);
+                QuotationDetailSelectResponse response = _quotationService.GetQuotation(qtnId);
                 if (response.Flag == 1)
                     return Ok(response);
                 else
@@ -47,7 +47,7 @@ namespace MicroApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new QuotationDetailResponse { Flag = 0, Message = ex.Message, Data = new Quotation { Details = new List<QuotationDetail>() } });
+                return StatusCode(500, new QuotationDetailSelectResponse { Flag = 0, Message = ex.Message, Data = new QuotationSelect { Details = new List<QuotationDetailSelect>() } });
             }
         }
 
@@ -126,6 +126,16 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
             }
         }
+        [HttpPost("approve")]
+        public IActionResult ApproveQuotation([FromBody] QuotationUpdate request)
+        {
+            var response = _quotationService.ApproveQuotation(request);
+            if (response.Flag == "1")
+                return Ok(response);
+            else
+                return BadRequest(response);
+        }
+
     }
 }
 

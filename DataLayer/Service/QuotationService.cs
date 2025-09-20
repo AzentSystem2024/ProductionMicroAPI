@@ -189,9 +189,9 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public QuotationDetailResponse GetQuotation(int qtnId)
+        public QuotationDetailSelectResponse GetQuotation(int qtnId)
         {
-            QuotationDetailResponse response = new QuotationDetailResponse { Data = new Quotation { Details = new List<QuotationDetail>() } };
+            QuotationDetailSelectResponse response = new QuotationDetailSelectResponse { Data = new QuotationSelect { Details = new List<QuotationDetailSelect>() } };
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
@@ -234,13 +234,13 @@ namespace MicroApi.DataLayer.Service
                         {
                             while (reader.Read())
                             {
-                                QuotationDetail detail = new QuotationDetail
+                                QuotationDetailSelect detail = new QuotationDetailSelect
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : 0,
                                     ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
-                                    //ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
-                                    //ITEM_NAME = reader["ITEM_NAME"] != DBNull.Value ? reader["ITEM_NAME"].ToString() : null,
+                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
+                                    ITEM_NAME = reader["ITEM_NAME"] != DBNull.Value ? reader["ITEM_NAME"].ToString() : null,
                                     UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
                                     QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
                                     PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
@@ -365,6 +365,97 @@ namespace MicroApi.DataLayer.Service
             }
             return true;
         }
+        public QuotationResponse ApproveQuotation(QuotationUpdate quotationUpdate)
+        {
+            QuotationResponse response = new QuotationResponse();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("QUANTITY", typeof(float));
+                        tvp.Columns.Add("PRICE", typeof(float));
+                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
+                        tvp.Columns.Add("AMOUNT", typeof(float));
+                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
+                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
+                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
+                        tvp.Columns.Add("REMARKS", typeof(string));
+
+                        foreach (var detail in quotationUpdate.Details)
+                        {
+                            tvp.Rows.Add(
+                                detail.ITEM_ID ?? 0,
+                                detail.UOM ?? "",
+                                detail.QUANTITY ?? 0,
+                                detail.PRICE ?? 0,
+                                detail.DISC_PERCENT ?? 0,
+                                detail.AMOUNT ?? 0,
+                                detail.TAX_PERCENT ?? 0,
+                                detail.TAX_AMOUNT ?? 0,
+                                detail.TOTAL_AMOUNT ?? 0,
+                                detail.REMARKS ?? ""
+                            );
+                        }
+
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 7); // Approve with update action
+                            cmd.Parameters.AddWithValue("@QTN_ID", quotationUpdate.ID ?? 0);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", quotationUpdate.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@STORE_ID", quotationUpdate.STORE_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@QTN_DATE", ParseDate(quotationUpdate.QTN_DATE));
+                            cmd.Parameters.AddWithValue("@CUST_ID", quotationUpdate.CUST_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SALESMAN_ID", quotationUpdate.SALESMAN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@CONTACT_NAME", quotationUpdate.CONTACT_NAME ?? "");
+                            cmd.Parameters.AddWithValue("@SUBJECT", quotationUpdate.SUBJECT ?? "");
+                            cmd.Parameters.AddWithValue("@REF_NO", quotationUpdate.REF_NO ?? "");
+                            cmd.Parameters.AddWithValue("@PAY_TERM_ID", quotationUpdate.PAY_TERM_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@DELIVERY_TERM_ID", quotationUpdate.DELIVERY_TERM_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@VALID_DAYS", quotationUpdate.VALID_DAYS ?? 0);
+                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", quotationUpdate.GROSS_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@TAX_AMOUNT", quotationUpdate.TAX_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", quotationUpdate.CHARGE_DESCRIPTION ?? "");
+                            cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", quotationUpdate.CHARGE_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@DISCOUNT_DESCRIPTION", quotationUpdate.DISCOUNT_DESCRIPTION ?? "");
+                            cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", quotationUpdate.DISCOUNT_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@ROUND_OFF", quotationUpdate.ROUND_OFF ?? false);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", quotationUpdate.NET_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@TERMS", quotationUpdate.TERMS ?? "");
+                            cmd.Parameters.AddWithValue("@NARRATION", quotationUpdate.NARRATION ?? "");
+
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SQTN_DETAIL", tvp);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_TB_SQTN_DETAIL";
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        response.Flag = "1";
+                        response.Message = "Quotation approved and updated successfully.";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        response.Flag = "0";
+                        response.Message = "Error approving quotation: " + ex.Message;
+                    }
+                }
+            }
+
+            return response;
+        }
+
 
     }
 }
