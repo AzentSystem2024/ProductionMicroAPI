@@ -203,6 +203,7 @@
         public string ITEM_CODE { get; set; }
         public string DESCRIPTION { get; set; }
         public string? MATRIX_CODE { get; set; }
+        public string? UOM {  get; set; }
         public float? COST { get; set; }
         public float? STOCK_QTY { get; set; }
     }
