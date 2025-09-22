@@ -135,6 +135,26 @@ namespace MicroApi.Controllers
             else
                 return BadRequest(response);
         }
+        [HttpPost("History/{itemId}")]
+        public IActionResult GetQuotationHistoryByItemId(int itemId)
+        {
+            try
+            {
+                var response = _quotationService.GetQuotationHistoryByItemId(itemId);
+                if (response.Flag == 1)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return BadRequest(response.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Internal server error: " + ex.Message });
+            }
+        }
 
     }
 }

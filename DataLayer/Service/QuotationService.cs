@@ -331,7 +331,8 @@ namespace MicroApi.DataLayer.Service
                                     MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
                                     UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
                                     COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)0,
-                                    STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)0
+                                    STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)0,
+                                    VAT_PERC = reader["VAT_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["VAT_PERC"]) : 0,
                                 };
                                 response.Data.Add(item);
                             }
@@ -466,6 +467,55 @@ namespace MicroApi.DataLayer.Service
                         response.Message = "Error approving quotation: " + ex.Message;
                     }
                 }
+            }
+            return response;
+        }
+        public QuotationHistoryResponse GetQuotationHistoryByItemId(int itemId)
+        {
+            QuotationHistoryResponse response = new QuotationHistoryResponse { Data = new List<QuotationHistory>() };
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@ITEM_ID", itemId);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                QuotationHistory history = new QuotationHistory
+                                {
+                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
+                                    QTN_NO = reader["QTN_NO"] != DBNull.Value ? reader["QTN_NO"].ToString() : null,
+                                    QTN_DATE = reader["QTN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["QTN_DATE"]) : DateTime.MinValue,
+                                    CUST_NAME = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : null,
+                                    REF_NO = reader["REF_NO"] != DBNull.Value ? reader["REF_NO"].ToString() : null,
+                                    QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
+                                    UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
+                                    UNIT_PRICE = reader["UNIT_PRICE"] != DBNull.Value ? Convert.ToSingle(reader["UNIT_PRICE"]) : 0,
+                                    DISC_PERCENT = reader["DISC_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DISC_PERCENT"]) : 0,
+                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0
+                                };
+                                response.Data.Add(history);
+                            }
+                        }
+                    }
+                    response.Flag = 1;
+                    response.Message = "Success";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
             }
             return response;
         }

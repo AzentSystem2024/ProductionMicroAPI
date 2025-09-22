@@ -206,6 +206,7 @@
         public string? UOM {  get; set; }
         public float? COST { get; set; }
         public float? STOCK_QTY { get; set; }
+        public decimal? VAT_PERC { get; set; }
     }
 
     public class ItemListResponse
@@ -213,5 +214,25 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<Item> Data { get; set; }
+    }
+    public class QuotationHistory
+    {
+        public int ITEM_ID { get; set; }
+        public string QTN_NO { get; set; }
+        public DateTime QTN_DATE { get; set; }
+        public string CUST_NAME { get; set; }
+        public string REF_NO { get; set; }
+        public float QUANTITY { get; set; }
+        public string UOM { get; set; }
+        public float UNIT_PRICE { get; set; }
+        public float DISC_PERCENT { get; set; }
+        public float AMOUNT { get; set; }
+    }
+
+    public class QuotationHistoryResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<QuotationHistory> Data { get; set; }
     }
 }

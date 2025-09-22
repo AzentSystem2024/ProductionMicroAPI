@@ -11,5 +11,6 @@ namespace MicroApi.DataLayer.Interface
         bool DeleteQuotation(int qtnId);
         ItemListResponse GetQuotationItems(QuotationRequest request);
         QuotationResponse ApproveQuotation(QuotationUpdate request);
+        QuotationHistoryResponse GetQuotationHistoryByItemId(int itemId);
     }
 }
