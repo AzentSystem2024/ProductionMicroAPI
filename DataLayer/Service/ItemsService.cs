@@ -750,13 +750,14 @@ namespace MicroApi.DataLayer.Services
                 {
                     itemsuppliers.Add(new ITEM_SUPPLIERS
                     {
-                        ID = Convert.ToInt32(dr2["ID"]),
-                        SUPP_ID = Convert.ToString(dr2["SUPP_ID"]),
-                        SUPP_NAME = Convert.ToString(dr2["SUPP_NAME"]),
-                        REORDER_NO = Convert.ToString(dr2["REORDER_NO"]),
-                        COST = float.Parse(dr2["COST"].ToString()),
-                        IS_PRIMARY = Convert.ToBoolean(dr2["IS_PRIMARY"]),
-                        IS_CONSIGNMENT = Convert.ToBoolean(dr2["IS_CONSIGNMENT"])
+                        ID = dr2["ID"] != DBNull.Value ? Convert.ToInt32(dr2["ID"]) : 0,
+                        SUPP_ID = dr2["SUPP_ID"] != DBNull.Value ? Convert.ToString(dr2["SUPP_ID"]) : string.Empty,
+                        SUPP_NAME = dr2["SUPP_NAME"] != DBNull.Value ? Convert.ToString(dr2["SUPP_NAME"]) : string.Empty,
+                        REORDER_NO = dr2["REORDER_NO"] != DBNull.Value ? Convert.ToString(dr2["REORDER_NO"]) : string.Empty,
+                        COST = dr2["COST"] != DBNull.Value ? Convert.ToSingle(dr2["COST"]) : 0f,
+                        IS_PRIMARY = dr2["IS_PRIMARY"] != DBNull.Value ? Convert.ToBoolean(dr2["IS_PRIMARY"]) : false,
+                        IS_CONSIGNMENT = dr2["IS_CONSIGNMENT"] != DBNull.Value ? Convert.ToBoolean(dr2["IS_CONSIGNMENT"]) : false
+
                     });
                 }
 
@@ -769,10 +770,10 @@ namespace MicroApi.DataLayer.Services
                 {
                     itemalias.Add(new ITEM_ALIAS
                     {
-                        ID = Convert.ToInt32(dr1["ID"]),
-                        ALIAS = Convert.ToString(dr1["ALIAS"]),
-                        IS_DEFAULT = Convert.ToBoolean(dr1["IS_DEFAULT"]),
-                        ALIAS_TYPE_ID = Convert.ToInt32(dr1["ALIAS_TYPE_ID"])
+                        ID = dr1["ID"] != DBNull.Value ? Convert.ToInt32(dr1["ID"]) : 0,
+                        ALIAS = dr1["ALIAS"] != DBNull.Value ? Convert.ToString(dr1["ALIAS"]) : string.Empty,
+                        IS_DEFAULT = dr1["IS_DEFAULT"] != DBNull.Value ? Convert.ToBoolean(dr1["IS_DEFAULT"]) : (bool?)null,
+                        ALIAS_TYPE_ID = dr1["ALIAS_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(dr1["ALIAS_TYPE_ID"]) : (int?)null
                         //IS_DEFAULT = Convert.IsDBNull(dr["IS_DEFAULT"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DEFAULT"])
                     });
                 }
@@ -790,13 +791,14 @@ namespace MicroApi.DataLayer.Services
                 {
                     itemcomponent.Add(new ITEM_COMPONENTS
                     {
-                        ID = ADO.ToInt32(dr3["ID"]),
-                        ITEM_ID = ADO.ToInt32(dr3["ITEM_ID"]),
-                        COMPONENT_ITEM_ID = ADO.ToInt32(dr3["COMPONENT_ITEM_ID"]),
-                        QUANTITY = ADO.ToFloat(dr3["QUANTITY"]),
-                        UOM = ADO.ToString(dr3["UOM"]),
-                        ITEM_CODE = ADO.ToString(dr3["ITEM_CODE"]),
-                        DESCRIPTION = ADO.ToString(dr3["DESCRIPTION"]),
+                        ID = dr3["ID"] != DBNull.Value ? Convert.ToInt32(dr3["ID"]) : (int?)null,
+                        ITEM_ID = dr3["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(dr3["ITEM_ID"]) : (int?)null,
+                        COMPONENT_ITEM_ID = dr3["COMPONENT_ITEM_ID"] != DBNull.Value ? Convert.ToInt32(dr3["COMPONENT_ITEM_ID"]) : (int?)null,
+                        QUANTITY = dr3["QUANTITY"] != DBNull.Value ? Convert.ToSingle(dr3["QUANTITY"]) : (float?)null,
+                        UOM = dr3["UOM"] != DBNull.Value ? Convert.ToString(dr3["UOM"]) : string.Empty,
+                        ITEM_CODE = dr3["ITEM_CODE"] != DBNull.Value ? Convert.ToString(dr3["ITEM_CODE"]) : string.Empty,
+                        DESCRIPTION = dr3["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr3["DESCRIPTION"]) : string.Empty
+
 
                     });
                 }
