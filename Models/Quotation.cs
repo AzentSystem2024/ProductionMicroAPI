@@ -4,6 +4,7 @@
     {
         public int? ID { get; set; }
         public int? COMPANY_ID { get; set; }
+        public int? FIN_ID { get; set; }
         public int? STORE_ID { get; set; }
         public string? QTN_NO { get; set; }
         public string? QTN_DATE { get; set; }
@@ -142,6 +143,7 @@
     {
         public int? ID { get; set; }
         public int? COMPANY_ID { get; set; }
+        public int? FIN_ID { get; set; }
         public int? STORE_ID { get; set; }
         public string? QTN_DATE { get; set; }
         public int? CUST_ID { get; set; }

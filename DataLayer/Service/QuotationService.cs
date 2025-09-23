@@ -61,6 +61,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 1);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", quotation.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", quotation.FIN_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", quotation.STORE_ID ?? 0);
                             cmd.Parameters.AddWithValue("@QTN_DATE", ParseDate(quotation.QTN_DATE));
                             cmd.Parameters.AddWithValue("@CUST_ID", quotation.CUST_ID ?? 0);
@@ -150,6 +151,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ACTION", 2);
                             cmd.Parameters.AddWithValue("@QTN_ID", quotation.ID ?? 0);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", quotation.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", quotation.FIN_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", quotation.STORE_ID ?? 0);
                             cmd.Parameters.AddWithValue("@QTN_DATE", ParseDate(quotation.QTN_DATE));
                             cmd.Parameters.AddWithValue("@CUST_ID", quotation.CUST_ID ?? 0);
