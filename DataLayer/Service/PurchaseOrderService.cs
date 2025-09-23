@@ -266,11 +266,11 @@ namespace MicroApi.DataLayer.Services
                     foreach (PurchaseOrderDetail ur in worksheet.PoDetails)
                     {
                         DataRow dRow = tbl.NewRow();
-                        dRow["ID"] = ur.ID;
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["ID"] = DBNull.Value;
+                        dRow["COMPANY_ID"] = ur.COMPANY_ID ?? (object)DBNull.Value;
                         dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
-                        dRow["PO_ID"] = ur.PO_ID;
-                        dRow["JOB_ID"] = ur.JOB_ID;
+                        dRow["PO_ID"] = DBNull.Value;
+                        dRow["JOB_ID"] = ur.JOB_ID ?? (object)DBNull.Value;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
                         dRow["QUANTITY"] = ur.QUANTITY;
                         dRow["PACKING"] = ur.PACKING;
@@ -282,8 +282,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
                         dRow["UOM"] = ur.UOM;
-                        dRow["GRN_QTY"] = ur.GRN_QTY;
-                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
+                        dRow["GRN_QTY"] = ur.GRN_QTY ?? (object)DBNull.Value;
+                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY ?? (object)DBNull.Value;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
@@ -409,11 +409,11 @@ namespace MicroApi.DataLayer.Services
                     foreach (PurchaseOrderDetail ur in worksheet.PoDetails)
                     {
                         DataRow dRow = tbl.NewRow();
-                        dRow["ID"] = ur.ID;
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["PO_ID"] = ur.PO_ID;
-                        dRow["JOB_ID"] = ur.JOB_ID;
+                        dRow["ID"] = DBNull.Value;
+                        dRow["COMPANY_ID"] = ur.COMPANY_ID ?? (object)DBNull.Value;
+                        dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
+                        dRow["PO_ID"] = DBNull.Value;
+                        dRow["JOB_ID"] = ur.JOB_ID ?? (object)DBNull.Value;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
                         dRow["QUANTITY"] = ur.QUANTITY;
                         dRow["PACKING"] = ur.PACKING;
@@ -425,11 +425,11 @@ namespace MicroApi.DataLayer.Services
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
                         dRow["UOM"] = ur.UOM;
-                        dRow["GRN_QTY"] = ur.GRN_QTY;
-                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
+                        dRow["GRN_QTY"] = ur.GRN_QTY ?? (object)DBNull.Value;
+                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY ?? (object)DBNull.Value;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID;
+                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -553,11 +553,11 @@ namespace MicroApi.DataLayer.Services
                     foreach (PurchaseOrderDetail ur in worksheet.PoDetails)
                     {
                         DataRow dRow = tbl.NewRow();
-                        dRow["ID"] = ur.ID;
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["ID"] = DBNull.Value;
+                        dRow["COMPANY_ID"] = ur.COMPANY_ID ?? (object)DBNull.Value;
                         dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
-                        dRow["PO_ID"] = ur.PO_ID;
-                        dRow["JOB_ID"] = ur.JOB_ID;
+                        dRow["PO_ID"] = DBNull.Value;
+                        dRow["JOB_ID"] = ur.JOB_ID ?? (object)DBNull.Value;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
                         dRow["QUANTITY"] = ur.QUANTITY;
                         dRow["PACKING"] = ur.PACKING;
@@ -569,8 +569,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
                         dRow["UOM"] = ur.UOM;
-                        dRow["GRN_QTY"] = ur.GRN_QTY;
-                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
+                        dRow["GRN_QTY"] = ur.GRN_QTY ?? (object)DBNull.Value;
+                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY ?? (object)DBNull.Value;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
