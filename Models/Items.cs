@@ -127,7 +127,7 @@
     public class ITEM_COMPONENTS
     {
         public int? ID { get; set; }
-        public int ITEM_ID { get; set; }
+        public int? ITEM_ID { get; set; }
         public int? COMPONENT_ITEM_ID { get; set; }
         public float? QUANTITY { get; set; }
         public string? UOM { get; set; }
