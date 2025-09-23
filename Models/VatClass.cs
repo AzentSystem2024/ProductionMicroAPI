@@ -10,7 +10,7 @@
 
         public decimal VAT_PERC { get; set; }
 
-        public string IS_DELETED { get; set; }
+        public string? IS_DELETED { get; set; }
     }
     public class VatClassResponse
     {

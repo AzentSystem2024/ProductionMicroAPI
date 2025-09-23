@@ -14,8 +14,7 @@ namespace MicroApi.DataLayer.Services
             List<ITEM_SUPPLIERS> itemsuppliers = new List<ITEM_SUPPLIERS>();
             List<ITEM_ALIAS> itemalias = new List<ITEM_ALIAS>();
 
-            string strSQL = @"
-        SELECT TB_ITEMS.*,
+            string strSQL = @"SELECT TB_ITEMS.*,
        TB_ITEM_DEPARTMENT.DEPT_NAME,
        TB_ITEM_CATEGORY.CAT_NAME,
        TB_ITEM_SUBCATEGORY.SUBCAT_NAME,
