@@ -61,6 +61,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 1);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", quotation.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", quotation.FIN_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", quotation.STORE_ID ?? 0);
                             cmd.Parameters.AddWithValue("@QTN_DATE", ParseDate(quotation.QTN_DATE));
                             cmd.Parameters.AddWithValue("@CUST_ID", quotation.CUST_ID ?? 0);
@@ -80,7 +81,11 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ROUND_OFF", quotation.ROUND_OFF ?? false);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", quotation.NET_AMOUNT ?? 0);
                             cmd.Parameters.AddWithValue("@USER_ID", quotation.USER_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@TERMS", quotation.TERMS ?? "");
+                            //cmd.Parameters.AddWithValue("@TERMS", string.IsNullOrWhiteSpace(quotation.TERMS) ? (object)DBNull.Value : quotation.TERMS);
+                            if (!string.IsNullOrWhiteSpace(quotation.TERMS) && quotation.TERMS.ToLower() != "string")
+                                cmd.Parameters.AddWithValue("@TERMS", quotation.TERMS);
+                            else
+                                cmd.Parameters.AddWithValue("@TERMS", DBNull.Value);
                             cmd.Parameters.AddWithValue("@NARRATION", quotation.NARRATION ?? "");
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SQTN_DETAIL", tvp);
@@ -146,6 +151,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ACTION", 2);
                             cmd.Parameters.AddWithValue("@QTN_ID", quotation.ID ?? 0);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", quotation.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", quotation.FIN_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", quotation.STORE_ID ?? 0);
                             cmd.Parameters.AddWithValue("@QTN_DATE", ParseDate(quotation.QTN_DATE));
                             cmd.Parameters.AddWithValue("@CUST_ID", quotation.CUST_ID ?? 0);
@@ -165,7 +171,11 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@ROUND_OFF", quotation.ROUND_OFF ?? false);
                             cmd.Parameters.AddWithValue("@TRANS_ID", quotation.TRANS_ID ?? 0);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", quotation.NET_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@TERMS", quotation.TERMS ?? "");
+                            //cmd.Parameters.AddWithValue("@TERMS", string.IsNullOrWhiteSpace(quotation.TERMS) ? (object)DBNull.Value : quotation.TERMS);
+                            if (!string.IsNullOrWhiteSpace(quotation.TERMS) && quotation.TERMS.ToLower() != "string")
+                                cmd.Parameters.AddWithValue("@TERMS", quotation.TERMS);
+                            else
+                                cmd.Parameters.AddWithValue("@TERMS", DBNull.Value);
                             cmd.Parameters.AddWithValue("@NARRATION", quotation.NARRATION ?? "");
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SQTN_DETAIL", tvp);
@@ -434,7 +444,11 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", quotationUpdate.DISCOUNT_AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@ROUND_OFF", quotationUpdate.ROUND_OFF ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", quotationUpdate.NET_AMOUNT ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@TERMS", string.IsNullOrEmpty(quotationUpdate.TERMS) ? (object)DBNull.Value : quotationUpdate.TERMS);
+                            // cmd.Parameters.AddWithValue("@TERMS", string.IsNullOrWhiteSpace(quotationUpdate.TERMS) ? (object)DBNull.Value : quotationUpdate.TERMS);
+                            if (!string.IsNullOrWhiteSpace(quotationUpdate.TERMS) && quotationUpdate.TERMS.ToLower() != "string")
+                                cmd.Parameters.AddWithValue("@TERMS", quotationUpdate.TERMS);
+                            else
+                                cmd.Parameters.AddWithValue("@TERMS", DBNull.Value);
                             cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(quotationUpdate.NARRATION) ? (object)DBNull.Value : quotationUpdate.NARRATION);
                             //cmd.Parameters.AddWithValue("@USER_ID", quotationUpdate.USER_ID ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@TRANS_TYPE", 10);
