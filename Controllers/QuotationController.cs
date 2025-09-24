@@ -135,6 +135,20 @@ namespace MicroApi.Controllers
             else
                 return BadRequest(response);
         }
+        [HttpPost]
+        [Route("list-terms")]
+        public IActionResult ListTerms()
+        {
+            try
+            {
+                var response = _quotationService.GetTERMSLIST();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
         [HttpPost("History/{itemId}")]
         public IActionResult GetQuotationHistoryByItemId(int itemId)
         {
