@@ -95,14 +95,6 @@ namespace MicroApi.Controllers
                 message = msg
             };
         }
-
-
-
-
-
-
-
-
         [HttpPost]
         [Route("update")]
         public ItemResponse Update(Items itemsData)

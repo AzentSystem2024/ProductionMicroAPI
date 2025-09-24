@@ -13,6 +13,7 @@ namespace MicroApi.DataLayer.Interface
         public List<ItemList> GetItemList(ItemInput input);
         public PurchaseOrderHeader GetPurchaseOrder(int id);
         PurchaseDoc GetLastDocNo();
+        public bool Delete(int id);
 
     }
 }

@@ -211,19 +211,19 @@ namespace MicroApi.DataLayer.Services
                 worksheetList.Add(new PurchaseOrderHeader
                 {
                     ID = ADO.ToInt32(dr["ID"]),
-                    PO_NO = ADO.ToString(dr["PO_NO"]),
-                    PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
-                    SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
-                    CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
-                    STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                    STATUS_ID = ADO.ToInt32(dr["STATUS_ID"]),
-                    SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
-                    NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
-                    CURRENCY = ADO.ToString(dr["CURRENCY"]),
-                    STORE = ADO.ToString(dr["STORE"]),
-                    NARRATION = ADO.ToString(dr["NARRATION"]),
-                    STATUS = ADO.ToString(dr["STATUS"]),
-                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : 0
+                    PO_NO = dr["PO_NO"] != DBNull.Value ? dr["PO_NO"].ToString() : null,
+                    PO_DATE = dr["PO_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PO_DATE"]) : (DateTime?)null,
+                    SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_ID"]) : (int?)null,
+                    CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : (int?)null,
+                    STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : (int?)null,
+                    STATUS_ID = dr["STATUS_ID"] != DBNull.Value ? Convert.ToInt32(dr["STATUS_ID"]) : (int?)null,
+                    SUPP_NAME = dr["SUPP_NAME"] != DBNull.Value ? dr["SUPP_NAME"].ToString() : null,
+                    NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["NET_AMOUNT"]) : (float?)null,
+                    CURRENCY = dr["CURRENCY"] != DBNull.Value ? dr["CURRENCY"].ToString() : null,
+                    STORE = dr["STORE"] != DBNull.Value ? dr["STORE"].ToString() : null,
+                    NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
+                    STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : null,
+                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : (int?)null
                 });
             }
             connection.Close();
@@ -846,6 +846,28 @@ namespace MicroApi.DataLayer.Services
             }
 
             return res;
+        }
+        public bool Delete(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = connection;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "SP_TB_PURCHASE_ORDER";
+                    cmd.Parameters.AddWithValue("ACTION", 4);
+                    cmd.Parameters.AddWithValue("@ID", id);
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
