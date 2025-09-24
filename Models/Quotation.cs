@@ -76,7 +76,7 @@
         public float? NET_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public string? TERMS { get; set; }
+        public List<string> TERMS { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetailSelect> Details { get; set; }
 
