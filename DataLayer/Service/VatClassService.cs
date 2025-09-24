@@ -31,8 +31,6 @@ namespace MicroApi.DataLayer.Services
                         CODE = Convert.ToString(dr["CODE"]),
                         VAT_NAME = Convert.ToString(dr["VAT_NAME"]),
                         // VAT_PERC = Convert.ToDecimal(dr["VAT_PERC"])
-
-
                         VAT_PERC = Convert.ToDecimal(dr["VAT_PERC"])
 
                     });

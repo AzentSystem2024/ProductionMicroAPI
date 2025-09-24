@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using MicroApi.DataLayer.Services;
 
 namespace MicroApi.Controllers
 {
@@ -217,6 +218,27 @@ namespace MicroApi.Controllers
                 res.Message = "Error: " + ex.Message;
             }
 
+            return res;
+        }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public PurchaseOrderResponse Delete(int id)
+        {
+            PurchaseOrderResponse res = new PurchaseOrderResponse();
+            try
+            {
+
+
+                _purchaseOrderService.Delete(id);
+                res.flag = 1;
+                res.message = "Success";
+                //res.data = _itemsService.GetItems(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 1;
+                res.message = ex.Message;
+            }
             return res;
         }
     }

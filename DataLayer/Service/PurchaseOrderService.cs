@@ -211,19 +211,19 @@ namespace MicroApi.DataLayer.Services
                 worksheetList.Add(new PurchaseOrderHeader
                 {
                     ID = ADO.ToInt32(dr["ID"]),
-                    PO_NO = ADO.ToString(dr["PO_NO"]),
-                    PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
-                    SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
-                    CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
-                    STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                    STATUS_ID = ADO.ToInt32(dr["STATUS_ID"]),
-                    SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
-                    NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
-                    CURRENCY = ADO.ToString(dr["CURRENCY"]),
-                    STORE = ADO.ToString(dr["STORE"]),
-                    NARRATION = ADO.ToString(dr["NARRATION"]),
-                    STATUS = ADO.ToString(dr["STATUS"]),
-                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : 0
+                    PO_NO = dr["PO_NO"] != DBNull.Value ? dr["PO_NO"].ToString() : null,
+                    PO_DATE = dr["PO_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PO_DATE"]) : (DateTime?)null,
+                    SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_ID"]) : (int?)null,
+                    CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : (int?)null,
+                    STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : (int?)null,
+                    STATUS_ID = dr["STATUS_ID"] != DBNull.Value ? Convert.ToInt32(dr["STATUS_ID"]) : (int?)null,
+                    SUPP_NAME = dr["SUPP_NAME"] != DBNull.Value ? dr["SUPP_NAME"].ToString() : null,
+                    NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["NET_AMOUNT"]) : (float?)null,
+                    CURRENCY = dr["CURRENCY"] != DBNull.Value ? dr["CURRENCY"].ToString() : null,
+                    STORE = dr["STORE"] != DBNull.Value ? dr["STORE"].ToString() : null,
+                    NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
+                    STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : null,
+                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : (int?)null
                 });
             }
             connection.Close();
@@ -266,11 +266,11 @@ namespace MicroApi.DataLayer.Services
                     foreach (PurchaseOrderDetail ur in worksheet.PoDetails)
                     {
                         DataRow dRow = tbl.NewRow();
-                        dRow["ID"] = ur.ID;
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["ID"] = DBNull.Value;
+                        dRow["COMPANY_ID"] = ur.COMPANY_ID ?? (object)DBNull.Value;
                         dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
-                        dRow["PO_ID"] = ur.PO_ID;
-                        dRow["JOB_ID"] = ur.JOB_ID;
+                        dRow["PO_ID"] = DBNull.Value;
+                        dRow["JOB_ID"] = ur.JOB_ID ?? (object)DBNull.Value;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
                         dRow["QUANTITY"] = ur.QUANTITY;
                         dRow["PACKING"] = ur.PACKING;
@@ -282,8 +282,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
                         dRow["UOM"] = ur.UOM;
-                        dRow["GRN_QTY"] = ur.GRN_QTY;
-                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
+                        dRow["GRN_QTY"] = ur.GRN_QTY ?? (object)DBNull.Value;
+                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY ?? (object)DBNull.Value;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
@@ -409,11 +409,11 @@ namespace MicroApi.DataLayer.Services
                     foreach (PurchaseOrderDetail ur in worksheet.PoDetails)
                     {
                         DataRow dRow = tbl.NewRow();
-                        dRow["ID"] = ur.ID;
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
-                        dRow["STORE_ID"] = ur.STORE_ID;
-                        dRow["PO_ID"] = ur.PO_ID;
-                        dRow["JOB_ID"] = ur.JOB_ID;
+                        dRow["ID"] = DBNull.Value;
+                        dRow["COMPANY_ID"] = ur.COMPANY_ID ?? (object)DBNull.Value;
+                        dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
+                        dRow["PO_ID"] = DBNull.Value;
+                        dRow["JOB_ID"] = ur.JOB_ID ?? (object)DBNull.Value;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
                         dRow["QUANTITY"] = ur.QUANTITY;
                         dRow["PACKING"] = ur.PACKING;
@@ -425,11 +425,11 @@ namespace MicroApi.DataLayer.Services
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
                         dRow["UOM"] = ur.UOM;
-                        dRow["GRN_QTY"] = ur.GRN_QTY;
-                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
+                        dRow["GRN_QTY"] = ur.GRN_QTY ?? (object)DBNull.Value;
+                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY ?? (object)DBNull.Value;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
-                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID;
+                        dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -553,11 +553,11 @@ namespace MicroApi.DataLayer.Services
                     foreach (PurchaseOrderDetail ur in worksheet.PoDetails)
                     {
                         DataRow dRow = tbl.NewRow();
-                        dRow["ID"] = ur.ID;
-                        dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["ID"] = DBNull.Value;
+                        dRow["COMPANY_ID"] = ur.COMPANY_ID ?? (object)DBNull.Value;
                         dRow["STORE_ID"] = ur.STORE_ID ?? (object)DBNull.Value;
-                        dRow["PO_ID"] = ur.PO_ID;
-                        dRow["JOB_ID"] = ur.JOB_ID;
+                        dRow["PO_ID"] = DBNull.Value;
+                        dRow["JOB_ID"] = ur.JOB_ID ?? (object)DBNull.Value;
                         dRow["ITEM_ID"] = ur.ITEM_ID;
                         dRow["QUANTITY"] = ur.QUANTITY;
                         dRow["PACKING"] = ur.PACKING;
@@ -569,8 +569,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
                         dRow["UOM"] = ur.UOM;
-                        dRow["GRN_QTY"] = ur.GRN_QTY;
-                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY;
+                        dRow["GRN_QTY"] = ur.GRN_QTY ?? (object)DBNull.Value;
+                        dRow["INVOICE_QTY"] = ur.INVOICE_QTY ?? (object)DBNull.Value;
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
@@ -846,6 +846,28 @@ namespace MicroApi.DataLayer.Services
             }
 
             return res;
+        }
+        public bool Delete(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = connection;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "SP_TB_PURCHASE_ORDER";
+                    cmd.Parameters.AddWithValue("ACTION", 4);
+                    cmd.Parameters.AddWithValue("@ID", id);
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
