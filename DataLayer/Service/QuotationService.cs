@@ -221,7 +221,9 @@ namespace MicroApi.DataLayer.Service
                             response.Data.QTN_NO = reader["QTN_NO"] != DBNull.Value ? reader["QTN_NO"].ToString() : null;
                             response.Data.QTN_DATE = reader["QTN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["QTN_DATE"]).ToString("yyyy-MM-dd") : null;
                             response.Data.CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : 0;
+                            response.Data.CUST_NAME = reader["CUSTOMER_NAME"] != DBNull.Value ? reader["CUSTOMER_NAME"].ToString() : null;
                             response.Data.SALESMAN_ID = reader["SALESMAN_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALESMAN_ID"]) : 0;
+                            response.Data.EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? reader["EMP_NAME"].ToString() : null;
                             response.Data.CONTACT_NAME = reader["CONTACT_NAME"] != DBNull.Value ? reader["CONTACT_NAME"].ToString() : null;
                             response.Data.SUBJECT = reader["SUBJECT"] != DBNull.Value ? reader["SUBJECT"].ToString() : null;
                             response.Data.REF_NO = reader["REF_NO"] != DBNull.Value ? reader["REF_NO"].ToString() : null;
@@ -233,6 +235,8 @@ namespace MicroApi.DataLayer.Service
                             response.Data.CHARGE_DESCRIPTION = reader["CHARGE_DESCRIPTION"] != DBNull.Value ? reader["CHARGE_DESCRIPTION"].ToString() : null;
                             response.Data.CHARGE_AMOUNT = reader["CHARGE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["CHARGE_AMOUNT"]) : 0;
                             response.Data.DISCOUNT_DESCRIPTION = reader["DISCOUNT_DESCRIPTION"] != DBNull.Value ? reader["DISCOUNT_DESCRIPTION"].ToString() : null;
+                            response.Data.PAY_TERM_NAME = reader["PAY_TERM_NAME"] != DBNull.Value ? reader["PAY_TERM_NAME"].ToString() : null;
+                            response.Data.DELIVERY_TERM_NAME = reader["DELIVERY_TERM_NAME"] != DBNull.Value ? reader["DELIVERY_TERM_NAME"].ToString() : null;
                             response.Data.DISCOUNT_AMOUNT = reader["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["DISCOUNT_AMOUNT"]) : 0;
                             response.Data.ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : false;
                             response.Data.NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0;

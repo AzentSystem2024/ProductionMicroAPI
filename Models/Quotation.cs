@@ -55,7 +55,9 @@
         public string? QTN_NO { get; set; }
         public string? QTN_DATE { get; set; }
         public int? CUST_ID { get; set; }
+        public string? CUST_NAME { get; set; }
         public int? SALESMAN_ID { get; set; }
+        public string? EMP_NAME { get; set; }
         public string? CONTACT_NAME { get; set; }
         public string? SUBJECT { get; set; }
         public string? REF_NO { get; set; }
@@ -67,6 +69,8 @@
         public string? CHARGE_DESCRIPTION { get; set; }
         public float? CHARGE_AMOUNT { get; set; }
         public string? DISCOUNT_DESCRIPTION { get; set; }
+        public string? PAY_TERM_NAME { get; set; }
+        public string? DELIVERY_TERM_NAME { get; set; }
         public float? DISCOUNT_AMOUNT { get; set; }
         public bool? ROUND_OFF { get; set; }
         public float? NET_AMOUNT { get; set; }
