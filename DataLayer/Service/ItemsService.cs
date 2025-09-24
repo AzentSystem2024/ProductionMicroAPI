@@ -155,6 +155,10 @@ namespace MicroApi.DataLayer.Services
 
                 foreach (ITEM_STORES ur in items.item_stores)
                 {
+                    if (ur.STORE_ID == 0) 
+                    {
+                        return (0, "Select Store.");
+                    }
                     DataRow dRow = tbl.NewRow();
 
                     dRow["ID"] = DBNull.Value;
@@ -208,6 +212,10 @@ namespace MicroApi.DataLayer.Services
                 {
                     foreach (ITEM_SUPPLIERS ur in items.item_suppliers)
                     {
+                        if (string.IsNullOrEmpty(ur.SUPP_ID) || ur.SUPP_ID == "0")
+                        {
+                            return (0, "Select Supplier.");
+                        }
                         DataRow dRow2 = tbl2.NewRow();
 
                         dRow2["ID"] = DBNull.Value;
@@ -361,8 +369,18 @@ namespace MicroApi.DataLayer.Services
 
             try
             {
-                DataTable tbl = new DataTable();
+                if (items.item_stores != null && items.item_stores.Any(ur => ur.STORE_ID == 0))
+                {
+                    throw new Exception("Alert:Select Store...!");
+                }
 
+                // Check for SUPP_ID = 0 in item_suppliers
+                if (items.item_suppliers != null && items.item_suppliers.Any(ur => ur.SUPP_ID == "0"))
+                {
+                    throw new Exception("Alert:Select Supplier...!");
+                }
+
+                DataTable tbl = new DataTable();
                 tbl.Columns.Add("ID", typeof(Int32));
                 tbl.Columns.Add("STORE_ID", typeof(Int32));
                 tbl.Columns.Add("SALE_PRICE", typeof(float));
@@ -378,11 +396,9 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("IS_PRICE_REQUIRED", typeof(bool));
                 tbl.Columns.Add("IS_NOT_DISCOUNTABLE", typeof(bool));
 
-
                 foreach (ITEM_STORES ur in items.item_stores)
                 {
                     DataRow dRow = tbl.NewRow();
-
                     dRow["ID"] = ur.ID;
                     dRow["STORE_ID"] = ur.STORE_ID;
                     dRow["SALE_PRICE"] = ur.SALE_PRICE;
@@ -397,12 +413,11 @@ namespace MicroApi.DataLayer.Services
                     dRow["IS_NOT_SALE_RETURN"] = ur.IS_NOT_SALE_RETURN;
                     dRow["IS_PRICE_REQUIRED"] = ur.IS_PRICE_REQUIRED;
                     dRow["IS_NOT_DISCOUNTABLE"] = ur.IS_NOT_DISCOUNTABLE;
-
                     tbl.Rows.Add(dRow);
                     tbl.AcceptChanges();
                 }
-                DataTable tbl1 = new DataTable();
 
+                DataTable tbl1 = new DataTable();
                 tbl1.Columns.Add("ID", typeof(Int32));
                 tbl1.Columns.Add("ALIAS", typeof(string));
                 tbl1.Columns.Add("IS_DEFAULT", typeof(bool));
@@ -421,8 +436,8 @@ namespace MicroApi.DataLayer.Services
                         tbl1.AcceptChanges();
                     }
                 }
-                DataTable tbl2 = new DataTable();
 
+                DataTable tbl2 = new DataTable();
                 tbl2.Columns.Add("ID", typeof(Int32));
                 tbl2.Columns.Add("SUPP_ID", typeof(Int32));
                 tbl2.Columns.Add("REORDER_NO", typeof(string));
@@ -435,41 +450,34 @@ namespace MicroApi.DataLayer.Services
                     foreach (ITEM_SUPPLIERS ur in items.item_suppliers)
                     {
                         DataRow dRow2 = tbl2.NewRow();
-
                         dRow2["ID"] = ur.ID;
                         dRow2["SUPP_ID"] = ur.SUPP_ID;
                         dRow2["REORDER_NO"] = ur.REORDER_NO;
                         dRow2["COST"] = ur.COST;
                         dRow2["IS_PRIMARY"] = ur.IS_PRIMARY;
                         dRow2["IS_CONSIGNMENT"] = ur.IS_CONSIGNMENT;
-
                         tbl2.Rows.Add(dRow2);
                         tbl2.AcceptChanges();
                     }
                 }
 
                 DataTable tbl3 = new DataTable();
-
                 tbl3.Columns.Add("ID", typeof(Int32));
                 tbl3.Columns.Add("ITEM_ID", typeof(Int32));
                 tbl3.Columns.Add("COMPONENT_ITEM_ID", typeof(Int32));
                 tbl3.Columns.Add("QUANTITY", typeof(float));
                 tbl3.Columns.Add("UOM", typeof(string));
 
-
                 if (items.item_components != null && items.item_components.Any())
                 {
                     foreach (ITEM_COMPONENTS ur in items.item_components)
                     {
                         DataRow dRow3 = tbl3.NewRow();
-
                         dRow3["ID"] = ur.ID;
                         dRow3["ITEM_ID"] = ur.ITEM_ID;
                         dRow3["COMPONENT_ITEM_ID"] = ur.COMPONENT_ITEM_ID;
                         dRow3["QUANTITY"] = ur.QUANTITY;
                         dRow3["UOM"] = ur.UOM;
-
-
                         tbl3.Rows.Add(dRow3);
                         tbl3.AcceptChanges();
                     }
@@ -480,7 +488,6 @@ namespace MicroApi.DataLayer.Services
                 cmd.Transaction = objtrans;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_ITEMS";
-
                 cmd.Parameters.AddWithValue("ACTION", 3);
                 cmd.Parameters.AddWithValue("ID", items.ID);
                 cmd.Parameters.AddWithValue("HQID", items.HQID);
@@ -542,24 +549,15 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
-
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_SUPPLIER", tbl2);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_COMPONENT", tbl3);
 
                 cmd.ExecuteNonQuery();
-
                 objtrans.Commit();
-
                 connection.Close();
                 return true;
-
-                //Int32 CountryID = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
-                //return CountryID;
             }
             catch (Exception ex)
             {
