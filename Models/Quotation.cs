@@ -79,6 +79,7 @@
         public int? USER_ID { get; set; }
         public List<QuotationTerm> TERMS { get; set; } = new List<QuotationTerm>();
         public string? NARRATION { get; set; }
+        public string? STATUS { get; set; }
         public List<QuotationDetailSelect> Details { get; set; }
 
     }

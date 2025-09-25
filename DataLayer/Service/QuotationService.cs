@@ -279,6 +279,7 @@ namespace MicroApi.DataLayer.Service
                             response.Data.NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0;
                             response.Data.TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
                             response.Data.NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null;
+                            response.Data.STATUS = reader["TRANS_STATUS"] != DBNull.Value ? reader["TRANS_STATUS"].ToString() : null;
                         }
 
                         if (reader.NextResult())
