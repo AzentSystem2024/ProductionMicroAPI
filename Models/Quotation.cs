@@ -26,7 +26,8 @@
         public float? NET_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public List<string> Terms { get; set; }
+        //public List<string> Terms { get; set; }
+        public List<QuotationTerm> Terms { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetail> Details { get; set; }
     }
@@ -173,7 +174,8 @@
         public bool? ROUND_OFF { get; set; }
         public int? TRANS_ID { get; set; }
         public float? NET_AMOUNT { get; set; }
-        public List<string> Terms { get; set; }
+        //public List<string> Terms { get; set; }
+        public List<QuotationTerm> Terms { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetail> Details { get; set; }
     }

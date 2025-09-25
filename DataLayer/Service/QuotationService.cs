@@ -57,13 +57,15 @@ namespace MicroApi.DataLayer.Service
                         }
                         // Create DataTable for SQTN_TERMS
                         DataTable tvpTerms = new DataTable();
+                        tvpTerms.Columns.Add("ID", typeof(int));
+                        tvpTerms.Columns.Add("QTN_ID", typeof(int));
                         tvpTerms.Columns.Add("TERMS", typeof(string));
 
                         if (quotation.Terms != null && quotation.Terms.Any())
                         {
                             foreach (var term in quotation.Terms)
                             {
-                                tvpTerms.Rows.Add(term);
+                                tvpTerms.Rows.Add(term.ID, term.QTN_ID, term.TERMS);
                             }
                         }
 
@@ -106,7 +108,7 @@ namespace MicroApi.DataLayer.Service
                             // Add SQTN_TERMS TVP
                             SqlParameter tvpTermsParam = cmd.Parameters.AddWithValue("@SQTN_TERMS", tvpTerms);
                             tvpTermsParam.SqlDbType = SqlDbType.Structured;
-                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERMS";
+                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERM";
 
                             cmd.ExecuteNonQuery();
                         }
@@ -162,13 +164,15 @@ namespace MicroApi.DataLayer.Service
                         }
                         // Create DataTable for SQTN_TERMS
                         DataTable tvpTerms = new DataTable();
+                        tvpTerms.Columns.Add("ID", typeof(int));
+                        tvpTerms.Columns.Add("QTN_ID", typeof(int));
                         tvpTerms.Columns.Add("TERMS", typeof(string));
 
                         if (quotation.Terms != null && quotation.Terms.Any())
                         {
                             foreach (var term in quotation.Terms)
                             {
-                                tvpTerms.Rows.Add(term);
+                                tvpTerms.Rows.Add(term.ID, term.QTN_ID, term.TERMS);
                             }
                         }
 
@@ -212,7 +216,7 @@ namespace MicroApi.DataLayer.Service
                             // Add SQTN_TERMS TVP
                             SqlParameter tvpTermsParam = cmd.Parameters.AddWithValue("@SQTN_TERMS", tvpTerms);
                             tvpTermsParam.SqlDbType = SqlDbType.Structured;
-                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERMS";
+                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERM";
 
                             cmd.ExecuteNonQuery();
                         }
@@ -533,7 +537,7 @@ namespace MicroApi.DataLayer.Service
                             // Add SQTN_TERMS TVP
                             SqlParameter tvpTermsParam = cmd.Parameters.AddWithValue("@SQTN_TERMS", tvpTerms);
                             tvpTermsParam.SqlDbType = SqlDbType.Structured;
-                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERMS";
+                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERM";
 
                             cmd.ExecuteNonQuery();
                         }
