@@ -216,8 +216,7 @@ namespace MicroApi.DataLayer.Service
             return list;
         }
 
-      
-        public TransferOutInvUpdate GetTransferOut(int id)
+      public TransferOutInvUpdate GetTransferOut(int id)
         {
             TransferOutInvUpdate transfer = new TransferOutInvUpdate();
             try
