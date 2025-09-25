@@ -13,5 +13,7 @@ namespace MicroApi.DataLayer.Interface
         QuotationResponse ApproveQuotation(QuotationUpdate request);
         TERMSLISTResponse GetTERMSLIST();
         QuotationHistoryResponse GetQuotationHistoryByItemId(int itemId);
+        LatestVocherResponse GetLatestVoucherNumber();
+
     }
 }

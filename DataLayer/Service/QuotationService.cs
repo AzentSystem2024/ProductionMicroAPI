@@ -57,13 +57,15 @@ namespace MicroApi.DataLayer.Service
                         }
                         // Create DataTable for SQTN_TERMS
                         DataTable tvpTerms = new DataTable();
+                        tvpTerms.Columns.Add("ID", typeof(int));
+                        tvpTerms.Columns.Add("QTN_ID", typeof(int));
                         tvpTerms.Columns.Add("TERMS", typeof(string));
 
                         if (quotation.Terms != null && quotation.Terms.Any())
                         {
                             foreach (var term in quotation.Terms)
                             {
-                                tvpTerms.Rows.Add(term);
+                                tvpTerms.Rows.Add(term.ID, term.QTN_ID, term.TERMS);
                             }
                         }
 
@@ -106,7 +108,7 @@ namespace MicroApi.DataLayer.Service
                             // Add SQTN_TERMS TVP
                             SqlParameter tvpTermsParam = cmd.Parameters.AddWithValue("@SQTN_TERMS", tvpTerms);
                             tvpTermsParam.SqlDbType = SqlDbType.Structured;
-                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERMS";
+                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERM";
 
                             cmd.ExecuteNonQuery();
                         }
@@ -162,13 +164,15 @@ namespace MicroApi.DataLayer.Service
                         }
                         // Create DataTable for SQTN_TERMS
                         DataTable tvpTerms = new DataTable();
+                        tvpTerms.Columns.Add("ID", typeof(int));
+                        tvpTerms.Columns.Add("QTN_ID", typeof(int));
                         tvpTerms.Columns.Add("TERMS", typeof(string));
 
                         if (quotation.Terms != null && quotation.Terms.Any())
                         {
                             foreach (var term in quotation.Terms)
                             {
-                                tvpTerms.Rows.Add(term);
+                                tvpTerms.Rows.Add(term.ID, term.QTN_ID, term.TERMS);
                             }
                         }
 
@@ -212,7 +216,7 @@ namespace MicroApi.DataLayer.Service
                             // Add SQTN_TERMS TVP
                             SqlParameter tvpTermsParam = cmd.Parameters.AddWithValue("@SQTN_TERMS", tvpTerms);
                             tvpTermsParam.SqlDbType = SqlDbType.Structured;
-                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERMS";
+                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERM";
 
                             cmd.ExecuteNonQuery();
                         }
@@ -234,7 +238,7 @@ namespace MicroApi.DataLayer.Service
         public QuotationDetailSelectResponse GetQuotation(int qtnId)
         {
             QuotationDetailSelectResponse response = new QuotationDetailSelectResponse 
-            { Data = new QuotationSelect { Details = new List<QuotationDetailSelect>(), TERMS = new List<string>() } };
+            { Data = new QuotationSelect { Details = new List<QuotationDetailSelect>(), TERMS = new List<QuotationTerm>() } };
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
@@ -274,7 +278,8 @@ namespace MicroApi.DataLayer.Service
                             response.Data.ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : false;
                             response.Data.NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0;
                             response.Data.TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
-                            //response.Data.TERMS = reader["TERMS"] != DBNull.Value ? reader["TERMS"].ToString() : null;
+                            response.Data.NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null;
+                            response.Data.STATUS = reader["TRANS_STATUS"] != DBNull.Value ? reader["TRANS_STATUS"].ToString() : null;
                         }
 
                         if (reader.NextResult())
@@ -306,9 +311,14 @@ namespace MicroApi.DataLayer.Service
                         {
                             while (reader.Read())
                             {
-                                string term = reader["TERMS"] != DBNull.Value ? reader["TERMS"].ToString() : null;
-                                if (!string.IsNullOrEmpty(term))
-                                    response.Data.TERMS.Add(term);
+                                var term = new QuotationTerm
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : 0,
+                                    TERMS = reader["TERMS"] != DBNull.Value ? reader["TERMS"].ToString() : null
+                                };
+
+                                response.Data.TERMS.Add(term);
                             }
                         }
                     }
@@ -468,13 +478,15 @@ namespace MicroApi.DataLayer.Service
                         }
                         // Create DataTable for SQTN_TERMS
                         DataTable tvpTerms = new DataTable();
+                        tvpTerms.Columns.Add("ID", typeof(int));
+                        tvpTerms.Columns.Add("QTN_ID", typeof(int));
                         tvpTerms.Columns.Add("TERMS", typeof(string));
 
                         if (quotationUpdate.Terms != null && quotationUpdate.Terms.Any())
                         {
                             foreach (var term in quotationUpdate.Terms)
                             {
-                                tvpTerms.Rows.Add(term);
+                                tvpTerms.Rows.Add(term.ID, term.QTN_ID, term.TERMS);
                             }
                         }
 
@@ -528,7 +540,7 @@ namespace MicroApi.DataLayer.Service
                             // Add SQTN_TERMS TVP
                             SqlParameter tvpTermsParam = cmd.Parameters.AddWithValue("@SQTN_TERMS", tvpTerms);
                             tvpTermsParam.SqlDbType = SqlDbType.Structured;
-                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERMS";
+                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERM";
 
                             cmd.ExecuteNonQuery();
                         }
@@ -635,8 +647,46 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public LatestVocherResponse GetLatestVoucherNumber()
+        {
+            LatestVocherResponse response = new LatestVocherResponse { Data = new List<LatestVocher>() };
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
 
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 9);
 
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                LatestVocher vocher = new LatestVocher
+                                {
+                                    VOCHERNO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                };
+                                response.Data.Add(vocher);
+                            }
+                        }
+                    }
+                }
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+            return response;
+        }
 
 
     }

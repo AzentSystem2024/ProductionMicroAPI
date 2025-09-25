@@ -26,7 +26,8 @@
         public float? NET_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public List<string> Terms { get; set; }
+        //public List<string> Terms { get; set; }
+        public List<QuotationTerm> Terms { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetail> Details { get; set; }
     }
@@ -76,13 +77,14 @@
         public float? NET_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public List<string> TERMS { get; set; }
+        public List<QuotationTerm> TERMS { get; set; } = new List<QuotationTerm>();
         public string? NARRATION { get; set; }
+        public string? STATUS { get; set; }
         public List<QuotationDetailSelect> Details { get; set; }
 
     }
     public class QuotationDetailSelect
-        {
+    {
         public int? ID { get; set; }
         public int? QTN_ID { get; set; }
         public int? ITEM_ID { get; set; }
@@ -97,6 +99,12 @@
         public float? TAX_AMOUNT { get; set; }
         public float? TOTAL_AMOUNT { get; set; }
         public string? REMARKS { get; set; }
+    }
+    public class QuotationTerm
+    {
+        public int ID { get; set; }
+        public int QTN_ID { get; set; }
+        public string TERMS { get; set; }
     }
     public class QuotationDetailSelectResponse
     {
@@ -167,7 +175,8 @@
         public bool? ROUND_OFF { get; set; }
         public int? TRANS_ID { get; set; }
         public float? NET_AMOUNT { get; set; }
-        public List<string> Terms { get; set; }
+        //public List<string> Terms { get; set; }
+        public List<QuotationTerm> Terms { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetail> Details { get; set; }
     }
@@ -252,5 +261,17 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<QuotationHistory> Data { get; set; }
+    }
+    public class LatestVocher
+    {
+        public string? VOCHERNO { get; set; }
+        public int? TRANS_ID { get; set; }
+    }
+    public class LatestVocherResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<LatestVocher> Data { get; set; }
+
     }
 }

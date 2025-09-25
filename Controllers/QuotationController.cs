@@ -169,6 +169,26 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = "Internal server error: " + ex.Message });
             }
         }
+        [HttpPost("GetLatestVoucherNumber")]
+        public IActionResult GetLatestVoucherNumber()
+        {
+            try
+            {
+                var response = _quotationService.GetLatestVoucherNumber();
+                if (response.Flag == 1)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return BadRequest(response.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Flag = 0, Message = ex.Message });
+            }
+        }
 
     }
 }
