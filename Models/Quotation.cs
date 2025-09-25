@@ -262,4 +262,16 @@
         public string Message { get; set; }
         public List<QuotationHistory> Data { get; set; }
     }
+    public class LatestVocher
+    {
+        public string? VOCHERNO { get; set; }
+        public int? TRANS_ID { get; set; }
+    }
+    public class LatestVocherResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<LatestVocher> Data { get; set; }
+
+    }
 }
