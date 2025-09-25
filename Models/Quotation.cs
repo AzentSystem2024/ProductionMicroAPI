@@ -26,7 +26,7 @@
         public float? NET_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public string? TERMS { get; set; }
+        public List<string> Terms { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetail> Details { get; set; }
     }
@@ -76,7 +76,7 @@
         public float? NET_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public string? TERMS { get; set; }
+        public List<string> TERMS { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetailSelect> Details { get; set; }
 
@@ -167,7 +167,7 @@
         public bool? ROUND_OFF { get; set; }
         public int? TRANS_ID { get; set; }
         public float? NET_AMOUNT { get; set; }
-        public string? TERMS { get; set; }
+        public List<string> Terms { get; set; }
         public string? NARRATION { get; set; }
         public List<QuotationDetail> Details { get; set; }
     }
@@ -199,7 +199,7 @@
         public float? DISCOUNT_AMOUNT { get; set; }
         public bool? ROUND_OFF { get; set; }
         public float? NET_AMOUNT { get; set; }
-        public string? TERMS { get; set; }
+        public List<string> Terms { get; set; }
         public List<QuotationDetail> Details { get; set; }
     }
 
@@ -220,6 +220,18 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<Item> Data { get; set; }
+    }
+    public class TERMSLIST
+    {
+        public int? ID { get; set; }
+        public int? QTN_ID { get; set; }
+        public string? TERMS { get; set; }
+    }
+    public class TERMSLISTResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<TERMSLIST> Data { get; set; }
     }
     public class QuotationHistory
     {
