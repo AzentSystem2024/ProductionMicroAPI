@@ -477,13 +477,15 @@ namespace MicroApi.DataLayer.Service
                         }
                         // Create DataTable for SQTN_TERMS
                         DataTable tvpTerms = new DataTable();
+                        tvpTerms.Columns.Add("ID", typeof(int));
+                        tvpTerms.Columns.Add("QTN_ID", typeof(int));
                         tvpTerms.Columns.Add("TERMS", typeof(string));
 
                         if (quotationUpdate.Terms != null && quotationUpdate.Terms.Any())
                         {
                             foreach (var term in quotationUpdate.Terms)
                             {
-                                tvpTerms.Rows.Add(term);
+                                tvpTerms.Rows.Add(term.ID, term.QTN_ID, term.TERMS);
                             }
                         }
 
