@@ -234,7 +234,7 @@ namespace MicroApi.DataLayer.Service
         public QuotationDetailSelectResponse GetQuotation(int qtnId)
         {
             QuotationDetailSelectResponse response = new QuotationDetailSelectResponse 
-            { Data = new QuotationSelect { Details = new List<QuotationDetailSelect>(), TERMS = new List<string>() } };
+            { Data = new QuotationSelect { Details = new List<QuotationDetailSelect>(), TERMS = new List<QuotationTerm>() } };
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
@@ -274,7 +274,7 @@ namespace MicroApi.DataLayer.Service
                             response.Data.ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : false;
                             response.Data.NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0;
                             response.Data.TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
-                            //response.Data.TERMS = reader["TERMS"] != DBNull.Value ? reader["TERMS"].ToString() : null;
+                            response.Data.NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null;
                         }
 
                         if (reader.NextResult())
@@ -306,9 +306,14 @@ namespace MicroApi.DataLayer.Service
                         {
                             while (reader.Read())
                             {
-                                string term = reader["TERMS"] != DBNull.Value ? reader["TERMS"].ToString() : null;
-                                if (!string.IsNullOrEmpty(term))
-                                    response.Data.TERMS.Add(term);
+                                var term = new QuotationTerm
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : 0,
+                                    TERMS = reader["TERMS"] != DBNull.Value ? reader["TERMS"].ToString() : null
+                                };
+
+                                response.Data.TERMS.Add(term);
                             }
                         }
                     }

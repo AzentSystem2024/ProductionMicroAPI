@@ -76,13 +76,13 @@
         public float? NET_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public List<string> TERMS { get; set; }
+        public List<QuotationTerm> TERMS { get; set; } = new List<QuotationTerm>();
         public string? NARRATION { get; set; }
         public List<QuotationDetailSelect> Details { get; set; }
 
     }
     public class QuotationDetailSelect
-        {
+    {
         public int? ID { get; set; }
         public int? QTN_ID { get; set; }
         public int? ITEM_ID { get; set; }
@@ -97,6 +97,12 @@
         public float? TAX_AMOUNT { get; set; }
         public float? TOTAL_AMOUNT { get; set; }
         public string? REMARKS { get; set; }
+    }
+    public class QuotationTerm
+    {
+        public int ID { get; set; }
+        public int QTN_ID { get; set; }
+        public string TERMS { get; set; }
     }
     public class QuotationDetailSelectResponse
     {
