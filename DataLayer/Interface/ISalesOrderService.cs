@@ -11,5 +11,6 @@ namespace MicroApi.DataLayer.Interface
         bool DeleteSalesOrder(int soId);
         ItemListResponse GetSalesOrderItems(SalesOrderRequest request);
         SalesOrderResponse ApproveSalesOrder(SalesOrderUpdate request);
+        SOQUOTATIONLISTResponse GetSOQUOTATIONLIST();
     }
 }
