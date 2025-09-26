@@ -485,14 +485,15 @@ namespace MicroApi.DataLayer.Service
                             {
                                 SOQUOTATIONLIST item = new SOQUOTATIONLIST
                                 {
-                                  ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                  QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : (int?)null,
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : (int?)null,
                                     ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
                                     ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
                                     ITEM_NAME = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                     MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
                                     UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
                                     QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
+                                    GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
                                     PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
                                     DISC_PERCENT = reader["DISC_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DISC_PERCENT"]) : 0,
                                     AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,

@@ -169,6 +169,7 @@
         public string? MATRIX_CODE { get; set; }
         public string? UOM {  get; set; }
         public float? QUANTITY { get; set; }
+        public float? GROSS_AMOUNT { get; set; }
         public float? PRICE { get; set; }
         public float? DISC_PERCENT { get; set; }
         public float? AMOUNT { get; set; }
