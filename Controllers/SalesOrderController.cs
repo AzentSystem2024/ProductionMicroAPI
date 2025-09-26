@@ -140,6 +140,20 @@ namespace MicroApi.Controllers
             else
                 return BadRequest(response);
         }
+        [HttpPost]
+        [Route("listQuotation")]
+        public IActionResult ListQuotation()
+        {
+            try
+            {
+                var response = _salesOrderService.GetSOQUOTATIONLIST();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
 
     }
 }

@@ -159,6 +159,30 @@
     {
         public int STORE_ID { get; set; }
     }
+    public class SOQUOTATIONLIST
+    {
+        public int? ID { get; set; }
+        public int? QTN_ID { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string ? ITEM_NAME { get; set; }
+        public string? MATRIX_CODE { get; set; }
+        public string? UOM {  get; set; }
+        public float? QUANTITY { get; set; }
+        public float? PRICE { get; set; }
+        public float? DISC_PERCENT { get; set; }
+        public float? AMOUNT { get; set; }
+        public float? TAX_PERCENT { get; set; }
+        public float? TAX_AMOUNT { get; set; }
+        public float? TOTAL_AMOUNT { get; set; }
+        public string? REMARKS { get; set; }
+    }
+    public class SOQUOTATIONLISTResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<SOQUOTATIONLIST> Data { get; set; }
+    }
 }
     
 

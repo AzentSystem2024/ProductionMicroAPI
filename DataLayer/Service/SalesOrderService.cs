@@ -465,5 +465,57 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public SOQUOTATIONLISTResponse GetSOQUOTATIONLIST()
+        {
+            SOQUOTATIONLISTResponse response = new SOQUOTATIONLISTResponse { Data = new List<SOQUOTATIONLIST>() };
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 8);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                SOQUOTATIONLIST item = new SOQUOTATIONLIST
+                                {
+                                  ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                  QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : (int?)null,
+                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
+                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
+                                    ITEM_NAME = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
+                                    MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
+                                    UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
+                                    QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
+                                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
+                                    DISC_PERCENT = reader["DISC_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DISC_PERCENT"]) : 0,
+                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
+                                    TAX_PERCENT = reader["TAX_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["TAX_PERCENT"]) : 0,
+                                    TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TAX_AMOUNT"]) : 0,
+                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_AMOUNT"]) : 0,
+                                    REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null
+                                };
+                                response.Data.Add(item);
+                            }
+                        }
+                    }
+                }
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+            return response;
+        }
     }
 }
