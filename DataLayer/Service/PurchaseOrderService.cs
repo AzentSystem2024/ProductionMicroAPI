@@ -223,7 +223,8 @@ namespace MicroApi.DataLayer.Services
                     STORE = dr["STORE"] != DBNull.Value ? dr["STORE"].ToString() : null,
                     NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
                     STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : null,
-                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : (int?)null
+                    TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(dr["TRANS_ID"]) : (int?)null,
+                    GROSS_AMOUNT = dr["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["GROSS_AMOUNT"]) : (float?)null,
                 });
             }
             connection.Close();
