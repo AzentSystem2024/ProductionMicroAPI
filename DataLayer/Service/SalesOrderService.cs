@@ -28,6 +28,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     try
                     {
+
                         DataTable tvp = new DataTable();
                         tvp.Columns.Add("ITEM_ID", typeof(int));
                         tvp.Columns.Add("UOM", typeof(string));
@@ -57,6 +58,13 @@ namespace MicroApi.DataLayer.Service
                                 detail.DN_QTY ?? 0
                             );
                         }
+                        // Create DataTable for QTN_ID_LIST
+                        //DataTable tvpQTN = new DataTable();
+                        //tvpQTN.Columns.Add("QTN_ID", typeof(int));
+                        //foreach (var qtnId in salesOrder.QTN_ID_LIST)
+                        //{
+                        //    tvpQTN.Rows.Add(qtnId);
+                        //}
 
                         using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection, transaction))
                         {
@@ -81,6 +89,11 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? 0);
                             cmd.Parameters.AddWithValue("@USER_ID", salesOrder.USER_ID ?? 0);
                             cmd.Parameters.AddWithValue("@NARRATION", salesOrder.NARRATION ?? "");
+
+                            // Add QTN_ID_LIST as a structured parameter
+                            //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
+                            //qtnParam.SqlDbType = SqlDbType.Structured;
+                            //qtnParam.TypeName = "dbo.UDT_QTN_ID_LIST";
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SO_DETAIL", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;
@@ -142,6 +155,13 @@ namespace MicroApi.DataLayer.Service
                                 );
                             }
                         }
+                        // Create DataTable for QTN_ID_LIST
+                        //DataTable tvpQTN = new DataTable();
+                        //tvpQTN.Columns.Add("QTN_ID", typeof(int));
+                        //foreach (var qtnId in salesOrder.QTN_ID_LIST)
+                        //{
+                        //    tvpQTN.Rows.Add(qtnId);
+                        //}
 
                         using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection, transaction))
                         {
@@ -167,6 +187,11 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@TRANS_ID", salesOrder.TRANS_ID ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(salesOrder.NARRATION) ? (object)DBNull.Value : salesOrder.NARRATION);
+
+                            // Add QTN_ID_LIST as a structured parameter
+                            //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
+                            //qtnParam.SqlDbType = SqlDbType.Structured;
+                            //qtnParam.TypeName = "dbo.UDT_QTN_ID_LIST";
 
                             if (tvp.Rows.Count > 0)
                             {
@@ -317,9 +342,9 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public ItemListResponse GetSalesOrderItems(SalesOrderRequest request)
+        public ItemListsResponse GetSalesOrderItems(SalesOrderRequest request)
         {
-            ItemListResponse response = new ItemListResponse { Data = new List<Item>() };
+            ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
@@ -335,7 +360,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             while (reader.Read())
                             {
-                                Item item = new Item
+                                ITEMS item = new ITEMS
                                 {
                                     ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
                                     ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
@@ -424,6 +449,14 @@ namespace MicroApi.DataLayer.Service
                             }
                         }
 
+                        //// Create DataTable for QTN_ID_LIST
+                        //DataTable tvpQTN = new DataTable();
+                        //tvpQTN.Columns.Add("QTN_ID", typeof(int));
+                        //foreach (var qtnId in request.QTN_ID_LIST)
+                        //{
+                        //    tvpQTN.Rows.Add(qtnId);
+                        //}
+
                         using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection, transaction))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
@@ -447,6 +480,12 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", request.CHARGE_AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@NET_AMOUNT", request.NET_AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(request.NARRATION) ? (object)DBNull.Value : request.NARRATION);
+
+                            // Add QTN_ID_LIST as a structured parameter
+                            //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
+                            //qtnParam.SqlDbType = SqlDbType.Structured;
+                            //qtnParam.TypeName = "dbo.UDT_QTN_ID_LIST";
+
 
                             if (tvp.Rows.Count > 0)
                             {
@@ -477,7 +516,7 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
-        public SOQUOTATIONLISTResponse GetSOQUOTATIONLIST()
+        public SOQUOTATIONLISTResponse GetSOQUOTATIONLIST(SOQUOTATIONRequest request)
         {
             SOQUOTATIONLISTResponse response = new SOQUOTATIONLISTResponse { Data = new List<SOQUOTATIONLIST>() };
             try
@@ -490,6 +529,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 8);
+                        cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -499,6 +539,7 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
                                     QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : (int?)null,
+                                    CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : (int?)null,
                                     ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
                                     ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
                                     ITEM_NAME = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,

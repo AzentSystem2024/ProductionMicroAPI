@@ -14,6 +14,7 @@
         public string? CONTACT_PHONE { get; set; }
         public string? CONTACT_EMAIL { get; set; }
         public int? QTN_ID { get; set; }
+       // public List<int> QTN_ID_LIST { get; set; }
         public string? REF_NO { get; set; }
         public int? PAY_TERM_ID { get; set; }
         public int? DELIVERY_TERM_ID { get; set; }
@@ -129,6 +130,24 @@
         public string Message { get; set; }
         public List<SalesOrderList> Data { get; set; }
     }
+    public class ITEMS
+    {
+        public int? ITEM_ID { get; set; }
+        public string ITEM_CODE { get; set; }
+        public string DESCRIPTION { get; set; }
+        public string? MATRIX_CODE { get; set; }
+        public string? UOM { get; set; }
+        public float? COST { get; set; }
+        public float? STOCK_QTY { get; set; }
+        public decimal? VAT_PERC { get; set; }
+    }
+
+    public class ItemListsResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<ITEMS> Data { get; set; }
+    }
 
     public class SalesOrderUpdate
     {
@@ -143,6 +162,7 @@
         public string? CONTACT_PHONE { get; set; }
         public string? CONTACT_EMAIL { get; set; }
         public int? QTN_ID { get; set; }
+        ///public List<int> QTN_ID_LIST { get; set; }
         public string? REF_NO { get; set; }
         public int? PAY_TERM_ID { get; set; }
         public int? DELIVERY_TERM_ID { get; set; }
@@ -163,6 +183,7 @@
     {
         public int? ID { get; set; }
         public int? QTN_ID { get; set; }
+        public int? CUST_ID { get; set; }
         public int? ITEM_ID { get; set; }
         public string? ITEM_CODE { get; set; }
         public string ? ITEM_NAME { get; set; }
@@ -184,6 +205,10 @@
         public string Message { get; set; }
         public List<SOQUOTATIONLIST> Data { get; set; }
     }
+    public class SOQUOTATIONRequest
+    {
+        public int CUST_ID { get; set; }
+    }
     public class LatestVocherNO
     {
         public string? VOCHERNO { get; set; }
@@ -196,6 +221,7 @@
         public List<LatestVocherNO> Data { get; set; }
 
     }
+
 }
     
 

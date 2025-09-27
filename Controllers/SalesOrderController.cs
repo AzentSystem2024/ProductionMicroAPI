@@ -143,11 +143,11 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("listQuotation")]
-        public IActionResult ListQuotation()
+        public IActionResult ListQuotation([FromBody] SOQUOTATIONRequest request)
         {
             try
             {
-                var response = _salesOrderService.GetSOQUOTATIONLIST();
+                var response = _salesOrderService.GetSOQUOTATIONLIST(request);
                 return Ok(response);
             }
             catch (Exception ex)
