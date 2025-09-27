@@ -184,6 +184,18 @@
         public string Message { get; set; }
         public List<SOQUOTATIONLIST> Data { get; set; }
     }
+    public class LatestVocherNO
+    {
+        public string? VOCHERNO { get; set; }
+        public int? TRANS_ID { get; set; }
+    }
+    public class LatestVocherNOResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<LatestVocherNO> Data { get; set; }
+
+    }
 }
     
 

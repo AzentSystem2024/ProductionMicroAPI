@@ -1,4 +1,5 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -152,6 +153,26 @@ namespace MicroApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
+        [HttpPost("GetLatestVoucherNumber")]
+        public IActionResult GetLatestVoucherNumber()
+        {
+            try
+            {
+                var response = _salesOrderService.GetLatestVoucherNumber();
+                if (response.Flag == 1)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return BadRequest(response.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Flag = 0, Message = ex.Message });
             }
         }
 

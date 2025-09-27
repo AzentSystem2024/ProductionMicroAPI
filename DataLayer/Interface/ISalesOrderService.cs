@@ -12,5 +12,6 @@ namespace MicroApi.DataLayer.Interface
         ItemListResponse GetSalesOrderItems(SalesOrderRequest request);
         SalesOrderResponse ApproveSalesOrder(SalesOrderUpdate request);
         SOQUOTATIONLISTResponse GetSOQUOTATIONLIST();
+        LatestVocherNOResponse GetLatestVoucherNumber();
     }
 }
