@@ -105,8 +105,7 @@ namespace MicroApi.DataLayer.Service
             SalesOrderResponse response = new SalesOrderResponse();
             using (SqlConnection connection = ADO.GetConnection())
             {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
+                if (connection.State == ConnectionState.Closed) connection.Open();
                 using (SqlTransaction transaction = connection.BeginTransaction())
                 {
                     try
@@ -124,21 +123,24 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("REMARKS", typeof(string));
                         tvp.Columns.Add("DN_QTY", typeof(float));
 
-                        foreach (var detail in salesOrder.Details)
+                        if (salesOrder.Details != null && salesOrder.Details.Any())
                         {
-                            tvp.Rows.Add(
-                                detail.ITEM_ID ?? 0,
-                                detail.UOM ?? "",
-                                detail.QUANTITY ?? 0,
-                                detail.PRICE ?? 0,
-                                detail.DISC_PERCENT ?? 0,
-                                detail.AMOUNT ?? 0,
-                                detail.TAX_PERCENT ?? 0,
-                                detail.TAX_AMOUNT ?? 0,
-                                detail.TOTAL_AMOUNT ?? 0,
-                                detail.REMARKS ?? "",
-                                detail.DN_QTY ?? 0
-                            );
+                            foreach (var detail in salesOrder.Details)
+                            {
+                                tvp.Rows.Add(
+                                    detail.ITEM_ID ?? 0,
+                                    detail.UOM ?? "",
+                                    detail.QUANTITY ?? 0,
+                                    detail.PRICE ?? 0,
+                                    detail.DISC_PERCENT ?? 0,
+                                    detail.AMOUNT ?? 0,
+                                    detail.TAX_PERCENT ?? 0,
+                                    detail.TAX_AMOUNT ?? 0,
+                                    detail.TOTAL_AMOUNT ?? 0,
+                                    detail.REMARKS ?? "",
+                                    detail.DN_QTY ?? 0
+                                );
+                            }
                         }
 
                         using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection, transaction))
@@ -146,29 +148,39 @@ namespace MicroApi.DataLayer.Service
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 2);
                             cmd.Parameters.AddWithValue("@ID", salesOrder.ID ?? 0);
-                            cmd.Parameters.AddWithValue("@COMPANY_ID", salesOrder.COMPANY_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@FIN_ID", salesOrder.FIN_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@STORE_ID", salesOrder.STORE_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@SO_DATE", ParseDate(salesOrder.SO_DATE));
-                            cmd.Parameters.AddWithValue("@CUST_ID", salesOrder.CUST_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@SALESMAN_ID", salesOrder.SALESMAN_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@CONTACT_NAME", salesOrder.CONTACT_NAME ?? "");
-                            cmd.Parameters.AddWithValue("@CONTACT_PHONE", salesOrder.CONTACT_PHONE ?? "");
-                            cmd.Parameters.AddWithValue("@CONTACT_EMAIL", salesOrder.CONTACT_EMAIL ?? "");
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", salesOrder.COMPANY_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@FIN_ID", salesOrder.FIN_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@STORE_ID", salesOrder.STORE_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SO_DATE", string.IsNullOrEmpty(salesOrder.SO_DATE) ? (object)DBNull.Value : ParseDate(salesOrder.SO_DATE));
+                            cmd.Parameters.AddWithValue("@CUST_ID", salesOrder.CUST_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SALESMAN_ID", salesOrder.SALESMAN_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CONTACT_NAME", string.IsNullOrEmpty(salesOrder.CONTACT_NAME) ? (object)DBNull.Value : salesOrder.CONTACT_NAME);
+                            cmd.Parameters.AddWithValue("@CONTACT_PHONE", string.IsNullOrEmpty(salesOrder.CONTACT_PHONE) ? (object)DBNull.Value : salesOrder.CONTACT_PHONE);
+                            cmd.Parameters.AddWithValue("@CONTACT_EMAIL", string.IsNullOrEmpty(salesOrder.CONTACT_EMAIL) ? (object)DBNull.Value : salesOrder.CONTACT_EMAIL);
                             cmd.Parameters.AddWithValue("@QTN_ID", salesOrder.QTN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@REF_NO", salesOrder.REF_NO ?? "");
-                            cmd.Parameters.AddWithValue("@PAY_TERM_ID", salesOrder.PAY_TERM_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@DELIVERY_TERM_ID", salesOrder.DELIVERY_TERM_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", salesOrder.GROSS_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", salesOrder.CHARGE_DESCRIPTION ?? "");
-                            cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", salesOrder.CHARGE_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@TRANS_ID", salesOrder.TRANS_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@NARRATION", salesOrder.NARRATION ?? "");
+                            cmd.Parameters.AddWithValue("@REF_NO", string.IsNullOrEmpty(salesOrder.REF_NO) ? (object)DBNull.Value : salesOrder.REF_NO);
+                            cmd.Parameters.AddWithValue("@PAY_TERM_ID", salesOrder.PAY_TERM_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@DELIVERY_TERM_ID", salesOrder.DELIVERY_TERM_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", salesOrder.GROSS_AMOUNT ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", string.IsNullOrEmpty(salesOrder.CHARGE_DESCRIPTION) ? (object)DBNull.Value : salesOrder.CHARGE_DESCRIPTION);
+                            cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", salesOrder.CHARGE_AMOUNT ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", salesOrder.TRANS_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(salesOrder.NARRATION) ? (object)DBNull.Value : salesOrder.NARRATION);
 
-                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SO_DETAIL", tvp);
-                            tvpParam.SqlDbType = SqlDbType.Structured;
-                            tvpParam.TypeName = "dbo.UDT_TB_SO_DETAIL";
+                            if (tvp.Rows.Count > 0)
+                            {
+                                SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SO_DETAIL", tvp);
+                                tvpParam.SqlDbType = SqlDbType.Structured;
+                                tvpParam.TypeName = "dbo.UDT_TB_SO_DETAIL";
+                            }
+                            else
+                            {
+                                // Pass an empty table if no details are provided
+                                SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SO_DETAIL", new DataTable());
+                                tvpParam.SqlDbType = SqlDbType.Structured;
+                                tvpParam.TypeName = "dbo.UDT_TB_SO_DETAIL";
+                            }
 
                             cmd.ExecuteNonQuery();
                         }
