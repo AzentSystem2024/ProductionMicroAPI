@@ -212,9 +212,12 @@ namespace MicroApi.DataLayer.Services
                 {
                     foreach (ITEM_SUPPLIERS ur in items.item_suppliers)
                     {
-                        if (string.IsNullOrEmpty(ur.SUPP_ID) || ur.SUPP_ID == "0")
+                        if (items.TYPE_ID != 8)
                         {
-                            return (0, "Select Supplier.");
+                            if (string.IsNullOrEmpty(ur.SUPP_ID) || ur.SUPP_ID == "0")
+                            {
+                                return (0, "Select Supplier.");
+                            }
                         }
                         DataRow dRow2 = tbl2.NewRow();
 
@@ -374,10 +377,12 @@ namespace MicroApi.DataLayer.Services
                     throw new Exception("Alert:Select Store...!");
                 }
 
-                // Check for SUPP_ID = 0 in item_suppliers
-                if (items.item_suppliers != null && items.item_suppliers.Any(ur => ur.SUPP_ID == "0"))
+                if (items.TYPE_ID != 8)
                 {
-                    throw new Exception("Alert:Select Supplier...!");
+                    if (items.item_suppliers != null && items.item_suppliers.Any(ur => string.IsNullOrEmpty(ur.SUPP_ID) || ur.SUPP_ID == "0"))
+                    {
+                        throw new Exception("Alert:Select Supplier...!");
+                    }
                 }
 
                 DataTable tbl = new DataTable();
