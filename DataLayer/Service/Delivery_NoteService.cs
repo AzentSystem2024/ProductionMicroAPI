@@ -211,6 +211,8 @@ namespace MicroApi.DataLayer.Service
                                 TOTAL_QTY = dr["TOTAL_QTY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["TOTAL_QTY"]) : null,
                                 STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : null,
                                 TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["TRANS_ID"]) : null,
+                                STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? dr["STORE_NAME"].ToString() : null,
+                                CUSTOMER_NAME = dr["CUST_NAME"] != DBNull.Value ? dr["CUST_NAME"].ToString() : null,
                             };
                             data.Add(item);
                         }

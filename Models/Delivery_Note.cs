@@ -90,6 +90,8 @@
         public double? TOTAL_QTY { get; set; }
         public string? STATUS { get; set; }
         public int? TRANS_ID { get; set; }
+        public string? CUSTOMER_NAME { get; set; }
+        public string? STORE_NAME { get; set; }
     }
 
     public class Delivery_Note_List_Response
