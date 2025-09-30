@@ -61,11 +61,13 @@
     }
     public class SODetail
     {
-        public int SO_DETAIL_ID { get; set; }
-        public int ITEM_ID { get; set; }
-        public string REMARKS { get; set; }
-        public string UOM { get; set; }
-        public double QUANTITY { get; set; }
+        public int? SO_DETAIL_ID { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? REMARKS { get; set; }
+        public string? UOM { get; set; }
+        public double? QUANTITY { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? DESCRIPTION { get; set; }
     }
     public class SODetailResponse
     {
@@ -140,6 +142,10 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int DELIVERY_NO { get; set; }
+    }
+    public class DeliveryRequest
+    {
+        public int CUST_ID { get; set; }
     }
 }
 

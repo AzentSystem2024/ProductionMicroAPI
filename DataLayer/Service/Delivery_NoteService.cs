@@ -146,7 +146,7 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
-        public List<SODetail> GetSO()
+        public List<SODetail> GetSO(DeliveryRequest request)
         {
             List<SODetail> items = new List<SODetail>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -155,6 +155,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@ACTION", 3);
+                cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -164,11 +165,13 @@ namespace MicroApi.DataLayer.Service
                 {
                     items.Add(new SODetail
                     {
-                        SO_DETAIL_ID = ADO.ToInt32(dr["ID"]),
-                        ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
-                        REMARKS = ADO.ToString(dr["REMARKS"]),
-                        UOM = ADO.ToString(dr["UOM"]),
-                        QUANTITY = dr["QUANTITY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QUANTITY"])
+                        SO_DETAIL_ID = dr["ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ID"]),
+                        ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ITEM_ID"]),
+                        REMARKS = dr["REMARKS"] == DBNull.Value ? null : dr["REMARKS"].ToString(),
+                        UOM = dr["UOM"] == DBNull.Value ? null : dr["UOM"].ToString(),
+                        QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
+                        ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),
+                        DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : dr["DESCRIPTION"].ToString(),
                     });
                 }
             }

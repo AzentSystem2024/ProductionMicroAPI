@@ -57,13 +57,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("getso")]
-        public SODetailResponse GetSO()
+        public SODetailResponse GetSO(DeliveryRequest request)
         {
             SODetailResponse res = new SODetailResponse();
 
             try
             {
-                var result = _delivery_noteservice.GetSO();
+                var result = _delivery_noteservice.GetSO(request);
 
                 res.Flag = 1;
                 res.Message = "Success";
