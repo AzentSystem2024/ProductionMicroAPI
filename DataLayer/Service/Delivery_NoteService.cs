@@ -172,6 +172,8 @@ namespace MicroApi.DataLayer.Service
                         QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
                         ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),
                         DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : dr["DESCRIPTION"].ToString(),
+                        //DELIVERED_QUANTITY = dr["DELIVERED_QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["DELIVERED_QUANTITY"])
+
                     });
                 }
             }

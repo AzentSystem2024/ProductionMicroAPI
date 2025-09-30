@@ -68,6 +68,7 @@
         public double? QUANTITY { get; set; }
         public string? ITEM_CODE { get; set; }
         public string? DESCRIPTION { get; set; }
+        public double? DELIVERED_QUANTITY { get; set; }
     }
     public class SODetailResponse
     {
