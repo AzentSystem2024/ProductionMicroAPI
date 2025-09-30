@@ -31,7 +31,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -100,7 +100,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -310,6 +310,7 @@ namespace MicroApi.DataLayer.Service
                                 SALESMAN_ID = firstRow["SALESMAN_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["SALESMAN_ID"]) : null,
                                 TOTAL_QTY = firstRow["TOTAL_QTY"] != DBNull.Value ? (double?)Convert.ToDouble(firstRow["TOTAL_QTY"]) : null,
                                 TRANS_ID = firstRow["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["TRANS_ID"]) : null,
+                                NARRATION = firstRow["NARRATION"] != DBNull.Value ? firstRow["NARRATION"].ToString() : null,
                                 DETAILS = new List<Delivery_Note_Detail_Select>()
                             };
 
@@ -322,7 +323,10 @@ namespace MicroApi.DataLayer.Service
                                     ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["ITEM_ID"]) : null,
                                     REMARKS = dr["REMARKS"] != DBNull.Value ? dr["REMARKS"].ToString() : null,
                                     UOM = dr["UOM"] != DBNull.Value ? dr["UOM"].ToString() : null,
-                                    QUANTITY = dr["QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["QUANTITY"]) : null
+                                    QUANTITY = dr["QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["QUANTITY"]) : null,
+                                    ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? dr["ITEM_CODE"].ToString() : null,
+                                    DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? dr["DESCRIPTION"].ToString() : null,
+                                    DELIVERED_QUANTITY = dr["DELIVERED_QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["DELIVERED_QUANTITY"]) : null,
                                 };
                                 deliveryNote.DETAILS.Add(detail);
                             }
@@ -372,7 +376,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }

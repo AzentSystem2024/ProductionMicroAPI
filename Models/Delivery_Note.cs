@@ -24,7 +24,7 @@
         public int ITEM_ID { get; set; }
         public string REMARKS { get; set; }
         public string UOM { get; set; }
-        public double QUANTITY { get; set; }
+        public double DELIVERED_QUANTITY { get; set; }
     }
     public class Delivery_NoteUpdate
     {
@@ -51,7 +51,7 @@
         public int? ITEM_ID { get; set; }
         public string? REMARKS { get; set; }
         public string? UOM { get; set; }
-        public double? QUANTITY { get; set; }
+        public double? DELIVERED_QUANTITY { get; set; }
     }
     public class DeliverynotesaveResponse
     {
@@ -119,6 +119,7 @@
         public int? SALESMAN_ID { get; set; }
         public double? TOTAL_QTY { get; set; }
         public int? TRANS_ID { get; set; }
+        public string? NARRATION { get; set; }
         public List<Delivery_Note_Detail_Select>? DETAILS { get; set; }
     }
     public class Delivery_Note_Detail_Select
@@ -129,6 +130,9 @@
         public string? REMARKS { get; set; }
         public string? UOM { get; set; }
         public double? QUANTITY { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public double? DELIVERED_QUANTITY { get; set; }
     }
 
     // Response for select
