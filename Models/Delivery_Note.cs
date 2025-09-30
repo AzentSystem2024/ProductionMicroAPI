@@ -147,5 +147,19 @@
     {
         public int CUST_ID { get; set; }
     }
+    public class Custdetail
+    {
+        public string? CONTACT_NAME { get; set; }
+        public string? CONTACT_FAX { get; set; }
+        public string? CONTACT_PHONE { get; set; }
+        public string? CONTACT_MOBILE { get; set; }
+        public string? CONTACT_EMAIL { get; set; }
+    }
+    public class CustdetailResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<Custdetail> Data { get; set; }
+    }
 }
 

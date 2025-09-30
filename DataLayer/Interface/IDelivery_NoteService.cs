@@ -12,7 +12,7 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Approve(Delivery_NoteUpdate deliverynote);
         public bool Delete(int id);
         DeliveryDoc GetLastDocNo();
-
+        public List<Custdetail> GetCustdetail(DeliveryRequest request);
 
     }
 }

@@ -78,6 +78,28 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("getcust")]
+        public CustdetailResponse GetCustdetail(DeliveryRequest request)
+        {
+            CustdetailResponse res = new CustdetailResponse();
+
+            try
+            {
+                var result = _delivery_noteservice.GetCustdetail(request);
+
+                res.Flag = 1;
+                res.Message = "Success";
+                res.Data = result;
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("list")]
         public Delivery_Note_List_Response List()
         {

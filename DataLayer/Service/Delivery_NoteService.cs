@@ -177,6 +177,35 @@ namespace MicroApi.DataLayer.Service
             }
             return items;
         }
+        public List<Custdetail> GetCustdetail(DeliveryRequest request)
+        {
+            List<Custdetail> items = new List<Custdetail>();
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SP_TB_DELIVERY_NOTE", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ACTION", 6);
+                cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                foreach (DataRow dr in tbl.Rows)
+                {
+                    items.Add(new Custdetail
+                    {
+                        CONTACT_NAME = dr["CONTACT_NAME"] == DBNull.Value ? null : dr["CONTACT_NAME"].ToString(),
+                        CONTACT_FAX = dr["FAX_NO"] == DBNull.Value ? null : dr["FAX_NO"].ToString(),
+                        CONTACT_MOBILE = dr["MOBILE_NO"] == DBNull.Value ? null : dr["MOBILE_NO"].ToString(),
+                        CONTACT_PHONE = dr["PHONE"] == DBNull.Value ? null : dr["PHONE"].ToString(),
+                        CONTACT_EMAIL = dr["EMAIL"] == DBNull.Value ? null : dr["EMAIL"].ToString(),
+                    });
+                }
+            }
+            return items;
+        }
         public Delivery_Note_List_Response GetDeliveryNoteList()
         {
             Delivery_Note_List_Response response = new Delivery_Note_List_Response();
