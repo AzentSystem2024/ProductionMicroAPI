@@ -112,6 +112,44 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public DeliveryReturnsaveResponse Delete(int id)
+        {
+            DeliveryReturnsaveResponse res = new DeliveryReturnsaveResponse();
+            try
+            {
+                int userId = 1; // Replace with actual user ID from session/token
+                _delivery_ReturnService.Delete(id, userId);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+
+        [HttpPost]
+        [Route("approve")]
+        public DeliveryReturnsaveResponse Approve(Delivery_Return_Approve deliveryReturn)
+        {
+            DeliveryReturnsaveResponse res = new DeliveryReturnsaveResponse();
+            try
+            {
+                _delivery_ReturnService.Approve(deliveryReturn);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
 
     }
 }

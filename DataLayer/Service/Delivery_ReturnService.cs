@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace MicroApi.DataLayer.Service
 {
-    public class Delivery_ReturnService: IDelivery_ReturnService
+    public class Delivery_ReturnService : IDelivery_ReturnService
     {
         public Int32 Insert(Delivery_Return deliveryreturn)
         {
@@ -116,7 +116,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ID", deliveryreturn.ID);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", deliveryreturn.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", deliveryreturn.STORE_ID);
-                    cmd.Parameters.AddWithValue("@DN_DATE", (object?)deliveryreturn.DR_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DR_DATE", (object?)deliveryreturn.DR_DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@REF_NO", (object?)deliveryreturn.REF_NO ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@CUST_ID", deliveryreturn.CUST_ID);
                     cmd.Parameters.AddWithValue("@CONTACT_NAME", (object?)deliveryreturn.CONTACT_NAME ?? DBNull.Value);
@@ -329,6 +329,105 @@ namespace MicroApi.DataLayer.Service
             }
 
             return response;
+        }
+        public int Delete(int id, int userId)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlTransaction objtrans = connection.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_TB_DELIVERY_RETURN", connection, objtrans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 4);
+                    cmd.Parameters.AddWithValue("@ID", id);
+                    cmd.Parameters.AddWithValue("@USER_ID", userId);
+                    object result = cmd.ExecuteScalar();
+                    Int32 deletedId = ADO.ToInt32(result);
+                    objtrans.Commit();
+                    return deletedId;
+                }
+                catch (Exception ex)
+                {
+                    objtrans.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
+            }
+        }
+
+        public int Approve(Delivery_Return_Approve deliveryReturn)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlTransaction objtrans = connection.BeginTransaction();
+                try
+                {
+                    DataTable tbl = new DataTable();
+                    tbl.Columns.Add("SO_DETAIL_ID", typeof(Int32));
+                    tbl.Columns.Add("DN_DETAIL_ID", typeof(Int32));
+                    tbl.Columns.Add("ITEM_ID", typeof(Int32));
+                    tbl.Columns.Add("REMARKS", typeof(string));
+                    tbl.Columns.Add("UOM", typeof(string));
+                    tbl.Columns.Add("QUANTITY", typeof(double));
+
+                    if (deliveryReturn.DETAILS != null && deliveryReturn.DETAILS.Any())
+                    {
+                        foreach (var d in deliveryReturn.DETAILS)
+                        {
+                            DataRow dRow = tbl.NewRow();
+                            dRow["SO_DETAIL_ID"] = d.SO_DETAIL_ID;
+                            dRow["DN_DETAIL_ID"] = d.DN_DETAIL_ID;
+                            dRow["ITEM_ID"] = d.ITEM_ID;
+                            dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
+                            dRow["UOM"] = d.UOM;
+                            dRow["QUANTITY"] = d.RETURN_QUANTITY;
+                            tbl.Rows.Add(dRow);
+                        }
+                    }
+
+                    SqlCommand cmd = new SqlCommand("SP_TB_DELIVERY_RETURN", connection, objtrans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 5);
+                    cmd.Parameters.AddWithValue("@ID", deliveryReturn.ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", deliveryReturn.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", deliveryReturn.STORE_ID);
+                    cmd.Parameters.AddWithValue("@DR_DATE", (object?)deliveryReturn.DR_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@REF_NO", (object?)deliveryReturn.REF_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CUST_ID", deliveryReturn.CUST_ID);
+                    cmd.Parameters.AddWithValue("@CONTACT_NAME", (object?)deliveryReturn.CONTACT_NAME ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CONTACT_PHONE", (object?)deliveryReturn.CONTACT_PHONE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CONTACT_FAX", (object?)deliveryReturn.CONTACT_FAX ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CONTACT_MOBILE", (object?)deliveryReturn.CONTACT_MOBILE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@SALESMAN_ID", deliveryReturn.SALESMAN_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", deliveryReturn.FIN_ID);
+                    cmd.Parameters.AddWithValue("@TOTAL_QTY", deliveryReturn.TOTAL_QTY);
+                    cmd.Parameters.AddWithValue("@USER_ID", deliveryReturn.USER_ID);
+                    cmd.Parameters.AddWithValue("@NARRATION", (object?)deliveryReturn.NARRATION ?? DBNull.Value);
+
+                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_DR_DETAIL", tbl);
+                    tvpParam.SqlDbType = SqlDbType.Structured;
+
+                    object result = cmd.ExecuteScalar();
+                    Int32 approvedId = ADO.ToInt32(result);
+                    objtrans.Commit();
+                    return approvedId;
+                }
+                catch (Exception ex)
+                {
+                    objtrans.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
+            }
         }
     }
 }

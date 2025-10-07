@@ -9,5 +9,7 @@ namespace MicroApi.DataLayer.Interface
         public List<DeliverynoteDetail> GetDN(DNRequest request);
         public DeliveryRtnListResponse GetDeliveryRtnList();
         public DeliveryRtnSelectResponse GetDeliveryRtnById(int id);
+        public int Delete(int id, int userId);
+        public int Approve(Delivery_Return_Approve deliveryReturn);
     }
 }

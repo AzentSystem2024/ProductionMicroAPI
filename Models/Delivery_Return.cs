@@ -150,4 +150,24 @@
         public string Message { get; set; }
         public DeliveryRtnSelect? Data { get; set; }
     }
+    public class Delivery_Return_Approve
+    {
+        public int ID { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int STORE_ID { get; set; }
+        public DateTime DR_DATE { get; set; }
+        public string REF_NO { get; set; }
+        public int CUST_ID { get; set; }
+        public string CONTACT_NAME { get; set; }
+        public string CONTACT_PHONE { get; set; }
+        public string CONTACT_FAX { get; set; }
+        public string CONTACT_MOBILE { get; set; }
+        public int SALESMAN_ID { get; set; }
+        public int FIN_ID { get; set; }
+        public double TOTAL_QTY { get; set; }
+        public int USER_ID { get; set; }
+        public string NARRATION { get; set; }
+        public List<Delivery_Return_Detail> DETAILS { get; set; }
+    }
+
 }
