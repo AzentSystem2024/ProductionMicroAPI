@@ -31,7 +31,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -100,7 +100,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -146,7 +146,7 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
-        public List<SODetail> GetSO()
+        public List<SODetail> GetSO(DeliveryRequest request)
         {
             List<SODetail> items = new List<SODetail>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -155,6 +155,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@ACTION", 3);
+                cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -164,11 +165,44 @@ namespace MicroApi.DataLayer.Service
                 {
                     items.Add(new SODetail
                     {
-                        SO_DETAIL_ID = ADO.ToInt32(dr["ID"]),
-                        ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
-                        REMARKS = ADO.ToString(dr["REMARKS"]),
-                        UOM = ADO.ToString(dr["UOM"]),
-                        QUANTITY = dr["QUANTITY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QUANTITY"])
+                        SO_DETAIL_ID = dr["ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ID"]),
+                        ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ITEM_ID"]),
+                        REMARKS = dr["REMARKS"] == DBNull.Value ? null : dr["REMARKS"].ToString(),
+                        UOM = dr["UOM"] == DBNull.Value ? null : dr["UOM"].ToString(),
+                        QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
+                        ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),
+                        DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : dr["DESCRIPTION"].ToString(),
+                        //DELIVERED_QUANTITY = dr["DELIVERED_QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["DELIVERED_QUANTITY"])
+
+                    });
+                }
+            }
+            return items;
+        }
+        public List<Custdetail> GetCustdetail(DeliveryRequest request)
+        {
+            List<Custdetail> items = new List<Custdetail>();
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SP_TB_DELIVERY_NOTE", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ACTION", 6);
+                cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                foreach (DataRow dr in tbl.Rows)
+                {
+                    items.Add(new Custdetail
+                    {
+                        CONTACT_NAME = dr["CONTACT_NAME"] == DBNull.Value ? null : dr["CONTACT_NAME"].ToString(),
+                        CONTACT_FAX = dr["FAX_NO"] == DBNull.Value ? null : dr["FAX_NO"].ToString(),
+                        CONTACT_MOBILE = dr["MOBILE_NO"] == DBNull.Value ? null : dr["MOBILE_NO"].ToString(),
+                        CONTACT_PHONE = dr["PHONE"] == DBNull.Value ? null : dr["PHONE"].ToString(),
+                        CONTACT_EMAIL = dr["EMAIL"] == DBNull.Value ? null : dr["EMAIL"].ToString(),
                     });
                 }
             }
@@ -211,6 +245,8 @@ namespace MicroApi.DataLayer.Service
                                 TOTAL_QTY = dr["TOTAL_QTY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["TOTAL_QTY"]) : null,
                                 STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : null,
                                 TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["TRANS_ID"]) : null,
+                                STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? dr["STORE_NAME"].ToString() : null,
+                                CUSTOMER_NAME = dr["CUST_NAME"] != DBNull.Value ? dr["CUST_NAME"].ToString() : null,
                             };
                             data.Add(item);
                         }
@@ -274,6 +310,7 @@ namespace MicroApi.DataLayer.Service
                                 SALESMAN_ID = firstRow["SALESMAN_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["SALESMAN_ID"]) : null,
                                 TOTAL_QTY = firstRow["TOTAL_QTY"] != DBNull.Value ? (double?)Convert.ToDouble(firstRow["TOTAL_QTY"]) : null,
                                 TRANS_ID = firstRow["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["TRANS_ID"]) : null,
+                                NARRATION = firstRow["NARRATION"] != DBNull.Value ? firstRow["NARRATION"].ToString() : null,
                                 DETAILS = new List<Delivery_Note_Detail_Select>()
                             };
 
@@ -286,7 +323,10 @@ namespace MicroApi.DataLayer.Service
                                     ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["ITEM_ID"]) : null,
                                     REMARKS = dr["REMARKS"] != DBNull.Value ? dr["REMARKS"].ToString() : null,
                                     UOM = dr["UOM"] != DBNull.Value ? dr["UOM"].ToString() : null,
-                                    QUANTITY = dr["QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["QUANTITY"]) : null
+                                    QUANTITY = dr["QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["QUANTITY"]) : null,
+                                    ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? dr["ITEM_CODE"].ToString() : null,
+                                    DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? dr["DESCRIPTION"].ToString() : null,
+                                    DELIVERED_QUANTITY = dr["DELIVERED_QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["DELIVERED_QUANTITY"]) : null,
                                 };
                                 deliveryNote.DETAILS.Add(detail);
                             }
@@ -336,7 +376,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }
