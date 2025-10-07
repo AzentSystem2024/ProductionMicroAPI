@@ -3,6 +3,7 @@ using MicroApi.Helper;
 using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -177,6 +178,9 @@ namespace MicroApi.DataLayer.Service
                         QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
                         ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),
                         DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : dr["DESCRIPTION"].ToString(),
+                        SIZE = dr["SIZE"] == DBNull.Value ? null : dr["SIZE"].ToString(),
+                        COLOR = dr["COLOR"] == DBNull.Value ? null : dr["COLOR"].ToString(),
+                        STYLE = dr["STYLE"] == DBNull.Value ? null : dr["STYLE"].ToString(),
                         SO_QTY = dr["SO_QTY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["SO_QTY"])
 
                     });

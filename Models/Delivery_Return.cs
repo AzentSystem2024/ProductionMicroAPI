@@ -71,6 +71,9 @@
         public double? QUANTITY { get; set; }
         public string? ITEM_CODE { get; set; }
         public string? DESCRIPTION { get; set; }
+        public string? SIZE { get; set; }
+        public string? COLOR { get; set; }
+        public string? STYLE { get; set; }
         public double? SO_QTY { get; set; }
     }
     public class DeliverynoteDetailResponse
