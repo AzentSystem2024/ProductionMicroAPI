@@ -1,0 +1,103 @@
+﻿namespace MicroApi.Models
+{
+    public class PhysicalStock
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public string? PHYSICAL_NO { get; set; }
+        public string? PHYSICAL_DATE { get; set; }
+        public int? REASON_ID { get; set; }
+        public string? REASON_NAME { get; set; }
+        public string? REFERENCE_NO { get; set; }
+        public int? TRANS_ID { get; set; }
+        public int? USER_ID { get; set; }
+        public string? NARRATION { get; set; }
+        public int? STATUS { get; set; }
+        public List<PhysicalStockDetail> Details { get; set; }
+    }
+    public class PhysicalStockDetail
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public int? PHYSICAL_ID { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? ITEM_NAME { get; set; }
+        public float? QTY_OH { get; set; }
+        public float? COST { get; set; }
+        public float? QTY_COUNT { get; set; }
+        public decimal? ADJUSTED_QTY { get; set; }
+        public string BATCH_NO { get; set; }
+        public DateTime? EXPIRY_DATE { get; set; }
+    }
+
+    public class PhysicalStockDetailResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public PhysicalStock Data { get; set; }
+    }
+
+    public class PhysicalStockResponse
+    {
+        public string Flag { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class PhysicalStockList
+    {
+        public int? ID { get; set; }
+        public string? PHYSICAL_DATE { get; set; }
+        public string? PHYSICAL_NO { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public string? STORE_NAME { get; set; }
+        public string? MATRIX_CODE { get; set; }
+        public int? REASON_ID { get; set; }
+        public string REASON_DESCRIPTION { get; set; }
+        public int? TRANS_STATUS { get; set; }
+        public string? NARRATION { get; set; }
+    }
+
+    public class PhysicalStockListResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<PhysicalStockList> Data { get; set; }
+    }
+
+    public class PhysicalStockUpdate
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? TRANS_ID { get; set; }
+        public string? PHYSICAL_DATE { get; set; }
+        public int? REASON_ID { get; set; }
+        public string? REFERENCE_NO { get; set; }
+        public string? NARRATION { get; set; }
+        public List<PhysicalStockDetail> Details { get; set; }
+    }
+
+    public class PhysicalStockRequest
+    {
+        public int STORE_ID { get; set; }
+    }
+
+    public class PhysicalStockApproval
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? TRANS_ID { get; set; }
+        public string? PHYSICAL_DATE { get; set; }
+        public int? REASON_ID { get; set; }
+        public string? NARRATION { get; set; }
+        public List<PhysicalStockDetail> Details { get; set; }
+    }
+}
