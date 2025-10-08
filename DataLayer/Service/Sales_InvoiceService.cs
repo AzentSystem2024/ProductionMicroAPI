@@ -4,6 +4,7 @@ using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Reflection;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -35,7 +36,7 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
+                        //CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
@@ -101,13 +102,14 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
                         cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
                         cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
+                       // cmd.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
                         cmd.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
@@ -127,7 +129,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             dt.Rows.Add(
                                 item.DELIVERY_NOTE_ID ?? 0,
-                                item.TOTAL_PAIR_QTY,
+                                //item.TOTAL_PAIR_QTY,
                                 item.PRICE ?? 0,
                                 item.AMOUNT ?? 0,
                                 item.GST ?? 0,
@@ -493,6 +495,7 @@ namespace MicroApi.DataLayer.Service
                                         SALE_NO = reader["SALE_NO"]?.ToString(),
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         SALE_DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        NARRATION = reader["NARRATION"]?.ToString(),
                                         CUST_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                         GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
                                         TAX_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
@@ -589,7 +592,7 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
+                        //CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
@@ -609,7 +612,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             dt.Rows.Add(
                                 item.DELIVERY_NOTE_ID ?? 0,
-                                item.TOTAL_PAIR_QTY ?? 0,
+                                //item.TOTAL_PAIR_QTY ?? 0,
                                 item.PRICE ?? 0,
                                 item.AMOUNT ?? 0,
                                 item.GST ?? 0,
