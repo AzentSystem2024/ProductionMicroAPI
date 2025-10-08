@@ -76,6 +76,7 @@
         public string? COLOR { get; set; }
         public string? STYLE { get; set; }
         public double? SO_QTY { get; set; }
+        public double? QTY_AVAILABLE { get; set; }
     }
     public class DeliverynoteDetailResponse
     {

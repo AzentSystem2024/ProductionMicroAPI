@@ -182,7 +182,8 @@ namespace MicroApi.DataLayer.Service
                         SIZE = dr["SIZE"] == DBNull.Value ? null : dr["SIZE"].ToString(),
                         COLOR = dr["COLOR"] == DBNull.Value ? null : dr["COLOR"].ToString(),
                         STYLE = dr["STYLE"] == DBNull.Value ? null : dr["STYLE"].ToString(),
-                        SO_QTY = dr["SO_QTY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["SO_QTY"])
+                        SO_QTY = dr["SO_QTY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["SO_QTY"]),
+                        QTY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QTY_AVAILABLE"])
 
                     });
                 }
