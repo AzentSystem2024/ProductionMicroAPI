@@ -412,7 +412,7 @@ namespace MicroApi.DataLayer.Service
                     if (con.State == ConnectionState.Closed)
                         con.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("SP_SALE_INVOICE", con))
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_DEL_SALE_INVOICE", con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
