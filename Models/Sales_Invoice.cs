@@ -149,4 +149,10 @@
         public string Message { get; set; }
         public List<SalesInvoiceHeaderSelect> Data { get; set; }
     }
+    public class SalesInvoicesaveResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+
+    }
 }

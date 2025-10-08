@@ -538,6 +538,103 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public int Delete(int id)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlTransaction objtrans = connection.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_TB_DEL_SALE_INVOICE", connection, objtrans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 4);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", id);
+                    object result = cmd.ExecuteScalar();
+                    Int32 deletedId = ADO.ToInt32(result);
+                    objtrans.Commit();
+                    return deletedId;
+                }
+                catch (Exception ex)
+                {
+                    objtrans.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
+            }
+        }
+        public SalesInvoiceResponse Approve(Sale_InvoiceUpdate model)
+        {
+            SalesInvoiceResponse RESPONSE = new SalesInvoiceResponse();
+            try
+            {
+                using (SqlConnection CONNECTION = ADO.GetConnection())
+                {
+                    if (CONNECTION.State == ConnectionState.Closed)
+                        CONNECTION.Open();
+                    using (SqlCommand CMD = new SqlCommand("SP_TB_DEL_SALE_INVOICE", CONNECTION))
+                    {
+                        CMD.CommandType = CommandType.StoredProcedure;
+                        CMD.Parameters.AddWithValue("@ACTION", 3);
+                        CMD.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID ?? 0);
+                        CMD.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE);
+                        CMD.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                        CMD.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        CMD.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        CMD.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        CMD.Parameters.AddWithValue("@TRANS_STATUS", 5); // Approved status
+                        CMD.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
+                        CMD.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+                        CMD.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
+                        CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
+                        CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
+                        CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
+                        CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
+
+                        // Prepare UDT (User Defined Table) for Sale Detail
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("DELIVERY_NOTE_ID", typeof(int));
+                        dt.Columns.Add("QUANTITY", typeof(double));
+                        dt.Columns.Add("PRICE", typeof(double));
+                        dt.Columns.Add("TAXABLE_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("TAX_PERC", typeof(decimal));
+                        dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
+
+                        foreach (var item in model.SALE_DETAILS)
+                        {
+                            dt.Rows.Add(
+                                item.DELIVERY_NOTE_ID ?? 0,
+                                item.TOTAL_PAIR_QTY ?? 0,
+                                item.PRICE ?? 0,
+                                item.AMOUNT ?? 0,
+                                item.GST ?? 0,
+                                item.TAX_AMOUNT ?? 0,
+                                item.TOTAL_AMOUNT ?? 0
+                            );
+                        }
+
+                        SqlParameter tvp = CMD.Parameters.AddWithValue("@UDT_DEL_SALE_DETAIL", dt);
+                        tvp.SqlDbType = SqlDbType.Structured;
+                        tvp.TypeName = "UDT_DEL_SALE_DETAIL";
+
+                        CMD.ExecuteNonQuery();
+                        RESPONSE.flag = 1;
+                        RESPONSE.Message = "Success.";
+                    }
+                }
+            }
+            catch (Exception EX)
+            {
+                RESPONSE.flag = 0;
+                RESPONSE.Message = "ERROR: " + EX.Message;
+            }
+            return RESPONSE;
+        }
 
     }
 }

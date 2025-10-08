@@ -9,5 +9,8 @@ namespace MicroApi.DataLayer.Interface
         DeliveryGridResponse GetTransferData(DeliveryInvoiceRequest request);
         SalesInvoiceHeaderResponse GetSaleInvoiceHeaderData();
         SalesInvselectResponse GetSaleInvoiceById(int id);
+        public int Delete(int id);
+        SalesInvoiceResponse Approve(Sale_InvoiceUpdate model);
+
     }
 }

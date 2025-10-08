@@ -102,5 +102,39 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("delete/{id:int}")]
+        public SalesInvoicesaveResponse Delete(int id)
+        {
+            SalesInvoicesaveResponse res = new SalesInvoicesaveResponse();
+            try
+            {
+                _salesinvoiceService.Delete(id);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("approve")]
+        public SalesInvoiceResponse Approve(Sale_InvoiceUpdate model)
+        {
+            SalesInvoiceResponse res = new SalesInvoiceResponse();
+            try
+            {
+                res = _salesinvoiceService.Approve(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+            return res;
+        }
     }
 }
