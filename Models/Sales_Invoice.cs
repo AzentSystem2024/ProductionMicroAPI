@@ -12,7 +12,7 @@
         public int? CREATE_USER_ID { get; set; }
 
         // SALE HEADER FIELDS
-        public string? SALE_REF_NO { get; set; }
+        //public string? SALE_REF_NO { get; set; }
         public int? CUST_ID { get; set; }
         public int? FIN_ID { get; set; }
         public float? GROSS_AMOUNT { get; set; }
@@ -51,29 +51,30 @@
         public int? CREATE_USER_ID { get; set; }
 
         // SALE HEADER FIELDS
-        public string? SALE_REF_NO { get; set; }
+        //public string? SALE_REF_NO { get; set; }
         public int? CUST_ID { get; set; }
         public int? FIN_ID { get; set; }
         public float? GROSS_AMOUNT { get; set; }
         public float? TAX_AMOUNT { get; set; }
         public float? NET_AMOUNT { get; set; }
 
-        public List<SalesDetailUpdate> SALE_DETAILS { get; set; }
+        // public List<SalesDetailUpdate> SALE_DETAILS { get; set; }
+        public List<SaleDetails> SALE_DETAILS { get; set; }
     }
-    public class SalesDetailUpdate
-    {
-        public int? DELIVERY_NOTE_ID { get; set; }
-        public string? TRANSFER_NO { get; set; }
-        public string? TRANSFER_DATE { get; set; }
-        public string? ARTICLE { get; set; }
-        public double? TOTAL_PAIR_QTY { get; set; }
-        //public double? QUANTITY { get; set; }
-        public double? PRICE { get; set; }
-        public decimal? AMOUNT { get; set; }
-        public decimal? GST { get; set; }
-        public decimal? TAX_AMOUNT { get; set; }
-        public decimal? TOTAL_AMOUNT { get; set; }
-    }
+    //public class SalesDetailUpdate
+    //{
+    //    public int? DELIVERY_NOTE_ID { get; set; }
+    //    public string? TRANSFER_NO { get; set; }
+    //    public string? TRANSFER_DATE { get; set; }
+    //    public string? ARTICLE { get; set; }
+    //    public double? TOTAL_PAIR_QTY { get; set; }
+    //    //public double? QUANTITY { get; set; }
+    //    public double? PRICE { get; set; }
+    //    public decimal? AMOUNT { get; set; }
+    //    public decimal? GST { get; set; }
+    //    public decimal? TAX_AMOUNT { get; set; }
+    //    public decimal? TOTAL_AMOUNT { get; set; }
+    //}
     public class DeliveryGridResponse
     {
         public int flag { get; set; }
@@ -121,6 +122,7 @@
         public int? TRANS_STATUS { get; set; }
         public string SALE_NO { get; set; }
         public string SALE_DATE { get; set; }
+        public string? NARRATION { get; set; }
         public int CUST_ID { get; set; }
         public float GROSS_AMOUNT { get; set; }
         public float NET_AMOUNT { get; set; }
