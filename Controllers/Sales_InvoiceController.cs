@@ -67,5 +67,40 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("getlist")]
+        public SalesInvoiceHeaderResponse GetSaleInvoiceHeaderData()
+        {
+            SalesInvoiceHeaderResponse res = new SalesInvoiceHeaderResponse();
+
+            try
+            {
+                res = _salesinvoiceService.GetSaleInvoiceHeaderData();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<SalesInvoiceHeader>();
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public SalesInvselectResponse Select(int id)
+        {
+            SalesInvselectResponse response = new SalesInvselectResponse();
+            try
+            {
+                response = _salesinvoiceService.GetSaleInvoiceById(id);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
     }
 }

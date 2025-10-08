@@ -38,8 +38,7 @@
         // SALE HEADER FIELDS
         public string? SALE_DATE { get; set; }
         public string? SALE_REF_NO { get; set; }
-        public int? UNIT_ID { get; set; }
-        public int? DISTRIBUTOR_ID { get; set; }
+        public int? CUST_ID { get; set; }
         public int? FIN_ID { get; set; }
         public float? GROSS_AMOUNT { get; set; }
         public float? GST_AMOUNT { get; set; }
@@ -101,8 +100,7 @@
 
         public string? SALE_DATE { get; set; }
         public string? SALE_REF_NO { get; set; }
-        public int? UNIT_ID { get; set; }
-        public int? DISTRIBUTOR_ID { get; set; }
+        public int? CUST_ID { get; set; }
         public int? FIN_ID { get; set; }
         public float? GROSS_AMOUNT { get; set; }
         public float? TAX_AMOUNT { get; set; }
@@ -141,5 +139,61 @@
     public class DeliveryInvoiceRequest
     {
         public int CUST_ID { get; set; }
+    }
+    public class SalesInvoiceHeader
+    {
+        public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public int? TRANS_STATUS { get; set; }
+        public string SALE_NO { get; set; }
+        public string SALE_DATE { get; set; }
+        public int CUST_ID { get; set; }
+        public float GROSS_AMOUNT { get; set; }
+        public float NET_AMOUNT { get; set; }
+        public decimal TAX_AMOUNT { get; set; }
+        public decimal TOTAL_AMOUNT { get; set; }
+        public string CUST_NAME { get; set; }
+
+    }
+    public class SalesInvoiceHeaderResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<SalesInvoiceHeader> Data { get; set; }
+    }
+    public class SalesInvoiceHeaderSelect
+    {
+        public int TRANS_ID { get; set; }
+        public int TRANS_TYPE { get; set; }
+        public int? TRANS_STATUS { get; set; }
+        public string SALE_NO { get; set; }
+        public string SALE_DATE { get; set; }
+        public int CUST_ID { get; set; }
+        public float GROSS_AMOUNT { get; set; }
+        public float NET_AMOUNT { get; set; }
+        public float TAX_AMOUNT { get; set; }
+        public string? REF_NO { get; set; }
+        public List<SalesInvoiceDetailUpdate> SALE_DETAILS { get; set; }
+
+    }
+    public class SalesInvoiceDetailUpdate
+    {
+        public int? DELIVERY_NOTE_ID { get; set; }
+        public string ITEM_CODE { get; set; }
+        public string DELIVERY_DATE { get; set; }
+        public string DESCRIPTION { get; set; }
+        public double QUANTITY { get; set; }
+        public double? PRICE { get; set; }
+        public decimal? AMOUNT { get; set; }
+        public decimal? GST { get; set; }
+        public decimal? TAX_AMOUNT { get; set; }
+        public decimal TOTAL_AMOUNT { get; set; }
+
+    }
+    public class SalesInvselectResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<SalesInvoiceHeaderSelect> Data { get; set; }
     }
 }

@@ -62,8 +62,7 @@ namespace MicroApi.DataLayer.Service
 
                         CMD.Parameters.AddWithValue("@SALE_DATE", ParseDate(model.SALE_DATE));
                         CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
-                        CMD.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
+                        CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.GST_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
@@ -152,8 +151,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@SALE_DATE", ParseDate(model.SALE_DATE));
                         cmd.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
                         cmd.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
@@ -325,5 +323,264 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public SalesInvoiceHeaderResponse GetSaleInvoiceHeaderData()
+        {
+            SalesInvoiceHeaderResponse res = new SalesInvoiceHeaderResponse();
+            List<SalesInvoiceHeader> list = new List<SalesInvoiceHeader>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_TB_DEL_SALE_INVOICE", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // 🔹 Header Parameters
+                    cmd.Parameters.AddWithValue("@ACTION", 0);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@TRANSFER_NO", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
+                    cmd.Parameters.AddWithValue("@STORE_ID", 0);
+                    cmd.Parameters.AddWithValue("@FIN_ID", 0);
+                    cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
+                    cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
+                    cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
+                    cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PDC_ID", 0);
+                    cmd.Parameters.AddWithValue("@IS_CLOSED", false);
+                    cmd.Parameters.AddWithValue("@PARTY_ID", 0);
+                    cmd.Parameters.AddWithValue("@UNIT_ID", 0);
+                    cmd.Parameters.AddWithValue("@CUSTOMER_ID", 0);
+                    cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IS_PASSED", false);
+                    cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
+                    cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
+                    cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
+                    cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
+                    cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
+                    cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
+                    cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
+                    cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
+                    cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
+                    cmd.Parameters.AddWithValue("@BILL_NO", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@STORE_AUTO_ID", 0);
+                    cmd.Parameters.AddWithValue("@JOB_ID", 0);
+                    cmd.Parameters.AddWithValue("@SALE_DATE", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@SALE_REF_NO", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@GROSS_AMOUNT", 0);
+                    cmd.Parameters.AddWithValue("@TAX_AMOUNT", 0);
+                    cmd.Parameters.AddWithValue("@NET_AMOUNT", 0);
+
+                    // 🔹 Empty UDT Table
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("DELIVERY_NOTE_ID", typeof(int));
+                    dt.Columns.Add("QUANTITY", typeof(double));
+                    dt.Columns.Add("PRICE", typeof(double));
+                    dt.Columns.Add("TAXABLE_AMOUNT", typeof(decimal));
+                    dt.Columns.Add("TAX_PERC", typeof(decimal));
+                    dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
+                    dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
+
+                    SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_DEL_SALE_DETAIL", dt);
+                    tvp.SqlDbType = SqlDbType.Structured;
+                    tvp.TypeName = "UDT_DEL_SALE_DETAIL";
+
+                    // 🔹 Fill DataTable
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable resultTable = new DataTable();
+                    da.Fill(resultTable);
+
+                    // 🔹 Map to Model
+                    foreach (DataRow dr in resultTable.Rows)
+                    {
+                        SalesInvoiceHeader obj = new SalesInvoiceHeader
+                        {
+                            TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
+                            TRANS_TYPE = ADO.ToInt32(dr["TRANS_TYPE"]),
+                            TRANS_STATUS = dr["TRANS_STATUS"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["TRANS_STATUS"]),
+                            SALE_NO = ADO.ToString(dr["SALE_NO"]),
+                            SALE_DATE = dr["SALE_DATE"] == DBNull.Value ? null : Convert.ToDateTime(dr["SALE_DATE"]).ToString("dd-MM-yyyy"),
+                            CUST_ID = ADO.ToInt32(dr["CUSTOMER_ID"]),
+                            GROSS_AMOUNT = dr["GROSS_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["GROSS_AMOUNT"]),
+                            TAX_AMOUNT = dr["TAX_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TAX_AMOUNT"]),
+                            NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["NET_AMOUNT"]),
+                            CUST_NAME = ADO.ToString(dr["CUST_NAME"])
+                        };
+
+                        list.Add(obj);
+                    }
+
+                    res.flag = 1;
+                    res.Message = "Success";
+                    res.Data = list;
+                }
+                catch (Exception ex)
+                {
+                    res.flag = 0;
+                    res.Message = "Error: " + ex.Message;
+                    res.Data = new List<SalesInvoiceHeader>();
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
+            }
+
+            return res;
+        }
+        public SalesInvselectResponse GetSaleInvoiceById(int id)
+        {
+            SalesInvselectResponse response = new SalesInvselectResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<SalesInvoiceHeaderSelect>()
+            };
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_SALE_INVOICE", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
+
+                        // Add all required default parameters
+                        cmd.Parameters.AddWithValue("@TRANSFER_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", 0);
+                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
+                        cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
+                        cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
+                        cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PDC_ID", 0);
+                        cmd.Parameters.AddWithValue("@IS_CLOSED", false);
+                        cmd.Parameters.AddWithValue("@PARTY_ID", 0);
+                        cmd.Parameters.AddWithValue("@UNIT_ID", 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", 0);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IS_PASSED", false);
+                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
+                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
+                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
+                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
+                        cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
+                        cmd.Parameters.AddWithValue("@BILL_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@STORE_AUTO_ID", 0);
+                        cmd.Parameters.AddWithValue("@JOB_ID", 0);
+                        cmd.Parameters.AddWithValue("@SALE_DATE", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@SALE_REF_NO", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@GROSS_AMOUNT", 0);
+                        cmd.Parameters.AddWithValue("@TAX_AMOUNT", 0);
+                        cmd.Parameters.AddWithValue("@NET_AMOUNT", 0);
+
+                        // UDT Placeholder
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("DELIVERY_NOTE_ID", typeof(int));
+                        dt.Columns.Add("QUANTITY", typeof(double));
+                        dt.Columns.Add("PRICE", typeof(double));
+                        dt.Columns.Add("TAXABLE_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("TAX_PERC", typeof(decimal));
+                        dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
+
+                        SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_DEL_SALE_DETAIL", dt);
+                        tvp.SqlDbType = SqlDbType.Structured;
+                        tvp.TypeName = "UDT_DEL_SALE_DETAIL";
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            SalesInvoiceHeaderSelect invoice = null;
+                            List<SalesInvoiceDetailUpdate> saleDetails = new List<SalesInvoiceDetailUpdate>();
+
+                            while (reader.Read())
+                            {
+                                if (invoice == null)
+                                {
+                                    invoice = new SalesInvoiceHeaderSelect
+                                    {
+                                        TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                        TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
+                                        SALE_NO = reader["SALE_NO"]?.ToString(),
+                                        REF_NO = reader["REF_NO"]?.ToString(),
+                                        SALE_DATE = reader["SALE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        CUST_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
+                                        GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
+                                        TAX_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                        SALE_DETAILS = new List<SalesInvoiceDetailUpdate>()
+                                    };
+                                }
+
+                                // Add to SALE_DETAILS
+                                saleDetails.Add(new SalesInvoiceDetailUpdate
+                                {
+                                    DELIVERY_NOTE_ID = reader["TRANSFER_SUMMARY_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANSFER_SUMMARY_ID"]) : (int?)null,
+                                    ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
+                                    DELIVERY_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                    QUANTITY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_QTY"]) : 0,
+                                    //QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["QUANTITY"]) : (double?)null,
+
+                                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToDouble(reader["PRICE"]) : 0,
+                                    AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAXABLE_AMOUNT"]) : 0,
+                                    GST = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
+                                    TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
+                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0
+                                });
+                            }
+
+                            if (invoice != null)
+                            {
+                                invoice.SALE_DETAILS = saleDetails;
+                                response.Data.Add(invoice);
+                                response.flag = 1;
+                                response.Message = "Success";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+
     }
 }
