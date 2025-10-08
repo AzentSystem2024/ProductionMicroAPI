@@ -32,39 +32,13 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
                         CMD.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
                         CMD.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
-                        CMD.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
-                        CMD.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);
                         CMD.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
-                        CMD.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
-                        CMD.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
-                        CMD.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
-                        CMD.Parameters.AddWithValue("@RECON_DATE", ParseDate(model.RECON_DATE));
-                        CMD.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
-                        CMD.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
-                        CMD.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
-                        CMD.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
-                        CMD.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
                         CMD.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@APPROVE3_USER_ID", model.APPROVE3_USER_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
-                        CMD.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@BILL_NO", model.BILL_NO ?? string.Empty);
-                        CMD.Parameters.AddWithValue("@STORE_AUTO_ID", model.STORE_AUTO_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@JOB_ID", model.JOB_ID ?? 0);
-
-                        CMD.Parameters.AddWithValue("@SALE_DATE", ParseDate(model.SALE_DATE));
                         CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
-                        CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.GST_AMOUNT ?? 0);
+                        CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
 
                         // SALE DETAIL UDT
@@ -126,30 +100,13 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
                         cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
-                        cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
-                        cmd.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);
                         cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
-                        cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@RECON_DATE", ParseDate(model.RECON_DATE));
-                        cmd.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
-                        cmd.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
-                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
                         cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
-
-                        cmd.Parameters.AddWithValue("@SALE_DATE", ParseDate(model.SALE_DATE));
                         cmd.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.CUST_ID ?? 0);
                         cmd.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
