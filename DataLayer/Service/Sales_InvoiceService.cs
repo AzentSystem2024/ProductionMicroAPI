@@ -638,6 +638,46 @@ namespace MicroApi.DataLayer.Service
             }
             return RESPONSE;
         }
+        public SalesInvoiceLatestVocherNOResponse GetLatestVoucherNumber()
+        {
+            SalesInvoiceLatestVocherNOResponse response = new SalesInvoiceLatestVocherNOResponse { Data = new List<SalesInvoiceLatestVocherNO>() };
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_DEL_SALE_INVOICE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 6);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                SalesInvoiceLatestVocherNO vocher = new SalesInvoiceLatestVocherNO
+                                {
+                                    VOCHERNO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                };
+                                response.Data.Add(vocher);
+                            }
+                        }
+                    }
+                }
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+            return response;
+        }
 
     }
 }

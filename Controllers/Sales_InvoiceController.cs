@@ -136,5 +136,25 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost("GetLatestVoucherNumber")]
+        public IActionResult GetLatestVoucherNumber()
+        {
+            try
+            {
+                var response = _salesinvoiceService.GetLatestVoucherNumber();
+                if (response.Flag == 1)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return BadRequest(response.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Flag = 0, Message = ex.Message });
+            }
+        }
     }
 }
