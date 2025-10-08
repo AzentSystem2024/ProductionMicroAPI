@@ -176,7 +176,7 @@ namespace MicroApi.DataLayer.Service
                         REMARKS = dr["REMARKS"] == DBNull.Value ? null : dr["REMARKS"].ToString(),
                         MATRIX_CODE = dr["MATRIX_CODE"] == DBNull.Value ? null : dr["MATRIX_CODE"].ToString(),
                         UOM = dr["UOM"] == DBNull.Value ? null : dr["UOM"].ToString(),
-                        QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
+                        DELIVERED_QUANTITY = dr["QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["QUANTITY"]) : null,
                         ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),
                         DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : dr["DESCRIPTION"].ToString(),
                         SIZE = dr["SIZE"] == DBNull.Value ? null : dr["SIZE"].ToString(),
@@ -310,6 +310,11 @@ namespace MicroApi.DataLayer.Service
                                     ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? dr["ITEM_CODE"].ToString() : null,
                                     DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? dr["DESCRIPTION"].ToString() : null,
                                     DELIVERED_QUANTITY = dr["QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["QUANTITY"]) : null,
+                                    QTY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QTY_AVAILABLE"]),
+                                    SIZE = dr["SIZE"] == DBNull.Value ? null : dr["SIZE"].ToString(),
+                                    COLOR = dr["COLOR"] == DBNull.Value ? null : dr["COLOR"].ToString(),
+                                    STYLE = dr["STYLE"] == DBNull.Value ? null : dr["STYLE"].ToString(),
+                                    MATRIX_CODE = dr["MATRIX_CODE"] == DBNull.Value ? null : dr["MATRIX_CODE"].ToString()
                                 };
                                 deliveryNote.DETAILS.Add(detail);
                             }
