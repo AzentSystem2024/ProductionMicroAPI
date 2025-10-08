@@ -174,6 +174,7 @@ namespace MicroApi.DataLayer.Service
                         DN_DETAIL_ID = dr["ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ID"]),
                         ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ITEM_ID"]),
                         REMARKS = dr["REMARKS"] == DBNull.Value ? null : dr["REMARKS"].ToString(),
+                        MATRIX_CODE = dr["MATRIX_CODE"] == DBNull.Value ? null : dr["MATRIX_CODE"].ToString(),
                         UOM = dr["UOM"] == DBNull.Value ? null : dr["UOM"].ToString(),
                         QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
                         ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),

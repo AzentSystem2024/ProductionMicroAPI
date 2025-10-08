@@ -67,6 +67,7 @@
         public int? DN_DETAIL_ID { get; set; }
         public int? ITEM_ID { get; set; }
         public string? REMARKS { get; set; }
+        public string? MATRIX_CODE { get; set; }
         public string? UOM { get; set; }
         public double? QUANTITY { get; set; }
         public string? ITEM_CODE { get; set; }
