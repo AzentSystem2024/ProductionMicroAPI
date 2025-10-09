@@ -30,7 +30,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             DataRow dRow = tbl.NewRow();
                             dRow["SO_DETAIL_ID"] = d.SO_DETAIL_ID;
-                            dRow["DN_DETAIL_ID"] = d.SO_DETAIL_ID;
+                            dRow["DN_DETAIL_ID"] = d.DN_DETAIL_ID;
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
@@ -101,7 +101,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             DataRow dRow = tbl.NewRow();
                             dRow["SO_DETAIL_ID"] = d.SO_DETAIL_ID;
-                            dRow["DN_DETAIL_ID"] = d.SO_DETAIL_ID;
+                            dRow["DN_DETAIL_ID"] = d.DN_DETAIL_ID;
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
