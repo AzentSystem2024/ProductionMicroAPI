@@ -53,7 +53,7 @@
         public int? ITEM_ID { get; set; }
         public string? REMARKS { get; set; }
         public string? UOM { get; set; }
-        public double? RETURN_QUANTITY { get; set; }
+        public double? QUANTITY { get; set; }
     }
     public class DeliveryReturnsaveResponse
     {
