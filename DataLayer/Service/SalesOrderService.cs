@@ -581,7 +581,7 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection))
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 9);

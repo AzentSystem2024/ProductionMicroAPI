@@ -157,4 +157,16 @@
         public string Message { get; set; }
 
     }
+    public class SalesInvoiceLatestVocherNO
+    {
+        public string? VOCHERNO { get; set; }
+        public int? TRANS_ID { get; set; }
+    }
+    public class SalesInvoiceLatestVocherNOResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<SalesInvoiceLatestVocherNO> Data { get; set; }
+
+    }
 }

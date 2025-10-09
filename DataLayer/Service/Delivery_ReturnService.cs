@@ -34,7 +34,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.RETURN_QUANTITY;
+                            dRow["QUANTITY"] = d.QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -396,7 +396,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.RETURN_QUANTITY;
+                            dRow["QUANTITY"] = d.QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }

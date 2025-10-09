@@ -11,6 +11,7 @@ namespace MicroApi.DataLayer.Interface
         SalesInvselectResponse GetSaleInvoiceById(int id);
         public int Delete(int id);
         SalesInvoiceResponse Approve(Sale_InvoiceUpdate model);
+        SalesInvoiceLatestVocherNOResponse GetLatestVoucherNumber();
 
     }
 }
