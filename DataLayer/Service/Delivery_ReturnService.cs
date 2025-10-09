@@ -372,7 +372,6 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
-
         public int Approve(Delivery_Return_Approve deliveryReturn)
         {
             using (SqlConnection connection = ADO.GetConnection())
