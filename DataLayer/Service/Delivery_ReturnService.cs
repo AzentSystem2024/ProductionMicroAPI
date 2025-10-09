@@ -105,7 +105,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["ITEM_ID"] = d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
-                            dRow["QUANTITY"] = d.RETURN_QUANTITY;
+                            dRow["QUANTITY"] = d.QUANTITY;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -292,6 +292,7 @@ namespace MicroApi.DataLayer.Service
                                 SALESMAN_ID = firstRow["SALESMAN_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["SALESMAN_ID"]) : null,
                                 TOTAL_QTY = firstRow["TOTAL_QTY"] != DBNull.Value ? (double?)Convert.ToDouble(firstRow["TOTAL_QTY"]) : null,
                                 TRANS_ID = firstRow["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["TRANS_ID"]) : null,
+                                STATUS = firstRow["STATUS"] != DBNull.Value ? firstRow["STATUS"].ToString() : null,
                                 NARRATION = firstRow["NARRATION"] != DBNull.Value ? firstRow["NARRATION"].ToString() : null,
                                 DETAILS = new List<DeliveryRtnDetailSelect>()
                             };
@@ -314,7 +315,8 @@ namespace MicroApi.DataLayer.Service
                                     SIZE = dr["SIZE"] == DBNull.Value ? null : dr["SIZE"].ToString(),
                                     COLOR = dr["COLOR"] == DBNull.Value ? null : dr["COLOR"].ToString(),
                                     STYLE = dr["STYLE"] == DBNull.Value ? null : dr["STYLE"].ToString(),
-                                    MATRIX_CODE = dr["MATRIX_CODE"] == DBNull.Value ? null : dr["MATRIX_CODE"].ToString()
+                                    MATRIX_CODE = dr["MATRIX_CODE"] == DBNull.Value ? null : dr["MATRIX_CODE"].ToString(),
+                                   
                                 };
                                 deliveryNote.DETAILS.Add(detail);
                             }

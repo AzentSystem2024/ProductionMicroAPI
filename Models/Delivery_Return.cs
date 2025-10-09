@@ -53,7 +53,7 @@
         public int? ITEM_ID { get; set; }
         public string? REMARKS { get; set; }
         public string? UOM { get; set; }
-        public double? RETURN_QUANTITY { get; set; }
+        public double? QUANTITY { get; set; }
     }
     public class DeliveryReturnsaveResponse
     {
@@ -131,6 +131,7 @@
         public int? SALESMAN_ID { get; set; }
         public double? TOTAL_QTY { get; set; }
         public int? TRANS_ID { get; set; }
+        public string? STATUS { get; set; }
         public string? NARRATION { get; set; }
         public List<DeliveryRtnDetailSelect>? DETAILS { get; set; }
     }
@@ -151,6 +152,7 @@
         public string? COLOR { get; set; }
         public string? STYLE { get; set; }
         public string? MATRIX_CODE { get; set; }
+        
     }
 
     // Response for select
