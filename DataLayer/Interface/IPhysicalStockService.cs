@@ -1,4 +1,5 @@
 ﻿using MicroApi.Models;
+using System.Data;
 
 namespace MicroApi.DataLayer.Interface
 {
@@ -11,5 +12,6 @@ namespace MicroApi.DataLayer.Interface
         bool DeletePhysicalStock(int physicalId);
         StockItemListResponse GetPhysicalStockItems(PhysicalStockRequest request);
         PhysicalStockResponse ApprovePhysicalStock(PhysicalStockApproval physicalStock);
+        List<StockItems> GetFilteredItems(FilteredItemsRequest request);
     }
 }

@@ -2,6 +2,7 @@
 using MicroApi.DataLayer.Service;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace MicroApi.Controllers
 {
@@ -140,6 +141,20 @@ namespace MicroApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Flag = "0", Message = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("filtered-items")]
+        public IActionResult GetFilteredItems([FromBody] FilteredItemsRequest request)
+        {
+            try
+            {
+                List<StockItems> items = _physicalStockService.GetFilteredItems(request);
+                return Ok(new { Flag = 1, Message = "Success", Data = items });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
             }
         }
     }

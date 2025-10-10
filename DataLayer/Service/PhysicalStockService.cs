@@ -378,6 +378,55 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public List<StockItems> GetFilteredItems(FilteredItemsRequest request)
+        {
+            List<StockItems> items = new List<StockItems>();
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SP_TB_PHYSICAL_STOCK", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 8);
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.StoreId);
+                    cmd.Parameters.AddWithValue("@DEPT_ID", request.DeptId ?? 0);
+                    cmd.Parameters.AddWithValue("@CAT_ID", request.CatId ?? 0);
+                    cmd.Parameters.AddWithValue("@BRAND_ID", request.BrandId ?? 0);
+                    cmd.Parameters.AddWithValue("@SUPPLIER_ID", request.SupplierId ?? 0);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            StockItems item = new StockItems
+                            {
+                                ItemId = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
+                                ItemCode = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : string.Empty,
+                                Description = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
+                                MatrixCode = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : string.Empty,
+                                Cost = reader["COST"] != DBNull.Value ? Convert.ToDecimal(reader["COST"]) : 0,
+                                StoreId = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                StockQty = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["STOCK_QTY"]) : 0,
+                                DeptId = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+                                DeptName = reader["DEPT_NAME"] != DBNull.Value ? reader["DEPT_NAME"].ToString() : string.Empty,
+                                CatId = reader["CAT_ID"] != DBNull.Value ? Convert.ToInt32(reader["CAT_ID"]) : 0,
+                                CatName = reader["CAT_NAME"] != DBNull.Value ? reader["CAT_NAME"].ToString() : string.Empty,
+                                Brand_Id = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
+                                BrandName = reader["BRAND_NAME"] != DBNull.Value ? reader["BRAND_NAME"].ToString() : string.Empty,
+                                SuppId = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
+                                Supp_Name = reader["SUPP_NAME"] != DBNull.Value ? reader["SUPP_NAME"].ToString() : string.Empty,
+                            };
+                            items.Add(item);
+                        }
+                    }
+                }
+            }
+            return items;
+        }
     }
+
 }
+
 

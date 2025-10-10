@@ -100,4 +100,32 @@
         public string? NARRATION { get; set; }
         public List<PhysicalStockDetail> Details { get; set; }
     }
+    public class StockItems
+    {
+        public int ItemId { get; set; }
+        public string ItemCode { get; set; }
+        public string Description { get; set; }
+        public string MatrixCode { get; set; }
+        public decimal Cost { get; set; }
+        public int StoreId { get; set; }
+        public decimal StockQty { get; set; }
+        public int DeptId { get; set; }
+        public string DeptName { get; set; }
+        public int CatId { get; set; }
+        public string CatName { get; set; }
+        public int Brand_Id { get; set; }
+        public string BrandName { get; set; }
+        public int SuppId { get; set; }
+        public string Supp_Name { get; set; }
+    }
+
+    public class FilteredItemsRequest
+    {
+        public int StoreId { get; set; }
+        public int? DeptId { get; set; }
+        public int? CatId { get; set; }
+        public int? BrandId { get; set; }
+        public int? SupplierId { get; set; }
+    }
+
 }
