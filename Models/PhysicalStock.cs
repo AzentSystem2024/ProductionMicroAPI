@@ -118,14 +118,23 @@
         public int SuppId { get; set; }
         public string Supp_Name { get; set; }
     }
-
     public class FilteredItemsRequest
     {
-        public int StoreId { get; set; }
-        public int? DeptId { get; set; }
-        public int? CatId { get; set; }
-        public int? BrandId { get; set; }
-        public int? SupplierId { get; set; }
+        public List<FilterId> FilterIds { get; set; }
     }
+    public class FilterId
+    {
+        public string FilterType { get; set; } // e.g., "Store", "Dept", "Cat", "Brand", "Supplier"
+        public int Id { get; set; }
+    }
+
+    //public class FilteredItemsRequest
+    //{
+    //    public int StoreId { get; set; }
+    //    public int? DeptId { get; set; }
+    //    public int? CatId { get; set; }
+    //    public int? BrandId { get; set; }
+    //    public int? SupplierId { get; set; }
+    //}
 
 }

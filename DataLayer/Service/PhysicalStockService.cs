@@ -390,11 +390,25 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 8);
-                    cmd.Parameters.AddWithValue("@STORE_ID", request.StoreId);
-                    cmd.Parameters.AddWithValue("@DEPT_ID", request.DeptId ?? 0);
-                    cmd.Parameters.AddWithValue("@CAT_ID", request.CatId ?? 0);
-                    cmd.Parameters.AddWithValue("@BRAND_ID", request.BrandId ?? 0);
-                    cmd.Parameters.AddWithValue("@SUPPLIER_ID", request.SupplierId ?? 0);
+
+                    // Create a DataTable for the UDT parameter
+                    DataTable filterIdsTable = new DataTable();
+                    filterIdsTable.Columns.Add("FilterType", typeof(string));
+                    filterIdsTable.Columns.Add("Id", typeof(int));
+
+                    // Add rows for each filter
+                    if (request.FilterIds != null && request.FilterIds.Count > 0)
+                    {
+                        foreach (var filter in request.FilterIds)
+                        {
+                            filterIdsTable.Rows.Add(filter.FilterType, filter.Id);
+                        }
+                    }
+
+                    // Add the UDT parameter
+                    SqlParameter filterIdsParam = cmd.Parameters.AddWithValue("@FilterIds", filterIdsTable);
+                    filterIdsParam.SqlDbType = SqlDbType.Structured;
+                    filterIdsParam.TypeName = "dbo.UDT_FilterIds";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -415,8 +429,8 @@ namespace MicroApi.DataLayer.Service
                                 CatName = reader["CAT_NAME"] != DBNull.Value ? reader["CAT_NAME"].ToString() : string.Empty,
                                 Brand_Id = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
                                 BrandName = reader["BRAND_NAME"] != DBNull.Value ? reader["BRAND_NAME"].ToString() : string.Empty,
-                                SuppId = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0,
                                 Supp_Name = reader["SUPP_NAME"] != DBNull.Value ? reader["SUPP_NAME"].ToString() : string.Empty,
+                                SuppId = reader["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPP_ID"]) : 0
                             };
                             items.Add(item);
                         }
