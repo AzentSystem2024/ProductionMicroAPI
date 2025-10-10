@@ -738,6 +738,7 @@ namespace MicroApi.DataLayer.Services
                         DEPT_NAME = ADO.ToString(dr2["DEPT_NAME"]),
                         CAT_NAME = ADO.ToString(dr2["CAT_NAME"]),
                         BRAND_NAME = ADO.ToString(dr2["BRAND_NAME"]),
+                        Selected = ADO.Toboolean(dr2["Selected"]),
                         PRICE_NEW = ADO.ToFloat(dr2["PRICE_NEW"]),
                         PRICE_LEVEL1_NEW = ADO.ToFloat(dr2["PRICE_LEVEL1_NEW"]),
                         PRICE_LEVEL2_NEW = ADO.ToFloat(dr2["PRICE_LEVEL2_NEW"]),
