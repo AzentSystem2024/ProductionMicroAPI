@@ -923,42 +923,40 @@ namespace MicroApi.DataLayer.Services
             {
                 DataTable tbl = new DataTable();
 
-                tbl.Columns.Add("ID", typeof(Int32));
-                tbl.Columns.Add("ITEM_ID", typeof(Int32));
-                tbl.Columns.Add("PRICE", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL1", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL2", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL3", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL4", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL5", typeof(float));
-                tbl.Columns.Add("PRICE_NEW", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL1_NEW", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL2_NEW", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL3_NEW", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL4_NEW", typeof(float));
-                tbl.Columns.Add("PRICE_LEVEL5_NEW", typeof(float));
+                tbl.Columns.Add("ID", typeof(Int32)).AllowDBNull = true;
+                tbl.Columns.Add("ITEM_ID", typeof(Int32)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL1", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL2", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL3", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL4", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL5", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_NEW", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL1_NEW", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL2_NEW", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL3_NEW", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL4_NEW", typeof(float)).AllowDBNull = true;
+                tbl.Columns.Add("PRICE_LEVEL5_NEW", typeof(float)).AllowDBNull = true;
                 foreach (WorksheetItemPrice ur in worksheet.worksheet_item_price)
                 {
                     DataRow dRow = tbl.NewRow();
-
-                    dRow["ID"] = ur.ID;
-                    dRow["ITEM_ID"] = ur.ITEM_ID;
-                    dRow["PRICE"] = ur.SALE_PRICE;
-                    dRow["PRICE_LEVEL1"] = ur.SALE_PRICE1;
-                    dRow["PRICE_LEVEL2"] = ur.SALE_PRICE2;
-                    dRow["PRICE_LEVEL3"] = ur.SALE_PRICE3;
-                    dRow["PRICE_LEVEL4"] = ur.SALE_PRICE4;
-                    dRow["PRICE_LEVEL5"] = ur.SALE_PRICE5;
-                    dRow["PRICE_NEW"] = ur.PRICE_NEW;
-                    dRow["PRICE_LEVEL1_NEW"] = ur.PRICE_LEVEL1_NEW;
-                    dRow["PRICE_LEVEL2_NEW"] = ur.PRICE_LEVEL2_NEW;
-                    dRow["PRICE_LEVEL3_NEW"] = ur.PRICE_LEVEL3_NEW;
-                    dRow["PRICE_LEVEL4_NEW"] = ur.PRICE_LEVEL4_NEW;
-                    dRow["PRICE_LEVEL5_NEW"] = ur.PRICE_LEVEL5_NEW;
-
+                    dRow["ID"] = ur.ID.HasValue ? (object)ur.ID.Value : DBNull.Value;
+                    dRow["ITEM_ID"] = ur.ITEM_ID.HasValue ? (object)ur.ITEM_ID.Value : DBNull.Value;
+                    dRow["PRICE"] = ur.SALE_PRICE.HasValue ? (object)ur.SALE_PRICE.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL1"] = ur.SALE_PRICE1.HasValue ? (object)ur.SALE_PRICE1.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL2"] = ur.SALE_PRICE2.HasValue ? (object)ur.SALE_PRICE2.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL3"] = ur.SALE_PRICE3.HasValue ? (object)ur.SALE_PRICE3.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL4"] = ur.SALE_PRICE4.HasValue ? (object)ur.SALE_PRICE4.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL5"] = ur.SALE_PRICE5.HasValue ? (object)ur.SALE_PRICE5.Value : DBNull.Value;
+                    dRow["PRICE_NEW"] = ur.PRICE_NEW.HasValue ? (object)ur.PRICE_NEW.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL1_NEW"] = ur.PRICE_LEVEL1_NEW.HasValue ? (object)ur.PRICE_LEVEL1_NEW.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL2_NEW"] = ur.PRICE_LEVEL2_NEW.HasValue ? (object)ur.PRICE_LEVEL2_NEW.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL3_NEW"] = ur.PRICE_LEVEL3_NEW.HasValue ? (object)ur.PRICE_LEVEL3_NEW.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL4_NEW"] = ur.PRICE_LEVEL4_NEW.HasValue ? (object)ur.PRICE_LEVEL4_NEW.Value : DBNull.Value;
+                    dRow["PRICE_LEVEL5_NEW"] = ur.PRICE_LEVEL5_NEW.HasValue ? (object)ur.PRICE_LEVEL5_NEW.Value : DBNull.Value;
                     tbl.Rows.Add(dRow);
-                    tbl.AcceptChanges();
                 }
+                tbl.AcceptChanges();
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
@@ -968,13 +966,12 @@ namespace MicroApi.DataLayer.Services
 
                 cmd.Parameters.AddWithValue("ACTION", 6);
 
-                cmd.Parameters.AddWithValue("ID", worksheet.ID);
-                cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
-                cmd.Parameters.AddWithValue("USER_ID", worksheet.USER_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
-                cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
+                cmd.Parameters.AddWithValue("ID", worksheet.ID.HasValue ? (object)worksheet.ID.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID.HasValue ? (object)worksheet.COMPANY_ID.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("USER_ID", worksheet.USER_ID.HasValue ? (object)worksheet.USER_ID.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("STORE_ID", (object)worksheet.STORE_ID ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("NARRATION", (object)worksheet.NARRATION ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PRICE", tbl);
-
                 cmd.ExecuteNonQuery();
 
                 objtrans.Commit();
