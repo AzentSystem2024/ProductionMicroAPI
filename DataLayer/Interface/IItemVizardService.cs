@@ -1,6 +1,6 @@
-﻿using RetailApi.Models;
+﻿using MicroApi.Models;
 
-namespace RetailApi.DAL.Interfaces
+namespace MicroApi.DataLayer.Interface
 {
     public interface IItemVizardService
     {

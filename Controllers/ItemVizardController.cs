@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RetailApi.DAL.Interfaces;
-using RetailApi.Models;
+using MicroApi.DataLayer.Interface;
+using MicroApi.Models;
 
-namespace RetailApi.Controllers
+namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ItemVizardController : ControllerBase

@@ -1,10 +1,10 @@
-﻿using RetailApi.DAL.Interfaces;
-using RetailApi.Helper;
-using RetailApi.Models;
+﻿using MicroApi.DataLayer.Interface;
+using MicroApi.Helper;
+using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace RetailApi.DAL.Services
+namespace MicroApi.DataLayer.Services
 {
     public class ItemVizardService:IItemVizardService
     {

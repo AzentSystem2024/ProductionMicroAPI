@@ -1,4 +1,4 @@
-﻿namespace RetailApi.Models
+﻿namespace MicroApi.Models
 {
     public class ItemVizard
     {
