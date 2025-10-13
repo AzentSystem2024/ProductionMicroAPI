@@ -196,6 +196,7 @@
                                         QTY_OH = reader["QTY_OH"] != DBNull.Value ? Convert.ToSingle(reader["QTY_OH"]) : 0,
                                         COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : 0,
                                         QTY_COUNT = reader["QTY_COUNT"] != DBNull.Value ? Convert.ToSingle(reader["QTY_COUNT"]) : 0,
+                                        COUNT_TIME = reader["COUNT_TIME"] != DBNull.Value ? Convert.ToDateTime(reader["COUNT_TIME"]) : (DateTime?)null,
                                         ADJUSTED_QTY = reader["ADJUSTED_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["ADJUSTED_QTY"]) : 0,
                                         BATCH_NO = reader["BATCH_NO"] != DBNull.Value ? reader["BATCH_NO"].ToString() : null,
                                         EXPIRY_DATE = reader["EXPIRY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["EXPIRY_DATE"]) : (DateTime?)null

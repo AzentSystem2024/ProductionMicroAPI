@@ -29,6 +29,7 @@
         public float? QTY_OH { get; set; }
         public float? COST { get; set; }
         public float? QTY_COUNT { get; set; }
+        public DateTime? COUNT_TIME { get; set; }
         public decimal? ADJUSTED_QTY { get; set; }
         public string BATCH_NO { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
