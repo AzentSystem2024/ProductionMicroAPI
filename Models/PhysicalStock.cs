@@ -128,13 +128,40 @@
         public int Id { get; set; }
     }
 
-    //public class FilteredItemsRequest
-    //{
-    //    public int StoreId { get; set; }
-    //    public int? DeptId { get; set; }
-    //    public int? CatId { get; set; }
-    //    public int? BrandId { get; set; }
-    //    public int? SupplierId { get; set; }
-    //}
+    public class ItemDetailsModel
+    {
+        public int? ItemId { get; set; }
+        public string ItemCode { get; set; }
+        public string ItemName { get; set; }
+        public string MatrixCode { get; set; }
+        public string Barcode { get; set; }
+        public int? CatId { get; set; }
+        public string CatName { get; set; }
+        public int? BrandId { get; set; }
+        public string BrandName { get; set; }
+        public int? DeptId { get; set; }
+        public string DeptName { get; set; }
+        public decimal QtyStock { get; set; }
+    }
+    public class HistoryModel
+    {
+        public int Action { get; set; }
+        public DateTime Time { get; set; }
+        public string Description { get; set; }
+        public int DocTypeId { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+    }
+    public class ItemCodeRequest
+    {
+        public List<string> BarCodes { get; set; }
+    }
+    public class ItemCodeListResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<ItemDetailsModel> Data { get; set; }
+    }
+
 
 }

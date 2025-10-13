@@ -157,6 +157,35 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
             }
         }
+        [HttpPost]
+        [Route("list-Barcodes")]
+        public IActionResult GetPhysicalStockItemsByItemCodes([FromBody] ItemCodeRequest request)
+        {
+            try
+            {
+                var response = _physicalStockService.GetPhysicalStockItemsByItemCodes(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("history")]
+        public IActionResult GetPhysicalStockHistory()
+        {
+            try
+            {
+                var history = _physicalStockService.GetPhysicalStockHistory();
+                return Ok(new { Flag = 1, Message = "Success", Data = history });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
     }
 }
 
