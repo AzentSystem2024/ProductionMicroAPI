@@ -39,7 +39,7 @@ namespace MicroApi.Controllers
         {
             try
             {
-                PhysicalStockDetailResponse response = _physicalStockService.GetPhysicalStock(physicalId);
+                PhysicalStockSelectDetailResponse response = _physicalStockService.GetPhysicalStock(physicalId);
                 if (response.Flag == 1)
                     return Ok(response);
                 else

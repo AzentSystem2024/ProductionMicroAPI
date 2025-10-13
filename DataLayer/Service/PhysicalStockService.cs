@@ -149,9 +149,9 @@
                 return response;
             }
 
-            public PhysicalStockDetailResponse GetPhysicalStock(int physicalId)
+            public PhysicalStockSelectDetailResponse GetPhysicalStock(int physicalId)
             {
-                PhysicalStockDetailResponse response = new PhysicalStockDetailResponse { Data = new PhysicalStock { Details = new List<PhysicalStockDetail>() } };
+            PhysicalStockSelectDetailResponse response = new PhysicalStockSelectDetailResponse { Data = new PhysicalStockSelect { Details = new List<PhysicalStockSelectDetail>() } };
                 using (SqlConnection connection = ADO.GetConnection())
                 {
                     if (connection.State == ConnectionState.Closed)
@@ -184,8 +184,8 @@
                             {
                                 while (reader.Read())
                                 {
-                                    PhysicalStockDetail detail = new PhysicalStockDetail
-                                    {
+                                PhysicalStockSelectDetail detail = new PhysicalStockSelectDetail
+                                {
                                         ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                         COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                         STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,

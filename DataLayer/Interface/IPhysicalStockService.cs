@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Interface
         PhysicalStockListResponse GetAllPhysicalStocks();
         int SaveData(PhysicalStock physicalStock);
         PhysicalStockResponse EditData(PhysicalStockUpdate physicalStock);
-        PhysicalStockDetailResponse GetPhysicalStock(int physicalId);
+        PhysicalStockSelectDetailResponse GetPhysicalStock(int physicalId);
         bool DeletePhysicalStock(int physicalId);
         StockItemListResponse GetPhysicalStockItems(PhysicalStockRequest request);
         PhysicalStockResponse ApprovePhysicalStock(PhysicalStockApproval physicalStock);

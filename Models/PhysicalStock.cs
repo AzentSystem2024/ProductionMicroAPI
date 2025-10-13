@@ -29,6 +29,46 @@
         public float? QTY_OH { get; set; }
         public float? COST { get; set; }
         public float? QTY_COUNT { get; set; }
+       // public DateTime? COUNT_TIME { get; set; }
+        public decimal? ADJUSTED_QTY { get; set; }
+        public string BATCH_NO { get; set; }
+        public DateTime? EXPIRY_DATE { get; set; }
+    }
+    public class PhysicalStockSelectDetailResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public PhysicalStockSelect Data { get; set; }
+    }
+    public class PhysicalStockSelect
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public string? PHYSICAL_NO { get; set; }
+        public string? PHYSICAL_DATE { get; set; }
+        public int? REASON_ID { get; set; }
+        public string? REASON_NAME { get; set; }
+        public string? REFERENCE_NO { get; set; }
+        public int? TRANS_ID { get; set; }
+        public int? USER_ID { get; set; }
+        public string? NARRATION { get; set; }
+        public int? STATUS { get; set; }
+        public List<PhysicalStockSelectDetail> Details { get; set; }
+    }
+    public class PhysicalStockSelectDetail
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public int? PHYSICAL_ID { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? ITEM_NAME { get; set; }
+        public float? QTY_OH { get; set; }
+        public float? COST { get; set; }
+        public float? QTY_COUNT { get; set; }
         public DateTime? COUNT_TIME { get; set; }
         public decimal? ADJUSTED_QTY { get; set; }
         public string BATCH_NO { get; set; }
