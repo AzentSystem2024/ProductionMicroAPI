@@ -203,6 +203,18 @@
         public string Message { get; set; }
         public List<ItemDetailsModel> Data { get; set; }
     }
+    public class PhysicalStockLatestVocherNO
+    {
+        public string? VOCHERNO { get; set; }
+        public int? TRANS_ID { get; set; }
+    }
+    public class PhysicalStockLatestVocherNOResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<PhysicalStockLatestVocherNO> Data { get; set; }
+
+    }
 
 
 }

@@ -15,5 +15,6 @@ namespace MicroApi.DataLayer.Interface
         List<StockItems> GetFilteredItems(FilteredItemsRequest request);
         ItemCodeListResponse GetPhysicalStockItemsByItemCodes(ItemCodeRequest request);
         List<HistoryModel> GetPhysicalStockHistory();
+        PhysicalStockLatestVocherNOResponse GetLatestVoucherNumber();
     }
 }
