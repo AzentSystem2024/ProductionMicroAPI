@@ -870,5 +870,36 @@ namespace MicroApi.DataLayer.Services
                 throw ex;
             }
         }
+        public List<POhis> GetPOHis()
+        {
+            List<POhis> history = new List<POhis>();
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed) connection.Open();
+                using (SqlCommand cmd = new SqlCommand("SP_TB_PURCHASE_ORDER", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 7);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            POhis model = new POhis
+                            {
+                                ACTION = reader["ACTION"] != DBNull.Value ? Convert.ToInt32(reader["ACTION"]) : 0,
+                                TIME = reader["TIME"] != DBNull.Value ? Convert.ToDateTime(reader["TIME"]) : DateTime.MinValue,
+                                DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
+                                DOC_TYPE_ID = reader["DOC_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["DOC_TYPE_ID"]) : 0,
+                                USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0,
+                                USER_NAME = reader["USER_NAME"] != DBNull.Value ? reader["USER_NAME"].ToString() : string.Empty,
+                            };
+                            history.Add(model);
+                        }
+                    }
+                }
+            }
+            return history;
+        }
     }
 }
