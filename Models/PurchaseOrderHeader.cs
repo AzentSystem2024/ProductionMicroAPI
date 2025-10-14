@@ -170,4 +170,13 @@ namespace MicroApi.Models
         public string Message { get; set; }
         public int PURCHASE_NO { get; set; }
     }
+    public class POhis
+    {
+        public int ACTION { get; set; }
+        public DateTime TIME { get; set; }
+        public string DESCRIPTION { get; set; }
+        public int DOC_TYPE_ID { get; set; }
+        public int USER_ID { get; set; }
+        public string USER_NAME { get; set; }
+    }
 }

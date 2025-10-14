@@ -241,5 +241,21 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("getpohis")]
+        public List<POhis> GetPOHis()
+        {
+            List<POhis> History = new List<POhis>();
+
+            try
+            {
+
+                History = _purchaseOrderService.GetPOHis();
+            }
+            catch (Exception ex)
+            {
+            }
+            return History.ToList();
+        }
     }
 }
