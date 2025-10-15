@@ -209,6 +209,8 @@ namespace MicroApi.Service
                                     BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
                                     NEW_ARRIVAL_DAYS = reader["NEW_ARRIVAL_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NEW_ARRIVAL_DAYS"]) : 0,
                                     IMAGE_NAME = reader["IMAGE_NAME"]?.ToString() ?? string.Empty,
+                                    SUPPLIER_ID = reader["SUPPLIER_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUPPLIER_ID"]) : 0,
+                                    SupplierName = reader["SUPP_NAME"]?.ToString() ?? string.Empty,
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
                                     COMPONENT_ARTICLE_ID = reader["COMPONENT_ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPONENT_ARTICLE_ID"]) : (int?)null,
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString() ?? string.Empty,
@@ -422,10 +424,6 @@ namespace MicroApi.Service
 
             return res;
         }
-
-
-
-
         public ArticleResponse DeleteArticleData(int id)
         {
             var res = new ArticleResponse();
