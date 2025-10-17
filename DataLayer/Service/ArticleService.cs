@@ -75,38 +75,6 @@ namespace MicroApi.Service
             }
             return res;
         }
-
-
-        //public string GetSupplierNameByUnitId(int unitId)
-        //{
-        //    string supplierName = string.Empty;
-        //    try
-        //    {
-        //        using (var connection = ADO.GetConnection())
-        //        {
-        //            if (connection.State == ConnectionState.Closed)
-        //                connection.Open();
-
-        //            using (var cmd = new SqlCommand("SELECT UNIT_NAME FROM TB_MATERIAL_UNITS WHERE ID = @UNIT_ID", connection))
-        //            {
-        //                cmd.Parameters.AddWithValue("@UNIT_ID", unitId);
-
-        //                var result = cmd.ExecuteScalar();
-        //                if (result != null && result != DBNull.Value)
-        //                {
-        //                    supplierName = result.ToString();
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    return supplierName;
-        //}
-
-
         public ArticleResponse Update(ArticleUpdate article)
         {
             var res = new ArticleResponse();
@@ -166,7 +134,6 @@ namespace MicroApi.Service
             }
             return res;
         }
-
         public ArticleResponse GetArticleById(ArticleSelectRequest request)
         {
             ArticleResponse res = new ArticleResponse();
@@ -202,6 +169,7 @@ namespace MicroApi.Service
                                     PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
                                     PACK_QTY = reader["PACK_QTY"] != DBNull.Value ? Convert.ToInt32(reader["PACK_QTY"]) : 0,
                                     PART_NO = reader["PART_NO"]?.ToString() ?? string.Empty,
+                                    NEXT_SERIAL = reader["NEXT_SERIAL"] != DBNull.Value ? Convert.ToInt32(reader["NEXT_SERIAL"]) : (int?)null,
                                     ALIAS_NO = reader["ALIAS_NO"]?.ToString() ?? string.Empty,
                                     UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
                                     ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
@@ -215,6 +183,7 @@ namespace MicroApi.Service
                                     COMPONENT_ARTICLE_ID = reader["COMPONENT_ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPONENT_ARTICLE_ID"]) : (int?)null,
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString() ?? string.Empty,
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString() ?? string.Empty,
+                                    LAST_ORDER_NO = reader["LASTORDERNO"]?.ToString() ?? string.Empty,
                                     CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])) : (DateTime?)null
 
                                 };
@@ -246,85 +215,6 @@ namespace MicroApi.Service
 
             return res;
         }
-
-        //public ArticleListResponse GetLogList()
-        //{
-        //    ArticleListResponse res = new ArticleListResponse();
-        //    try
-        //    {
-        //        using (var connection = ADO.GetConnection())
-        //        {
-        //            if (connection.State == ConnectionState.Closed)
-        //                connection.Open();
-
-        //            using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
-        //            {
-        //                cmd.CommandType = CommandType.StoredProcedure;
-        //                cmd.Parameters.AddWithValue("@ACTION", 0);
-
-        //                using (var reader = cmd.ExecuteReader())
-        //                {
-        //                    res.Data = MapArticles(reader).ToList();
-        //                    res.flag = 1;
-        //                    res.Message = "Success";
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.flag = 0;
-        //        res.Message = "Error: " + ex.Message;
-        //        res.Data = null;
-        //    }
-        //    return res;
-        //}
-
-
-        //private IEnumerable<ArticleUpdate> MapArticles(SqlDataReader reader)
-        //{
-        //    while (reader.Read())
-        //    {
-        //        var articleUpdate = new ArticleUpdate
-        //        {
-        //            ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
-        //            ART_NO = reader["ART_NO"]?.ToString(),
-        //            DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
-        //            COLOR = reader["COLOR"]?.ToString(),
-        //            PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
-        //            PACK_QTY = reader["PACK_QTY"] != DBNull.Value ? Convert.ToInt32(reader["PACK_QTY"]) : 0,
-        //            PART_NO = reader["PART_NO"]?.ToString(),
-        //            ALIAS_NO = reader["ALIAS_NO"]?.ToString(),
-        //            UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-        //            ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
-        //            ARTICLE_TYPE_NAME = reader["ARTICLE_TYPE_NAME"]?.ToString(),
-        //            CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
-        //            CATEGORY_NAME = reader["CATEGORY_NAME"]?.ToString(),
-        //            BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
-        //            BRAND_NAME = reader["BRAND_NAME"]?.ToString(),
-        //            NEW_ARRIVAL_DAYS = reader["NEW_ARRIVAL_DAYS"] != DBNull.Value ? Convert.ToInt32(reader["NEW_ARRIVAL_DAYS"]) : 0,
-        //            IS_STOPPED = reader["IS_STOPPED"] != DBNull.Value && Convert.ToBoolean(reader["IS_STOPPED"]),
-        //            IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
-        //            ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
-        //            ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString()
-        //        };
-
-        //        if (reader["SIZES"] != DBNull.Value)
-        //        {
-        //            var sizesJson = reader["SIZES"].ToString();
-        //            try
-        //            {
-        //                articleUpdate.SIZES = JsonConvert.DeserializeObject<List<Sizes>>(sizesJson);
-        //            }
-        //            catch
-        //            {
-        //                articleUpdate.SIZES = new List<Sizes>(); // fallback
-        //            }
-        //        }
-
-        //        yield return articleUpdate;
-        //    }
-        //}
         public ArticleListResponse GetArticleList(ArticleListRequest request)
         {
             ArticleListResponse res = new ArticleListResponse();
@@ -424,7 +314,7 @@ namespace MicroApi.Service
 
             return res;
         }
-        public ArticleResponse DeleteArticleData(int id)
+        public ArticleResponse DeleteArticleData(DeleteArticleRequest request)
         {
             var res = new ArticleResponse();
             try
@@ -438,11 +328,11 @@ namespace MicroApi.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 3);
-                        cmd.Parameters.AddWithValue("@ART_NO", id); // Pass the ART_NO parameter
+                        cmd.Parameters.AddWithValue("@ART_NO", request.ART_NO); // Pass the ART_NO parameter
                         cmd.ExecuteNonQuery();
 
                         res.flag = 1;
-                        res.Message = "Deleted";
+                        res.Message = "Deleted successfully";
                     }
                 }
             }
