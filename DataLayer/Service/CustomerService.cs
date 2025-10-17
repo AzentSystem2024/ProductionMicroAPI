@@ -64,7 +64,7 @@ namespace MicroApi.DataLayer.Services
                         CUST_VAT_RULE_ID = Convert.IsDBNull(dr["CUST_VAT_RULE_ID"]) ? 0 : Convert.ToInt32(dr["CUST_VAT_RULE_ID"]),
                         VAT_REGNO = Convert.IsDBNull(dr["VAT_REGNO"]) ? null : Convert.ToString(dr["VAT_REGNO"]),
                         IS_DELETED = Convert.IsDBNull(dr["IS_DELETED"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DELETED"]),
-
+                        CUST_TYPE = Convert.IsDBNull(dr["CUST_TYPE"]) ? 0 : Convert.ToInt32(dr["CUST_TYPE"]),
 
                         LOYALTY_POINT = Convert.IsDBNull(dr["LOYALTY_POINT"]) ? (decimal?)null : Convert.ToDecimal(dr["LOYALTY_POINT"]),
 
@@ -134,6 +134,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
                     cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0);
                     cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
+                    cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
 
                     if (connection.State != ConnectionState.Open)
                         connection.Open();
@@ -220,6 +221,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
                     cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0m);  // ← FIXED HERE
                     cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
+                    cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
 
                     if (connection.State != ConnectionState.Open)
                         connection.Open();
@@ -249,7 +251,7 @@ namespace MicroApi.DataLayer.Services
                    " TB_CUSTOMER.IS_BLOCKED, TB_CUSTOMER.MOBILE_NO, TB_CUSTOMER.FAX_NO, TB_CUSTOMER.LAST_NAME, " +
                    " TB_CUSTOMER.DOB, TB_CUSTOMER.NATIONALITY, TB_CUSTOMER.NOTES, TB_CUSTOMER.CUST_NAME, " +
                    " TB_CUSTOMER.CREDIT_DAYS, TB_CUSTOMER.PAY_TERM_ID, TB_CUSTOMER.PRICE_CLASS_ID, TB_CUSTOMER.DISCOUNT_PERCENT," +
-                   " TB_CUSTOMER.DOJ, TB_CUSTOMER.COMPANY_ID, TB_CUSTOMER.STORE_ID, TB_CUSTOMER.CUST_VAT_RULE_ID," +
+                   " TB_CUSTOMER.DOJ, TB_CUSTOMER.COMPANY_ID,TB_CUSTOMER.CUST_TYPE, TB_CUSTOMER.STORE_ID, TB_CUSTOMER.CUST_VAT_RULE_ID," +
                    " TB_CUSTOMER.VAT_REGNO, TB_CUSTOMER.IS_DELETED, TB_CUSTOMER.LOYALTY_POINT," +
                    " TB_STATE.STATE_NAME, TB_COUNTRY.COUNTRY_NAME, TB_EMPLOYEE.EMP_NAME, " +
                    " TB_PAYMENT_TERMS.CODE, TB_PRICE_CLASS.CLASS_NAME,   " +
@@ -323,6 +325,7 @@ namespace MicroApi.DataLayer.Services
                     customer.STORE_NAME = Convert.ToString(dr["STORE_NAME"]);
                     customer.VAT_RULE_DESCRIPTION = Convert.ToString(dr["VAT_RULE_DESCRIPTION"]);
                     customer.CUST_VAT_RULE_ID = Convert.ToInt32(dr["CUST_VAT_RULE_ID"]);
+                    customer.CUST_TYPE = Convert.ToInt32(dr["CUST_TYPE"]);
 
                 }
             }
