@@ -93,10 +93,10 @@
     public class DeliveryNoteItem
     {
         public int ID { get; set; }
-        public string ITEM_CODE { get; set; }
-        public string DESCRIPTION { get; set; }
-        public string DN_DATE { get; set; }
-        public double TOTAL_QTY { get; set; }
+        public string TRANSFER_NO { get; set; }
+        public string ARTICLE { get; set; }
+        public string TRANSFER_DATE { get; set; }
+        public double TOTAL_PAIR_QTY { get; set; }
     }
 
     public class DeliveryNoteResponse

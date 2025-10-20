@@ -328,11 +328,11 @@ namespace MicroApi.DataLayer.Service
                                     transferResponse.Data.Add(new DeliveryNoteItem
                                     {
                                         ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                        ITEM_CODE = reader["TRANSFER_NO"]?.ToString(),
-                                        DN_DATE = reader["TRANSFER_DATE"] != DBNull.Value
+                                        TRANSFER_NO = reader["TRANSFER_NO"]?.ToString(),
+                                        TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value
                                             ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
-                                        DESCRIPTION = reader["ARTICLE"]?.ToString(),
-                                        TOTAL_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
+                                        ARTICLE = reader["ARTICLE"]?.ToString(),
+                                        TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
                                             ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0
                                     });
                                 }
@@ -355,11 +355,11 @@ namespace MicroApi.DataLayer.Service
                                     deliveryResponse.Data.Add(new DeliveryNoteItem
                                     {
                                         ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                        ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
-                                        DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
-                                        DN_DATE = reader["DN_DATE"] != DBNull.Value
+                                        TRANSFER_NO = reader["ITEM_CODE"]?.ToString(),
+                                        ARTICLE = reader["DESCRIPTION"]?.ToString(),
+                                        TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value
                                             ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
-                                        TOTAL_QTY = reader["TOTAL_QTY"] != DBNull.Value
+                                        TOTAL_PAIR_QTY = reader["TOTAL_QTY"] != DBNull.Value
                                             ? Convert.ToDouble(reader["TOTAL_QTY"]) : 0
                                     });
                                 }
