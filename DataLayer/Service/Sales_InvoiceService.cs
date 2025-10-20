@@ -316,23 +316,23 @@ namespace MicroApi.DataLayer.Service
                             // 🔹 CASE 1: Transfer Out Summary (CUST_TYPE = 1)
                             if (columnNames.Contains("TRANSFER_NO"))
                             {
-                                var transferResponse = new TransferOutSummaryResponse
+                                var transferResponse = new DeliveryNoteResponse
                                 {
                                     flag = 1,
                                     Message = "Success",
-                                    Data = new List<TransferOutSummaryItem>()
+                                    Data = new List<DeliveryNoteItem>()
                                 };
 
                                 while (reader.Read())
                                 {
-                                    transferResponse.Data.Add(new TransferOutSummaryItem
+                                    transferResponse.Data.Add(new DeliveryNoteItem
                                     {
                                         ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                        TRANSFER_NO = reader["TRANSFER_NO"]?.ToString(),
-                                        TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value
+                                        ITEM_CODE = reader["TRANSFER_NO"]?.ToString(),
+                                        DN_DATE = reader["TRANSFER_DATE"] != DBNull.Value
                                             ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
-                                        ARTICLE = reader["ARTICLE"]?.ToString(),
-                                        TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
+                                        DESCRIPTION = reader["ARTICLE"]?.ToString(),
+                                        TOTAL_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
                                             ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0
                                     });
                                 }
