@@ -50,23 +50,23 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public DeliveryGridResponse GetCreditNoteList(DeliveryInvoiceRequest request)
+        public IActionResult GetCustomerList([FromBody] DeliveryInvoiceRequest request)
         {
-            DeliveryGridResponse res = new DeliveryGridResponse();
-
             try
             {
-                res = _salesinvoiceService.GetTransferData(request);
+                var result = _salesinvoiceService.GetCustomerBasedData(request);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                res.flag = 0;
-                res.Message = "Error: " + ex.Message;
-                res.Data = new List<DeliveryGridItem>();
+                return Ok(new
+                {
+                    flag = 0,
+                    Message = "Error: " + ex.Message
+                });
             }
-
-            return res;
         }
+
         [HttpPost]
         [Route("getlist")]
         public SalesInvoiceHeaderResponse GetSaleInvoiceHeaderData()

@@ -178,15 +178,112 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public DeliveryGridResponse GetTransferData(DeliveryInvoiceRequest request)
-        {
-            var response = new DeliveryGridResponse
-            {
-                flag = 0,
-                Message = "Failed",
-                Data = new List<DeliveryGridItem>()
-            };
+        //public DeliveryGridResponse GetTransferData(DeliveryInvoiceRequest request)
+        //{
+        //    var response = new DeliveryGridResponse
+        //    {
+        //        flag = 0,
+        //        Message = "Failed",
+        //        Data = new List<DeliveryGridItem>()
+        //    };
 
+        //    try
+        //    {
+        //        using (var conn = ADO.GetConnection())
+        //        {
+        //            if (conn.State == ConnectionState.Closed)
+        //                conn.Open();
+
+        //            using (var cmd = new SqlCommand("SP_TB_DEL_SALE_INVOICE", conn))
+        //            {
+        //                cmd.CommandType = CommandType.StoredProcedure;
+
+        //                cmd.Parameters.AddWithValue("@ACTION", 5);
+        //                cmd.Parameters.AddWithValue("@TRANSFER_NO", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@TRANS_TYPE", 0);
+        //                cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
+        //                cmd.Parameters.AddWithValue("@STORE_ID", 0);
+        //                cmd.Parameters.AddWithValue("@FIN_ID", 0);
+        //                cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
+        //                cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
+        //                cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
+        //                cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@PDC_ID", 0);
+        //                cmd.Parameters.AddWithValue("@IS_CLOSED", false);
+        //                cmd.Parameters.AddWithValue("@PARTY_ID", 0);
+        //                cmd.Parameters.AddWithValue("@UNIT_ID", 0);
+        //                cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
+        //                cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@IS_PASSED", false);
+        //                cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
+        //                cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
+        //                cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
+        //                cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
+        //                cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
+        //                cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
+        //                cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
+        //                cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
+        //                cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
+        //                cmd.Parameters.AddWithValue("@BILL_NO", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@STORE_AUTO_ID", 0);
+        //                cmd.Parameters.AddWithValue("@JOB_ID", 0);
+        //                cmd.Parameters.AddWithValue("@SALE_DATE", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@SALE_REF_NO", DBNull.Value);
+        //                cmd.Parameters.AddWithValue("@GROSS_AMOUNT", 0);
+        //                cmd.Parameters.AddWithValue("@TAX_AMOUNT", 0);
+        //                cmd.Parameters.AddWithValue("@NET_AMOUNT", 0);
+        //                DataTable dt = new DataTable();
+        //                dt.Columns.Add("DELIVERY_NOTE_ID", typeof(int));
+        //                dt.Columns.Add("QUANTITY", typeof(double));
+        //                dt.Columns.Add("PRICE", typeof(double));
+        //                dt.Columns.Add("TAXABLE_AMOUNT", typeof(decimal));
+        //                dt.Columns.Add("TAX_PERC", typeof(decimal));
+        //                dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
+        //                dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
+
+        //                SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_DEL_SALE_DETAIL", dt);
+        //                tvp.SqlDbType = SqlDbType.Structured;
+        //                tvp.TypeName = "UDT_DEL_SALE_DETAIL";
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        response.Data.Add(new DeliveryGridItem
+        //                        {
+        //                            DELIVERY_NOTE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+        //                            ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
+        //                            DELIVERY_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
+        //                            DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+        //                            QUANTITY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_QTY"]) : 0
+        //                        });
+        //                    }
+        //                }
+
+        //                response.flag = 1;
+        //                response.Message = "Success";
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.flag = 0;
+        //        response.Message = "Error: " + ex.Message;
+        //    }
+
+        //    return response;
+        //}
+        public object GetCustomerBasedData(DeliveryInvoiceRequest request)
+        {
             try
             {
                 using (var conn = ADO.GetConnection())
@@ -197,91 +294,99 @@ namespace MicroApi.DataLayer.Service
                     using (var cmd = new SqlCommand("SP_TB_DEL_SALE_INVOICE", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-
                         cmd.Parameters.AddWithValue("@ACTION", 5);
-                        cmd.Parameters.AddWithValue("@TRANSFER_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 0);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
-                        cmd.Parameters.AddWithValue("@STORE_ID", 0);
-                        cmd.Parameters.AddWithValue("@FIN_ID", 0);
-                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
-                        cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
-                        cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
-                        cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PDC_ID", 0);
-                        cmd.Parameters.AddWithValue("@IS_CLOSED", false);
-                        cmd.Parameters.AddWithValue("@PARTY_ID", 0);
-                        cmd.Parameters.AddWithValue("@UNIT_ID", 0);
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
-                        cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IS_PASSED", false);
-                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
-                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
-                        cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
-                        cmd.Parameters.AddWithValue("@BILL_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@STORE_AUTO_ID", 0);
-                        cmd.Parameters.AddWithValue("@JOB_ID", 0);
-                        cmd.Parameters.AddWithValue("@SALE_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@SALE_REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@GROSS_AMOUNT", 0);
-                        cmd.Parameters.AddWithValue("@TAX_AMOUNT", 0);
-                        cmd.Parameters.AddWithValue("@NET_AMOUNT", 0);
-                        DataTable dt = new DataTable();
-                        dt.Columns.Add("DELIVERY_NOTE_ID", typeof(int));
-                        dt.Columns.Add("QUANTITY", typeof(double));
-                        dt.Columns.Add("PRICE", typeof(double));
-                        dt.Columns.Add("TAXABLE_AMOUNT", typeof(decimal));
-                        dt.Columns.Add("TAX_PERC", typeof(decimal));
-                        dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
-                        dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
 
-                        SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_DEL_SALE_DETAIL", dt);
-                        tvp.SqlDbType = SqlDbType.Structured;
-                        tvp.TypeName = "UDT_DEL_SALE_DETAIL";
                         using (var reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (!reader.HasRows)
                             {
-                                response.Data.Add(new DeliveryGridItem
+                                return new
                                 {
-                                    DELIVERY_NOTE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                    ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
-                                    DELIVERY_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
-                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
-                                    QUANTITY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_QTY"]) : 0
-                                });
+                                    flag = 0,
+                                    Message = "No records found."
+                                };
                             }
-                        }
 
-                        response.flag = 1;
-                        response.Message = "Success";
+                            // Detect result type based on columns returned
+                            var columnNames = Enumerable.Range(0, reader.FieldCount)
+                                                        .Select(reader.GetName)
+                                                        .ToList();
+
+                            // 🔹 CASE 1: Transfer Out Summary (CUST_TYPE = 1)
+                            if (columnNames.Contains("TRANSFER_NO"))
+                            {
+                                var transferResponse = new TransferOutSummaryResponse
+                                {
+                                    flag = 1,
+                                    Message = "Success",
+                                    Data = new List<TransferOutSummaryItem>()
+                                };
+
+                                while (reader.Read())
+                                {
+                                    transferResponse.Data.Add(new TransferOutSummaryItem
+                                    {
+                                        ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                        TRANSFER_NO = reader["TRANSFER_NO"]?.ToString(),
+                                        TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value
+                                            ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        ARTICLE = reader["ARTICLE"]?.ToString(),
+                                        TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
+                                            ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0
+                                    });
+                                }
+
+                                return transferResponse;
+                            }
+
+                            // 🔹 CASE 2: Delivery Note List (CUST_TYPE = 2)
+                            else if (columnNames.Contains("ITEM_CODE"))
+                            {
+                                var deliveryResponse = new DeliveryNoteResponse
+                                {
+                                    flag = 1,
+                                    Message = "Success",
+                                    Data = new List<DeliveryNoteItem>()
+                                };
+
+                                while (reader.Read())
+                                {
+                                    deliveryResponse.Data.Add(new DeliveryNoteItem
+                                    {
+                                        ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                        ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
+                                        DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                        DN_DATE = reader["DN_DATE"] != DBNull.Value
+                                            ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
+                                        TOTAL_QTY = reader["TOTAL_QTY"] != DBNull.Value
+                                            ? Convert.ToDouble(reader["TOTAL_QTY"]) : 0
+                                    });
+                                }
+
+                                return deliveryResponse;
+                            }
+
+                            // If neither matched
+                            return new
+                            {
+                                flag = 0,
+                                Message = "Unknown result structure from SP."
+                            };
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                response.flag = 0;
-                response.Message = "Error: " + ex.Message;
+                return new
+                {
+                    flag = 0,
+                    Message = "Error: " + ex.Message
+                };
             }
-
-            return response;
         }
+
         public SalesInvoiceHeaderResponse GetSaleInvoiceHeaderData()
         {
             SalesInvoiceHeaderResponse res = new SalesInvoiceHeaderResponse();
