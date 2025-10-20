@@ -332,6 +332,8 @@ namespace MicroApi.DataLayer.Service
                                         TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value
                                             ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
                                         ARTICLE = reader["ARTICLE"]?.ToString(),
+                                        CUST_TYPE = reader["CUST_TYPE"] != DBNull.Value
+                                            ? Convert.ToInt32(reader["CUST_TYPE"]) : (int?)null,
                                         TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
                                             ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0
                                     });
@@ -357,6 +359,8 @@ namespace MicroApi.DataLayer.Service
                                         ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                         TRANSFER_NO = reader["ITEM_CODE"]?.ToString(),
                                         ARTICLE = reader["DESCRIPTION"]?.ToString(),
+                                        CUST_TYPE = reader["CUST_TYPE"] != DBNull.Value
+                                            ? Convert.ToInt32(reader["CUST_TYPE"]) : (int?)null,
                                         TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value
                                             ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
                                         TOTAL_PAIR_QTY = reader["TOTAL_QTY"] != DBNull.Value
