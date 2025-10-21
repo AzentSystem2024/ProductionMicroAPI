@@ -75,6 +75,39 @@
     //    public decimal? TAX_AMOUNT { get; set; }
     //    public decimal? TOTAL_AMOUNT { get; set; }
     //}
+    //public class TransferOutSummaryItem
+    //{
+    //    public int ID { get; set; }
+    //    public string TRANSFER_NO { get; set; }
+    //    public string TRANSFER_DATE { get; set; }
+    //    public string ARTICLE { get; set; }
+    //    public double TOTAL_PAIR_QTY { get; set; }
+    //}
+
+    //public class TransferOutSummaryResponse
+    //{
+    //    public int flag { get; set; }
+    //    public string Message { get; set; }
+    //    public List<TransferOutSummaryItem> Data { get; set; }
+    //}
+    public class DeliveryNoteItem
+    {
+        public int ID { get; set; }
+        public string TRANSFER_NO { get; set; }
+        public string ARTICLE { get; set; }
+        public int? CUST_TYPE { get; set; }
+        public string TRANSFER_DATE { get; set; }
+        public double TOTAL_PAIR_QTY { get; set; }
+    }
+
+    public class DeliveryNoteResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<DeliveryNoteItem> Data { get; set; }
+    }
+
+
     public class DeliveryGridResponse
     {
         public int flag { get; set; }

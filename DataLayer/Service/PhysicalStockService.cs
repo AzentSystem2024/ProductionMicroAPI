@@ -422,7 +422,7 @@ namespace MicroApi.DataLayer.Service
                                 Description = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
                                 MatrixCode = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : string.Empty,
                                 Cost = reader["COST"] != DBNull.Value ? Convert.ToDecimal(reader["COST"]) : 0,
-                                StoreId = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                               // StoreId = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
                                 StockQty = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["STOCK_QTY"]) : 0,
                                 DeptId = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                 DeptName = reader["DEPT_NAME"] != DBNull.Value ? reader["DEPT_NAME"].ToString() : string.Empty,

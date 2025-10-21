@@ -6,7 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         SalesInvoiceResponse insert(Sales_Invoice model);
         SalesInvoiceResponse Update(Sale_InvoiceUpdate model);
-        DeliveryGridResponse GetTransferData(DeliveryInvoiceRequest request);
+        object GetCustomerBasedData(DeliveryInvoiceRequest request);
         SalesInvoiceHeaderResponse GetSaleInvoiceHeaderData();
         SalesInvselectResponse GetSaleInvoiceById(int id);
         public int Delete(int id);

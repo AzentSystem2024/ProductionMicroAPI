@@ -75,6 +75,7 @@
         public string TRANSFER_NO { get; set; }
         public string TRANSFER_DATE { get; set; }
         public string ARTICLE { get; set; }
+        public int? CUST_TYPE { get; set; }
         public double TOTAL_PAIR_QTY { get; set; }
         public int UNIT_ID { get; set; }
         public int DISTRIBUTOR_ID { get; set; }

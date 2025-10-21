@@ -49,6 +49,7 @@
         public string? STORE_NAME { get; set; }
         public string? VAT_RULE_DESCRIPTION { get; set; }
         public bool? IS_COMPANY_BRANCH { get; set; }
+        public int? CUST_TYPE { get; set; }
     }
     public class CustomerUpdate
     {
@@ -100,6 +101,7 @@
         public string? STORE_NAME { get; set; }
         public string? VAT_RULE_DESCRIPTION { get; set; }
         public bool? IS_COMPANY_BRANCH { get; set; }
+        public int? CUST_TYPE { get; set; }
     }
         public class CustomerResponse
     {

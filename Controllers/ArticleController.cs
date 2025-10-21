@@ -86,13 +86,13 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("Delete/{id:int}")]
-        public ArticleResponse Delete(int id)
+        [Route("Delete")]
+        public ArticleResponse Delete(DeleteArticleRequest request)
         {
             ArticleResponse res = new ArticleResponse();
             try
             {
-                res = _articleService.DeleteArticleData(id);
+                res = _articleService.DeleteArticleData(request);
             }
             catch (Exception ex)
             {
