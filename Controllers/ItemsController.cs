@@ -16,34 +16,56 @@ namespace MicroApi.Controllers
             _itemsService = itemsService;
         }
 
+        //[HttpPost]
+        //[Route("list")]
+        //public ItemsResponse List(DateRequest objFilter)
+        //{
+        //    ItemsResponse res = new ItemsResponse();
+        //    List<Items> items = new List<Items>();
+
+        //    try
+        //    {
+        //        // Ensure filter is not null
+        //        if (objFilter == null)
+        //        {
+        //            objFilter = new DateRequest
+        //            {
+        //                DATE_FROM = null,
+        //                DATE_TO = null
+        //            };
+        //        }
+
+        //        // Prepare request for service
+        //        DateRequest request = new DateRequest
+        //        {
+        //            DATE_FROM = objFilter.DATE_FROM ?? DateTime.MinValue,
+        //            DATE_TO = objFilter.DATE_TO ?? DateTime.MinValue
+        //        };
+
+        //        // Get items from service
+        //        items = _itemsService.GetAllItems(request);
+
+        //        res.flag = "1";
+        //        res.message = "Success";
+        //        res.data = items;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = "0";
+        //        res.message = ex.Message;
+        //        res.data = null;
+        //    }
+
+        //    return res;
+        //}
         [HttpPost]
         [Route("list")]
-        public ItemsResponse List(DateRequest objFilter)
+        public ItemsResponse List()
         {
             ItemsResponse res = new ItemsResponse();
-            List<Items> items = new List<Items>();
-
             try
             {
-                // Ensure filter is not null
-                if (objFilter == null)
-                {
-                    objFilter = new DateRequest
-                    {
-                        DATE_FROM = null,
-                        DATE_TO = null
-                    };
-                }
-
-                // Prepare request for service
-                DateRequest request = new DateRequest
-                {
-                    DATE_FROM = objFilter.DATE_FROM ?? DateTime.MinValue,
-                    DATE_TO = objFilter.DATE_TO ?? DateTime.MinValue
-                };
-
-                // Get items from service
-                items = _itemsService.GetAllItems(request);
+                var items = _itemsService.GetAllItems();
 
                 res.flag = "1";
                 res.message = "Success";
@@ -55,7 +77,6 @@ namespace MicroApi.Controllers
                 res.message = ex.Message;
                 res.data = null;
             }
-
             return res;
         }
 
