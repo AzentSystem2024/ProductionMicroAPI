@@ -322,7 +322,7 @@ namespace MicroApi.DataLayer.Service
                                     Message = "Success",
                                     Data = new List<DeliveryNoteItem>()
                                 };
-
+                                //Giving model name same for TROUT SUMMARY and DN LIST
                                 while (reader.Read())
                                 {
                                     transferResponse.Data.Add(new DeliveryNoteItem
