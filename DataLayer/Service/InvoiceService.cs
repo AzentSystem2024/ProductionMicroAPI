@@ -172,7 +172,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             dt.Rows.Add(
                                 item.TRANSFER_SUMMARY_ID ?? 0,
-                                item.TOTAL_PAIR_QTY, 
+                                item.QUANTITY,
                                 item.PRICE ?? 0,
                                 item.AMOUNT ?? 0,
                                 item.GST ?? 0,
