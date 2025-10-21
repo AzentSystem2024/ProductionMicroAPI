@@ -182,7 +182,7 @@
         public string? TRANSFER_DATE { get; set; }
         public string? ARTICLE { get; set; }
         public double?   TOTAL_PAIR_QTY { get; set; }
-        //public double? QUANTITY { get; set; }
+        public double? QUANTITY { get; set; }
         public double? PRICE { get; set; }
         public decimal? AMOUNT { get; set; }
         public decimal? GST { get; set; }
