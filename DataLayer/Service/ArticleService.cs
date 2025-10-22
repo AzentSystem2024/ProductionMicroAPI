@@ -215,7 +215,7 @@ namespace MicroApi.Service
 
             return res;
         }
-        public ArticleListResponse GetArticleList(ArticleListRequest request)
+        public ArticleListResponse GetArticleList()
         {
             ArticleListResponse res = new ArticleListResponse();
             res.Data = new List<ArticleUpdate>();
@@ -230,13 +230,13 @@ namespace MicroApi.Service
                     using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.CommandTimeout = 300; // 5 minutes timeout
+                        cmd.CommandTimeout = 1000; // 5 minutes timeout
 
                         cmd.Parameters.AddWithValue("@ACTION", 0); // List
 
                         // ✅ Pass filter values
-                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO ?? (object)DBNull.Value);
+                        //cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM ?? (object)DBNull.Value);
+                        // cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO ?? (object)DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -261,7 +261,7 @@ namespace MicroApi.Service
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
-                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])): (DateTime?)null,
+                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])) : (DateTime?)null,
                                     SIZES = new List<Sizes>()
                                 };
 
@@ -314,6 +314,7 @@ namespace MicroApi.Service
 
             return res;
         }
+
         public ArticleResponse DeleteArticleData(DeleteArticleRequest request)
         {
             var res = new ArticleResponse();
