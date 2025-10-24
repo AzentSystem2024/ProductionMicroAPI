@@ -42,7 +42,7 @@
         public float? TAX_AMOUNT { get; set; }
         public float? TOTAL_AMOUNT { get; set; }
         public string? REMARKS { get; set; }
-        public float? DN_QTY { get; set; }
+        public int? ARTICLE_ID { get; set; }
     }
 
     public class SalesOrderSelect
@@ -77,20 +77,9 @@
     public class SalesOrderDetailSelect
     {
         public int? ID { get; set; }
-        public int? SO_ID { get; set; }
-        public int? ITEM_ID { get; set; }
-        public string? ITEM_CODE { get; set; }
-        public string? ITEM_NAME { get; set; }
-        public string? UOM { get; set; }
+        public int? ARTICLE_ID { get; set; }
         public float? QUANTITY { get; set; }
-        public float? PRICE { get; set; }
-        public float? DISC_PERCENT { get; set; }
-        public float? AMOUNT { get; set; }
-        public float? TAX_PERCENT { get; set; }
-        public float? TAX_AMOUNT { get; set; }
-        public float? TOTAL_AMOUNT { get; set; }
         public string? REMARKS { get; set; }
-        public float? DN_QTY { get; set; }
     }
 
     public class SalesOrderDetailSelectResponse
@@ -132,15 +121,12 @@
     }
     public class ITEMS
     {
-        public int? ITEM_ID { get; set; }
-        public string ITEM_CODE { get; set; }
+        public int? ARTICLE_ID { get; set; }
         public string DESCRIPTION { get; set; }
-        public string? MATRIX_CODE { get; set; }
-        public string? UOM { get; set; }
-        public float? COST { get; set; }
-        public float? STOCK_QTY { get; set; }
-        public decimal? VAT_PERC { get; set; }
+       
     }
+   
+
 
     public class ItemListsResponse
     {
@@ -177,7 +163,9 @@
 
     public class SalesOrderRequest
     {
-        public int STORE_ID { get; set; }
+        public string BRAND_ID { get; set; }
+        public string? ARTICLE_TYPE { get; set; }
+        public string? CATEGORY_ID { get; set; }
     }
     public class SOQUOTATIONLIST
     {
@@ -221,6 +209,7 @@
         public List<LatestVocherNO> Data { get; set; }
 
     }
+   
 
 }
     

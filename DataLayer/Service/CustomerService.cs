@@ -76,6 +76,8 @@ namespace MicroApi.DataLayer.Services
                         COMPANY_NAME = Convert.IsDBNull(dr["COMPANY_NAME"]) ? null : Convert.ToString(dr["COMPANY_NAME"]),
                         STORE_NAME = Convert.IsDBNull(dr["STORE_NAME"]) ? null : Convert.ToString(dr["STORE_NAME"]),
                         VAT_RULE_DESCRIPTION = Convert.IsDBNull(dr["VAT_RULE_DESCRIPTION"]) ? null : Convert.ToString(dr["VAT_RULE_DESCRIPTION"]),
+                        DEALER_TYPE = Convert.IsDBNull(dr["DEALER_TYPE"]) ? 0 : Convert.ToInt32(dr["DEALER_TYPE"]),
+                        DEALER_ID = Convert.IsDBNull(dr["DEALER_ID"]) ? 0 : Convert.ToInt32(dr["DEALER_ID"]),
 
 
                     });
@@ -85,70 +87,90 @@ namespace MicroApi.DataLayer.Services
             return employeeList;
         }
 
-        public Int32 SaveData(Customer customer)
+        public int SaveData(Customer customer)
         {
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    SqlCommand cmd = new SqlCommand("SP_TB_CUSTOMER", connection)
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_CUSTOMER", connection))
                     {
-                        CommandType = CommandType.StoredProcedure
-                    };
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@ACTION", 1);
-                    cmd.Parameters.AddWithValue("@HQID", customer.HQID ?? 0);
-                    cmd.Parameters.AddWithValue("@AC_HEAD_ID", customer.AC_HEAD_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@CUST_CODE", customer.CUST_CODE ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@FIRST_NAME", customer.FIRST_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CONTACT_NAME", customer.CONTACT_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ADDRESS1", customer.ADDRESS1 ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ADDRESS2", customer.ADDRESS2 ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ADDRESS3", customer.ADDRESS3 ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ZIP", customer.ZIP ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CITY", customer.CITY ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@STATE_ID", customer.STATE_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@COUNTRY_ID", customer.COUNTRY_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@PHONE", customer.PHONE ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@EMAIL", customer.EMAIL ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@SALESMAN_ID", customer.SALESMAN_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@CREDIT_LIMIT", customer.CREDIT_LIMIT ?? 0);
-                    cmd.Parameters.AddWithValue("@CURRENT_CREDIT", customer.CURRENT_CREDIT ?? 0);
-                    cmd.Parameters.AddWithValue("@IS_BLOCKED", customer.IS_BLOCKED ?? false);
-                    cmd.Parameters.AddWithValue("@MOBILE_NO", customer.MOBILE_NO ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@FAX_NO", customer.FAX_NO ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@LAST_NAME", customer.LAST_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
-                    cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
-                    cmd.Parameters.AddWithValue("@NOTES", customer.NOTES ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CUST_NAME", customer.CUST_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CREDIT_DAYS", customer.CREDIT_DAYS ?? 0);
-                    cmd.Parameters.AddWithValue("@PAY_TERM_ID", customer.PAY_TERM_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@PRICE_CLASS_ID", customer.PRICE_CLASS_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@DISCOUNT_PERCENT", customer.DISCOUNT_PERCENT ?? 0);
-                    cmd.Parameters.AddWithValue("@DOJ", ParseDate(customer.DOJ));
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", customer.COMPANY_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@STORE_ID", customer.STORE_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@CUST_VAT_RULE_ID", customer.CUST_VAT_RULE_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@VAT_REGNO", customer.VAT_REGNO ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
-                    cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0);
-                    cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
-                    cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
+                        // Scalar parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
+                        cmd.Parameters.AddWithValue("@HQID", customer.HQID ?? 0);
+                        cmd.Parameters.AddWithValue("@AC_HEAD_ID", customer.AC_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUST_CODE", customer.CUST_CODE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@FIRST_NAME", customer.FIRST_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CONTACT_NAME", customer.CONTACT_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ADDRESS1", customer.ADDRESS1 ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ADDRESS2", customer.ADDRESS2 ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ADDRESS3", customer.ADDRESS3 ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ZIP", customer.ZIP ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CITY", customer.CITY ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@STATE_ID", customer.STATE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@COUNTRY_ID", customer.COUNTRY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PHONE", customer.PHONE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@EMAIL", customer.EMAIL ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@SALESMAN_ID", customer.SALESMAN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CREDIT_LIMIT", customer.CREDIT_LIMIT ?? 0);
+                        cmd.Parameters.AddWithValue("@CURRENT_CREDIT", customer.CURRENT_CREDIT ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_BLOCKED", customer.IS_BLOCKED ?? false);
+                        cmd.Parameters.AddWithValue("@MOBILE_NO", customer.MOBILE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@FAX_NO", customer.FAX_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@LAST_NAME", customer.LAST_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
+                        cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
+                        cmd.Parameters.AddWithValue("@NOTES", customer.NOTES ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CUST_NAME", customer.CUST_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREDIT_DAYS", customer.CREDIT_DAYS ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_TERM_ID", customer.PAY_TERM_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PRICE_CLASS_ID", customer.PRICE_CLASS_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DISCOUNT_PERCENT", customer.DISCOUNT_PERCENT ?? 0);
+                        cmd.Parameters.AddWithValue("@DOJ", ParseDate(customer.DOJ));
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", customer.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", customer.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUST_VAT_RULE_ID", customer.CUST_VAT_RULE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VAT_REGNO", customer.VAT_REGNO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
+                        cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
+                        cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@DEALER_TYPE", customer.DEALER_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
 
-                    if (connection.State != ConnectionState.Open)
-                        connection.Open();
+                        DataTable dtDelivery = new DataTable();
+                        dtDelivery.Columns.Add("DELIVERY_ADDRESS", typeof(string));
 
-                    object result = cmd.ExecuteScalar();
+                        if (customer.DELIVERY_ADDRESS != null)
+                        {
+                            foreach (var addr in customer.DELIVERY_ADDRESS)
+                            {
+                                dtDelivery.Rows.Add(addr.DELIVERY_ADDRESS ?? string.Empty);
+                            }
+                        }
 
-                    return result != null && result != DBNull.Value ? Convert.ToInt32(result) : throw new Exception("Insert failed: No ID returned.");
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_CUST_DELIVERY_ADDRESS", dtDelivery);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_CUST_DELIVERY_ADDRESS";
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        object result = cmd.ExecuteScalar();
+                        return result != null && result != DBNull.Value
+                            ? Convert.ToInt32(result)
+                            : throw new Exception("Insert failed: No ID returned.");
+                    }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("SaveCustomer Error: " + ex.Message, ex);
+                throw new Exception("SaveCustomerError: " + ex.Message, ex);
             }
         }
+
 
         private static object ParseDate(string? dateStr)
         {
@@ -171,68 +193,87 @@ namespace MicroApi.DataLayer.Services
 
             return DBNull.Value;
         }
-        public Int32 UpdateCustomer(CustomerUpdate customer)
+        public int UpdateCustomer(CustomerUpdate customer)
         {
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    SqlCommand cmd = new SqlCommand("SP_TB_CUSTOMER", connection)
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_CUSTOMER", connection))
                     {
-                        CommandType = CommandType.StoredProcedure
-                    };
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@ACTION", 2);
-                    cmd.Parameters.AddWithValue("@ID", customer.ID);
-                    cmd.Parameters.AddWithValue("@HQID", customer.HQID ?? 0);
-                    cmd.Parameters.AddWithValue("@AC_HEAD_ID", customer.AC_HEAD_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@CUST_CODE", customer.CUST_CODE ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@FIRST_NAME", customer.FIRST_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CONTACT_NAME", customer.CONTACT_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ADDRESS1", customer.ADDRESS1 ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ADDRESS2", customer.ADDRESS2 ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ADDRESS3", customer.ADDRESS3 ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@ZIP", customer.ZIP ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CITY", customer.CITY ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@STATE_ID", customer.STATE_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@COUNTRY_ID", customer.COUNTRY_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@PHONE", customer.PHONE ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@EMAIL", customer.EMAIL ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@SALESMAN_ID", customer.SALESMAN_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@CREDIT_LIMIT", customer.CREDIT_LIMIT ?? 0);
-                    cmd.Parameters.AddWithValue("@CURRENT_CREDIT", customer.CURRENT_CREDIT ?? 0);
-                    cmd.Parameters.AddWithValue("@IS_BLOCKED", customer.IS_BLOCKED ?? false);
-                    cmd.Parameters.AddWithValue("@MOBILE_NO", customer.MOBILE_NO ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@FAX_NO", customer.FAX_NO ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@LAST_NAME", customer.LAST_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
-                    cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
-                    cmd.Parameters.AddWithValue("@NOTES", customer.NOTES ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CUST_NAME", customer.CUST_NAME ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@CREDIT_DAYS", customer.CREDIT_DAYS ?? 0);
-                    cmd.Parameters.AddWithValue("@PAY_TERM_ID", customer.PAY_TERM_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@PRICE_CLASS_ID", customer.PRICE_CLASS_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@DISCOUNT_PERCENT", customer.DISCOUNT_PERCENT ?? 0);
-                    cmd.Parameters.AddWithValue("@DOJ", ParseDate(customer.DOJ));
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", customer.COMPANY_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@STORE_ID", customer.STORE_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@CUST_VAT_RULE_ID", customer.CUST_VAT_RULE_ID ?? 0);
-                    cmd.Parameters.AddWithValue("@VAT_REGNO", customer.VAT_REGNO ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
-                    cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0m);  // ← FIXED HERE
-                    cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
-                    cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
+                        // Scalar parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 2);
+                        cmd.Parameters.AddWithValue("@ID", customer.ID);
+                        cmd.Parameters.AddWithValue("@HQID", customer.HQID ?? 0);
+                        cmd.Parameters.AddWithValue("@AC_HEAD_ID", customer.AC_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUST_CODE", customer.CUST_CODE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@FIRST_NAME", customer.FIRST_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CONTACT_NAME", customer.CONTACT_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ADDRESS1", customer.ADDRESS1 ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ADDRESS2", customer.ADDRESS2 ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ADDRESS3", customer.ADDRESS3 ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ZIP", customer.ZIP ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CITY", customer.CITY ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@STATE_ID", customer.STATE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@COUNTRY_ID", customer.COUNTRY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PHONE", customer.PHONE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@EMAIL", customer.EMAIL ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@SALESMAN_ID", customer.SALESMAN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CREDIT_LIMIT", customer.CREDIT_LIMIT ?? 0);
+                        cmd.Parameters.AddWithValue("@CURRENT_CREDIT", customer.CURRENT_CREDIT ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_BLOCKED", customer.IS_BLOCKED ?? false);
+                        cmd.Parameters.AddWithValue("@MOBILE_NO", customer.MOBILE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@FAX_NO", customer.FAX_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@LAST_NAME", customer.LAST_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
+                        cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
+                        cmd.Parameters.AddWithValue("@NOTES", customer.NOTES ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CUST_NAME", customer.CUST_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREDIT_DAYS", customer.CREDIT_DAYS ?? 0);
+                        cmd.Parameters.AddWithValue("@PAY_TERM_ID", customer.PAY_TERM_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@PRICE_CLASS_ID", customer.PRICE_CLASS_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DISCOUNT_PERCENT", customer.DISCOUNT_PERCENT ?? 0);
+                        cmd.Parameters.AddWithValue("@DOJ", ParseDate(customer.DOJ));
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", customer.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", customer.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUST_VAT_RULE_ID", customer.CUST_VAT_RULE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VAT_REGNO", customer.VAT_REGNO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
+                        cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0m);
+                        cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
+                        cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
+                        cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@DEALER_TYPE", customer.DEALER_TYPE ?? 0);
 
-                    if (connection.State != ConnectionState.Open)
-                        connection.Open();
+                        // Table-valued parameter for delivery addresses
+                        DataTable dtDelivery = new DataTable();
+                        dtDelivery.Columns.Add("DELIVERY_ADDRESS", typeof(string));
 
-                    cmd.ExecuteNonQuery();
-                    return customer.ID;
+                        if (customer.DELIVERY_ADDRESS != null)
+                        {
+                            foreach (var addr in customer.DELIVERY_ADDRESS)
+                            {
+                                dtDelivery.Rows.Add(addr.DELIVERY_ADDRESS ?? string.Empty);
+                            }
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_CUST_DELIVERY_ADDRESS", dtDelivery);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_CUST_DELIVERY_ADDRESS";
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        cmd.ExecuteNonQuery();
+                        return customer.ID;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("UpdateCustomer Error: " + ex.Message, ex);
+                throw new Exception("UpdateCustomerError: " + ex.Message, ex);
             }
         }
 
@@ -244,40 +285,35 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = "SELECT TB_CUSTOMER.ID, TB_CUSTOMER.HQID, TB_CUSTOMER.AC_HEAD_ID, TB_CUSTOMER.FIRST_NAME," +
-                   " TB_CUSTOMER.CONTACT_NAME, TB_CUSTOMER.CUST_CODE," +
-                   " TB_CUSTOMER.ADDRESS1, TB_CUSTOMER.ADDRESS2, TB_CUSTOMER.ADDRESS3, TB_CUSTOMER.ZIP, " +
-                   " TB_CUSTOMER.CITY, TB_CUSTOMER.STATE_ID, TB_CUSTOMER.COUNTRY_ID, TB_CUSTOMER.PHONE, " +
-                   " TB_CUSTOMER.EMAIL, TB_CUSTOMER.SALESMAN_ID, TB_CUSTOMER.CREDIT_LIMIT, TB_CUSTOMER.CURRENT_CREDIT," +
-                   " TB_CUSTOMER.IS_BLOCKED, TB_CUSTOMER.MOBILE_NO, TB_CUSTOMER.FAX_NO, TB_CUSTOMER.LAST_NAME, " +
-                   " TB_CUSTOMER.DOB, TB_CUSTOMER.NATIONALITY, TB_CUSTOMER.NOTES, TB_CUSTOMER.CUST_NAME, " +
-                   " TB_CUSTOMER.CREDIT_DAYS, TB_CUSTOMER.PAY_TERM_ID, TB_CUSTOMER.PRICE_CLASS_ID, TB_CUSTOMER.DISCOUNT_PERCENT," +
-                   " TB_CUSTOMER.DOJ, TB_CUSTOMER.COMPANY_ID,TB_CUSTOMER.CUST_TYPE, TB_CUSTOMER.STORE_ID, TB_CUSTOMER.CUST_VAT_RULE_ID," +
-                   " TB_CUSTOMER.VAT_REGNO, TB_CUSTOMER.IS_DELETED, TB_CUSTOMER.LOYALTY_POINT," +
-                   " TB_STATE.STATE_NAME, TB_COUNTRY.COUNTRY_NAME, TB_EMPLOYEE.EMP_NAME, " +
-                   " TB_PAYMENT_TERMS.CODE, TB_PRICE_CLASS.CLASS_NAME,   " +
-                   " TB_COMPANY.COMPANY_NAME, TB_STORES.STORE_NAME," +
-                   " TB_VAT_RULE_CUSTOMER.DESCRIPTION AS VAT_RULE_DESCRIPTION,TB_CUSTOMER.CUST_VAT_RULE_ID,TB_CUSTOMER.IS_COMPANY_BRANCH" +
-                   " FROM TB_CUSTOMER " +
-                   " LEFT JOIN TB_STATE ON TB_CUSTOMER.STATE_ID = TB_STATE.ID " +
-                   " LEFT JOIN TB_COUNTRY ON TB_CUSTOMER.COUNTRY_ID = TB_COUNTRY.ID " +
-                   " LEFT JOIN TB_COUNTRY AS TB_NATIONALITY ON TB_CUSTOMER.NATIONALITY = TB_NATIONALITY.ID " +
-                   " LEFT JOIN TB_EMPLOYEE ON TB_CUSTOMER.SALESMAN_ID = TB_EMPLOYEE.ID " +
-                   " LEFT JOIN TB_PAYMENT_TERMS ON TB_CUSTOMER.PAY_TERM_ID = TB_PAYMENT_TERMS.ID " +
-                   " LEFT JOIN TB_PRICE_CLASS ON TB_CUSTOMER.PRICE_CLASS_ID = TB_PRICE_CLASS.ID " +
-                   " LEFT JOIN TB_COMPANY ON TB_CUSTOMER.COMPANY_ID = TB_COMPANY.ID " +
-                   " LEFT JOIN TB_STORES ON TB_CUSTOMER.STORE_ID = TB_STORES.ID " +
-                   " LEFT JOIN TB_VAT_RULE_CUSTOMER ON TB_CUSTOMER.CUST_VAT_RULE_ID = TB_VAT_RULE_CUSTOMER.ID " +
-                   " WHERE TB_CUSTOMER.ID = " + id;
-
-
-
-
+                    " TB_CUSTOMER.CONTACT_NAME, TB_CUSTOMER.CUST_CODE," +
+                    " TB_CUSTOMER.ADDRESS1, TB_CUSTOMER.ADDRESS2, TB_CUSTOMER.ADDRESS3, TB_CUSTOMER.ZIP, " +
+                    " TB_CUSTOMER.CITY, TB_CUSTOMER.STATE_ID, TB_CUSTOMER.COUNTRY_ID, TB_CUSTOMER.PHONE, " +
+                    " TB_CUSTOMER.EMAIL, TB_CUSTOMER.SALESMAN_ID, TB_CUSTOMER.CREDIT_LIMIT, TB_CUSTOMER.CURRENT_CREDIT," +
+                    " TB_CUSTOMER.IS_BLOCKED, TB_CUSTOMER.MOBILE_NO, TB_CUSTOMER.FAX_NO, TB_CUSTOMER.LAST_NAME, " +
+                    " TB_CUSTOMER.DOB, TB_CUSTOMER.NATIONALITY, TB_CUSTOMER.NOTES, TB_CUSTOMER.CUST_NAME, " +
+                    " TB_CUSTOMER.CREDIT_DAYS, TB_CUSTOMER.PAY_TERM_ID, TB_CUSTOMER.PRICE_CLASS_ID, TB_CUSTOMER.DISCOUNT_PERCENT," +
+                    " TB_CUSTOMER.DOJ, TB_CUSTOMER.COMPANY_ID, TB_CUSTOMER.CUST_TYPE, TB_CUSTOMER.STORE_ID, TB_CUSTOMER.CUST_VAT_RULE_ID," +
+                    " TB_CUSTOMER.VAT_REGNO, TB_CUSTOMER.IS_DELETED, TB_CUSTOMER.LOYALTY_POINT," +
+                    " TB_STATE.STATE_NAME, TB_COUNTRY.COUNTRY_NAME, TB_EMPLOYEE.EMP_NAME, " +
+                    " TB_PAYMENT_TERMS.CODE, TB_PRICE_CLASS.CLASS_NAME," +
+                    " TB_COMPANY.COMPANY_NAME, TB_STORES.STORE_NAME," +
+                    " TB_VAT_RULE_CUSTOMER.DESCRIPTION AS VAT_RULE_DESCRIPTION, TB_CUSTOMER.CUST_VAT_RULE_ID, TB_CUSTOMER.IS_COMPANY_BRANCH, TB_CUSTOMER.DEALER_ID, TB_CUSTOMER.DEALER_TYPE" +
+                    " FROM TB_CUSTOMER " +
+                    " LEFT JOIN TB_STATE ON TB_CUSTOMER.STATE_ID = TB_STATE.ID " +
+                    " LEFT JOIN TB_COUNTRY ON TB_CUSTOMER.COUNTRY_ID = TB_COUNTRY.ID " +
+                    " LEFT JOIN TB_COUNTRY AS TB_NATIONALITY ON TB_CUSTOMER.NATIONALITY = TB_NATIONALITY.ID " +
+                    " LEFT JOIN TB_EMPLOYEE ON TB_CUSTOMER.SALESMAN_ID = TB_EMPLOYEE.ID " +
+                    " LEFT JOIN TB_PAYMENT_TERMS ON TB_CUSTOMER.PAY_TERM_ID = TB_PAYMENT_TERMS.ID " +
+                    " LEFT JOIN TB_PRICE_CLASS ON TB_CUSTOMER.PRICE_CLASS_ID = TB_PRICE_CLASS.ID " +
+                    " LEFT JOIN TB_COMPANY ON TB_CUSTOMER.COMPANY_ID = TB_COMPANY.ID " +
+                    " LEFT JOIN TB_STORES ON TB_CUSTOMER.STORE_ID = TB_STORES.ID " +
+                    " LEFT JOIN TB_VAT_RULE_CUSTOMER ON TB_CUSTOMER.CUST_VAT_RULE_ID = TB_VAT_RULE_CUSTOMER.ID " +
+                    " WHERE TB_CUSTOMER.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Customer");
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];
-
 
                     customer.ID = Convert.ToInt32(dr["ID"]);
                     customer.HQID = Convert.ToInt32(dr["HQID"]);
@@ -324,17 +360,35 @@ namespace MicroApi.DataLayer.Services
                     customer.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
                     customer.STORE_NAME = Convert.ToString(dr["STORE_NAME"]);
                     customer.VAT_RULE_DESCRIPTION = Convert.ToString(dr["VAT_RULE_DESCRIPTION"]);
-                    customer.CUST_VAT_RULE_ID = Convert.ToInt32(dr["CUST_VAT_RULE_ID"]);
                     customer.CUST_TYPE = Convert.ToInt32(dr["CUST_TYPE"]);
+                    customer.DEALER_TYPE = Convert.ToInt32(dr["DEALER_TYPE"]);
+                    customer.DEALER_ID = Convert.ToInt32(dr["DEALER_ID"]);
+                }
 
+                // ✅ Initialize the list before using it
+                customer.DELIVERY_ADDRESS = new List<CustomerDeliveryAddress>();
+
+                // ✅ Fetch delivery address list
+                string deliverySQL = "SELECT DELIVERY_ADDRESS FROM TB_CUST_DELIVERY_ADDRESS WHERE CUST_ID = " + id;
+                DataTable dtDelivery = ADO.GetDataTable(deliverySQL, "DELIVERY_ADDRESS");
+
+                foreach (DataRow dr in dtDelivery.Rows)
+                {
+                    customer.DELIVERY_ADDRESS.Add(new CustomerDeliveryAddress
+                    {
+                        DELIVERY_ADDRESS = Convert.ToString(dr["DELIVERY_ADDRESS"])
+                    });
                 }
             }
             catch (Exception ex)
             {
-
+                throw new Exception("Error fetching customer details: " + ex.Message);
             }
+
             return customer;
         }
+
+
 
         public bool DeleteCustomers(int id)
         {

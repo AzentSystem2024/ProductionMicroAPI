@@ -50,7 +50,16 @@
         public string? VAT_RULE_DESCRIPTION { get; set; }
         public bool? IS_COMPANY_BRANCH { get; set; }
         public int? CUST_TYPE { get; set; }
+        public int? DEALER_ID { get; set; }
+        public int? DEALER_TYPE { get; set; }
+        public List<CustomerDeliveryAddress>? DELIVERY_ADDRESS { get; set; }
     }
+    public class CustomerDeliveryAddress
+    {
+        public string? DELIVERY_ADDRESS { get; set; }
+       
+    }
+
     public class CustomerUpdate
     {
         public int ID { get; set; }
@@ -102,6 +111,9 @@
         public string? VAT_RULE_DESCRIPTION { get; set; }
         public bool? IS_COMPANY_BRANCH { get; set; }
         public int? CUST_TYPE { get; set; }
+        public int? DEALER_ID { get; set; }
+        public int? DEALER_TYPE { get; set; }
+        public List<CustomerDeliveryAddress>? DELIVERY_ADDRESS { get; set; }
     }
         public class CustomerResponse
     {

@@ -40,7 +40,7 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("TAX_AMOUNT", typeof(float));
                         tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
                         tvp.Columns.Add("REMARKS", typeof(string));
-                        tvp.Columns.Add("DN_QTY", typeof(float));
+                        tvp.Columns.Add("ARTICLE_ID", typeof(int));
 
                         foreach (var detail in salesOrder.Details)
                         {
@@ -55,7 +55,7 @@ namespace MicroApi.DataLayer.Service
                                 detail.TAX_AMOUNT ?? 0,
                                 detail.TOTAL_AMOUNT ?? 0,
                                 detail.REMARKS ?? "",
-                                detail.DN_QTY ?? 0
+                                detail.ARTICLE_ID ?? 0
                             );
                         }
                         // Create DataTable for QTN_ID_LIST
@@ -134,7 +134,7 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("TAX_AMOUNT", typeof(float));
                         tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
                         tvp.Columns.Add("REMARKS", typeof(string));
-                        tvp.Columns.Add("DN_QTY", typeof(float));
+                        tvp.Columns.Add("ARTICLE_ID", typeof(float));
 
                         if (salesOrder.Details != null && salesOrder.Details.Any())
                         {
@@ -151,7 +151,7 @@ namespace MicroApi.DataLayer.Service
                                     detail.TAX_AMOUNT ?? 0,
                                     detail.TOTAL_AMOUNT ?? 0,
                                     detail.REMARKS ?? "",
-                                    detail.DN_QTY ?? 0
+                                    detail.ARTICLE_ID ?? 0
                                 );
                             }
                         }
@@ -274,20 +274,9 @@ namespace MicroApi.DataLayer.Service
                                 SalesOrderDetailSelect detail = new SalesOrderDetailSelect
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                    SO_ID = reader["SO_ID"] != DBNull.Value ? Convert.ToInt32(reader["SO_ID"]) : 0,
-                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
-                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
-                                    ITEM_NAME = reader["ITEM_NAME"] != DBNull.Value ? reader["ITEM_NAME"].ToString() : null,
-                                    UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
+                                    ARTICLE_ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_ID"]) : 0,
                                     QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
-                                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
-                                    DISC_PERCENT = reader["DISC_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DISC_PERCENT"]) : 0,
-                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
-                                    TAX_PERCENT = reader["TAX_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["TAX_PERCENT"]) : 0,
-                                    TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TAX_AMOUNT"]) : 0,
-                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_AMOUNT"]) : 0,
                                     REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
-                                    DN_QTY = reader["DN_QTY"] != DBNull.Value ? Convert.ToSingle(reader["DN_QTY"]) : 0,
                                 };
                                 response.Data.Details.Add(detail);
                             }
@@ -342,7 +331,7 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public ItemListsResponse GetSalesOrderItems(SalesOrderRequest request)
+        public ItemListsResponse GetSalesOrderItems()
         {
             ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
             try
@@ -355,21 +344,15 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 6);
-                        cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 ITEMS item = new ITEMS
                                 {
-                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
-                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
-                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
-                                    MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
-                                    UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
-                                    COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)0,
-                                    STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)0,
-                                    VAT_PERC = reader["VAT_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["VAT_PERC"]) : 0,
+                                    ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
+                                    
                                 };
                                 response.Data.Add(item);
                             }
@@ -387,6 +370,162 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public ItemListsResponse GetarticleType(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT DISTINCT TB_ARTICLE_TYPE.ID,TB_ARTICLE_TYPE.DESCRIPTION
+                                    FROM TB_ARTICLE_TYPE INNER JOIN TB_PACKING ON TB_ARTICLE_TYPE.ID=TB_PACKING.ARTICLE_TYPE
+                                    WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_ARTICLE_TYPE.IS_DELETED=0 ";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+
+                        // Use value from payload (converted to string if needed)
+                        cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID.ToString());
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ITEMS item = new ITEMS
+                                {
+                                    ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
+                                };
+                                response.Data.Add(item);
+                            }
+                        }
+                    }
+                }
+
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+
+            return response;
+        }
+        public ItemListsResponse Getcategory(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT DISTINCT TB_ARTICLE_CATEGORY.ID,TB_ARTICLE_CATEGORY.DESCRIPTION FROM TB_ARTICLE_CATEGORY 
+                                    INNER JOIN TB_PACKING ON TB_ARTICLE_CATEGORY.ID=TB_PACKING.CATEGORY_ID 
+                                    WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_PACKING.ARTICLE_TYPE=@ARTICLE_TYPE AND TB_ARTICLE_CATEGORY.IS_DELETED=0";
+         
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+
+                        // Add parameters from request payload
+                        cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
+                        cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ITEMS item = new ITEMS
+                                {
+                                    ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
+                                };
+
+                                response.Data.Add(item);
+                            }
+                        }
+                    }
+                }
+
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+
+            return response;
+        }
+        public ItemListsResponse GetArtNo(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT DISTINCT TB_PACKING.ID,TB_PACKING.ART_NO FROM TB_ARTICLE_CATEGORY 
+                                    INNER JOIN TB_PACKING ON TB_ARTICLE_CATEGORY.ID=TB_PACKING.CATEGORY_ID 
+                                    WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_PACKING.ARTICLE_TYPE=@ARTICLE_TYPE AND 
+                                    TB_PACKING.CATEGORY_ID=@CATEGORY_ID AND TB_ARTICLE_CATEGORY.IS_DELETED=0";
+                    
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+
+                        // Parameters from payload
+                        cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
+                        cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
+                        cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ITEMS item = new ITEMS
+                                {
+                                    ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    DESCRIPTION = reader["ART_NO"] != DBNull.Value ? reader["ART_NO"].ToString() : null
+                                };
+
+                                response.Data.Add(item);
+                            }
+                        }
+                    }
+                }
+
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+
+            return response;
+        }
+      
 
         public bool DeleteSalesOrder(int soId)
         {
@@ -427,7 +566,7 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("TAX_AMOUNT", typeof(float));
                         tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
                         tvp.Columns.Add("REMARKS", typeof(string));
-                        tvp.Columns.Add("DN_QTY", typeof(float));
+                        tvp.Columns.Add("ARTICLE_ID", typeof(float));
 
                         if (request.Details != null && request.Details.Any())
                         {
@@ -444,7 +583,7 @@ namespace MicroApi.DataLayer.Service
                                     detail.TAX_AMOUNT ?? 0,
                                     detail.TOTAL_AMOUNT ?? 0,
                                     detail.REMARKS ?? "",
-                                    detail.DN_QTY ?? 0
+                                    detail.ARTICLE_ID ?? 0
                                 );
                             }
                         }

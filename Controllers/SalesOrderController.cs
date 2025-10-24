@@ -118,20 +118,74 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("list-items")]
-        public IActionResult ListItems([FromBody] SalesOrderRequest request)
+        [Route("getitem")]
+        public ItemListsResponse GetSalesOrderItems()
         {
+            ItemListsResponse response = new ItemListsResponse();
             try
             {
-                var response = _salesOrderService.GetSalesOrderItems(request);
-                return Ok(response);
+                response = _salesOrderService.GetSalesOrderItems();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+                response.Flag = 0;
+                response.Message = ex.Message;
+                response.Data = new List<ITEMS>();
             }
+            return response;
         }
 
+        [HttpPost]
+        [Route("gettype")]
+        public ItemListsResponse GetarticleType(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse();
+            try
+            {
+                response = _salesOrderService.GetarticleType(request);
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+                response.Data = new List<ITEMS>();
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("getcategory")]
+        public ItemListsResponse Getcategory(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse();
+            try
+            {
+                response = _salesOrderService.Getcategory(request);
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+                response.Data = new List<ITEMS>();
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("getartno")]
+        public ItemListsResponse GetArtNo(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse();
+            try
+            {
+                response = _salesOrderService.GetArtNo(request);
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+                response.Data = new List<ITEMS>();
+            }
+            return response;
+        }
         [HttpPost("approve")]
         public IActionResult ApproveSalesOrder([FromBody] SalesOrderUpdate request)
         {

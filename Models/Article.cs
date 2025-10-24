@@ -15,7 +15,7 @@ namespace MicroApi.Models
         public int UNIT_ID { get; set; }
         public int ARTICLE_TYPE { get; set; }
         public int CATEGORY_ID { get; set; }
-        public string IMAGE_NAME { get; set; }
+        public string? IMAGE_NAME { get; set; }
         public int BRAND_ID { get; set; }
         public int NEW_ARRIVAL_DAYS { get; set; }
         public bool IS_STOPPED { get; set; }
@@ -54,7 +54,7 @@ namespace MicroApi.Models
         public int? BRAND_ID { get; set; }
         public string? BRAND_NAME { get; set; }
         public int? NEXT_SERIAL { get; set; }
-        public string IMAGE_NAME { get; set; }
+        public string? IMAGE_NAME { get; set; }
         public int? NEW_ARRIVAL_DAYS { get; set; }
         public bool? IS_STOPPED { get; set; }
         public int? SUPPLIER_ID { get; set; }

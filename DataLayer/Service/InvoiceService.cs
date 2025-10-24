@@ -223,6 +223,114 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
+        //public TransferGridResponse GetTransferData(TransferInvoiceRequest request)
+        //{
+        //    var response = new TransferGridResponse
+        //    {
+        //        flag = 0,
+        //        Message = "Failed",
+        //        Data = new List<TransferGridItem>()
+        //    };
+
+        //    try
+        //    {
+        //        using (var conn = ADO.GetConnection())
+        //        {
+        //            if (conn.State == ConnectionState.Closed)
+        //                conn.Open();
+
+        //            using (var cmd = new SqlCommand("SP_SALE_INVOICE", conn))
+        //            {
+        //                cmd.CommandType = CommandType.StoredProcedure;
+        //                cmd.Parameters.AddWithValue("@ACTION", 5);
+        //                cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
+
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (!reader.HasRows)
+        //                    {
+        //                        return new TransferGridResponse
+        //                        {
+        //                            flag = 0,
+        //                            Message = "No records found.",
+        //                            Data = new List<TransferGridItem>()
+        //                        };
+        //                    }
+
+        //                    // Detect result type based on columns returned
+        //                    var columnNames = Enumerable.Range(0, reader.FieldCount)
+        //                        .Select(reader.GetName)
+        //                        .ToList();
+
+        //                    // 🔹 CASE 1: Transfer Out Summary (CUST_TYPE=1)
+        //                    if (columnNames.Contains("TRANSFER_NO"))
+        //                    {
+        //                        var transferResponse = new TransferGridResponse
+        //                        {
+        //                            flag = 1,
+        //                            Message = "Success",
+        //                            Data = new List<TransferGridItem>()
+        //                        };
+
+        //                        while (reader.Read())
+        //                        {
+        //                            transferResponse.Data.Add(new TransferGridItem
+        //                            {
+        //                                TRANSFER_SUMMARY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+        //                                TRANSFER_NO = reader["TRANSFER_NO"]?.ToString(),
+        //                                TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
+        //                                ARTICLE = reader["ARTICLE"]?.ToString(),
+        //                                CUST_TYPE = reader["CUST_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["CUST_TYPE"]) : (int?)null,
+        //                                TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0
+        //                            });
+        //                        }
+        //                        return transferResponse;
+        //                    }
+        //                    // 🔹 CASE 2: Delivery Note List (CUST_TYPE=2)
+        //                    else if (columnNames.Contains("ITEM_CODE"))
+        //                    {
+        //                        var deliveryResponse = new TransferGridResponse
+        //                        {
+        //                            flag = 1,
+        //                            Message = "Success",
+        //                            Data = new List<TransferGridItem>()
+        //                        };
+
+        //                        while (reader.Read())
+        //                        {
+        //                            deliveryResponse.Data.Add(new TransferGridItem
+        //                            {
+        //                                TRANSFER_SUMMARY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+        //                                TRANSFER_NO = reader["ITEM_CODE"]?.ToString(),
+        //                                ARTICLE = reader["DESCRIPTION"]?.ToString(),
+        //                                CUST_TYPE = reader["CUST_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["CUST_TYPE"]) : (int?)null,
+        //                                TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
+        //                                TOTAL_PAIR_QTY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_QTY"]) : 0
+        //                            });
+        //                        }
+        //                        return deliveryResponse;
+        //                    }
+        //                    // If neither matched
+        //                    return new TransferGridResponse
+        //                    {
+        //                        flag = 0,
+        //                        Message = "Unknown result structure from SP.",
+        //                        Data = new List<TransferGridItem>()
+        //                    };
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new TransferGridResponse
+        //        {
+        //            flag = 0,
+        //            Message = "Error: " + ex.Message,
+        //            Data = new List<TransferGridItem>()
+        //        };
+        //    }
+        //}
         public TransferGridResponse GetTransferData(TransferInvoiceRequest request)
         {
             var response = new TransferGridResponse
@@ -257,79 +365,41 @@ namespace MicroApi.DataLayer.Service
                                 };
                             }
 
-                            // Detect result type based on columns returned
-                            var columnNames = Enumerable.Range(0, reader.FieldCount)
-                                .Select(reader.GetName)
-                                .ToList();
+                            var transferList = new List<TransferGridItem>();
 
-                            // 🔹 CASE 1: Transfer Out Summary (CUST_TYPE=1)
-                            if (columnNames.Contains("TRANSFER_NO"))
+                            while (reader.Read())
                             {
-                                var transferResponse = new TransferGridResponse
+                                var item = new TransferGridItem
                                 {
-                                    flag = 1,
-                                    Message = "Success",
-                                    Data = new List<TransferGridItem>()
+                                    TRANSFER_SUMMARY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    TRANSFER_NO = reader["ART_NO"]?.ToString(),
+                                    ARTICLE = reader["ARTICLE"]?.ToString(),
+                                    TRANSFER_DATE = reader["UPDATED_DATE"] != DBNull.Value
+                                        ? Convert.ToDateTime(reader["UPDATED_DATE"]).ToString("dd-MM-yyyy")
+                                        : null,
+                                    TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
+                                        ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"])
+                                        : 0
                                 };
 
-                                while (reader.Read())
-                                {
-                                    transferResponse.Data.Add(new TransferGridItem
-                                    {
-                                        TRANSFER_SUMMARY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                        TRANSFER_NO = reader["TRANSFER_NO"]?.ToString(),
-                                        TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
-                                        ARTICLE = reader["ARTICLE"]?.ToString(),
-                                        CUST_TYPE = reader["CUST_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["CUST_TYPE"]) : (int?)null,
-                                        TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0
-                                    });
-                                }
-                                return transferResponse;
+                                transferList.Add(item);
                             }
-                            // 🔹 CASE 2: Delivery Note List (CUST_TYPE=2)
-                            else if (columnNames.Contains("ITEM_CODE"))
-                            {
-                                var deliveryResponse = new TransferGridResponse
-                                {
-                                    flag = 1,
-                                    Message = "Success",
-                                    Data = new List<TransferGridItem>()
-                                };
 
-                                while (reader.Read())
-                                {
-                                    deliveryResponse.Data.Add(new TransferGridItem
-                                    {
-                                        TRANSFER_SUMMARY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                        TRANSFER_NO = reader["ITEM_CODE"]?.ToString(),
-                                        ARTICLE = reader["DESCRIPTION"]?.ToString(),
-                                        CUST_TYPE = reader["CUST_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["CUST_TYPE"]) : (int?)null,
-                                        TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
-                                        TOTAL_PAIR_QTY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_QTY"]) : 0
-                                    });
-                                }
-                                return deliveryResponse;
-                            }
-                            // If neither matched
-                            return new TransferGridResponse
-                            {
-                                flag = 0,
-                                Message = "Unknown result structure from SP.",
-                                Data = new List<TransferGridItem>()
-                            };
+                            response.flag = 1;
+                            response.Message = "Success";
+                            response.Data = transferList;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                return new TransferGridResponse
-                {
-                    flag = 0,
-                    Message = "Error: " + ex.Message,
-                    Data = new List<TransferGridItem>()
-                };
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = new List<TransferGridItem>();
             }
+
+            return response;
         }
 
         public InvoiceHeaderResponse GetSaleInvoiceHeaderData()
