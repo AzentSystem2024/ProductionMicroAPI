@@ -186,6 +186,36 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("getcolor")]
+        public IActionResult GetColor([FromBody] SalesOrderRequest request)
+        {
+            try
+            {
+                var response = _salesOrderService.GetColor(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("getpacking")]
+        public IActionResult GetPacking([FromBody] SalesOrderRequest request)
+        {
+            try
+            {
+                var response = _salesOrderService.GetPacking(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
+
         [HttpPost("approve")]
         public IActionResult ApproveSalesOrder([FromBody] SalesOrderUpdate request)
         {

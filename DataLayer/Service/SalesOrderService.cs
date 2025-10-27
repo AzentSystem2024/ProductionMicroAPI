@@ -525,7 +525,112 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-      
+        public ItemListsResponse GetColor(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                SELECT DISTINCT TB_ARTICLE_COLOR.ID, TB_ARTICLE_COLOR.COLOR_ENGLISH FROM TB_ARTICLE_COLOR
+                 INNER JOIN TB_PACKING ON TB_ARTICLE_COLOR.COLOR_ENGLISH = TB_PACKING.COLOR
+                  WHERE
+                        TB_PACKING.BRAND_ID = @BRAND_ID
+                        AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
+                        AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
+                        AND TB_PACKING.ART_NO = @ART_NO
+                        AND TB_ARTICLE_COLOR.IS_DELETED = 0
+                                ";
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
+                        cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
+                        cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
+                        cmd.Parameters.AddWithValue("@ART_NO", request.ART_NO);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ITEMS item = new ITEMS
+                                {
+                                    ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
+                                };
+                                response.Data.Add(item);
+                            }
+                        }
+                    }
+                }
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+            return response;
+        }
+        public ItemListsResponse GetPacking(SalesOrderRequest request)
+        {
+            ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                SELECT DISTINCT TB_PACKING.ID, TB_PACKING.ART_NO FROM TB_PACKING WHERE
+                    TB_PACKING.BRAND_ID = @BRAND_ID
+                    AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
+                    AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
+                    AND TB_PACKING.ART_NO = @ART_NO
+                    AND TB_PACKING.COLOR_ID = @COLOR_ID
+                    ";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
+                        cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
+                        cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
+                        cmd.Parameters.AddWithValue("@ART_NO", request.ART_NO);
+                        cmd.Parameters.AddWithValue("@COLOR_ID", request.COLOR);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ITEMS item = new ITEMS
+                                {
+                                    ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    DESCRIPTION = reader["PACKING_NO"] != DBNull.Value ? reader["PACKING_NO"].ToString() : null
+                                };
+                                response.Data.Add(item);
+                            }
+                        }
+                    }
+                }
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+            return response;
+        }
 
         public bool DeleteSalesOrder(int soId)
         {

@@ -388,8 +388,6 @@ namespace MicroApi.DataLayer.Services
             return customer;
         }
 
-
-
         public bool DeleteCustomers(int id)
         {
             try
@@ -412,6 +410,43 @@ namespace MicroApi.DataLayer.Services
             {
                 throw ex;
             }
+        }
+        public List<DeliveryAddress> GetDeliveryAddressesForDealer(DELIVERYADDREQUEST custId)
+        {
+            var deliveryAddresses = new List<DeliveryAddress>();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_CUSTOMER", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@ID", custId.CUST_ID);
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var address = new DeliveryAddress
+                                {
+                                    Id = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    DELIVERYADDRESS = reader["DELIVERY_ADDRESS"] != DBNull.Value ? reader["DELIVERY_ADDRESS"].ToString() : string.Empty
+                                };
+                                deliveryAddresses.Add(address);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching delivery addresses: " + ex.Message, ex);
+            }
+            return deliveryAddresses;
         }
     }
 }

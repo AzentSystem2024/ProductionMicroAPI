@@ -59,7 +59,15 @@
         public string? DELIVERY_ADDRESS { get; set; }
        
     }
-
+    public class DeliveryAddress
+    {
+        public int Id { get; set; }
+        public string? DELIVERYADDRESS { get; set; }
+    }
+    public class DELIVERYADDREQUEST
+    { 
+     public int? CUST_ID { get; set; }
+    }
     public class CustomerUpdate
     {
         public int ID { get; set; }

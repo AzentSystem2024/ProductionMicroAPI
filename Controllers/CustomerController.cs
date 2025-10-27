@@ -122,5 +122,21 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("dropdownlist")]
+        public List<DeliveryAddress> DropDownAddressList([FromBody] DELIVERYADDREQUEST custId)
+        {
+            List<DeliveryAddress> customers = new List<DeliveryAddress>();
+
+            try
+            {
+
+                customers = _customerService.GetDeliveryAddressesForDealer(custId);
+            }
+            catch (Exception ex)
+            {
+            }
+            return customers.ToList();
+        }
     }
 }
