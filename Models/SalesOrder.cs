@@ -166,8 +166,8 @@
         public string BRAND_ID { get; set; }
         public string? ARTICLE_TYPE { get; set; }
         public string? CATEGORY_ID { get; set; }
-        public string ART_NO { get; set; }
-        public string COLOR { get; set; }
+        public string? ART_NO { get; set; }
+        public string? COLOR { get; set; }
     }
     public class SOQUOTATIONLIST
     {
