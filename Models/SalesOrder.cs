@@ -6,43 +6,26 @@
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? STORE_ID { get; set; }
-        public string? SO_NO { get; set; }
         public string? SO_DATE { get; set; }
         public int? CUST_ID { get; set; }
-        public int? SALESMAN_ID { get; set; }
-        public string? CONTACT_NAME { get; set; }
-        public string? CONTACT_PHONE { get; set; }
-        public string? CONTACT_EMAIL { get; set; }
-        public int? QTN_ID { get; set; }
-       // public List<int> QTN_ID_LIST { get; set; }
-        public string? REF_NO { get; set; }
-        public int? PAY_TERM_ID { get; set; }
-        public int? DELIVERY_TERM_ID { get; set; }
-        public float? GROSS_AMOUNT { get; set; }
-        public string? CHARGE_DESCRIPTION { get; set; }
-        public float? CHARGE_AMOUNT { get; set; }
-        public float? NET_AMOUNT { get; set; }
-        public int? TRANS_ID { get; set; }
         public int? USER_ID { get; set; }
-        public string? NARRATION { get; set; }
+        public string? REMARKS { get; set; }
+        public int? DELIVERY_ADDRESS { get; set; }
+        public int? WAREHOUSE { get; set; }
+        public float? TOTAL_QTY { get; set; }
         public List<SalesOrderDetail> Details { get; set; }
     }
 
     public class SalesOrderDetail
     {
-        public int? ID { get; set; }
-        public int? SO_ID { get; set; }
-        public int? ITEM_ID { get; set; }
-        public string? UOM { get; set; }
-        public float? QUANTITY { get; set; }
-        public float? PRICE { get; set; }
-        public float? DISC_PERCENT { get; set; }
-        public float? AMOUNT { get; set; }
-        public float? TAX_PERCENT { get; set; }
-        public float? TAX_AMOUNT { get; set; }
-        public float? TOTAL_AMOUNT { get; set; }
-        public string? REMARKS { get; set; }
-        public int? ARTICLE_ID { get; set; }
+        public int? PACKING { get; set; }
+        public int? BRAND_ID { get; set; }
+        public int? ARTICLE_TYPE { get; set; }
+        public int? CATEGORY { get; set; }
+        public int? ART_NO { get; set; }
+        public int? COLOR { get; set; }
+        public int? QUANTITY { get; set; }
+
     }
 
     public class SalesOrderSelect
@@ -143,21 +126,11 @@
         public int? STORE_ID { get; set; }
         public string? SO_DATE { get; set; }
         public int? CUST_ID { get; set; }
-        public int? SALESMAN_ID { get; set; }
-        public string? CONTACT_NAME { get; set; }
-        public string? CONTACT_PHONE { get; set; }
-        public string? CONTACT_EMAIL { get; set; }
-        public int? QTN_ID { get; set; }
-        ///public List<int> QTN_ID_LIST { get; set; }
-        public string? REF_NO { get; set; }
-        public int? PAY_TERM_ID { get; set; }
-        public int? DELIVERY_TERM_ID { get; set; }
-        public float? GROSS_AMOUNT { get; set; }
-        public string? CHARGE_DESCRIPTION { get; set; }
-        public float? CHARGE_AMOUNT { get; set; }
-        public float? NET_AMOUNT { get; set; }
-        public int? TRANS_ID { get; set; }
-        public string? NARRATION { get; set; }
+        public int? USER_ID { get; set; }
+        public string? REMARKS { get; set; }
+        public int? DELIVERY_ADDRESS { get; set; }
+        public int? WAREHOUSE { get; set; }
+        public float? TOTAL_QTY { get; set; }
         public List<SalesOrderDetail> Details { get; set; }
     }
 
@@ -166,7 +139,7 @@
         public string BRAND_ID { get; set; }
         public string? ARTICLE_TYPE { get; set; }
         public string? CATEGORY_ID { get; set; }
-        public string? ART_NO { get; set; }
+        public string? ARTNO_ID { get; set; }
         public string? COLOR { get; set; }
     }
     public class SOQUOTATIONLIST

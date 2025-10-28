@@ -30,41 +30,28 @@ namespace MicroApi.DataLayer.Service
                     {
 
                         DataTable tvp = new DataTable();
-                        tvp.Columns.Add("ITEM_ID", typeof(int));
-                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("BRAND_ID", typeof(int));
+                        tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
+                        tvp.Columns.Add("CATEGORY", typeof(int));
+                        tvp.Columns.Add("ART_NO", typeof(int));
+                        tvp.Columns.Add("COLOR", typeof(int));
+                        tvp.Columns.Add("PACKING", typeof(int));    
                         tvp.Columns.Add("QUANTITY", typeof(float));
-                        tvp.Columns.Add("PRICE", typeof(float));
-                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
-                        tvp.Columns.Add("AMOUNT", typeof(float));
-                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
-                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
-                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
-                        tvp.Columns.Add("REMARKS", typeof(string));
-                        tvp.Columns.Add("ARTICLE_ID", typeof(int));
+
 
                         foreach (var detail in salesOrder.Details)
                         {
                             tvp.Rows.Add(
-                                detail.ITEM_ID ?? 0,
-                                detail.UOM ?? "",
-                                detail.QUANTITY ?? 0,
-                                detail.PRICE ?? 0,
-                                detail.DISC_PERCENT ?? 0,
-                                detail.AMOUNT ?? 0,
-                                detail.TAX_PERCENT ?? 0,
-                                detail.TAX_AMOUNT ?? 0,
-                                detail.TOTAL_AMOUNT ?? 0,
-                                detail.REMARKS ?? "",
-                                detail.ARTICLE_ID ?? 0
+                                detail.BRAND_ID ?? 0,
+                                detail.ARTICLE_TYPE ?? 0,
+                                detail.CATEGORY ?? 0,
+                                detail.ART_NO ?? 0,
+                                detail.COLOR ?? 0,
+                                detail.PACKING ?? 0,   
+                                detail.QUANTITY ?? 0
                             );
                         }
-                        // Create DataTable for QTN_ID_LIST
-                        //DataTable tvpQTN = new DataTable();
-                        //tvpQTN.Columns.Add("QTN_ID", typeof(int));
-                        //foreach (var qtnId in salesOrder.QTN_ID_LIST)
-                        //{
-                        //    tvpQTN.Rows.Add(qtnId);
-                        //}
+                       
 
                         using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection, transaction))
                         {
@@ -75,20 +62,11 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@STORE_ID", salesOrder.STORE_ID ?? 0);
                             cmd.Parameters.AddWithValue("@SO_DATE", ParseDate(salesOrder.SO_DATE));
                             cmd.Parameters.AddWithValue("@CUST_ID", salesOrder.CUST_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@SALESMAN_ID", salesOrder.SALESMAN_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@CONTACT_NAME", salesOrder.CONTACT_NAME ?? "");
-                            cmd.Parameters.AddWithValue("@CONTACT_PHONE", salesOrder.CONTACT_PHONE ?? "");
-                            cmd.Parameters.AddWithValue("@CONTACT_EMAIL", salesOrder.CONTACT_EMAIL ?? "");
-                            cmd.Parameters.AddWithValue("@QTN_ID", salesOrder.QTN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@REF_NO", salesOrder.REF_NO ?? "");
-                            cmd.Parameters.AddWithValue("@PAY_TERM_ID", salesOrder.PAY_TERM_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@DELIVERY_TERM_ID", salesOrder.DELIVERY_TERM_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", salesOrder.GROSS_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", salesOrder.CHARGE_DESCRIPTION ?? "");
-                            cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", salesOrder.CHARGE_AMOUNT ?? 0);
-                            cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? 0);
                             cmd.Parameters.AddWithValue("@USER_ID", salesOrder.USER_ID ?? 0);
-                            cmd.Parameters.AddWithValue("@NARRATION", salesOrder.NARRATION ?? "");
+                            cmd.Parameters.AddWithValue("@REMARKS", salesOrder.REMARKS ?? "");
+                            cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS", salesOrder.DELIVERY_ADDRESS ?? 0);
+                            cmd.Parameters.AddWithValue("@WAREHOUSE", salesOrder.WAREHOUSE ?? 0);
+                            cmd.Parameters.AddWithValue("@TOTAL_QTY", salesOrder.TOTAL_QTY ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
@@ -124,34 +102,26 @@ namespace MicroApi.DataLayer.Service
                     try
                     {
                         DataTable tvp = new DataTable();
-                        tvp.Columns.Add("ITEM_ID", typeof(int));
-                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("BRAND_ID", typeof(int));
+                        tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
+                        tvp.Columns.Add("CATEGORY", typeof(int));
+                        tvp.Columns.Add("ART_NO", typeof(int));
+                        tvp.Columns.Add("COLOR", typeof(int));
+                        tvp.Columns.Add("PACKING", typeof(int));    
                         tvp.Columns.Add("QUANTITY", typeof(float));
-                        tvp.Columns.Add("PRICE", typeof(float));
-                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
-                        tvp.Columns.Add("AMOUNT", typeof(float));
-                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
-                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
-                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
-                        tvp.Columns.Add("REMARKS", typeof(string));
-                        tvp.Columns.Add("ARTICLE_ID", typeof(float));
 
                         if (salesOrder.Details != null && salesOrder.Details.Any())
                         {
                             foreach (var detail in salesOrder.Details)
                             {
                                 tvp.Rows.Add(
-                                    detail.ITEM_ID ?? 0,
-                                    detail.UOM ?? "",
-                                    detail.QUANTITY ?? 0,
-                                    detail.PRICE ?? 0,
-                                    detail.DISC_PERCENT ?? 0,
-                                    detail.AMOUNT ?? 0,
-                                    detail.TAX_PERCENT ?? 0,
-                                    detail.TAX_AMOUNT ?? 0,
-                                    detail.TOTAL_AMOUNT ?? 0,
-                                    detail.REMARKS ?? "",
-                                    detail.ARTICLE_ID ?? 0
+                                    detail.BRAND_ID ?? 0,
+                                    detail.ARTICLE_TYPE ?? 0,
+                                    detail.CATEGORY ?? 0,
+                                    detail.ART_NO ?? 0,
+                                    detail.COLOR ?? 0,
+                                    detail.PACKING ?? 0,
+                                    detail.QUANTITY ?? 0
                                 );
                             }
                         }
@@ -168,25 +138,16 @@ namespace MicroApi.DataLayer.Service
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 2);
                             cmd.Parameters.AddWithValue("@ID", salesOrder.ID ?? 0);
-                            cmd.Parameters.AddWithValue("@COMPANY_ID", salesOrder.COMPANY_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@FIN_ID", salesOrder.FIN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@STORE_ID", salesOrder.STORE_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@SO_DATE", string.IsNullOrEmpty(salesOrder.SO_DATE) ? (object)DBNull.Value : ParseDate(salesOrder.SO_DATE));
-                            cmd.Parameters.AddWithValue("@CUST_ID", salesOrder.CUST_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@SALESMAN_ID", salesOrder.SALESMAN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@CONTACT_NAME", string.IsNullOrEmpty(salesOrder.CONTACT_NAME) ? (object)DBNull.Value : salesOrder.CONTACT_NAME);
-                            cmd.Parameters.AddWithValue("@CONTACT_PHONE", string.IsNullOrEmpty(salesOrder.CONTACT_PHONE) ? (object)DBNull.Value : salesOrder.CONTACT_PHONE);
-                            cmd.Parameters.AddWithValue("@CONTACT_EMAIL", string.IsNullOrEmpty(salesOrder.CONTACT_EMAIL) ? (object)DBNull.Value : salesOrder.CONTACT_EMAIL);
-                            cmd.Parameters.AddWithValue("@QTN_ID", salesOrder.QTN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@REF_NO", string.IsNullOrEmpty(salesOrder.REF_NO) ? (object)DBNull.Value : salesOrder.REF_NO);
-                            cmd.Parameters.AddWithValue("@PAY_TERM_ID", salesOrder.PAY_TERM_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@DELIVERY_TERM_ID", salesOrder.DELIVERY_TERM_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", salesOrder.GROSS_AMOUNT ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", string.IsNullOrEmpty(salesOrder.CHARGE_DESCRIPTION) ? (object)DBNull.Value : salesOrder.CHARGE_DESCRIPTION);
-                            cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", salesOrder.CHARGE_AMOUNT ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@TRANS_ID", salesOrder.TRANS_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(salesOrder.NARRATION) ? (object)DBNull.Value : salesOrder.NARRATION);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", salesOrder.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", salesOrder.FIN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@STORE_ID", salesOrder.STORE_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SO_DATE", ParseDate(salesOrder.SO_DATE));
+                            cmd.Parameters.AddWithValue("@CUST_ID", salesOrder.CUST_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@USER_ID", salesOrder.USER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@REMARKS", salesOrder.REMARKS ?? "");
+                            cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS", salesOrder.DELIVERY_ADDRESS ?? 0);
+                            cmd.Parameters.AddWithValue("@WAREHOUSE", salesOrder.WAREHOUSE ?? 0);
+                            cmd.Parameters.AddWithValue("@TOTAL_QTY", salesOrder.TOTAL_QTY ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
@@ -540,14 +501,14 @@ namespace MicroApi.DataLayer.Service
                             WHERE TB_PACKING.BRAND_ID = @BRAND_ID
                             AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
                             AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
-                            AND TB_PACKING.ART_NO = @ART_NO";
+                            AND TB_PACKING.ID = @ARTNO_ID";
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.CommandType = CommandType.Text;
                         cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
-                        cmd.Parameters.AddWithValue("@ART_NO", request.ART_NO);
+                        cmd.Parameters.AddWithValue("@ARTNO_ID", request.ARTNO_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -589,7 +550,7 @@ namespace MicroApi.DataLayer.Service
                  TB_PACKING.BRAND_ID = @BRAND_ID
                  AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
                  AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
-                 AND TB_PACKING.ART_NO = @ART_NO
+                 AND TB_PACKING.ID = @ARTNO_ID
                  AND TB_PACKING.COLOR = @COLOR_ID";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
@@ -598,7 +559,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
-                        cmd.Parameters.AddWithValue("@ART_NO", request.ART_NO);
+                        cmd.Parameters.AddWithValue("@ARTNO_ID", request.ARTNO_ID);
                         cmd.Parameters.AddWithValue("@COLOR_ID", request.COLOR);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -656,34 +617,26 @@ namespace MicroApi.DataLayer.Service
                     try
                     {
                         DataTable tvp = new DataTable();
-                        tvp.Columns.Add("ITEM_ID", typeof(int));
-                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("BRAND_ID", typeof(int));
+                        tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
+                        tvp.Columns.Add("CATEGORY", typeof(int));
+                        tvp.Columns.Add("ART_NO", typeof(int));
+                        tvp.Columns.Add("COLOR", typeof(int));
+                        tvp.Columns.Add("PACKING", typeof(int));    
                         tvp.Columns.Add("QUANTITY", typeof(float));
-                        tvp.Columns.Add("PRICE", typeof(float));
-                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
-                        tvp.Columns.Add("AMOUNT", typeof(float));
-                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
-                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
-                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
-                        tvp.Columns.Add("REMARKS", typeof(string));
-                        tvp.Columns.Add("ARTICLE_ID", typeof(float));
 
                         if (request.Details != null && request.Details.Any())
                         {
                             foreach (var detail in request.Details)
                             {
                                 tvp.Rows.Add(
-                                    detail.ITEM_ID ?? 0,
-                                    detail.UOM ?? "",
-                                    detail.QUANTITY ?? 0,
-                                    detail.PRICE ?? 0,
-                                    detail.DISC_PERCENT ?? 0,
-                                    detail.AMOUNT ?? 0,
-                                    detail.TAX_PERCENT ?? 0,
-                                    detail.TAX_AMOUNT ?? 0,
-                                    detail.TOTAL_AMOUNT ?? 0,
-                                    detail.REMARKS ?? "",
-                                    detail.ARTICLE_ID ?? 0
+                                    detail.BRAND_ID ?? 0,
+                                    detail.ARTICLE_TYPE ?? 0,
+                                    detail.CATEGORY ?? 0,
+                                    detail.ART_NO ?? 0,
+                                    detail.COLOR ?? 0,
+                                    detail.PACKING ?? 0,
+                                    detail.QUANTITY ?? 0
                                 );
                             }
                         }
@@ -700,25 +653,17 @@ namespace MicroApi.DataLayer.Service
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 7);
-                            cmd.Parameters.AddWithValue("@SO_ID", request.ID ?? 0);
-                            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@SO_DATE", string.IsNullOrEmpty(request.SO_DATE) ? (object)DBNull.Value : ParseDate(request.SO_DATE));
-                            cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@SALESMAN_ID", request.SALESMAN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@CONTACT_NAME", string.IsNullOrEmpty(request.CONTACT_NAME) ? (object)DBNull.Value : request.CONTACT_NAME);
-                            cmd.Parameters.AddWithValue("@CONTACT_PHONE", string.IsNullOrEmpty(request.CONTACT_PHONE) ? (object)DBNull.Value : request.CONTACT_PHONE);
-                            cmd.Parameters.AddWithValue("@CONTACT_EMAIL", string.IsNullOrEmpty(request.CONTACT_EMAIL) ? (object)DBNull.Value : request.CONTACT_EMAIL);
-                            cmd.Parameters.AddWithValue("@QTN_ID", request.QTN_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@REF_NO", string.IsNullOrEmpty(request.REF_NO) ? (object)DBNull.Value : request.REF_NO);
-                            cmd.Parameters.AddWithValue("@PAY_TERM_ID", request.PAY_TERM_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@DELIVERY_TERM_ID", request.DELIVERY_TERM_ID ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", request.GROSS_AMOUNT ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", string.IsNullOrEmpty(request.CHARGE_DESCRIPTION) ? (object)DBNull.Value : request.CHARGE_DESCRIPTION);
-                            cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", request.CHARGE_AMOUNT ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@NET_AMOUNT", request.NET_AMOUNT ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@NARRATION", string.IsNullOrEmpty(request.NARRATION) ? (object)DBNull.Value : request.NARRATION);
+                            cmd.Parameters.AddWithValue("@ID", request.ID ?? 0);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SO_DATE", ParseDate(request.SO_DATE));
+                            cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@USER_ID", request.USER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@REMARKS", request.REMARKS ?? "");
+                            cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS", request.DELIVERY_ADDRESS ?? 0);
+                            cmd.Parameters.AddWithValue("@WAREHOUSE", request.WAREHOUSE ?? 0);
+                            cmd.Parameters.AddWithValue("@TOTAL_QTY", request.TOTAL_QTY ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
