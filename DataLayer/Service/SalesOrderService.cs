@@ -536,15 +536,11 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                SELECT DISTINCT TB_ARTICLE_COLOR.ID, TB_ARTICLE_COLOR.COLOR_ENGLISH FROM TB_ARTICLE_COLOR
-                 INNER JOIN TB_PACKING ON TB_ARTICLE_COLOR.COLOR_ENGLISH = TB_PACKING.COLOR
-                  WHERE
-                        TB_PACKING.BRAND_ID = @BRAND_ID
-                        AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
-                        AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
-                        AND TB_PACKING.ART_NO = @ART_NO
-                        AND TB_ARTICLE_COLOR.IS_DELETED = 0
-                                ";
+                            SELECT DISTINCT TB_PACKING.ID, TB_PACKING.COLOR FROM TB_PACKING
+                            WHERE TB_PACKING.BRAND_ID = @BRAND_ID
+                            AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
+                            AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
+                            AND TB_PACKING.ART_NO = @ART_NO";
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.CommandType = CommandType.Text;
@@ -560,7 +556,7 @@ namespace MicroApi.DataLayer.Service
                                 ITEMS item = new ITEMS
                                 {
                                     ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
+                                    DESCRIPTION = reader["COLOR"] != DBNull.Value ? reader["COLOR"].ToString() : null
                                 };
                                 response.Data.Add(item);
                             }
@@ -589,13 +585,12 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                SELECT DISTINCT TB_PACKING.ID, TB_PACKING.ART_NO FROM TB_PACKING WHERE
-                    TB_PACKING.BRAND_ID = @BRAND_ID
-                    AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
-                    AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
-                    AND TB_PACKING.ART_NO = @ART_NO
-                    AND TB_PACKING.COLOR_ID = @COLOR_ID
-                    ";
+               	 SELECT DISTINCT TB_PACKING.ID, TB_PACKING.DESCRIPTION FROM TB_PACKING WHERE
+                 TB_PACKING.BRAND_ID = @BRAND_ID
+                 AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
+                 AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
+                 AND TB_PACKING.ART_NO = @ART_NO
+                 AND TB_PACKING.COLOR = @COLOR_ID";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
@@ -613,7 +608,7 @@ namespace MicroApi.DataLayer.Service
                                 ITEMS item = new ITEMS
                                 {
                                     ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                    DESCRIPTION = reader["PACKING_NO"] != DBNull.Value ? reader["PACKING_NO"].ToString() : null
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
                                 };
                                 response.Data.Add(item);
                             }
