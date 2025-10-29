@@ -34,12 +34,12 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("select/{soId:int}")]
-        public IActionResult Select(int soId)
+        [Route("select/{id:int}")]
+        public IActionResult Select(int id)
         {
             try
             {
-                SalesOrderDetailSelectResponse response = _salesOrderService.GetSalesOrder(soId);
+                SalesOrderDetailSelectResponse response = _salesOrderService.GetSalesOrder(id);
                 if (response.Flag == 1)
                     return Ok(response);
                 else
@@ -137,12 +137,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("gettype")]
-        public ItemListsResponse GetarticleType(SalesOrderRequest request)
+        public ItemListsResponse GetarticleType()
         {
             ItemListsResponse response = new ItemListsResponse();
             try
             {
-                response = _salesOrderService.GetarticleType(request);
+                response = _salesOrderService.GetarticleType();
             }
             catch (Exception ex)
             {

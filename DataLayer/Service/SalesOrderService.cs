@@ -185,82 +185,90 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public SalesOrderDetailSelectResponse GetSalesOrder(int soId)
+        public SalesOrderDetailSelectResponse GetSalesOrder(int id)
         {
             SalesOrderDetailSelectResponse response = new SalesOrderDetailSelectResponse
             {
-                Data = new SalesOrderSelect { Details = new List<SalesOrderDetailSelect>() }
+                Data = new SalesOrderSelect
+                {
+                    Details = new List<SalesOrderDetailSelect>()
+                }
             };
+
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
+
                 using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 4);
-                    cmd.Parameters.AddWithValue("@SO_ID", soId);
+                    cmd.Parameters.AddWithValue("@ID", id); 
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
+                        bool isHeaderSet = false;
+
+                        while (reader.Read())
                         {
-                            response.Data.ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0;
-                            response.Data.COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0;
-                            response.Data.STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0;
-                            response.Data.SO_NO = reader["SO_NO"] != DBNull.Value ? reader["SO_NO"].ToString() : null;
-                            response.Data.SO_DATE = reader["SO_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SO_DATE"]).ToString("yyyy-MM-dd") : null;
-                            response.Data.CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : 0;
-                            response.Data.CUST_NAME = reader["CUSTOMER_NAME"] != DBNull.Value ? reader["CUSTOMER_NAME"].ToString() : null;
-                            response.Data.SALESMAN_ID = reader["SALESMAN_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALESMAN_ID"]) : 0;
-                            response.Data.EMP_NAME = reader["EMP_NAME"] != DBNull.Value ? reader["EMP_NAME"].ToString() : null;
-                            response.Data.CONTACT_NAME = reader["CONTACT_NAME"] != DBNull.Value ? reader["CONTACT_NAME"].ToString() : null;
-                            response.Data.CONTACT_PHONE = reader["CONTACT_PHONE"] != DBNull.Value ? reader["CONTACT_PHONE"].ToString() : null;
-                            response.Data.CONTACT_EMAIL = reader["CONTACT_EMAIL"] != DBNull.Value ? reader["CONTACT_EMAIL"].ToString() : null;
-                            response.Data.REF_NO = reader["REF_NO"] != DBNull.Value ? reader["REF_NO"].ToString() : null;
-                            response.Data.PAY_TERM_ID = reader["PAY_TERM_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TERM_ID"]) : 0;
-                            response.Data.DELIVERY_TERM_ID = reader["DELIVERY_TERM_ID"] != DBNull.Value ? Convert.ToInt32(reader["DELIVERY_TERM_ID"]) : 0;
-                            response.Data.PAY_TERM_NAME = reader["PAY_TERM_NAME"] != DBNull.Value ? reader["PAY_TERM_NAME"].ToString() : null;
-                            response.Data.DELIVERY_TERM_NAME = reader["DELIVERY_TERM_NAME"] != DBNull.Value ? reader["DELIVERY_TERM_NAME"].ToString() : null;
-                            response.Data.GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0;
-                            response.Data.CHARGE_DESCRIPTION = reader["CHARGE_DESCRIPTION"] != DBNull.Value ? reader["CHARGE_DESCRIPTION"].ToString() : null;
-                            response.Data.CHARGE_AMOUNT = reader["CHARGE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["CHARGE_AMOUNT"]) : 0;
-                            response.Data.NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0;
-                            response.Data.TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
-                            response.Data.NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null;
-                        }
-                        if (reader.NextResult())
-                        {
-                            while (reader.Read())
+                            if (!isHeaderSet)
                             {
-                                SalesOrderDetailSelect detail = new SalesOrderDetailSelect
-                                {
-                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                    ARTICLE_ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_ID"]) : 0,
-                                    QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
-                                    REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
-                                };
-                                response.Data.Details.Add(detail);
+                                response.Data.ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0;
+                                response.Data.STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0;
+                                response.Data.SO_NO = reader["SO_NO"]?.ToString();
+                                response.Data.SO_DATE = reader["SO_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SO_DATE"]).ToString("yyyy-MM-dd") : null;
+                                response.Data.CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : 0;
+                                response.Data.CUST_NAME = reader["CUST_NAME"]?.ToString();
+                                response.Data.TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
+                                response.Data.DELIVERY_ADDRESS = reader["DELIVERY_ADDRESS"] != DBNull.Value ? Convert.ToInt32(reader["DELIVERY_ADDRESS"]) : 0;
+                                response.Data.WAREHOUSE = reader["WAREHOUSE"] != DBNull.Value ? Convert.ToInt32(reader["WAREHOUSE"]) : 0;
+                                response.Data.REMARKS = reader["REMARKS"]?.ToString();
+                                response.Data.TOTAL_QTY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_QTY"]) : 0;
+                                response.Data.TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0;
+                                isHeaderSet = true;
                             }
+
+                            SalesOrderDetailSelect detail = new SalesOrderDetailSelect
+                            {
+                                BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
+                                ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
+                                CATEGORY = reader["CATEGORY"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY"]) : 0,
+                                ART_NO = reader["ART_NO"] != DBNull.Value ? Convert.ToInt32(reader["ART_NO"]) : 0,
+                                COLOR = reader["COLOR"] != DBNull.Value ? Convert.ToInt32(reader["COLOR"]) : 0,
+                                PACKING = reader["PACKING"] != DBNull.Value ? Convert.ToSingle(reader["PACKING"]) : 0,
+                                QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0
+                            };
+
+                            response.Data.Details.Add(detail);
                         }
                     }
                 }
             }
+
             response.Flag = 1;
             response.Message = "Success";
             return response;
         }
 
+
         public SalesOrderListResponse GetAllSalesOrders()
         {
-            SalesOrderListResponse response = new SalesOrderListResponse { Data = new List<SalesOrderList>() };
+            SalesOrderListResponse response = new SalesOrderListResponse
+            {
+                Data = new List<SalesOrderList>()
+            };
+
             using (SqlConnection connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
+
                 using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 5);
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -268,29 +276,32 @@ namespace MicroApi.DataLayer.Service
                             SalesOrderList salesOrder = new SalesOrderList
                             {
                                 ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                SO_DATE = reader["SO_DATE"] != DBNull.Value ? reader["SO_DATE"].ToString() : null,
                                 SO_NO = reader["SO_NO"] != DBNull.Value ? reader["SO_NO"].ToString() : null,
-                                COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
+                                SO_DATE = reader["SO_DATE"] != DBNull.Value
+                                    ? Convert.ToDateTime(reader["SO_DATE"]).ToString("yyyy-MM-dd") : null,
                                 STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : (int?)null,
-                                STORE_NAME = reader["STORE_NAME"] != DBNull.Value ? reader["STORE_NAME"].ToString() : null,
                                 CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : (int?)null,
-                                CUSTOMER_NAME = reader["CUSTOMER_NAME"] != DBNull.Value ? reader["CUSTOMER_NAME"].ToString() : null,
-                                SALESMAN_ID = reader["SALESMAN_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALESMAN_ID"]) : (int?)null,
-                                CONTACT_NAME = reader["CONTACT_NAME"] != DBNull.Value ? reader["CONTACT_NAME"].ToString() : null,
-                                REF_NO = reader["REF_NO"] != DBNull.Value ? reader["REF_NO"].ToString() : null,
-                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : (float?)null,
+                                CUSTOMER_NAME = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : null,
+                                DELIVERY_ADDRESS_ID = reader["DELIVERY_ADDRESS"] != DBNull.Value ? Convert.ToInt32(reader["DELIVERY_ADDRESS"]) : (int?)null, 
+                                WAREHOUSE = reader["WAREHOUSE"] != DBNull.Value ? Convert.ToInt32(reader["WAREHOUSE"]) : (int?)null,
+                                REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
+                                TOTAL_QTY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_QTY"]) : (float?)null,
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : (int?)null,
                                 TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
-                                NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null
+                                DELIVERY_ADDRESS = reader["ADDRESS"] != DBNull.Value ? reader["ADDRESS"].ToString() : null,
                             };
+
                             response.Data.Add(salesOrder);
                         }
                     }
                 }
             }
+
             response.Flag = 1;
             response.Message = "Success";
             return response;
         }
+
 
         public ItemListsResponse GetSalesOrderItems()
         {
@@ -312,8 +323,8 @@ namespace MicroApi.DataLayer.Service
                                 ITEMS item = new ITEMS
                                 {
                                     ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
-                                    
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
+
                                 };
                                 response.Data.Add(item);
                             }
@@ -331,7 +342,7 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
-        public ItemListsResponse GetarticleType(SalesOrderRequest request)
+        public ItemListsResponse GetarticleType()
         {
             ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
 
@@ -344,14 +355,12 @@ namespace MicroApi.DataLayer.Service
 
                     string query = @"SELECT DISTINCT TB_ARTICLE_TYPE.ID,TB_ARTICLE_TYPE.DESCRIPTION
                                     FROM TB_ARTICLE_TYPE INNER JOIN TB_PACKING ON TB_ARTICLE_TYPE.ID=TB_PACKING.ARTICLE_TYPE
-                                    WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_ARTICLE_TYPE.IS_DELETED=0 ";
+                                    WHERE TB_ARTICLE_TYPE.IS_DELETED=0";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.CommandType = CommandType.Text;
 
-                        // Use value from payload (converted to string if needed)
-                        cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID.ToString());
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -360,7 +369,7 @@ namespace MicroApi.DataLayer.Service
                                 ITEMS item = new ITEMS
                                 {
                                     ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                 };
                                 response.Data.Add(item);
                             }
@@ -411,7 +420,7 @@ namespace MicroApi.DataLayer.Service
                                 ITEMS item = new ITEMS
                                 {
                                     ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                 };
 
                                 response.Data.Add(item);
@@ -551,7 +560,7 @@ namespace MicroApi.DataLayer.Service
                  AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
                  AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
                  AND TB_PACKING.ID = @ARTNO_ID
-                 AND TB_PACKING.COLOR = @COLOR_ID";
+                 AND TB_PACKING.ID = @COLOR_ID";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
