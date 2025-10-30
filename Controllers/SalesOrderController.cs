@@ -215,6 +215,20 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
             }
         }
+        [HttpPost]
+        [Route("getpair")]
+        public IActionResult GetPairQtyByPackingId(PackingPairRequest request)
+        {
+            try
+            {
+                var response = _salesOrderService.GetPairQtyByPackingId(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
 
         [HttpPost("approve")]
         public IActionResult ApproveSalesOrder([FromBody] SalesOrderUpdate request)

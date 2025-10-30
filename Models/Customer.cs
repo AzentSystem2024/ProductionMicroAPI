@@ -52,17 +52,15 @@
         public int? CUST_TYPE { get; set; }
         public int? DEALER_ID { get; set; }
         public int? DEALER_TYPE { get; set; }
-        public List<CustomerDeliveryAddress>? DELIVERY_ADDRESS { get; set; }
+        public int? DELIVERY_ADDRESS_ID { get; set; }
+        public int? WAREHOUSE_ID { get; set; }
     }
-    public class CustomerDeliveryAddress
-    {
-        public string? DELIVERY_ADDRESS { get; set; }
-       
-    }
+   
     public class DeliveryAddress
     {
         public int Id { get; set; }
         public string? DELIVERYADDRESS { get; set; }
+        public string? ADDRESS { get; set; }
     }
     public class DELIVERYADDREQUEST
     { 
@@ -121,7 +119,8 @@
         public int? CUST_TYPE { get; set; }
         public int? DEALER_ID { get; set; }
         public int? DEALER_TYPE { get; set; }
-        public List<CustomerDeliveryAddress>? DELIVERY_ADDRESS { get; set; }
+        public int? DELIVERY_ADDRESS_ID { get; set; }
+        public int? WAREHOUSE_ID { get; set; }
     }
         public class CustomerResponse
     {

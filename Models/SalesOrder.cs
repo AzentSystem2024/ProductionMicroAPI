@@ -18,13 +18,9 @@
 
     public class SalesOrderDetail
     {
-        public int? PACKING { get; set; }
-        public int? BRAND_ID { get; set; }
-        public int? ARTICLE_TYPE { get; set; }
-        public int? CATEGORY { get; set; }
-        public int? ART_NO { get; set; }
-        public int? COLOR { get; set; }
-        public int? QUANTITY { get; set; }
+        public int? PACKING_ID { get; set; }
+        public string? CONTENT { get; set; }
+        public float? QUANTITY { get; set; }
 
     }
     public class SalesOrderSelect
@@ -36,23 +32,21 @@
         public int CUST_ID { get; set; }
         public string CUST_NAME { get; set; }
         public int TRANS_ID { get; set; }
-        public int DELIVERY_ADDRESS { get; set; }
+        public int DELIVERY_ADDRESS_ID { get; set; }
         public int WAREHOUSE { get; set; }
         public string REMARKS { get; set; }
         public float TOTAL_QTY { get; set; }
         public int TRANS_STATUS { get; set; }
+        public string DELIVERY_ADDRESS { get; set; }
+        public string ADDRESS { get; set; }
         public List<SalesOrderDetailSelect> Details { get; set; }
     }
 
     public class SalesOrderDetailSelect
     {
-        public int BRAND_ID { get; set; }
-        public int ARTICLE_TYPE { get; set; }
-        public int CATEGORY { get; set; }
-        public int ART_NO { get; set; }
-        public int COLOR { get; set; }
-        public float PACKING { get; set; }
-        public float QUANTITY { get; set; }
+        public int? PACKING_ID { get; set; }
+        public string? CONTENT { get; set; }
+        public float? QUANTITY { get; set; }
     }
 
 
@@ -84,6 +78,7 @@
         public int? TRANS_ID { get; set; }
         public int? TRANS_STATUS { get; set; }
         public string? DELIVERY_ADDRESS { get; set; }
+        public string? ADDRESS { get; set; }
     }
 
 
@@ -177,7 +172,23 @@
         public List<LatestVocherNO> Data { get; set; }
 
     }
-   
+    public class PackingPairRequest
+    {
+        public int PACKING_ID { get; set; }
+    }
+
+    public class PairDtl
+    {
+        public int? ID { get; set; }
+        public decimal? PAIR_QTY { get; set; }
+    }
+
+    public class PairResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<PairDtl>? Data { get; set; }
+    }
 
 }
     
