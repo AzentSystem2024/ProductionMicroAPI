@@ -11,7 +11,7 @@ namespace MicroApi.DataLayer.Interface
         List<ArticleSize> GetArticleSizesForCombination(string artNo, string color, int categoryID, int unitID);
         PackingResponse Insert(PackingMasters packing);
         PackingResponse Update(PackingUpdate packing);
-        PackingResponse GetPackingById(int id);
+        PackingSelectResponse GetPackingById(int id);
         PackingListResponses GetPackingList();
         PackingResponse DeletePackingData(int id);
         

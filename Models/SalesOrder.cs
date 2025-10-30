@@ -19,6 +19,11 @@
     public class SalesOrderDetail
     {
         public int? PACKING_ID { get; set; }
+        public int? BRAND_ID { get; set; }
+        public int? ARTICLE_TYPE { get; set; }
+        public int? CATEGORY_ID { get; set; }
+        public int? ART_NO { get; set; }
+        public int? COLOR_ID { get; set; }
         public string? CONTENT { get; set; }
         public float? QUANTITY { get; set; }
 
@@ -32,12 +37,12 @@
         public int CUST_ID { get; set; }
         public string CUST_NAME { get; set; }
         public int TRANS_ID { get; set; }
-        public int DELIVERY_ADDRESS_ID { get; set; }
+        public int DELIVERY_ADDRESS { get; set; }
         public int WAREHOUSE { get; set; }
         public string REMARKS { get; set; }
         public float TOTAL_QTY { get; set; }
         public int TRANS_STATUS { get; set; }
-        public string DELIVERY_ADDRESS { get; set; }
+        //public string DELIVERY_ADDRESS { get; set; }
         public string ADDRESS { get; set; }
         public List<SalesOrderDetailSelect> Details { get; set; }
     }
@@ -45,8 +50,14 @@
     public class SalesOrderDetailSelect
     {
         public int? PACKING_ID { get; set; }
+        public int? BRAND_ID { get; set; }
+        public int? ARTICLE_TYPE { get; set; }
+        public int? CATEGORY_ID { get; set; }
+        public int? ART_NO { get; set; }
+        public int? COLOR_ID { get; set; }
         public string? CONTENT { get; set; }
         public float? QUANTITY { get; set; }
+
     }
 
 

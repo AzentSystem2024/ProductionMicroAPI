@@ -136,6 +136,7 @@ namespace MicroApi.DataLayer.Service
         public PackingResponse Insert(PackingMasters packing)
         {
             PackingResponse res = new PackingResponse();
+
             try
             {
                 using (var connection = ADO.GetConnection())
@@ -143,29 +144,14 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    //// Fetch the last ORDER_NO for the given UNIT_ID and increment it by 1
-                    //using (var cmd = new SqlCommand("SELECT ISNULL(MAX(CAST(ORDER_NO AS INT)), 0) AS LastOrderNo FROM TB_PACKING WHERE UNIT_ID = @UNIT_ID", connection))
-                    //{
-                    //    cmd.Parameters.AddWithValue("@UNIT_ID", packing.UNIT_ID);
-                    //    var lastOrderNo = cmd.ExecuteScalar();
-
-                    //    // Ensure lastOrderNo is not null and convert it to an integer
-                    //    int nextOrderNo = lastOrderNo != null && lastOrderNo != DBNull.Value ? Convert.ToInt32(lastOrderNo) + 1 : 1;
-                    //    packing.ORDER_NO = nextOrderNo.ToString();
-                    //}
-
-                    //// Generate the combination string based on the selected sizes and quantities
-                    //string combination = GenerateCombinationString(packing.ART_NO, packing.COLOR, packing.CATEGORY_ID, packing.UNIT_ID, packing.PAIR_QTY);
-                    //packing.COMBINATION = combination;
-
-                    // Insert the record with the generated ORDER_NO
                     using (var insertCmd = new SqlCommand("SP_ManagePackingData", connection))
                     {
                         insertCmd.CommandType = CommandType.StoredProcedure;
+
                         insertCmd.Parameters.AddWithValue("@ActionType", "InsertPacking");
                         insertCmd.Parameters.AddWithValue("@COMPANY_ID", packing.COMPANY_ID);
+                        insertCmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO ?? (object)DBNull.Value);
                         insertCmd.Parameters.AddWithValue("@ART_NO", packing.ART_NO);
-                        //insertCmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO);
                         insertCmd.Parameters.AddWithValue("@DESCRIPTION", packing.DESCRIPTION);
                         insertCmd.Parameters.AddWithValue("@CATEGORY_ID", packing.CATEGORY_ID);
                         insertCmd.Parameters.AddWithValue("@COLOR", packing.COLOR);
@@ -186,9 +172,33 @@ namespace MicroApi.DataLayer.Service
                         insertCmd.Parameters.AddWithValue("@COMBINATION", packing.COMBINATION);
                         insertCmd.Parameters.AddWithValue("@NEW_ARRIVAL_DAYS", packing.NEW_ARRIVAL_DAYS);
 
-                        insertCmd.ExecuteNonQuery();
-                        res.flag = 1;
-                        res.Message = "Insert successful";
+                        DataTable packingEntryTable = new DataTable();
+                        packingEntryTable.Columns.Add("ARTICLE_ID", typeof(long));
+                        packingEntryTable.Columns.Add("QUANTITY", typeof(float));
+                        packingEntryTable.Columns.Add("SIZE", typeof(string));
+
+                        if (packing.PackingEntries != null)
+                        {
+                            foreach (var entry in packing.PackingEntries)
+                            {
+                                packingEntryTable.Rows.Add(entry.ARTICLE_ID, entry.QUANTITY, entry.SIZE);
+                            }
+                        }
+
+                        // ✅ Add the structured parameter
+                        SqlParameter udtParam = new SqlParameter("@UDT_PACKING_ENTRY", SqlDbType.Structured);
+                        udtParam.TypeName = "UDT_PACKING_ENTRY";
+                        udtParam.Value = packingEntryTable;
+                        insertCmd.Parameters.Add(udtParam);
+
+                        using (SqlDataReader dr = insertCmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                res.flag = Convert.ToInt32(dr["flag"]);
+                                res.Message = dr["Message"].ToString();
+                            }
+                        }
                     }
                 }
             }
@@ -197,8 +207,10 @@ namespace MicroApi.DataLayer.Service
                 res.flag = 0;
                 res.Message = ex.Message;
             }
+
             return res;
         }
+
 
 
         public PackingResponse Update(PackingUpdate packing)
@@ -214,21 +226,23 @@ namespace MicroApi.DataLayer.Service
                     using (var cmd = new SqlCommand("SP_ManagePackingData", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
+
                         cmd.Parameters.AddWithValue("@ActionType", "UpdatePacking");
                         cmd.Parameters.AddWithValue("@ID", packing.ID);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", packing.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@ART_NO", packing.ART_NO);
-                        cmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO);
+                        cmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", packing.DESCRIPTION);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", packing.CATEGORY_ID);
                         cmd.Parameters.AddWithValue("@COLOR", packing.COLOR);
                         cmd.Parameters.AddWithValue("@PAIR_QTY", packing.PAIR_QTY);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", packing.IS_INACTIVE);
-                        cmd.Parameters.AddWithValue("@ART_SERIAL", packing.ART_SERIAL);
-                        cmd.Parameters.AddWithValue("@PART_NO", packing.PART_NO);
-                        cmd.Parameters.AddWithValue("@ALIAS_NO", packing.ALIAS_NO);
+                        cmd.Parameters.AddWithValue("@ART_SERIAL", packing.ART_SERIAL ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IS_ANY_QTY", packing.IS_ANY_QTY);
+                        cmd.Parameters.AddWithValue("@PART_NO", packing.PART_NO ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ALIAS_NO", packing.ALIAS_NO ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_ANY_COMB", packing.IS_ANY_COMB);
-                        cmd.Parameters.AddWithValue("@PACK_PRICE", packing.PRICE);
+                        cmd.Parameters.AddWithValue("@PACK_PRICE", packing.PACK_PRICE);
                         cmd.Parameters.AddWithValue("@UNIT_ID", packing.UNIT_ID);
                         cmd.Parameters.AddWithValue("@IS_PURCHASABLE", packing.IS_PURCHASABLE);
                         cmd.Parameters.AddWithValue("@SUPP_ID", packing.SUPP_ID);
@@ -236,12 +250,37 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", packing.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@BRAND_ID", packing.BRAND_ID);
                         cmd.Parameters.AddWithValue("@COMBINATION", packing.COMBINATION);
-                       // cmd.Parameters.AddWithValue("@IMAGE_NAME", packing.IMAGE_NAME);
                         cmd.Parameters.AddWithValue("@NEW_ARRIVAL_DAYS", packing.NEW_ARRIVAL_DAYS);
 
-                        cmd.ExecuteNonQuery();
-                        res.flag = 1;
-                        res.Message = "Update successful";
+                        // ✅ Add UDT parameter for packing entries
+                        DataTable packingEntryTable = new DataTable();
+                        packingEntryTable.Columns.Add("ARTICLE_ID", typeof(long));
+                        packingEntryTable.Columns.Add("QUANTITY", typeof(float));
+                        packingEntryTable.Columns.Add("SIZE", typeof(string));
+
+                        if (packing.PackingEntries != null)
+                        {
+                            foreach (var entry in packing.PackingEntries)
+                            {
+                                packingEntryTable.Rows.Add(entry.ARTICLE_ID, entry.QUANTITY, entry.SIZE);
+                            }
+                        }
+
+                        SqlParameter udtParam = new SqlParameter("@UDT_PACKING_ENTRY", SqlDbType.Structured)
+                        {
+                            TypeName = "UDT_PACKING_ENTRY",
+                            Value = packingEntryTable
+                        };
+                        cmd.Parameters.Add(udtParam);
+
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                res.flag = Convert.ToInt32(dr["flag"]);
+                                res.Message = dr["Message"].ToString();
+                            }
+                        }
                     }
                 }
             }
@@ -250,13 +289,15 @@ namespace MicroApi.DataLayer.Service
                 res.flag = 0;
                 res.Message = ex.Message;
             }
+
             return res;
         }
 
 
-        public PackingResponse GetPackingById(int id)
+
+        public PackingSelectResponse GetPackingById(int id)
         {
-            PackingResponse response = new PackingResponse();
+            PackingSelectResponse response = new PackingSelectResponse();
 
             try
             {
@@ -273,9 +314,12 @@ namespace MicroApi.DataLayer.Service
 
                         using (var reader = cmd.ExecuteReader())
                         {
+                            PackingSelect packing = null;
+
+                            // ✅ Read master data (first result set)
                             if (reader.Read())
                             {
-                                response.Data = new PackingUpdate
+                                packing = new PackingSelect
                                 {
                                     ID = reader.GetInt64(reader.GetOrdinal("ID")),
                                     COMPANY_ID = reader.IsDBNull(reader.GetOrdinal("COMPANY_ID")) ? 0 : reader.GetInt32(reader.GetOrdinal("COMPANY_ID")),
@@ -283,36 +327,52 @@ namespace MicroApi.DataLayer.Service
                                     ORDER_NO = reader.IsDBNull(reader.GetOrdinal("OrderNo")) ? null : reader.GetString(reader.GetOrdinal("OrderNo")),
                                     DESCRIPTION = reader.IsDBNull(reader.GetOrdinal("PackingName")) ? null : reader.GetString(reader.GetOrdinal("PackingName")),
                                     COLOR = reader.IsDBNull(reader.GetOrdinal("Color")) ? null : reader.GetString(reader.GetOrdinal("Color")),
-                                    PRICE = reader.IsDBNull(reader.GetOrdinal("PackPrice")) ? 0 : (float)reader.GetDouble(reader.GetOrdinal("PackPrice")),
+                                    PACK_PRICE = reader.IsDBNull(reader.GetOrdinal("PackPrice")) ? 0 : (float)reader.GetDouble(reader.GetOrdinal("PackPrice")),
                                     PAIR_QTY = reader.IsDBNull(reader.GetOrdinal("PairQty")) ? 0 : reader.GetInt32(reader.GetOrdinal("PairQty")),
                                     PART_NO = reader.IsDBNull(reader.GetOrdinal("PartNo")) ? null : reader.GetString(reader.GetOrdinal("PartNo")),
                                     ALIAS_NO = reader.IsDBNull(reader.GetOrdinal("AliasNo")) ? null : reader.GetString(reader.GetOrdinal("AliasNo")),
                                     UNIT_ID = reader.IsDBNull(reader.GetOrdinal("UnitId")) ? 0 : reader.GetInt32(reader.GetOrdinal("UnitId")),
-                                   // UnitCode = reader.IsDBNull(reader.GetOrdinal("UnitCode")) ? null : reader.GetString(reader.GetOrdinal("UnitCode")),
                                     ARTICLE_TYPE = reader.IsDBNull(reader.GetOrdinal("ArticleType")) ? 0 : reader.GetInt32(reader.GetOrdinal("ArticleType")),
-                                   // ARTICLE_TYPE_NAME = reader.IsDBNull(reader.GetOrdinal("Type")) ? null : reader.GetString(reader.GetOrdinal("Type")),
                                     CATEGORY_ID = reader.IsDBNull(reader.GetOrdinal("CategoryId")) ? 0 : reader.GetInt32(reader.GetOrdinal("CategoryId")),
-                                    //CATEGORY_NAME = reader.IsDBNull(reader.GetOrdinal("Category")) ? null : reader.GetString(reader.GetOrdinal("Category")),
                                     BRAND_ID = reader.IsDBNull(reader.GetOrdinal("BrandId")) ? 0 : reader.GetInt32(reader.GetOrdinal("BrandId")),
-                                   // BRAND_NAME = reader.IsDBNull(reader.GetOrdinal("Brand")) ? null : reader.GetString(reader.GetOrdinal("Brand")),
                                     ART_SERIAL = reader.IsDBNull(reader.GetOrdinal("ArtSerial")) ? null : reader.GetString(reader.GetOrdinal("ArtSerial")),
-                                   // IMAGE_NAME = reader.IsDBNull(reader.GetOrdinal("ImageName")) ? null : reader.GetString(reader.GetOrdinal("ImageName")),
                                     NEW_ARRIVAL_DAYS = reader.IsDBNull(reader.GetOrdinal("NewArrivalDays")) ? 0 : reader.GetInt32(reader.GetOrdinal("NewArrivalDays")),
                                     IS_STOPPED = reader.IsDBNull(reader.GetOrdinal("IsStopped")) ? false : reader.GetBoolean(reader.GetOrdinal("IsStopped")),
                                     SUPP_ID = reader.IsDBNull(reader.GetOrdinal("SupplierId")) ? 0 : reader.GetInt32(reader.GetOrdinal("SupplierId")),
-                                    //SupplierName = reader.IsDBNull(reader.GetOrdinal("Supplier")) ? null : reader.GetString(reader.GetOrdinal("Supplier")),
                                     COMBINATION = reader.IsDBNull(reader.GetOrdinal("Combination")) ? null : reader.GetString(reader.GetOrdinal("Combination")),
                                     IS_PURCHASABLE = reader.IsDBNull(reader.GetOrdinal("IsPurchasable")) ? false : reader.GetBoolean(reader.GetOrdinal("IsPurchasable")),
                                     IS_EXPORT = reader.IsDBNull(reader.GetOrdinal("IsExport")) ? false : reader.GetBoolean(reader.GetOrdinal("IsExport")),
                                     IS_ANY_COMB = reader.IsDBNull(reader.GetOrdinal("IsAnyComb")) ? false : reader.GetBoolean(reader.GetOrdinal("IsAnyComb")),
                                     IS_INACTIVE = reader.IsDBNull(reader.GetOrdinal("IsInactive")) ? false : reader.GetBoolean(reader.GetOrdinal("IsInactive")),
-                                    CreatedDate = reader.IsDBNull(reader.GetOrdinal("CreatedDate")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
+                                    CreatedDate = reader.IsDBNull(reader.GetOrdinal("CreatedDate")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
+                                    COST = reader["Cost"] != DBNull.Value ? Convert.ToSingle(reader["Cost"]) : 0,
+                                    Packing_Entry = new List<Packing_Entry>() 
                                 };
                             }
+
+                            if (reader.NextResult() && packing != null)
+                            {
+                                while (reader.Read())
+                                {
+                                    var entry = new Packing_Entry
+                                    {
+                                        ENTRY_ID = reader["ENTRY_ID"] != DBNull.Value ? Convert.ToInt32(reader["ENTRY_ID"]) : 0,
+                                        PACK_ID = reader["PACK_ID"] != DBNull.Value ? Convert.ToInt32(reader["PACK_ID"]) : 0,
+                                        ARTICLE_ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_ID"]) : 0,
+                                        QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]):0,
+                                        SIZE = reader["SIZE"] != DBNull.Value ? Convert.ToString(reader["SIZE"]) : null,
+                                        UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0
+                                    };
+                                    packing.Packing_Entry.Add(entry);
+                                }
+                            }
+
+                            response.Data = packing;
                         }
+
+                        response.flag = 1;
+                        response.Message = "Success";
                     }
-                    response.flag = 1;
-                    response.Message = "Success";
                 }
             }
             catch (Exception ex)
@@ -323,6 +383,8 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
+
 
         public PackingListResponses GetPackingList()
         {

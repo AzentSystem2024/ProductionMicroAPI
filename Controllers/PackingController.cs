@@ -72,9 +72,9 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("Select/{id:int}")]
-        public PackingResponse Select(int id)
+        public PackingSelectResponse Select(int id)
         {
-            PackingResponse res = new PackingResponse();
+            PackingSelectResponse res = new PackingSelectResponse();
             try
             {
                 res = _packingService.GetPackingById(id);

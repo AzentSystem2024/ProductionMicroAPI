@@ -30,17 +30,30 @@ namespace MicroApi.DataLayer.Service
                     {
 
                         DataTable tvp = new DataTable();
+                        tvp.Columns.Add("BRAND_ID", typeof(int));
+                        tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
+                        tvp.Columns.Add("CATEGORY_ID", typeof(int));
+                        tvp.Columns.Add("ART_NO", typeof(int));
+                        tvp.Columns.Add("COLOR_ID", typeof(int));
                         tvp.Columns.Add("CONTENT", typeof(string));
-                        tvp.Columns.Add("PACKING_ID", typeof(int));    
+                        tvp.Columns.Add("PACKING_ID", typeof(int));
                         tvp.Columns.Add("QUANTITY", typeof(float));
+                        
+
 
 
                         foreach (var detail in salesOrder.Details)
                         {
                             tvp.Rows.Add(
+                                detail.BRAND_ID ?? 0,
+                                detail.ARTICLE_TYPE ?? 0,
+                                detail.CATEGORY_ID ?? 0,
+                                detail.ART_NO ?? 0,
+                                detail.COLOR_ID ?? 0,
                                 detail.CONTENT ?? string.Empty,
-                                detail.PACKING_ID ?? 0,   
+                                detail.PACKING_ID ?? 0,
                                 detail.QUANTITY ?? 0
+                                
                             );
                         }
                        
@@ -94,6 +107,11 @@ namespace MicroApi.DataLayer.Service
                     try
                     {
                         DataTable tvp = new DataTable();
+                        tvp.Columns.Add("BRAND_ID", typeof(int));
+                        tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
+                        tvp.Columns.Add("CATEGORY_ID", typeof(int));
+                        tvp.Columns.Add("ART_NO", typeof(int));
+                        tvp.Columns.Add("COLOR_ID", typeof(int));
                         tvp.Columns.Add("CONTENT", typeof(string));
                         tvp.Columns.Add("PACKING_ID", typeof(int));
                         tvp.Columns.Add("QUANTITY", typeof(float));
@@ -103,7 +121,12 @@ namespace MicroApi.DataLayer.Service
                             foreach (var detail in salesOrder.Details)
                             {
                                 tvp.Rows.Add(
-                                    detail.CONTENT ?? string.Empty,
+                                 detail.BRAND_ID ?? 0,
+                                detail.ARTICLE_TYPE ?? 0,
+                                detail.CATEGORY_ID ?? 0,
+                                detail.ART_NO ?? 0,
+                                detail.COLOR_ID ?? 0,
+                                detail.CONTENT ?? string.Empty,
                                 detail.PACKING_ID ?? 0,
                                 detail.QUANTITY ?? 0
                                 );
@@ -205,12 +228,12 @@ namespace MicroApi.DataLayer.Service
                                 response.Data.CUST_ID = reader["CUST_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUST_ID"]) : 0;
                                 response.Data.CUST_NAME = reader["CUST_NAME"]?.ToString();
                                 response.Data.TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0;
-                                response.Data.DELIVERY_ADDRESS_ID = reader["DELIVERY_ADDRESS"] != DBNull.Value ? Convert.ToInt32(reader["DELIVERY_ADDRESS"]) : 0;
+                                response.Data.DELIVERY_ADDRESS = reader["DELIVERY_ADDRESS"] != DBNull.Value ? Convert.ToInt32(reader["DELIVERY_ADDRESS"]) : 0;
                                 response.Data.WAREHOUSE = reader["WAREHOUSE"] != DBNull.Value ? Convert.ToInt32(reader["WAREHOUSE"]) : 0;
                                 response.Data.REMARKS = reader["REMARKS"]?.ToString();
                                 response.Data.TOTAL_QTY = reader["TOTAL_QTY"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_QTY"]) : 0;
                                 response.Data.TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0;
-                                response.Data.DELIVERY_ADDRESS = reader["ADDRESS1"]?.ToString();
+                               // response.Data.DELIVERY_ADDRESS = reader["ADDRESS1"]?.ToString();
                                 response.Data.ADDRESS = reader["DELIVERY_ADDRESS_FULL"]?.ToString();
                                 isHeaderSet = true;
                             }
@@ -220,6 +243,11 @@ namespace MicroApi.DataLayer.Service
                                
                                 CONTENT = reader["CONTENT"] != DBNull.Value ? Convert.ToString(reader["CONTENT"]) : null,
                                 PACKING_ID = reader["PACKING_ID"] != DBNull.Value ? Convert.ToInt32(reader["PACKING_ID"]) : 0,
+                                BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
+                                ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
+                                CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
+                                ART_NO = reader["ART_NO"] != DBNull.Value ? Convert.ToInt32(reader["ART_NO"]) : 0,
+                                COLOR_ID = reader["COLOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["COLOR_ID"]) : 0,
                                 QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0
                             };
 
@@ -657,6 +685,11 @@ namespace MicroApi.DataLayer.Service
                     try
                     {
                         DataTable tvp = new DataTable();
+                        tvp.Columns.Add("BRAND_ID", typeof(int));
+                        tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
+                        tvp.Columns.Add("CATEGORY_ID", typeof(int));
+                        tvp.Columns.Add("ART_NO", typeof(int));
+                        tvp.Columns.Add("COLOR_ID", typeof(int));
                         tvp.Columns.Add("CONTENT", typeof(string));
                         tvp.Columns.Add("PACKING_ID", typeof(int));
                         tvp.Columns.Add("QUANTITY", typeof(float));
@@ -666,9 +699,14 @@ namespace MicroApi.DataLayer.Service
                             foreach (var detail in request.Details)
                             {
                                 tvp.Rows.Add(
-                                    detail.CONTENT ?? string.Empty,
-                                     detail.PACKING_ID ?? 0,
-                                     detail.QUANTITY ?? 0
+                                 detail.BRAND_ID ?? 0,
+                                 detail.ARTICLE_TYPE ?? 0,
+                                 detail.CATEGORY_ID ?? 0,
+                                 detail.ART_NO ?? 0,
+                                 detail.COLOR_ID ?? 0,
+                                 detail.CONTENT ?? string.Empty,
+                                 detail.PACKING_ID ?? 0,
+                                 detail.QUANTITY ?? 0
                                 );
                             }
                         }
