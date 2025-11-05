@@ -1,5 +1,6 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
+using MicroApi.DataLayer.Services;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,14 +82,15 @@ namespace MicroApi.Controllers
         {
             try
             {
-                _salesOrderService.EditData(salesOrderUpdate);
-                return Ok(new { Flag = "1", Message = "Success" });
+                var response = _salesOrderService.EditData(salesOrderUpdate);
+                return Ok(response);
             }
             catch (Exception ex)
             {
                 return BadRequest(new { Flag = "0", Message = ex.Message });
             }
         }
+
 
         [HttpPost]
         [Route("delete/{soId:int}")]
@@ -229,6 +231,20 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
             }
         }
+        [HttpPost]
+        [Route("getwarehouse")]
+        public IActionResult GetWarehouseByCustId(SOQUOTATIONRequest request)
+        {
+            try
+            {
+                var response = _salesOrderService.GetWarehouseByCustId(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = "Error: " + ex.Message });
+            }
+        }
 
         [HttpPost("approve")]
         public IActionResult ApproveSalesOrder([FromBody] SalesOrderUpdate request)
@@ -273,6 +289,21 @@ namespace MicroApi.Controllers
                 return Ok(new { Flag = 0, Message = ex.Message });
             }
         }
+        [HttpPost]
+        [Route("getsubdealer")]
+        public List<Subdealers> GetSubdealer(SubdealerRequest id)
+        {
+            List<Subdealers> subdealer = new List<Subdealers>();
 
+            try
+            {
+
+                subdealer = _salesOrderService.GetSubdealer(id);
+            }
+            catch (Exception ex)
+            {
+            }
+            return subdealer.ToList();
+        }
     }
 }

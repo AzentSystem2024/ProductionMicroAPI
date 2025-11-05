@@ -346,7 +346,7 @@ namespace MicroApi.DataLayer.Service
                                     IS_INACTIVE = reader.IsDBNull(reader.GetOrdinal("IsInactive")) ? false : reader.GetBoolean(reader.GetOrdinal("IsInactive")),
                                     CreatedDate = reader.IsDBNull(reader.GetOrdinal("CreatedDate")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
                                     COST = reader["Cost"] != DBNull.Value ? Convert.ToSingle(reader["Cost"]) : 0,
-                                    Packing_Entry = new List<Packing_Entry>() 
+                                    PackingEntries = new List<Packing_Entry>() 
                                 };
                             }
 
@@ -359,11 +359,11 @@ namespace MicroApi.DataLayer.Service
                                         ENTRY_ID = reader["ENTRY_ID"] != DBNull.Value ? Convert.ToInt32(reader["ENTRY_ID"]) : 0,
                                         PACK_ID = reader["PACK_ID"] != DBNull.Value ? Convert.ToInt32(reader["PACK_ID"]) : 0,
                                         ARTICLE_ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_ID"]) : 0,
-                                        QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]):0,
+                                        QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
                                         SIZE = reader["SIZE"] != DBNull.Value ? Convert.ToString(reader["SIZE"]) : null,
                                         UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0
                                     };
-                                    packing.Packing_Entry.Add(entry);
+                                    packing.PackingEntries.Add(entry);
                                 }
                             }
 

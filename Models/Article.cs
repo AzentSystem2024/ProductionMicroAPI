@@ -23,7 +23,21 @@ namespace MicroApi.Models
         public bool IS_COMPONENT { get; set; }
         public int? COMPONENT_ARTICLE_ID { get; set; }
         public DateTime? CREATED_DATE { get; set; }
+        public string? STANDARD_PACKING { get; set; }
+        public List<ArticleBOM> BOM { get; set; }
         public List<Sizes> Sizes { get; set; }
+    }
+    public class ArticleBOM
+    {
+        
+        public string? ITEM_CODE { get; set; }
+        public float? QUANTITY { get; set; } 
+        public int? ARTICLE_ID { get; set; }
+        public int? BOM_ID { get; set; }// FOR SELECT
+        public string? DESCRIPTION { get; set; }
+        public string? UOM { get; set; }
+        public int? ITEM_ID { get; set; }
+
     }
 
     public class ArticleResponse
@@ -65,7 +79,9 @@ namespace MicroApi.Models
         public string? ComponentArticleName { get; set; }
         public DateTime? CREATED_DATE { get; set; }
         public List<Sizes> SIZES { get; set; }
- 
+        public string? STANDARD_PACKING { get; set; }
+        public List<ArticleBOM>? BOM { get; set; }
+
     }
 
 
@@ -99,5 +115,22 @@ namespace MicroApi.Models
        public string? ART_NO { get; set; }
     }
 
+    public class ItemdataResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public ItemData? Data { get; set; }
+    }
 
+    public class ItemData
+    {
+        public long ID { get; set; }
+        public string DESCRIPTION { get; set; }
+        public string UOM { get; set; }
+    }
+
+    public class ItemcodeRequest
+    {
+        public string ITEM_CODE { get; set; }
+    }
 }

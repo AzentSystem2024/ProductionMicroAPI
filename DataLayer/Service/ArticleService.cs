@@ -13,56 +13,80 @@ namespace MicroApi.Service
     {
         public ArticleResponse Insert(Article article)
         {
-            ArticleResponse res = new ArticleResponse();
+            var res = new ArticleResponse();
             try
             {
+                // Validation: prevent conflicting component settings
                 if (article.IS_COMPONENT && article.COMPONENT_ARTICLE_ID.HasValue && article.COMPONENT_ARTICLE_ID.Value != 0)
                 {
                     res.flag = 0;
-                    res.Message = "IsComponent cannot be true while ComponentArticleID is set.";
+                    res.Message = "IS_COMPONENT cannot be true while COMPONENT_ARTICLE_ID is set.";
                     return res;
                 }
 
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    if (connection.State == ConnectionState.Closed) connection.Open();
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
 
                     using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
+                        // Basic parameters
                         cmd.Parameters.AddWithValue("@ACTION", 1);
-                        cmd.Parameters.AddWithValue("@ART_NO", article.ART_NO);
-                        cmd.Parameters.AddWithValue("@DESCRIPTION", (object)article.DESCRIPTION ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@COLOR", (object)article.COLOR ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ART_NO", article.ART_NO ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DESCRIPTION", article.DESCRIPTION ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COLOR", article.COLOR ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@PRICE", article.PRICE);
                         cmd.Parameters.AddWithValue("@PACK_QTY", article.PACK_QTY);
-                        cmd.Parameters.AddWithValue("@PART_NO", (object)article.PART_NO ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@ALIAS_NO", (object)article.ALIAS_NO ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PART_NO", article.PART_NO ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ALIAS_NO", article.ALIAS_NO ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", article.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", article.CATEGORY_ID);
-                        cmd.Parameters.AddWithValue("@IMAGE_NAME", (object)article.IMAGE_NAME ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@BRAND_ID", article.BRAND_ID);
                         cmd.Parameters.AddWithValue("@NEW_ARRIVAL_DAYS", article.NEW_ARRIVAL_DAYS);
                         cmd.Parameters.AddWithValue("@IS_STOPPED", article.IS_STOPPED);
                         cmd.Parameters.AddWithValue("@SUPPLIER_ID", article.SUPPLIER_ID);
                         cmd.Parameters.AddWithValue("@IS_COMPONENT", article.IS_COMPONENT);
                         cmd.Parameters.AddWithValue("@COMPONENT_ARTICLE_ID", (object)article.COMPONENT_ARTICLE_ID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
+                        cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? (object)DBNull.Value);
 
+                        // ✅ Structured parameter for SIZES (UDT_TB_ARTICLE_SIZE)
                         var sizeTable = new DataTable();
                         sizeTable.Columns.Add("SIZE", typeof(string));
-                        foreach (var size in article.Sizes)
+                        if (article.Sizes != null)
                         {
-                            sizeTable.Rows.Add(size.SizeValue);
+                            foreach (var size in article.Sizes)
+                            {
+                                sizeTable.Rows.Add(size.SizeValue);
+                            }
                         }
-
                         var sizeParam = cmd.Parameters.AddWithValue("@SIZES", sizeTable);
                         sizeParam.SqlDbType = SqlDbType.Structured;
                         sizeParam.TypeName = "dbo.UDT_TB_ARTICLE_SIZE";
 
+                        // ✅ Structured parameter for BOM (UDT_TB_ARTICLE_BOM)
+                        var bomTable = new DataTable();
+                        bomTable.Columns.Add("ITEM_CODE", typeof(string));
+                        bomTable.Columns.Add("QUANTITY", typeof(decimal));
+                        if (article.BOM != null)
+                        {
+                            foreach (var item in article.BOM)
+                            {
+                                bomTable.Rows.Add(item.ITEM_CODE, item.QUANTITY);
+                            }
+                        }
+                        var bomParam = cmd.Parameters.AddWithValue("@UDT_TB_ARTICLE_BOM", bomTable);
+                        bomParam.SqlDbType = SqlDbType.Structured;
+                        bomParam.TypeName = "dbo.UDT_TB_ARTICLE_BOM";
+
+                        // Execute
                         cmd.ExecuteNonQuery();
+
                         res.flag = 1;
                         res.Message = "Success";
                     }
@@ -73,11 +97,14 @@ namespace MicroApi.Service
                 res.flag = 0;
                 res.Message = ex.Message;
             }
+
             return res;
         }
+
         public ArticleResponse Update(ArticleUpdate article)
         {
             var res = new ArticleResponse();
+
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
@@ -89,41 +116,64 @@ namespace MicroApi.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
+                        // 🔹 Main parameters
                         cmd.Parameters.AddWithValue("@ACTION", 2);
-                        cmd.Parameters.AddWithValue("@ID",  article.ID ?? 0);
+                        cmd.Parameters.AddWithValue("@ID", article.ID ?? 0);
                         cmd.Parameters.AddWithValue("@ART_NO", article.ART_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", article.DESCRIPTION ?? string.Empty);
                         cmd.Parameters.AddWithValue("@COLOR", article.COLOR ?? string.Empty);
                         cmd.Parameters.AddWithValue("@PRICE", article.PRICE ?? 0);
                         cmd.Parameters.AddWithValue("@PACK_QTY", article.PACK_QTY);
-                        cmd.Parameters.AddWithValue("@PART_NO", article.PART_NO);
-                        cmd.Parameters.AddWithValue("@ALIAS_NO", article.ALIAS_NO);
+                        cmd.Parameters.AddWithValue("@PART_NO", article.PART_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ALIAS_NO", article.ALIAS_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? 0);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", article.ARTICLE_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", article.CATEGORY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@BRAND_ID", article.BRAND_ID ?? 0);
                         cmd.Parameters.AddWithValue("@NEW_ARRIVAL_DAYS", article.NEW_ARRIVAL_DAYS ?? 0);
                         cmd.Parameters.AddWithValue("@IS_STOPPED", article.IS_STOPPED);
+                        //cmd.Parameters.AddWithValue("@IS_INACTIVE", article.IS_INACTIVE);
                         cmd.Parameters.AddWithValue("@SUPPLIER_ID", article.SUPPLIER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@IS_COMPONENT", article.IS_COMPONENT);
                         cmd.Parameters.AddWithValue("@COMPONENT_ARTICLE_ID", (object)article.COMPONENT_ARTICLE_ID ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME);
-                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
+                        cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
+                        cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? string.Empty);
 
+                        // 🔹 Structured parameter for SIZES
                         var sizeTable = new DataTable();
                         sizeTable.Columns.Add("SIZE", typeof(string));
-                        foreach (var size in article.SIZES)
+
+                        if (article.SIZES != null)
                         {
-                            sizeTable.Rows.Add(size.SizeValue);
+                            foreach (var size in article.SIZES)
+                                sizeTable.Rows.Add(size.SizeValue);
                         }
 
                         var sizeParam = cmd.Parameters.AddWithValue("@SIZES", sizeTable);
                         sizeParam.SqlDbType = SqlDbType.Structured;
                         sizeParam.TypeName = "dbo.UDT_TB_ARTICLE_SIZE";
 
+                        // 🔹 Structured parameter for BOMItems
+                        var bomTable = new DataTable();
+                        bomTable.Columns.Add("ITEM_CODE", typeof(string));
+                        bomTable.Columns.Add("QUANTITY", typeof(decimal));
+
+                        if (article.BOM != null)
+                        {
+                            foreach (var bom in article.BOM)
+                                bomTable.Rows.Add(bom.ITEM_CODE, bom.QUANTITY);
+                        }
+
+                        var bomParam = cmd.Parameters.AddWithValue("@UDT_TB_ARTICLE_BOM", bomTable);
+                        bomParam.SqlDbType = SqlDbType.Structured;
+                        bomParam.TypeName = "dbo.UDT_TB_ARTICLE_BOM";
+
+                        // 🔹 Execute
                         cmd.ExecuteNonQuery();
+
                         res.flag = 1;
-                        res.Message = "Success";
+                        res.Message = "Updated Successfully";
                     }
                 }
             }
@@ -132,8 +182,10 @@ namespace MicroApi.Service
                 res.flag = 0;
                 res.Message = ex.Message;
             }
+
             return res;
         }
+
         public ArticleResponse GetArticleById(ArticleSelectRequest request)
         {
             ArticleResponse res = new ArticleResponse();
@@ -158,6 +210,7 @@ namespace MicroApi.Service
 
                         using (var reader = cmd.ExecuteReader())
                         {
+                            // ✅ 1. Read Main Article Details
                             if (reader.Read())
                             {
                                 articleDetails = new ArticleUpdate
@@ -184,25 +237,55 @@ namespace MicroApi.Service
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString() ?? string.Empty,
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString() ?? string.Empty,
                                     LAST_ORDER_NO = reader["LASTORDERNO"]?.ToString() ?? string.Empty,
-                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])) : (DateTime?)null
-
+                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value
+                                        ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"]))
+                                        : (DateTime?)null,
+                                   STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? string.Empty
                                 };
 
+                                // Parse JSON Sizes
                                 if (reader["SIZES"] != DBNull.Value)
                                 {
                                     var sizesJson = reader["SIZES"].ToString();
                                     articleDetails.SIZES = JsonConvert.DeserializeObject<List<Sizes>>(sizesJson);
                                 }
+                            }
 
-                                res.Data = articleDetails;
-                                res.flag = 1;
-                                res.Message = "Success";
+                            // ✅ 2. Move to BOM result set
+                            if (reader.NextResult())
+                            {
+                                var bomList = new List<ArticleBOM>();
+                                while (reader.Read())
+                                {
+                                    bomList.Add(new ArticleBOM
+                                    {
+                                        BOM_ID = reader["BOM_ID"] != DBNull.Value ? Convert.ToInt32(reader["BOM_ID"]) : 0,
+                                        ARTICLE_ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_ID"]) : 0,
+                                        ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
+                                        QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
+                                        ITEM_CODE = reader["ITEM_CODE"]?.ToString() ?? string.Empty,
+                                        DESCRIPTION = reader["DESCRIPTION"]?.ToString() ?? string.Empty,
+                                        UOM = reader["UOM"]?.ToString() ?? string.Empty,
+                                    });
+                                }
+
+                                if (articleDetails != null)
+                                    articleDetails.BOM = bomList;
+                            }
+
+                            // ✅ 3. Read final success flag (optional)
+                            if (reader.NextResult() && reader.Read())
+                            {
+                                res.flag = reader["Flag"] != DBNull.Value ? Convert.ToInt32(reader["Flag"]) : 0;
+                                res.Message = reader["Message"]?.ToString() ?? string.Empty;
                             }
                             else
                             {
-                                res.flag = 0;
-                                res.Message = "No record found";
+                                res.flag = 1;
+                                res.Message = "Success";
                             }
+
+                            res.Data = articleDetails;
                         }
                     }
                 }
@@ -215,6 +298,7 @@ namespace MicroApi.Service
 
             return res;
         }
+
         public ArticleListResponse GetArticleList()
         {
             ArticleListResponse res = new ArticleListResponse();
@@ -262,6 +346,7 @@ namespace MicroApi.Service
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
                                     CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])) : (DateTime?)null,
+                                    STANDARD_PACKING= reader["STD_PACKING"]?.ToString() ?? string.Empty,
                                     SIZES = new List<Sizes>()
                                 };
 
@@ -314,6 +399,57 @@ namespace MicroApi.Service
 
             return res;
         }
+        public ItemdataResponse GetItemByCode(ItemcodeRequest request)
+        {
+            ItemdataResponse res = new ItemdataResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT ID, DESCRIPTION, UOM 
+                             FROM TB_ITEMS 
+                             WHERE IS_DELETED = 0 AND ITEM_CODE = @ITEM_CODE";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@ITEM_CODE", request.ITEM_CODE);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                res.Data = new ItemData
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString() ?? string.Empty,
+                                    UOM = reader["UOM"]?.ToString() ?? string.Empty
+                                };
+
+                                res.flag = 1;
+                                res.Message = "Success";
+                            }
+                            else
+                            {
+                                res.flag = 0;
+                                res.Message = "No record found";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+
 
         public ArticleResponse DeleteArticleData(DeleteArticleRequest request)
         {

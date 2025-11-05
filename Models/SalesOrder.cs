@@ -13,17 +13,18 @@
         public int? DELIVERY_ADDRESS { get; set; }
         public int? WAREHOUSE { get; set; }
         public float? TOTAL_QTY { get; set; }
+        public int? SUBDEALER_ID { get; set; }
         public List<SalesOrderDetail> Details { get; set; }
     }
 
     public class SalesOrderDetail
     {
-        public int? PACKING_ID { get; set; }
+        public string? PACKING_ID { get; set; }
         public int? BRAND_ID { get; set; }
         public int? ARTICLE_TYPE { get; set; }
-        public int? CATEGORY_ID { get; set; }
-        public int? ART_NO { get; set; }
-        public int? COLOR_ID { get; set; }
+        public string? CATEGORY_ID { get; set; }
+        public string? ART_NO { get; set; }
+        public string? COLOR_ID { get; set; }
         public string? CONTENT { get; set; }
         public float? QUANTITY { get; set; }
 
@@ -44,17 +45,18 @@
         public int TRANS_STATUS { get; set; }
         //public string DELIVERY_ADDRESS { get; set; }
         public string ADDRESS { get; set; }
+        public int? SUBDEALER_ID { get; set; }
         public List<SalesOrderDetailSelect> Details { get; set; }
     }
 
     public class SalesOrderDetailSelect
     {
-        public int? PACKING_ID { get; set; }
+        public string? PACKING_ID { get; set; }
         public int? BRAND_ID { get; set; }
         public int? ARTICLE_TYPE { get; set; }
-        public int? CATEGORY_ID { get; set; }
-        public int? ART_NO { get; set; }
-        public int? COLOR_ID { get; set; }
+        public string? CATEGORY_ID { get; set; }
+        public string? ART_NO { get; set; }
+        public string? COLOR_ID { get; set; }
         public string? CONTENT { get; set; }
         public float? QUANTITY { get; set; }
 
@@ -90,6 +92,7 @@
         public int? TRANS_STATUS { get; set; }
         public string? DELIVERY_ADDRESS { get; set; }
         public string? ADDRESS { get; set; }
+        public int? SUBDEALER_ID { get; set; }
     }
 
 
@@ -130,6 +133,7 @@
         public int? DELIVERY_ADDRESS { get; set; }
         public int? WAREHOUSE { get; set; }
         public float? TOTAL_QTY { get; set; }
+        public int? SUBDEALER_ID { get; set; }
         public List<SalesOrderDetail> Details { get; set; }
     }
 
@@ -174,7 +178,6 @@
     public class LatestVocherNO
     {
         public string? VOCHERNO { get; set; }
-        public int? TRANS_ID { get; set; }
     }
     public class LatestVocherNOResponse
     {
@@ -192,6 +195,7 @@
     {
         public int? ID { get; set; }
         public decimal? PAIR_QTY { get; set; }
+        public string? COMBINATION { get; set; }
     }
 
     public class PairResponse
@@ -200,7 +204,27 @@
         public string Message { get; set; }
         public List<PairDtl>? Data { get; set; }
     }
+    public class WarehouseResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<WarehouseDtl> Data { get; set; }
+    }
 
+    public class WarehouseDtl
+    {
+        public int? ID { get; set; }
+        public string WAREHOUSE_NAME { get; set; }
+    }
+    public class Subdealers
+    {
+        public int ID { get; set; }
+        public string? SUBDEALER { get; set; }
+    }
+    public class SubdealerRequest
+    {
+        public int? DEALER_ID { get; set; }
+    }
 }
     
 

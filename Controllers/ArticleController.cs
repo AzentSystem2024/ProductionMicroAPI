@@ -84,6 +84,22 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("getitem")]
+        public ItemdataResponse GetItemByCode(ItemcodeRequest request)
+        {
+            ItemdataResponse res = new ItemdataResponse();
+            try
+            {
+                res = _articleService.GetItemByCode(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
 
         [HttpPost]
         [Route("Delete")]

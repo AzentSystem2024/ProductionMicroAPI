@@ -23,8 +23,8 @@
         public string? MOBILE_NO { get; set; }
         public string? FAX_NO { get; set; }
         public string? LAST_NAME { get; set; }
-        public string? DOB { get; set; }
-        public int? NATIONALITY { get; set; }
+        //public string? DOB { get; set; }
+        //public int? NATIONALITY { get; set; }
         public string? NOTES { get; set; }
         public string? CUST_NAME { get; set; }
         public int? CREDIT_DAYS { get; set; }
@@ -48,14 +48,14 @@
         public string? COMPANY_NAME { get; set; }
         public string? STORE_NAME { get; set; }
         public string? VAT_RULE_DESCRIPTION { get; set; }
-        public bool? IS_COMPANY_BRANCH { get; set; }
-        public int? CUST_TYPE { get; set; }
+        public int? IS_COMPANY_BRANCH { get; set; }
         public int? DEALER_ID { get; set; }
-        public int? DEALER_TYPE { get; set; }
-        public int? DELIVERY_ADDRESS_ID { get; set; }
+        public int? CUST_TYPE { get; set; }
         public int? WAREHOUSE_ID { get; set; }
+        public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
+
     }
-   
+
     public class DeliveryAddress
     {
         public int Id { get; set; }
@@ -90,8 +90,8 @@
         public string? MOBILE_NO { get; set; }
         public string? FAX_NO { get; set; }
         public string? LAST_NAME { get; set; }
-        public string? DOB { get; set; }
-        public int? NATIONALITY { get; set; }
+        //public string? DOB { get; set; }
+        //public int? NATIONALITY { get; set; }
         public string? NOTES { get; set; }
         public string? CUST_NAME { get; set; }
         public int? CREDIT_DAYS { get; set; }
@@ -115,14 +115,36 @@
         public string? COMPANY_NAME { get; set; }
         public string? STORE_NAME { get; set; }
         public string? VAT_RULE_DESCRIPTION { get; set; }
-        public bool? IS_COMPANY_BRANCH { get; set; }
-        public int? CUST_TYPE { get; set; }
+        public int? IS_COMPANY_BRANCH { get; set; }
         public int? DEALER_ID { get; set; }
-        public int? DEALER_TYPE { get; set; }
-        public int? DELIVERY_ADDRESS_ID { get; set; }
+        public int? CUST_TYPE { get; set; }
         public int? WAREHOUSE_ID { get; set; }
+        public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
+
     }
-        public class CustomerResponse
+    public class CustDeliveryAddress
+    {
+        public int? ID { get; set; } //--->for select
+        public string? ADDRESS1 { get; set; }
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? LOCATION { get; set; }
+        public string? MOBILE { get; set; }
+        public string? PHONE { get; set; }
+    }
+    public class CustDeliveryAddressSelect
+    {
+        public int? ID { get; set; }
+        public string? ADDRESS1 { get; set; }
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? LOCATION { get; set; }
+        public string? MOBILE { get; set; }
+        public string? PHONE { get; set; }
+        
+    }
+
+    public class CustomerResponse
     {
         public string flag { get; set; }
         public string message { get; set; }

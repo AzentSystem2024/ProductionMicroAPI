@@ -50,8 +50,8 @@ namespace MicroApi.DataLayer.Services
                         MOBILE_NO = Convert.IsDBNull(dr["MOBILE_NO"]) ? null : Convert.ToString(dr["MOBILE_NO"]),
                         FAX_NO = Convert.IsDBNull(dr["FAX_NO"]) ? null : Convert.ToString(dr["FAX_NO"]),
                         LAST_NAME = Convert.IsDBNull(dr["LAST_NAME"]) ? null : Convert.ToString(dr["LAST_NAME"]),
-                        DOB = Convert.IsDBNull(dr["DOB"]) ? null : Convert.ToString(dr["DOB"]),
-                        NATIONALITY = Convert.IsDBNull(dr["NATIONALITY"]) ? 0 : Convert.ToInt32(dr["NATIONALITY"]),
+                        //DOB = Convert.IsDBNull(dr["DOB"]) ? null : Convert.ToString(dr["DOB"]),
+                        //NATIONALITY = Convert.IsDBNull(dr["NATIONALITY"]) ? 0 : Convert.ToInt32(dr["NATIONALITY"]),
                         NOTES = Convert.IsDBNull(dr["NOTES"]) ? null : Convert.ToString(dr["NOTES"]),
                         CUST_NAME = Convert.IsDBNull(dr["CUST_NAME"]) ? null : Convert.ToString(dr["CUST_NAME"]),
                         CREDIT_DAYS = Convert.IsDBNull(dr["CREDIT_DAYS"]) ? 0 : Convert.ToInt32(dr["CREDIT_DAYS"]),
@@ -64,7 +64,7 @@ namespace MicroApi.DataLayer.Services
                         CUST_VAT_RULE_ID = Convert.IsDBNull(dr["CUST_VAT_RULE_ID"]) ? 0 : Convert.ToInt32(dr["CUST_VAT_RULE_ID"]),
                         VAT_REGNO = Convert.IsDBNull(dr["VAT_REGNO"]) ? null : Convert.ToString(dr["VAT_REGNO"]),
                         IS_DELETED = Convert.IsDBNull(dr["IS_DELETED"]) ? (bool?)null : Convert.ToBoolean(dr["IS_DELETED"]),
-                        CUST_TYPE = Convert.IsDBNull(dr["CUST_TYPE"]) ? 0 : Convert.ToInt32(dr["CUST_TYPE"]),
+                        IS_COMPANY_BRANCH = Convert.IsDBNull(dr["IS_COMPANY_BRANCH"]) ? 0 : Convert.ToInt32(dr["IS_COMPANY_BRANCH"]),
 
                         LOYALTY_POINT = Convert.IsDBNull(dr["LOYALTY_POINT"]) ? (decimal?)null : Convert.ToDecimal(dr["LOYALTY_POINT"]),
 
@@ -76,9 +76,8 @@ namespace MicroApi.DataLayer.Services
                         COMPANY_NAME = Convert.IsDBNull(dr["COMPANY_NAME"]) ? null : Convert.ToString(dr["COMPANY_NAME"]),
                         STORE_NAME = Convert.IsDBNull(dr["STORE_NAME"]) ? null : Convert.ToString(dr["STORE_NAME"]),
                         VAT_RULE_DESCRIPTION = Convert.IsDBNull(dr["VAT_RULE_DESCRIPTION"]) ? null : Convert.ToString(dr["VAT_RULE_DESCRIPTION"]),
-                        DEALER_TYPE = Convert.IsDBNull(dr["DEALER_TYPE"]) ? 0 : Convert.ToInt32(dr["DEALER_TYPE"]),
+                        CUST_TYPE = Convert.IsDBNull(dr["CUST_TYPE"]) ? 0 : Convert.ToInt32(dr["CUST_TYPE"]),
                         DEALER_ID = Convert.IsDBNull(dr["DEALER_ID"]) ? 0 : Convert.ToInt32(dr["DEALER_ID"]),
-                        DELIVERY_ADDRESS_ID = Convert.IsDBNull(dr["DELIVERY_ADDRESS_ID"]) ? 0 : Convert.ToInt32(dr["DELIVERY_ADDRESS_ID"]),
                         WAREHOUSE_ID = Convert.IsDBNull(dr["WAREHOUSE_ID"]) ? 0 : Convert.ToInt32(dr["WAREHOUSE_ID"])
 
 
@@ -98,9 +97,7 @@ namespace MicroApi.DataLayer.Services
                     using (SqlCommand cmd = new SqlCommand("SP_TB_CUSTOMER", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-
-                        // Set insert action
-                        cmd.Parameters.AddWithValue("@ACTION", 1);
+                        cmd.Parameters.AddWithValue("@ACTION", 1); // INSERT
 
                         // Scalar Parameters
                         cmd.Parameters.AddWithValue("@HQID", customer.HQID ?? 0);
@@ -124,8 +121,8 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@MOBILE_NO", customer.MOBILE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@FAX_NO", customer.FAX_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@LAST_NAME", customer.LAST_NAME ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
-                        cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
+                        //cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
+                        //cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
                         cmd.Parameters.AddWithValue("@NOTES", customer.NOTES ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CUST_NAME", customer.CUST_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREDIT_DAYS", customer.CREDIT_DAYS ?? 0);
@@ -139,29 +136,46 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@VAT_REGNO", customer.VAT_REGNO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
                         cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0);
-                        cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
+                        cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? 0);
                         cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
-                        cmd.Parameters.AddWithValue("@DEALER_TYPE", customer.DEALER_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS_ID", customer.DELIVERY_ADDRESS_ID ?? 0);
                         cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
+
+                        // 🔹 UDT parameter for delivery address
+                        DataTable dtAddress = new DataTable();
+                        dtAddress.Columns.Add("ADDRESS1", typeof(string));
+                        dtAddress.Columns.Add("ADDRESS2", typeof(string));
+                        dtAddress.Columns.Add("ADDRESS3", typeof(string));
+                        dtAddress.Columns.Add("LOCATION", typeof(string));
+                        dtAddress.Columns.Add("MOBILE", typeof(string));
+                        dtAddress.Columns.Add("PHONE", typeof(string));
+
+                        if (customer.DeliveryAddresses != null && customer.DeliveryAddresses.Count > 0)
+                        {
+                            foreach (var addr in customer.DeliveryAddresses)
+                            {
+                                dtAddress.Rows.Add(addr.ADDRESS1, addr.ADDRESS2, addr.ADDRESS3, addr.LOCATION, addr.MOBILE, addr.PHONE);
+                            }
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_CUST_DELIVERY_ADDRESS", dtAddress);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_CUST_DELIVERY_ADDRESS";
 
                         if (connection.State != ConnectionState.Open)
                             connection.Open();
 
                         object result = cmd.ExecuteScalar();
-
-                        return result != null && result != DBNull.Value
-                            ? Convert.ToInt32(result)
-                            : throw new Exception("Insert failed: No ID returned.");
+                        return result != null && result != DBNull.Value ? Convert.ToInt32(result) : throw new Exception("Insert failed: No ID returned.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("SaveCustomerError: " + ex.Message, ex);
+                throw new Exception("SaveCustomer Error: " + ex.Message, ex);
             }
         }
+
 
 
         private static object ParseDate(string? dateStr)
@@ -194,12 +208,10 @@ namespace MicroApi.DataLayer.Services
                     using (SqlCommand cmd = new SqlCommand("SP_TB_CUSTOMER", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-
-                        // Update action
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@ID", customer.ID);
 
-                        // Scalar parameters
+                        // Same scalar parameters as SaveData
                         cmd.Parameters.AddWithValue("@HQID", customer.HQID ?? 0);
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", customer.AC_HEAD_ID ?? 0);
                         cmd.Parameters.AddWithValue("@CUST_CODE", customer.CUST_CODE ?? string.Empty);
@@ -221,8 +233,8 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@MOBILE_NO", customer.MOBILE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@FAX_NO", customer.FAX_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@LAST_NAME", customer.LAST_NAME ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
-                        cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
+                        //cmd.Parameters.AddWithValue("@DOB", ParseDate(customer.DOB));
+                        //cmd.Parameters.AddWithValue("@NATIONALITY", customer.NATIONALITY ?? 0);
                         cmd.Parameters.AddWithValue("@NOTES", customer.NOTES ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CUST_NAME", customer.CUST_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREDIT_DAYS", customer.CREDIT_DAYS ?? 0);
@@ -236,18 +248,35 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@VAT_REGNO", customer.VAT_REGNO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@IS_DELETED", customer.IS_DELETED ?? false);
                         cmd.Parameters.AddWithValue("@LOYALTY_POINT", customer.LOYALTY_POINT ?? 0m);
-                        cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? false);
+                        cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? 0);
                         cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
-                        cmd.Parameters.AddWithValue("@DEALER_TYPE", customer.DEALER_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS_ID", customer.DELIVERY_ADDRESS_ID ?? 0);
                         cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
 
-                        // OPEN CONNECTION
+                        // 🔹 Add UDT Delivery Address
+                        DataTable dtAddress = new DataTable();
+                        dtAddress.Columns.Add("ADDRESS1", typeof(string));
+                        dtAddress.Columns.Add("ADDRESS2", typeof(string));
+                        dtAddress.Columns.Add("ADDRESS3", typeof(string));
+                        dtAddress.Columns.Add("LOCATION", typeof(string));
+                        dtAddress.Columns.Add("MOBILE", typeof(string));
+                        dtAddress.Columns.Add("PHONE", typeof(string));
+
+                        if (customer.DeliveryAddresses != null && customer.DeliveryAddresses.Count > 0)
+                        {
+                            foreach (var addr in customer.DeliveryAddresses)
+                            {
+                                dtAddress.Rows.Add(addr.ADDRESS1, addr.ADDRESS2, addr.ADDRESS3, addr.LOCATION, addr.MOBILE, addr.PHONE);
+                            }
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_CUST_DELIVERY_ADDRESS", dtAddress);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "UDT_CUST_DELIVERY_ADDRESS";
+
                         if (connection.State != ConnectionState.Open)
                             connection.Open();
 
-                        // EXECUTE UPDATE
                         cmd.ExecuteNonQuery();
                         return customer.ID;
                     }
@@ -255,7 +284,7 @@ namespace MicroApi.DataLayer.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("UpdateCustomerError: " + ex.Message, ex);
+                throw new Exception("UpdateCustomer Error: " + ex.Message, ex);
             }
         }
 
@@ -264,6 +293,7 @@ namespace MicroApi.DataLayer.Services
         public CustomerUpdate GetItems(int id)
         {
             CustomerUpdate customer = new CustomerUpdate();
+            customer.DeliveryAddresses = new List<CustDeliveryAddress>();
 
             try
             {
@@ -279,8 +309,8 @@ namespace MicroApi.DataLayer.Services
                     " TB_CUSTOMER.VAT_REGNO, TB_CUSTOMER.IS_DELETED, TB_CUSTOMER.LOYALTY_POINT," +
                     " TB_STATE.STATE_NAME, TB_COUNTRY.COUNTRY_NAME, TB_EMPLOYEE.EMP_NAME, " +
                     " TB_PAYMENT_TERMS.CODE, TB_PRICE_CLASS.CLASS_NAME," +
-                    " TB_COMPANY.COMPANY_NAME, TB_STORES.STORE_NAME,TB_CUSTOMER.DELIVERY_ADDRESS_ID,TB_CUSTOMER.WAREHOUSE_ID," +
-                    " TB_VAT_RULE_CUSTOMER.DESCRIPTION AS VAT_RULE_DESCRIPTION, TB_CUSTOMER.CUST_VAT_RULE_ID, TB_CUSTOMER.IS_COMPANY_BRANCH, TB_CUSTOMER.DEALER_ID, TB_CUSTOMER.DEALER_TYPE" +
+                    " TB_COMPANY.COMPANY_NAME, TB_STORES.STORE_NAME,TB_CUSTOMER.WAREHOUSE_ID," +
+                    " TB_VAT_RULE_CUSTOMER.DESCRIPTION AS VAT_RULE_DESCRIPTION, TB_CUSTOMER.CUST_VAT_RULE_ID, TB_CUSTOMER.IS_COMPANY_BRANCH, TB_CUSTOMER.DEALER_ID, TB_CUSTOMER.CUST_TYPE" +
                     " FROM TB_CUSTOMER " +
                     " LEFT JOIN TB_STATE ON TB_CUSTOMER.STATE_ID = TB_STATE.ID " +
                     " LEFT JOIN TB_COUNTRY ON TB_CUSTOMER.COUNTRY_ID = TB_COUNTRY.ID " +
@@ -320,8 +350,8 @@ namespace MicroApi.DataLayer.Services
                     customer.MOBILE_NO = Convert.ToString(dr["MOBILE_NO"]);
                     customer.FAX_NO = Convert.ToString(dr["FAX_NO"]);
                     customer.LAST_NAME = Convert.ToString(dr["LAST_NAME"]);
-                    customer.DOB = Convert.ToString(dr["DOB"]);
-                    customer.NATIONALITY = Convert.ToInt32(dr["NATIONALITY"]);
+                    //customer.DOB = Convert.ToString(dr["DOB"]);
+                    //customer.NATIONALITY = Convert.ToInt32(dr["NATIONALITY"]);
                     customer.NOTES = Convert.ToString(dr["NOTES"]);
                     customer.CUST_NAME = Convert.ToString(dr["CUST_NAME"]);
                     customer.CREDIT_DAYS = Convert.ToInt32(dr["CREDIT_DAYS"]);
@@ -335,7 +365,7 @@ namespace MicroApi.DataLayer.Services
                     customer.VAT_REGNO = Convert.ToString(dr["VAT_REGNO"]);
                     customer.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
                     customer.LOYALTY_POINT = Convert.ToDecimal(dr["LOYALTY_POINT"]);
-                    customer.IS_COMPANY_BRANCH = Convert.ToBoolean(dr["IS_COMPANY_BRANCH"]);
+                    customer.IS_COMPANY_BRANCH = Convert.ToInt32(dr["IS_COMPANY_BRANCH"]);
                     customer.STATE_NAME = Convert.ToString(dr["STATE_NAME"]);
                     customer.COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]);
                     customer.EMP_NAME = Convert.ToString(dr["EMP_NAME"]);
@@ -344,13 +374,33 @@ namespace MicroApi.DataLayer.Services
                     customer.STORE_NAME = Convert.ToString(dr["STORE_NAME"]);
                     customer.VAT_RULE_DESCRIPTION = Convert.ToString(dr["VAT_RULE_DESCRIPTION"]);
                     customer.CUST_TYPE = Convert.ToInt32(dr["CUST_TYPE"]);
-                    customer.DEALER_TYPE = Convert.ToInt32(dr["DEALER_TYPE"]);
                     customer.DEALER_ID = Convert.ToInt32(dr["DEALER_ID"]);
-                    customer.DELIVERY_ADDRESS_ID = Convert.ToInt32(dr["DELIVERY_ADDRESS_ID"]);
                     customer.WAREHOUSE_ID = Convert.ToInt32(dr["WAREHOUSE_ID"]);
                 }
+                string addressSQL = @"
+                        SELECT ID, ADDRESS1, ADDRESS2, ADDRESS3, LOCATION, MOBILE, PHONE
+                        FROM TB_CUST_DELIVERY_ADDRESS
+                        WHERE CUST_ID = " + id;
 
-               
+                DataTable addrTbl = ADO.GetDataTable(addressSQL, "CustDeliveryAddress");
+                foreach (DataRow adr in addrTbl.Rows)
+                {
+                    CustDeliveryAddress addr = new CustDeliveryAddress
+                    {
+                        ID = Convert.ToInt32(adr["ID"]),
+                        ADDRESS1 = Convert.ToString(adr["ADDRESS1"]),
+                        ADDRESS2 = Convert.ToString(adr["ADDRESS2"]),
+                        ADDRESS3 = Convert.ToString(adr["ADDRESS3"]),
+                        LOCATION = Convert.ToString(adr["LOCATION"]),
+                        MOBILE = Convert.ToString(adr["MOBILE"]),
+                        PHONE = Convert.ToString(adr["PHONE"])
+                        
+                    };
+                    customer.DeliveryAddresses.Add(addr);
+                }
+            
+
+
             }
             catch (Exception ex)
             {

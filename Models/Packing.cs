@@ -165,7 +165,7 @@
         public bool IS_INACTIVE { get; set; }
         public DateTime CreatedDate { get; set; }
         public float? COST { get; set; }
-        public List<Packing_Entry> Packing_Entry { get; set; }
+        public List<Packing_Entry> PackingEntries { get; set; }
 
     }
     public class Packing_Entry

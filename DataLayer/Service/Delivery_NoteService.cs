@@ -149,36 +149,40 @@ namespace MicroApi.DataLayer.Service
         public List<SODetail> GetSO(DeliveryRequest request)
         {
             List<SODetail> items = new List<SODetail>();
+
             using (SqlConnection connection = ADO.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand("SP_TB_DELIVERY_NOTE", connection);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@ACTION", 3);
-                cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable tbl = new DataTable();
-                da.Fill(tbl);
-
-                foreach (DataRow dr in tbl.Rows)
+                using (SqlCommand cmd = new SqlCommand("SP_TB_DELIVERY_NOTE", connection))
                 {
-                    items.Add(new SODetail
-                    {
-                        SO_DETAIL_ID = dr["ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ID"]),
-                        ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ITEM_ID"]),
-                        REMARKS = dr["REMARKS"] == DBNull.Value ? null : dr["REMARKS"].ToString(),
-                        UOM = dr["UOM"] == DBNull.Value ? null : dr["UOM"].ToString(),
-                        QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
-                        ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),
-                        DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : dr["DESCRIPTION"].ToString(),
-                        //DELIVERED_QUANTITY = dr["DELIVERED_QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["DELIVERED_QUANTITY"])
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 3);
+                    cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
 
-                    });
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable tbl = new DataTable();
+                    da.Fill(tbl);
+
+                    foreach (DataRow dr in tbl.Rows)
+                    {
+                        items.Add(new SODetail
+                        {
+                            SO_DETAIL_ID = dr["ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ID"]),
+                            PACKING = dr["PACKING"] == DBNull.Value ? null : dr["PACKING"].ToString(),
+                            ART_NO = dr["ART_NO"] == DBNull.Value ? null : dr["ART_NO"].ToString(),
+                            BRAND = dr["BRAND"] == DBNull.Value ? null : dr["BRAND"].ToString(),
+                            QUANTITY = dr["QUANTITY"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QUANTITY"]),
+                            ARTICLE_TYPE = dr["ARTICLE_TYPE"] == DBNull.Value ? null : dr["ARTICLE_TYPE"].ToString(),
+                            COLOR = dr["COLOR"] == DBNull.Value ? null : dr["COLOR"].ToString(),
+                            CATEGORY = dr["CATEGORY"] == DBNull.Value ? null : dr["CATEGORY"].ToString(),
+                            REMARKS = dr["REMARKS"] == DBNull.Value ? null : dr["REMARKS"].ToString()
+                        });
+                    }
                 }
             }
+
             return items;
         }
+
         public List<Custdetail> GetCustdetail(DeliveryRequest request)
         {
             List<Custdetail> items = new List<Custdetail>();

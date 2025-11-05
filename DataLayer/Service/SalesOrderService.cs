@@ -32,11 +32,11 @@ namespace MicroApi.DataLayer.Service
                         DataTable tvp = new DataTable();
                         tvp.Columns.Add("BRAND_ID", typeof(int));
                         tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
-                        tvp.Columns.Add("CATEGORY_ID", typeof(int));
-                        tvp.Columns.Add("ART_NO", typeof(int));
-                        tvp.Columns.Add("COLOR_ID", typeof(int));
+                        tvp.Columns.Add("CATEGORY_ID", typeof(string));
+                        tvp.Columns.Add("ART_NO", typeof(string));
+                        tvp.Columns.Add("COLOR_ID", typeof(string));
                         tvp.Columns.Add("CONTENT", typeof(string));
-                        tvp.Columns.Add("PACKING_ID", typeof(int));
+                        tvp.Columns.Add("PACKING_ID", typeof(string));
                         tvp.Columns.Add("QUANTITY", typeof(float));
                         
 
@@ -47,11 +47,11 @@ namespace MicroApi.DataLayer.Service
                             tvp.Rows.Add(
                                 detail.BRAND_ID ?? 0,
                                 detail.ARTICLE_TYPE ?? 0,
-                                detail.CATEGORY_ID ?? 0,
-                                detail.ART_NO ?? 0,
-                                detail.COLOR_ID ?? 0,
+                                detail.CATEGORY_ID ?? string.Empty,
+                                detail.ART_NO ?? string.Empty,
+                                detail.COLOR_ID ?? string.Empty,
                                 detail.CONTENT ?? string.Empty,
-                                detail.PACKING_ID ?? 0,
+                                detail.PACKING_ID ?? string.Empty,
                                 detail.QUANTITY ?? 0
                                 
                             );
@@ -72,6 +72,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS", salesOrder.DELIVERY_ADDRESS ?? 0);
                             cmd.Parameters.AddWithValue("@WAREHOUSE", salesOrder.WAREHOUSE ?? 0);
                             cmd.Parameters.AddWithValue("@TOTAL_QTY", salesOrder.TOTAL_QTY ?? 0);
+                            cmd.Parameters.AddWithValue("@SUBDEALER_ID", salesOrder.SUBDEALER_ID ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
@@ -109,11 +110,11 @@ namespace MicroApi.DataLayer.Service
                         DataTable tvp = new DataTable();
                         tvp.Columns.Add("BRAND_ID", typeof(int));
                         tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
-                        tvp.Columns.Add("CATEGORY_ID", typeof(int));
-                        tvp.Columns.Add("ART_NO", typeof(int));
-                        tvp.Columns.Add("COLOR_ID", typeof(int));
+                        tvp.Columns.Add("CATEGORY_ID", typeof(string));
+                        tvp.Columns.Add("ART_NO", typeof(string));
+                        tvp.Columns.Add("COLOR_ID", typeof(string));
                         tvp.Columns.Add("CONTENT", typeof(string));
-                        tvp.Columns.Add("PACKING_ID", typeof(int));
+                        tvp.Columns.Add("PACKING_ID", typeof(string));
                         tvp.Columns.Add("QUANTITY", typeof(float));
 
                         if (salesOrder.Details != null && salesOrder.Details.Any())
@@ -123,11 +124,11 @@ namespace MicroApi.DataLayer.Service
                                 tvp.Rows.Add(
                                  detail.BRAND_ID ?? 0,
                                 detail.ARTICLE_TYPE ?? 0,
-                                detail.CATEGORY_ID ?? 0,
-                                detail.ART_NO ?? 0,
-                                detail.COLOR_ID ?? 0,
+                                detail.CATEGORY_ID ?? string.Empty,
+                                detail.ART_NO ?? string.Empty,
+                                detail.COLOR_ID ?? string.Empty,
                                 detail.CONTENT ?? string.Empty,
-                                detail.PACKING_ID ?? 0,
+                                detail.PACKING_ID ?? string.Empty,
                                 detail.QUANTITY ?? 0
                                 );
                             }
@@ -155,6 +156,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS", salesOrder.DELIVERY_ADDRESS ?? 0);
                             cmd.Parameters.AddWithValue("@WAREHOUSE", salesOrder.WAREHOUSE ?? 0);
                             cmd.Parameters.AddWithValue("@TOTAL_QTY", salesOrder.TOTAL_QTY ?? 0);
+                            cmd.Parameters.AddWithValue("@SUBDEALER_ID", salesOrder.SUBDEALER_ID ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
@@ -235,6 +237,7 @@ namespace MicroApi.DataLayer.Service
                                 response.Data.TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0;
                                // response.Data.DELIVERY_ADDRESS = reader["ADDRESS1"]?.ToString();
                                 response.Data.ADDRESS = reader["DELIVERY_ADDRESS_FULL"]?.ToString();
+                                response.Data.SUBDEALER_ID = reader["SUBDEALER_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUBDEALER_ID"]) : 0;
                                 isHeaderSet = true;
                             }
 
@@ -242,12 +245,12 @@ namespace MicroApi.DataLayer.Service
                             {
                                
                                 CONTENT = reader["CONTENT"] != DBNull.Value ? Convert.ToString(reader["CONTENT"]) : null,
-                                PACKING_ID = reader["PACKING_ID"] != DBNull.Value ? Convert.ToInt32(reader["PACKING_ID"]) : 0,
+                                PACKING_ID = reader["DESCRIPTION"] != DBNull.Value ? Convert.ToString(reader["DESCRIPTION"]) : null,
                                 BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
                                 ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
-                                CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
-                                ART_NO = reader["ART_NO"] != DBNull.Value ? Convert.ToInt32(reader["ART_NO"]) : 0,
-                                COLOR_ID = reader["COLOR_ID"] != DBNull.Value ? Convert.ToInt32(reader["COLOR_ID"]) : 0,
+                                CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToString(reader["CATEGORY_ID"]) : null,
+                                ART_NO = reader["ART_NO"] != DBNull.Value ? Convert.ToString(reader["ART_NO"]) : null,
+                                COLOR_ID = reader["COLOR"] != DBNull.Value ? Convert.ToString(reader["COLOR"]) : null,
                                 QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0
                             };
 
@@ -301,6 +304,7 @@ namespace MicroApi.DataLayer.Service
                                 TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
                                 DELIVERY_ADDRESS = reader["ADDRESS"] != DBNull.Value ? reader["ADDRESS"].ToString() : null,
                                 ADDRESS = reader["DELIVERY_ADDRESS_FULL"] != DBNull.Value ? reader["DELIVERY_ADDRESS_FULL"].ToString() : null,
+                                SUBDEALER_ID = reader["SUBDEALER_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUBDEALER_ID"]) : (int?)null,
                             };
 
                             response.Data.Add(salesOrder);
@@ -464,10 +468,11 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    string query = @"SELECT DISTINCT TB_PACKING.ID,TB_PACKING.ART_NO FROM TB_ARTICLE_CATEGORY 
+                    string query = @"SELECT DISTINCT  MIN(TB_PACKING.ID) AS ID,TB_PACKING.ART_NO FROM TB_ARTICLE_CATEGORY 
                                     INNER JOIN TB_PACKING ON TB_ARTICLE_CATEGORY.ID=TB_PACKING.CATEGORY_ID 
                                     WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_PACKING.ARTICLE_TYPE=@ARTICLE_TYPE AND 
-                                    TB_PACKING.CATEGORY_ID=@CATEGORY_ID AND TB_ARTICLE_CATEGORY.IS_DELETED=0";
+                                    TB_ARTICLE_CATEGORY.DESCRIPTION=@CATEGORY_ID AND TB_ARTICLE_CATEGORY.IS_DELETED=0 
+                                    GROUP BY TB_PACKING.ART_NO";
                     
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
@@ -518,18 +523,20 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                            SELECT DISTINCT TB_PACKING.ID, TB_PACKING.COLOR FROM TB_PACKING
+                            SELECT DISTINCT MIN(TB_PACKING.ID) AS ID, TB_PACKING.COLOR FROM TB_PACKING
+                            INNER JOIN TB_ARTICLE_CATEGORY ON TB_ARTICLE_CATEGORY.ID=TB_PACKING.CATEGORY_ID
                             WHERE TB_PACKING.BRAND_ID = @BRAND_ID
                             AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
-                            AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
-                            AND TB_PACKING.ID = @ARTNO_ID";
+                            AND TB_ARTICLE_CATEGORY.DESCRIPTION= @CATEGORY_ID                            
+                            AND TB_PACKING.ART_NO = @ART_NO
+                            GROUP BY TB_PACKING.COLOR";
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.CommandType = CommandType.Text;
                         cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
-                        cmd.Parameters.AddWithValue("@ARTNO_ID", request.ARTNO_ID);
+                        cmd.Parameters.AddWithValue("@ART_NO", request.ARTNO_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -567,12 +574,13 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-               	 SELECT DISTINCT TB_PACKING.ID, TB_PACKING.DESCRIPTION FROM TB_PACKING WHERE
-                 TB_PACKING.BRAND_ID = @BRAND_ID
+               	 SELECT DISTINCT TB_PACKING.ID, TB_PACKING.DESCRIPTION FROM TB_PACKING
+                 INNER JOIN TB_ARTICLE_CATEGORY ON TB_ARTICLE_CATEGORY.ID=TB_PACKING.CATEGORY_ID
+                 WHERE TB_PACKING.BRAND_ID = @BRAND_ID
                  AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
-                 AND TB_PACKING.CATEGORY_ID = @CATEGORY_ID
-                 AND TB_PACKING.ID = @ARTNO_ID
-                 AND TB_PACKING.ID = @COLOR_ID";
+                 AND TB_ARTICLE_CATEGORY.DESCRIPTION = @CATEGORY_ID
+                 AND TB_PACKING.ART_NO = @ART_NO
+                 AND TB_PACKING.COLOR = @COLOR";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
@@ -580,8 +588,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", request.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
-                        cmd.Parameters.AddWithValue("@ARTNO_ID", request.ARTNO_ID);
-                        cmd.Parameters.AddWithValue("@COLOR_ID", request.COLOR);
+                        cmd.Parameters.AddWithValue("@ART_NO", request.ARTNO_ID);
+                        cmd.Parameters.AddWithValue("@COLOR", request.COLOR);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -619,12 +627,12 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    string query = @"SELECT ID, PAIR_QTY FROM TB_PACKING 
-                       WHERE ID = @PACKING_ID AND IS_INACTIVE = 0 AND IS_ANY_COMB=1";
+                    string query = @"SELECT ID, PAIR_QTY, COMBINATION 
+                             FROM TB_PACKING 
+                             WHERE ID = @PACKING_ID AND IS_INACTIVE = 0";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        cmd.CommandType = CommandType.Text;
                         cmd.Parameters.AddWithValue("@PACKING_ID", request.PACKING_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -634,10 +642,61 @@ namespace MicroApi.DataLayer.Service
                                 PairDtl pair = new PairDtl
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
-                                    PAIR_QTY = reader["PAIR_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["PAIR_QTY"]) : (decimal?)null
+                                    PAIR_QTY = reader["PAIR_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["PAIR_QTY"]) : (decimal?)null,
+                                    // ✅ Clean escaped double quotes from DB value
+                                    COMBINATION = reader["COMBINATION"] != DBNull.Value
+                                        ? Convert.ToString(reader["COMBINATION"]).Replace("\\\"", "\"")
+                                        : null
                                 };
 
                                 response.Data.Add(pair);
+                            }
+                        }
+                    }
+                }
+
+                response.Flag = 1;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+                response.Data = null;
+            }
+
+            return response;
+        }
+
+        public WarehouseResponse GetWarehouseByCustId(SOQUOTATIONRequest request)
+        {
+            WarehouseResponse response = new WarehouseResponse { Data = new List<WarehouseDtl>() };
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT DISTINCT TB_COMPANY_MASTER.ID,TB_COMPANY_MASTER.COMPANY_NAME FROM TB_COMPANY_MASTER
+                                    INNER JOIN TB_CUSTOMER ON TB_COMPANY_MASTER.ID= TB_CUSTOMER.WAREHOUSE_ID
+                                    WHERE TB_CUSTOMER.CUST_TYPE=1 AND TB_CUSTOMER.IS_DELETED=0 AND TB_CUSTOMER.ID=@CUST_ID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                WarehouseDtl warehouse = new WarehouseDtl
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                    WAREHOUSE_NAME = reader["COMPANY_NAME"] != DBNull.Value ? reader["COMPANY_NAME"].ToString() : null,
+                                };
+                                response.Data.Add(warehouse);
                             }
                         }
                     }
@@ -687,11 +746,11 @@ namespace MicroApi.DataLayer.Service
                         DataTable tvp = new DataTable();
                         tvp.Columns.Add("BRAND_ID", typeof(int));
                         tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
-                        tvp.Columns.Add("CATEGORY_ID", typeof(int));
-                        tvp.Columns.Add("ART_NO", typeof(int));
-                        tvp.Columns.Add("COLOR_ID", typeof(int));
+                        tvp.Columns.Add("CATEGORY_ID", typeof(string));
+                        tvp.Columns.Add("ART_NO", typeof(string));
+                        tvp.Columns.Add("COLOR_ID", typeof(string));
                         tvp.Columns.Add("CONTENT", typeof(string));
-                        tvp.Columns.Add("PACKING_ID", typeof(int));
+                        tvp.Columns.Add("PACKING_ID", typeof(string));
                         tvp.Columns.Add("QUANTITY", typeof(float));
 
                         if (request.Details != null && request.Details.Any())
@@ -701,11 +760,11 @@ namespace MicroApi.DataLayer.Service
                                 tvp.Rows.Add(
                                  detail.BRAND_ID ?? 0,
                                  detail.ARTICLE_TYPE ?? 0,
-                                 detail.CATEGORY_ID ?? 0,
-                                 detail.ART_NO ?? 0,
-                                 detail.COLOR_ID ?? 0,
+                                 detail.CATEGORY_ID ?? string.Empty,
+                                 detail.ART_NO ?? string.Empty,
+                                 detail.COLOR_ID ?? string.Empty,
                                  detail.CONTENT ?? string.Empty,
-                                 detail.PACKING_ID ?? 0,
+                                 detail.PACKING_ID ?? string.Empty,
                                  detail.QUANTITY ?? 0
                                 );
                             }
@@ -734,6 +793,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS", request.DELIVERY_ADDRESS ?? 0);
                             cmd.Parameters.AddWithValue("@WAREHOUSE", request.WAREHOUSE ?? 0);
                             cmd.Parameters.AddWithValue("@TOTAL_QTY", request.TOTAL_QTY ?? 0);
+                            cmd.Parameters.AddWithValue("@SUBDEALER_ID", request.SUBDEALER_ID ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
@@ -846,8 +906,7 @@ namespace MicroApi.DataLayer.Service
                             {
                                 LatestVocherNO vocher = new LatestVocherNO
                                 {
-                                    VOCHERNO = reader["VOUCHER_NO"] != DBNull.Value ? reader["VOUCHER_NO"].ToString() : null,
-                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                    VOCHERNO = reader["NEXT_SO_NO"] != DBNull.Value ? reader["NEXT_SO_NO"].ToString() : null,
                                 };
                                 response.Data.Add(vocher);
                             }
@@ -864,6 +923,48 @@ namespace MicroApi.DataLayer.Service
                 response.Data = null;
             }
             return response;
+        }
+        public List<Subdealers> GetSubdealer(SubdealerRequest id)
+        {
+            var subdealers = new List<Subdealers>();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    string query = @"
+                SELECT ID, CUST_NAME 
+                FROM TB_CUSTOMER 
+                WHERE CUST_TYPE = 2 
+                  AND DEALER_ID = @DEALER_ID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.AddWithValue("@DEALER_ID", id.DEALER_ID);
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var address = new Subdealers
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    SUBDEALER = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : string.Empty
+                                };
+                                subdealers.Add(address);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching sub dealer data: " + ex.Message, ex);
+            }
+            return subdealers;
         }
 
     }
