@@ -298,6 +298,7 @@
         public string NARRATION { get; set; }
         public int SUPP_ID { get; set; }
         public int TRANS_STATUS { get; set; }
+        public string SUPP_NAME { get; set; }
     }
     public class DebitNoteListResponse
     {
@@ -318,6 +319,7 @@
         public float NET_AMOUNT { get; set; }
         public float DUE_AMOUNT { get; set; }
         public string DOC_NO { get; set; }
+        public string? PARTY_NAME { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
     public class AC_DebitNoteSelect

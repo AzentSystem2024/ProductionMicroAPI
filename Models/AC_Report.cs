@@ -416,4 +416,5 @@
         public string message { get; set; }
         public List<VatReturnReport> Data { get; set; } 
     }
+    
 }

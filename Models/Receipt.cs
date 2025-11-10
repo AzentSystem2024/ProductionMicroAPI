@@ -175,6 +175,7 @@
         public string ADD_TIME { get; set; }
         public decimal NET_AMOUNT { get; set; }
         public int? PDC_ID { get; set; }
+        public string? PARTY_NAME { get; set; }
         public List<ReceiptDetail> REC_DETAIL { get; set; }
 
     }

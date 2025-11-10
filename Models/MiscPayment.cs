@@ -14,6 +14,7 @@
             public int? CREATE_USER_ID { get; set; }
             public int? PAY_TYPE_ID { get; set; }
             public int? PAY_HEAD_ID { get; set; }
+            public int? STORE_ID { get; set; }
         public List<MiscPaymentDetail> MISC_DETAIL { get; set; }
 
     }
@@ -48,7 +49,7 @@
         public string? REMARKS { get; set; }
         public double? AMOUNT { get; set; }
         public double? VAT_AMOUNT { get; set; }
-        public double? VAT_REGN { get; set; }
+        public string? VAT_REGN { get; set; }
         public float? VAT_PERCENT { get; set; }
         public string? LEDGER_CODE { get; set; }
         public string? LEDGER_NAME { get; set; }
@@ -74,7 +75,7 @@
         public string REMARKS  { get; set; }
         public float VAT_AMOUNT { get; set; }
         public float VAT_PERCENT { get; set; }
-        public float VAT_REGN { get; set; }
+        public string VAT_REGN { get; set; }
         public int DEPT_ID { get; set; }
 
     }
@@ -101,7 +102,7 @@
         public int TRANS_STATUS { get; set; }
         public string LEDGER_CODE { get; set; }
         public string LEDGER_NAME { get; set; }
-        public double VAT_REGN { get; set; }
+        public string VAT_REGN { get; set; }
         public int DEPT_ID { get; set; }
         public List<MiscPaymentDetail> DetailList { get; set; }
     }

@@ -36,6 +36,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? string.Empty);
                         cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? (object)DBNull.Value);
 
                         // Prepare table-valued parameter with only PAYDETAIL_ID
                         DataTable dtDetail = new DataTable();

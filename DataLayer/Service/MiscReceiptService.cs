@@ -45,6 +45,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
                         cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
 
 
 

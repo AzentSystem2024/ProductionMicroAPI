@@ -19,6 +19,7 @@
     {
         public int COMPANY_ID { get; set; }
         public int FIN_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public List<OpeningBalance> Details { get; set; }
     }
 

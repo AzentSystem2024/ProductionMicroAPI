@@ -26,7 +26,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@p_GROUP_ID", accountHead.GROUP_ID);
                         cmd.Parameters.AddWithValue("@p_IS_DIRECT", accountHead.IS_DIRECT);
                         cmd.Parameters.AddWithValue("@p_ARABIC_NAME", (object)accountHead.ARABIC_NAME ?? DBNull.Value);
-                       // cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@p_IS_INACTIVE", accountHead.IS_INACTIVE);
+                        // cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {

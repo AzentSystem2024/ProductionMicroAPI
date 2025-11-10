@@ -88,6 +88,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ACTION", 1);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
+
 
                     // Prepare UDT
                     DataTable dt = new DataTable();
@@ -149,6 +151,79 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        //public OBResponse Commit(OBCommitRequest request)
+        //{
+        //    OBResponse response = new OBResponse();
+
+        //    try
+        //    {
+        //        using (SqlConnection connection = ADO.GetConnection())
+        //        {
+        //            SqlCommand cmd = new SqlCommand("SP_AC_OPENING_BALANCE", connection);
+        //            cmd.CommandType = CommandType.StoredProcedure;
+
+        //            // Main parameters
+        //            cmd.Parameters.AddWithValue("@ACTION", 2); 
+        //            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+        //            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+        //            cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+
+        //            // Prepare UDT
+        //            DataTable dt = new DataTable();
+        //            dt.Columns.Add("ID", typeof(int));
+        //            dt.Columns.Add("TRANS_ID", typeof(int));
+        //            dt.Columns.Add("COMPANY_ID", typeof(int));
+        //            dt.Columns.Add("STORE_ID", typeof(int));
+        //            dt.Columns.Add("SL_NO", typeof(int));
+        //            dt.Columns.Add("HEAD_ID", typeof(int));
+        //            dt.Columns.Add("DR_AMOUNT", typeof(decimal));
+        //            dt.Columns.Add("CR_AMOUNT", typeof(decimal));
+        //            dt.Columns.Add("REMARKS", typeof(string));
+        //            dt.Columns.Add("OPP_HEAD_ID", typeof(int));
+        //            dt.Columns.Add("OPP_HEAD_NAME", typeof(string));
+        //            dt.Columns.Add("BILL_NO", typeof(string));
+        //            dt.Columns.Add("JOB_ID", typeof(int));
+        //            dt.Columns.Add("CREATED_STORE_ID", typeof(int));
+        //            dt.Columns.Add("STORE_AUTO_ID", typeof(int));
+
+        //            int slno = 1;
+        //            foreach (var item in request.Details)
+        //            {
+        //                dt.Rows.Add(DBNull.Value,
+        //                    request.TRANS_ID,
+        //                    request.COMPANY_ID,
+        //                    item.STORE_ID,
+        //                    slno++,
+        //                    item.HEAD_ID,
+        //                    item.DR_AMOUNT,
+        //                    item.CR_AMOUNT,
+        //                    item.REMARKS ?? string.Empty,
+        //                    item.OPP_HEAD_ID,
+        //                    item.OPP_HEAD_NAME ?? string.Empty,
+        //                    item.BILL_NO ?? string.Empty,
+        //                    item.JOB_ID,
+        //                    item.CREATED_STORE_ID,
+        //                    item.STORE_AUTO_ID
+        //                );
+        //            }
+
+        //            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
+        //            tvpParam.SqlDbType = SqlDbType.Structured;
+
+        //            cmd.ExecuteNonQuery();
+
+        //            response.flag = 1;
+        //            response.Message = "Commit successful.";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.flag = 0;
+        //        response.Message = "Error committing opening balance: " + ex.Message;
+        //    }
+
+        //    return response;
+        //}
         public OBResponse Commit(OBCommitRequest request)
         {
             OBResponse response = new OBResponse();
@@ -157,61 +232,81 @@ namespace MicroApi.DataLayer.Service
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    SqlCommand cmd = new SqlCommand("SP_AC_OPENING_BALANCE", connection);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    // Main parameters
-                    cmd.Parameters.AddWithValue("@ACTION", 2); 
-                    cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
-
-                    // Prepare UDT
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add("ID", typeof(int));
-                    dt.Columns.Add("TRANS_ID", typeof(int));
-                    dt.Columns.Add("COMPANY_ID", typeof(int));
-                    dt.Columns.Add("STORE_ID", typeof(int));
-                    dt.Columns.Add("SL_NO", typeof(int));
-                    dt.Columns.Add("HEAD_ID", typeof(int));
-                    dt.Columns.Add("DR_AMOUNT", typeof(decimal));
-                    dt.Columns.Add("CR_AMOUNT", typeof(decimal));
-                    dt.Columns.Add("REMARKS", typeof(string));
-                    dt.Columns.Add("OPP_HEAD_ID", typeof(int));
-                    dt.Columns.Add("OPP_HEAD_NAME", typeof(string));
-                    dt.Columns.Add("BILL_NO", typeof(string));
-                    dt.Columns.Add("JOB_ID", typeof(int));
-                    dt.Columns.Add("CREATED_STORE_ID", typeof(int));
-                    dt.Columns.Add("STORE_AUTO_ID", typeof(int));
-
-                    int slno = 1;
-                    foreach (var item in request.Details)
+                    using (SqlCommand cmd = new SqlCommand("SP_AC_OPENING_BALANCE", connection))
                     {
-                        dt.Rows.Add(DBNull.Value,
-                            request.TRANS_ID,
-                            request.COMPANY_ID,
-                            item.STORE_ID,
-                            slno++,
-                            item.HEAD_ID,
-                            item.DR_AMOUNT,
-                            item.CR_AMOUNT,
-                            item.REMARKS ?? string.Empty,
-                            item.OPP_HEAD_ID,
-                            item.OPP_HEAD_NAME ?? string.Empty,
-                            item.BILL_NO ?? string.Empty,
-                            item.JOB_ID,
-                            item.CREATED_STORE_ID,
-                            item.STORE_AUTO_ID
-                        );
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Main parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 2);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+
+                        // Prepare TVP
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("ID", typeof(int));
+                        dt.Columns.Add("TRANS_ID", typeof(int));
+                        dt.Columns.Add("COMPANY_ID", typeof(int));
+                        dt.Columns.Add("STORE_ID", typeof(int));
+                        dt.Columns.Add("SL_NO", typeof(int));
+                        dt.Columns.Add("HEAD_ID", typeof(int));
+                        dt.Columns.Add("DR_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("CR_AMOUNT", typeof(decimal));
+                        dt.Columns.Add("REMARKS", typeof(string));
+                        dt.Columns.Add("OPP_HEAD_ID", typeof(int));
+                        dt.Columns.Add("OPP_HEAD_NAME", typeof(string));
+                        dt.Columns.Add("BILL_NO", typeof(string));
+                        dt.Columns.Add("JOB_ID", typeof(int));
+                        dt.Columns.Add("CREATED_STORE_ID", typeof(int));
+                        dt.Columns.Add("STORE_AUTO_ID", typeof(int));
+
+                        int slno = 1;
+                        foreach (var item in request.Details)
+                        {
+                            dt.Rows.Add(DBNull.Value,
+                                request.TRANS_ID,
+                                request.COMPANY_ID,
+                                item.STORE_ID,
+                                slno++,
+                                item.HEAD_ID,
+                                item.DR_AMOUNT,
+                                item.CR_AMOUNT,
+                                item.REMARKS ?? string.Empty,
+                                item.OPP_HEAD_ID,
+                                item.OPP_HEAD_NAME ?? string.Empty,
+                                item.BILL_NO ?? string.Empty,
+                                item.JOB_ID,
+                                item.CREATED_STORE_ID,
+                                item.STORE_AUTO_ID
+                            );
+                        }
+
+                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+
+                        //connection.Open();
+
+                        // Execute and read TRANS_STATUS
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // Assuming SP returns TRANS_STATUS after commit
+                                int transStatus = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0;
+
+                                response.Data = new
+                                {
+                                    TRANS_ID = request.TRANS_ID,
+                                    TRANS_STATUS = transStatus
+                                };
+                            }
+                        }
+
+                        connection.Close();
+
+                        response.flag = 1;
+                        response.Message = "Commit successful.";
                     }
-
-                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
-                    tvpParam.SqlDbType = SqlDbType.Structured;
-
-                    cmd.ExecuteNonQuery();
-
-                    response.flag = 1;
-                    response.Message = "Commit successful.";
                 }
             }
             catch (Exception ex)

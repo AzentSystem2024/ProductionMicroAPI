@@ -20,6 +20,8 @@
         public int? NO_OF_DAYS { get; set; }
         public double? EXPENSE_AMOUNT { get; set; }
         public int? NO_OF_MONTHS { get; set; }
+        public string? PARTY_NAME { get; set; }
+        public int? STORE_ID { get; set; }
         public List<PrepayDetail>? PREPAY_DETAIL { get; set; }
 
     }
@@ -54,6 +56,8 @@
         public int? NO_OF_DAYS { get; set; }
         public double? EXPENSE_AMOUNT { get; set; }
         public int? NO_OF_MONTHS { get; set; }
+        public string? PARTY_NAME { get; set; }
+        public int? STORE_ID { get; set; }
         public List<PrepayDetail>? PREPAY_DETAIL { get; set; }
 
     }
@@ -86,6 +90,7 @@
         public decimal NET_AMOUNT { get; set; }
         public string? REF_NO { get; set; }
         public string? NARRATION { get; set; }
+        public string? PARTY_NAME { get; set; }
         public List<PrePaymentListDetail> Details { get; set; }
     }
 

@@ -88,6 +88,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 39); 
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         // Create DataTable for UDT_TB_PREPAY_POSTING
                         DataTable dtPrepayDetail = new DataTable();
                         dtPrepayDetail.Columns.Add("ID", typeof(int));

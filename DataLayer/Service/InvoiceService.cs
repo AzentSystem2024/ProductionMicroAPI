@@ -645,6 +645,7 @@ namespace MicroApi.DataLayer.Service
                                         GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
                                         TAX_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                        PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         SALE_DETAILS = new List<SaleDetailUpdate>()
                                     };
                                 }

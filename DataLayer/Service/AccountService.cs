@@ -32,6 +32,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@p_GROUP_TYPE", account.GROUP_TYPE);
                         cmd.Parameters.AddWithValue("@p_GROUP_LEVEL", account.GROUP_LEVEL);
 
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())

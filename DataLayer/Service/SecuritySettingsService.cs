@@ -178,7 +178,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("MFAEmail", securitySettings.MFAEmail);
                     cmd.Parameters.AddWithValue("MFASMS", securitySettings.MFASMS);
                     cmd.Parameters.AddWithValue("MFASingleToken", securitySettings.MFASingleToken);
-                    cmd.Parameters.AddWithValue("UserID", securitySettings.UserID);
+                    cmd.Parameters.AddWithValue("@UserID", userID);
 
 
 

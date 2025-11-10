@@ -379,6 +379,7 @@ namespace MicroApi.DataLayer.Service
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                         VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
                                         PDC_ID = reader["PDC_ID"] != DBNull.Value ? Convert.ToInt32(reader["PDC_ID"]) : 0,
+                                        PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         REC_DETAIL = new List<ReceiptDetail>(),
                                     };
                                 }

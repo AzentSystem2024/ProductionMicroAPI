@@ -44,6 +44,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@NO_OF_DAYS", model.NO_OF_DAYS ?? 0);
                         cmd.Parameters.AddWithValue("@EXPENSE_AMOUNT", model.EXPENSE_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@NO_OF_MONTHS", model.NO_OF_MONTHS ?? 0);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
 
                         // UDT for TB_PREPAY_DETAIL
                         DataTable dtPrepayDetail = new DataTable();
@@ -118,6 +120,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@EXPENSE_AMOUNT", model.EXPENSE_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@NO_OF_MONTHS", model.NO_OF_MONTHS ?? 0);
                         cmd.Parameters.AddWithValue("@PREPAY_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
 
 
                         // UDT for TB_PREPAY_DETAIL
@@ -332,6 +336,7 @@ namespace MicroApi.DataLayer.Service
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         NARRATION = reader["NARRATION"]?.ToString(),
+                                        PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         Details = new List<PrePaymentListDetail>()
                                     };
                                 }
@@ -405,6 +410,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@EXPENSE_AMOUNT", model.EXPENSE_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@NO_OF_MONTHS", model.NO_OF_MONTHS ?? 0);
                         cmd.Parameters.AddWithValue("@PREPAY_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
 
 
                         // UDT for TB_PREPAY_DETAIL

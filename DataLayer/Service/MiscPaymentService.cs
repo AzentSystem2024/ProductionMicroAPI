@@ -38,6 +38,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
 
 
                         // UDT setup
@@ -236,15 +237,15 @@ namespace MicroApi.DataLayer.Service
                                     BANK_NAME = reader["BANK_NAME"] != DBNull.Value ? reader["BANK_NAME"].ToString() : null,
                                     PARTY_NAME = reader["PARTY_NAME"] != DBNull.Value ? reader["PARTY_NAME"].ToString() : null,
                                     NARRATION = reader["NARRATION"] != DBNull.Value ? reader["NARRATION"].ToString() : null,
-                                    AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
-                                    HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
-                                    VAT_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
-                                    VAT_PERCENT = reader["VAT_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_PERCENT"]) : 0,
-                                    VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToSingle(reader["VAT_REGN"]) : 0,
+                                    //AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
+                                    //HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
+                                    //VAT_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
+                                    //VAT_PERCENT = reader["VAT_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_PERCENT"]) : 0,
+                                    //VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
                                     TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
                                     PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                     PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
-                                    REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
+                                    //REMARKS = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
                                     //DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
 
                                 });
@@ -313,7 +314,7 @@ namespace MicroApi.DataLayer.Service
                                         AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
                                         LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                         LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
-                                        VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToDouble(reader["VAT_REGN"]) : 0,
+                                        VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
                                         DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DetailList = new List<MiscPaymentDetail>()
                                     };
@@ -327,7 +328,7 @@ namespace MicroApi.DataLayer.Service
                                     AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["AMOUNT"]) : 0,
                                     VAT_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["VAT_AMOUNT"]) : 0,
                                     VAT_PERCENT = reader["VAT_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_PERCENT"]) : 0,
-                                    VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToDouble(reader["VAT_REGN"]) : 0,
+                                    VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString()
@@ -449,7 +450,7 @@ namespace MicroApi.DataLayer.Service
                     string query = @"
                     SELECT TOP 1 VOUCHER_NO 
                     FROM TB_AC_TRANS_HEADER 
-                    WHERE TRANS_TYPE = 31
+                    WHERE TRANS_TYPE = 3
                     ORDER BY TRANS_ID DESC";
 
                     using (var cmd = new SqlCommand(query, connection))

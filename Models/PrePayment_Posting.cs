@@ -5,6 +5,7 @@
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? CREATE_USER_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public List<PrepaymentPostingDetail> PREPAY_DETAIL { get; set; }
     }
     public class PrepaymentPostingDetail

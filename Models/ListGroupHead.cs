@@ -8,6 +8,7 @@
         public string HeadCode { get; set; }
         public string HeadName { get; set; }
         public int ID { get; set; }
+        public string IS_INACTIVE { get; set; }
     }
     public class ListResponse
     {

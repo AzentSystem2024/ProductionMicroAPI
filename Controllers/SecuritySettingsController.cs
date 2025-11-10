@@ -48,7 +48,7 @@ namespace MicroApi.Controllers
             SecuritySettingResponse res = new SecuritySettingResponse();
             try
             {
-                int userID = 1;
+                int userID = objSecurity.UserID;
                 _securitySettingsService.Save(objSecurity, userID);
                 res.flag = "1";
                 res.message = "Success";
