@@ -102,5 +102,24 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("getlist")]
+        public AccountHeadListResponse GetList()
+        {
+
+            AccountHeadListResponse res = new AccountHeadListResponse();
+            try
+            {
+
+                res = _accountHeadService.GetList();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
     }
 }

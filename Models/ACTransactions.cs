@@ -239,6 +239,7 @@
         public double AMOUNT { get; set; }
         public double GST_AMOUNT { get; set; }
         public string REMARKS { get; set; }
+        public float? GST_PERC { get; set; }
     }
     public class DebitNoteResponse
     {
@@ -299,6 +300,7 @@
         public int SUPP_ID { get; set; }
         public int TRANS_STATUS { get; set; }
         public string SUPP_NAME { get; set; }
+        public string DOC_NO { get; set; }
     }
     public class DebitNoteListResponse
     {

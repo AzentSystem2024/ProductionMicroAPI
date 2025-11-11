@@ -11,6 +11,7 @@ namespace MicroApi.DataLayer.Interface
         AccountHeadResponse Update(AccountHeadUpdate accountHead);
         AccountHeadResponse GetAccountHeadById(int id);
         AccountHeadListResponse GetLogList(int? id = null);
+        AccountHeadListResponse GetList();
         AccountHeadResponse DeleteAccountHeadData(int id);
     }
 }
