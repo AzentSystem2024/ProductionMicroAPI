@@ -99,7 +99,7 @@
         public float? SUPP_NET_AMOUNT { get; set; }
         public float? GROSS_AMOUNT { get; set; }
         public string? CHARGE_DESCRIPTION { get; set; }
-        public decimal? TAX_AMOUNT { get; set; }
+        public decimal? VAT_AMOUNT { get; set; }
         public float? NET_AMOUNT { get; set; }
         public decimal? RETURN_AMOUNT { get; set; }
         public float? ADJ_AMOUNT { get; set; }
@@ -126,7 +126,7 @@
         public float? SUPP_PRICE { get; set; }
         public float? SUPP_AMOUNT { get; set; }
         public decimal? VAT_PERC { get; set; }
-        public decimal? TAX_AMOUNT { get; set; }
+        public decimal? VAT_AMOUNT { get; set; }
         public int? GRN_STORE_ID { get; set; }
         public float RETURN_AMOUNT { get; set; }
         public string STORE_NAME { get; set; }

@@ -374,8 +374,8 @@ namespace MicroApi.DataLayer.Service
                                     TRANSFER_SUMMARY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     TRANSFER_NO = reader["ART_NO"]?.ToString(),
                                     ARTICLE = reader["ARTICLE"]?.ToString(),
-                                    TRANSFER_DATE = reader["UPDATED_DATE"] != DBNull.Value
-                                        ? Convert.ToDateTime(reader["UPDATED_DATE"]).ToString("dd-MM-yyyy")
+                                    TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value
+                                        ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy")
                                         : null,
                                     TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
                                         ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"])
@@ -646,6 +646,7 @@ namespace MicroApi.DataLayer.Service
                                         TAX_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
+                                        CUST_NAME = reader["CUST_NAME"]?.ToString(),
                                         SALE_DETAILS = new List<SaleDetailUpdate>()
                                     };
                                 }
@@ -658,8 +659,8 @@ namespace MicroApi.DataLayer.Service
                                     TRANSFER_DATE = reader["TRANSFER_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANSFER_DATE"]).ToString("dd-MM-yyyy") : null,
                                     ARTICLE = reader["ARTICLE"]?.ToString(),
                                     TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0,
-                                    //QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["QUANTITY"]) : (double?)null,
 
+                                    QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["QUANTITY"]) : (double?)null,
                                     PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToDouble(reader["PRICE"]) : 0,
                                     AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAXABLE_AMOUNT"]) : 0,
                                     GST = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
@@ -739,6 +740,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
 
                         // Prepare UDT (User Defined Table) for Sale Detail
+                      
                         DataTable dt = new DataTable();
                         dt.Columns.Add("TRANSFER_SUMMARY_ID", typeof(int));
                         dt.Columns.Add("QUANTITY", typeof(double));  // from TOTAL_PAIR_QTY
@@ -752,7 +754,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             dt.Rows.Add(
                                 item.TRANSFER_SUMMARY_ID ?? 0,
-                                item.TOTAL_PAIR_QTY,
+                                item.QUANTITY,
                                 item.PRICE ?? 0,
                                 item.AMOUNT ?? 0,
                                 item.GST ?? 0,
@@ -760,7 +762,6 @@ namespace MicroApi.DataLayer.Service
                                 item.TOTAL_AMOUNT ?? 0
                             );
                         }
-
                         SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_SALE_DETAIL", dt);
                         tvp.SqlDbType = SqlDbType.Structured;
                         tvp.TypeName = "UDT_SALE_DETAIL";

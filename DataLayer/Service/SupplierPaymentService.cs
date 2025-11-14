@@ -311,6 +311,7 @@ namespace MicroApi.DataLayer.Service
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                         PDC_ID = reader["PDC_ID"] != DBNull.Value ? Convert.ToInt32(reader["PDC_ID"]) : 0,
+                                        PDC_AMOUNT = reader["PDC_AMOUNT"] as decimal? ?? 0,
                                         PAY_DETAIL = new List<SupplierDetail>()
                                     };
                                 }

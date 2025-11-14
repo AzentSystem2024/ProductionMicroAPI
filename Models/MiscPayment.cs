@@ -48,9 +48,9 @@
         public int? HEAD_ID { get; set; }
         public string? REMARKS { get; set; }
         public double? AMOUNT { get; set; }
-        public double? VAT_AMOUNT { get; set; }
-        public string? VAT_REGN { get; set; }
-        public float? VAT_PERCENT { get; set; }
+       // public double? VAT_AMOUNT { get; set; }
+       // public string? VAT_REGN { get; set; }
+        //public float? VAT_PERCENT { get; set; }
         public string? LEDGER_CODE { get; set; }
         public string? LEDGER_NAME { get; set; }
    
@@ -73,9 +73,9 @@
         public float AMOUNT { get; set; }
         public int HEAD_ID { get; set; }
         public string REMARKS  { get; set; }
-        public float VAT_AMOUNT { get; set; }
-        public float VAT_PERCENT { get; set; }
-        public string VAT_REGN { get; set; }
+        //public float VAT_AMOUNT { get; set; }
+        //public float VAT_PERCENT { get; set; }
+        //public string VAT_REGN { get; set; }
         public int DEPT_ID { get; set; }
 
     }

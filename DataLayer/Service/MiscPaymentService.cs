@@ -50,9 +50,9 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("AMOUNT", typeof(decimal));
-                        dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
-                        dt.Columns.Add("VAT_REGN", typeof(string));
-                        dt.Columns.Add("VAT_PERCENT", typeof(double));
+                       // dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                        //dt.Columns.Add("VAT_REGN", typeof(string));
+                        //dt.Columns.Add("VAT_PERCENT", typeof(double));
 
                         int slno = 1;
                         // Add rows from your model
@@ -62,10 +62,10 @@ namespace MicroApi.DataLayer.Service
                                 slno++,0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
-                                item.AMOUNT,
-                                item.VAT_AMOUNT,
-                                item.VAT_REGN ,
-                                item.VAT_PERCENT
+                                item.AMOUNT
+                                //item.VAT_AMOUNT,
+                                //item.VAT_REGN ,
+                                //item.VAT_PERCENT
                             );
                         }
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_PAYMENT", dt);
@@ -128,9 +128,9 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("AMOUNT", typeof(decimal));
-                        dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
-                        dt.Columns.Add("VAT_REGN", typeof(string));
-                        dt.Columns.Add("VAT_PERCENT", typeof(double));
+                        //dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                        //dt.Columns.Add("VAT_REGN", typeof(string));
+                        //dt.Columns.Add("VAT_PERCENT", typeof(double));
 
                         int slno = 1;
                         // Add rows from your model
@@ -139,10 +139,10 @@ namespace MicroApi.DataLayer.Service
                             dt.Rows.Add(0, slno++,0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
-                                item.AMOUNT,
-                                item.VAT_AMOUNT,
-                                item.VAT_REGN,
-                                item.VAT_PERCENT
+                                item.AMOUNT
+                                //item.VAT_AMOUNT,
+                                //item.VAT_REGN,
+                                //item.VAT_PERCENT
                             );
                         }
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_PAYMENT", dt);
@@ -326,9 +326,9 @@ namespace MicroApi.DataLayer.Service
                                     SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : 0,
                                     HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
                                     AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["AMOUNT"]) : 0,
-                                    VAT_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["VAT_AMOUNT"]) : 0,
-                                    VAT_PERCENT = reader["VAT_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_PERCENT"]) : 0,
-                                    VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
+                                    //VAT_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["VAT_AMOUNT"]) : 0,
+                                    //VAT_PERCENT = reader["VAT_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_PERCENT"]) : 0,
+                                    //VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString()
@@ -400,9 +400,9 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("AMOUNT", typeof(decimal));
-                        dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
-                        dt.Columns.Add("VAT_REGN", typeof(string));
-                        dt.Columns.Add("VAT_PERCENT", typeof(double));
+                        //dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                        //dt.Columns.Add("VAT_REGN", typeof(string));
+                        //dt.Columns.Add("VAT_PERCENT", typeof(double));
 
                         int slno = 1;
                         // Add rows from your model
@@ -411,10 +411,10 @@ namespace MicroApi.DataLayer.Service
                             dt.Rows.Add(0, slno++, 0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
-                                item.AMOUNT,
-                                item.VAT_AMOUNT,
-                                item.VAT_REGN,
-                                item.VAT_PERCENT
+                                item.AMOUNT
+                                //item.VAT_AMOUNT,
+                                //item.VAT_REGN,
+                                //item.VAT_PERCENT
                             );
                         }
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_PAYMENT", dt);

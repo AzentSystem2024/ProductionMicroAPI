@@ -51,6 +51,8 @@ namespace MicroApi.DataLayer.Service
                                     response.USER_NAME = reader["USER_NAME"]?.ToString();
                                     response.DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString();
                                     response.COUNTRY_NAME = reader["COUNTRY_NAME"]?.ToString();
+                                    response.USER_ROLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null;
+                                    response.USER_ROLE_NAME = reader["UserRole"]?.ToString();
                                 }
 
                                 // Result 3: Assigned Companies
