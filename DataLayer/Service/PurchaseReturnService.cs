@@ -185,7 +185,6 @@ namespace MicroApi.DataLayer.Services
             }
             catch (Exception ex)
             {
-                // Rollback the transaction if an error occurs
                 objtrans.Rollback();
                 throw;
             }
@@ -340,12 +339,15 @@ namespace MicroApi.DataLayer.Services
                 }
 
                 strSQL = " SELECT distinct TB_PURCH_RET_DETAIL.*,  TB_COMPANY_MASTER.COMPANY_NAME,TB_STORES.STORE_NAME, " +
-                " TB_ITEMS.DESCRIPTION,TB_ITEMS.BARCODE,TB_GRN_DETAIL.DISC_PERCENT,TB_GRN_DETAIL.SUPP_PRICE,TB_GRN_DETAIL.RETURN_QTY,TB_ITEM_STOCK.QTY_STOCK FROM TB_PURCH_RET_DETAIL " +
+                " TB_ITEMS.DESCRIPTION,TB_ITEMS.BARCODE,TB_GRN_DETAIL.DISC_PERCENT,TB_GRN_DETAIL.SUPP_PRICE,TB_GRN_DETAIL.RETURN_QTY,TB_ITEM_STOCK.QTY_STOCK," +
+                "TB_PURCH_HEADER.PURCH_DATE,TB_PURCH_HEADER.DOC_NO FROM TB_PURCH_RET_DETAIL " +
                 " LEFT JOIN TB_COMPANY_MASTER ON TB_PURCH_RET_DETAIL.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                 " LEFT JOIN TB_STORES ON TB_PURCH_RET_DETAIL.STORE_ID = TB_STORES.ID " +
                 " LEFT JOIN TB_ITEMS ON TB_PURCH_RET_DETAIL.ITEM_ID = TB_ITEMS.ID " +
                 " LEFT JOIN TB_GRN_DETAIL ON TB_PURCH_RET_DETAIL.ITEM_ID = TB_GRN_DETAIL.ITEM_ID and TB_PURCH_RET_DETAIL.GRN_DET_ID = TB_GRN_DETAIL.ID " +
                 " LEFT JOIN TB_ITEM_STOCK ON TB_ITEM_STOCK.ITEM_ID = TB_ITEMS.ID and TB_ITEM_STOCK.STORE_ID = TB_GRN_DETAIL.STORE_ID " +
+                "LEFT JOIN TB_PURCH_DETAIL ON TB_PURCH_RET_DETAIL.PURCH_DET_ID=TB_PURCH_DETAIL.ID " +
+                "LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID " +
                 " WHERE TB_PURCH_RET_DETAIL.RET_ID = " + id;
 
                 DataTable tblgrndetail = ADO.GetDataTable(strSQL, "GrnDetails");
@@ -380,7 +382,9 @@ namespace MicroApi.DataLayer.Services
                         SUPP_PRICE = ADO.ToDecimal(dr3["SUPP_PRICE"]),
                         RETURN_QTY = ADO.ToFloat(dr3["RETURN_QTY"]),
                         QTY_STOCK = ADO.ToFloat(dr3["QTY_STOCK"]),
-                        PURCH_DET_ID = ADO.ToInt32(dr3["PURCH_DET_ID"])
+                        PURCH_DET_ID = ADO.ToInt32(dr3["PURCH_DET_ID"]),
+                        PURCH_DATE = Convert.ToDateTime(dr3["PURCH_DATE"]),
+                        DOC_NO = ADO.ToString(dr3["DOC_NO"]),
 
                     });
                 }
@@ -727,6 +731,39 @@ namespace MicroApi.DataLayer.Services
 
             return res;
         }
+        public PurchaseReturnDoc GetLastDocNo()
+        {
+            PurchaseReturnDoc res = new PurchaseReturnDoc();
 
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"
+                    SELECT TOP 1 VOUCHER_NO 
+                    FROM TB_AC_TRANS_HEADER 
+                    WHERE TRANS_TYPE = 20
+                    ORDER BY TRANS_ID DESC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        res.flag = 1;
+                        res.PURCHASE_NO = result != null ? Convert.ToInt32(result) : 0;
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }

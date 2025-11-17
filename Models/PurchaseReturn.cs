@@ -57,6 +57,8 @@
         public int? UOM_MULTIPLE { get; set; }
         public float? DISC_PERCENT { get; set; }
         public int? PURCH_DET_ID { get; set; }
+        public DateTime? PURCH_DATE { get; set; }
+        public string? DOC_NO { get; set; }
 
     }
     public class Input
@@ -163,5 +165,11 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<PurchaseReturnList> Data { get; set; }
+    }
+    public class PurchaseReturnDoc
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public int PURCHASE_NO { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Verify(PurchaseReturn purchaseReturn);
         public Int32 Approve(PurchaseReturn purchaseReturn);
         PurchaseInvoiceDetailResponse GetPurchaseInvoiceDetail(InvoiceInput request);
+        PurchaseReturnDoc GetLastDocNo();
     }
 }

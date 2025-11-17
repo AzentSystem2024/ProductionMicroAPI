@@ -1,5 +1,6 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
+using MicroApi.DataLayer.Services;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -233,6 +234,24 @@ namespace MicroApi.Controllers
                 res.Flag = 0;
                 res.Message = "Error: " + ex.Message;
                 res.Data = new List<PurchaseInvoiceDetail>();
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("Docno")]
+        public PurchaseReturnDoc GetLastDocNo()
+        {
+            PurchaseReturnDoc res = new PurchaseReturnDoc();
+
+            try
+            {
+                res = _purchaseReturnService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
             }
 
             return res;
