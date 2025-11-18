@@ -701,7 +701,8 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = "SELECT TB_PO_HEADER.*, TB_STORES.STORE_NAME, TB_SUPPLIER.SUPP_NAME," +
-                    "TB_PAYMENT_TERMS.DESCRIPTION as PAYMENT_NAME, " +
+                    "TB_PAYMENT_TERMS.DESCRIPTION as PAYMENT_NAME,TB_CURRENCY.DESCRIPTION AS CURRENCY_NAME, " +
+                    "TB_VAT_RULE_SUPPLIER.DESCRIPTION AS VAT_RULE_NAME,TB_SUPPLIER.EMAIL, " +
                     "TB_DELIVERY_TERMS.DESCRIPTION AS DELIVERY_TERM, TB_STATUS.STATUS_DESC, " +
                     "TB_AC_TRANS_HEADER.NARRATION AS NARRATION, " +
                     "TB_EMPLOYEE.EMP_NAME FROM TB_PO_HEADER " +
@@ -713,6 +714,7 @@ namespace MicroApi.DataLayer.Services
                     "LEFT JOIN TB_EMPLOYEE on TB_PO_HEADER.ISSUED_EMP_ID = TB_EMPLOYEE.ID " +
                     "LEFT JOIN TB_CURRENCY on TB_PO_HEADER.CURRENCY_ID = TB_CURRENCY.ID " +
                     "LEFT JOIN TB_AC_TRANS_HEADER ON TB_PO_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID " +
+                    "LEFT JOIN TB_VAT_RULE_SUPPLIER ON TB_SUPPLIER.VAT_RULE_ID = TB_VAT_RULE_SUPPLIER.ID " +
 
                     "WHERE TB_PO_HEADER.ID = " + id;
 
@@ -763,7 +765,10 @@ namespace MicroApi.DataLayer.Services
                         PAY_TERM = ADO.ToString(dr["PAYMENT_NAME"]),
                         DELIVERY_TERM = ADO.ToString(dr["DELIVERY_TERM"]),
                         NARRATION = ADO.ToString(dr["NARRATION"]),
-                        TRANS_ID = ADO.ToInt32(dr["TRANS_ID"])
+                        TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
+                        SUPPLIER_EMAIL = ADO.ToString(dr["EMAIL"]),
+                        CURRENCY_NAME = ADO.ToString(dr["CURRENCY_NAME"]),
+                        VAT_RULE_NAME = ADO.ToString(dr["VAT_RULE_NAME"]),
 
                     };
                 }

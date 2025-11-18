@@ -84,6 +84,9 @@ namespace MicroApi.Models
         public int? USER_ID { get; set; }
         public string? PAY_TERM { get; set; }
         public string? DELIVERY_TERM { get; set; }
+        public string? CURRENCY_NAME { get; set; }
+        public string? VAT_RULE_NAME { get; set; }
+        public string? SUPPLIER_EMAIL { get; set; }
 
 
         public List<PurchaseOrderDetail>? PoDetails { get; set; }
