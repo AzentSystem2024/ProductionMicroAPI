@@ -25,15 +25,17 @@ namespace MicroApi.DataLayer.Service
                         CMD.CommandType = CommandType.StoredProcedure;
 
                         CMD.Parameters.AddWithValue("@ACTION", 1);
-                        CMD.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
+                        CMD.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);   // ok
                         CMD.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE);
                         CMD.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                         CMD.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         CMD.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+
                         CMD.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
                         CMD.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
                         CMD.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
                         CMD.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);
+
                         CMD.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
@@ -41,34 +43,45 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@RECON_DATE", ParseDate(model.RECON_DATE));
                         CMD.Parameters.AddWithValue("@PDC_ID", model.PDC_ID ?? 0);
                         CMD.Parameters.AddWithValue("@IS_CLOSED", model.IS_CLOSED ?? false);
+
                         CMD.Parameters.AddWithValue("@PARTY_ID", model.PARTY_ID ?? 0);
                         CMD.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
                         CMD.Parameters.AddWithValue("@PARTY_REF_NO", model.PARTY_REF_NO ?? string.Empty);
                         CMD.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
+
                         CMD.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
                         CMD.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
+
                         CMD.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         CMD.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
                         CMD.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
                         CMD.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
                         CMD.Parameters.AddWithValue("@APPROVE3_USER_ID", model.APPROVE3_USER_ID ?? 0);
+
                         CMD.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         CMD.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
+
                         CMD.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
                         CMD.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
-                        CMD.Parameters.AddWithValue("@BILL_NO", model.BILL_NO ?? string.Empty);
+
                         CMD.Parameters.AddWithValue("@STORE_AUTO_ID", model.STORE_AUTO_ID ?? 0);
                         CMD.Parameters.AddWithValue("@JOB_ID", model.JOB_ID ?? 0);
 
                         CMD.Parameters.AddWithValue("@SALE_DATE", ParseDate(model.SALE_DATE));
                         CMD.Parameters.AddWithValue("@SALE_REF_NO", model.SALE_REF_NO ?? string.Empty);
+
                         CMD.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
                         CMD.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
+
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.GST_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
 
-                        // SALE DETAIL UDT
+                        // ⭐ Required new parameter
+                        CMD.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
+
+
+                        // UDT for details
                         DataTable DT = new DataTable();
                         DT.Columns.Add("TRANSFER_SUMMARY_ID", typeof(int));
                         DT.Columns.Add("QUANTITY", typeof(double));
@@ -102,14 +115,15 @@ namespace MicroApi.DataLayer.Service
                     }
                 }
             }
-            catch (Exception EX)
+            catch (Exception ex)
             {
                 RESPONSE.flag = 0;
-                RESPONSE.Message = "ERROR: " + EX.Message;
+                RESPONSE.Message = "ERROR: " + ex.Message;
             }
 
             return RESPONSE;
         }
+
         public InvoiceResponse Update(InvoiceUpdate model)
         {
             InvoiceResponse response = new InvoiceResponse();
@@ -647,6 +661,23 @@ namespace MicroApi.DataLayer.Service
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         CUST_NAME = reader["CUST_NAME"]?.ToString(),
+                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                        ADDRESS1 = reader["ADDRESS1"]?.ToString(),
+                                        ADDRESS2 = reader["ADDRESS2"]?.ToString(),
+                                        ADDRESS3 = reader["ADDRESS3"]?.ToString(),
+                                        COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
+                                        EMAIL = reader["EMAIL"]?.ToString(),
+                                        PHONE = reader["PHONE"]?.ToString(),
+                                        CUST_CODE = reader["CUST_CODE"]?.ToString(),
+                                        CUST_ADDRESS1 = reader["CUST_ADDRESS1"]?.ToString(),
+                                        CUST_ADDRESS2 = reader["CUST_ADDRESS2"]?.ToString(),
+                                        CUST_ADDRESS3 = reader["CUST_ADDRESS3"]?.ToString(),
+                                        CUST_ZIP = reader["ZIP"]?.ToString(),
+                                        CUST_CITY = reader["CITY"]?.ToString(),
+                                        CUST_STATE = reader["STATE_NAME"]?.ToString(),
+                                        CUST_PHONE = reader["CUST_PHONE"]?.ToString(),
+                                        CUST_EMAIL = reader["CUST_EMAIL"]?.ToString(),
+
                                         SALE_DETAILS = new List<SaleDetailUpdate>()
                                     };
                                 }

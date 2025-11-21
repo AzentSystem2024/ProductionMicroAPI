@@ -4,6 +4,7 @@ using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Reflection;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -242,6 +243,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@EXCHANGE_RATE", grnHeader.EXCHANGE_RATE);
                 cmd.Parameters.AddWithValue("@NARRATION", grnHeader.NARRATION);
                 cmd.Parameters.AddWithValue("@USER_ID", grnHeader.USER_ID);
+                cmd.Parameters.AddWithValue("@IS_APPROVED", grnHeader.IS_APPROVED == true ? 1 : 0);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_DETAIL", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_ITEM_COST", tbl1);
@@ -633,7 +635,7 @@ namespace MicroApi.DataLayer.Service
                         GRN_NO = ADO.ToInt32(dr["GRN_NO"]),
                         GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
-                        SUPPPLIER_NAME = ADO.ToString(dr["STORE_NAME"]),
+                        SUPPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
                         NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
                         TOTAL_COST = ADO.ToFloat(dr["TOTAL_COST"]),
                         SUPP_GROSS_AMOUNT = ADO.ToFloat(dr["SUPP_GROSS_AMOUNT"]),

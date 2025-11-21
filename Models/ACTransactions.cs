@@ -31,6 +31,7 @@
         public string? ADD_TIME { get; set; } 
         public int? CREATED_STORE_ID { get; set; }
         public int? DEPT_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<JournalDetail> DETAILS { get; set; }
     }
 
@@ -229,6 +230,7 @@
         public string? BILL_NO { get; set; }
         public int? JOB_ID { get; set; }
         public int? STORE_AUTO_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
 

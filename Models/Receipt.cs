@@ -37,6 +37,7 @@
         public string? ADD_TIME { get; set; }
         public int? CREATED_STORE_ID { get; set; }
         public double? NET_AMOUNT { get; set; }
+        public bool? IS_APPROVED { get; set; }
 
         public List<CustomerReceiptDetail> REC_DETAIL { get; set; }
     }

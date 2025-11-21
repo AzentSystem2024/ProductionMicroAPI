@@ -12,7 +12,8 @@ namespace MicroApi.Models
         public int PACK_QTY { get; set; }
         public string PART_NO { get; set; }
         public string ALIAS_NO { get; set; }
-        public int UNIT_ID { get; set; }
+        //public int UNIT_ID { get; set; }
+        public string UNIT_ID { get; set; }
         public int ARTICLE_TYPE { get; set; }
         public int CATEGORY_ID { get; set; }
         public string? IMAGE_NAME { get; set; }
@@ -59,7 +60,8 @@ namespace MicroApi.Models
         public int PACK_QTY { get; set; }
         public string PART_NO { get; set; }
         public string ALIAS_NO { get; set; }
-        public int? UNIT_ID { get; set; }
+        //public int? UNIT_ID { get; set; }
+        public string UNIT_ID { get; set; }
         //public string? UnitCode { get; set; }
         public int? ARTICLE_TYPE { get; set; }
         public string? ARTICLE_TYPE_NAME { get; set; }
@@ -98,7 +100,7 @@ namespace MicroApi.Models
     }
     public class ArticleSelectRequest
     {
-        public int UnitID { get; set; }
+        public string UnitID { get; set; }
         public string ArtNo { get; set; }
         public string Color { get; set; }
         public int CategoryID { get; set; }
@@ -121,6 +123,13 @@ namespace MicroApi.Models
         public string Message { get; set; } = string.Empty;
         public ItemData? Data { get; set; }
     }
+    public class ListItemsResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<ItemData> DataList { get; set; }
+    }
+
 
     public class ItemData
     {

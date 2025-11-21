@@ -415,6 +415,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
+                cmd.Parameters.AddWithValue("HSN_CODE", items.HSN_CODE);
+                cmd.Parameters.AddWithValue("GST_PERC", items.GST_PERC);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
@@ -642,6 +644,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
+                cmd.Parameters.AddWithValue("HSN_CODE", items.HSN_CODE);
+                cmd.Parameters.AddWithValue("GST_PERC", items.GST_PERC);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_SUPPLIER", tbl2);
@@ -680,7 +684,7 @@ namespace MicroApi.DataLayer.Services
                                 "TB_ITEMS.ITEM_SL, TB_ITEMS.SALE_PRICE1, TB_ITEMS.SALE_PRICE2, TB_ITEMS.SALE_PRICE3, TB_ITEMS.SALE_PRICE4, TB_ITEMS.SALE_PRICE5, " +
                                 "TB_ITEMS.PURCH_PRICE, TB_ITEMS.PURCH_CURRENCY, TB_ITEMS.IS_CONSIGNMENT, TB_ITEMS.VAT_CLASS_ID, TB_ITEMS.ITEM_PROPERTY1, " +
                                 "TB_ITEMS.IS_DELETED, TB_ITEMS.ITEM_PROPERTY2, TB_ITEMS.ITEM_PROPERTY3, TB_ITEMS.ITEM_PROPERTY4, TB_ITEMS.ITEM_PROPERTY5, " +
-                                "TB_ITEMS.COSTING_METHOD, " +
+                                "TB_ITEMS.COSTING_METHOD,TB_ITEMS.HSN_CODE,TB_ITEMS.GST_PERC, " +
                                 "TB_ITEMS.RESTOCK_LEVEL, TB_ITEMS.REORDER_POINT, TB_ITEMS.BIN_LOCATION, TB_ITEMS.POS_DESCRIPTION, " +
 
                                 "TB_ITEMS.IS_DIFFERENT_UOM_PURCH, TB_ITEMS.UOM_PURCH, TB_ITEMS.UOM_MULTPLE,TB_ITEMS.MATRIX_CODE, " +
@@ -781,6 +785,8 @@ namespace MicroApi.DataLayer.Services
                         UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
                         UOM_MULTPLE = dr["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(dr["UOM_MULTPLE"]) : 0,
                         MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
+                        HSN_CODE = dr["HSN_CODE"] != DBNull.Value ? Convert.ToString(dr["HSN_CODE"]) : string.Empty,
+                        GST_PERC = Convert.IsDBNull(dr["GST_PERC"]) ? (float?)null : Convert.ToSingle(dr["GST_PERC"]),
 
 
                     };

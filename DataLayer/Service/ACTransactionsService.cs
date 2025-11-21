@@ -35,7 +35,9 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
-                        cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
+                        int status = (model.IS_APPROVED == true) ? 5 : (model.TRANS_STATUS ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_STATUS", status);
+                        // cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
                         cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CHEQUE_DATE", ParseDate(model.CHEQUE_DATE));
@@ -59,6 +61,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
                         cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
                         // === UDT Table ===
                         DataTable dt = new DataTable();
@@ -742,6 +745,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BILL_NO", model.BILL_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@JOB_ID", model.JOB_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_AUTO_ID", model.STORE_AUTO_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
                         // Table-valued parameter
                         DataTable dt = new DataTable();

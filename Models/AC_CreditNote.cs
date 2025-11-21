@@ -36,6 +36,7 @@
         public string INVOICE_NO { get; set; }
         public int? UNIT_ID { get; set; }
         public int? DISTRIBUTOR_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
 
         public List<CreditNoteDetail> NOTE_DETAIL { get; set; }
     }

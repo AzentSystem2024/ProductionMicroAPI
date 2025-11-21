@@ -44,6 +44,7 @@
         public float? GROSS_AMOUNT { get; set; }
         public float? GST_AMOUNT { get; set; }
         public float? NET_AMOUNT { get; set; }
+        public bool? IS_APPROVED { get; set; }
 
         // FOR TROUT SUMMARY UPDATE
         public List<SaleDetail> SALE_DETAILS { get; set; }
@@ -163,7 +164,6 @@
         public int TRANS_TYPE { get; set; }
         public string SALE_NO { get; set; }
         public string SALE_DATE { get; set; }
-        public int UNIT_ID { get; set; }
         public int DISTRIBUTOR_ID { get; set; }
         public float GROSS_AMOUNT { get; set; }
         public float TAX_AMOUNT { get; set; }
@@ -171,6 +171,22 @@
         public string? REF_NO { get; set; }
         public string? PARTY_NAME { get; set; }
         public string? CUST_NAME { get; set; }
+        public string? COMPANY_NAME { get; set; }
+        public string? ADDRESS1 { get; set; }
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? COMPANY_CODE { get; set; }
+        public string? EMAIL { get; set; }
+        public string? PHONE { get; set; }
+        public string? CUST_CODE { get; set; }
+        public string? CUST_ADDRESS1 { get; set; }
+        public string? CUST_ADDRESS2 { get; set; }
+        public string? CUST_ADDRESS3 { get; set; }
+        public string? CUST_ZIP { get; set; }
+        public string? CUST_CITY { get; set; }
+        public string? CUST_STATE { get; set; }
+        public string? CUST_PHONE { get; set; }
+        public string? CUST_EMAIL { get; set; }
         public List<SaleDetailUpdate> SALE_DETAILS { get; set; }
 
     }

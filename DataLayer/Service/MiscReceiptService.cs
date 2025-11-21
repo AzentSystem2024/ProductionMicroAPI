@@ -46,6 +46,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
                         cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
 
 

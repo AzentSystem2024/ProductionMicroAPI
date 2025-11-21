@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -218,22 +219,21 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                string strSQL = @"SELECT TB_PURCH_HEADER.*, 
-                             TB_STORES.STORE_NAME, 
-                             TB_SUPPLIER.SUPP_NAME, 
-                             TB_PO_HEADER.PO_NO, 
-                             TB_CURRENCY.ID AS CURRENCY_ID, 
-                             TB_CURRENCY.SYMBOL, 
-                             TB_STATUS.STATUS_DESC AS STATUS, 
-                             TB_AC_TRANS_HEADER.NARRATION AS NARRATION 
-                          FROM TB_PURCH_HEADER 
-                          LEFT JOIN TB_STORES ON TB_PURCH_HEADER.STORE_ID = TB_STORES.ID 
-                          LEFT JOIN TB_SUPPLIER ON TB_PURCH_HEADER.SUPP_ID = TB_SUPPLIER.ID 
-                          LEFT JOIN TB_AC_TRANS_HEADER ON TB_PURCH_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID 
-                          LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID 
-                          LEFT JOIN TB_PO_HEADER ON TB_PURCH_HEADER.PO_ID = TB_PO_HEADER.ID 
-                          LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.ID 
-                          WHERE TB_AC_TRANS_HEADER.TRANS_ID = " + id;
+                string strSQL = @"SELECT TB_PURCH_HEADER.*,TB_STORES.STORE_NAME,TB_SUPPLIER.SUPP_NAME,TB_PO_HEADER.PO_NO, 
+                                  TB_CURRENCY.ID AS CURRENCY_ID,TB_CURRENCY.SYMBOL,TB_STATUS.STATUS_DESC AS STATUS, 
+                                  TB_AC_TRANS_HEADER.NARRATION AS NARRATION,TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE,
+                                  TB_COMPANY_MASTER.COMPANY_NAME,TB_COMPANY_MASTER.PHONE,TB_COMPANY_MASTER.EMAIL,TB_SUPPLIER.ADDRESS1 AS SUPP_ADDRESS1,TB_SUPPLIER.ADDRESS2 AS SUPP_ADDRESS2,TB_SUPPLIER.ADDRESS3 AS SUPP_ADDRESS3, 
+                                  TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE,TB_SUPPLIER.EMAIL AS SUPP_EMAIL,TB_SUPPLIER.SUPP_CODE,TB_STATE.STATE_NAME
+                                  FROM TB_PURCH_HEADER 
+                                  LEFT JOIN TB_STORES ON TB_PURCH_HEADER.STORE_ID = TB_STORES.ID 
+                                  LEFT JOIN TB_SUPPLIER ON TB_PURCH_HEADER.SUPP_ID = TB_SUPPLIER.ID 
+                                  LEFT JOIN TB_AC_TRANS_HEADER ON TB_PURCH_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID 
+                                  LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID 
+                                  LEFT JOIN TB_PO_HEADER ON TB_PURCH_HEADER.PO_ID = TB_PO_HEADER.ID 
+                                  LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.ID 
+                                  LEFT JOIN TB_STATE ON TB_SUPPLIER.STATE_ID= TB_STATE.ID
+                                  LEFT JOIN TB_COMPANY_MASTER ON TB_PURCH_HEADER.COMPANY_ID=TB_COMPANY_MASTER.ID
+                                  WHERE TB_AC_TRANS_HEADER.TRANS_ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "PurchHeader");
 
@@ -264,7 +264,24 @@ namespace MicroApi.DataLayer.Service
                         NET_AMOUNT = dr["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["NET_AMOUNT"]) : (float?)null,
                         RETURN_AMOUNT = dr["RETURN_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(dr["RETURN_AMOUNT"]) : (decimal?)null,
                         ADJ_AMOUNT = dr["ADJ_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["ADJ_AMOUNT"]) : (float?)null,
-                        PAID_AMOUNT = dr["PAID_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["PAID_AMOUNT"]) : 0f
+                        PAID_AMOUNT = dr["PAID_AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["PAID_AMOUNT"]) : 0f,
+                        COMPANY_NAME = ADO.ToString(dr["COMPANY_NAME"]),
+                        ADDRESS1 = ADO.ToString(dr["ADDRESS1"]),
+                        ADDRESS2 = ADO.ToString(dr["ADDRESS2"]),
+                        ADDRESS3 = ADO.ToString(dr["ADDRESS3"]),
+                        COMPANY_CODE = ADO.ToString(dr["COMPANY_CODE"]),
+                        EMAIL = ADO.ToString(dr["EMAIL"]),
+                        PHONE = ADO.ToString(dr["PHONE"]),
+                        SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
+                        SUPP_ADDRESS1 = ADO.ToString(dr["SUPP_ADDRESS1"]),
+                        SUPP_ADDRESS2 = ADO.ToString(dr["SUPP_ADDRESS2"]),
+                        SUPP_ADDRESS3 = ADO.ToString(dr["SUPP_ADDRESS3"]),
+                        SUPP_CITY = ADO.ToString(dr["CITY"]),
+                        SUPP_CODE = ADO.ToString(dr["SUPP_CODE"]),
+                        SUPP_ZIP = ADO.ToString(dr["ZIP"]),
+                        SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
+                        SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
+                        SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
                     };
                 }
 
@@ -432,6 +449,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
                 cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION);
+                cmd.Parameters.AddWithValue("@IS_APPROVED", purchHeader.IS_APPROVED == true ? 1 : 0);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
@@ -907,7 +925,7 @@ namespace MicroApi.DataLayer.Service
             return invoiceList;
         }
 
-
+        
         public GrnPendingQtyResponse GetGrnPendingQty(PendingGRNRequest request)
         {
             GrnPendingQtyResponse res = new GrnPendingQtyResponse();

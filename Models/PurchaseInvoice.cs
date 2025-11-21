@@ -14,7 +14,7 @@
         public string STATUS { get; set; }
         public string PO_NO { get; set; }
         public long? TRANS_ID { get; set; }
-
+        
     }
     public class PIDropdownInput
     {
@@ -104,6 +104,24 @@
         public decimal? RETURN_AMOUNT { get; set; }
         public float? ADJ_AMOUNT { get; set; }
         public float PAID_AMOUNT { get; set; }
+        public bool? IS_APPROVED { get; set; }
+        public string? COMPANY_NAME { get; set; } //for select
+        public string? ADDRESS1 { get; set; }
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? EMAIL { get; set; }
+        public string? PHONE { get; set; }
+        public string? COMPANY_CODE { get; set; }
+        public string? SUPP_NAME { get; set; }
+        public string? SUPP_ADDRESS1 { get; set; }
+        public string? SUPP_ADDRESS2 { get; set; }
+        public string? SUPP_ADDRESS3 { get; set; }
+        public string? SUPP_EMAIL { get; set; }
+        public string? SUPP_PHONE { get; set; }
+        public string? SUPP_CODE { get; set; }
+        public string? SUPP_STATE_NAME { get; set; }
+        public string? SUPP_ZIP { get; set; }
+        public string? SUPP_CITY { get; set; }
         public List<PurchDetails> PurchDetails { get; set; }
     }
     public class PurchDetails

@@ -42,7 +42,8 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@PACK_QTY", article.PACK_QTY);
                         cmd.Parameters.AddWithValue("@PART_NO", article.PART_NO ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@ALIAS_NO", article.ALIAS_NO ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID);
+                        //cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID);
+                        cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", article.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", article.CATEGORY_ID);
                         cmd.Parameters.AddWithValue("@BRAND_ID", article.BRAND_ID);
@@ -71,7 +72,7 @@ namespace MicroApi.Service
 
                         // ✅ Structured parameter for BOM (UDT_TB_ARTICLE_BOM)
                         var bomTable = new DataTable();
-                        bomTable.Columns.Add("ITEM_CODE", typeof(string));
+                        bomTable.Columns.Add("ITEM_ID", typeof(int));
                         bomTable.Columns.Add("QUANTITY", typeof(decimal));
                         if (article.BOM != null)
                         {
@@ -126,7 +127,8 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@PACK_QTY", article.PACK_QTY);
                         cmd.Parameters.AddWithValue("@PART_NO", article.PART_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@ALIAS_NO", article.ALIAS_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? 0);
+                        //cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", article.ARTICLE_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", article.CATEGORY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@BRAND_ID", article.BRAND_ID ?? 0);
@@ -156,7 +158,7 @@ namespace MicroApi.Service
 
                         // 🔹 Structured parameter for BOMItems
                         var bomTable = new DataTable();
-                        bomTable.Columns.Add("ITEM_CODE", typeof(string));
+                        bomTable.Columns.Add("ITEM_ID", typeof(int));
                         bomTable.Columns.Add("QUANTITY", typeof(decimal));
 
                         if (article.BOM != null)
@@ -206,7 +208,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@ART_NO", request.ArtNo);
                         cmd.Parameters.AddWithValue("@COLOR", request.Color);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CategoryID);
-                        cmd.Parameters.AddWithValue("@PRICE", request.Price);
+                        cmd.Parameters.Add("@PRICE", SqlDbType.Decimal).Value = request.Price;
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -224,7 +226,7 @@ namespace MicroApi.Service
                                     PART_NO = reader["PART_NO"]?.ToString() ?? string.Empty,
                                     NEXT_SERIAL = reader["NEXT_SERIAL"] != DBNull.Value ? Convert.ToInt32(reader["NEXT_SERIAL"]) : (int?)null,
                                     ALIAS_NO = reader["ALIAS_NO"]?.ToString() ?? string.Empty,
-                                    UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
+                                    UNIT_ID = reader["UNIT_ID"]?.ToString() ?? string.Empty,
                                     ARTICLE_TYPE = reader["ARTICLE_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_TYPE"]) : 0,
                                     CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
                                     BRAND_ID = reader["BRAND_ID"] != DBNull.Value ? Convert.ToInt32(reader["BRAND_ID"]) : 0,
@@ -314,26 +316,21 @@ namespace MicroApi.Service
                     using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.CommandTimeout = 1000; // 5 minutes timeout
-
-                        cmd.Parameters.AddWithValue("@ACTION", 0); // List
-
-                        // ✅ Pass filter values
-                        //cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM ?? (object)DBNull.Value);
-                        // cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO ?? (object)DBNull.Value);
+                        cmd.CommandTimeout = 1000;
+                        cmd.Parameters.AddWithValue("@ACTION", 0);
 
                         using (var reader = cmd.ExecuteReader())
                         {
                             var articles = new List<ArticleUpdate>();
 
-                            // Step 1: Read article data
+                            #region STEP 1 ➤ Read article master
                             while (reader.Read())
                             {
                                 var article = new ArticleUpdate
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
                                     ART_NO = reader["ART_NO"]?.ToString(),
-                                    UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
+                                    UNIT_ID = reader["UNIT_ID"]?.ToString(), // ⚠️ Keep as STRING
                                     COLOR = reader["COLOR"]?.ToString(),
                                     CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
                                     PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
@@ -345,15 +342,19 @@ namespace MicroApi.Service
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
-                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"])) : (DateTime?)null,
-                                    STANDARD_PACKING= reader["STD_PACKING"]?.ToString() ?? string.Empty,
+                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value
+                                    ? (reader["CREATED_DATE"] is DateTimeOffset dto
+                                            ? dto.UtcDateTime
+                                            : Convert.ToDateTime(reader["CREATED_DATE"]))
+                                    : (DateTime?)null,
+                                    STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? "",
                                     SIZES = new List<Sizes>()
                                 };
-
                                 articles.Add(article);
                             }
+                            #endregion
 
-                            // Step 2: Read sizes
+                            #region STEP 2 ➤ Read Sizes
                             if (reader.NextResult())
                             {
                                 while (reader.Read())
@@ -366,22 +367,39 @@ namespace MicroApi.Service
 
                                     string artNo = reader["ART_NO"]?.ToString();
                                     string color = reader["COLOR"]?.ToString();
-                                    int unitId = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0;
+                                    string unitIdStr = reader["UNIT_ID"]?.ToString() ?? "";  // ⚠️ Keep string
                                     int catId = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0;
                                     float price = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0;
 
+                                    // ✅ Match Sizes correctly for multi-unit
                                     var match = articles.FirstOrDefault(a =>
-                                        a.ART_NO == artNo &&
-                                        a.UNIT_ID == unitId &&
-                                        a.COLOR == color &&
-                                        a.CATEGORY_ID == catId &&
-                                        a.PRICE == price
-                                    );
+                                    {
+                                        if (a.ART_NO != artNo) return false;
+                                        if (a.COLOR != color) return false;
+                                        if (a.CATEGORY_ID != catId) return false;
+                                        if (a.PRICE != price) return false;
+                                        if (string.IsNullOrEmpty(a.UNIT_ID)) return false;
+
+                                        // Article Unit IDs as string list (no conversion)
+                                        var articleUnits = a.UNIT_ID.Split(',')
+                                                                    .Select(x => x.Trim())
+                                                                    .ToList();
+
+                                        // Size Row Unit ID as string list (no conversion)
+                                        var sizeUnits = unitIdStr.Split(',')
+                                                                 .Select(x => x.Trim())
+                                                                 .ToList();
+
+                                        // Check if any unit matches (string comparison)
+                                        return sizeUnits.Any(u => articleUnits.Contains(u));
+                                    });
+
 
                                     if (match != null)
                                         match.SIZES.Add(size);
                                 }
                             }
+                            #endregion
 
                             res.Data = articles;
                             res.flag = 1;
@@ -399,6 +417,52 @@ namespace MicroApi.Service
 
             return res;
         }
+        public ListItemsResponse GetItems()
+        {
+            ListItemsResponse res = new ListItemsResponse();
+            res.DataList = new List<ItemData>();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT ID, ITEM_CODE + '-' + DESCRIPTION AS ITEM_NAME 
+                             FROM TB_ITEMS 
+                             WHERE IS_DELETED = 0 
+                             ORDER BY ID ASC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())  
+                            {
+                                res.DataList.Add(new ItemData
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["ITEM_NAME"]?.ToString() ?? string.Empty,
+                                });
+                            }
+                        }
+                    }
+                }
+
+                res.flag = res.DataList.Count > 0 ? 1 : 0;
+                res.Message = res.DataList.Count > 0 ? "Success" : "No record found";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+
+
         public ItemdataResponse GetItemByCode(ItemcodeRequest request)
         {
             ItemdataResponse res = new ItemdataResponse();
@@ -450,7 +514,6 @@ namespace MicroApi.Service
             return res;
         }
 
-
         public ArticleResponse DeleteArticleData(DeleteArticleRequest request)
         {
             var res = new ArticleResponse();
@@ -481,10 +544,10 @@ namespace MicroApi.Service
             return res;
         }
 
-        //getting Lasrorderno from the unit
-        public string GetLastOrderNoByUnitId(int unitId)
+        public string GetLastOrderNoByUnitId()
         {
-            string lastOrderNo = "0"; // Default value if no order number is found
+            string lastOrderNo = "0";
+
             try
             {
                 using (var connection = ADO.GetConnection())
@@ -492,12 +555,13 @@ namespace MicroApi.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    using (var cmd = new SqlCommand("SP_GetLastOrderNoByUnitId", connection))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@UNIT_ID", unitId);
+                    string query = @"SELECT ISNULL(MAX(ORDER_NO), 0) AS LastOrderNo 
+                             FROM TB_ARTICLE";
 
-                        var result = cmd.ExecuteScalar();
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        object result = cmd.ExecuteScalar();
+
                         if (result != null && result != DBNull.Value)
                         {
                             lastOrderNo = result.ToString();
@@ -507,10 +571,11 @@ namespace MicroApi.Service
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it as needed
                 Console.WriteLine(ex.Message);
             }
+
             return lastOrderNo;
         }
+
     }
 }

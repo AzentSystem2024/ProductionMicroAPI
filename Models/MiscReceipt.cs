@@ -16,6 +16,7 @@
         public int? PAY_HEAD_ID { get; set; }
         public int? DEPT_ID { get; set; }
         public int? STORE_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<MiscReceiptDetail> DETAILS { get; set; }
     }
     public class MiscReceiptDetail

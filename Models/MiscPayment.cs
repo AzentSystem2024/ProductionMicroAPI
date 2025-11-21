@@ -15,6 +15,7 @@
             public int? PAY_TYPE_ID { get; set; }
             public int? PAY_HEAD_ID { get; set; }
             public int? STORE_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<MiscPaymentDetail> MISC_DETAIL { get; set; }
 
     }

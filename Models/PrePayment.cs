@@ -22,6 +22,7 @@
         public int? NO_OF_MONTHS { get; set; }
         public string? PARTY_NAME { get; set; }
         public int? STORE_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<PrepayDetail>? PREPAY_DETAIL { get; set; }
 
     }

@@ -46,6 +46,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@NO_OF_MONTHS", model.NO_OF_MONTHS ?? 0);
                         cmd.Parameters.AddWithValue("@PARTY_NAME", model.PARTY_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
                         // UDT for TB_PREPAY_DETAIL
                         DataTable dtPrepayDetail = new DataTable();

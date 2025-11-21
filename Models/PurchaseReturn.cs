@@ -22,6 +22,22 @@
         public string? NARRATION { get; set; }
         public string? STATUS { get; set; }
         public string? CURRENCY_SYMBOL { get; set; }
+        public bool? IS_APPROVED { get; set; }
+        public string? ADDRESS1 { get; set; }//FOR SELECT
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? EMAIL { get; set; }
+        public string? PHONE { get; set; }
+        public string? COMPANY_CODE { get; set; }
+        public string? SUPP_ADDRESS1 { get; set; }
+        public string? SUPP_ADDRESS2 { get; set; }
+        public string? SUPP_ADDRESS3 { get; set; }
+        public string? SUPP_EMAIL { get; set; }
+        public string? SUPP_PHONE { get; set; }
+        public string? SUPP_CODE { get; set; }
+        public string? SUPP_STATE_NAME { get; set; }
+        public string? SUPP_ZIP { get; set; }
+        public string? SUPP_CITY { get; set; }
         public List<PurchaseReturnDetail> PurchDetail { get; set; }
     }
     public class PurchaseReturnDetail

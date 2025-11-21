@@ -85,6 +85,22 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("listitem")]
+        public ListItemsResponse GetItems()
+        {
+            ListItemsResponse res = new ListItemsResponse();
+            try
+            {
+                res = _articleService.GetItems();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
         [Route("getitem")]
         public ItemdataResponse GetItemByCode(ItemcodeRequest request)
         {
@@ -119,12 +135,12 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("LastOrderNo/{unitId:int}")]
-        public IActionResult GetLastOrderNo(int unitId)
+        [Route("LastOrderNo")]
+        public IActionResult GetLastOrderNo()
         {
             try
             {
-                var lastOrderNo = _articleService.GetLastOrderNoByUnitId(unitId);
+                var lastOrderNo = _articleService.GetLastOrderNoByUnitId();
                 return Ok(new { LastOrderNo = lastOrderNo });
             }
             catch (Exception ex)

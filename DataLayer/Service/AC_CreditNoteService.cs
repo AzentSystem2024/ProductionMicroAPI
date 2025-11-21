@@ -60,6 +60,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@INVOICE_NO", model.INVOICE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID ?? 0);
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", model.DISTRIBUTOR_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
                         // UDT setup
                         DataTable dt = new DataTable();

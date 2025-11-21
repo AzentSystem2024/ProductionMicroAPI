@@ -175,6 +175,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@USER_ID", purchaseReturn.USER_ID);
                 cmd.Parameters.AddWithValue("@NARRATION", purchaseReturn.NARRATION);
                 cmd.Parameters.AddWithValue("@GRN_NO", purchaseReturn.GRN_NO);
+                cmd.Parameters.AddWithValue("@IS_APPROVED", purchaseReturn.IS_APPROVED == true ? 1 : 0);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_RET_DETAIL", tbl);
 
@@ -302,12 +303,17 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = " SELECT TB_PURCH_RET_HEADER.*, TB_COMPANY_MASTER.COMPANY_NAME,TB_STORES.STORE_NAME, " +
-                    " TB_SUPPLIER.SUPP_NAME, TB_AC_TRANS_HEADER.NARRATION AS NARRATION,TB_CURRENCY.SYMBOL FROM TB_PURCH_RET_HEADER " +
+                    " TB_SUPPLIER.SUPP_NAME, TB_AC_TRANS_HEADER.NARRATION AS NARRATION,TB_CURRENCY.SYMBOL, " +
+                    " TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE, " +
+                    " TB_COMPANY_MASTER.PHONE,TB_COMPANY_MASTER.EMAIL,TB_SUPPLIER.ADDRESS1 AS SUPP_ADDRESS1,TB_SUPPLIER.ADDRESS2 AS SUPP_ADDRESS2,TB_SUPPLIER.ADDRESS3 AS SUPP_ADDRESS3, " +
+                    " TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE,TB_SUPPLIER.EMAIL AS SUPP_EMAIL,TB_SUPPLIER.SUPP_CODE,TB_STATE.STATE_NAME " +
+                    " FROM TB_PURCH_RET_HEADER " +
                     " LEFT JOIN TB_COMPANY_MASTER ON TB_PURCH_RET_HEADER.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                     " LEFT JOIN TB_STORES ON TB_PURCH_RET_HEADER.STORE_ID = TB_STORES.ID " +
                     " LEFT JOIN TB_SUPPLIER on TB_PURCH_RET_HEADER.SUPP_ID = TB_SUPPLIER.ID " +
                     " LEFT JOIN TB_CURRENCY on TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID " +
                     " LEFT JOIN TB_AC_TRANS_HEADER ON TB_PURCH_RET_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID " +
+                    " LEFT JOIN TB_STATE ON TB_SUPPLIER.STATE_ID= TB_STATE.ID " +
                     " WHERE TB_PURCH_RET_HEADER.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Grn");
@@ -334,7 +340,24 @@ namespace MicroApi.DataLayer.Services
                         VAT_AMOUNT = ADO.ToDecimal(dr["VAT_AMOUNT"]),
                         NET_AMOUNT = ADO.ToDecimal(dr["NET_AMOUNT"]),
                         CURRENCY_SYMBOL = ADO.ToString(dr["SYMBOL"]),
-                        NARRATION = ADO.ToString(dr["NARRATION"])
+                        NARRATION = ADO.ToString(dr["NARRATION"]),
+                        ADDRESS1 = ADO.ToString(dr["ADDRESS1"]),
+                        ADDRESS2 = ADO.ToString(dr["ADDRESS2"]),
+                        ADDRESS3 = ADO.ToString(dr["ADDRESS3"]),
+                        COMPANY_CODE = ADO.ToString(dr["COMPANY_CODE"]),
+                        EMAIL = ADO.ToString(dr["EMAIL"]),
+                        PHONE = ADO.ToString(dr["PHONE"]),
+                        SUPP_ADDRESS1 = ADO.ToString(dr["SUPP_ADDRESS1"]),
+                        SUPP_ADDRESS2 = ADO.ToString(dr["SUPP_ADDRESS2"]),
+                        SUPP_ADDRESS3 = ADO.ToString(dr["SUPP_ADDRESS3"]),
+                        SUPP_CITY = ADO.ToString(dr["CITY"]),
+                        SUPP_CODE = ADO.ToString(dr["SUPP_CODE"]),
+                        SUPP_ZIP = ADO.ToString(dr["ZIP"]),
+                        SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
+                        SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
+                        SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
+                       
+
                     };
                 }
 

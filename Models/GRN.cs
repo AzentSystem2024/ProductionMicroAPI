@@ -22,6 +22,7 @@
         public int CURRENCY_ID { get; set; }
         public int USER_ID { get; set; }
         public string? CURRENCY_SYMBOL { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<GRNDetail> GRNDetails { get; set; }
         public List<GRN_ITEM_COST>? GRN_Item_Cost { get; set; }
         public List<GRN_COST>? GRN_Cost { get; set; }

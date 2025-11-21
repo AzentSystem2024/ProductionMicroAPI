@@ -155,7 +155,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@DELIVERY_DATE", worksheet.DELIVERY_DATE);
                 cmd.Parameters.AddWithValue("@USER_ID", worksheet.USER_ID);
-
+                cmd.Parameters.AddWithValue("@IS_APPROVED", worksheet.IS_APPROVED == true ? 1 : 0);
                 //cmd.Parameters.AddWithValue("CREATED_STORE_ID", worksheet.CREATED_STORE_ID);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PO_DETAIL", tbl);
@@ -705,7 +705,10 @@ namespace MicroApi.DataLayer.Services
                     "TB_VAT_RULE_SUPPLIER.DESCRIPTION AS VAT_RULE_NAME,TB_SUPPLIER.EMAIL, " +
                     "TB_DELIVERY_TERMS.DESCRIPTION AS DELIVERY_TERM, TB_STATUS.STATUS_DESC, " +
                     "TB_AC_TRANS_HEADER.NARRATION AS NARRATION, " +
-                    "TB_EMPLOYEE.EMP_NAME FROM TB_PO_HEADER " +
+                    "TB_EMPLOYEE.EMP_NAME FROM TB_PO_HEADER" +
+                    "TB_COMPANY_MASTER.COMPANY_NAME,TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE, " +
+                    "TB_COMPANY_MASTER.PHONE,TB_COMPANY_MASTER.EMAIL,TB_SUPPLIER.ADDRESS1 AS SUPP_ADDRESS1,TB_SUPPLIER.ADDRESS2 AS SUPP_ADDRESS2,TB_SUPPLIER.ADDRESS3 AS SUPP_ADDRESS3, " +
+                    "TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE,TB_SUPPLIER.EMAIL AS SUPP_EMAIL,TB_SUPPLIER.SUPP_CODE,TB_STATE.STATE_NAME " +
                     "LEFT JOIN TB_STORES ON TB_PO_HEADER.STORE_ID = TB_STORES.ID " +
                     "LEFT JOIN TB_SUPPLIER on TB_PO_HEADER.SUPP_ID = TB_SUPPLIER.ID " +
                     "LEFT JOIN TB_PAYMENT_TERMS on TB_PO_HEADER.PAY_TERM_ID = TB_PAYMENT_TERMS.ID " +
@@ -714,7 +717,8 @@ namespace MicroApi.DataLayer.Services
                     "LEFT JOIN TB_EMPLOYEE on TB_PO_HEADER.ISSUED_EMP_ID = TB_EMPLOYEE.ID " +
                     "LEFT JOIN TB_CURRENCY on TB_PO_HEADER.CURRENCY_ID = TB_CURRENCY.ID " +
                     "LEFT JOIN TB_AC_TRANS_HEADER ON TB_PO_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID " +
-                    "LEFT JOIN TB_VAT_RULE_SUPPLIER ON TB_SUPPLIER.VAT_RULE_ID = TB_VAT_RULE_SUPPLIER.ID " +
+                    "LEFT JOIN TB_VAT_RULE_SUPPLIER ON TB_SUPPLIER.VAT_RULE_ID = TB_VAT_RULE_SUPPLIER.ID" +
+                    "LEFT JOIN TB_STATE ON TB_SUPPLIER.STATE_ID= TB_STATE.ID + " +
 
                     "WHERE TB_PO_HEADER.ID = " + id;
 
@@ -769,6 +773,22 @@ namespace MicroApi.DataLayer.Services
                         SUPPLIER_EMAIL = ADO.ToString(dr["EMAIL"]),
                         CURRENCY_NAME = ADO.ToString(dr["CURRENCY_NAME"]),
                         VAT_RULE_NAME = ADO.ToString(dr["VAT_RULE_NAME"]),
+                        COMPANY_NAME = ADO.ToString(dr["COMPANY_NAME"]),
+                        ADDRESS1 = ADO.ToString(dr["ADDRESS1"]),
+                        ADDRESS2 = ADO.ToString(dr["ADDRESS2"]),
+                        ADDRESS3 = ADO.ToString(dr["ADDRESS3"]),
+                        COMPANY_CODE = ADO.ToString(dr["COMPANY_CODE"]),
+                        EMAIL = ADO.ToString(dr["EMAIL"]),
+                        PHONE = ADO.ToString(dr["PHONE"]),
+                        SUPP_ADDRESS1 = ADO.ToString(dr["SUPP_ADDRESS1"]),
+                        SUPP_ADDRESS2 = ADO.ToString(dr["SUPP_ADDRESS2"]),
+                        SUPP_ADDRESS3 = ADO.ToString(dr["SUPP_ADDRESS3"]),
+                        SUPP_CITY = ADO.ToString(dr["CITY"]),
+                        SUPP_CODE = ADO.ToString(dr["SUPP_CODE"]),
+                        SUPP_ZIP = ADO.ToString(dr["ZIP"]),
+                        SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
+                        SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
+                        SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
 
                     };
                 }
