@@ -70,10 +70,11 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("VAT_AMOUNT", typeof(double));
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("GST_PERC", typeof(float));
+                        dt.Columns.Add("HSN_CODE", typeof(string));
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE);
                         }
 
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
@@ -180,10 +181,11 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("VAT_AMOUNT", typeof(float));
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("GST_PERC", typeof(float));
+                        dt.Columns.Add("HSN_CODE", typeof(string));
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE);
                         }
 
                         SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
@@ -372,6 +374,7 @@ namespace MicroApi.DataLayer.Service
                                     GST_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["GST_PERC"]) : 0,
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString()
                                 });
                             }
 
@@ -461,10 +464,11 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("VAT_AMOUNT", typeof(float));
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("GST_PERC", typeof(float));
+                        dt.Columns.Add("HSN_CODE", typeof(string));
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE);
                         }
 
                         SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);

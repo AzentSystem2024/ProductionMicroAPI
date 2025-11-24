@@ -1,6 +1,6 @@
 ﻿namespace MicroApi.Models
 {
-    public class PrePayment
+    public class PrePayment_GST
     {
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
@@ -9,9 +9,9 @@
         public string? REF_NO { get; set; }
         public string? NARRATION { get; set; }
         public int? CREATE_USER_ID { get; set; }
-        //public double? TAX_PERCENT { get; set; }
-        //public double? TAX_AMOUNT { get; set; }
-        //public double? NET_AMOUNT { get; set; }
+        public double? TAX_PERCENT { get; set; }
+        public double? TAX_AMOUNT { get; set; }
+        public double? NET_AMOUNT { get; set; }
         public int? SUPP_ID { get; set; }
         public int? EXP_HEAD_ID { get; set; }
         public int? PREPAY_HEAD_ID { get; set; }
@@ -23,20 +23,19 @@
         public string? PARTY_NAME { get; set; }
         public int? STORE_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
-        public List<PrepayDetail>? PREPAY_DETAIL { get; set; }
-
+        public List<Prepay_GSTDetail>? PREPAY_DETAIL { get; set; }
     }
-    public class PrepayDetail
+    public class Prepay_GSTDetail
     {
         public DateTime? DUE_DATE { get; set; }
         public decimal? DUE_AMOUNT { get; set; }
     }
-    public class PrePaymentResponse
+    public class PrePayment_GSTResponse
     {
         public int flag { get; set; }
         public string Message { get; set; }
     }
-    public class PrePaymentUpdate
+    public class PrePayment_GSTUpdate
     {
         public int TRANS_ID { get; set; }
         public int? COMPANY_ID { get; set; }
@@ -46,9 +45,9 @@
         public string? REF_NO { get; set; }
         public string? NARRATION { get; set; }
         public int? CREATE_USER_ID { get; set; }
-        //public double? TAX_PERCENT { get; set; }
-        //public double? TAX_AMOUNT { get; set; }
-        //public double? NET_AMOUNT { get; set; }
+        public double? TAX_PERCENT { get; set; }
+        public double? TAX_AMOUNT { get; set; }
+        public double? NET_AMOUNT { get; set; }
         public int? SUPP_ID { get; set; }
         public int? EXP_HEAD_ID { get; set; }
         public int? PREPAY_HEAD_ID { get; set; }
@@ -59,17 +58,17 @@
         public int? NO_OF_MONTHS { get; set; }
         public string? PARTY_NAME { get; set; }
         public int? STORE_ID { get; set; }
-        public List<PrepayDetail>? PREPAY_DETAIL { get; set; }
+        public List<Prepay_GSTDetail>? PREPAY_DETAIL { get; set; }
 
     }
-   
-    public class PrePaymentListResponse
+
+    public class PrePayment_GSTListResponse
     {
-        public int flag { get; set; }       
+        public int flag { get; set; }
         public string Message { get; set; }
-        public List<PrePaymentListHeader> Data { get; set; }
+        public List<PrePayment_GSTListHeader> Data { get; set; }
     }
-    public class PrePaymentListHeader
+    public class PrePayment_GSTListHeader
     {
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
@@ -86,27 +85,27 @@
         public int NO_OF_DAYS { get; set; }
         public string? DATE_TO { get; set; }
         public decimal EXPENSE_AMOUNT { get; set; }
-        //public double TAX_PERCENT { get; set; }
-        //public decimal TAX_AMOUNT { get; set; }
-        //public decimal NET_AMOUNT { get; set; }
+        public double TAX_PERCENT { get; set; }
+        public decimal TAX_AMOUNT { get; set; }
+        public decimal NET_AMOUNT { get; set; }
         public string? REF_NO { get; set; }
         public string? NARRATION { get; set; }
         public string? PARTY_NAME { get; set; }
-        public List<PrePaymentListDetail> Details { get; set; }
+        public List<PrePayment_GSTListDetail> Details { get; set; }
     }
 
-    public class PrePaymentListDetail
+    public class PrePayment_GSTListDetail
     {
         public string DUE_DATE { get; set; }
         public decimal DUE_AMOUNT { get; set; }
     }
-    public class PrePaymentListHeaderResponse
+    public class PrePayment_GSTListHeaderResponse
     {
         public int flag { get; set; }
         public string Message { get; set; }
-        public PrePaymentListHeader Data { get; set; }
+        public PrePayment_GSTListHeader Data { get; set; }
     }
-    public class PrePaymentLastDocno
+    public class PrePaymentGSTLastDocno
     {
         public int flag { get; set; }
         public string Message { get; set; }

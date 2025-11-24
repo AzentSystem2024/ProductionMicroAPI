@@ -242,6 +242,7 @@
         public double GST_AMOUNT { get; set; }
         public string REMARKS { get; set; }
         public float? GST_PERC { get; set; }
+        public string? HSN_CODE { get; set; }
     }
     public class DebitNoteResponse
     {
