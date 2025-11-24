@@ -166,6 +166,7 @@ namespace MicroApi.Models
         public int PACKING_ID { get; set; }
         public string PACKING_NAME { get; set; }
         public string SUPPLIER_MAIL { get; set; }
+        
 
     }
     public class ItemInput

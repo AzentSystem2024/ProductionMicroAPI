@@ -597,7 +597,9 @@ namespace MicroApi.DataLayer.Service
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                     ADJUSTED_AMOUNT = reader["ADJUSTED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["ADJUSTED_AMOUNT"]) : 0,
                                     RECEIVED_AMOUNT = reader["RECEIVED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["RECEIVED_AMOUNT"]) : 0,
-                                    BALANCE_AMOUNT = reader["BALANCE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["BALANCE_AMOUNT"]) : 0
+                                    BALANCE_AMOUNT = reader["BALANCE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["BALANCE_AMOUNT"]) : 0,
+                                    //GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["GST_PERC"]) : 0,
+                                    //HSN_CODE = reader["HSN_CODE"] != DBNull.Value ? reader["HSN_CODE"].ToString() : "",
                                 };
 
                                 response.Data.Add(item);

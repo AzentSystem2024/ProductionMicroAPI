@@ -55,6 +55,8 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? (object)DBNull.Value);
+                        //cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
+                        //cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
                         // ✅ Structured parameter for SIZES (UDT_TB_ARTICLE_SIZE)
                         var sizeTable = new DataTable();
@@ -141,6 +143,8 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? string.Empty);
+                        //cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
+                        //cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
                         // 🔹 Structured parameter for SIZES
                         var sizeTable = new DataTable();
@@ -242,7 +246,10 @@ namespace MicroApi.Service
                                     CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value
                                         ? (reader["CREATED_DATE"] is DateTimeOffset dto ? dto.DateTime : Convert.ToDateTime(reader["CREATED_DATE"]))
                                         : (DateTime?)null,
-                                   STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? string.Empty
+                                   STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? string.Empty,
+                                   //HSN_CODE = reader["HSN_CODE"]?.ToString() ?? string.Empty,
+                                   //GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["GST_PERC"]) : 0
+
                                 };
 
                                 // Parse JSON Sizes
@@ -348,6 +355,8 @@ namespace MicroApi.Service
                                             : Convert.ToDateTime(reader["CREATED_DATE"]))
                                     : (DateTime?)null,
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? "",
+                                    //HSN_CODE = reader["HSN_CODE"]?.ToString() ?? string.Empty,
+                                    //GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["GST_PERC"]) : 0,
                                     SIZES = new List<Sizes>()
                                 };
                                 articles.Add(article);

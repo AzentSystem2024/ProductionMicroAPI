@@ -150,6 +150,7 @@
         public string UOM { get; set; }
         public string UOM_PURCH { get; set; }
         public int UOM_MULTIPLE { get; set; }
+       
 
 
     }

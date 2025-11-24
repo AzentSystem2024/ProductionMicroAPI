@@ -74,8 +74,6 @@
         public string? UOM_PURCH { get; set; }
         public int? UOM_MULTPLE { get; set; }
         public string? MATRIX_CODE {get; set; }
-        public string? HSN_CODE { get; set; }
-        public float? GST_PERC { get; set; }
         public List<ITEM_STORES> item_stores { get; set; }
         public List<ITEM_ALIAS> item_alias { get; set; }
         public List<ITEM_SUPPLIERS> item_suppliers { get; set; }

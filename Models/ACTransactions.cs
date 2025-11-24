@@ -364,6 +364,7 @@
         public string SUPP_INV_NO { get; set; }
         public double NET_AMOUNT { get; set; }
         public double PENDING_AMOUNT { get; set; }
+       
 
     }
     public class DebitInvoiceRequest

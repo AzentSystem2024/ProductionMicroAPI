@@ -736,7 +736,8 @@ namespace MicroApi.DataLayer.Services
                             BARCODE = row["BARCODE"] != DBNull.Value ? row["BARCODE"].ToString() : "",
                             UOM = row["UOM"] != DBNull.Value ? row["UOM"].ToString() : "",
                             UOM_PURCH = row["UOM_PURCH"] != DBNull.Value ? row["UOM_PURCH"].ToString() : "",
-                            UOM_MULTIPLE = row["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(row["UOM_MULTPLE"]) : 0
+                            UOM_MULTIPLE = row["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(row["UOM_MULTPLE"]) : 0,
+                           
 
                         });
                     }

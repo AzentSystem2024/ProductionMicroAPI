@@ -4,6 +4,7 @@ using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Reflection;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -170,6 +171,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", request.LAST_DEPR_DATE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IS_APPROVED", request.IS_APPROVED == true ? 1 : 0);
 
                             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
                             tvpParam.SqlDbType = SqlDbType.Structured;

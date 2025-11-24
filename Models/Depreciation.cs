@@ -15,6 +15,7 @@
         public int DAYS { get; set; }
         public float DEPR_AMOUNT { get; set; }
         public int STORE_ID { get; set; }
+        
     }
     public class DepreciationInsertRequest
     {
@@ -24,6 +25,7 @@
         public float? AMOUNT { get; set; }
         public int? FIN_ID { get; set; }
         public string? LAST_DEPR_DATE { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
     public class DepreciationUpdateRequest

@@ -163,6 +163,8 @@ namespace MicroApi.DataLayer.Service
                                         ENABLE_MATRIX_CODE= reader["ENABLE_MATRIX_CODE"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_MATRIX_CODE"]),
                                         QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString() ?? "",
                                         SELLING_PRICE_INCL_VAT= reader["SELLING_PRICE_INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
+                                        HSN_CODE = reader["FT_HSN_CODE"]?.ToString() ?? "",
+                                        GST_PERC = reader["FT_GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["FT_GST_PERC"]) : 0,
                                     };
                                 }
 
