@@ -1039,7 +1039,7 @@ namespace MicroApi.DataLayer.Service
                                         SUPP_PHONE = reader["SUPP_PHONE"]?.ToString(),
                                         SUPP_EMAIL = reader["SUPP_EMAIL"]?.ToString(),
                                         VEHICLE_NO = reader["VEHICLE_NO"]?.ToString(),
-                                        ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : 0,
+                                        ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : false,
                                         NOTE_DETAIL = new List<DebitNoteDetail>()
                                     };
                                 }
