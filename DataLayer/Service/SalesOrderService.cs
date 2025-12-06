@@ -73,6 +73,7 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@WAREHOUSE", salesOrder.WAREHOUSE ?? 0);
                             cmd.Parameters.AddWithValue("@TOTAL_QTY", salesOrder.TOTAL_QTY ?? 0);
                             cmd.Parameters.AddWithValue("@SUBDEALER_ID", salesOrder.SUBDEALER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@IS_APPROVED", salesOrder.IS_APPROVED == true ? 1 : 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
@@ -371,7 +372,7 @@ namespace MicroApi.DataLayer.Service
 
                     string query = @"SELECT DISTINCT TB_ARTICLE_TYPE.ID,TB_ARTICLE_TYPE.DESCRIPTION
                                     FROM TB_ARTICLE_TYPE INNER JOIN TB_PACKING ON TB_ARTICLE_TYPE.ID=TB_PACKING.ARTICLE_TYPE
-                                    WHERE TB_ARTICLE_TYPE.IS_DELETED=0";
+                                    WHERE TB_ARTICLE_TYPE.IS_DELETED=0 AND TB_PACKING.IS_INACTIVE = 0";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
@@ -418,7 +419,7 @@ namespace MicroApi.DataLayer.Service
 
                     string query = @"SELECT DISTINCT TB_ARTICLE_CATEGORY.ID,TB_ARTICLE_CATEGORY.DESCRIPTION FROM TB_ARTICLE_CATEGORY 
                                     INNER JOIN TB_PACKING ON TB_ARTICLE_CATEGORY.ID=TB_PACKING.CATEGORY_ID 
-                                    WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_PACKING.ARTICLE_TYPE=@ARTICLE_TYPE AND TB_ARTICLE_CATEGORY.IS_DELETED=0";
+                                    WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_PACKING.ARTICLE_TYPE=@ARTICLE_TYPE AND TB_ARTICLE_CATEGORY.IS_DELETED=0 AND TB_PACKING.IS_INACTIVE = 0";
          
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
@@ -471,7 +472,7 @@ namespace MicroApi.DataLayer.Service
                     string query = @"SELECT DISTINCT  MIN(TB_PACKING.ID) AS ID,TB_PACKING.ART_NO FROM TB_ARTICLE_CATEGORY 
                                     INNER JOIN TB_PACKING ON TB_ARTICLE_CATEGORY.ID=TB_PACKING.CATEGORY_ID 
                                     WHERE TB_PACKING.BRAND_ID=@BRAND_ID AND TB_PACKING.ARTICLE_TYPE=@ARTICLE_TYPE AND 
-                                    TB_ARTICLE_CATEGORY.DESCRIPTION=@CATEGORY_ID AND TB_ARTICLE_CATEGORY.IS_DELETED=0 
+                                    TB_ARTICLE_CATEGORY.DESCRIPTION=@CATEGORY_ID AND TB_ARTICLE_CATEGORY.IS_DELETED=0 AND TB_PACKING.IS_INACTIVE = 0
                                     GROUP BY TB_PACKING.ART_NO";
                     
 
@@ -528,7 +529,7 @@ namespace MicroApi.DataLayer.Service
                             WHERE TB_PACKING.BRAND_ID = @BRAND_ID
                             AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
                             AND TB_ARTICLE_CATEGORY.DESCRIPTION= @CATEGORY_ID                            
-                            AND TB_PACKING.ART_NO = @ART_NO
+                            AND TB_PACKING.ART_NO = @ART_NO AND TB_PACKING.IS_INACTIVE = 0
                             GROUP BY TB_PACKING.COLOR";
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
@@ -580,7 +581,7 @@ namespace MicroApi.DataLayer.Service
                  AND TB_PACKING.ARTICLE_TYPE = @ARTICLE_TYPE
                  AND TB_ARTICLE_CATEGORY.DESCRIPTION = @CATEGORY_ID
                  AND TB_PACKING.ART_NO = @ART_NO
-                 AND TB_PACKING.COLOR = @COLOR";
+                 AND TB_PACKING.COLOR = @COLOR AND TB_PACKING.IS_INACTIVE = 0";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {

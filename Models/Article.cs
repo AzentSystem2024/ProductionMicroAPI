@@ -29,6 +29,11 @@ namespace MicroApi.Models
         //public float? GST_PERC { get; set; }
         public List<ArticleBOM> BOM { get; set; }
         public List<Sizes> Sizes { get; set; }
+        public List<ArticleUnits> Units { get; set; }
+    }
+    public class ArticleUnits
+    {
+        public int? UNIT_ID { get; set; }
     }
     public class ArticleBOM
     {
@@ -63,7 +68,6 @@ namespace MicroApi.Models
         public string PART_NO { get; set; }
         public string ALIAS_NO { get; set; }
         //public int? UNIT_ID { get; set; }
-        public string UNIT_ID { get; set; }
         //public string? UnitCode { get; set; }
         public int? ARTICLE_TYPE { get; set; }
         public string? ARTICLE_TYPE_NAME { get; set; }
@@ -85,6 +89,7 @@ namespace MicroApi.Models
         //public string? HSN_CODE { get; set; }
         //public float? GST_PERC { get; set; }
         public List<Sizes> SIZES { get; set; }
+        public List<ArticleUnits> Units { get; set; }
         public string? STANDARD_PACKING { get; set; }
         public List<ArticleBOM>? BOM { get; set; }
 

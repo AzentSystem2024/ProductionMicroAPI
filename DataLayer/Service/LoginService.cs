@@ -63,7 +63,8 @@ namespace MicroApi.DataLayer.Service
                                         response.Companies.Add(new CompanyList
                                         {
                                             COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
-                                            COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
+                                            COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                            //STATE_NAME = reader["STATE_NAME"]?.ToString()
                                         });
                                     }
                                 }
@@ -74,7 +75,8 @@ namespace MicroApi.DataLayer.Service
                                     response.SELECTED_COMPANY = new CompanyList
                                     {
                                         COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
-                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
+                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                        STATE_NAME = reader["STATE_NAME"]?.ToString()
                                     };
                                 }
 

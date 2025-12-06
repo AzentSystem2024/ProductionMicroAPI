@@ -156,5 +156,21 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("gethis")]
+        public List<Credithis> GetcreditHis(CreditHisRequest request)
+        {
+            List<Credithis> History = new List<Credithis>();
+
+            try
+            {
+
+                History = _creditNoteService.GetcreditHis(request);
+            }
+            catch (Exception ex)
+            {
+            }
+            return History.ToList();
+        }
     }
 }

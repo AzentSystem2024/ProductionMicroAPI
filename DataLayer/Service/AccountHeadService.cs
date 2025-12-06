@@ -182,18 +182,21 @@ namespace MicroApi.DataLayer.Service
                             {
                                 lstHead.Add(new AccountHeadUpdate
                                 {
-                                    HEAD_ID = Convert.ToInt32(dr["HEAD_ID"]),
-                                    HEAD_CODE = dr["HEAD_CODE"].ToString(),
-                                    HEAD_NAME = dr["HEAD_NAME"].ToString(),
-                                    GROUP_ID = Convert.ToInt32(dr["GROUP_ID"]),
-                                    IS_DIRECT = Convert.ToBoolean(dr["IS_DIRECT"]),
-                                    ARABIC_NAME = dr["ARABIC_NAME"].ToString(),
-                                    IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]),
-                                    SERIAL_NO = Convert.ToInt32(dr["SERIAL_NO"]),
-                                   // CostTypeID = dr["CostTypeID"] != DBNull.Value ? Convert.ToInt32(dr["CostTypeID"]) : (int?)null,
+                                    HEAD_ID = dr["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ID"]) : 0,
+                                    HEAD_CODE = dr["HEAD_CODE"]?.ToString(),
+                                    HEAD_NAME = dr["HEAD_NAME"]?.ToString(),
+
+                                    GROUP_ID = dr["GROUP_ID"] != DBNull.Value ? Convert.ToInt32(dr["GROUP_ID"]) : (int?)null,
+                                    IS_DIRECT = dr["IS_DIRECT"] != DBNull.Value ? Convert.ToBoolean(dr["IS_DIRECT"]) : (bool?)null,
+                                    ARABIC_NAME = dr["ARABIC_NAME"]?.ToString(),
+
+                                    IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : (bool?)null,
+                                    SERIAL_NO = dr["SERIAL_NO"] != DBNull.Value ? Convert.ToInt32(dr["SERIAL_NO"]) : (int?)null,
+
                                     MAIN_GROUP_ID = dr["MainGROUP_ID"] != DBNull.Value ? Convert.ToInt32(dr["MainGROUP_ID"]) : (int?)null,
                                     SUB_GROUP_ID = dr["SubGROUP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SubGROUP_ID"]) : (int?)null
                                 });
+
                             }
                             res.flag = 1;
                             res.Message = "Success";

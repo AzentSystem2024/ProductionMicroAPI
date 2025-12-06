@@ -138,5 +138,21 @@ namespace MicroApi.Controllers
             }
             return customers.ToList();
         }
+        [HttpPost]
+        [Route("custdtl")]
+        public List<Cust_stateName> Getcustlist()
+        {
+            List<Cust_stateName> customers = new List<Cust_stateName>();
+
+            try
+            {
+
+                customers = _customerService.Getcustlist();
+            }
+            catch (Exception ex)
+            {
+            }
+            return customers.ToList();
+        }
     }
 }

@@ -193,10 +193,15 @@ namespace MicroApi.Models
     public class POhis
     {
         public int ACTION { get; set; }
+        public int DOC_ID { get; set; }
         public DateTime TIME { get; set; }
         public string DESCRIPTION { get; set; }
         public int DOC_TYPE_ID { get; set; }
         public int USER_ID { get; set; }
         public string USER_NAME { get; set; }
+    }
+    public class POHIS
+    {
+        public int TRANS_ID { get; set; }
     }
 }

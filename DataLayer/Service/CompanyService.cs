@@ -38,6 +38,10 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@WHATSAPP", company.WHATSAPP ?? "");
                         cmd.Parameters.AddWithValue("@COMPANY_TYPE", company.COMPANY_TYPE);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", company.IS_INACTIVE);
+                        cmd.Parameters.AddWithValue("@STATE_ID", company.STATE_ID);
+                        cmd.Parameters.AddWithValue("@GST_NO", company.GST_NO ?? "");
+                        cmd.Parameters.AddWithValue("@PAN_NO", company.PAN_NO ?? "");
+                        cmd.Parameters.AddWithValue("@CIN", company.CIN ?? "");
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -98,6 +102,10 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@WHATSAPP", company.WHATSAPP ?? "");
                         cmd.Parameters.AddWithValue("@COMPANY_TYPE", company.COMPANY_TYPE);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", company.IS_INACTIVE);
+                        cmd.Parameters.AddWithValue("@STATE_ID", company.STATE_ID);
+                        cmd.Parameters.AddWithValue("@GST_NO", company.GST_NO ?? "");
+                        cmd.Parameters.AddWithValue("@PAN_NO", company.PAN_NO ?? "");
+                        cmd.Parameters.AddWithValue("@CIN", company.CIN ?? "");
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -163,7 +171,11 @@ namespace MicroApi.DataLayer.Service
                                     WHATSAPP = reader["WHATSAPP"]?.ToString(),
                                     COMPANY_TYPE = reader["COMPANY_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_TYPE"]) : 0,
                                     COMPANY_TYPE_NAME = reader["COMPANY_TYPE_NAME"]?.ToString(), 
-                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
+                                    STATE_ID = Convert.ToInt32(reader["STATE_ID"]),
+                                    GST_NO = reader["GST_NO"]?.ToString(),
+                                    PAN_NO = reader["PAN_NO"]?.ToString(),
+                                    CIN = reader["CIN"]?.ToString(),
                                 };
 
                                 res.Data.Add(company);
@@ -234,7 +246,11 @@ namespace MicroApi.DataLayer.Service
                                     WHATSAPP = reader["WHATSAPP"]?.ToString(),
                                     COMPANY_TYPE = reader["COMPANY_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_TYPE"]) : 0,
                                     COMPANY_TYPE_NAME = reader["COMPANY_TYPE_NAME"]?.ToString(),
-                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
+                                    STATE_ID = Convert.ToInt32(reader["STATE_ID"]),
+                                    GST_NO = reader["GST_NO"]?.ToString(),
+                                    PAN_NO = reader["PAN_NO"]?.ToString(),
+                                    CIN = reader["CIN"]?.ToString()
                                 };
 
                                 res.flag = 1;

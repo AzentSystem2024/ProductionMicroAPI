@@ -21,6 +21,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("REMARKS", typeof(string));
                     tbl.Columns.Add("UOM", typeof(string));
                     tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("PACKING_ID", typeof(Int32));
 
                     if (deliverynote.DETAILS != null && deliverynote.DETAILS.Any())
                     {
@@ -28,10 +29,11 @@ namespace MicroApi.DataLayer.Service
                         {
                             DataRow dRow = tbl.NewRow();
                             dRow["SO_DETAIL_ID"] = d.SO_DETAIL_ID;
-                            dRow["ITEM_ID"] = d.ITEM_ID;
+                            dRow["ITEM_ID"] = d.ITEM_ID == null ? (object)DBNull.Value : d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
-                            dRow["UOM"] = d.UOM;
+                            dRow["UOM"] = string.IsNullOrEmpty(d.UOM) ? (object)DBNull.Value : d.UOM;
                             dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
+                            dRow["PACKING_ID"] = d.PACKING_ID;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -55,6 +57,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@TOTAL_QTY", deliverynote.TOTAL_QTY);
                     cmd.Parameters.AddWithValue("@USER_ID", deliverynote.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", (object?)deliverynote.NARRATION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DN_TYPE", deliverynote.DN_TYPE);
+                    cmd.Parameters.AddWithValue("@IS_APPROVED", deliverynote.IS_APPROVED == true ? 1 : 0);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_DN_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
@@ -90,6 +94,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("REMARKS", typeof(string));
                     tbl.Columns.Add("UOM", typeof(string));
                     tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("PACKING_ID", typeof(Int32));
 
                     if (deliverynote.DETAILS != null && deliverynote.DETAILS.Any())
                     {
@@ -97,10 +102,11 @@ namespace MicroApi.DataLayer.Service
                         {
                             DataRow dRow = tbl.NewRow();
                             dRow["SO_DETAIL_ID"] = d.SO_DETAIL_ID;
-                            dRow["ITEM_ID"] = d.ITEM_ID;
+                            dRow["ITEM_ID"] = d.ITEM_ID == null ? (object)DBNull.Value : d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
-                            dRow["UOM"] = d.UOM;
+                            dRow["UOM"] = string.IsNullOrEmpty(d.UOM) ? (object)DBNull.Value : d.UOM;
                             dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
+                            dRow["PACKING_ID"] = d.PACKING_ID;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -124,6 +130,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@TOTAL_QTY", deliverynote.TOTAL_QTY);
                     cmd.Parameters.AddWithValue("@USER_ID", deliverynote.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", (object?)deliverynote.NARRATION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DN_TYPE", deliverynote.DN_TYPE);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_DN_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
@@ -167,6 +174,7 @@ namespace MicroApi.DataLayer.Service
                         items.Add(new SODetail
                         {
                             SO_DETAIL_ID = dr["ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ID"]),
+                            PACKING_ID = dr["PACKING_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["PACKING_ID"]),
                             PACKING = dr["PACKING"] == DBNull.Value ? null : dr["PACKING"].ToString(),
                             ART_NO = dr["ART_NO"] == DBNull.Value ? null : dr["ART_NO"].ToString(),
                             BRAND = dr["BRAND"] == DBNull.Value ? null : dr["BRAND"].ToString(),
@@ -251,6 +259,7 @@ namespace MicroApi.DataLayer.Service
                                 TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["TRANS_ID"]) : null,
                                 STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? dr["STORE_NAME"].ToString() : null,
                                 CUSTOMER_NAME = dr["CUST_NAME"] != DBNull.Value ? dr["CUST_NAME"].ToString() : null,
+                                NARRATION = dr["NARRATION"] != DBNull.Value ? dr["NARRATION"].ToString() : null,
                             };
                             data.Add(item);
                         }
@@ -315,6 +324,7 @@ namespace MicroApi.DataLayer.Service
                                 TOTAL_QTY = firstRow["TOTAL_QTY"] != DBNull.Value ? (double?)Convert.ToDouble(firstRow["TOTAL_QTY"]) : null,
                                 TRANS_ID = firstRow["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["TRANS_ID"]) : null,
                                 NARRATION = firstRow["NARRATION"] != DBNull.Value ? firstRow["NARRATION"].ToString() : null,
+                                DN_TYPE = firstRow["DN_TYPE"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["DN_TYPE"]) : null,
                                 DETAILS = new List<Delivery_Note_Detail_Select>()
                             };
 
@@ -331,6 +341,14 @@ namespace MicroApi.DataLayer.Service
                                     ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? dr["ITEM_CODE"].ToString() : null,
                                     DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? dr["DESCRIPTION"].ToString() : null,
                                     DELIVERED_QUANTITY = dr["DELIVERED_QUANTITY"] != DBNull.Value ? (double?)Convert.ToDouble(dr["DELIVERED_QUANTITY"]) : null,
+
+                                    PACKING_ID = dr["PACKING_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["PACKING_ID"]),
+                                    PACKING = dr["PACKING"] == DBNull.Value ? null : dr["PACKING"].ToString(),
+                                    ART_NO = dr["ART_NO"] == DBNull.Value ? null : dr["ART_NO"].ToString(),
+                                    BRAND = dr["BRAND"] == DBNull.Value ? null : dr["BRAND"].ToString(),
+                                    ARTICLE_TYPE = dr["ARTICLE_TYPE"] == DBNull.Value ? null : dr["ARTICLE_TYPE"].ToString(),
+                                    COLOR = dr["COLOR"] == DBNull.Value ? null : dr["COLOR"].ToString(),
+                                    CATEGORY = dr["CATEGORY"] == DBNull.Value ? null : dr["CATEGORY"].ToString(),
                                 };
                                 deliveryNote.DETAILS.Add(detail);
                             }
@@ -370,6 +388,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("REMARKS", typeof(string));
                     tbl.Columns.Add("UOM", typeof(string));
                     tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("PACKING_ID", typeof(Int32));
 
                     if (deliverynote.DETAILS != null && deliverynote.DETAILS.Any())
                     {
@@ -377,10 +396,11 @@ namespace MicroApi.DataLayer.Service
                         {
                             DataRow dRow = tbl.NewRow();
                             dRow["SO_DETAIL_ID"] = d.SO_DETAIL_ID;
-                            dRow["ITEM_ID"] = d.ITEM_ID;
+                            dRow["ITEM_ID"] = d.ITEM_ID == null ? (object)DBNull.Value : d.ITEM_ID;
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
-                            dRow["UOM"] = d.UOM;
+                            dRow["UOM"] = string.IsNullOrEmpty(d.UOM) ? (object)DBNull.Value : d.UOM;
                             dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
+                            dRow["PACKING_ID"] = d.PACKING_ID;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -404,6 +424,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@TOTAL_QTY", deliverynote.TOTAL_QTY);
                     cmd.Parameters.AddWithValue("@USER_ID", deliverynote.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", (object?)deliverynote.NARRATION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DN_TYPE", deliverynote.DN_TYPE);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_DN_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
@@ -461,7 +482,7 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                    SELECT TOP 1 VOUCHER_NO 
+                    SELECT TOP 1 VOUCHER_NO + 1
                     FROM TB_AC_TRANS_HEADER 
                     WHERE TRANS_TYPE = 23
                     ORDER BY TRANS_ID DESC";

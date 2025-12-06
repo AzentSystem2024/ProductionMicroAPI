@@ -14,6 +14,7 @@
         public int? WAREHOUSE { get; set; }
         public float? TOTAL_QTY { get; set; }
         public int? SUBDEALER_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<SalesOrderDetail> Details { get; set; }
     }
 

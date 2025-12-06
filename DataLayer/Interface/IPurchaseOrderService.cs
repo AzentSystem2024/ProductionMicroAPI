@@ -14,6 +14,6 @@ namespace MicroApi.DataLayer.Interface
         public PurchaseOrderHeader GetPurchaseOrder(int id);
         PurchaseDoc GetLastDocNo();
         public bool Delete(int id);
-        List<POhis> GetPOHis();
+        List<POhis> GetPOHis(POHIS request);
     }
 }

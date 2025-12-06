@@ -81,7 +81,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 1);
-                    cmd.Parameters.AddWithValue("@ID", 0);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", 0);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", transferIn.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", transferIn.STORE_ID);
                     cmd.Parameters.AddWithValue("@REC_DATE", (object?)transferIn.REC_DATE ?? DBNull.Value);
@@ -92,6 +92,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ISSUE_ID",transferIn.ISSUE_ID); 
                     cmd.Parameters.AddWithValue("@REASON_ID", transferIn.REASON_ID);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", transferIn.NET_AMOUNT);
+                    cmd.Parameters.AddWithValue("@IS_APPROVED", transferIn.IS_APPROVED == true ? 1 : 0);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFERINV_IN", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
@@ -153,7 +154,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 2); // UPDATE
-                    cmd.Parameters.AddWithValue("@ID", transferIn.ID);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", transferIn.TRANS_ID);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", transferIn.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", transferIn.STORE_ID);
                     cmd.Parameters.AddWithValue("@REC_DATE", (object?)transferIn.REC_DATE ?? DBNull.Value);
@@ -211,6 +212,7 @@ namespace MicroApi.DataLayer.Service
                         TransferInList obj = new TransferInList
                         {
                             TRANSFER_ID = ADO.ToInt32(dr["TRANSFER_ID"]),
+                            TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
                             COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
                             STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                             TRANSFER_DATE = dr["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["TRANSFER_DATE"]),
@@ -257,7 +259,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 0); // Fetch by ID
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
 
                         DataTable tbl = new DataTable();
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -270,6 +272,7 @@ namespace MicroApi.DataLayer.Service
                             transfer = new TransferInInvUpdate
                             {
                                 ID = ADO.ToInt32(firstRow["TRANSFER_ID"]),
+                                TRANS_ID = ADO.ToInt32(firstRow["TRANS_ID"]),
                                 COMPANY_ID = firstRow["COMPANY_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["COMPANY_ID"]),
                                 STORE_ID = firstRow["STORE_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["STORE_ID"]),
                                 TRANSFER_DATE = firstRow["TRANSFER_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(firstRow["TRANSFER_DATE"]),
@@ -281,6 +284,22 @@ namespace MicroApi.DataLayer.Service
                                 REASON_ID = firstRow["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["REASON_ID"]),
                                 TRANSFER_NO = firstRow["TRANSFER_NO"] == DBNull.Value ? 0 : ADO.ToInt32(firstRow["TRANSFER_NO"]),
                                 ISSUE_ID = ADO.ToInt32(firstRow["ISSUE_ID"]),
+                                COMPANY_NAME = firstRow["COMPANY_NAME"]?.ToString(),
+                                ADDRESS1 = firstRow["ADDRESS1"]?.ToString(),
+                                ADDRESS2 = firstRow["ADDRESS2"]?.ToString(),
+                                ADDRESS3 = firstRow["ADDRESS3"]?.ToString(),
+                                COMPANY_CODE = firstRow["COMPANY_CODE"]?.ToString(),
+                                EMAIL = firstRow["EMAIL"]?.ToString(),
+                                PHONE = firstRow["PHONE"]?.ToString(),
+                                STORE_CODE = firstRow["CODE"]?.ToString(),
+                                STORE_ADDRESS1 = firstRow["STORE_ADDRESS1"]?.ToString(),
+                                STORE_ADDRESS2 = firstRow["STORE_ADDRESS2"]?.ToString(),
+                                STORE_ADDRESS3 = firstRow["STORE_ADDRESS3"]?.ToString(),
+                                STORE_ZIP = firstRow["ZIP_CODE"]?.ToString(),
+                                STORE_CITY = firstRow["CITY"]?.ToString(),
+                                STORE_STATE = firstRow["STATE_NAME"]?.ToString(),
+                                STORE_PHONE = firstRow["STORE_PHONE"]?.ToString(),
+                                STORE_EMAIL = firstRow["STORE_EMAIL"]?.ToString(),
                                 DETAILS = new List<TransferInDetailUpdate>()
                             };
 
@@ -412,7 +431,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 5); // UPDATE
-                    cmd.Parameters.AddWithValue("@ID", transferIn.ID);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", transferIn.TRANS_ID);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", transferIn.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", transferIn.STORE_ID);
                     cmd.Parameters.AddWithValue("@REC_DATE", (object?)transferIn.REC_DATE ?? DBNull.Value);

@@ -10,5 +10,6 @@ namespace MicroApi.DataLayer.Interface
         public CustomerUpdate GetItems(int id);
         public bool DeleteCustomers(int id);
         public List<DeliveryAddress> GetDeliveryAddressesForDealer(DELIVERYADDREQUEST custId);
+        public List<Cust_stateName> Getcustlist();
     }
 }

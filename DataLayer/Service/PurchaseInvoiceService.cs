@@ -282,6 +282,8 @@ namespace MicroApi.DataLayer.Service
                         SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
                         SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
                         SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
+                        VEHICLE_NO = ADO.ToString(dr["VEHICLE_NO"]),
+                        ROUND_OFF = ADO.Toboolean(dr["ROUND_OFF"]),
                     };
                 }
 
@@ -345,7 +347,9 @@ namespace MicroApi.DataLayer.Service
                         PENDING_QTY = dr["PO_QUANTITY"] != DBNull.Value && dr["GRN_QTY"] != DBNull.Value
                             ? Convert.ToDecimal(dr["PO_QUANTITY"]) - Convert.ToDecimal(dr["GRN_QTY"])
                             : 0,
-                        TOTAL_AMOUNT = dr["AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["AMOUNT"]) : 0f
+                        TOTAL_AMOUNT = dr["AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["AMOUNT"]) : 0f,
+                        CGST = dr["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["CGST"]) : null,
+                        SGST = dr["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["SGST"]) : null
                     });
                 }
 
@@ -390,6 +394,8 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -416,6 +422,8 @@ namespace MicroApi.DataLayer.Service
                         dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
+                        dRow["CGST"] = (object?)ur.CGST ?? DBNull.Value;
+                        dRow["SGST"] = (object?)ur.SGST ?? DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -450,6 +458,8 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
                 cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION);
                 cmd.Parameters.AddWithValue("@IS_APPROVED", purchHeader.IS_APPROVED == true ? 1 : 0);
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchHeader.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchHeader.ROUND_OFF);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
@@ -517,6 +527,8 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -543,6 +555,8 @@ namespace MicroApi.DataLayer.Service
                         dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
+                        dRow["CGST"] = (object?)ur.CGST ?? DBNull.Value;
+                        dRow["SGST"] = (object?)ur.SGST ?? DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -577,6 +591,8 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
                 cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION);
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchHeader.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchHeader.ROUND_OFF);
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
 
@@ -770,6 +786,8 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -796,6 +814,8 @@ namespace MicroApi.DataLayer.Service
                         dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
+                        dRow["CGST"] = (object?)ur.CGST ?? DBNull.Value;
+                        dRow["SGST"] = (object?)ur.SGST ?? DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -830,6 +850,8 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
                 cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchHeader.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchHeader.ROUND_OFF);
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
 
@@ -1015,6 +1037,44 @@ namespace MicroApi.DataLayer.Service
             }
 
             return res;
+        }
+        public List<PurchInvhis> GetPurchInvHis(PurchInvHisRequest request)
+        {
+            List<PurchInvhis> history = new List<PurchInvhis>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SP_TB_PURCH", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 8);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PurchInvhis model = new PurchInvhis
+                            {
+                                ACTION = reader["ACTION"] != DBNull.Value ? Convert.ToInt32(reader["ACTION"]) : 0,
+                                DOC_ID = reader["DOC_ID"] != DBNull.Value ? Convert.ToInt32(reader["DOC_ID"]) : 0,
+                                DOC_TYPE_ID = reader["DOC_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["DOC_TYPE_ID"]) : 0,
+                                USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0,
+                                USER_NAME = reader["USER_NAME"] != DBNull.Value ? reader["USER_NAME"].ToString() : string.Empty,
+                                TIME = reader["TIME"] != DBNull.Value ? Convert.ToDateTime(reader["TIME"]) : DateTime.MinValue,
+                                DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
+                            };
+
+                            history.Add(model);
+                        }
+                    }
+                }
+            }
+
+            return history;
         }
 
 

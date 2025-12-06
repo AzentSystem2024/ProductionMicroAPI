@@ -449,7 +449,7 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                    SELECT TOP 1 VOUCHER_NO 
+                    SELECT TOP 1 VOUCHER_NO + 1
                     FROM TB_AC_TRANS_HEADER 
                     WHERE TRANS_TYPE = 3
                     ORDER BY TRANS_ID DESC";

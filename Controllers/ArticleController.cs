@@ -52,13 +52,13 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("Select")]
-        public ArticleResponse Select([FromBody] ArticleSelectRequest request)
+        [Route("select/{id:int}")]
+        public ArticleResponse Select(int id)
         {
             ArticleResponse res = new ArticleResponse();
             try
             {
-                res = _articleService.GetArticleById(request);
+                res = _articleService.GetArticleById(id);
             }
             catch (Exception ex)
             {

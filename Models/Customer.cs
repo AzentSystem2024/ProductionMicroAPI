@@ -150,4 +150,10 @@
         public string message { get; set; }
         public CustomerUpdate data { get; set; }
     }
+    public class Cust_stateName
+    {
+        public int ID { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public string? STATE_NAME { get; set; }
+    }
 }

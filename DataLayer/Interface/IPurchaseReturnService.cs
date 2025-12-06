@@ -15,5 +15,6 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Approve(PurchaseReturn purchaseReturn);
         PurchaseInvoiceDetailResponse GetPurchaseInvoiceDetail(InvoiceInput request);
         PurchaseReturnDoc GetLastDocNo();
+        List<PurchReturnhis> GetPurchReturnHis(PurchReturnHisRequest request);
     }
 }

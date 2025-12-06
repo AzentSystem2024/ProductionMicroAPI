@@ -243,14 +243,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("getpohis")]
-        public List<POhis> GetPOHis()
+        public List<POhis> GetPOHis(POHIS request)
         {
             List<POhis> History = new List<POhis>();
 
             try
             {
 
-                History = _purchaseOrderService.GetPOHis();
+                History = _purchaseOrderService.GetPOHis(request);
             }
             catch (Exception ex)
             {

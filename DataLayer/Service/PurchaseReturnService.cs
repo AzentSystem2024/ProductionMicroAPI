@@ -257,7 +257,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_PURCHASE_RETURN";
                 cmd.Parameters.AddWithValue("ACTION", 2);
-                cmd.Parameters.AddWithValue("@ID", purchaseReturn.ID);
+                cmd.Parameters.AddWithValue("@TRANS_ID", purchaseReturn.TRANS_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchaseReturn.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchaseReturn.FIN_ID);
                 cmd.Parameters.AddWithValue("@STORE_ID", purchaseReturn.STORE_ID);
@@ -303,10 +303,10 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = " SELECT TB_PURCH_RET_HEADER.*, TB_COMPANY_MASTER.COMPANY_NAME,TB_STORES.STORE_NAME, " +
-                    " TB_SUPPLIER.SUPP_NAME, TB_AC_TRANS_HEADER.NARRATION AS NARRATION,TB_CURRENCY.SYMBOL, " +
+                    " TB_SUPPLIER.SUPP_NAME, TB_AC_TRANS_HEADER.NARRATION AS NARRATION,TB_CURRENCY.SYMBOL,TB_AC_TRANS_HEADER.CREATE_USER_ID, " +
                     " TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE, " +
                     " TB_COMPANY_MASTER.PHONE,TB_COMPANY_MASTER.EMAIL,TB_SUPPLIER.ADDRESS1 AS SUPP_ADDRESS1,TB_SUPPLIER.ADDRESS2 AS SUPP_ADDRESS2,TB_SUPPLIER.ADDRESS3 AS SUPP_ADDRESS3, " +
-                    " TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE,TB_SUPPLIER.EMAIL AS SUPP_EMAIL,TB_SUPPLIER.SUPP_CODE,TB_STATE.STATE_NAME " +
+                    " TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE,TB_SUPPLIER.EMAIL AS SUPP_EMAIL,TB_SUPPLIER.SUPP_CODE,TB_STATE.STATE_NAME,TB_USERS.USER_NAME " +
                     " FROM TB_PURCH_RET_HEADER " +
                     " LEFT JOIN TB_COMPANY_MASTER ON TB_PURCH_RET_HEADER.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                     " LEFT JOIN TB_STORES ON TB_PURCH_RET_HEADER.STORE_ID = TB_STORES.ID " +
@@ -314,7 +314,8 @@ namespace MicroApi.DataLayer.Services
                     " LEFT JOIN TB_CURRENCY on TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID " +
                     " LEFT JOIN TB_AC_TRANS_HEADER ON TB_PURCH_RET_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID " +
                     " LEFT JOIN TB_STATE ON TB_SUPPLIER.STATE_ID= TB_STATE.ID " +
-                    " WHERE TB_PURCH_RET_HEADER.ID = " + id;
+                    " LEFT JOIN TB_USERS ON TB_AC_TRANS_HEADER.CREATE_USER_ID=TB_USERS.USER_ID  " +
+                    " WHERE TB_PURCH_RET_HEADER.TRANS_ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Grn");
 
@@ -324,7 +325,7 @@ namespace MicroApi.DataLayer.Services
 
                     purchaseReturn = new PurchaseReturn
                     {
-                        ID = ADO.ToInt32(dr["ID"]),
+                        TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
                         COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
                         COMPANY_NAME = ADO.ToString(dr["COMPANY_NAME"]),
                         STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
@@ -356,7 +357,8 @@ namespace MicroApi.DataLayer.Services
                         SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
                         SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
                         SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
-                       
+                        USER_ID = ADO.ToInt32(dr["CREATE_USER_ID"]),
+                        USER_NAME = ADO.ToString(dr["USER_NAME"]),
 
                     };
                 }
@@ -369,9 +371,10 @@ namespace MicroApi.DataLayer.Services
                 " LEFT JOIN TB_ITEMS ON TB_PURCH_RET_DETAIL.ITEM_ID = TB_ITEMS.ID " +
                 " LEFT JOIN TB_GRN_DETAIL ON TB_PURCH_RET_DETAIL.ITEM_ID = TB_GRN_DETAIL.ITEM_ID and TB_PURCH_RET_DETAIL.GRN_DET_ID = TB_GRN_DETAIL.ID " +
                 " LEFT JOIN TB_ITEM_STOCK ON TB_ITEM_STOCK.ITEM_ID = TB_ITEMS.ID and TB_ITEM_STOCK.STORE_ID = TB_GRN_DETAIL.STORE_ID " +
-                "LEFT JOIN TB_PURCH_DETAIL ON TB_PURCH_RET_DETAIL.PURCH_DET_ID=TB_PURCH_DETAIL.ID " +
-                "LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID " +
-                " WHERE TB_PURCH_RET_DETAIL.RET_ID = " + id;
+                " LEFT JOIN TB_PURCH_DETAIL ON TB_PURCH_RET_DETAIL.PURCH_DET_ID=TB_PURCH_DETAIL.ID " +
+                " LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID" +
+                " LEFT JOIN TB_PURCH_RET_HEADER ON TB_PURCH_RET_HEADER.ID=TB_PURCH_RET_DETAIL.RET_ID  " +
+                " WHERE TB_PURCH_RET_HEADER.TRANS_ID = " + id;
 
                 DataTable tblgrndetail = ADO.GetDataTable(strSQL, "GrnDetails");
 
@@ -561,7 +564,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_PURCHASE_RETURN";
                 cmd.Parameters.AddWithValue("ACTION", 5);
-                cmd.Parameters.AddWithValue("@ID", purchaseReturn.ID);
+                cmd.Parameters.AddWithValue("@ID", purchaseReturn.TRANS_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchaseReturn.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchaseReturn.FIN_ID);
                 cmd.Parameters.AddWithValue("@STORE_ID", purchaseReturn.STORE_ID);
@@ -659,7 +662,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_PURCHASE_RETURN";
                 cmd.Parameters.AddWithValue("ACTION", 6);
-                cmd.Parameters.AddWithValue("@ID", purchaseReturn.ID);
+                cmd.Parameters.AddWithValue("@TRANS_ID", purchaseReturn.TRANS_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchaseReturn.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchaseReturn.FIN_ID);
                 cmd.Parameters.AddWithValue("@STORE_ID", purchaseReturn.STORE_ID);
@@ -788,6 +791,44 @@ namespace MicroApi.DataLayer.Services
             }
 
             return res;
+        }
+        public List<PurchReturnhis> GetPurchReturnHis(PurchReturnHisRequest request)
+        {
+            List<PurchReturnhis> history = new List<PurchReturnhis>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SP_TB_PURCHASE_RETURN", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 8);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PurchReturnhis model = new PurchReturnhis
+                            {
+                                ACTION = reader["ACTION"] != DBNull.Value ? Convert.ToInt32(reader["ACTION"]) : 0,
+                                DOC_ID = reader["DOC_ID"] != DBNull.Value ? Convert.ToInt32(reader["DOC_ID"]) : 0,
+                                DOC_TYPE_ID = reader["DOC_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["DOC_TYPE_ID"]) : 0,
+                                USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0,
+                                USER_NAME = reader["USER_NAME"] != DBNull.Value ? reader["USER_NAME"].ToString() : string.Empty,
+                                TIME = reader["TIME"] != DBNull.Value ? Convert.ToDateTime(reader["TIME"]) : DateTime.MinValue,
+                                DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
+                            };
+
+                            history.Add(model);
+                        }
+                    }
+                }
+            }
+
+            return history;
         }
     }
 }

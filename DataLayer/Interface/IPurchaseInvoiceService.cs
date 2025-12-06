@@ -15,7 +15,7 @@ namespace MicroApi.DataLayer.Interface
         public List<PurchaseInvoice> GetPurchaseInvoiceList();
         GrnPendingQtyResponse GetGrnPendingQty(PendingGRNRequest request);
         PurchaseVoucherResponse GetPurchaseNo();
-
+        List<PurchInvhis> GetPurchInvHis(PurchInvHisRequest request);
 
     }
 }

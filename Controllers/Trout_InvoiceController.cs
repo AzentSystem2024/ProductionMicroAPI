@@ -7,23 +7,23 @@ namespace MicroApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class InvoiceController : ControllerBase
+    public class Trout_InvoiceController : ControllerBase
     {
-        private readonly IInvoiceService _invoiceService;
+        private readonly ITrout_InvoiceService _trout_InvoiceService;
 
-        public InvoiceController(IInvoiceService invoiceService)
+        public Trout_InvoiceController(ITrout_InvoiceService trout_InvoiceService)
         {
-            _invoiceService = invoiceService;
+            _trout_InvoiceService = trout_InvoiceService;
         }
         [HttpPost]
         [Route("insert")]
-        public InvoiceResponse Insert(Invoice model)
+        public Trout_InvoiceResponse Insert(Trout_Invoice model)
         {
-            InvoiceResponse res = new InvoiceResponse();
+            Trout_InvoiceResponse res = new Trout_InvoiceResponse();
 
             try
             {
-                res = _invoiceService.insert(model);
+                res = _trout_InvoiceService.insert(model);
             }
             catch (Exception ex)
             {
@@ -35,66 +35,68 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("update")]
-        public InvoiceResponse Update(InvoiceUpdate model)
+        public Trout_InvoiceResponse update(Trout_InvoiceUpdate model)
         {
-            InvoiceResponse res = new InvoiceResponse();
-            try
-            {
-                res = _invoiceService.Update(model);
-            }
-            catch (Exception ex)
-            {
-                res.flag = 0;
-                res.Message = ex.Message;
-            }
-            return res;
-        }
-        [HttpPost]
-        [Route("list")]
-        public TransferGridResponse GetTransferData(TransferInvoiceRequest request)
-        {
-            TransferGridResponse res = new TransferGridResponse();
+            Trout_InvoiceResponse res = new Trout_InvoiceResponse();
 
             try
             {
-                res = _invoiceService.GetTransferData(request);
+                res = _trout_InvoiceService.update(model);
             }
             catch (Exception ex)
             {
                 res.flag = 0;
                 res.Message = "Error: " + ex.Message;
-                res.Data = new List<TransferGridItem>();
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("list")]
+        public PendingDeliverydataResponse GetTransferData(PendingDeliverydataRequest request)
+        {
+            PendingDeliverydataResponse res = new PendingDeliverydataResponse();
+
+            try
+            {
+                res = _trout_InvoiceService.GetTransferData(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<PendingDeliverydata>();
             }
 
             return res;
         }
         [HttpPost]
         [Route("getlist")]
-        public InvoiceHeaderResponse GetSaleInvoiceHeaderData()
+        public Trout_InvoiceListResponse GetSaleInvoiceHeaderData()
         {
-            InvoiceHeaderResponse res = new InvoiceHeaderResponse();
+            Trout_InvoiceListResponse res = new Trout_InvoiceListResponse();
 
             try
             {
-                res = _invoiceService.GetSaleInvoiceHeaderData();
+                res = _trout_InvoiceService.GetSaleInvoiceHeaderData();
             }
             catch (Exception ex)
             {
                 res.flag = 0;
                 res.Message = "Error: " + ex.Message;
-                res.Data = new List<InvoiceHeader>();
+                res.Data = new List<Trout_InvoiceList>();
             }
 
             return res;
         }
         [HttpPost]
         [Route("select/{id:int}")]
-        public InvoiceHeaderSelectResponse Select(int id)
+        public Trout_InvoiceSelectResponse Select(int id)
         {
-            InvoiceHeaderSelectResponse response = new InvoiceHeaderSelectResponse();
+            Trout_InvoiceSelectResponse response = new Trout_InvoiceSelectResponse();
             try
             {
-                response = _invoiceService.GetSaleInvoiceById(id);
+                response = _trout_InvoiceService.GetSaleInvoiceById(id);
             }
             catch (Exception ex)
             {
@@ -104,30 +106,32 @@ namespace MicroApi.Controllers
             return response;
         }
         [HttpPost]
-        [Route("commit")]
-        public InvoiceResponse Commit(InvoiceUpdate model)
+        [Route("approve")]
+        public Trout_InvoiceResponse commit(Trout_InvoiceUpdate model)
         {
-            InvoiceResponse response = new InvoiceResponse();
-            try
-            {
-                response = _invoiceService.commit(model);
-            }
-            catch (Exception ex)
-            {
-                response.flag = 0;
-                response.Message = "Error: " + ex.Message;
-            }
-            return response;
-        }
-        [HttpPost]
-        [Route("invoiceno")]
-        public InvResponse GetInvoiceNo()
-        {
-            InvResponse res = new InvResponse();
+            Trout_InvoiceResponse res = new Trout_InvoiceResponse();
 
             try
             {
-                res = _invoiceService.GetInvoiceNo();
+                res = _trout_InvoiceService.commit(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("invoiceno")]
+        public TroutInvResponse GetInvoiceNo()
+        {
+            TroutInvResponse res = new TroutInvResponse();
+
+            try
+            {
+                res = _trout_InvoiceService.GetInvoiceNo();
             }
             catch (Exception ex)
             {
@@ -139,12 +143,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("delete/{id:int}")]
-        public InvoiceResponse Delete(int id)
+        public Trout_InvoiceResponse Delete(int id)
         {
-            InvoiceResponse res = new InvoiceResponse();
+            Trout_InvoiceResponse res = new Trout_InvoiceResponse();
             try
             {
-                res = _invoiceService.Delete(id);
+                res = _trout_InvoiceService.Delete(id);
             }
             catch (Exception ex)
             {
@@ -153,6 +157,5 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-
     }
 }

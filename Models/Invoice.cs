@@ -45,8 +45,8 @@
         public float? GST_AMOUNT { get; set; }
         public float? NET_AMOUNT { get; set; }
         public bool? IS_APPROVED { get; set; }
-
-        // FOR TROUT SUMMARY UPDATE
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<SaleDetail> SALE_DETAILS { get; set; }
     }
     public class SaleDetail
@@ -58,6 +58,9 @@
         public decimal? GST { get; set; }
         public decimal? TAX_AMOUNT { get; set; }
         public decimal? TOTAL_AMOUNT { get; set; }
+        public int? DN_DETAIL_ID { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
     }
     public class InvoiceResponse
     {
@@ -72,12 +75,13 @@
     }
     public class TransferGridItem
     {
-        public int TRANSFER_SUMMARY_ID { get; set; }
+        public int DN_DETAIL_ID { get; set; }
         public string TRANSFER_NO { get; set; }
         public string TRANSFER_DATE { get; set; }
         public string ARTICLE { get; set; }
         public double TOTAL_PAIR_QTY { get; set; }
-        
+        public decimal PRICE { get; set; }
+
     }
     public class InvoiceHeader
     {
@@ -97,6 +101,7 @@
         public decimal TAX_AMOUNT { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
         public string CUST_NAME { get; set; }
+        public string VEHICLE_NO { get; set; }
         public List<SaleDetailUpdate> SALE_DETAILS { get; set; } = new List<SaleDetailUpdate>();
 
 
@@ -151,6 +156,8 @@
         public float? GROSS_AMOUNT { get; set; }
         public float? TAX_AMOUNT { get; set; }
         public float? NET_AMOUNT { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<SaleDetailUpdate> SALE_DETAILS { get; set; }
     }
     public class CommitInvoiceRequest
@@ -187,6 +194,8 @@
         public string? CUST_STATE { get; set; }
         public string? CUST_PHONE { get; set; }
         public string? CUST_EMAIL { get; set; }
+        public string VEHICLE_NO { get; set; }
+        public bool ROUND_OFF { get; set; }
         public List<SaleDetailUpdate> SALE_DETAILS { get; set; }
 
     }
@@ -203,6 +212,9 @@
         public decimal? GST { get; set; }
         public decimal? TAX_AMOUNT { get; set; }
         public decimal? TOTAL_AMOUNT { get; set; }
+        public int? DN_DETAIL_ID { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
     }
     public class InvoiceHeaderSelectResponse
     {

@@ -2,7 +2,7 @@
 {
     public class PurchaseReturn
     {
-        public int? ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
         public string? COMPANY_NAME { get; set; }
@@ -38,6 +38,7 @@
         public string? SUPP_STATE_NAME { get; set; }
         public string? SUPP_ZIP { get; set; }
         public string? SUPP_CITY { get; set; }
+        public string? USER_NAME { get; set; }
         public List<PurchaseReturnDetail> PurchDetail { get; set; }
     }
     public class PurchaseReturnDetail
@@ -188,5 +189,19 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int PURCHASE_NO { get; set; }
+    }
+    public class PurchReturnhis
+    {
+        public int ACTION { get; set; }
+        public int DOC_ID { get; set; }
+        public DateTime TIME { get; set; }
+        public string DESCRIPTION { get; set; }
+        public int DOC_TYPE_ID { get; set; }
+        public int USER_ID { get; set; }
+        public string USER_NAME { get; set; }
+    }
+    public class PurchReturnHisRequest
+    {
+        public int TRANS_ID { get; set; }
     }
 }

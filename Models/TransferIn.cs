@@ -12,7 +12,7 @@
         public int FIN_ID { get; set; }           
         public int REASON_ID { get; set; }
         public double NET_AMOUNT { get; set; }
-
+        public bool? IS_APPROVED { get; set; }
         public List<TransferInDetail> DETAILS { get; set; }
     }
     public class TransferInDetail
@@ -28,7 +28,7 @@
     }
     public class TransferInUpdate
     {
-        public int ID { get; set; }  
+        public int TRANS_ID { get; set; }  
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public DateTime? REC_DATE { get; set; }
@@ -56,7 +56,7 @@
         public double? QUANTITY_ISSUED { get; set; }
         public string? BARCODE { get; set; }
         public string? DESCRIPTION { get; set; }
-
+        
     }
     public class TransferInListResponse
     {
@@ -103,6 +103,7 @@
     public class TransferInList
     {
         public int TRANSFER_ID { get; set; }
+        public int TRANS_ID { get; set; }
         public int COMPANY_ID { get; set; }
         public int STORE_ID { get; set; }
         public DateTime? TRANSFER_DATE { get; set; }
@@ -126,6 +127,7 @@
     public class TransferInInvUpdate
     {
         public int ID { get; set; }
+        public int TRANS_ID { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public DateTime? TRANSFER_DATE { get; set; }
@@ -137,7 +139,22 @@
         public int? REASON_ID { get; set; }
         public int TRANSFER_NO { get; set; }
         public int ISSUE_ID { get; set; }
-
+        public string? COMPANY_NAME { get; set; }      //for select
+        public string? ADDRESS1 { get; set; }
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? COMPANY_CODE { get; set; }
+        public string? EMAIL { get; set; }
+        public string? PHONE { get; set; }
+        public string? STORE_CODE { get; set; }
+        public string? STORE_ADDRESS1 { get; set; }
+        public string? STORE_ADDRESS2 { get; set; }
+        public string? STORE_ADDRESS3 { get; set; }
+        public string? STORE_ZIP { get; set; }
+        public string? STORE_CITY { get; set; }
+        public string? STORE_STATE { get; set; }
+        public string? STORE_PHONE { get; set; }
+        public string? STORE_EMAIL { get; set; }
         public List<TransferInDetailUpdate> DETAILS { get; set; }
     }
     public class TransferinDoc

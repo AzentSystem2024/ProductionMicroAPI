@@ -47,7 +47,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
                         cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
                         cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
@@ -157,7 +157,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
                         cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
                         cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
@@ -356,12 +356,31 @@ namespace MicroApi.DataLayer.Service
                                         //UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,             
                                         DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+                                        GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
                                         DOC_NO = Convert.ToInt32(reader["VOUCHER_NO"]),
                                         INVOICE_NET_AMOUNT = reader["INVOICE_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["INVOICE_NET_AMOUNT"]) : 0,
                                         ADJUSTED_AMOUNT = reader["ADJUSTED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["ADJUSTED_AMOUNT"]) : 0,
                                         RECEIVED_AMOUNT = reader["RECEIVED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["RECEIVED_AMOUNT"]) : 0,
                                         DUE_AMOUNT = reader["DUE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["DUE_AMOUNT"]) : 0,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
+                                        COMPANY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                        CUST_NAME = reader["CUST_NAME"]?.ToString(),
+                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                        ADDRESS1 = reader["ADDRESS1"]?.ToString(),
+                                        ADDRESS2 = reader["ADDRESS2"]?.ToString(),
+                                        ADDRESS3 = reader["ADDRESS3"]?.ToString(),
+                                        COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
+                                        EMAIL = reader["EMAIL"]?.ToString(),
+                                        PHONE = reader["PHONE"]?.ToString(),
+                                        CUST_CODE = reader["CUST_CODE"]?.ToString(),
+                                        CUST_ADDRESS1 = reader["CUST_ADDRESS1"]?.ToString(),
+                                        CUST_ADDRESS2 = reader["CUST_ADDRESS2"]?.ToString(),
+                                        CUST_ADDRESS3 = reader["CUST_ADDRESS3"]?.ToString(),
+                                        CUST_ZIP = reader["ZIP"]?.ToString(),
+                                        CUST_CITY = reader["CITY"]?.ToString(),
+                                        CUST_STATE = reader["STATE_NAME"]?.ToString(),
+                                        CUST_PHONE = reader["CUST_PHONE"]?.ToString(),
+                                        CUST_EMAIL = reader["CUST_EMAIL"]?.ToString(),
                                         NOTE_DETAIL = new List<CreditNoteDetailUpdate>()
                                     };
                                 }
@@ -374,7 +393,10 @@ namespace MicroApi.DataLayer.Service
                                     GST_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["GST_PERC"]) : 0,
-                                    HSN_CODE = reader["HSN_CODE"]?.ToString()
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString(),
+                                    LEDGER_CODE = reader["HEAD_CODE"]?.ToString(),
+                                    LEDGER_NAME = reader["HEAD_NAME"]?.ToString(),
+
                                 });
                             }
 
@@ -440,7 +462,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_PASSED", model.IS_PASSED ?? false);
                         cmd.Parameters.AddWithValue("@SCHEDULE_NO", model.SCHEDULE_NO ?? 0);
                         cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@VERIFY_USER_ID", model.VERIFY_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", model.APPROVE1_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", model.APPROVE2_USER_ID ?? 0);
@@ -504,7 +526,7 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                    SELECT TOP 1 VOUCHER_NO 
+                    SELECT TOP 1 VOUCHER_NO + 1
                     FROM TB_AC_TRANS_HEADER 
                     WHERE TRANS_TYPE = 37 
                     ORDER BY TRANS_ID DESC";
@@ -624,6 +646,43 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public List<Credithis> GetcreditHis(CreditHisRequest request)
+        {
+            List<Credithis> history = new List<Credithis>();
 
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SP_AC_CREDIT_NOTE", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 6);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Credithis model = new Credithis
+                            {
+                                ACTION = reader["ACTION"] != DBNull.Value ? Convert.ToInt32(reader["ACTION"]) : 0,
+                                DOC_ID = reader["DOC_ID"] != DBNull.Value ? Convert.ToInt32(reader["DOC_ID"]) : 0,
+                                DOC_TYPE_ID = reader["DOC_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["DOC_TYPE_ID"]) : 0,
+                                USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : 0,
+                                USER_NAME = reader["USER_NAME"] != DBNull.Value ? reader["USER_NAME"].ToString() : string.Empty,
+                                TIME = reader["TIME"] != DBNull.Value ? Convert.ToDateTime(reader["TIME"]) : DateTime.MinValue,
+                                DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
+                            };
+
+                            history.Add(model);
+                        }
+                    }
+                }
+            }
+
+            return history;
+        }
     }
 }

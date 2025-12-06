@@ -23,7 +23,7 @@
         public bool? IS_PASSED { get; set; }
         public int? SCHEDULE_NO { get; set; }
         public string? NARRATION { get; set; }
-        public int? CREATE_USER_ID { get; set; }
+        public int? USER_ID { get; set; }
         public int? VERIFY_USER_ID { get; set; }
         public int? APPROVE1_USER_ID { get; set; }
         public int? APPROVE2_USER_ID { get; set; }
@@ -80,7 +80,7 @@
         public bool? IS_PASSED { get; set; }
         public int? SCHEDULE_NO { get; set; }
         public string? NARRATION { get; set; }
-        public int? CREATE_USER_ID { get; set; }
+        public int? USER_ID { get; set; }
         public int? VERIFY_USER_ID { get; set; }
         public int? APPROVE1_USER_ID { get; set; }
         public int? APPROVE2_USER_ID { get; set; }
@@ -104,8 +104,10 @@
         public float AMOUNT { get; set; }
         public float GST_AMOUNT { get; set; }
         public string REMARKS { get; set; }
-        public float? GST_PERC { get; set; }
+        public float? GST_PERC { get; set; }//FOR SELECT
         public string? HSN_CODE { get; set; }
+        public string? LEDGER_CODE { get; set; }
+        public string? LEDGER_NAME { get; set; }
     }
     public class CreditNoteListItem
     {
@@ -145,15 +147,33 @@
         public int? INVOICE_ID { get; set; }
         public string INVOICE_NO { get; set; }
         public string NARRATION { get; set; }
-        public int UNIT_ID { get; set; }           
         public int DISTRIBUTOR_ID { get; set; }
         public float NET_AMOUNT { get; set; }
+        public float? GROSS_AMOUNT { get; set; }
         public int DOC_NO { get; set; }
         public float INVOICE_NET_AMOUNT { get; set; }
         public float ADJUSTED_AMOUNT { get; set; }
         public float RECEIVED_AMOUNT { get; set; }
         public float DUE_AMOUNT { get; set; }
         public string? PARTY_NAME { get; set; }
+        public string? CUST_NAME { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public string? COMPANY_NAME { get; set; }
+        public string? ADDRESS1 { get; set; }
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? COMPANY_CODE { get; set; }
+        public string? EMAIL { get; set; }
+        public string? PHONE { get; set; }
+        public string? CUST_CODE { get; set; }
+        public string? CUST_ADDRESS1 { get; set; }
+        public string? CUST_ADDRESS2 { get; set; }
+        public string? CUST_ADDRESS3 { get; set; }
+        public string? CUST_ZIP { get; set; }
+        public string? CUST_CITY { get; set; }
+        public string? CUST_STATE { get; set; }
+        public string? CUST_PHONE { get; set; }
+        public string? CUST_EMAIL { get; set; }
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteCommitRequest
@@ -190,6 +210,20 @@
     public class Pendingrequest
     {
         public int CUST_ID { get; set; }
+    }
+    public class Credithis
+    {
+        public int ACTION { get; set; }
+        public int DOC_ID { get; set; }
+        public DateTime TIME { get; set; }
+        public string DESCRIPTION { get; set; }
+        public int DOC_TYPE_ID { get; set; }
+        public int USER_ID { get; set; }
+        public string USER_NAME { get; set; }
+    }
+    public class CreditHisRequest
+    {
+        public int TRANS_ID { get; set; }
     }
 }
 

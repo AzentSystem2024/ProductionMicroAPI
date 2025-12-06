@@ -13,7 +13,11 @@
         public string EMAIL { get; set; }
         public string WHATSAPP { get; set; }
         public int COMPANY_TYPE { get; set; }
-        public bool IS_INACTIVE { get; set; }
+        public int? STATE_ID { get; set; }
+        public bool? IS_INACTIVE { get; set; }
+        public string? GST_NO { get; set; }
+        public string? PAN_NO { get; set; }
+        public string? CIN { get; set; }
     }
     public class CompanyUpdate
     {
@@ -31,6 +35,10 @@
         public int COMPANY_TYPE { get; set; }
         public string? COMPANY_TYPE_NAME { get; set; }
         public bool IS_INACTIVE { get; set; }
+        public int? STATE_ID { get; set; }
+        public string? GST_NO { get; set; }
+        public string? PAN_NO { get; set; }
+        public string? CIN { get; set; }
     }
     public class CompanyResponse
     {

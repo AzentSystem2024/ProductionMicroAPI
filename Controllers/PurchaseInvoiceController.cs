@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using MicroApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using MicroApi.DataLayer.Interface;
-using MicroApi.Helper;
-using System.Data.SqlClient;
+﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
+using MicroApi.DataLayer.Services;
+using MicroApi.Helper;
+using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 
 namespace MicroApi.Controllers
 {
@@ -261,6 +262,22 @@ namespace MicroApi.Controllers
             }
 
             return res;
+        }
+        [HttpPost]
+        [Route("gethis")]
+        public List<PurchInvhis> GetPurchInvHis(PurchInvHisRequest request)
+        {
+            List<PurchInvhis> History = new List<PurchInvhis>();
+
+            try
+            {
+
+                History = _PurchaseInvoiceService.GetPurchInvHis(request);
+            }
+            catch (Exception ex)
+            {
+            }
+            return History.ToList();
         }
     }
 }

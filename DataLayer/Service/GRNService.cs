@@ -609,13 +609,18 @@ namespace MicroApi.DataLayer.Service
             {
                 string strSQL = "SELECT TB_GRN_HEADER.*, TB_STORES.STORE_NAME, TB_SUPPLIER.SUPP_NAME, TB_PO_HEADER.PO_NO, " +
                     "TB_CURRENCY.ID AS CURRENCY_ID , TB_CURRENCY.SYMBOL , TB_STATUS.STATUS_DESC AS STATUS, " +
-                    "TB_AC_TRANS_HEADER.NARRATION AS NARRATION FROM TB_GRN_HEADER " +
+                    "TB_AC_TRANS_HEADER.NARRATION AS NARRATION, " +
+                    "TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE, " +
+                    "TB_COMPANY_MASTER.PHONE,TB_COMPANY_MASTER.EMAIL,TB_SUPPLIER.ADDRESS1 AS SUPP_ADDRESS1,TB_SUPPLIER.ADDRESS2 AS SUPP_ADDRESS2,TB_SUPPLIER.ADDRESS3 AS SUPP_ADDRESS3, " +
+                    "TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE,TB_SUPPLIER.EMAIL AS SUPP_EMAIL,TB_SUPPLIER.SUPP_CODE,TB_STATE.STATE_NAME " +
+                    "FROM TB_GRN_HEADER " +
                     "LEFT JOIN TB_STORES ON TB_GRN_HEADER.STORE_ID = TB_STORES.ID " +
                     "LEFT JOIN TB_SUPPLIER on TB_GRN_HEADER.SUPP_ID = TB_SUPPLIER.ID " +
                     "LEFT JOIN TB_AC_TRANS_HEADER ON TB_GRN_HEADER.TRANS_ID = TB_AC_TRANS_HEADER.TRANS_ID " +
                     "LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID=TB_CURRENCY.ID " +
                     "LEFT JOIN TB_PO_HEADER ON TB_GRN_HEADER.PO_ID = TB_PO_HEADER.ID " +
                     "LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.id " +
+                    "LEFT JOIN TB_COMPANY_MASTER ON TB_PURCH_RET_HEADER.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                     "WHERE TB_GRN_HEADER.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Grn");
@@ -628,6 +633,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         ID = ADO.ToInt32(dr["ID"]),
                         COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
+                        COMPANY_NAME = ADO.ToString(dr["COMPANY_NAME"]),
                         STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                         PO_ID = ADO.ToInt32(dr["PO_ID"]),
@@ -644,7 +650,22 @@ namespace MicroApi.DataLayer.Service
                         NARRATION = ADO.ToString(dr["NARRATION"]),
                         CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
                         CURRENCY_SYMBOL = ADO.ToString(dr["SYMBOL"]),
-                        STATUS = ADO.ToString(dr["STATUS"])
+                        STATUS = ADO.ToString(dr["STATUS"]),
+                        ADDRESS1 = ADO.ToString(dr["ADDRESS1"]),
+                        ADDRESS2 = ADO.ToString(dr["ADDRESS2"]),
+                        ADDRESS3 = ADO.ToString(dr["ADDRESS3"]),
+                        COMPANY_CODE = ADO.ToString(dr["COMPANY_CODE"]),
+                        EMAIL = ADO.ToString(dr["EMAIL"]),
+                        PHONE = ADO.ToString(dr["PHONE"]),
+                        SUPP_ADDRESS1 = ADO.ToString(dr["SUPP_ADDRESS1"]),
+                        SUPP_ADDRESS2 = ADO.ToString(dr["SUPP_ADDRESS2"]),
+                        SUPP_ADDRESS3 = ADO.ToString(dr["SUPP_ADDRESS3"]),
+                        SUPP_CITY = ADO.ToString(dr["CITY"]),
+                        SUPP_CODE = ADO.ToString(dr["SUPP_CODE"]),
+                        SUPP_ZIP = ADO.ToString(dr["ZIP"]),
+                        SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
+                        SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
+                        SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
                     };
                 }
 

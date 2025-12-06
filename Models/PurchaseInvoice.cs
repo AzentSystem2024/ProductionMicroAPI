@@ -122,6 +122,8 @@
         public string? SUPP_STATE_NAME { get; set; }
         public string? SUPP_ZIP { get; set; }
         public string? SUPP_CITY { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<PurchDetails> PurchDetails { get; set; }
     }
     public class PurchDetails
@@ -156,6 +158,8 @@
         public DateTime? GRN_DATE { get; set; }
         public decimal? PENDING_QTY { get; set; }
         public float? TOTAL_AMOUNT { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
     }
     public class PurchResponce
     {
@@ -213,5 +217,18 @@
         public int SUPP_ID { get; set; }
        
     }
-
+    public class PurchInvhis
+    {
+        public int ACTION { get; set; }
+        public int DOC_ID { get; set; }
+        public DateTime TIME { get; set; }
+        public string DESCRIPTION { get; set; }
+        public int DOC_TYPE_ID { get; set; }
+        public int USER_ID { get; set; }
+        public string USER_NAME { get; set; }
+    }
+    public class PurchInvHisRequest
+    {
+        public int TRANS_ID { get; set; }
+    }
 }

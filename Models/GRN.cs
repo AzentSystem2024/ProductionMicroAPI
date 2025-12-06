@@ -23,6 +23,22 @@
         public int USER_ID { get; set; }
         public string? CURRENCY_SYMBOL { get; set; }
         public bool? IS_APPROVED { get; set; }
+        public string? ADDRESS1 { get; set; }//FOR SELECT
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? COMPANY_NAME { get; set; }
+        public string? EMAIL { get; set; }
+        public string? PHONE { get; set; }
+        public string? COMPANY_CODE { get; set; }
+        public string? SUPP_ADDRESS1 { get; set; }
+        public string? SUPP_ADDRESS2 { get; set; }
+        public string? SUPP_ADDRESS3 { get; set; }
+        public string? SUPP_EMAIL { get; set; }
+        public string? SUPP_PHONE { get; set; }
+        public string? SUPP_CODE { get; set; }
+        public string? SUPP_STATE_NAME { get; set; }
+        public string? SUPP_ZIP { get; set; }
+        public string? SUPP_CITY { get; set; }
         public List<GRNDetail> GRNDetails { get; set; }
         public List<GRN_ITEM_COST>? GRN_Item_Cost { get; set; }
         public List<GRN_COST>? GRN_Cost { get; set; }

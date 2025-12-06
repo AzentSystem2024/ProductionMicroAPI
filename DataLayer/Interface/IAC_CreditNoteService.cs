@@ -12,6 +12,6 @@ namespace MicroApi.DataLayer.Interface
         DocResponse GetLastDocNo();
         CreditNoteResponse Delete(int id);
         CreditNoteInvoiceListResponse GetCreditNoteInvoiceList(Pendingrequest request);
-
+        List<Credithis> GetcreditHis(CreditHisRequest request);
     }
 }

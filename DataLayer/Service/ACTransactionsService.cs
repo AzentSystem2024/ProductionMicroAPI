@@ -496,7 +496,7 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                SELECT TOP 1 VOUCHER_NO 
+                SELECT TOP 1 VOUCHER_NO + 1
                 FROM TB_AC_TRANS_HEADER 
                 WHERE TRANS_TYPE = 4 
                 ORDER BY TRANS_ID DESC";
@@ -1012,6 +1012,24 @@ namespace MicroApi.DataLayer.Service
                                         DUE_AMOUNT = reader["DUE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["DUE_AMOUNT"]) : 0,
                                         DOC_NO = reader["VOUCHER_NO"] != DBNull.Value? Convert.ToString(reader["VOUCHER_NO"]): null,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
+                                        COMPANY_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                        SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
+                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                        ADDRESS1 = reader["ADDRESS1"]?.ToString(),
+                                        ADDRESS2 = reader["ADDRESS2"]?.ToString(),
+                                        ADDRESS3 = reader["ADDRESS3"]?.ToString(),
+                                        COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
+                                        EMAIL = reader["EMAIL"]?.ToString(),
+                                        PHONE = reader["PHONE"]?.ToString(),
+                                        SUPP_CODE = reader["SUPP_CODE"]?.ToString(),
+                                        SUPP_ADDRESS1 = reader["SUPP_ADDRESS1"]?.ToString(),
+                                        SUPP_ADDRESS2 = reader["SUPP_ADDRESS2"]?.ToString(),
+                                        SUPP_ADDRESS3 = reader["SUPP_ADDRESS3"]?.ToString(),
+                                        SUPP_ZIP = reader["ZIP"]?.ToString(),
+                                        SUPP_CITY = reader["CITY"]?.ToString(),
+                                        SUPP_STATE_NAME = reader["STATE_NAME"]?.ToString(),
+                                        SUPP_PHONE = reader["SUPP_PHONE"]?.ToString(),
+                                        SUPP_EMAIL = reader["SUPP_EMAIL"]?.ToString(),
                                         NOTE_DETAIL = new List<DebitNoteDetail>()
                                     };
                                 }
@@ -1153,7 +1171,7 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                    SELECT TOP 1 VOUCHER_NO 
+                    SELECT TOP 1 VOUCHER_NO + 1
                     FROM TB_AC_TRANS_HEADER 
                     WHERE TRANS_TYPE = 36 
                     ORDER BY TRANS_ID DESC";

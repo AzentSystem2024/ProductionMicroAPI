@@ -256,5 +256,21 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("gethis")]
+        public List<PurchReturnhis> GetPurchReturnHis(PurchReturnHisRequest request)
+        {
+            List<PurchReturnhis> History = new List<PurchReturnhis>();
+
+            try
+            {
+
+                History = _purchaseReturnService.GetPurchReturnHis(request);
+            }
+            catch (Exception ex)
+            {
+            }
+            return History.ToList();
+        }
     }
 }
