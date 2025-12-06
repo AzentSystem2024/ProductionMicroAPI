@@ -15,6 +15,8 @@
         public float? TAX_AMOUNT { get; set; }
         public float? NET_AMOUNT { get; set; }
         public bool? IS_APPROVED { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<TroutSaleDetail> SALE_DETAILS { get; set; }
     }
     public class TroutSaleDetail
@@ -26,6 +28,8 @@
         public decimal? TAX_AMOUNT { get; set; }
         public decimal? TOTAL_AMOUNT { get; set; }
         public int? DN_DETAIL_ID { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
     }
     public class Trout_InvoiceResponse
     {
@@ -48,6 +52,8 @@
         public float? TAX_AMOUNT { get; set; }
         public float? NET_AMOUNT { get; set; }
         public bool? IS_APPROVED { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<TroutSaleDetail>? SALE_DETAILS { get; set; }
     }
     public class PendingDeliverydataRequest
@@ -118,6 +124,8 @@
         public string? CUST_STATE { get; set; }
         public string? CUST_PHONE { get; set; }
         public string? CUST_EMAIL { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<TroutSaleDetailSelect> SALE_DETAILS { get; set; }
 
     }
@@ -134,6 +142,9 @@
         public string DN_DATE { get; set; }
         public string ARTICLE { get; set; }
         public double TOTAL_PAIR_QTY { get; set; }
+        public decimal? CGST {  get; set; }
+        public decimal? SGST { get; set; }
+
     }
     public class Trout_InvoiceSelectResponse
     {

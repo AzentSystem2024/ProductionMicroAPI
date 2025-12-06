@@ -39,6 +39,8 @@
         public string? SUPP_ZIP { get; set; }
         public string? SUPP_CITY { get; set; }
         public string? USER_NAME { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<PurchaseReturnDetail> PurchDetail { get; set; }
     }
     public class PurchaseReturnDetail
@@ -76,6 +78,8 @@
         public int? PURCH_DET_ID { get; set; }
         public DateTime? PURCH_DATE { get; set; }
         public string? DOC_NO { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
 
     }
     public class Input

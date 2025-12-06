@@ -37,7 +37,8 @@
         public int? UNIT_ID { get; set; }
         public int? DISTRIBUTOR_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
-
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<CreditNoteDetail> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteDetail
@@ -49,6 +50,8 @@
         public string REMARKS { get; set; }
         public float? GST_PERC { get; set; }
         public string? HSN_CODE { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
     }
 
     public class CreditNoteResponse
@@ -93,6 +96,8 @@
         public string? INVOICE_NO { get; set; }
         public int? UNIT_ID { get; set; }
         public int? DISTRIBUTOR_ID { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
 
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
@@ -104,6 +109,8 @@
         public float AMOUNT { get; set; }
         public float GST_AMOUNT { get; set; }
         public string REMARKS { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
         public float? GST_PERC { get; set; }//FOR SELECT
         public string? HSN_CODE { get; set; }
         public string? LEDGER_CODE { get; set; }
@@ -174,6 +181,8 @@
         public string? CUST_STATE { get; set; }
         public string? CUST_PHONE { get; set; }
         public string? CUST_EMAIL { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteCommitRequest

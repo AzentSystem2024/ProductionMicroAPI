@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Services;
 using MicroApi.Models;
-using MicroApi.DataLayer.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace MicroApi.Controllers
@@ -105,6 +106,22 @@ namespace MicroApi.Controllers
                 res.message = ex.Message;
             }
             return res;
+        }
+        [HttpPost]
+        [Route("suppdtl")]
+        public List<Supp_stateName> Getsupplist()
+        {
+            List<Supp_stateName> suppliers = new List<Supp_stateName>();
+
+            try
+            {
+
+                suppliers = _supplierService.Getsupplist();
+            }
+            catch (Exception ex)
+            {
+            }
+            return suppliers.ToList();
         }
     }
 }

@@ -231,6 +231,8 @@
         public int? JOB_ID { get; set; }
         public int? STORE_AUTO_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
 
@@ -243,6 +245,8 @@
         public string REMARKS { get; set; }
         public float? GST_PERC { get; set; }
         public string? HSN_CODE { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
     }
     public class DebitNoteResponse
     {
@@ -288,6 +292,8 @@
         public string? BILL_NO { get; set; }
         public int? JOB_ID { get; set; }
         public int? STORE_AUTO_ID { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
     public class DebitNoteListItem
@@ -343,6 +349,8 @@
         public string? SUPP_STATE_NAME { get; set; }
         public string? SUPP_ZIP { get; set; }
         public string? SUPP_CITY { get; set; }
+        public string? VEHICLE_NO { get; set; }
+        public bool? ROUND_OFF { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
     public class AC_DebitNoteSelect

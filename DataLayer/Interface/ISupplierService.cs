@@ -8,5 +8,6 @@ namespace MicroApi.DataLayer.Interface
         public bool SaveData(Suppliers supplier);
         public Suppliers GetItems(int id);
         public bool DeleteSupplier(int id);
+        public List<Supp_stateName> Getsupplist();
     }
 }

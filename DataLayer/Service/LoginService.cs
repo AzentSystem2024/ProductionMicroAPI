@@ -76,6 +76,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                         COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                        STATE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                         STATE_NAME = reader["STATE_NAME"]?.ToString()
                                     };
                                 }

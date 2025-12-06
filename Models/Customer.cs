@@ -154,6 +154,7 @@
     {
         public int ID { get; set; }
         public string? DESCRIPTION { get; set; }
+        public int STATE_ID { get; set; }
         public string? STATE_NAME { get; set; }
     }
 }

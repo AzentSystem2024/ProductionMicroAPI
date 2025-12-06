@@ -39,6 +39,8 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
+                        CMD.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
+                        CMD.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
                         CMD.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
 
@@ -52,6 +54,8 @@ namespace MicroApi.DataLayer.Service
                         DT.Columns.Add("TAX_AMOUNT", typeof(decimal));
                         DT.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
                         DT.Columns.Add("DN_DETAIL_ID", typeof(int));
+                        DT.Columns.Add("CGST", typeof(decimal));
+                        DT.Columns.Add("SGST", typeof(decimal));
 
                         foreach (var ITEM in model.SALE_DETAILS)
                         {
@@ -63,7 +67,9 @@ namespace MicroApi.DataLayer.Service
                                 ITEM.TAX_PERC,
                                 ITEM.TAX_AMOUNT,
                                 ITEM.TOTAL_AMOUNT,
-                                ITEM.DN_DETAIL_ID
+                                ITEM.DN_DETAIL_ID,
+                                ITEM.CGST,
+                                ITEM.SGST
                             );
                         }
 
@@ -116,6 +122,8 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@GROSS_AMOUNT", model.GROSS_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
+                        CMD.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
+                        CMD.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
                         CMD.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
 
@@ -129,6 +137,8 @@ namespace MicroApi.DataLayer.Service
                         DT.Columns.Add("TAX_AMOUNT", typeof(decimal));
                         DT.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
                         DT.Columns.Add("DN_DETAIL_ID", typeof(int));
+                        DT.Columns.Add("CGST", typeof(decimal));
+                        DT.Columns.Add("SGST", typeof(decimal));
 
                         foreach (var ITEM in model.SALE_DETAILS)
                         {
@@ -140,7 +150,9 @@ namespace MicroApi.DataLayer.Service
                                 ITEM.TAX_PERC,
                                 ITEM.TAX_AMOUNT,
                                 ITEM.TOTAL_AMOUNT,
-                                ITEM.DN_DETAIL_ID
+                                ITEM.DN_DETAIL_ID,
+                                ITEM.CGST,
+                                ITEM.SGST
                             );
                         }
 
@@ -379,6 +391,8 @@ namespace MicroApi.DataLayer.Service
                                         CUST_STATE = reader["STATE_NAME"]?.ToString(),
                                         CUST_PHONE = reader["CUST_PHONE"]?.ToString(),
                                         CUST_EMAIL = reader["CUST_EMAIL"]?.ToString(),
+                                        VEHICLE_NO = reader["VEHICLE_NO"]?.ToString(),
+                                        ROUND_OFF = ADO.Toboolean(reader["ROUND_OFF"]),
 
                                         SALE_DETAILS = new List<TroutSaleDetailSelect>()
                                     };
@@ -399,6 +413,8 @@ namespace MicroApi.DataLayer.Service
                                     TAX_PERC = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
                                     TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
                                     TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0,
+                                    CGST = reader["CGST"] != DBNull.Value ? Convert.ToDecimal(reader["CGST"]) : 0,
+                                    SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0,
                                 });
                             }
 
@@ -452,6 +468,8 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@TAX_AMOUNT", model.TAX_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
                         CMD.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
+                        CMD.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
+                        CMD.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
 
 
                         // UDT for details
@@ -464,6 +482,8 @@ namespace MicroApi.DataLayer.Service
                         DT.Columns.Add("TAX_AMOUNT", typeof(decimal));
                         DT.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
                         DT.Columns.Add("DN_DETAIL_ID", typeof(int));
+                        DT.Columns.Add("CGST", typeof(decimal));
+                        DT.Columns.Add("SGST", typeof(decimal));
 
                         foreach (var ITEM in model.SALE_DETAILS)
                         {
@@ -475,7 +495,9 @@ namespace MicroApi.DataLayer.Service
                                 ITEM.TAX_PERC,
                                 ITEM.TAX_AMOUNT,
                                 ITEM.TOTAL_AMOUNT,
-                                ITEM.DN_DETAIL_ID
+                                ITEM.DN_DETAIL_ID,
+                                ITEM.CGST,
+                                ITEM.SGST
                             );
                         }
 
@@ -510,13 +532,11 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                    SELECT TOP 1 VOUCHER_NO FROM TB_AC_TRANS_HEADER 
-                    INNER JOIN TB_SALE_HEADER ON TB_AC_TRANS_HEADER.TRANS_ID=TB_SALE_HEADER.TRANS_ID
-                    INNER JOIN TB_SALE_DETAIL ON TB_SALE_HEADER.ID=TB_SALE_DETAIL.SALE_ID
-                    LEFT JOIN TB_DN_DETAIL ON TB_SALE_DETAIL.DN_DETAIL_ID=TB_DN_DETAIL.ID
-                    LEFT JOIN  TB_DN_HEADER ON TB_DN_DETAIL.DN_ID=TB_DN_HEADER.ID
-                    WHERE TB_AC_TRANS_HEADER.TRANS_TYPE = 25 AND TB_DN_HEADER.DN_TYPE=1
-                    ORDER BY TB_AC_TRANS_HEADER.TRANS_ID DESC";
+                    SELECT TOP 1 VOUCHER_NO + 1 FROM TB_AC_TRANS_HEADER 
+                     INNER JOIN TB_SALE_HEADER ON TB_AC_TRANS_HEADER.TRANS_ID=TB_SALE_HEADER.TRANS_ID
+                     LEFT JOIN  TB_CUSTOMER ON TB_CUSTOMER.ID=TB_SALE_HEADER.CUSTOMER_ID
+                     WHERE TB_AC_TRANS_HEADER.TRANS_TYPE = 25 AND TB_CUSTOMER.CUST_TYPE=3
+                     ORDER BY TB_AC_TRANS_HEADER.TRANS_ID DESC";
 
                     using (var cmd = new SqlCommand(query, connection))
                     {

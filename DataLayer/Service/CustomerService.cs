@@ -494,6 +494,7 @@ namespace MicroApi.DataLayer.Services
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     DESCRIPTION = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : string.Empty,
+                                    STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
                                     STATE_NAME = reader["STATE_NAME"] != DBNull.Value ? reader["STATE_NAME"].ToString() : string.Empty
                                 };
                                 Cust_stateName.Add(address);
@@ -504,7 +505,6 @@ namespace MicroApi.DataLayer.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error fetching delivery addresses: " + ex.Message, ex);
             }
             return Cust_stateName;
         }

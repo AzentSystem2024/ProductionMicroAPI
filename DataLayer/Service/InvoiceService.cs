@@ -741,13 +741,11 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"
-                    SELECT TOP 1 VOUCHER_NO FROM TB_AC_TRANS_HEADER 
-                    INNER JOIN TB_SALE_HEADER ON TB_AC_TRANS_HEADER.TRANS_ID=TB_SALE_HEADER.TRANS_ID
-                    INNER JOIN TB_SALE_DETAIL ON TB_SALE_HEADER.ID=TB_SALE_DETAIL.SALE_ID
-                    LEFT JOIN TB_DN_DETAIL ON TB_SALE_DETAIL.DN_DETAIL_ID=TB_DN_DETAIL.ID
-                    LEFT JOIN  TB_DN_HEADER ON TB_DN_DETAIL.DN_ID=TB_DN_HEADER.ID
-                    WHERE TB_AC_TRANS_HEADER.TRANS_TYPE = 25 AND TB_DN_HEADER.DN_TYPE=2
-                    ORDER BY TB_AC_TRANS_HEADER.TRANS_ID DESC";
+                     SELECT TOP 1 VOUCHER_NO + 1 FROM TB_AC_TRANS_HEADER 
+                     INNER JOIN TB_SALE_HEADER ON TB_AC_TRANS_HEADER.TRANS_ID=TB_SALE_HEADER.TRANS_ID
+                     LEFT JOIN  TB_CUSTOMER ON TB_CUSTOMER.ID=TB_SALE_HEADER.CUSTOMER_ID
+                     WHERE TB_AC_TRANS_HEADER.TRANS_TYPE = 25 AND TB_CUSTOMER.CUST_TYPE in (1,2)
+                     ORDER BY TB_AC_TRANS_HEADER.TRANS_ID DESC";
 
                     using (var cmd = new SqlCommand(query, connection))
                     {

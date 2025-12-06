@@ -745,6 +745,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BILL_NO", model.BILL_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@JOB_ID", model.JOB_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_AUTO_ID", model.STORE_AUTO_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
                         cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
                         // Table-valued parameter
@@ -756,10 +758,12 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("GST_PERC", typeof(float));
                         dt.Columns.Add("HSN_CODE", typeof(string));
+                        dt.Columns.Add("CGST", typeof(decimal));
+                        dt.Columns.Add("SGST", typeof(decimal));
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE,item.CGST,item.SGST);
                         }
 
                         SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
@@ -834,6 +838,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BILL_NO", model.BILL_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@JOB_ID", model.JOB_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_AUTO_ID", model.STORE_AUTO_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
 
                         // Table-valued parameter for NOTE_DETAIL
                         DataTable dt = new DataTable();
@@ -844,10 +850,12 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("GST_PERC", typeof(float));
                         dt.Columns.Add("HSN_CODE", typeof(string));
+                        dt.Columns.Add("CGST", typeof(decimal));
+                        dt.Columns.Add("SGST", typeof(decimal));
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE, item.CGST, item.SGST);
                         }
 
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);
@@ -1030,6 +1038,8 @@ namespace MicroApi.DataLayer.Service
                                         SUPP_STATE_NAME = reader["STATE_NAME"]?.ToString(),
                                         SUPP_PHONE = reader["SUPP_PHONE"]?.ToString(),
                                         SUPP_EMAIL = reader["SUPP_EMAIL"]?.ToString(),
+                                        VEHICLE_NO = reader["VEHICLE_NO"]?.ToString(),
+                                        ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : 0,
                                         NOTE_DETAIL = new List<DebitNoteDetail>()
                                     };
                                 }
@@ -1043,6 +1053,8 @@ namespace MicroApi.DataLayer.Service
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["GST_PERC"]) : 0,
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
+                                    CGST = reader["CGST"] != DBNull.Value ? Convert.ToDecimal(reader["CGST"]) : 0,
+                                    SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0
                                 });
                             }
 
@@ -1123,6 +1135,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BILL_NO", model.BILL_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@JOB_ID", model.JOB_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_AUTO_ID", model.STORE_AUTO_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
 
                         // Table-valued parameter for NOTE_DETAIL
                         DataTable dt = new DataTable();
@@ -1133,11 +1147,13 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("GST_PERC", typeof(float));
                         dt.Columns.Add("HSN_CODE", typeof(string));
+                        dt.Columns.Add("CGST", typeof(decimal));
+                        dt.Columns.Add("SGST", typeof(decimal));
 
 
                         foreach (var item in model.NOTE_DETAIL)
                         {
-                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE);
+                            dt.Rows.Add(item.SL_NO, item.HEAD_ID, item.AMOUNT, item.GST_AMOUNT, item.REMARKS ?? string.Empty,item.GST_PERC,item.HSN_CODE, item.CGST, item.SGST);
                         }
 
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_NOTE_DETAIL", dt);

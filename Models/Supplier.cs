@@ -47,4 +47,11 @@
         public string message { get; set; }
         public Suppliers data { get; set; }
     }
+    public class Supp_stateName
+    {
+        public int ID { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public int STATE_ID { get; set; }
+        public string? STATE_NAME { get; set; }
+    }
 }

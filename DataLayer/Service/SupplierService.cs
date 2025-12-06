@@ -277,28 +277,42 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        //public bool DeleteSupplier(int id)
-        //{
-        //    try
-        //    {
-        //        using (SqlConnection connection = ADO.GetConnection())
-        //        {
-        //            SqlCommand cmd = new SqlCommand();
-        //            cmd.Connection = connection;
-        //            cmd.CommandType = CommandType.StoredProcedure;
-        //            cmd.CommandText = "SP_TB_SUPPLIER";
-        //            cmd.Parameters.AddWithValue("ACTION", 4);
-        //            cmd.Parameters.AddWithValue("@ID", id);
-        //            cmd.ExecuteNonQuery();
+        public List<Supp_stateName> Getsupplist()
+        {
+            var Supp_stateName = new List<Supp_stateName>();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_SUPPLIER", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
 
-        //            connection.Close();
-        //        }
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var address = new Supp_stateName
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["SUPP_NAME"] != DBNull.Value ? reader["SUPP_NAME"].ToString() : string.Empty,
+                                    STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
+                                    STATE_NAME = reader["STATE_NAME"] != DBNull.Value ? reader["STATE_NAME"].ToString() : string.Empty
+                                };
+                                Supp_stateName.Add(address);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return Supp_stateName;
+        }
     }
 }

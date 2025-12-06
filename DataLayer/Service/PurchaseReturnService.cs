@@ -128,6 +128,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("UOM_PURCH", typeof(string));
                 tbl.Columns.Add("UOM_MULTIPLE", typeof(int));
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
                 {
@@ -152,6 +154,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -176,6 +180,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@NARRATION", purchaseReturn.NARRATION);
                 cmd.Parameters.AddWithValue("@GRN_NO", purchaseReturn.GRN_NO);
                 cmd.Parameters.AddWithValue("@IS_APPROVED", purchaseReturn.IS_APPROVED == true ? 1 : 0);
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchaseReturn.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchaseReturn.ROUND_OFF);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_RET_DETAIL", tbl);
 
@@ -223,6 +229,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("UOM_PURCH", typeof(string));
                 tbl.Columns.Add("UOM_MULTIPLE", typeof(int));
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
                 {
@@ -247,6 +255,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -271,6 +281,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@USER_ID", purchaseReturn.USER_ID);
                 cmd.Parameters.AddWithValue("@NARRATION", purchaseReturn.NARRATION);
                 cmd.Parameters.AddWithValue("@GRN_NO", purchaseReturn.GRN_NO);
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchaseReturn.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchaseReturn.ROUND_OFF);
 
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_RET_DETAIL", tbl);
@@ -359,6 +371,8 @@ namespace MicroApi.DataLayer.Services
                         SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
                         USER_ID = ADO.ToInt32(dr["CREATE_USER_ID"]),
                         USER_NAME = ADO.ToString(dr["USER_NAME"]),
+                        VEHICLE_NO = ADO.ToString(dr["VEHICLE_NO"]),
+                        ROUND_OFF = ADO.Toboolean(dr["ROUND_OFF"])
 
                     };
                 }
@@ -411,6 +425,8 @@ namespace MicroApi.DataLayer.Services
                         PURCH_DET_ID = ADO.ToInt32(dr3["PURCH_DET_ID"]),
                         PURCH_DATE = Convert.ToDateTime(dr3["PURCH_DATE"]),
                         DOC_NO = ADO.ToString(dr3["DOC_NO"]),
+                        CGST = dr3["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["CGST"]) : null,
+                        SGST = dr3["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["SGST"]) : null
 
                     });
                 }
@@ -628,6 +644,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("UOM_PURCH", typeof(string));
                 tbl.Columns.Add("UOM_MULTIPLE", typeof(int));
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
                 {
@@ -652,6 +670,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -676,7 +696,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@USER_ID", purchaseReturn.USER_ID);
                 cmd.Parameters.AddWithValue("@NARRATION", purchaseReturn.NARRATION);
                 cmd.Parameters.AddWithValue("@GRN_NO", purchaseReturn.GRN_NO);
-
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchaseReturn.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchaseReturn.ROUND_OFF);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_RET_DETAIL", tbl);
 
@@ -770,7 +791,7 @@ namespace MicroApi.DataLayer.Services
                         connection.Open();
 
                     string query = @"
-                    SELECT TOP 1 VOUCHER_NO 
+                    SELECT TOP 1 VOUCHER_NO + 1
                     FROM TB_AC_TRANS_HEADER 
                     WHERE TRANS_TYPE = 20
                     ORDER BY TRANS_ID DESC";
