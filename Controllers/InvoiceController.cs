@@ -153,6 +153,21 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("cust")]
+        public List<InvoiceCust_stateName> Getcustlist()
+        {
+            List<InvoiceCust_stateName> customers = new List<InvoiceCust_stateName>();
 
+            try
+            {
+
+                customers = _invoiceService.Getcustlist();
+            }
+            catch (Exception ex)
+            {
+            }
+            return customers.ToList();
+        }
     }
 }

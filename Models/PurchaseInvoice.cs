@@ -124,6 +124,9 @@
         public string? SUPP_CITY { get; set; }
         public string? VEHICLE_NO { get; set; }
         public bool? ROUND_OFF { get; set; }
+        public string? GST_NO { get; set; }
+        public string? PAN_NO { get; set; }
+        public string? CIN { get; set; }
         public List<PurchDetails> PurchDetails { get; set; }
     }
     public class PurchDetails

@@ -6,5 +6,6 @@ namespace MicroApi.DataLayer.Interface
     {
         DocSettingsResponse Insert(DocSettings model);
         DocSettingsListResponse List(DocSettingsListRequest request);
+        //DocSettingsVoucherResponse GetNextVoucherNumber(DocSettingsVoucherRequest request);
     }
 }

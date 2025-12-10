@@ -52,5 +52,24 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        //[HttpPost]
+        //[Route("nextvoucherno")]
+        //public DocSettingsVoucherResponse GetNextVoucherNumber(DocSettingsVoucherRequest request)
+        //{
+        //    DocSettingsVoucherResponse res = new DocSettingsVoucherResponse();
+
+        //    try
+        //    {
+        //        res = _docSettingsService.GetNextVoucherNumber(request);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = 0;
+        //        res.Message = "Error: " + ex.Message;
+        //    }
+
+        //    return res;
+        //}
+
     }
 }

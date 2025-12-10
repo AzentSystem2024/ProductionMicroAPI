@@ -591,5 +591,42 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public List<TroutCust_stateName> Getcustlist()
+        {
+            var TroutCust_stateName = new List<TroutCust_stateName>();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_TROUT_INVOICE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 6);
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var address = new TroutCust_stateName
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : string.Empty,
+                                    STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
+                                    STATE_NAME = reader["STATE_NAME"] != DBNull.Value ? reader["STATE_NAME"].ToString() : string.Empty
+                                };
+                                TroutCust_stateName.Add(address);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return TroutCust_stateName;
+        }
     }
 }

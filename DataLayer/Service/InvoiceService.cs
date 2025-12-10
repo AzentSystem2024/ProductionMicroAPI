@@ -800,6 +800,42 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public List<InvoiceCust_stateName> Getcustlist()
+        {
+            var InvoiceCust_stateName = new List<InvoiceCust_stateName>();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_SALE_INVOICE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 6);
 
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var address = new InvoiceCust_stateName
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : string.Empty,
+                                    STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
+                                    STATE_NAME = reader["STATE_NAME"] != DBNull.Value ? reader["STATE_NAME"].ToString() : string.Empty
+                                };
+                                InvoiceCust_stateName.Add(address);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return InvoiceCust_stateName;
+        }
     }
 }

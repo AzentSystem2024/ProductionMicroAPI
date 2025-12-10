@@ -232,4 +232,11 @@
     {
         public int CUST_ID { get; set; }
     }
+    public class InvoiceCust_stateName
+    {
+        public int ID { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public int STATE_ID { get; set; }
+        public string? STATE_NAME { get; set; }
+    }
 }

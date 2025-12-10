@@ -1,5 +1,6 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
+using MicroApi.DataLayer.Services;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -156,6 +157,22 @@ namespace MicroApi.Controllers
                 res.Message = ex.Message;
             }
             return res;
+        }
+        [HttpPost]
+        [Route("cust")]
+        public List<TroutCust_stateName> Getcustlist()
+        {
+            List<TroutCust_stateName> customers = new List<TroutCust_stateName>();
+
+            try
+            {
+
+                customers = _trout_InvoiceService.Getcustlist();
+            }
+            catch (Exception ex)
+            {
+            }
+            return customers.ToList();
         }
     }
 }

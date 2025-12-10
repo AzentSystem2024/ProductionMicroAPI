@@ -508,7 +508,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_PURCHASE_RETURN";
                 cmd.Parameters.AddWithValue("ACTION", 4);
-                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.Parameters.AddWithValue("@TRANS_ID", id);
                 cmd.ExecuteNonQuery();
 
                 connection.Close();

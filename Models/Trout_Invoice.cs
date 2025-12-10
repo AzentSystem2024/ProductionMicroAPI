@@ -158,4 +158,11 @@
         public string Message { get; set; }
         public int INVOICE_NO { get; set; }
     }
+    public class TroutCust_stateName
+    {
+        public int ID { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public int STATE_ID { get; set; }
+        public string? STATE_NAME { get; set; }
+    }
 }

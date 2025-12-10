@@ -86,7 +86,7 @@ namespace MicroApi.DataLayer.Service
 
                         CMD.Parameters.AddWithValue("@ACTION", 2);
                         CMD.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                        CMD.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                        //CMD.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
 
                         using (SqlDataReader DR = CMD.ExecuteReader())
                         {
@@ -100,7 +100,9 @@ namespace MicroApi.DataLayer.Service
                                     PREFIX = DR["PREFIX"]?.ToString(),
                                     START = DR["START"] != DBNull.Value ? Convert.ToInt32(DR["START"]) : (int?)null,
                                     WIDTH = DR["WIDTH"] != DBNull.Value ? Convert.ToInt32(DR["WIDTH"]) : (int?)null,
-                                    VERIFY_REQUIRED = DR["VERIFY_REQUIRED"] != DBNull.Value ? Convert.ToBoolean(DR["VERIFY_REQUIRED"]) : (bool?)null
+                                    VERIFY_REQUIRED = DR["VERIFY_REQUIRED"] != DBNull.Value ? Convert.ToBoolean(DR["VERIFY_REQUIRED"]) : (bool?)null,
+                                    LAST_NO = DR["LastNo"]?.ToString(),
+                                    NEXT_VOUCHER_NO = DR["NextVoucherNo"]?.ToString()
                                 });
                             }
                         }
@@ -118,6 +120,47 @@ namespace MicroApi.DataLayer.Service
 
             return RESPONSE;
         }
+        //public DocSettingsVoucherResponse GetNextVoucherNumber(DocSettingsVoucherRequest request)
+        //{
+        //    DocSettingsVoucherResponse response = new DocSettingsVoucherResponse();
+
+        //    try
+        //    {
+        //        using (SqlConnection con = ADO.GetConnection())
+        //        {
+        //            if (con.State == ConnectionState.Closed)
+        //                con.Open();
+
+        //            using (SqlCommand cmd = new SqlCommand("SP_GET_NEXT_VOUCHER_NO", con))
+        //            {
+        //                cmd.CommandType = CommandType.StoredProcedure;
+
+        //                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+        //                cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
+
+        //                SqlParameter outParam = new SqlParameter("@NEXT_VOUCHER_NO", SqlDbType.VarChar, 50);
+        //                outParam.Direction = ParameterDirection.Output;
+
+        //                cmd.Parameters.Add(outParam);
+
+        //                cmd.ExecuteNonQuery();
+
+        //                string nextNo = Convert.ToString(outParam.Value);
+
+        //                response.flag = 1;
+        //                response.Message = "Success";
+        //                response.VOUCHER_NO = nextNo;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.flag = 0;
+        //        response.Message = "ERROR: " + ex.Message;
+        //    }
+
+        //    return response;
+        //}
 
     }
 }

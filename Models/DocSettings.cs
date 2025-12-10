@@ -24,7 +24,7 @@
     public class DocSettingsListRequest
     {
         public int COMPANY_ID { get; set; }
-        public int FIN_ID { get; set; }
+       // public int FIN_ID { get; set; }
     }
     public class DocSettingsList
     {
@@ -35,6 +35,8 @@
         public int? START { get; set; }
         public int? WIDTH { get; set; }
         public bool? VERIFY_REQUIRED { get; set; }
+        public string LAST_NO { get; set; }
+        public string NEXT_VOUCHER_NO { get; set; }
     }
     public class DocSettingsListResponse
     {
@@ -42,5 +44,16 @@
         public string Message { get; set; }
         public List<DocSettingsList> Data { get; set; }
     }
+    //public class DocSettingsVoucherRequest
+    //{
+    //    public int COMPANY_ID { get; set; }
+    //     public int TRANS_TYPE { get; set; }
+    //}
+    //public class DocSettingsVoucherResponse
+    //{
+    //    public int flag { get; set; }
+    //    public string Message { get; set; }
+    //    public string VOUCHER_NO { get; set; }
 
+    //}
 }
