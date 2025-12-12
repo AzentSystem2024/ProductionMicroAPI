@@ -35,7 +35,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
                         cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
-                        cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
+                        cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? false);
                         cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);

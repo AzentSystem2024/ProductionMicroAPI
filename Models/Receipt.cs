@@ -10,7 +10,7 @@
         public int? STORE_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? TRANS_STATUS { get; set; }
-        public int? RECEIPT_NO { get; set; }
+        public string? RECEIPT_NO { get; set; }
         public bool? IS_DIRECT { get; set; }
         public string? REF_NO { get; set; }
         public string? CHEQUE_NO { get; set; }

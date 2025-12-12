@@ -37,6 +37,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
                         // Prepare table-valued parameter with only PAYDETAIL_ID
                         DataTable dtDetail = new DataTable();

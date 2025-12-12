@@ -15,6 +15,7 @@
         public string? BANK_NAME { get; set; }
         public int? CREATE_USER_ID { get; set; }
         public int? STORE_ID { get; set; }
+        public bool? IS_APPROVED { get; set; }
         public List<SalaryPayDetail> SALARY_PAY_DETAIL { get; set; } = new List<SalaryPayDetail>();
     }
     public class SalaryPayDetail
