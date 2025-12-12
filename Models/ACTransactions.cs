@@ -127,7 +127,7 @@
     public class JournalListItem
     {
         public int? TRANS_ID { get; set; }
-        public string? JOURNAL_NO { get; set; }
+        public string? DOC_NO { get; set; }
         public string TRANS_DATE { get; set; }
         public string? PARTY_NAME { get; set; }
         public string REF_NO { get; set; }
@@ -152,7 +152,7 @@
     public class JournalViewHeader
     {
         public int TRANS_ID { get; set; }
-        public string JOURNAL_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string TRANS_DATE { get; set; }
         public string PARTY_NAME { get; set; }
         public string REF_NO { get; set; }

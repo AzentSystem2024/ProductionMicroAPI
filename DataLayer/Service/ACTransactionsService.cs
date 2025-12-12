@@ -356,7 +356,7 @@ namespace MicroApi.DataLayer.Service
                                     headers[transId] = new JournalListItem
                                     {
                                         TRANS_ID = transId,
-                                        JOURNAL_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         TRANS_DATE = reader["TRANS_DATE"]?.ToString(),
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         REF_NO = reader["REF_NO"]?.ToString(),
@@ -436,7 +436,7 @@ namespace MicroApi.DataLayer.Service
                                     header = new JournalViewHeader
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
-                                        JOURNAL_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("yyyy-MM-dd"): null,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         REF_NO = reader["REF_NO"]?.ToString(),

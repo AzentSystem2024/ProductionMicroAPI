@@ -638,7 +638,7 @@ namespace MicroApi.DataLayer.Service
                         STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                         PO_ID = ADO.ToInt32(dr["PO_ID"]),
                         PO_NO = ADO.ToInt32(dr["PO_NO"]),
-                        GRN_NO = ADO.ToInt32(dr["GRN_NO"]),
+                        DOC_NO = ADO.ToInt32(dr["GRN_NO"]),
                         GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                         SUPPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
@@ -808,7 +808,7 @@ namespace MicroApi.DataLayer.Service
                 worksheetList.Add(new GRN
                 {
                     ID = ADO.ToInt32(dr["ID"]),
-                    GRN_NO = ADO.ToInt32(dr["GRN_NO"]),
+                    DOC_NO = ADO.ToInt32(dr["GRN_NO"]),
                     GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
                     SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                     STORE_ID = ADO.ToInt32(dr["STORE_ID"]),

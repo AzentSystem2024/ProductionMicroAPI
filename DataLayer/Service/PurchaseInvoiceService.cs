@@ -245,7 +245,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         ID = Convert.ToInt32(dr["ID"]),
                         COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        PURCH_NO = dr["DOC_NO"]?.ToString(),
+                        DOC_NO = dr["DOC_NO"]?.ToString(),
                         SUPPPLIER_NAME = dr["SUPP_NAME"]?.ToString(),
                         NARRATION = dr["NARRATION"]?.ToString(),
                         PURCH_DATE = dr["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PURCH_DATE"]) : (DateTime?)null,
@@ -933,7 +933,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         ID = dr["ID"] != DBNull.Value ? ADO.ToInt32(dr["ID"]) : 0,
                         TRANS_ID = dr["TRANS_ID"] != DBNull.Value ? ADO.ToInt32(dr["TRANS_ID"]) : 0,
-                        PURCH_NO = ADO.ToString(dr["PURCH_NO"]),
+                        DOC_NO = ADO.ToString(dr["PURCH_NO"]),
                         PURCH_DATE = dr["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PURCH_DATE"]) : (DateTime?) null,
                         SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? ADO.ToInt32(dr["SUPP_ID"]) : 0,
                         STORE_ID = dr["STORE_ID"] != DBNull.Value ? ADO.ToInt32(dr["STORE_ID"]) : 0,

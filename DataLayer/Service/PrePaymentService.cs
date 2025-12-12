@@ -214,7 +214,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         TRANS_ID = transId,
                                         TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
-                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
                                         TRANS_STATUS = reader["TRANS_STATUS"]?.ToString(),
                                         ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
@@ -311,7 +311,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
                                         TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
-                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ?
                                                      Convert.ToDateTime(reader["TRANS_DATE"]).ToString("yyyy-MM-dd") : null,
                                         TRANS_STATUS = reader["TRANS_STATUS"]?.ToString(),

@@ -290,7 +290,7 @@ namespace MicroApi.DataLayer.Service
                                 ReceiptListItem item = new ReceiptListItem
                                 {
                                     TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                    VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                    DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                     TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
                                     REC_DATE = reader["REC_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["REC_DATE"]).ToString("dd-MM-yyyy") : null,
                                    // UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
@@ -378,7 +378,7 @@ namespace MicroApi.DataLayer.Service
                                         CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
-                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         PDC_ID = reader["PDC_ID"] != DBNull.Value ? Convert.ToInt32(reader["PDC_ID"]) : 0,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         REC_DETAIL = new List<ReceiptDetail>(),

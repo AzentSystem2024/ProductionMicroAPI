@@ -212,7 +212,7 @@ namespace MicroApi.DataLayer.Services
                 worksheetList.Add(new PurchaseOrderHeader
                 {
                     ID = ADO.ToInt32(dr["ID"]),
-                    PO_NO = dr["PO_NO"] != DBNull.Value ? dr["PO_NO"].ToString() : null,
+                    DOC_NO = dr["PO_NO"] != DBNull.Value ? dr["PO_NO"].ToString() : null,
                     PO_DATE = dr["PO_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PO_DATE"]) : (DateTime?)null,
                     SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_ID"]) : (int?)null,
                     CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : (int?)null,
@@ -737,7 +737,7 @@ namespace MicroApi.DataLayer.Services
                         COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
                         STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE = ADO.ToString(dr["STORE_NAME"]),
-                        PO_NO = ADO.ToString(dr["PO_NO"]),
+                        DOC_NO = ADO.ToString(dr["PO_NO"]),
                         PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                         SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),

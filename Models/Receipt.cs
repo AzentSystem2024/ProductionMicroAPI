@@ -80,7 +80,7 @@
     public class ReceiptListItem
     {
         public int TRANS_ID { get; set; }
-        public string VOUCHER_NO { get; set; }
+        public string DOC_NO { get; set; }
         public int? TRANS_STATUS { get; set; }
         public string REC_DATE { get; set; }
         public int UNIT_ID { get; set; }
@@ -157,7 +157,7 @@
     public class ReceiptSelect
     {
         public int TRANS_ID { get; set; }
-        public string VOUCHER_NO { get; set; }
+        public string DOC_NO { get; set; }
         public int TRANS_TYPE { get; set; }
         public string REC_DATE { get; set; }
         public int COMPANY_ID { get; set; }

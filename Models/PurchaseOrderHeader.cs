@@ -10,7 +10,7 @@ namespace MicroApi.Models
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string? PO_NO { get; set; }
+        public string? DOC_NO { get; set; }
         public DateTime? PO_DATE { get; set; }
         public int? SUPP_ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

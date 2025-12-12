@@ -288,7 +288,7 @@ namespace MicroApi.DataLayer.Service
                                     headers[transId] = new MiscReceiptListItem
                                     {
                                         TRANS_ID = transId,
-                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]): 0,
@@ -377,7 +377,7 @@ namespace MicroApi.DataLayer.Service
                                     header = new MiscReceiptViewHeader
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
-                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         TRANS_DATE = reader["TRANS_DATE"]?.ToString(),
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
                                         TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,

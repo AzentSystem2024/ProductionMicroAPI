@@ -342,7 +342,7 @@ namespace MicroApi.DataLayer.Services
                         COMPANY_NAME = ADO.ToString(dr["COMPANY_NAME"]),
                         STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
-                        RET_NO = ADO.ToString(dr["RET_NO"]),
+                        DOC_NO = ADO.ToString(dr["RET_NO"]),
                         RET_DATE = Convert.ToDateTime(dr["RET_DATE"]),
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                         SUPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
@@ -467,7 +467,7 @@ namespace MicroApi.DataLayer.Services
                             var item = new PurchaseReturnList
                             {
                                 ID = ADO.ToInt32(dr["ID"]),
-                                RET_NO = ADO.ToString(dr["RET_NO"]),
+                                DOC_NO = ADO.ToString(dr["RET_NO"]),
                                 RET_DATE = dr["RET_DATE"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dr["RET_DATE"]),
                                 SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                                 SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),

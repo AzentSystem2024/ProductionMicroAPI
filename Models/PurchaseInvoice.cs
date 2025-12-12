@@ -3,7 +3,7 @@
     public class PurchaseInvoice
     {
         public int ID { get; set; }
-        public string PURCH_NO { get; set; }
+        public string DOC_NO { get; set; }
         public DateTime? PURCH_DATE { get; set; }
         public int SUPP_ID { get; set; }
         public int STORE_ID { get; set; }
@@ -84,7 +84,7 @@
         public int? ID { get; set; }
         public int COMPANY_ID { get; set; }
         public int USER_ID { get; set; }
-        public string? PURCH_NO { get; set; }
+        public string? DOC_NO { get; set; }
         public string? SUPPPLIER_NAME { get; set; }
         public string? NARRATION { get; set; }
         public DateTime? PURCH_DATE { get; set; }

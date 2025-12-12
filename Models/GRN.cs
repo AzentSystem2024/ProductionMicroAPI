@@ -7,7 +7,7 @@
         public int STORE_ID { get; set; }
         public int PO_ID { get; set; }
         public int PO_NO { get; set; }
-        public int GRN_NO { get; set; }
+        public int DOC_NO { get; set; }
         public DateTime GRN_DATE { get; set; }
         public int SUPP_ID { get; set; }
         public float NET_AMOUNT { get; set; }

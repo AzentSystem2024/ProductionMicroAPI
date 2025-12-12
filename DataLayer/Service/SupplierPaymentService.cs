@@ -223,7 +223,7 @@ namespace MicroApi.DataLayer.Service
                                 SupplierPaymentListItem item = new SupplierPaymentListItem
                                 {
                                     TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                    VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+                                    DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                     TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
                                     PAY_DATE = reader["PAY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PAY_DATE"]).ToString("dd-MM-yyyy") : null,
                                     // UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
@@ -296,7 +296,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
                                         TRANS_TYPE = reader["TRANS_TYPE"] as int? ?? 0,
-                                        SUPPLIER_NO = reader["VOUCHER_NO"] != DBNull.Value ? Convert.ToInt32(reader["VOUCHER_NO"]) : 0,
+                                        DOC_NO = reader["VOUCHER_NO"] != DBNull.Value ? Convert.ToInt32(reader["VOUCHER_NO"]) : 0,
                                         PAY_DATE = reader["PAY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PAY_DATE"]).ToString("dd-MM-yyyy") : null,
                                         COMPANY_ID = reader["COMPANY_ID"] as int? ?? 0,
                                         FIN_ID = reader["FIN_ID"] as int? ?? 0,

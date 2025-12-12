@@ -8,7 +8,7 @@
         public string? COMPANY_NAME { get; set; }
         public int? STORE_ID { get; set; }
         public string? STORE_NAME { get; set; }
-        public string? RET_NO { get; set; }
+        public string? DOC_NO { get; set; }
         public DateTime? RET_DATE { get; set; }
         public int? SUPP_ID { get; set; }
         public string? SUPPLIER_NAME { get; set; }
@@ -172,7 +172,7 @@
     public class PurchaseReturnList
     {
         public int ID { get; set; }
-        public string RET_NO { get; set; }
+        public string DOC_NO { get; set; }
         public DateTime RET_DATE { get; set; }
         public int SUPP_ID { get; set; }
         public string SUPP_NAME { get; set; }

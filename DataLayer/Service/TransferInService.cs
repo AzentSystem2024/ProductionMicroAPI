@@ -223,7 +223,7 @@ namespace MicroApi.DataLayer.Service
                             ISSUE_ID = ADO.ToInt32(dr["ISSUE_ID"]),
                             STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                             STATUS = ADO.ToString(dr["STATUS"]),
-                            TRANSFER_NO = ADO.ToInt32(dr["TRANSFER_NO"])
+                            DOC_NO = ADO.ToInt32(dr["TRANSFER_NO"])
 
                         };
                         list.Add(obj);
@@ -282,7 +282,7 @@ namespace MicroApi.DataLayer.Service
                                 USER_ID = firstRow["USER_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["USER_ID"]),
                                 NARRATION = firstRow["NARRATION"] == DBNull.Value ? null : ADO.ToString(firstRow["NARRATION"]),
                                 REASON_ID = firstRow["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["REASON_ID"]),
-                                TRANSFER_NO = firstRow["TRANSFER_NO"] == DBNull.Value ? 0 : ADO.ToInt32(firstRow["TRANSFER_NO"]),
+                                DOC_NO = firstRow["TRANSFER_NO"] == DBNull.Value ? 0 : ADO.ToInt32(firstRow["TRANSFER_NO"]),
                                 ISSUE_ID = ADO.ToInt32(firstRow["ISSUE_ID"]),
                                 COMPANY_NAME = firstRow["COMPANY_NAME"]?.ToString(),
                                 ADDRESS1 = firstRow["ADDRESS1"]?.ToString(),

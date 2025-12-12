@@ -88,7 +88,7 @@
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
         public int? TRANS_STATUS { get; set; }
-        public string SALE_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string SALE_DATE { get; set; }
         public int UNIT_ID { get; set; }
         public int DISTRIBUTOR_ID { get; set; }
@@ -169,7 +169,7 @@
     {
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
-        public string SALE_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string SALE_DATE { get; set; }
         public int DISTRIBUTOR_ID { get; set; }
         public float GROSS_AMOUNT { get; set; }

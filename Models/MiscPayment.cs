@@ -62,7 +62,7 @@
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
         public string TRANS_DATE { get; set; }
-        public string VOUCHER_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string? CHEQUE_NO { get; set; }
         public string? CHEQUE_DATE { get; set; }
         public string? BANK_NAME { get; set; }
@@ -91,7 +91,7 @@
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
         public string TRANS_DATE { get; set; }
-        public string VOUCHER_NO { get; set; }
+        public string DOC_NO { get; set; }
         public int PAY_HEAD_ID { get; set; }
         public int PAY_TYPE_ID { get; set; }
         public string CHEQUE_NO { get; set; }

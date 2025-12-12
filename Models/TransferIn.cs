@@ -114,7 +114,7 @@
         public int ISSUE_ID { get; set; }
         public string STORE_NAME { get; set; }
         public string STATUS { get; set; }
-        public int TRANSFER_NO { get; set; }
+        public int DOC_NO { get; set; }
 
     }
 
@@ -137,7 +137,7 @@
         public int? USER_ID { get; set; }
         public string NARRATION { get; set; }
         public int? REASON_ID { get; set; }
-        public int TRANSFER_NO { get; set; }
+        public int DOC_NO { get; set; }
         public int ISSUE_ID { get; set; }
         public string? COMPANY_NAME { get; set; }      //for select
         public string? ADDRESS1 { get; set; }

@@ -80,7 +80,7 @@
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
         public int? TRANS_STATUS { get; set; }
-        public string INVOICE_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string INVOICE_DATE { get; set; }
         public int CUST_ID { get; set; }
         public float GROSS_AMOUNT { get; set; }
@@ -99,7 +99,7 @@
     {
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
-        public string INVOICE_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string TRANS_DATE { get; set; }
         public int CUST_ID { get; set; }
         public float GROSS_AMOUNT { get; set; }

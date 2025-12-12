@@ -66,7 +66,7 @@
     public class MiscReceiptListItem
     {
         public int? TRANS_ID { get; set; }
-        public string? VOUCHER_NO { get; set; }
+        public string? DOC_NO { get; set; }
         public string TRANS_DATE { get; set; }
         public string? PARTY_NAME { get; set; }
         public int? TRANS_TYPE { get; set; }
@@ -95,7 +95,7 @@
     public class MiscReceiptViewHeader
     {
         public int TRANS_ID { get; set; }
-        public string VOUCHER_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string TRANS_DATE { get; set; }
         public string PARTY_NAME { get; set; }
         public int TRANS_TYPE { get; set; }
