@@ -126,6 +126,13 @@
         public string? CUST_EMAIL { get; set; }
         public string? VEHICLE_NO { get; set; }
         public bool? ROUND_OFF { get; set; }
+        public string GST_NO { get; set; }
+        public string PAN_NO { get; set; }
+        public string CIN { get; set; }
+        public string DELIVERY_ADD1 { get; set; }
+        public string DELIVERY_ADD2 { get; set; }
+        public string DELIVERY_ADD3 { get; set; }
+        public string MOBILE { get; set; }
         public List<TroutSaleDetailSelect> SALE_DETAILS { get; set; }
 
     }

@@ -105,13 +105,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("DocNo")]
-        public DocResponse GetLastDocNo()
+        public DocResponse GetLastDocNo(CreditVoucherRequest request)
         {
             DocResponse res = new DocResponse();
 
             try
             {
-                res = _creditNoteService.GetLastDocNo();
+                res = _creditNoteService.GetLastDocNo(request);
             }
             catch (Exception ex)
             {

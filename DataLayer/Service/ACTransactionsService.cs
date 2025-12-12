@@ -1040,6 +1040,9 @@ namespace MicroApi.DataLayer.Service
                                         SUPP_EMAIL = reader["SUPP_EMAIL"]?.ToString(),
                                         VEHICLE_NO = reader["VEHICLE_NO"]?.ToString(),
                                         ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : false,
+                                        GST_NO = reader["GST_NO"]?.ToString(),
+                                        PAN_NO = reader["PAN_NO"]?.ToString(),
+                                        CIN = reader["CIN"]?.ToString(),
                                         NOTE_DETAIL = new List<DebitNoteDetail>()
                                     };
                                 }
@@ -1275,7 +1278,7 @@ namespace MicroApi.DataLayer.Service
                                 DebitInvoicelist item = new DebitInvoicelist
                                 {
                                     BILL_ID = reader["BILL_ID"] != DBNull.Value ? Convert.ToInt32(reader["BILL_ID"]) : 0,
-                                    INVOICE_NO = reader["DOC_NO"] != DBNull.Value ? Convert.ToInt32(reader["DOC_NO"]) : 0,
+                                    INVOICE_NO = reader["DOC_NO"] != DBNull.Value ? Convert.ToString(reader["DOC_NO"]) : null,
                                     PURCH_DATE = reader["PURCH_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
                                     SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PURCH_DATE"]).ToString("dd-MM-yyyy") : null,
                                     SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),

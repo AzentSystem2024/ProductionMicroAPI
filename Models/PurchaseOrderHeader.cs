@@ -104,6 +104,9 @@ namespace MicroApi.Models
         public string? SUPP_STATE_NAME { get; set; }
         public string? SUPP_ZIP { get; set; }
         public string? SUPP_CITY { get; set; }
+        public string? GST_NO { get; set; }
+        public string? PAN_NO { get; set; }
+        public string? CIN { get; set; }
 
         public List<PurchaseOrderDetail>? PoDetails { get; set; }
     }

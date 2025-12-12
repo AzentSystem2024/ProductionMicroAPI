@@ -585,6 +585,13 @@ namespace MicroApi.DataLayer.Service
                                         CUST_EMAIL = reader["CUST_EMAIL"]?.ToString(),
                                         VEHICLE_NO = reader["VEHICLE_NO"]?.ToString(),
                                         ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : false,
+                                        GST_NO = reader["GST_NO"]?.ToString(),
+                                        PAN_NO = reader["PAN_NO"]?.ToString(),
+                                        CIN = reader["CIN"]?.ToString(),
+                                        DELIVERY_ADD1 = reader["CUST_DELIVERY_ADD1"]?.ToString(),
+                                        DELIVERY_ADD2 = reader["CUST_DELIVERY_ADD2"]?.ToString(),
+                                        DELIVERY_ADD3 = reader["CUST_DELIVERY_ADD3"]?.ToString(),
+                                        MOBILE = reader["MOBILE"]?.ToString(),
                                         SALE_DETAILS = new List<SaleDetailUpdate>()
                                     };
                                 }

@@ -313,8 +313,8 @@ namespace MicroApi.Service
                                         ARTICLE_ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_ID"]) : 0,
                                         ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
                                         QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
-                                        ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
-                                        DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                        //ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
+                                        DESCRIPTION = reader["ITEM_NAME"]?.ToString(),
                                         UOM = reader["UOM"]?.ToString()
                                     });
                                 }
@@ -376,7 +376,7 @@ namespace MicroApi.Service
                                 {
                                     ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt64(reader["ARTICLE_ID"]) : 0,
                                     ART_NO = reader["ART_NO"]?.ToString(),
-                                    //DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
                                     COLOR = reader["COLOR"]?.ToString(),
                                     PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
                                     CATEGORY_NAME = reader["CATEGORY_NAME"]?.ToString(),
@@ -386,9 +386,9 @@ namespace MicroApi.Service
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
-                                    CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value
-    ? ((DateTimeOffset)reader["CREATED_DATE"]).DateTime
-    : (DateTime?)null,
+                                    //CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value
+                                    //? ((DateTimeOffset)reader["CREATED_DATE"]).DateTime
+                                    //: (DateTime?)null,
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? "",
                                     SIZES = new List<Sizes>() // still keep sizes
                                 };

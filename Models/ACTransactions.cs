@@ -351,6 +351,9 @@
         public string? SUPP_CITY { get; set; }
         public string? VEHICLE_NO { get; set; }
         public bool? ROUND_OFF { get; set; }
+        public string? GST_NO { get; set; }
+        public string? PAN_NO { get; set; }
+        public string? CIN { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
     public class AC_DebitNoteSelect
@@ -385,7 +388,7 @@
     public class DebitInvoicelist
     {
         public int BILL_ID { get; set; }
-        public int INVOICE_NO { get; set; }
+        public string INVOICE_NO { get; set; }
         public string PURCH_DATE { get; set; }
         public string SUPP_INV_DATE { get; set; }
         public string SUPP_INV_NO { get; set; }

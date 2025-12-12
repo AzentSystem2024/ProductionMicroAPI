@@ -706,7 +706,7 @@ namespace MicroApi.DataLayer.Services
                     "TB_VAT_RULE_SUPPLIER.DESCRIPTION AS VAT_RULE_NAME,TB_SUPPLIER.EMAIL, " +
                     "TB_DELIVERY_TERMS.DESCRIPTION AS DELIVERY_TERM, TB_STATUS.STATUS_DESC, " +
                     "TB_AC_TRANS_HEADER.NARRATION AS NARRATION, " +
-                    "TB_EMPLOYEE.EMP_NAME,TB_COMPANY_MASTER.COMPANY_NAME,TB_COMPANY_MASTER.ADDRESS1, " +
+                    "TB_EMPLOYEE.EMP_NAME,TB_COMPANY_MASTER.COMPANY_NAME,TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.GST_NO,TB_COMPANY_MASTER.PAN_NO,TB_COMPANY_MASTER.CIN, " +
                     "TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE, " +
                     "TB_COMPANY_MASTER.PHONE,TB_COMPANY_MASTER.EMAIL,TB_SUPPLIER.ADDRESS1 AS SUPP_ADDRESS1,TB_SUPPLIER.ADDRESS2 AS SUPP_ADDRESS2, " +
                     "TB_SUPPLIER.ADDRESS3 AS SUPP_ADDRESS3,TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE, " +
@@ -792,6 +792,9 @@ namespace MicroApi.DataLayer.Services
                         SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
                         SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
                         SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
+                        GST_NO = ADO.ToString(dr["GST_NO"]),
+                        PAN_NO = ADO.ToString(dr["PAN_NO"]),
+                        CIN = ADO.ToString(dr["CIN"]),
 
                     };
                 }

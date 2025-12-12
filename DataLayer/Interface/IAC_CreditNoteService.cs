@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Interface
         CreditNoteListResponse GetCreditNoteList();
         AC_CreditNoteSelect GetCreditNoteById(int id);
         CreditNoteResponse Commit(AC_CreditNoteUpdate model);
-        DocResponse GetLastDocNo();
+        DocResponse GetLastDocNo(CreditVoucherRequest request);
         CreditNoteResponse Delete(int id);
         CreditNoteInvoiceListResponse GetCreditNoteInvoiceList(Pendingrequest request);
         List<Credithis> GetcreditHis(CreditHisRequest request);

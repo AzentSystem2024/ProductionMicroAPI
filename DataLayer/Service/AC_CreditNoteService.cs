@@ -365,7 +365,7 @@ namespace MicroApi.DataLayer.Service
                                         DISTRIBUTOR_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
                                         NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                         GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
-                                        DOC_NO = Convert.ToInt32(reader["VOUCHER_NO"]),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         INVOICE_NET_AMOUNT = reader["INVOICE_NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["INVOICE_NET_AMOUNT"]) : 0,
                                         ADJUSTED_AMOUNT = reader["ADJUSTED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["ADJUSTED_AMOUNT"]) : 0,
                                         RECEIVED_AMOUNT = reader["RECEIVED_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["RECEIVED_AMOUNT"]) : 0,
@@ -391,6 +391,13 @@ namespace MicroApi.DataLayer.Service
                                         CUST_EMAIL = reader["CUST_EMAIL"]?.ToString(),
                                         VEHICLE_NO = reader["VEHICLE_NO"]?.ToString(),
                                         ROUND_OFF = reader["ROUND_OFF"] != DBNull.Value ? Convert.ToBoolean(reader["ROUND_OFF"]) : false,
+                                        GST_NO = reader["GST_NO"]?.ToString(),
+                                        PAN_NO = reader["PAN_NO"]?.ToString(),
+                                        CIN = reader["CIN"]?.ToString(),
+                                        DELIVERY_ADDRESS1 = reader["CUST_DELIVERY_ADD1"]?.ToString(),
+                                        DELIVERY_ADDRESS2 = reader["CUST_DELIVERY_ADD2"]?.ToString(),
+                                        DELIVERY_ADDRESS3 = reader["CUST_DELIVERY_ADD3"]?.ToString(),
+                                        MOBILE = reader["MOBILE"]?.ToString(),
                                         NOTE_DETAIL = new List<CreditNoteDetailUpdate>()
                                     };
                                 }
@@ -529,10 +536,43 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public DocResponse GetLastDocNo()
-        {
-            DocResponse res = new DocResponse();
+        //public DocResponse GetLastDocNo()
+        //{
+        //    DocResponse res = new DocResponse();
 
+        //    try
+        //    {
+        //        using (var connection = ADO.GetConnection())
+        //        {
+        //            if (connection.State == ConnectionState.Closed)
+        //                connection.Open();
+
+        //            string query = @"
+        //            SELECT TOP 1 VOUCHER_NO + 1
+        //            FROM TB_AC_TRANS_HEADER 
+        //            WHERE TRANS_TYPE = 37 
+        //            ORDER BY TRANS_ID DESC";
+
+        //            using (var cmd = new SqlCommand(query, connection))
+        //            {
+        //                object result = cmd.ExecuteScalar();
+        //                res.flag = 1;
+        //                res.DOC_NO = result != null ? Convert.ToInt32(result) : 0;
+        //                res.Message = "Success";
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = 0;
+        //        res.Message = "Error: " + ex.Message;
+        //    }
+
+        //    return res;
+        //}
+        public DocResponse GetLastDocNo(CreditVoucherRequest request)
+        {
+            var res = new DocResponse();
             try
             {
                 using (var connection = ADO.GetConnection())
@@ -540,17 +580,18 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    string query = @"
-                    SELECT TOP 1 VOUCHER_NO + 1
-                    FROM TB_AC_TRANS_HEADER 
-                    WHERE TRANS_TYPE = 37 
-                    ORDER BY TRANS_ID DESC";
+                    // Call the SQL function directly
+                    string query = "SELECT dbo.fn_NextVoucherNo(@TRANS_TYPE, @COMPANY_ID) AS VOUCHER_NO";
 
                     using (var cmd = new SqlCommand(query, connection))
                     {
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
                         object result = cmd.ExecuteScalar();
+
                         res.flag = 1;
-                        res.DOC_NO = result != null ? Convert.ToInt32(result) : 0;
+                        res.DOC_NO = result != null ? result.ToString() : "0";  
                         res.Message = "Success";
                     }
                 }
@@ -563,6 +604,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+
         public CreditNoteResponse Delete(int id)
         {
             CreditNoteResponse res = new CreditNoteResponse();
