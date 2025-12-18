@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         MiscpaymentGSTResponse Save(MiscPayment_GST model);
         MiscpaymentGSTResponse Edit(MiscPayment_GSTUpdate model);
         MiscPaymentGSTSelectedView GetMiscPaymentById(int id);
-        MiscPaymentListGSTResponse GetMiscPaymentList();
+        MiscPaymentListGSTResponse GetMiscPaymentList(MiscpaymentGSTListRequest request);
         MiscpaymentGSTResponse commit(MiscPayment_GSTUpdate model);
         MiscGSTLastDocno GetLastDocNo();
         MiscpaymentGSTResponse Delete(int id);

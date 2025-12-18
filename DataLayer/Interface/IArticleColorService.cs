@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         ArticleColorResponse Insert(ArticleColor articleColor);
         ArticleColorResponse Update(ArticleColorUpdate articleColor);
         ArticleColorResponse GetArticleColorById(int id);
-        ArticleColorListResponse GetLogList(int? id = null);
+        ArticleColorListResponse GetLogList(ArticleColorListReq request);
         ArticleColorResponse DeleteArticleColorData(int id);
     }
 }

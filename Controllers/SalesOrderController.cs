@@ -18,12 +18,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public SalesOrderListResponse List()
+        public SalesOrderListResponse List(SOListRequest request)
         {
             SalesOrderListResponse response = new SalesOrderListResponse();
             try
             {
-                response = _salesOrderService.GetAllSalesOrders();
+                response = _salesOrderService.GetAllSalesOrders(request);
             }
             catch (Exception ex)
             {

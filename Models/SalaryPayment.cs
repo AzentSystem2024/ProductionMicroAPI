@@ -57,6 +57,7 @@
     public class SalaryPendingRequest
     {
         public string SAL_MONTH { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class SalaryPendingResponse
     {
@@ -123,5 +124,9 @@
         public string EMP_NAME { get; set; }
         public string EMP_CODE { get; set; }
         public decimal NET_AMOUNT { get; set; }
+    }
+    public class SalaryPendingListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

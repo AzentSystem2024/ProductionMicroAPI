@@ -61,4 +61,9 @@
         public string Message { get; set; }
         public List<SalaryHeadUpdate> Data { get; set; }
     }
+    public class SalaryHeadListRequest
+    {
+        public int COMPANY_ID { get; set; }
+       
+    }
 }

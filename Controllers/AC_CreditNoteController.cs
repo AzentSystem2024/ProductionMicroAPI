@@ -54,13 +54,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public CreditNoteListResponse GetCreditNoteList()
+        public CreditNoteListResponse GetCreditNoteList(CreditlistRequest request)
         {
             CreditNoteListResponse res = new CreditNoteListResponse();
 
             try
             {
-                res = _creditNoteService.GetCreditNoteList();
+                res = _creditNoteService.GetCreditNoteList(request);
             }
             catch (Exception ex)
             {

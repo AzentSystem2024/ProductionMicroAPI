@@ -183,7 +183,7 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public GRNResponse List()
+        public GRNResponse List(GRNListRequest request)
         {
             GRNResponse res = new GRNResponse();
             List<GRN> grn = new List<GRN>();
@@ -214,8 +214,8 @@ namespace MicroApi.Controllers
                 */
 
                 
-                grn = _grnService.GetGRNList(intUserID);
-
+                grn = _grnService.GetGRNList(request);
+                
                 res.Flag = 1;
                 res.Message = "Success";
                 res.grnheader = grn;

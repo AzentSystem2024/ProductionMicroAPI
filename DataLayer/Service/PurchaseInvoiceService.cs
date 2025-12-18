@@ -20,6 +20,7 @@ namespace MicroApi.DataLayer.Service
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_GET_PENDING_PO_LIST";
             cmd.Parameters.AddWithValue("@SUPP_ID", input.SUPP_ID);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -50,6 +51,7 @@ namespace MicroApi.DataLayer.Service
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_GET_PO_DETAILS";
             cmd.Parameters.AddWithValue("@PO_ID", input.PO_ID);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -301,7 +303,7 @@ namespace MicroApi.DataLayer.Service
                                   TB_GRN_DETAIL.INVOICE_QTY,
                                   TB_GRN_DETAIL.UOM,
                                   TB_GRN_HEADER.GRN_NO,
-                                  TB_GRN_HEADER.GRN_DATE
+                                  TB_GRN_HEADER.GRN_DATE,TB_GRN_DETAIL.QUANTITY - TB_GRN_DETAIL.INVOICE_QTY AS PENDING_QTY
                                 FROM TB_PURCH_DETAIL
                                 LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID
                                 LEFT JOIN TB_STORES ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID 
@@ -347,9 +349,7 @@ namespace MicroApi.DataLayer.Service
 
                         GRN_NO = dr["GRN_NO"]?.ToString(),
                         GRN_DATE = dr["GRN_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["GRN_DATE"]) : (DateTime?)null,
-                        PENDING_QTY = dr["PO_QUANTITY"] != DBNull.Value && dr["GRN_QTY"] != DBNull.Value
-                            ? Convert.ToDecimal(dr["PO_QUANTITY"]) - Convert.ToDecimal(dr["GRN_QTY"])
-                            : 0,
+                        PENDING_QTY = dr["PENDING_QTY"] != DBNull.Value ? Convert.ToDecimal(dr["PENDING_QTY"]) : 0,
                         TOTAL_AMOUNT = dr["AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["AMOUNT"]) : 0f,
                         CGST = dr["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["CGST"]) : null,
                         SGST = dr["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["SGST"]) : null
@@ -914,7 +914,7 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
-        public List<PurchaseInvoice> GetPurchaseInvoiceList()
+        public List<PurchaseInvoice> GetPurchaseInvoiceList(PurchListRequest request)
         {
             List<PurchaseInvoice> invoiceList = new List<PurchaseInvoice>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -922,6 +922,7 @@ namespace MicroApi.DataLayer.Service
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ACTION", 0);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -964,6 +965,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 7);
                     cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -975,7 +977,7 @@ namespace MicroApi.DataLayer.Service
                         res.Data.Add(new GrnPendingQty
                         {
                             GRN_ID = row["ID"] != DBNull.Value ? Convert.ToInt32(row["ID"]) : 0,
-                            GRN_NO = row["GRN_NO"] != DBNull.Value ? Convert.ToInt32(row["GRN_NO"]) : 0,
+                            GRN_NO = row["GRN_NO"] != DBNull.Value ? Convert.ToString(row["GRN_NO"]) : null,
                             GRN_DATE = row["GRN_DATE"] != DBNull.Value ? Convert.ToDateTime(row["GRN_DATE"]) : DateTime.MinValue,
                             ITEM_ID = row["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(row["ITEM_ID"]) : 0,
                             ITEM_NAME = row["DESCRIPTION"] != DBNull.Value ? row["DESCRIPTION"].ToString() : "",

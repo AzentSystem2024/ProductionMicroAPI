@@ -31,7 +31,7 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         CMD.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
 
-                        CMD.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        CMD.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.SALE_DATE));
                         CMD.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
                         CMD.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
                         CMD.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);
@@ -151,7 +151,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.SALE_DATE));
                         cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
                         cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
                         cmd.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);
@@ -378,6 +378,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -431,7 +432,7 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public InvoiceHeaderResponse GetSaleInvoiceHeaderData()
+        public InvoiceHeaderResponse GetSaleInvoiceHeaderData(InvoiceListRequest request)
         {
             var response = new InvoiceHeaderResponse
             {
@@ -453,7 +454,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
-                       
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -660,7 +662,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.SALE_DATE));
                         cmd.Parameters.AddWithValue("@TRANS_STATUS", model.TRANS_STATUS ?? 0);
                         cmd.Parameters.AddWithValue("@RECEIPT_NO", model.RECEIPT_NO ?? 0);
                         cmd.Parameters.AddWithValue("@IS_DIRECT", model.IS_DIRECT ?? 0);

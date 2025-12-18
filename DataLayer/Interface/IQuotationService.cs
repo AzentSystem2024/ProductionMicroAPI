@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IQuotationService
     {
-        QuotationListResponse GetAllQuotations();
+        QuotationListResponse GetAllQuotations(QuotationListRequest request);
         QuotationDetailSelectResponse GetQuotation(int qtnId);
         int SaveData(Quotation quotation);
         QuotationResponse EditData(QuotationUpdate quotation);

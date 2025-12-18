@@ -19,12 +19,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("FixedAsset/list")]
-        public DepreciationResponse FixedAssetList()
+        public DepreciationResponse FixedAssetList(DepreciationListRequest request)
         {
             DepreciationResponse response = new DepreciationResponse();
             try
             {
-                response = _depreciationService.GetFixedAssetsList();
+                response = _depreciationService.GetFixedAssetsList(request);
             }
             catch (Exception ex)
             {
@@ -36,12 +36,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("DepreciationList/List")]
-        public DepreciationListResponse DepreciationList()
+        public DepreciationListResponse DepreciationList(DepreciationListRequest request)
         {
             DepreciationListResponse res = new DepreciationListResponse();
             try
             {
-                res = _depreciationService.GetList();
+                res = _depreciationService.GetList(request);
             }
             catch (Exception ex)
             {

@@ -80,11 +80,11 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public DeliveryRtnListResponse List()
+        public DeliveryRtnListResponse List(DRListRequest request)
         {
             try
             {
-                DeliveryRtnListResponse res = _delivery_ReturnService.GetDeliveryRtnList();
+                DeliveryRtnListResponse res = _delivery_ReturnService.GetDeliveryRtnList(request);
                 return res;
             }
             catch (Exception ex)

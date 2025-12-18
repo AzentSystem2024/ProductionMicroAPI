@@ -30,6 +30,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@DUE_DATE", request.DUE_DATE);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -200,7 +201,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public PrePayment_PostingListResponse GetPrePaymentList()
+        public PrePayment_PostingListResponse GetPrePaymentList(PrepaytListRequest request)
         {
             var response = new PrePayment_PostingListResponse
             {
@@ -223,6 +224,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 39);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface ISalesOrderService
     {
-        SalesOrderListResponse GetAllSalesOrders();
+        SalesOrderListResponse GetAllSalesOrders(SOListRequest request);
         SalesOrderDetailSelectResponse GetSalesOrder(int id);
         int SaveData(SalesOrder salesOrder);
         SalesOrderResponse EditData(SalesOrderUpdate salesOrder);

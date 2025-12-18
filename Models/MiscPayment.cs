@@ -119,5 +119,8 @@
         public string Message { get; set; }
         public int PAYMENT_NO { get; set; }
     }
-
+    public class MiscpaymentListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

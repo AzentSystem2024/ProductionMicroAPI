@@ -22,12 +22,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public AdvanceLogListResponseData LogList()
+        public AdvanceLogListResponseData LogList(AdvanceListRequest request)
         {
             AdvanceLogListResponseData loglist = new AdvanceLogListResponseData();
             try
             {
-                loglist = _advanceService.GetAllPayAdvance();
+                loglist = _advanceService.GetAllPayAdvance(request);
             }
             catch (Exception ex)
             {

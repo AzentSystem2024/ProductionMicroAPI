@@ -26,7 +26,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 1);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", articleType.DESCRIPTION);
-                        
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", articleType.COMPANY_ID);
+
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -69,7 +70,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@ID", articleType.ID);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", articleType.DESCRIPTION);
-                     
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", articleType.COMPANY_ID);
+
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -118,6 +120,7 @@ namespace MicroApi.DataLayer.Service
                                 res.Data = new ArticleTypeUpdate
                                 {
                                     ID = Convert.ToInt32(reader["ID"]),
+                                    COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
                                     DESCRIPTION = reader["DESCRIPTION"].ToString()
                                   
                                 };
@@ -143,7 +146,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public ArticleTypeListResponse GetLogList(int? id = null)
+        public ArticleTypeListResponse GetLogList(ArticleTypeListReq request)
         {
             ArticleTypeListResponse res = new ArticleTypeListResponse();
             List<ArticleTypeUpdate> Lstarticletype = new List<ArticleTypeUpdate>();
@@ -153,9 +156,10 @@ namespace MicroApi.DataLayer.Service
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ACTION", 0);
-                cmd.Parameters.AddWithValue("@ID", (object?)id ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                 cmd.Parameters.AddWithValue("@DESCRIPTION", DBNull.Value);
-               
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
 
                 try
                 {

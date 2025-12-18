@@ -54,6 +54,8 @@
     public class PrePayment_PostingRequest
     {
         public DateTime DUE_DATE { get; set; }
+        public int COMPANY_ID { get; set; }
+
     }
     public class PrePayment_PostingListHeader
     {
@@ -106,5 +108,9 @@
         public decimal DUE_AMOUNT { get; set; }
         public decimal DR_AMOUNT { get; set; }
         public decimal CR_AMOUNT { get; set; }
+    }
+    public class PrepaytListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

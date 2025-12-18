@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         InvoiceResponse insert(Invoice model);
         InvoiceResponse Update(InvoiceUpdate model);
         TransferGridResponse GetTransferData(TransferInvoiceRequest request);
-        InvoiceHeaderResponse GetSaleInvoiceHeaderData();
+        InvoiceHeaderResponse GetSaleInvoiceHeaderData(InvoiceListRequest request);
         InvoiceHeaderSelectResponse GetSaleInvoiceById(int id);
         InvoiceResponse commit(InvoiceUpdate model);
         InvResponse GetInvoiceNo();

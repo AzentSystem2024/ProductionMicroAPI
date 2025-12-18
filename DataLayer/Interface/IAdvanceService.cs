@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IAdvanceService
     {
-        public AdvanceLogListResponseData GetAllPayAdvance();
+        public AdvanceLogListResponseData GetAllPayAdvance(AdvanceListRequest request);
         public saveAdvanceResponseData SaveData(saveAdvanceData advData);
         public saveAdvanceData selectPayAdvanceData(int id);
         public saveAdvanceResponseData UpdateData(saveAdvanceData advData);

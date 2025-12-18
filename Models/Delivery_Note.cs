@@ -167,6 +167,7 @@
     public class DeliveryRequest
     {
         public int CUST_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class Custdetail
     {
@@ -181,6 +182,10 @@
         public int Flag { get; set; }
         public string Message { get; set; }
         public List<Custdetail> Data { get; set; }
+    }
+    public class DeliveryNoteListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }
 

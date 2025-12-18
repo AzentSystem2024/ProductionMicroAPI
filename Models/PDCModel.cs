@@ -71,5 +71,9 @@
         public string Message { get; set; }
         public List<PDCModelSelect> Data { get; set; }
     }
+    public class PDCListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }
 

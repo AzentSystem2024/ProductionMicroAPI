@@ -85,6 +85,7 @@
     public class Input
     {
         public int SUPP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class GRN_List
     {
@@ -168,6 +169,7 @@
     public class InvoiceInput
     {
         public int SUPP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class PurchaseReturnList
     {
@@ -207,5 +209,9 @@
     public class PurchReturnHisRequest
     {
         public int TRANS_ID { get; set; }
+    }
+    public class PurchaseReturnListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

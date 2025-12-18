@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IEmployeeService
     {
-        public List<Employee> GetAllEmployees(int? companyId);
+        public List<Employee> GetAllEmployees(CompanyRequest request);
         public int SaveEmployee(Employee employee);
         bool UpdateEmployee(EmployeeUpdate employee);
         public EmployeeUpdate GetItems(int id);

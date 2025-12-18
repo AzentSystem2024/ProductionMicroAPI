@@ -183,7 +183,7 @@ namespace MicroApi.DataLayer.Service
             }
             return items;
         }
-        public List<TransferOutDetailList> GetTransferOutList()
+        public List<TransferOutDetailList> GetTransferOutList(TransferOutListRequest request)
         {
             List<TransferOutDetailList> list = new List<TransferOutDetailList>();
 
@@ -194,7 +194,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 0);
                     cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);// Action=0 to get list
-
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                     DataTable dt = new DataTable();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     da.Fill(dt);
@@ -212,7 +212,7 @@ namespace MicroApi.DataLayer.Service
                             NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDouble(dr["NET_AMOUNT"]),
                             NARRATION = ADO.ToString(dr["NARRATION"]),
                             REASON_ID = dr["REASON_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["REASON_ID"]),
-                            DOC_NO = ADO.ToInt32(dr["ISSUE_NO"]),
+                            DOC_NO = ADO.ToString(dr["ISSUE_NO"]),
                             STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                             STATUS = ADO.ToString(dr["STATUS"])
 
@@ -269,7 +269,7 @@ namespace MicroApi.DataLayer.Service
                                 NET_AMOUNT = h["NET_AMOUNT"] == DBNull.Value ? null : Convert.ToDouble(h["NET_AMOUNT"]),
                                 NARRATION = h["NARRATION"]?.ToString(),
                                 REASON_ID = h["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(h["REASON_ID"]),
-                                DOC_NO = h["ISSUE_NO"] == DBNull.Value ? null : ADO.ToInt32(h["REASON_ID"]),
+                                DOC_NO = h["ISSUE_NO"] == DBNull.Value ? null : ADO.ToString(h["ISSUE_NO"]),
                                 DETAILS = new List<TransferOutDetailUpdate>()
                             };
                         }
@@ -290,7 +290,7 @@ namespace MicroApi.DataLayer.Service
                                 USER_ID = h["USER_ID"] == DBNull.Value ? null : ADO.ToInt32(h["USER_ID"]),
                                 NARRATION = h["NARRATION"]?.ToString(),
                                 REASON_ID = h["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(h["REASON_ID"]),
-                                DOC_NO = h["TRANSFER_NO"] == DBNull.Value ? null : ADO.ToInt32(h["TRANSFER_NO"]),
+                                DOC_NO = h["TRANSFER_NO"] == DBNull.Value ? null : ADO.ToString(h["TRANSFER_NO"]),
 
                                 COMPANY_NAME = h["COMPANY_NAME"]?.ToString(),
                                 ADDRESS1 = h["ADDRESS1"]?.ToString(),

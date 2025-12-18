@@ -22,8 +22,9 @@ namespace MicroApi.DataLayer.Services
                     " TB_CURRENCY.SYMBOL FROM TB_GRN_HEADER " +
                     " LEFT JOIN TB_SUPPLIER ON TB_GRN_HEADER.SUPP_ID = TB_SUPPLIER.ID " +
                     " LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID = TB_CURRENCY.ID " +
-                    " WHERE TB_GRN_HEADER.SUPP_ID = @SUPP_ID";
+                    " WHERE TB_GRN_HEADER.SUPP_ID = @SUPP_ID AND TB_GRN_HEADER.COMPANY_ID=@COMPANY_ID";
                 cmd.Parameters.AddWithValue("@SUPP_ID", input.SUPP_ID);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
 
                 DataTable tbl = new DataTable();
@@ -440,7 +441,7 @@ namespace MicroApi.DataLayer.Services
             return purchaseReturn;
         }
 
-        public PurchaseReturnListResponse List()
+        public PurchaseReturnListResponse List(PurchaseReturnListRequest request)
         {
             var res = new PurchaseReturnListResponse
             {
@@ -456,6 +457,7 @@ namespace MicroApi.DataLayer.Services
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 0);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
@@ -735,6 +737,7 @@ namespace MicroApi.DataLayer.Services
 
                     cmd.Parameters.AddWithValue("@ACTION", 7);       
                     cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();

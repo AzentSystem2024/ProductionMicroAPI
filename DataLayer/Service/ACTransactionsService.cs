@@ -286,7 +286,7 @@ namespace MicroApi.DataLayer.Service
             return DBNull.Value;
         }
 
-        public JournalListResponse GetJournalVoucherList()
+        public JournalListResponse GetJournalVoucherList(JVlistRequest request)
         {
             JournalListResponse res = new JournalListResponse
             {
@@ -309,39 +309,9 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@ACTION", 0);
 
-                        // Pass required default values for mandatory SP parameters
-                        cmd.Parameters.AddWithValue("@STORE_ID", 0);
-                        cmd.Parameters.AddWithValue("@FIN_ID", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 4);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
-                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
-                        cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
-                        cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PDC_ID", 0);
-                        cmd.Parameters.AddWithValue("@IS_CLOSED", 0);
-                        cmd.Parameters.AddWithValue("@PARTY_ID", 0);
-                        cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IS_PASSED", 0);
-                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
-                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
-                        cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
-                        cmd.Parameters.AddWithValue("@DEPT_ID", 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -878,7 +848,7 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public DebitNoteListResponse GetDebitNoteList()
+        public DebitNoteListResponse GetDebitNoteList(DebitlistRequest request)
         {
             DebitNoteListResponse response = new DebitNoteListResponse
             {
@@ -900,41 +870,8 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 36); 
-                        cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
-                        cmd.Parameters.AddWithValue("@STORE_ID", 0);
-                        cmd.Parameters.AddWithValue("@FIN_ID", 0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_STATUS", 0);
-                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@RECEIPT_NO", 0);
-                        cmd.Parameters.AddWithValue("@IS_DIRECT", 0);
-                        cmd.Parameters.AddWithValue("@REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@RECON_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PDC_ID", 0);
-                        cmd.Parameters.AddWithValue("@IS_CLOSED", false);
-                        cmd.Parameters.AddWithValue("@PARTY_ID", 0);
-                        cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PARTY_REF_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IS_PASSED", false);
-                        cmd.Parameters.AddWithValue("@SCHEDULE_NO", 0);
-                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@VERIFY_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE1_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE2_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@APPROVE3_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
-                        cmd.Parameters.AddWithValue("@ADD_TIME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATED_STORE_ID", 0);
-                        cmd.Parameters.AddWithValue("@INVOICE_ID", 0);
-                        cmd.Parameters.AddWithValue("@INVOICE_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@REMARKS", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@SUPP_ID", 0); 
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                       
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -1271,6 +1208,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 19);
                         cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())

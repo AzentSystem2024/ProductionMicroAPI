@@ -212,7 +212,7 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public PhysicalStockListResponse GetAllPhysicalStocks()
+        public PhysicalStockListResponse GetAllPhysicalStocks(PhysicalStockListRequest request)
         {
             PhysicalStockListResponse response = new PhysicalStockListResponse { Data = new List<PhysicalStockList>() };
             using (SqlConnection connection = ADO.GetConnection())
@@ -223,6 +223,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 5);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {

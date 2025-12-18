@@ -87,6 +87,7 @@
     public class DNRequest
     {
         public int CUST_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class DeliveryRtnList
     {
@@ -181,5 +182,8 @@
         public string NARRATION { get; set; }
         public List<Delivery_Return_Detail> DETAILS { get; set; }
     }
-
+    public class DRListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

@@ -222,6 +222,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -260,7 +261,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public ReceiptListResponse GetReceiptList()
+        public ReceiptListResponse GetReceiptList(ReceiptsListRequest request)
         {
             ReceiptListResponse response = new ReceiptListResponse
             {
@@ -282,6 +283,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 0); 
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 27);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -374,7 +376,7 @@ namespace MicroApi.DataLayer.Service
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] as int? ?? 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] as int? ?? 0,
                                         ADD_TIME = reader["ADD_TIME"] != DBNull.Value ? Convert.ToDateTime(reader["ADD_TIME"]).ToString("dd-MM-yyyy") : null,
-                                        NET_AMOUNT = reader["NET_AMOUNT"] as decimal? ?? 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
                                         CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
@@ -398,7 +400,7 @@ namespace MicroApi.DataLayer.Service
                                         INVOICE_DATE = reader["INVOICE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["INVOICE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         NARRATION = reader["NARRATION"]?.ToString(),
-                                        NET_AMOUNT = reader["NET_AMOUNT"] as double? ?? 0,
+                                        NET_AMOUNT = reader["INVOICE_NET_AMOUNT"] as double? ?? 0,
                                         SETTLED_TILL_DATE = reader["SETTLED_TILL_DATE"] as double? ?? 0,
                                         PENDING_AMOUNT = reader["PENDING_AMOUNT"] as double? ?? 0
                                     };

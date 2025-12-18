@@ -59,6 +59,11 @@
     public class PendingDeliverydataRequest
     {
         public int CUST_ID { get; set; }
+        public int COMPANY_ID { get; set; }
+    }
+    public class Trout_InvoiceListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
     public class PendingDeliverydataResponse
     {

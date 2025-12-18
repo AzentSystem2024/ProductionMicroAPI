@@ -17,12 +17,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public QuotationListResponse List()
+        public QuotationListResponse List(QuotationListRequest request)
         {
             QuotationListResponse response = new QuotationListResponse();
             try
             {
-                response = _quotationService.GetAllQuotations();
+                response = _quotationService.GetAllQuotations(request);
             }
             catch (Exception ex)
             {

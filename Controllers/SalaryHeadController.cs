@@ -20,13 +20,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public SalaryHeadListResponse List()
+        public SalaryHeadListResponse List(SalaryHeadListRequest request)
         {
             SalaryHeadListResponse res = new SalaryHeadListResponse();
 
             try
             {
-                res = _SalaryHeadService.GetAllSalaryHead();
+                res = _SalaryHeadService.GetAllSalaryHead(request);
             }
             catch (Exception ex)
             {

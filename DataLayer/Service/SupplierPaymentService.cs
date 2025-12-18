@@ -111,7 +111,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID ?? 0);
                        // cmd.Parameters.AddWithValue("@PAY_ID", model.PAY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.PAY_DATE));
                         cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
@@ -193,7 +193,7 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public SupplierPaymentListResponse GetPaymentList()
+        public SupplierPaymentListResponse GetPaymentList(SuppListRequest request)
         {
             SupplierPaymentListResponse response = new SupplierPaymentListResponse
             {
@@ -215,6 +215,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 21);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -296,7 +297,7 @@ namespace MicroApi.DataLayer.Service
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
                                         TRANS_TYPE = reader["TRANS_TYPE"] as int? ?? 0,
-                                        DOC_NO = reader["VOUCHER_NO"] != DBNull.Value ? Convert.ToInt32(reader["VOUCHER_NO"]) : 0,
+                                        DOC_NO = reader["VOUCHER_NO"] != DBNull.Value ? Convert.ToString(reader["VOUCHER_NO"]) : null,
                                         PAY_DATE = reader["PAY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PAY_DATE"]).ToString("dd-MM-yyyy") : null,
                                         COMPANY_ID = reader["COMPANY_ID"] as int? ?? 0,
                                         FIN_ID = reader["FIN_ID"] as int? ?? 0,
@@ -378,6 +379,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 19);
                         cmd.Parameters.AddWithValue("@SUPP_ID", request.SUPP_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -431,7 +433,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
                         // cmd.Parameters.AddWithValue("@PAY_ID", model.PAY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? 0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.TRANS_DATE));
+                        cmd.Parameters.AddWithValue("@TRANS_DATE", ParseDate(model.PAY_DATE));
                         cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);

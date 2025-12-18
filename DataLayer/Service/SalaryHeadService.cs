@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class SalaryHeadService : ISalaryHeadService
     {
-        public SalaryHeadListResponse GetAllSalaryHead()
+        public SalaryHeadListResponse GetAllSalaryHead(SalaryHeadListRequest request)
         {
             SalaryHeadListResponse response = new SalaryHeadListResponse();
             response.Data = new List<SalaryHeadUpdate>();
@@ -21,6 +21,7 @@ namespace MicroApi.DataLayer.Service
                     SqlCommand cmd = new SqlCommand("SP_TB_SALARY_HEAD", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 0);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable tbl = new DataTable();
@@ -31,6 +32,7 @@ namespace MicroApi.DataLayer.Service
                         SalaryHeadUpdate salaryHead = new SalaryHeadUpdate
                         {
                             ID = Convert.ToInt32(dr["ID"]),
+                            COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
                             HEAD_NAME = dr["HEAD_NAME"]?.ToString(),
                             PAYSLIP_TITLE = dr["HEAD_TITLE"]?.ToString(),
                             HEAD_ACTIVE = dr["HEAD_ACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["HEAD_ACTIVE"]) : (bool?)null,

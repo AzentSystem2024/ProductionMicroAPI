@@ -6,8 +6,8 @@
         public int COMPANY_ID { get; set; }
         public int STORE_ID { get; set; }
         public int PO_ID { get; set; }
-        public int PO_NO { get; set; }
-        public int DOC_NO { get; set; }
+        public string PO_NO { get; set; }
+        public string DOC_NO { get; set; }
         public DateTime GRN_DATE { get; set; }
         public int SUPP_ID { get; set; }
         public float NET_AMOUNT { get; set; }
@@ -111,6 +111,7 @@
     {
         public int STORE_ID { get; set; }
         public int SUPP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class GRNResponse
     {
@@ -159,5 +160,10 @@
     public class PODetailsInput
     {
         public int PO_ID { get; set; }
+        public int COMPANY_ID { get; set; }
+    }
+    public class GRNListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

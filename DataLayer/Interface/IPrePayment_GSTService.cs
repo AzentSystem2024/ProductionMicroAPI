@@ -6,7 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         PrePayment_GSTResponse Save(PrePayment_GST model);
         PrePayment_GSTResponse Update(PrePayment_GSTUpdate model);
-        PrePayment_GSTListResponse GetPrePaymentList();
+        PrePayment_GSTListResponse GetPrePaymentList(PrePaymentGSTListRequest request);
         PrePayment_GSTListHeaderResponse GetPrePaymentById(int id);
         PrePayment_GSTResponse commit(PrePayment_GSTUpdate model);
         PrePayment_GSTResponse Delete(int id);

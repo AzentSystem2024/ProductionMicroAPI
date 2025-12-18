@@ -70,13 +70,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("getlist")]
-        public InvoiceHeaderResponse GetSaleInvoiceHeaderData()
+        public InvoiceHeaderResponse GetSaleInvoiceHeaderData(InvoiceListRequest request)
         {
             InvoiceHeaderResponse res = new InvoiceHeaderResponse();
 
             try
             {
-                res = _invoiceService.GetSaleInvoiceHeaderData();
+                res = _invoiceService.GetSaleInvoiceHeaderData(request);
             }
             catch (Exception ex)
             {

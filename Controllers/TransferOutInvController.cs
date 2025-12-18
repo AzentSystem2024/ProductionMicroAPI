@@ -80,12 +80,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public TransferoutinvResponse List()
+        public TransferoutinvResponse List(TransferOutListRequest request)
         {
             var res = new TransferoutinvResponse();
             try
             {
-                List<TransferOutDetailList> transferList = _transferOutInv.GetTransferOutList();
+                List<TransferOutDetailList> transferList = _transferOutInv.GetTransferOutList(request);
 
                 res.flag = 1;
                 res.Message = "Success";

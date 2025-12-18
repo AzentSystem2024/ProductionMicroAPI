@@ -101,11 +101,11 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public Delivery_Note_List_Response List()
+        public Delivery_Note_List_Response List(DeliveryNoteListRequest request)
         {
             try
             {
-                Delivery_Note_List_Response res = _delivery_noteservice.GetDeliveryNoteList();
+                Delivery_Note_List_Response res = _delivery_noteservice.GetDeliveryNoteList(request);
                 return res;
             }
             catch (Exception ex)

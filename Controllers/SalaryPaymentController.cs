@@ -54,13 +54,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("view")]
-        public SalaryPaymentListResponse GetsalaryPaymentList()
+        public SalaryPaymentListResponse GetsalaryPaymentList(SalaryPendingListRequest request)
         {
             SalaryPaymentListResponse res = new SalaryPaymentListResponse();
 
             try
             {
-                res = _salaryService.GetsalaryPaymentList();
+                res = _salaryService.GetsalaryPaymentList(request);
             }
             catch (Exception ex)
             {

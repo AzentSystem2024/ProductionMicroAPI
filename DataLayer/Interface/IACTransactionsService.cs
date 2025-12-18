@@ -6,7 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         JournalResponse InsertJournal(JournalHeader journal);
         JournalResponse UpdateJournal(JournalUpdateHeader header);
-        JournalListResponse GetJournalVoucherList();
+        JournalListResponse GetJournalVoucherList(JVlistRequest request);
         JournalResponse GetJournalById(int id);
         VoucherResponse GetLastVoucherNo();
         JournalResponse DeleteJournal(int id);
@@ -14,7 +14,7 @@ namespace MicroApi.DataLayer.Interface
 
         DebitNoteResponse SaveDebitNote(AC_DebitNote model);
         DebitNoteResponse UpdateDebitNote(AC_DebitNoteUpdate model);
-        DebitNoteListResponse GetDebitNoteList();
+        DebitNoteListResponse GetDebitNoteList(DebitlistRequest request);
         AC_DebitNoteSelect GetDebitNoteById(int id);
         DebitNoteResponse Commit(AC_DebitNoteUpdate model);
         DocNoResponse GetLastDocNo();

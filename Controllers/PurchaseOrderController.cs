@@ -35,7 +35,7 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public PurchaseOrderResponse List()
+        public PurchaseOrderResponse List(POListRequest request)
         {
             PurchaseOrderResponse res = new PurchaseOrderResponse();
             List<PurchaseOrderHeader> itemBrands = new List<PurchaseOrderHeader>();
@@ -66,7 +66,7 @@ namespace MicroApi.Controllers
                 */
 
                 
-                itemBrands = _purchaseOrderService.GetPOList(intUserID);
+                itemBrands = _purchaseOrderService.GetPOList(request);
 
                 res.flag = 1;
                 res.message = "Success";

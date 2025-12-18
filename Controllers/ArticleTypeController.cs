@@ -69,13 +69,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public ArticleTypeListResponse ArticleTypeLogList()
+        public ArticleTypeListResponse ArticleTypeLogList(ArticleTypeListReq request)
         {
 
             ArticleTypeListResponse res = new ArticleTypeListResponse();
             try
             {
-                res = _articletypeService.GetLogList();
+                res = _articletypeService.GetLogList(request);
 
             }
             catch (Exception ex)

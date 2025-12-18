@@ -22,7 +22,7 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public DepreciationResponse GetFixedAssetsList()
+        public DepreciationResponse GetFixedAssetsList(DepreciationListRequest request)
         {
             DepreciationResponse response = new DepreciationResponse { Data = new List<FixedAssetLists>() };
 
@@ -37,6 +37,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -73,7 +74,7 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public DepreciationListResponse GetList()
+        public DepreciationListResponse GetList(DepreciationListRequest request)
         {
             DepreciationListResponse response = new DepreciationListResponse { Data = new List<DepreciationList>() };
 
@@ -88,6 +89,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 1);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

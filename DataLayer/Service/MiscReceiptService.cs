@@ -236,7 +236,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public MiscReceiptListResponse GetReceiptList()
+        public MiscReceiptListResponse GetReceiptList(MiscReceiptsListRequest request)
         {
             MiscReceiptListResponse res = new MiscReceiptListResponse
             {
@@ -262,19 +262,8 @@ namespace MicroApi.DataLayer.Service
                         // Pass required default values for mandatory SP parameters
                         cmd.Parameters.AddWithValue("@FIN_ID", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 2);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", 0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PARTY_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
-
-
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        
                         using (var reader = cmd.ExecuteReader())
                         {
                             var headers = new Dictionary<int, MiscReceiptListItem>();

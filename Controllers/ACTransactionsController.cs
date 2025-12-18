@@ -52,12 +52,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public JournalListResponse JournalList()
+        public JournalListResponse JournalList(JVlistRequest request)
         {
             JournalListResponse res = new JournalListResponse();
             try
             {
-                res = _journalService.GetJournalVoucherList();
+                res = _journalService.GetJournalVoucherList(request);
             }
             catch (Exception ex)
             {
@@ -181,12 +181,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("debitlist")]
-        public DebitNoteListResponse DebitList()
+        public DebitNoteListResponse DebitList(DebitlistRequest request)
         {
             DebitNoteListResponse res = new DebitNoteListResponse();
             try
             {
-                res = _journalService.GetDebitNoteList();
+                res = _journalService.GetDebitNoteList(request);
             }
             catch (Exception ex)
             {

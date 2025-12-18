@@ -65,7 +65,7 @@ namespace MicroApi.Models
     public class saveAdvanceData
     {
         public int ID { get; set; }
-
+        public int FIN_ID { get; set; }
         public string? ADV_NO { get; set; }
         public int EMP_ID { get; set; }
         public int? COMPANY_ID { get; set; }
@@ -90,10 +90,9 @@ namespace MicroApi.Models
     }
 
 
-    //public class saveRevisionDataResponse
-    //{
-    //    public string flag { get; set; }
-    //    public string message { get; set; }
-    //}
+    public class AdvanceListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 
 }

@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Insert(Delivery_Return deliveryreturn);
         public Int32 Update(Delivery_ReturnUpdate deliveryreturn);
         public List<DeliverynoteDetail> GetDN(DNRequest request);
-        public DeliveryRtnListResponse GetDeliveryRtnList();
+        public DeliveryRtnListResponse GetDeliveryRtnList(DRListRequest request);
         public DeliveryRtnSelectResponse GetDeliveryRtnById(int id);
         public int Delete(int id, int userId);
         public int Approve(Delivery_Return_Approve deliveryReturn);

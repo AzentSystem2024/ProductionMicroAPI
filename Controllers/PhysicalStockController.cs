@@ -17,12 +17,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public PhysicalStockListResponse List()
+        public PhysicalStockListResponse List(PhysicalStockListRequest request)
         {
             PhysicalStockListResponse response = new PhysicalStockListResponse();
             try
             {
-                response = _physicalStockService.GetAllPhysicalStocks();
+                response = _physicalStockService.GetAllPhysicalStocks(request);
             }
             catch (Exception ex)
             {

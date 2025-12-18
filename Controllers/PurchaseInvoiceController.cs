@@ -182,13 +182,13 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public PurchResponce List()
+        public PurchResponce List(PurchListRequest request)
         {
             PurchResponce res = new PurchResponce();
 
             try
             {
-                List<PurchaseInvoice> purchInvoice = _PurchaseInvoiceService.GetPurchaseInvoiceList(); 
+                List<PurchaseInvoice> purchInvoice = _PurchaseInvoiceService.GetPurchaseInvoiceList(request); 
 
                 res.Flag = 1;
                 res.Message = "Success";

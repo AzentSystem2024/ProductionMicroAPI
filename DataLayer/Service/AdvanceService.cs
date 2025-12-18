@@ -10,7 +10,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class AdvanceService : IAdvanceService
     {
-        public AdvanceLogListResponseData GetAllPayAdvance()
+        public AdvanceLogListResponseData GetAllPayAdvance(AdvanceListRequest request)
         {
             AdvanceLogListResponseData loglist = new AdvanceLogListResponseData();
             loglist.data = new List<AdvanceLogListData>();
@@ -22,6 +22,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_PAY_ADVANCE";
                 cmd.Parameters.AddWithValue("@ACTION", 0);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -69,6 +70,7 @@ namespace MicroApi.DataLayer.Services
                     //cmd.Parameters.AddWithValue("ID", employee.ID);
 
                     cmd.Parameters.AddWithValue("@EMP_ID", adv.EMP_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", adv.FIN_ID);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", adv.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@DATE", (object)adv.DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@ADV_TYPE_ID", (object)adv.ADV_TYPE_ID ?? DBNull.Value);
@@ -173,6 +175,7 @@ WHERE trans.TRANS_ID = " + id; // ✅ changed adv.TRANS_ID → trans.TRANS_ID
                     cmd.Parameters.AddWithValue("@ACTION", 2);
 
                     cmd.Parameters.AddWithValue("ID", adv.ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", adv.FIN_ID);
                     cmd.Parameters.AddWithValue("COMPANY_ID", (object)adv.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("EMP_ID", (object)adv.EMP_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("DATE", (object)adv.DATE ?? DBNull.Value);

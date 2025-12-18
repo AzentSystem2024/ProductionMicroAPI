@@ -215,6 +215,9 @@
         public List<PhysicalStockLatestVocherNO> Data { get; set; }
 
     }
-
+    public class PhysicalStockListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 
 }

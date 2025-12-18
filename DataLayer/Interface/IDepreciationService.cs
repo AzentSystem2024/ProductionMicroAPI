@@ -4,8 +4,8 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IDepreciationService
     {
-        DepreciationResponse GetFixedAssetsList();
-        DepreciationListResponse GetList();
+        DepreciationResponse GetFixedAssetsList(DepreciationListRequest request);
+        DepreciationListResponse GetList(DepreciationListRequest request);
         //DepreciationResponse InsertDepreciation();
         public int InsertDepreciation(DepreciationInsertRequest request);
        public int UpdateDepreciation(DepreciationUpdateRequest request);

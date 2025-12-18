@@ -50,12 +50,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public MiscReceiptListResponse GetReceiptList()
+        public MiscReceiptListResponse GetReceiptList(MiscReceiptsListRequest request)
         {
             MiscReceiptListResponse res = new MiscReceiptListResponse();
             try
             {
-                res = _miscreceiptService.GetReceiptList();
+                res = _miscreceiptService.GetReceiptList(request);
             }
             catch (Exception ex)
             {

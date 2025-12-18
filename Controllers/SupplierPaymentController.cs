@@ -54,13 +54,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public SupplierPaymentListResponse GetPaymentList()
+        public SupplierPaymentListResponse GetPaymentList(SuppListRequest request)
         {
             SupplierPaymentListResponse res = new SupplierPaymentListResponse();
 
             try
             {
-                res = _supplierService.GetPaymentList();
+                res = _supplierService.GetPaymentList(request);
             }
             catch (Exception ex)
             {

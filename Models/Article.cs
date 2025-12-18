@@ -27,6 +27,7 @@ namespace MicroApi.Models
         public string? STANDARD_PACKING { get; set; }
         //public string? HSN_CODE { get; set; }
         //public float? GST_PERC { get; set; }
+        public int? COMPANY_ID { get; set; }
         public List<ArticleBOM> BOM { get; set; }
         public List<Sizes> Sizes { get; set; }
         public List<ArticleUnits> Units { get; set; }
@@ -86,6 +87,7 @@ namespace MicroApi.Models
         public string? ComponentArticleNo { get; set; }
         public string? ComponentArticleName { get; set; }
         public DateTime? CREATED_DATE { get; set; }
+        public int? COMPANY_ID { get; set; }
         //public string? HSN_CODE { get; set; }
         //public float? GST_PERC { get; set; }
         public List<Sizes> SIZES { get; set; }
@@ -150,5 +152,9 @@ namespace MicroApi.Models
     public class ItemcodeRequest
     {
         public string ITEM_CODE { get; set; }
+    }
+    public class ArticleListReq
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

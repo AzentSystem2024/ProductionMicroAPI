@@ -141,13 +141,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("listdata")]
-        public CategoryListResponse GetArticleCategoryList()
+        public CategoryListResponse GetArticleCategoryList(ArticleCategoryListReq request)
         {
             CategoryListResponse res = new CategoryListResponse();
 
             try
             {
-                res = _articlecategoryService.GetAllArticleCategories();
+                res = _articlecategoryService.GetAllArticleCategories(request);
             }
             catch (Exception ex)
             {

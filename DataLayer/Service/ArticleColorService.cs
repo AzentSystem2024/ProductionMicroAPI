@@ -28,6 +28,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CODE", articleColor.CODE);
                         cmd.Parameters.AddWithValue("@COLOR_ENGLISH", articleColor.COLOR_ENGLISH);
                         cmd.Parameters.AddWithValue("@COLOR_ARABIC", articleColor.COLOR_ARABIC);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", articleColor.COMPANY_ID);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -72,7 +73,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CODE", articleColor.CODE);
                         cmd.Parameters.AddWithValue("@COLOR_ENGLISH", articleColor.COLOR_ENGLISH);
                         cmd.Parameters.AddWithValue("@COLOR_ARABIC", articleColor.COLOR_ARABIC);
-                        
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", articleColor.COMPANY_ID);
+
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
                         {
@@ -120,6 +122,7 @@ namespace MicroApi.DataLayer.Service
                                 res.Data = new ArticleColorUpdate
                                 {
                                     ID = Convert.ToInt32(reader["ID"]),
+                                    COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
                                     CODE = reader["CODE"].ToString(),
                                     COLOR_ENGLISH = reader["COLOR_ENGLISH"].ToString(),
                                     COLOR_ARABIC = reader["COLOR_ARABIC"].ToString()
@@ -146,7 +149,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public ArticleColorListResponse GetLogList(int? id = null)
+        public ArticleColorListResponse GetLogList(ArticleColorListReq request)
         {
             ArticleColorListResponse res = new ArticleColorListResponse();
             List<ArticleColorUpdate> Lstarticlecolor = new List<ArticleColorUpdate>();
@@ -156,10 +159,10 @@ namespace MicroApi.DataLayer.Service
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ACTION", 0);
-                cmd.Parameters.AddWithValue("@ID", (object?)id ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                 cmd.Parameters.AddWithValue("@CODE", DBNull.Value);
                 cmd.Parameters.AddWithValue("@COLOR_ENGLISH", DBNull.Value);
-                cmd.Parameters.AddWithValue("@COLOR_ARABIC", DBNull.Value);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                 try
                 {
@@ -173,6 +176,7 @@ namespace MicroApi.DataLayer.Service
                             Lstarticlecolor.Add(new ArticleColorUpdate
                             {
                                 ID = Convert.ToInt32(dr["ID"]),
+                                COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
                                 CODE = dr["CODE"].ToString(),
                                 COLOR_ENGLISH = dr["COLOR_ENGLISH"].ToString(),
                                 COLOR_ARABIC = dr["COLOR_ARABIC"].ToString()

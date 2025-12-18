@@ -127,95 +127,109 @@ namespace MicroApi.DataLayer.Services
 
         //            return itemsList;
         //        }
-        public List<Items> GetAllItems()
+        public List<Items> GetAllItems(ItemListRequest request)
         {
-            List<ITEM_STORES> itemstores = new List<ITEM_STORES>();
-            List<ITEM_SUPPLIERS> itemsuppliers = new List<ITEM_SUPPLIERS>();
-            List<ITEM_ALIAS> itemalias = new List<ITEM_ALIAS>();
+            List<Items> list = new List<Items>();
 
-            string strSQL = @"
-        SELECT 
-            TB_ITEMS.*, 
-            TB_ITEM_DEPARTMENT.DEPT_NAME,
-            TB_ITEM_CATEGORY.CAT_NAME,
-            TB_ITEM_SUBCATEGORY.SUBCAT_NAME,
-            TB_ITEM_BRAND.BRAND_NAME,
-            TB_ITEM_TYPE.TYPE_NAME,
-            TB_COUNTRY.COUNTRY_NAME,
-            TB_VAT_CLASS.VAT_NAME,
-            TB_COSTING_METHOD.COSTING_METHOD
-        FROM TB_ITEMS
-        LEFT JOIN TB_ITEM_DEPARTMENT ON TB_ITEMS.DEPT_ID = TB_ITEM_DEPARTMENT.ID
-        LEFT JOIN TB_ITEM_CATEGORY ON TB_ITEMS.CAT_ID = TB_ITEM_CATEGORY.ID
-        LEFT JOIN TB_ITEM_SUBCATEGORY ON TB_ITEMS.SUBCAT_ID = TB_ITEM_SUBCATEGORY.ID
-        LEFT JOIN TB_ITEM_BRAND ON TB_ITEMS.BRAND_ID = TB_ITEM_BRAND.ID
-        INNER JOIN TB_ITEM_TYPE ON TB_ITEMS.TYPE_ID = TB_ITEM_TYPE.ID
-        LEFT JOIN TB_COUNTRY ON TB_ITEMS.ORIGIN_COUNTRY = TB_COUNTRY.ID
-        LEFT JOIN TB_VAT_CLASS ON TB_ITEMS.VAT_CLASS_ID = TB_VAT_CLASS.ID
-        INNER JOIN TB_COSTING_METHOD ON TB_ITEMS.COSTING_METHOD = TB_COSTING_METHOD.ID
-        WHERE TB_ITEMS.IS_DELETED = 0";
-
-            // ❌ Removed date range filter completely
-
-            DataTable itemsTable = ADO.GetDataTable(strSQL, "TB_ITEMS");
-
-            var itemsList = itemsTable.AsEnumerable().Select(dr => new Items
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                ID = int.TryParse(dr["ID"]?.ToString(), out var id) ? id : 0,
-                HQID = int.TryParse(dr["HQID"]?.ToString(), out var hqid) ? hqid : 0,
-                ITEM_CODE = dr["ITEM_CODE"]?.ToString() ?? string.Empty,
-                BARCODE = dr["BARCODE"]?.ToString() ?? string.Empty,
-                DESCRIPTION = dr["DESCRIPTION"]?.ToString() ?? string.Empty,
-                ARABIC_DESCRIPTION = dr["ARABIC_DESCRIPTION"]?.ToString() ?? string.Empty,
-                TYPE_ID = int.TryParse(dr["TYPE_ID"]?.ToString(), out var typeId) ? typeId : 0,
-                TYPE_NAME = dr["TYPE_NAME"]?.ToString() ?? string.Empty,
-                DEPT_ID = int.TryParse(dr["DEPT_ID"]?.ToString(), out var deptId) ? deptId : 0,
-                DEPT_NAME = dr["DEPT_NAME"]?.ToString() ?? string.Empty,
-                CAT_ID = int.TryParse(dr["CAT_ID"]?.ToString(), out var catId) ? catId : 0,
-                CAT_NAME = dr["CAT_NAME"]?.ToString() ?? string.Empty,
-                SUBCAT_ID = int.TryParse(dr["SUBCAT_ID"]?.ToString(), out var subcatId) ? subcatId : 0,
-                SUBCAT_NAME = dr["SUBCAT_NAME"]?.ToString() ?? string.Empty,
-                BRAND_ID = int.TryParse(dr["BRAND_ID"]?.ToString(), out var brandId) ? brandId : 0,
-                BRAND_NAME = dr["BRAND_NAME"]?.ToString() ?? string.Empty,
-                PACKING = dr["PACKING"]?.ToString() ?? string.Empty,
-                PACKING_ID = int.TryParse(dr["PACKING_ID"]?.ToString(), out var packingId) ? packingId : 0,
-                UNIT_ID = int.TryParse(dr["UNIT_ID"]?.ToString(), out var unitId) ? unitId : 0,
-                UOM = dr["UOM"]?.ToString() ?? string.Empty,
-                LONG_DESCRIPTION = dr["LONG_DESCRIPTION"]?.ToString() ?? string.Empty,
-                SALE_PRICE = float.TryParse(dr["SALE_PRICE"]?.ToString(), out var salePrice) ? salePrice : 0f,
-                COST = float.TryParse(dr["COST"]?.ToString(), out var cost) ? cost : (float?)null,
-                PROFIT_MARGIN = float.TryParse(dr["PROFIT_MARGIN"]?.ToString(), out var profitMargin) ? profitMargin : (float?)null,
-                QTY_STOCK = float.TryParse(dr["QTY_STOCK"]?.ToString(), out var qtyStock) ? qtyStock : (float?)null,
-                QTY_COMMITTED = float.TryParse(dr["QTY_COMMITTED"]?.ToString(), out var qtyCommitted) ? qtyCommitted : (float?)null,
-                CREATED_DATE = DateTime.TryParse(dr["CREATED_DATE"]?.ToString(), out var cd) ? cd : (DateTime?)null,
-                LAST_PO_DATE = DateTime.TryParse(dr["LAST_PO_DATE"]?.ToString(), out var poDate) ? poDate : (DateTime?)null,
-                LAST_GRN_DATE = DateTime.TryParse(dr["LAST_GRN_DATE"]?.ToString(), out var grnDate) ? grnDate : (DateTime?)null,
-                LAST_SALE_DATE = DateTime.TryParse(dr["LAST_SALE_DATE"]?.ToString(), out var saleDate) ? saleDate : (DateTime?)null,
-                RESTOCK_LEVEL = float.TryParse(dr["RESTOCK_LEVEL"]?.ToString(), out var restockLevel) ? restockLevel : (float?)null,
-                REORDER_POINT = float.TryParse(dr["REORDER_POINT"]?.ToString(), out var reorderPoint) ? reorderPoint : (float?)null,
-                PARENT_ITEM_ID = int.TryParse(dr["PARENT_ITEM_ID"]?.ToString(), out var parentItemId) ? parentItemId : 0,
-                CHILD_QTY = float.TryParse(dr["CHILD_QTY"]?.ToString(), out var childQty) ? childQty : (float?)null,
-                ORIGIN_COUNTRY = int.TryParse(dr["ORIGIN_COUNTRY"]?.ToString(), out var originCountry) ? originCountry : 0,
-                COUNTRY_NAME = dr["COUNTRY_NAME"]?.ToString() ?? string.Empty,
-                SHELF_LIFE = int.TryParse(dr["SHELF_LIFE"]?.ToString(), out var shelfLife) ? shelfLife : 0,
-                BIN_LOCATION = dr["BIN_LOCATION"]?.ToString() ?? string.Empty,
-                NOTES = dr["NOTES"]?.ToString() ?? string.Empty,
-                IMAGE_NAME = dr["IMAGE_NAME"]?.ToString() ?? string.Empty,
-                VAT_CLASS_ID = int.TryParse(dr["VAT_CLASS_ID"]?.ToString(), out var vatClassId) ? vatClassId : 0,
-                VAT_NAME = dr["VAT_NAME"]?.ToString() ?? string.Empty,
-                COSTING_METHOD = int.TryParse(dr["COSTING_METHOD"]?.ToString(), out var costingMethod) ? costingMethod : 0,
-                COSTINGMETHOD = dr["COSTING_METHOD"]?.ToString() ?? string.Empty,
-                POS_DESCRIPTION = dr["POS_DESCRIPTION"]?.ToString() ?? string.Empty,
-                MATRIX_CODE = dr["MATRIX_CODE"]?.ToString() ?? string.Empty,
-                item_stores = itemstores,
-                item_alias = itemalias,
-                item_suppliers = itemsuppliers
-            }).ToList();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_TB_ITEMS", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-            return itemsList;
+                    // === REQUIRED PARAMETERS FOR ACTION 2 ===
+                    cmd.Parameters.AddWithValue("@ACTION", 2);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
+                    // OPTIONAL / UNUSED PARAMETERS (PASS NULL)
+                    cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        Items obj = new Items
+                        {
+                            ID = ADO.ToInt32(dr["ID"]),
+                            HQID = ADO.ToInt32(dr["HQID"]),
+                            COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
+
+                            ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
+                            BARCODE = ADO.ToString(dr["BARCODE"]),
+                            DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
+                            ARABIC_DESCRIPTION = ADO.ToString(dr["ARABIC_DESCRIPTION"]),
+                            POS_DESCRIPTION = ADO.ToString(dr["POS_DESCRIPTION"]),
+
+                            TYPE_ID = ADO.ToInt32(dr["TYPE_ID"]),
+                            TYPE_NAME = ADO.ToString(dr["TYPE_NAME"]),
+
+                            DEPT_ID = ADO.ToInt32(dr["DEPT_ID"]),
+                            DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
+
+                            CAT_ID = ADO.ToInt32(dr["CAT_ID"]),
+                            CAT_NAME = ADO.ToString(dr["CAT_NAME"]),
+
+                            SUBCAT_ID = ADO.ToInt32(dr["SUBCAT_ID"]),
+                            SUBCAT_NAME = ADO.ToString(dr["SUBCAT_NAME"]),
+
+                            BRAND_ID = ADO.ToInt32(dr["BRAND_ID"]),
+                            BRAND_NAME = ADO.ToString(dr["BRAND_NAME"]),
+
+                            PACKING = ADO.ToString(dr["PACKING"]),
+                            PACKING_ID = ADO.ToInt32(dr["PACKING_ID"]),
+
+                            UNIT_ID = ADO.ToInt32(dr["UNIT_ID"]),
+                            UOM = ADO.ToString(dr["UOM"]),
+
+                            SALE_PRICE = ADO.ToFloat(dr["SALE_PRICE"]),
+                            COST = dr["COST"] == DBNull.Value ? (float?)null : Convert.ToSingle(dr["COST"]),
+                            PROFIT_MARGIN = dr["PROFIT_MARGIN"] == DBNull.Value ? (float?)null : Convert.ToSingle(dr["PROFIT_MARGIN"]),
+
+                            QTY_STOCK = dr["QTY_STOCK"] == DBNull.Value ? (float?)null : Convert.ToSingle(dr["QTY_STOCK"]),
+                            QTY_COMMITTED = dr["QTY_COMMITTED"] == DBNull.Value ? (float?)null : Convert.ToSingle(dr["QTY_COMMITTED"]),
+
+                            CREATED_DATE = dr["CREATED_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["CREATED_DATE"]),
+                            LAST_PO_DATE = dr["LAST_PO_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["LAST_PO_DATE"]),
+                            LAST_GRN_DATE = dr["LAST_GRN_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["LAST_GRN_DATE"]),
+                            LAST_SALE_DATE = dr["LAST_SALE_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["LAST_SALE_DATE"]),
+
+                            ORIGIN_COUNTRY = ADO.ToInt32(dr["ORIGIN_COUNTRY"]),
+                            COUNTRY_NAME = ADO.ToString(dr["COUNTRY_NAME"]),
+
+                            VAT_CLASS_ID = ADO.ToInt32(dr["VAT_CLASS_ID"]),
+                            VAT_NAME = ADO.ToString(dr["VAT_NAME"]),
+
+                            COSTING_METHOD = ADO.ToInt32(dr["COSTING_METHOD"]),
+                            COSTINGMETHOD = ADO.ToString(dr["COSTING_METHOD"]),
+
+                            MATRIX_CODE = ADO.ToString(dr["MATRIX_CODE"]),
+
+                            item_stores = new List<ITEM_STORES>(),
+                            item_alias = new List<ITEM_ALIAS>(),
+                            item_suppliers = new List<ITEM_SUPPLIERS>()
+                        };
+
+                        list.Add(obj);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error fetching item list: " + ex.Message);
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
+            }
+
+            return list;
         }
 
-
+       
         public (int flag, string message) Insert(Items items)
         {
             SqlConnection connection = ADO.GetConnection();
@@ -415,7 +429,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
-               
+                cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
+
 
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
@@ -643,7 +658,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
-                
+                cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
+
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_SUPPLIER", tbl2);
@@ -682,7 +698,7 @@ namespace MicroApi.DataLayer.Services
                                 "TB_ITEMS.ITEM_SL, TB_ITEMS.SALE_PRICE1, TB_ITEMS.SALE_PRICE2, TB_ITEMS.SALE_PRICE3, TB_ITEMS.SALE_PRICE4, TB_ITEMS.SALE_PRICE5, " +
                                 "TB_ITEMS.PURCH_PRICE, TB_ITEMS.PURCH_CURRENCY, TB_ITEMS.IS_CONSIGNMENT, TB_ITEMS.VAT_CLASS_ID, TB_ITEMS.ITEM_PROPERTY1, " +
                                 "TB_ITEMS.IS_DELETED, TB_ITEMS.ITEM_PROPERTY2, TB_ITEMS.ITEM_PROPERTY3, TB_ITEMS.ITEM_PROPERTY4, TB_ITEMS.ITEM_PROPERTY5, " +
-                                "TB_ITEMS.COSTING_METHOD, " +
+                                "TB_ITEMS.COSTING_METHOD,TB_ITEMS.COMPANY_ID, " +
                                 "TB_ITEMS.RESTOCK_LEVEL, TB_ITEMS.REORDER_POINT, TB_ITEMS.BIN_LOCATION, TB_ITEMS.POS_DESCRIPTION, " +
 
                                 "TB_ITEMS.IS_DIFFERENT_UOM_PURCH, TB_ITEMS.UOM_PURCH, TB_ITEMS.UOM_MULTPLE,TB_ITEMS.MATRIX_CODE, " +
@@ -712,6 +728,7 @@ namespace MicroApi.DataLayer.Services
                     item = new Items
                     {
                         ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
                         HQID = dr["HQID"] != DBNull.Value ? Convert.ToInt32(dr["HQID"]) : 0,
                         ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? Convert.ToString(dr["ITEM_CODE"]) : string.Empty,
                         BARCODE = dr["BARCODE"] != DBNull.Value ? Convert.ToString(dr["BARCODE"]) : string.Empty,

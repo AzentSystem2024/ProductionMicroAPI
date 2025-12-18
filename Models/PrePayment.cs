@@ -112,4 +112,8 @@
         public string Message { get; set; }
         public int INVOICE_NO { get; set; }
     }
+    public class PrePaymentListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

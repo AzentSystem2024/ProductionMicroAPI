@@ -54,13 +54,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public MiscPaymentListResponse GetMiscPaymentList()
+        public MiscPaymentListResponse GetMiscPaymentList(MiscpaymentListRequest request)
         {
             MiscPaymentListResponse res = new MiscPaymentListResponse();
 
             try
             {
-                res = _miscpaymentService.GetMiscPaymentList();
+                res = _miscpaymentService.GetMiscPaymentList(request);
             }
             catch (Exception ex)
             {

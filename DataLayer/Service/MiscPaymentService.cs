@@ -187,7 +187,7 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public MiscPaymentListResponse GetMiscPaymentList()
+        public MiscPaymentListResponse GetMiscPaymentList(MiscpaymentListRequest request)
         {
             MiscPaymentListResponse response = new MiscPaymentListResponse
             {
@@ -210,18 +210,8 @@ namespace MicroApi.DataLayer.Service
                         // Add required parameters
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 3); // or your transaction type
-                        cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID",0);
-                        cmd.Parameters.AddWithValue("@FIN_ID",  0);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", 0);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", 0);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", 0);
-                        cmd.Parameters.AddWithValue("@BANK_NAME", 0);
-                        cmd.Parameters.AddWithValue("@PARTY_NAME", 0);
-                        cmd.Parameters.AddWithValue("@NARRATION", 0);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", 0);
-                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID",request.COMPANY_ID);
+                       
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

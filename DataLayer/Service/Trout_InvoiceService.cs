@@ -217,6 +217,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 5);
                         cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUST_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -266,7 +267,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public Trout_InvoiceListResponse GetSaleInvoiceHeaderData()
+        public Trout_InvoiceListResponse GetSaleInvoiceHeaderData(Trout_InvoiceListRequest request)
         {
             var response = new Trout_InvoiceListResponse
             {
@@ -288,6 +289,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (var reader = cmd.ExecuteReader())
                         {

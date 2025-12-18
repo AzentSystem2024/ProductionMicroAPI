@@ -6,7 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         CreditNoteResponse SaveCreditNote(AC_CreditNote model);
         CreditNoteResponse UpdateCreditNote(AC_CreditNoteUpdate model);
-        CreditNoteListResponse GetCreditNoteList();
+        CreditNoteListResponse GetCreditNoteList(CreditlistRequest request);
         AC_CreditNoteSelect GetCreditNoteById(int id);
         CreditNoteResponse Commit(AC_CreditNoteUpdate model);
         DocResponse GetLastDocNo(CreditVoucherRequest request);

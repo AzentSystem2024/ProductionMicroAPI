@@ -226,6 +226,10 @@
     {
         public int? DEALER_ID { get; set; }
     }
+    public class SOListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }
     
 

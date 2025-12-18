@@ -131,13 +131,13 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public PurchaseReturnListResponse List()
+        public PurchaseReturnListResponse List(PurchaseReturnListRequest request)
         {
             PurchaseReturnListResponse res = new PurchaseReturnListResponse();
 
             try
             {
-                res = _purchaseReturnService.List();
+                res = _purchaseReturnService.List(request);
             }
             catch (Exception ex)
             {

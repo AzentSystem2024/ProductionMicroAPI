@@ -160,7 +160,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public PrePayment_GSTListResponse GetPrePaymentList()
+        public PrePayment_GSTListResponse GetPrePaymentList(PrePaymentGSTListRequest request)
         {
             var response = new PrePayment_GSTListResponse
             {
@@ -182,7 +182,7 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@FIN_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 38);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);

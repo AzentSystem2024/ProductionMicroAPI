@@ -60,12 +60,12 @@ namespace MicroApi.Controllers
         //}
         [HttpPost]
         [Route("list")]
-        public ItemsResponse List()
+        public ItemsResponse List(ItemListRequest request)
         {
             ItemsResponse res = new ItemsResponse();
             try
             {
-                var items = _itemsService.GetAllItems();
+                var items = _itemsService.GetAllItems(request);
 
                 res.flag = "1";
                 res.message = "Success";

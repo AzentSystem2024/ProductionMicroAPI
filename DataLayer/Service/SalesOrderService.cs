@@ -267,7 +267,7 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public SalesOrderListResponse GetAllSalesOrders()
+        public SalesOrderListResponse GetAllSalesOrders(SOListRequest request)
         {
             SalesOrderListResponse response = new SalesOrderListResponse
             {
@@ -283,6 +283,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 5);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {

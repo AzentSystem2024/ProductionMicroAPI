@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Insert(PurchaseReturn purchaseReturn);
         public Int32 Update(PurchaseReturn purchaseReturn);
         public PurchaseReturn GetPurchaseReturn(int id);
-        public PurchaseReturnListResponse List();
+        public PurchaseReturnListResponse List(PurchaseReturnListRequest request);
         public bool Delete(int id);
         public Int32 Verify(PurchaseReturn purchaseReturn);
         public Int32 Approve(PurchaseReturn purchaseReturn);

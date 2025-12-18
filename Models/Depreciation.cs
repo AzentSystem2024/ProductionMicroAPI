@@ -129,4 +129,8 @@
         public float? CURRENT_VALUE { get; set; }
         public List<AssetDepreciationDetail> ASSET_IDS { get; set; }
     }
+    public class DepreciationListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

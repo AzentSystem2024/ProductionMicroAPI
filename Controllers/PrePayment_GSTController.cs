@@ -51,13 +51,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public PrePayment_GSTListResponse GetPrePaymentList()
+        public PrePayment_GSTListResponse GetPrePaymentList(PrePaymentGSTListRequest request)
         {
             PrePayment_GSTListResponse res = new PrePayment_GSTListResponse();
 
             try
             {
-                res = _prepayment_gstService.GetPrePaymentList();
+                res = _prepayment_gstService.GetPrePaymentList(request);
             }
             catch (Exception ex)
             {

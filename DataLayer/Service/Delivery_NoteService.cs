@@ -164,6 +164,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 3);
                     cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable tbl = new DataTable();
@@ -220,7 +221,7 @@ namespace MicroApi.DataLayer.Service
             }
             return items;
         }
-        public Delivery_Note_List_Response GetDeliveryNoteList()
+        public Delivery_Note_List_Response GetDeliveryNoteList(DeliveryNoteListRequest request)
         {
             Delivery_Note_List_Response response = new Delivery_Note_List_Response();
             List<Delivery_Note_List> data = new List<Delivery_Note_List>();
@@ -233,7 +234,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 0);
-                    cmd.Parameters.AddWithValue("@ID", 0); 
+                    cmd.Parameters.AddWithValue("@ID", 0);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                     //connection.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())

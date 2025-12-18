@@ -70,12 +70,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("List")]
-        public ArticleListResponse ArticleLogList()
+        public ArticleListResponse ArticleLogList(ArticleListReq request)
         {
             ArticleListResponse res = new ArticleListResponse();
             try
             {
-                res = _articleService.GetArticleList();
+                res = _articleService.GetArticleList(request);
             }
             catch (Exception ex)
             {
@@ -86,12 +86,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("listitem")]
-        public ListItemsResponse GetItems()
+        public ListItemsResponse GetItems(ArticleListReq request)
         {
             ListItemsResponse res = new ListItemsResponse();
             try
             {
-                res = _articleService.GetItems();
+                res = _articleService.GetItems(request);
             }
             catch (Exception ex)
             {

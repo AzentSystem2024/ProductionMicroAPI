@@ -5,7 +5,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IPhysicalStockService
     {
-        PhysicalStockListResponse GetAllPhysicalStocks();
+        PhysicalStockListResponse GetAllPhysicalStocks(PhysicalStockListRequest request);
         int SaveData(PhysicalStock physicalStock);
         PhysicalStockResponse EditData(PhysicalStockUpdate physicalStock);
         PhysicalStockSelectDetailResponse GetPhysicalStock(int physicalId);

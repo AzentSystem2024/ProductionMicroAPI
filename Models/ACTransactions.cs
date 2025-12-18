@@ -190,6 +190,10 @@
         public int TRANS_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
     }
+    public class JVlistRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
     //-------------------END---------------------------//
 
     public class AC_DebitNote
@@ -400,5 +404,10 @@
     public class DebitInvoiceRequest
     {
         public int SUPP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
+    }
+    public class DebitlistRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

@@ -16,12 +16,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public PDCResponse PDCList()
+        public PDCResponse PDCList(PDCListRequest request)
         {
             PDCResponse response = new PDCResponse();
             try
             {
-                response = _pdcService.GetPDCList();
+                response = _pdcService.GetPDCList(request);
             }
             catch (Exception ex)
             {

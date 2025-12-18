@@ -226,6 +226,7 @@
     public class Pendingrequest
     {
         public int CUST_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class Credithis
     {
@@ -244,6 +245,10 @@
     public class CreditVoucherRequest
     {
         public int TRANS_TYPE { get; set; }
+        public int COMPANY_ID { get; set; }
+    }
+    public class CreditlistRequest
+    {
         public int COMPANY_ID { get; set; }
     }
 }

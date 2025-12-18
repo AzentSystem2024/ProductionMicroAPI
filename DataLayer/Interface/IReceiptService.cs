@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Interface
     {
         ReceiptResponse insert(Receipt model);
         PendingInvoiceListResponse GetPendingInvoiceList(InvoicependingRequest request);
-        ReceiptListResponse GetReceiptList();
+        ReceiptListResponse GetReceiptList(ReceiptsListRequest request);
         ReceiptResponse Update(ReceiptUpdate model);
         ReceiptSelectResponse GetReceiptById(int id);
         ReceiptResponse Commit(ReceiptUpdate model);

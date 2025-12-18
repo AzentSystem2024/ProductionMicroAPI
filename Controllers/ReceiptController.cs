@@ -72,13 +72,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public ReceiptListResponse GetReceiptList()
+        public ReceiptListResponse GetReceiptList(ReceiptsListRequest request)
         {
             ReceiptListResponse res = new ReceiptListResponse();
 
             try
             {
-                res = _receiptService.GetReceiptList();
+                res = _receiptService.GetReceiptList(request);
             }
             catch (Exception ex)
             {

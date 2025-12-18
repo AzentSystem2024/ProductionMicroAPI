@@ -38,7 +38,7 @@
         public int? USER_ID { get; set; }
         public string? NARRATION { get; set; }
         public int? REASON_ID { get; set; }
-        public int? DOC_NO { get; set; }
+        public string? DOC_NO { get; set; }
         public string? COMPANY_NAME { get; set; }      //for select
         public string? ADDRESS1 { get; set; }
         public string? ADDRESS2 { get; set; }
@@ -84,7 +84,7 @@
         public string? NARRATION { get; set; }
         public int? REASON_ID { get; set; }
         public string? STORE_NAME { get; set; }
-        public int? DOC_NO { get; set; }
+        public string? DOC_NO { get; set; }
         public string? STATUS { get; set; }
 
 
@@ -127,5 +127,10 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public int TRANSFER_NO { get; set; }
+    }
+    public class TransferOutListRequest
+    {
+        public int COMPANY_ID { get; set; }
+
     }
 }

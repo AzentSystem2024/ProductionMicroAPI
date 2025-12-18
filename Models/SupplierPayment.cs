@@ -50,7 +50,7 @@
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public int? FIN_ID { get; set; }
-        public string? TRANS_DATE { get; set; }
+        public string? PAY_DATE { get; set; }
         public int? TRANS_STATUS { get; set; }
         public int? RECEIPT_NO { get; set; }
         public bool? IS_DIRECT { get; set; }
@@ -116,7 +116,7 @@
     {
         public int TRANS_ID { get; set; }
         public int TRANS_TYPE { get; set; }
-        public int DOC_NO { get; set; }
+        public string DOC_NO { get; set; }
         public string PAY_DATE { get; set; }
         public int COMPANY_ID { get; set; }
         public int FIN_ID { get; set; }
@@ -186,6 +186,7 @@
     public class PendingInvoiceRequest
     {
         public int SUPP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class PDCListResponse
     {
@@ -215,5 +216,8 @@
         public int SUPP_ID { get; set; }
         public int LEDGER_ID { get; set; }
     }
-
+    public class SuppListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

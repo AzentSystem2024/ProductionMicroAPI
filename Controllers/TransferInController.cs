@@ -75,13 +75,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public TransferInListsResponse List()
+        public TransferInListsResponse List(TransferInListRequest request)
         {
             TransferInListsResponse res = new TransferInListsResponse();
 
             try
             {
-                res = _transferInService.List();
+                res = _transferInService.List(request);
             }
             catch (Exception ex)
             {

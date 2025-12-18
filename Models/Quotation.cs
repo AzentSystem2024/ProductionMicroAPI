@@ -274,4 +274,8 @@
         public List<LatestVocher> Data { get; set; }
 
     }
+    public class QuotationListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

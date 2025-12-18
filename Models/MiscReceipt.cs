@@ -115,4 +115,8 @@
         public string Message { get; set; }
         public string VOUCHER_NO { get; set; }
     }
+    public class MiscReceiptsListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

@@ -33,7 +33,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? (object)DBNull.Value);
@@ -87,7 +87,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue("@ACTION", 4);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@FIN_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", DBNull.Value);
@@ -145,7 +145,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public SalaryPaymentListResponse GetsalaryPaymentList()
+        public SalaryPaymentListResponse GetsalaryPaymentList(SalaryPendingListRequest request)
         {
             SalaryPaymentListResponse response = new SalaryPaymentListResponse
             {
@@ -168,19 +168,9 @@ namespace MicroApi.DataLayer.Service
                         // Add required parameters
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 30);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@FIN_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TRANS_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PAY_TYPE_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@PAY_HEAD_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@NARRATION", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_NO", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BANK_NAME", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", DBNull.Value);
-
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -375,7 +365,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? (object)DBNull.Value);
 
@@ -433,7 +423,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@CHEQUE_NO", model.CHEQUE_NO ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@CHEQUE_DATE", model.CHEQUE_DATE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@BANK_NAME", model.BANK_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? (object)DBNull.Value);
 

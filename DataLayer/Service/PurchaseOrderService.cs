@@ -17,6 +17,7 @@ namespace MicroApi.DataLayer.Services
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_SUPPLIER_LIST";
             cmd.Parameters.AddWithValue("@SUPP_ID", input.SUPP_ID);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -44,7 +45,13 @@ namespace MicroApi.DataLayer.Services
                     ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
                     PACKING_ID = ADO.ToInt32(dr["PACKING_ID"]),
                     PACKING_NAME = ADO.ToString(dr["PACKING_NAME"]),
-                    SUPPLIER_MAIL = ADO.ToString(dr["EMAIL"])
+                    SUPPLIER_MAIL = ADO.ToString(dr["EMAIL"]),
+                    SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
+                    SUPP_ADDRESS = ADO.ToString(dr["ADDRESS1"]),
+                    CONTACT_NAME = ADO.ToString(dr["CONTACT_NAME"]),
+                    PHONE = ADO.ToString(dr["PHONE"]),
+                    STATE_ID = ADO.ToInt32(dr["STATE_ID"]),
+                    STATE_NAME = ADO.ToString(dr["STATE_NAME"])
 
                 });
             }
@@ -82,6 +89,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("CREATE_STORE_ID", typeof(Int32));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (worksheet.PoDetails != null && worksheet.PoDetails.Any())
                 {
@@ -109,6 +118,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -194,7 +205,7 @@ namespace MicroApi.DataLayer.Services
             }
         }
 
-        public List<PurchaseOrderHeader> GetPOList(Int32 intUserID)
+        public List<PurchaseOrderHeader> GetPOList(POListRequest request)
         {
             List<PurchaseOrderHeader> worksheetList = new List<PurchaseOrderHeader>();
             SqlConnection connection = ADO.GetConnection();
@@ -203,6 +214,7 @@ namespace MicroApi.DataLayer.Services
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_TB_PURCHASE_ORDER";
             cmd.Parameters.AddWithValue("@ACTION", 0);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -262,6 +274,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("CREATE_STORE_ID", typeof(Int32));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (worksheet.PoDetails != null && worksheet.PoDetails.Any())
                 {
@@ -289,6 +303,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -405,6 +421,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("CREATE_STORE_ID", typeof(Int32));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (worksheet.PoDetails != null && worksheet.PoDetails.Any())
                 {
@@ -432,6 +450,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -549,6 +569,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("SUPP_PRICE", typeof(float));
                 tbl.Columns.Add("SUPP_AMOUNT", typeof(float));
                 tbl.Columns.Add("CREATE_STORE_ID", typeof(Int32));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
 
                 if (worksheet.PoDetails != null && worksheet.PoDetails.Any())
                 {
@@ -576,6 +598,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -672,6 +696,7 @@ namespace MicroApi.DataLayer.Services
             cmd.CommandText = "SP_TB_PURCHASE_ORDER";
             cmd.Parameters.AddWithValue("ACTION", 3);
             cmd.Parameters.AddWithValue("@ITEM_ID", input.ITEM_ID);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -831,6 +856,8 @@ namespace MicroApi.DataLayer.Services
                         SUPP_PRICE = ADO.ToFloat(dr3["SUPP_PRICE"]),
                         SUPP_AMOUNT = ADO.ToFloat(dr3["SUPP_AMOUNT"]),
                         ITEM_CODE = ADO.ToString(dr3["ITEM_CODE"]),
+                        CGST = ADO.ToDecimal(dr3["CGST"]),
+                        SGST = ADO.ToDecimal(dr3["SGST"]),
 
                     });
                 }

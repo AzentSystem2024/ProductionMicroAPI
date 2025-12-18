@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         ArticleBrandResponse Insert(ArticleBrand articleBrand);
         ArticleBrandResponse Update(ArticleBrandUpdate articleBrand);
         ArticleBrandResponse GetArticleBrandById(int id);
-        ArticleBrandListResponse GetLogList(int? id = null);
+        ArticleBrandListResponse GetLogList(ArticleBrandListRequest request);
         ArticleBrandResponse DeleteArticleBrandData(int id);
     }
 }

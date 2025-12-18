@@ -212,6 +212,7 @@
     public class InvoicependingRequest
     {
         public int CUST_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class PDCListResponses
     {
@@ -239,5 +240,9 @@
     {
         public int CUST_ID { get; set; }
         public int LEDGER_ID { get; set; }
+    }
+    public class ReceiptsListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

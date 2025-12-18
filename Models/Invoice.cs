@@ -238,6 +238,7 @@
     public class TransferInvoiceRequest
     {
         public int CUST_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class InvoiceCust_stateName
     {
@@ -245,5 +246,9 @@
         public string? DESCRIPTION { get; set; }
         public int STATE_ID { get; set; }
         public string? STATE_NAME { get; set; }
+    }
+    public class InvoiceListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

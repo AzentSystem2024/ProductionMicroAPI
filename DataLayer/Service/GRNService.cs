@@ -20,6 +20,7 @@ namespace MicroApi.DataLayer.Service
             cmd.CommandText = "SP_GET_PENDING_PO";
             cmd.Parameters.AddWithValue("@STORE_ID", input.STORE_ID);
             cmd.Parameters.AddWithValue("@SUPP_ID", input.SUPP_ID);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -56,6 +57,7 @@ namespace MicroApi.DataLayer.Service
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_GET_PO";
             cmd.Parameters.AddWithValue("@PO_ID", input.PO_ID);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -610,7 +612,7 @@ namespace MicroApi.DataLayer.Service
                 string strSQL = "SELECT TB_GRN_HEADER.*, TB_STORES.STORE_NAME, TB_SUPPLIER.SUPP_NAME, TB_PO_HEADER.PO_NO, " +
                     "TB_CURRENCY.ID AS CURRENCY_ID , TB_CURRENCY.SYMBOL , TB_STATUS.STATUS_DESC AS STATUS, " +
                     "TB_AC_TRANS_HEADER.NARRATION AS NARRATION, " +
-                    "TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE, " +
+                    "TB_COMPANY_MASTER.ADDRESS1,TB_COMPANY_MASTER.ADDRESS2,TB_COMPANY_MASTER.ADDRESS3,TB_COMPANY_MASTER.COMPANY_CODE,TB_COMPANY_MASTER.COMPANY_NAME, " +
                     "TB_COMPANY_MASTER.PHONE,TB_COMPANY_MASTER.EMAIL,TB_SUPPLIER.ADDRESS1 AS SUPP_ADDRESS1,TB_SUPPLIER.ADDRESS2 AS SUPP_ADDRESS2,TB_SUPPLIER.ADDRESS3 AS SUPP_ADDRESS3, " +
                     "TB_SUPPLIER.ZIP,TB_SUPPLIER.CITY,TB_SUPPLIER.PHONE AS SUPP_PHONE,TB_SUPPLIER.EMAIL AS SUPP_EMAIL,TB_SUPPLIER.SUPP_CODE,TB_STATE.STATE_NAME " +
                     "FROM TB_GRN_HEADER " +
@@ -620,7 +622,8 @@ namespace MicroApi.DataLayer.Service
                     "LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID=TB_CURRENCY.ID " +
                     "LEFT JOIN TB_PO_HEADER ON TB_GRN_HEADER.PO_ID = TB_PO_HEADER.ID " +
                     "LEFT JOIN TB_STATUS ON TB_AC_TRANS_HEADER.TRANS_STATUS = TB_STATUS.id " +
-                    "LEFT JOIN TB_COMPANY_MASTER ON TB_PURCH_RET_HEADER.COMPANY_ID = TB_COMPANY_MASTER.ID " +
+                    "LEFT JOIN TB_COMPANY_MASTER ON TB_GRN_HEADER.COMPANY_ID = TB_COMPANY_MASTER.ID " +
+                    "LEFT JOIN TB_STATE ON TB_SUPPLIER.STATE_ID= TB_STATE.ID " +
                     "WHERE TB_GRN_HEADER.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Grn");
@@ -637,8 +640,8 @@ namespace MicroApi.DataLayer.Service
                         STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                         PO_ID = ADO.ToInt32(dr["PO_ID"]),
-                        PO_NO = ADO.ToInt32(dr["PO_NO"]),
-                        DOC_NO = ADO.ToInt32(dr["GRN_NO"]),
+                        PO_NO = ADO.ToString(dr["PO_NO"]),
+                        DOC_NO = ADO.ToString(dr["GRN_NO"]),
                         GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                         SUPPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
@@ -790,7 +793,7 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
-        public List<GRN> GetGRNList(Int32 intUserID)
+        public List<GRN> GetGRNList(GRNListRequest request)
         {
             List<GRN> worksheetList = new List<GRN>();
             SqlConnection connection = ADO.GetConnection();
@@ -799,6 +802,7 @@ namespace MicroApi.DataLayer.Service
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_TB_GRN";
             cmd.Parameters.AddWithValue("@ACTION", 0);
+            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();
@@ -808,7 +812,7 @@ namespace MicroApi.DataLayer.Service
                 worksheetList.Add(new GRN
                 {
                     ID = ADO.ToInt32(dr["ID"]),
-                    DOC_NO = ADO.ToInt32(dr["GRN_NO"]),
+                    DOC_NO = ADO.ToString(dr["GRN_NO"]),
                     GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
                     SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                     STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
@@ -817,7 +821,7 @@ namespace MicroApi.DataLayer.Service
                     NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
                     NARRATION = ADO.ToString(dr["NARRATION"]),
                     STATUS = ADO.ToString(dr["STATUS"]),
-                    PO_NO = ADO.ToInt32(dr["PO_NO"])
+                    PO_NO = ADO.ToString(dr["PO_NO"])
 
                 });
             }

@@ -55,6 +55,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
                         //cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
                         //cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
@@ -155,6 +156,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
                         //cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
                         //cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
@@ -267,6 +269,7 @@ namespace MicroApi.Service
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
                                     CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ?
                                         ((DateTimeOffset)reader["CREATED_DATE"]).DateTime : (DateTime?)null,
+                                    COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString(),
                                     SIZES = new List<Sizes>(),
                                     Units = new List<ArticleUnits>()
@@ -348,7 +351,7 @@ namespace MicroApi.Service
 
 
 
-        public ArticleListResponse GetArticleList()
+        public ArticleListResponse GetArticleList(ArticleListReq request)
         {
             var res = new ArticleListResponse();
             res.Data = new List<ArticleUpdate>();
@@ -364,6 +367,7 @@ namespace MicroApi.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.CommandTimeout = 1000;
                         cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -386,6 +390,7 @@ namespace MicroApi.Service
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
+                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                     //CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value
                                     //? ((DateTimeOffset)reader["CREATED_DATE"]).DateTime
                                     //: (DateTime?)null,
@@ -433,33 +438,43 @@ namespace MicroApi.Service
         }
 
 
-        public ListItemsResponse GetItems()
+        public ListItemsResponse GetItems(ArticleListReq request)
         {
             ListItemsResponse res = new ListItemsResponse();
             res.DataList = new List<ItemData>();
 
             try
             {
-                using (var connection = ADO.GetConnection())
+                using (SqlConnection connection = ADO.GetConnection())
                 {
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    string query = @"SELECT ID, ITEM_CODE + '-' + DESCRIPTION AS ITEM_NAME 
-                             FROM TB_ITEMS 
-                             WHERE IS_DELETED = 0 
-                             ORDER BY ID ASC";
+                    string query = @"
+                SELECT 
+                    ID, 
+                    ITEM_CODE + '-' + DESCRIPTION AS ITEM_NAME 
+                FROM TB_ITEMS 
+                WHERE IS_DELETED = 0 
+                  AND COMPANY_ID = @COMPANY_ID
+                ORDER BY ID ASC";
 
-                    using (var cmd = new SqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        using (var reader = cmd.ExecuteReader())
+                        // ✅ PASS COMPANY_ID FROM REQUEST BODY
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())  
+                            while (reader.Read())
                             {
                                 res.DataList.Add(new ItemData
                                 {
-                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
-                                    DESCRIPTION = reader["ITEM_NAME"]?.ToString() ?? string.Empty,
+                                    ID = reader["ID"] != DBNull.Value
+                                            ? Convert.ToInt64(reader["ID"])
+                                            : 0,
+
+                                    DESCRIPTION = reader["ITEM_NAME"]?.ToString() ?? string.Empty
                                 });
                             }
                         }
@@ -473,10 +488,12 @@ namespace MicroApi.Service
             {
                 res.flag = 0;
                 res.Message = "Error: " + ex.Message;
+                res.DataList = new List<ItemData>();
             }
 
             return res;
         }
+
 
 
         public ItemdataResponse GetItemByCode(ItemcodeRequest request)

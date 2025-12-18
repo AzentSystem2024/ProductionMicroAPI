@@ -73,13 +73,13 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("getlist")]
-        public Trout_InvoiceListResponse GetSaleInvoiceHeaderData()
+        public Trout_InvoiceListResponse GetSaleInvoiceHeaderData(Trout_InvoiceListRequest request)
         {
             Trout_InvoiceListResponse res = new Trout_InvoiceListResponse();
 
             try
             {
-                res = _trout_InvoiceService.GetSaleInvoiceHeaderData();
+                res = _trout_InvoiceService.GetSaleInvoiceHeaderData(request);
             }
             catch (Exception ex)
             {

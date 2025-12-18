@@ -21,7 +21,7 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public PDCResponse GetPDCList()
+        public PDCResponse GetPDCList(PDCListRequest request)
         {
             PDCResponse response = new PDCResponse { Data = new List<PDCList>() };
 
@@ -35,7 +35,8 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_PDC", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 3); 
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

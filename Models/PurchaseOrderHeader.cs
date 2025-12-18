@@ -134,6 +134,8 @@ namespace MicroApi.Models
         public float? SUPP_AMOUNT { get; set; }
         public int? CREATE_STORE_ID { get; set; }
         public string? ITEM_CODE { get; set; }
+        public decimal? CGST { get; set; }
+        public decimal? SGST { get; set; }
     }
 
     public class PurchaseOrderResponse
@@ -145,6 +147,7 @@ namespace MicroApi.Models
     public class SupplierInput
     {
         public int SUPP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class SupplierList
     {
@@ -169,12 +172,19 @@ namespace MicroApi.Models
         public int PACKING_ID { get; set; }
         public string PACKING_NAME { get; set; }
         public string SUPPLIER_MAIL { get; set; }
-        
+        public string SUPP_NAME { get; set; }
+        public string PHONE { get; set; }
+        public string CONTACT_NAME { get; set; }
+        public string SUPP_ADDRESS { get; set; }
+        public int STATE_ID { get; set; }
+        public string STATE_NAME { get; set; }
+
 
     }
     public class ItemInput
     {
         public int ITEM_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class ItemList
     {
@@ -206,5 +216,9 @@ namespace MicroApi.Models
     public class POHIS
     {
         public int TRANS_ID { get; set; }
+    }
+    public class POListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

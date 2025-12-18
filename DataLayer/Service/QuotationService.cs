@@ -329,7 +329,7 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
-        public QuotationListResponse GetAllQuotations()
+        public QuotationListResponse GetAllQuotations(QuotationListRequest request)
         {
             QuotationListResponse response = new QuotationListResponse { Data = new List<QuotationList>() };
             using (SqlConnection connection = ADO.GetConnection())
@@ -340,6 +340,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 5);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

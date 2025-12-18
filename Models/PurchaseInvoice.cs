@@ -19,6 +19,7 @@
     public class PIDropdownInput
     {
         public int? SUPP_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class PIDropdownResponce
     {
@@ -37,6 +38,7 @@
     public class GRNDetailInput
     {
         public int PO_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class GRNDetailResponce
     {
@@ -185,7 +187,7 @@
     public class GrnPendingQty
     {
         public int GRN_ID { get; set; }
-        public int GRN_NO { get; set; }
+        public string GRN_NO { get; set; }
         public DateTime GRN_DATE { get; set; }
         public int ITEM_ID { get; set; }
         public string ITEM_NAME { get; set; }
@@ -218,7 +220,8 @@
     public class PendingGRNRequest
     {
         public int SUPP_ID { get; set; }
-       
+        public int COMPANY_ID { get; set; }
+
     }
     public class PurchInvhis
     {
@@ -233,5 +236,9 @@
     public class PurchInvHisRequest
     {
         public int TRANS_ID { get; set; }
+    }
+    public class PurchListRequest
+    {
+        public int COMPANY_ID { get; set; }
     }
 }
