@@ -100,6 +100,8 @@
         public double QUANTITY_ISSUED { get; set; }
         public int ISSUE_ID { get; set; }
         public int ISSUE_DETAIL_ID { get; set; }
+        public decimal GST_PERC { get; set; }
+        public string HSN_CODE { get; set; }
     }
     public class TransferInList
     {

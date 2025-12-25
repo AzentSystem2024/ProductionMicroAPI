@@ -405,7 +405,8 @@ namespace MicroApi.DataLayer.Service
                                     TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0,
                                     PRICE = reader["PACK_PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["PACK_PRICE"]) :0,
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
-                                    HSN_CODE = reader["HSN_CODE"]?.ToString()
+                                    HSN_CODE = reader["HSN_CODE"] == DBNull.Value ? null : reader["HSN_CODE"].ToString()
+
                                 };
 
                                 transferList.Add(item);

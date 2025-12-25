@@ -178,7 +178,9 @@ namespace MicroApi.DataLayer.Service
                         DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
                         UOM = ADO.ToString(dr["UOM"]),
                         COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
-                        QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"])
+                        QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
+                        GST_PERC = dr["GST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["GST_PERC"]),
+                        HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
                     });
                 }
             }

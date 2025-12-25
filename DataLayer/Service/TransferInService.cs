@@ -37,6 +37,8 @@ namespace MicroApi.DataLayer.Service
                     QUANTITY_ISSUED = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
                     ISSUE_ID = ADO.ToInt32(dr["ISSUE_ID"]),
                     ISSUE_DETAIL_ID = ADO.ToInt32(dr["ISSUE_DETAIL_ID"]),
+                    GST_PERC = dr["GST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["GST_PERC"]),
+                    HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
                 }).ToList();
             }
 

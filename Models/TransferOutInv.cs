@@ -103,6 +103,8 @@
         public string UOM { get; set; }
         public double COST { get; set; }
         public double QUANTITY_AVAILABLE { get; set; }
+        public decimal GST_PERC { get; set; }
+        public string HSN_CODE { get; set; }
     }
     public class ItemRequest
     {
