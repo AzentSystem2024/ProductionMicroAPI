@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class StoresService:IStoresService
     {
-        public List<Stores> GetAllStores()
+        public List<Stores> GetAllStores(StoresList request)
         {
             List<Stores> storeList = new List<Stores>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -18,6 +18,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_STORES";
                 cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);

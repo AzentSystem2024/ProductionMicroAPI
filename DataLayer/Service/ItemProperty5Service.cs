@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class ItemProperty5Service:IItemProperty5Service
     {
-        public List<ItemProperty5> GetAllItemProperty5()
+        public List<ItemProperty5> GetAllItemProperty5(ItemPropertyList request)
         {
             List<ItemProperty5> paymentList = new List<ItemProperty5>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -18,6 +18,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_ITEM_PROPERTY5";
                 cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);

@@ -81,6 +81,8 @@
         public string ARTICLE { get; set; }
         public double TOTAL_PAIR_QTY { get; set; }
         public decimal PRICE { get; set; }
+        public decimal GST_PERC { get; set; }
+        public string HSN_CODE { get; set; }
 
     }
     public class InvoiceHeader

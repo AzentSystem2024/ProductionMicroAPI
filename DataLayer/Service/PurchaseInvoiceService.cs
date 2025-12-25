@@ -991,8 +991,9 @@ namespace MicroApi.DataLayer.Service
                             GRN_DET_ID = row["GRN_DET_ID"] != DBNull.Value ? Convert.ToInt32(row["GRN_DET_ID"]) : 0,
                             UOM = row["UOM"] != DBNull.Value ? row["UOM"].ToString() : "",
                             PENDING_QTY = row["PENDING_QTY"] != DBNull.Value ? Convert.ToDecimal(row["PENDING_QTY"]) : 0,
-                            //GST_PERC = row["GST_PERC"] != DBNull.Value ? Convert.ToSingle(row["GST_PERC"]) : 0,
-                            //HSN_CODE = row["HSN_CODE"] != DBNull.Value ? row["HSN_CODE"].ToString() : "",
+                            PRICE = row["PURCH_PRICE"] != DBNull.Value ? Convert.ToDecimal(row["PURCH_PRICE"]) : 0,
+                            GST_PERC = row["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(row["GST_PERC"]) : 0,
+                            HSN_CODE = row["HSN_CODE"] != DBNull.Value ? row["HSN_CODE"].ToString() : "",
                         });
                     }
 

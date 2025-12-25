@@ -20,14 +20,14 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public List<CustomerUpdate> List()
+        public List<CustomerUpdate> List(CustomerListReq request)
         {
             List<CustomerUpdate> customers = new List<CustomerUpdate>();
 
             try
             {
                 
-                customers = _customerService.GetAllCustomers();
+                customers = _customerService.GetAllCustomers(request);
             }
             catch (Exception ex)
             {

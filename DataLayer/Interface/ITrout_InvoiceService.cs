@@ -12,6 +12,6 @@ namespace MicroApi.DataLayer.Interface
         Trout_InvoiceResponse commit(Trout_InvoiceUpdate model);
         TroutInvResponse GetInvoiceNo();
         Trout_InvoiceResponse Delete(int id);
-        public List<TroutCust_stateName> Getcustlist();
+        public List<TroutCust_stateName> Getcustlist(Trout_InvoiceListRequest request);
     }
 }

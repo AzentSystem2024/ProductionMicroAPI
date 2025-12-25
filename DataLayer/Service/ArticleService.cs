@@ -56,8 +56,8 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
-                        //cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
-                        //cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
+                        cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
                         // ✅ Structured parameter for SIZES (UDT_TB_ARTICLE_SIZE)
                         var sizeTable = new DataTable();
@@ -157,8 +157,8 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? string.Empty);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
-                        //cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
-                        //cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
+                        cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
                         // 🔹 Structured parameter for SIZES
                         var sizeTable = new DataTable();
@@ -271,6 +271,8 @@ namespace MicroApi.Service
                                         ((DateTimeOffset)reader["CREATED_DATE"]).DateTime : (DateTime?)null,
                                     COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString(),
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString(),
+                                    GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
                                     SIZES = new List<Sizes>(),
                                     Units = new List<ArticleUnits>()
                                 };
@@ -395,28 +397,30 @@ namespace MicroApi.Service
                                     //? ((DateTimeOffset)reader["CREATED_DATE"]).DateTime
                                     //: (DateTime?)null,
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? "",
-                                    SIZES = new List<Sizes>() // still keep sizes
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString(),
+                                    GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
+                                    // SIZES = new List<Sizes>() // still keep sizes
                                 };
                                 articles.Add(article);
                             }
 
                             // 2️⃣ Move to next result set → Sizes
-                            if (reader.NextResult())
-                            {
-                                while (reader.Read())
-                                {
-                                    long articleId = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt64(reader["ARTICLE_ID"]) : 0;
-                                    var size = new Sizes
-                                    {
-                                        SizeValue = reader["SizeValue"] != DBNull.Value ? Convert.ToInt32(reader["SizeValue"]) : 0,
-                                        OrderNo = reader["OrderNo"]?.ToString()
-                                    };
+                            //if (reader.NextResult())
+                            //{
+                            //    while (reader.Read())
+                            //    {
+                            //        long articleId = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt64(reader["ARTICLE_ID"]) : 0;
+                            //        var size = new Sizes
+                            //        {
+                            //            SizeValue = reader["SizeValue"] != DBNull.Value ? Convert.ToInt32(reader["SizeValue"]) : 0,
+                            //            OrderNo = reader["OrderNo"]?.ToString()
+                            //        };
 
-                                    var match = articles.FirstOrDefault(a => a.ID == articleId);
-                                    if (match != null)
-                                        match.SIZES.Add(size);
-                                }
-                            }
+                            //        var match = articles.FirstOrDefault(a => a.ID == articleId);
+                            //        if (match != null)
+                            //            match.SIZES.Add(size);
+                            //    }
+                            //}
 
                             // **Removed units result set reading**
 
@@ -577,7 +581,7 @@ namespace MicroApi.Service
             return res;
         }
 
-        public string GetLastOrderNoByUnitId()
+        public string GetLastOrderNoByUnitId(ArticleListReq request)
         {
             string lastOrderNo = "0";
 
@@ -588,11 +592,15 @@ namespace MicroApi.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    string query = @"SELECT ISNULL(MAX(ORDER_NO), 0) AS LastOrderNo 
-                             FROM TB_ARTICLE";
+                    string query = @"
+                SELECT ISNULL(MAX(ORDER_NO), 0) 
+                FROM TB_ARTICLE
+                WHERE COMPANY_ID = @COMPANY_ID";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
                         object result = cmd.ExecuteScalar();
 
                         if (result != null && result != DBNull.Value)
@@ -609,6 +617,7 @@ namespace MicroApi.Service
 
             return lastOrderNo;
         }
+
 
     }
 }

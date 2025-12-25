@@ -136,11 +136,11 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("LastOrderNo")]
-        public IActionResult GetLastOrderNo()
+        public IActionResult GetLastOrderNo(ArticleListReq request)
         {
             try
             {
-                var lastOrderNo = _articleService.GetLastOrderNoByUnitId();
+                var lastOrderNo = _articleService.GetLastOrderNoByUnitId(request);
                 return Ok(new { LastOrderNo = lastOrderNo });
             }
             catch (Exception ex)

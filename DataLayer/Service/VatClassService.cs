@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class VatClassService:IVatClassService
     {
-        public List<VatClass> GetAllVatClass()
+        public List<VatClass> GetAllVatClass(VatClassList request)
         {
 
             List<VatClass> vatList = new List<VatClass>();
@@ -19,6 +19,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_VAT_CLASS";
                 cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -57,6 +58,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("CODE", vatClass.CODE);
                     cmd.Parameters.AddWithValue("VAT_NAME", vatClass.VAT_NAME);
                     cmd.Parameters.AddWithValue("VAT_PERC", vatClass.VAT_PERC);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", vatClass.COMPANY_ID);
 
                     Int32 VatclassID = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -79,7 +81,7 @@ namespace MicroApi.DataLayer.Services
             {
 
 
-                string strSQL = "SELECT ID,CODE,VAT_NAME,VAT_PERC,IS_DELETED from TB_VAT_CLASS WHERE TB_VAT_CLASS.ID =" + id;
+                string strSQL = "SELECT ID,CODE,VAT_NAME,VAT_PERC,IS_DELETED,COMPANY_ID from TB_VAT_CLASS WHERE TB_VAT_CLASS.ID =" + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "VatClass");
                 if (tbl.Rows.Count > 0)
@@ -87,6 +89,7 @@ namespace MicroApi.DataLayer.Services
                     DataRow dr = tbl.Rows[0];
 
                     vatClass.ID = Convert.ToInt32(dr["ID"]);
+                    vatClass.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
                     vatClass.CODE = Convert.ToString(dr["CODE"]);
                     vatClass.VAT_NAME = Convert.ToString(dr["VAT_NAME"]);
                     vatClass.VAT_PERC = Convert.ToDecimal(dr["VAT_PERC"]);

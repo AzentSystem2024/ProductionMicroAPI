@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class SupplierService:ISupplierService
     {
-        public List<Suppliers> GetAllSuppliers()
+        public List<Suppliers> GetAllSuppliers(SuppListReq request)
         {
             List<Suppliers> supplierList = new List<Suppliers>();
 
@@ -19,6 +19,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 0);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable tbl = new DataTable();
@@ -277,7 +278,7 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public List<Supp_stateName> Getsupplist()
+        public List<Supp_stateName> Getsupplist(SuppListReq request)
         {
             var Supp_stateName = new List<Supp_stateName>();
             try
@@ -288,6 +289,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         if (connection.State != ConnectionState.Open)
                             connection.Open();

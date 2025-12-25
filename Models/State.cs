@@ -12,6 +12,7 @@
         public string? COUNTRY_NAME { get; set; }
 
         public string? IS_DELETED { get; set; }
+       // public int COMPANY_ID { get; set; }
     }
     public class StateResponse
     {
@@ -19,4 +20,9 @@
         public string message { get; set; }
         public State data { get; set; }
     }
+    //public class StateListReq
+    //{
+    //    public int COMPANY_ID { get; set; }
+       
+    //}
 }

@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IStoresService
     {
-        public List<Stores> GetAllStores();
+        public List<Stores> GetAllStores(StoresList request);
         public Int32 SaveData(Stores company);
         public Stores GetItems(int id);
         public bool DeleteStores(int id);

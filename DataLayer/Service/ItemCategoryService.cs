@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class ItemCategoryService:IItemCategoryService
     {
-        public List<ItemCategory> GetAllItemCategory()
+        public List<ItemCategory> GetAllItemCategory(ItemCategoryList request)
         {
             List<ItemCategory> itemcategoryList = new List<ItemCategory>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -18,6 +18,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_ITEM_CATEGORY";
                 cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);

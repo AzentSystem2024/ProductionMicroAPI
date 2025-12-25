@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class ItemSubCategoryService:IItemSubCategoryService
     {
-        public List<ItemSubCategory> GetAllItemSubCategory()
+        public List<ItemSubCategory> GetAllItemSubCategory(ItemSubCategoryList request)
         {
             List<ItemSubCategory> itemsubcategoryList = new List<ItemSubCategory>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -18,6 +18,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_ITEM_SUBCATEGORY";
                 cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -27,6 +28,7 @@ namespace MicroApi.DataLayer.Services
                     itemsubcategoryList.Add(new ItemSubCategory
                     {
                         ID = Convert.ToInt32(dr["ID"]),
+                        COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
                         CODE = Convert.ToString(dr["CODE"]),
                         SUBCAT_NAME = Convert.ToString(dr["SUBCAT_NAME"]),
 
@@ -56,6 +58,7 @@ namespace MicroApi.DataLayer.Services
 
                     cmd.Parameters.AddWithValue("ACTION", 1);
                     cmd.Parameters.AddWithValue("ID", itemSubCategory.ID);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", itemSubCategory.COMPANY_ID);
                     cmd.Parameters.AddWithValue("CODE", itemSubCategory.CODE);
                     cmd.Parameters.AddWithValue("SUBCAT_NAME", itemSubCategory.SUBCAT_NAME);
                     cmd.Parameters.AddWithValue("CAT_ID", itemSubCategory.CAT_ID);
@@ -79,7 +82,7 @@ namespace MicroApi.DataLayer.Services
             {
 
                 string strSQL = "SELECT TB_ITEM_SUBCATEGORY.ID, TB_ITEM_SUBCATEGORY.CODE, TB_ITEM_SUBCATEGORY.SUBCAT_NAME, " +
-                  " TB_ITEM_SUBCATEGORY.CAT_ID, TB_ITEM_CATEGORY.CAT_NAME, " +
+                  " TB_ITEM_SUBCATEGORY.CAT_ID, TB_ITEM_CATEGORY.CAT_NAME,TB_ITEM_SUBCATEGORY.COMPANY_ID, " +
                   " TB_ITEM_DEPARTMENT.ID AS DEPT_ID, TB_ITEM_DEPARTMENT.DEPT_NAME " +
                   " FROM TB_ITEM_SUBCATEGORY " +
                   " INNER JOIN TB_ITEM_CATEGORY ON TB_ITEM_SUBCATEGORY.CAT_ID = TB_ITEM_CATEGORY.ID " +
@@ -94,6 +97,7 @@ namespace MicroApi.DataLayer.Services
                     DataRow dr = tbl.Rows[0];
 
                     itemSubCategory.ID = Convert.ToInt32(dr["ID"]);
+                    itemSubCategory.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
                     itemSubCategory.CODE = Convert.ToString(dr["CODE"]);
                     itemSubCategory.SUBCAT_NAME = Convert.ToString(dr["SUBCAT_NAME"]);
                     itemSubCategory.CAT_ID = Convert.ToInt32(dr["CAT_ID"]);

@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class CustomerService:ICustomerService
     {
-        public List<CustomerUpdate> GetAllCustomers()
+        public List<CustomerUpdate> GetAllCustomers(CustomerListReq request)
         {
             List<CustomerUpdate> employeeList = new List<CustomerUpdate>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -19,6 +19,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_CUSTOMER";
                 cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -78,7 +79,7 @@ namespace MicroApi.DataLayer.Services
                         VAT_RULE_DESCRIPTION = Convert.IsDBNull(dr["VAT_RULE_DESCRIPTION"]) ? null : Convert.ToString(dr["VAT_RULE_DESCRIPTION"]),
                         CUST_TYPE = Convert.IsDBNull(dr["CUST_TYPE"]) ? 0 : Convert.ToInt32(dr["CUST_TYPE"]),
                         DEALER_ID = Convert.IsDBNull(dr["DEALER_ID"]) ? 0 : Convert.ToInt32(dr["DEALER_ID"]),
-                        WAREHOUSE_ID = Convert.IsDBNull(dr["WAREHOUSE_ID"]) ? 0 : Convert.ToInt32(dr["WAREHOUSE_ID"])
+                       // WAREHOUSE_ID = Convert.IsDBNull(dr["WAREHOUSE_ID"]) ? 0 : Convert.ToInt32(dr["WAREHOUSE_ID"])
 
 
                     });
@@ -139,7 +140,7 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? 0);
                         cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
+                        //cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
 
                         // 🔹 UDT parameter for delivery address
                         DataTable dtAddress = new DataTable();
@@ -251,7 +252,7 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? 0);
                         cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
+                        //cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
 
                         // 🔹 Add UDT Delivery Address
                         DataTable dtAddress = new DataTable();
@@ -375,7 +376,7 @@ namespace MicroApi.DataLayer.Services
                     customer.VAT_RULE_DESCRIPTION = Convert.ToString(dr["VAT_RULE_DESCRIPTION"]);
                     customer.CUST_TYPE = Convert.ToInt32(dr["CUST_TYPE"]);
                     customer.DEALER_ID = Convert.ToInt32(dr["DEALER_ID"]);
-                    customer.WAREHOUSE_ID = Convert.ToInt32(dr["WAREHOUSE_ID"]);
+                    //customer.WAREHOUSE_ID = Convert.ToInt32(dr["WAREHOUSE_ID"]);
                 }
                 string addressSQL = @"
                         SELECT ID, ADDRESS1, ADDRESS2, ADDRESS3, LOCATION, MOBILE, PHONE

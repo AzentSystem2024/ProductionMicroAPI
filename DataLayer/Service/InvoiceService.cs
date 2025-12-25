@@ -401,15 +401,11 @@ namespace MicroApi.DataLayer.Service
                                     DN_DETAIL_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     TRANSFER_NO = reader["ART_NO"]?.ToString(),
                                     ARTICLE = reader["ARTICLE"]?.ToString(),
-                                    TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value
-                                        ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy")
-                                        : null,
-                                    TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
-                                        ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"])
-                                        : 0,
-                                    PRICE = reader["PACK_PRICE"] != DBNull.Value
-                                        ? Convert.ToDecimal(reader["PACK_PRICE"])
-                                        : 0
+                                    TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0,
+                                    PRICE = reader["PACK_PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["PACK_PRICE"]) :0,
+                                    GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString()
                                 };
 
                                 transferList.Add(item);
@@ -809,7 +805,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public List<InvoiceCust_stateName> Getcustlist()
+        public List<InvoiceCust_stateName> Getcustlist(InvoiceListRequest request)
         {
             var InvoiceCust_stateName = new List<InvoiceCust_stateName>();
             try
@@ -820,6 +816,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 6);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         if (connection.State != ConnectionState.Open)
                             connection.Open();

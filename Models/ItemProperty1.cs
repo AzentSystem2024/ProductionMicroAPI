@@ -19,4 +19,9 @@
         public string message { get; set; }
         public ItemProperty1 data { get; set; }
     }
+    public class ItemPropertyList
+    {
+        public int COMPANY_ID { get; set; }
+        
+    }
 }

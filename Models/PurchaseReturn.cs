@@ -156,7 +156,8 @@
         public string UOM { get; set; }
         public string UOM_PURCH { get; set; }
         public int UOM_MULTIPLE { get; set; }
-       
+        public string HSN_CODE { get; set; }
+        public decimal GST_PERC { get; set; }
 
 
     }

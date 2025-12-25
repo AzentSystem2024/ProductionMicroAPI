@@ -17,14 +17,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<ItemCategory> List()
+        public List<ItemCategory> List(ItemCategoryList request)
         {
             List<ItemCategory> itemCategories = new List<ItemCategory>();
 
             try
             {
                 
-                itemCategories = _itemCategoryService.GetAllItemCategory();
+                itemCategories = _itemCategoryService.GetAllItemCategory(request);
             }
             catch (Exception ex)
             {

@@ -214,8 +214,8 @@
         public float ADJUSTED_AMOUNT { get; set; }
         public float RECEIVED_AMOUNT { get; set; }
         public float BALANCE_AMOUNT { get; set; }
-        //public float? GST_PERC { get; set; }
-        //public string HSN_CODE { get; set; }
+        public decimal? GST_PERC { get; set; }
+        public string HSN_CODE { get; set; }
     }
     public class CreditNoteInvoiceListResponse
     {

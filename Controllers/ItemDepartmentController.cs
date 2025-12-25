@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+
 namespace MicroApi.Controllers
 {
     //[Authorize]
@@ -16,14 +17,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<ItemDepartment> List()
+        public List<ItemDepartment> List(ItemDepartmentListReq request)
         {
             List<ItemDepartment> companies = new List<ItemDepartment>();
 
             try
             {
                 
-                companies = _itemDepartmentService.GetAllDepartment();
+                companies = _itemDepartmentService.GetAllDepartment(request);
             }
             catch (Exception ex)
             {

@@ -14,4 +14,9 @@
         public string message { get; set; }
         public ItemDepartment data { get; set; }
     }
+    public class ItemDepartmentListReq
+    {
+        public int COMPANY_ID { get; set; }
+       
+    }
 }

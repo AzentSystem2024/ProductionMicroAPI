@@ -4,6 +4,7 @@
     {
      public int HEAD_ID { get; set; }
      public DateTime DATE_TO { get; set; }
+     public int COMPANY_ID { get; set; }
     }
     public class BankReconciliationReport
     {

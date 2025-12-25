@@ -54,4 +54,8 @@
         public int STATE_ID { get; set; }
         public string? STATE_NAME { get; set; }
     }
+    public class SuppListReq
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

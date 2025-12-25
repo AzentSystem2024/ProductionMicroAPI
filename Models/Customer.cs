@@ -51,7 +51,7 @@
         public int? IS_COMPANY_BRANCH { get; set; }
         public int? DEALER_ID { get; set; }
         public int? CUST_TYPE { get; set; }
-        public int? WAREHOUSE_ID { get; set; }
+        //public int? WAREHOUSE_ID { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
 
     }
@@ -118,7 +118,7 @@
         public int? IS_COMPANY_BRANCH { get; set; }
         public int? DEALER_ID { get; set; }
         public int? CUST_TYPE { get; set; }
-        public int? WAREHOUSE_ID { get; set; }
+       // public int? WAREHOUSE_ID { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
 
     }
@@ -156,5 +156,9 @@
         public string? DESCRIPTION { get; set; }
         public int STATE_ID { get; set; }
         public string? STATE_NAME { get; set; }
+    }
+    public class CustomerListReq
+    {
+        public int COMPANY_ID { get; set; }
     }
 }

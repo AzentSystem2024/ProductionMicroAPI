@@ -51,7 +51,9 @@ namespace MicroApi.DataLayer.Services
                     CONTACT_NAME = ADO.ToString(dr["CONTACT_NAME"]),
                     PHONE = ADO.ToString(dr["PHONE"]),
                     STATE_ID = ADO.ToInt32(dr["STATE_ID"]),
-                    STATE_NAME = ADO.ToString(dr["STATE_NAME"])
+                    STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
+                    HSN_CODE = ADO.ToString(dr["HSN_CODE"]),
+                    GST_PERC = ADO.ToDecimal(dr["GST_PERC"])
 
                 });
             }
@@ -108,7 +110,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["PRICE"] = ur.PRICE;
                         dRow["AMOUNT"] = ur.AMOUNT;
                         dRow["DISC_PERCENT"] = ur.DISC_PERCENT;
-                        dRow["TAX_PERCENT"] = ur.TAX_PERCENT;
+                        dRow["TAX_PERCENT"] = ur.VAT_PERC;
                         dRow["TAX_AMOUNT"] = ur.TAX_AMOUNT;
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
@@ -225,7 +227,10 @@ namespace MicroApi.DataLayer.Services
                 {
                     ID = ADO.ToInt32(dr["ID"]),
                     DOC_NO = dr["PO_NO"] != DBNull.Value ? dr["PO_NO"].ToString() : null,
-                    PO_DATE = dr["PO_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["PO_DATE"]) : (DateTime?)null,
+                    PO_DATE = dr["PO_DATE"] != DBNull.Value
+          ? Convert.ToDateTime(dr["PO_DATE"]).ToString("dd-MM-yyyy")
+          : null,
+
                     SUPP_ID = dr["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_ID"]) : (int?)null,
                     CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : (int?)null,
                     STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : (int?)null,
@@ -293,7 +298,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["PRICE"] = ur.PRICE;
                         dRow["AMOUNT"] = ur.AMOUNT;
                         dRow["DISC_PERCENT"] = ur.DISC_PERCENT;
-                        dRow["TAX_PERCENT"] = ur.TAX_PERCENT;
+                        dRow["TAX_PERCENT"] = ur.VAT_PERC;
                         dRow["TAX_AMOUNT"] = ur.TAX_AMOUNT;
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
@@ -440,7 +445,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["PRICE"] = ur.PRICE;
                         dRow["AMOUNT"] = ur.AMOUNT;
                         dRow["DISC_PERCENT"] = ur.DISC_PERCENT;
-                        dRow["TAX_PERCENT"] = ur.TAX_PERCENT;
+                        dRow["TAX_PERCENT"] = ur.VAT_PERC;
                         dRow["TAX_AMOUNT"] = ur.TAX_AMOUNT;
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
@@ -588,7 +593,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["PRICE"] = ur.PRICE;
                         dRow["AMOUNT"] = ur.AMOUNT;
                         dRow["DISC_PERCENT"] = ur.DISC_PERCENT;
-                        dRow["TAX_PERCENT"] = ur.TAX_PERCENT;
+                        dRow["TAX_PERCENT"] = ur.VAT_PERC;
                         dRow["TAX_AMOUNT"] = ur.TAX_AMOUNT;
                         dRow["TOTAL_AMOUNT"] = ur.TOTAL_AMOUNT;
                         dRow["ITEM_DESC"] = ur.ITEM_DESC;
@@ -763,7 +768,7 @@ namespace MicroApi.DataLayer.Services
                         STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE = ADO.ToString(dr["STORE_NAME"]),
                         DOC_NO = ADO.ToString(dr["PO_NO"]),
-                        PO_DATE = Convert.ToDateTime(dr["PO_DATE"]),
+                        PO_DATE = Convert.ToString(dr["PO_DATE"]),
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                         SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
                         SUPP_CONTACT = ADO.ToString(dr["SUPP_CONTACT"]),
@@ -846,7 +851,7 @@ namespace MicroApi.DataLayer.Services
                         PRICE = ADO.ToFloat(dr3["PRICE"]),
                         AMOUNT = ADO.ToFloat(dr3["AMOUNT"]),
                         DISC_PERCENT = ADO.ToFloat(dr3["DISC_PERCENT"]),
-                        TAX_PERCENT = ADO.ToDecimal(dr3["TAX_PERCENT"]),
+                        VAT_PERC = ADO.ToDecimal(dr3["TAX_PERCENT"]),
                         TAX_AMOUNT = ADO.ToDecimal(dr3["TAX_AMOUNT"]),
                         TOTAL_AMOUNT = ADO.ToDecimal(dr3["TOTAL_AMOUNT"]),
                         ITEM_DESC = ADO.ToString(dr3["ITEM_DESC"]),

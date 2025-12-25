@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface ICustomerService
     {
-        public List<CustomerUpdate> GetAllCustomers();
+        public List<CustomerUpdate> GetAllCustomers(CustomerListReq request);
         public Int32 SaveData(Customer company);
         public Int32 UpdateCustomer(CustomerUpdate company);
         public CustomerUpdate GetItems(int id);

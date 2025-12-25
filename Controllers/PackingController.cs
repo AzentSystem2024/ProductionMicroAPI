@@ -22,9 +22,9 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost("sizes-for-combination")]
-        public IActionResult GetSizesForCombination([FromQuery] string artNo, [FromQuery] string color, [FromQuery] int categoryID, [FromQuery] int unitID)
+        public IActionResult GetSizesForCombination(ArticleSizeCombinationRequest request)
         {
-            var sizes = _packingService.GetArticleSizesForCombination(artNo, color, categoryID, unitID);
+            var sizes = _packingService.GetArticleSizesForCombination(request);
             return Ok(sizes);
         }
 
@@ -89,12 +89,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("List")]
-        public PackingListResponses GetPackingList()
+        public PackingListResponses GetPackingList(PackingListReq request)
         {
             PackingListResponses res = new PackingListResponses();
             try
             {
-                res = _packingService.GetPackingList();
+                res = _packingService.GetPackingList(request);
             }
             catch (Exception ex)
             {

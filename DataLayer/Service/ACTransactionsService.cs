@@ -1222,7 +1222,8 @@ namespace MicroApi.DataLayer.Service
                                     SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["NET_AMOUNT"]) : 0,
                                     PENDING_AMOUNT = reader["PENDING_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["PENDING_AMOUNT"]) : 0,
-                                   
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString(),
+                                    GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
 
                                 };
 

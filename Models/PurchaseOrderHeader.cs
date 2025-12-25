@@ -11,7 +11,7 @@ namespace MicroApi.Models
         public int? STORE_ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? DOC_NO { get; set; }
-        public DateTime? PO_DATE { get; set; }
+        public string? PO_DATE { get; set; }
         public int? SUPP_ID { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? SUPP_CONTACT { get; set; }
@@ -123,7 +123,7 @@ namespace MicroApi.Models
         public float? PRICE { get; set; }
         public float? AMOUNT { get; set; }
         public float? DISC_PERCENT { get; set; }
-        public decimal? TAX_PERCENT { get; set; }
+        public decimal? VAT_PERC { get; set; }
         public decimal? TAX_AMOUNT { get; set; }
         public decimal? TOTAL_AMOUNT { get; set; }
         public string? ITEM_DESC { get; set; }
@@ -178,7 +178,8 @@ namespace MicroApi.Models
         public string SUPP_ADDRESS { get; set; }
         public int STATE_ID { get; set; }
         public string STATE_NAME { get; set; }
-
+        public string HSN_CODE { get; set; }
+        public decimal GST_PERC { get; set; }
 
     }
     public class ItemInput

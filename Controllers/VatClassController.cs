@@ -17,14 +17,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<VatClass> List()
+        public List<VatClass> List(VatClassList request)
         {
             List<VatClass> vatclass = new List<VatClass>();
 
             try
             {
                 
-                vatclass = _vatClassService.GetAllVatClass();
+                vatclass = _vatClassService.GetAllVatClass(request);
             }
             catch (Exception ex)
             {

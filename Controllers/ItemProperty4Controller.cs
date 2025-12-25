@@ -17,14 +17,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<ItemProperty4> List()
+        public List<ItemProperty4> List(ItemPropertyList request)
         {
             List<ItemProperty4> itemProperty2 = new List<ItemProperty4>();
 
             try
             {
                 
-                itemProperty2 = _itemProperty2Service.GetAllItemProperty4();
+                itemProperty2 = _itemProperty2Service.GetAllItemProperty4(request);
             }
             catch (Exception ex)
             {

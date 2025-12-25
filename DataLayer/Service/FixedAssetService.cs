@@ -31,7 +31,7 @@ namespace MicroApi.DataLayer.Service
 
             return DBNull.Value;
         }
-        public FixedAssetListResponse GetFixedAssetList()
+        public FixedAssetListResponse GetFixedAssetList(FixedAssetListReq request)
         {
             FixedAssetListResponse response = new FixedAssetListResponse
             {
@@ -49,6 +49,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 0);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

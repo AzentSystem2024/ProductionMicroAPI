@@ -163,6 +163,7 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.Parameters.AddWithValue("@ACTION", 3);
                 cmd.Parameters.AddWithValue("@STORE_ID", (object)request.STORE_ID ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();

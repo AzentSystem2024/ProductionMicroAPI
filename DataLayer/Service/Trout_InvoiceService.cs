@@ -240,12 +240,10 @@ namespace MicroApi.DataLayer.Service
                                     DN_DETAIL_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     ART_NO = reader["ART_NO"]?.ToString(),
                                     ARTICLE = reader["ARTICLE"]?.ToString(),
-                                    DN_DATE = reader["DN_DATE"] != DBNull.Value
-                                        ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy")
-                                        : null,
-                                    TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value
-                                        ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"])
-                                        : 0
+                                    DN_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
+                                    TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0,
+                                    GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString()
                                 };
 
                                 transferList.Add(item);
@@ -599,7 +597,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public List<TroutCust_stateName> Getcustlist()
+        public List<TroutCust_stateName> Getcustlist(Trout_InvoiceListRequest request)
         {
             var TroutCust_stateName = new List<TroutCust_stateName>();
             try
@@ -610,6 +608,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 6);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         if (connection.State != ConnectionState.Open)
                             connection.Open();

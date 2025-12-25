@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IItemCategoryService
     {
-        public List<ItemCategory> GetAllItemCategory();
+        public List<ItemCategory> GetAllItemCategory(ItemCategoryList request);
         public Int32 SaveData(ItemCategory company);
         public ItemCategory GetItems(int id);
         public bool DeleteItemCategory(int id);

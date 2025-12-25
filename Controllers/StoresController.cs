@@ -5,7 +5,7 @@ using MicroApi.Models;
 
 namespace MicroApi.Controllers
 {
-    //[Authorize]
+   // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class StoresController : ControllerBase
@@ -17,14 +17,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<Stores> List()
+        public List<Stores> List(StoresList request)
         {
             List<Stores> store = new List<Stores>();
 
             try
             {
                 
-                store = _storesService.GetAllStores();
+                store = _storesService.GetAllStores(request);
             }
             catch (Exception ex)
             {

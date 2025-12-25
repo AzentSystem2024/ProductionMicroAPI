@@ -86,4 +86,8 @@
         public string ASSET_TYPE { get; set; }
       
     }
+    public class FixedAssetListReq
+    {
+        public int COMPANY_ID { get; set; }
+    }
 }

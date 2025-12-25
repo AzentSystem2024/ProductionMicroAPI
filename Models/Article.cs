@@ -13,7 +13,7 @@ namespace MicroApi.Models
         public string PART_NO { get; set; }
         public string ALIAS_NO { get; set; }
         //public int UNIT_ID { get; set; }
-        public string UNIT_ID { get; set; }
+        public string? UNIT_ID { get; set; }
         public int ARTICLE_TYPE { get; set; }
         public int CATEGORY_ID { get; set; }
         public string? IMAGE_NAME { get; set; }
@@ -25,8 +25,8 @@ namespace MicroApi.Models
         public int? COMPONENT_ARTICLE_ID { get; set; }
         public DateTime? CREATED_DATE { get; set; }
         public string? STANDARD_PACKING { get; set; }
-        //public string? HSN_CODE { get; set; }
-        //public float? GST_PERC { get; set; }
+        public string? HSN_CODE { get; set; }
+        public decimal? GST_PERC { get; set; }
         public int? COMPANY_ID { get; set; }
         public List<ArticleBOM> BOM { get; set; }
         public List<Sizes> Sizes { get; set; }
@@ -88,8 +88,8 @@ namespace MicroApi.Models
         public string? ComponentArticleName { get; set; }
         public DateTime? CREATED_DATE { get; set; }
         public int? COMPANY_ID { get; set; }
-        //public string? HSN_CODE { get; set; }
-        //public float? GST_PERC { get; set; }
+        public string? HSN_CODE { get; set; }
+        public decimal? GST_PERC { get; set; }
         public List<Sizes> SIZES { get; set; }
         public List<ArticleUnits> Units { get; set; }
         public string? STANDARD_PACKING { get; set; }

@@ -107,7 +107,8 @@
     public class ItemRequest
     {
         public int STORE_ID { get; set; }
-        
+        public int COMPANY_ID { get; set; }
+
     }
     public class ItemInfoResponse
     {

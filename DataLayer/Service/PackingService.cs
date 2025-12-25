@@ -38,9 +38,10 @@ namespace MicroApi.DataLayer.Service
             return units;
         }
 
-        public List<ArticleSize> GetArticleSizesForCombination(string artNo, string color, int categoryID, int unitID)
+        public List<ArticleSize> GetArticleSizesForCombination(ArticleSizeCombinationRequest request)
         {
             List<ArticleSize> articleSizes = new List<ArticleSize>();
+
             using (var connection = ADO.GetConnection())
             {
                 if (connection.State == ConnectionState.Closed)
@@ -49,11 +50,13 @@ namespace MicroApi.DataLayer.Service
                 using (var cmd = new SqlCommand("SP_ManagePackingData", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@ActionType", "GetArticlesForCombination");
-                    cmd.Parameters.AddWithValue("@ART_NO", artNo);
-                    cmd.Parameters.AddWithValue("@COLOR", color);
-                    cmd.Parameters.AddWithValue("@CATEGORY_ID", categoryID);
-                    cmd.Parameters.AddWithValue("@UNIT_ID", unitID);
+                    cmd.Parameters.AddWithValue("@ART_NO", request.artNo);
+                    cmd.Parameters.AddWithValue("@COLOR", request.color);
+                    cmd.Parameters.AddWithValue("@CATEGORY_ID", request.categoryID);
+                    cmd.Parameters.AddWithValue("@UNIT_ID", request.unitID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -61,15 +64,20 @@ namespace MicroApi.DataLayer.Service
                         {
                             articleSizes.Add(new ArticleSize
                             {
-                                ArticleID = reader.GetInt64(reader.GetOrdinal("ArticleID")),
-                                Size = reader.GetString(reader.GetOrdinal("Size"))
+                                ArticleID = reader["ArticleID"] != DBNull.Value
+                                    ? Convert.ToInt64(reader["ArticleID"])
+                                    : 0,
+
+                                Size = reader["Size"]?.ToString()
                             });
                         }
                     }
                 }
             }
+
             return articleSizes;
         }
+
 
 
 
@@ -386,7 +394,7 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public PackingListResponses GetPackingList()
+        public PackingListResponses GetPackingList(PackingListReq request)
         {
             PackingListResponses response = new PackingListResponses();
             List<PackingListItem> packingList = new List<PackingListItem>();
@@ -402,6 +410,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ActionType", "GetPackingList");
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (var reader = cmd.ExecuteReader())
                         {

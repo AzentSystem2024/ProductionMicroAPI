@@ -8,125 +8,6 @@ namespace MicroApi.DataLayer.Services
 {
     public class ItemsService:IItemsService
     {
-        //        public List<Items> GetAllItems(DateRequest request)
-        //        {
-        //            List<ITEM_STORES> itemstores = new List<ITEM_STORES>();
-        //            List<ITEM_SUPPLIERS> itemsuppliers = new List<ITEM_SUPPLIERS>();
-        //            List<ITEM_ALIAS> itemalias = new List<ITEM_ALIAS>();
-
-        //            string strSQL = @"SELECT TB_ITEMS.*,
-        //       TB_ITEM_DEPARTMENT.DEPT_NAME,
-        //       TB_ITEM_CATEGORY.CAT_NAME,
-        //       TB_ITEM_SUBCATEGORY.SUBCAT_NAME,
-        //       TB_ITEM_BRAND.BRAND_NAME,
-        //       TB_ITEM_TYPE.TYPE_NAME,
-        //       TB_COUNTRY.COUNTRY_NAME,
-        //       TB_VAT_CLASS.VAT_NAME,
-        //       TB_COSTING_METHOD.COSTING_METHOD
-        //        FROM TB_ITEMS
-        //        LEFT JOIN TB_ITEM_DEPARTMENT ON TB_ITEMS.DEPT_ID = TB_ITEM_DEPARTMENT.ID
-        //        LEFT JOIN TB_ITEM_CATEGORY ON TB_ITEMS.CAT_ID = TB_ITEM_CATEGORY.ID
-        //        LEFT JOIN TB_ITEM_SUBCATEGORY ON TB_ITEMS.SUBCAT_ID = TB_ITEM_SUBCATEGORY.ID
-        //        LEFT JOIN TB_ITEM_BRAND ON TB_ITEMS.BRAND_ID = TB_ITEM_BRAND.ID
-        //        INNER JOIN TB_ITEM_TYPE ON TB_ITEMS.TYPE_ID = TB_ITEM_TYPE.ID
-        //        LEFT JOIN TB_COUNTRY ON TB_ITEMS.ORIGIN_COUNTRY = TB_COUNTRY.ID
-        //        LEFT JOIN TB_VAT_CLASS ON TB_ITEMS.VAT_CLASS_ID = TB_VAT_CLASS.ID
-        //        INNER JOIN TB_COSTING_METHOD ON TB_ITEMS.COSTING_METHOD = TB_COSTING_METHOD.ID
-        //        WHERE TB_ITEMS.IS_DELETED = 0
-        //";
-
-        //            // Date range filter
-        //            if (request.DATE_FROM != DateTime.MinValue && request.DATE_TO != DateTime.MinValue)
-        //            {
-        //                DateTime dateFrom = request.DATE_FROM.Value.Date;
-        //                DateTime dateTo = request.DATE_TO.Value.Date.AddDays(1);
-
-        //                strSQL += $" AND TB_ITEMS.CREATED_DATE >= '{dateFrom:yyyy-MM-dd}'" +
-        //                          $" AND TB_ITEMS.CREATED_DATE < '{dateTo:yyyy-MM-dd}'";
-        //            }
-
-        //            DataTable itemsTable = ADO.GetDataTable(strSQL, "TB_ITEMS");
-
-        //            var itemsList = itemsTable.AsEnumerable().Select(dr => new Items
-        //            {
-        //                // FIXED: Use proper null/empty string handling for ID conversion
-        //                ID = int.TryParse(dr["ID"]?.ToString(), out var id) ? id : 0,
-        //                HQID = int.TryParse(dr["HQID"]?.ToString(), out var hqid) ? hqid : 0,
-        //                ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? Convert.ToString(dr["ITEM_CODE"]) : string.Empty,
-        //                BARCODE = dr["BARCODE"] != DBNull.Value ? Convert.ToString(dr["BARCODE"]) : string.Empty,
-        //                DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["DESCRIPTION"]) : string.Empty,
-        //                ARABIC_DESCRIPTION = dr["ARABIC_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["ARABIC_DESCRIPTION"]) : string.Empty,
-        //                TYPE_ID = int.TryParse(dr["TYPE_ID"]?.ToString(), out var typeId) ? typeId : 0,
-        //                TYPE_NAME = dr["TYPE_NAME"] != DBNull.Value ? Convert.ToString(dr["TYPE_NAME"]) : string.Empty,
-        //                DEPT_ID = int.TryParse(dr["DEPT_ID"]?.ToString(), out var deptId) ? deptId : 0,
-        //                DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : string.Empty,
-        //                CAT_ID = int.TryParse(dr["CAT_ID"]?.ToString(), out var catId) ? catId : 0,
-        //                CAT_NAME = dr["CAT_NAME"] != DBNull.Value ? Convert.ToString(dr["CAT_NAME"]) : string.Empty,
-        //                SUBCAT_ID = int.TryParse(dr["SUBCAT_ID"]?.ToString(), out var subcatId) ? subcatId : 0,
-        //                SUBCAT_NAME = dr["SUBCAT_NAME"] != DBNull.Value ? Convert.ToString(dr["SUBCAT_NAME"]) : string.Empty,
-        //                BRAND_ID = int.TryParse(dr["BRAND_ID"]?.ToString(), out var brandId) ? brandId : 0,
-        //                BRAND_NAME = dr["BRAND_NAME"] != DBNull.Value ? Convert.ToString(dr["BRAND_NAME"]) : string.Empty,
-        //                PACKING = dr["PACKING"] != DBNull.Value ? Convert.ToString(dr["PACKING"]) : string.Empty,
-        //                PACKING_ID = int.TryParse(dr["PACKING_ID"]?.ToString(), out var packingId) ? packingId : 0,
-        //                UNIT_ID = int.TryParse(dr["UNIT_ID"]?.ToString(), out var unitId) ? unitId : 0,
-        //                UOM = dr["UOM"] != DBNull.Value ? Convert.ToString(dr["UOM"]) : string.Empty,
-        //                LONG_DESCRIPTION = dr["LONG_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["LONG_DESCRIPTION"]) : string.Empty,
-        //                SALE_PRICE = float.TryParse(dr["SALE_PRICE"]?.ToString(), out var salePrice) ? salePrice : 0f,
-        //                COST = float.TryParse(dr["COST"]?.ToString(), out var cost) ? cost : (float?)null,
-        //                PROFIT_MARGIN = float.TryParse(dr["PROFIT_MARGIN"]?.ToString(), out var profitMargin) ? profitMargin : (float?)null,
-        //                QTY_STOCK = float.TryParse(dr["QTY_STOCK"]?.ToString(), out var qtyStock) ? qtyStock : (float?)null,
-        //                QTY_COMMITTED = float.TryParse(dr["QTY_COMMITTED"]?.ToString(), out var qtyCommitted) ? qtyCommitted : (float?)null,
-        //                CREATED_DATE = DateTime.TryParse(dr["CREATED_DATE"]?.ToString(), out var cd) ? cd : (DateTime?)null,
-        //                LAST_PO_DATE = DateTime.TryParse(dr["LAST_PO_DATE"]?.ToString(), out var poDate) ? poDate : (DateTime?)null,
-        //                LAST_GRN_DATE = DateTime.TryParse(dr["LAST_GRN_DATE"]?.ToString(), out var grnDate) ? grnDate : (DateTime?)null,
-        //                LAST_SALE_DATE = DateTime.TryParse(dr["LAST_SALE_DATE"]?.ToString(), out var saleDate) ? saleDate : (DateTime?)null,
-        //                RESTOCK_LEVEL = float.TryParse(dr["RESTOCK_LEVEL"]?.ToString(), out var restockLevel) ? restockLevel : (float?)null,
-        //                REORDER_POINT = float.TryParse(dr["REORDER_POINT"]?.ToString(), out var reorderPoint) ? reorderPoint : (float?)null,
-        //                PARENT_ITEM_ID = int.TryParse(dr["PARENT_ITEM_ID"]?.ToString(), out var parentItemId) ? parentItemId : 0,
-        //                CHILD_QTY = float.TryParse(dr["CHILD_QTY"]?.ToString(), out var childQty) ? childQty : (float?)null,
-        //                ORIGIN_COUNTRY = int.TryParse(dr["ORIGIN_COUNTRY"]?.ToString(), out var originCountry) ? originCountry : 0,
-        //                COUNTRY_NAME = dr["COUNTRY_NAME"] != DBNull.Value ? Convert.ToString(dr["COUNTRY_NAME"]) : string.Empty,
-        //                SHELF_LIFE = int.TryParse(dr["SHELF_LIFE"]?.ToString(), out var shelfLife) ? shelfLife : 0,
-        //                BIN_LOCATION = dr["BIN_LOCATION"] != DBNull.Value ? Convert.ToString(dr["BIN_LOCATION"]) : string.Empty,
-        //                NOTES = dr["NOTES"] != DBNull.Value ? Convert.ToString(dr["NOTES"]) : string.Empty,
-        //                IS_INACTIVE = bool.TryParse(dr["IS_INACTIVE"]?.ToString(), out var isInactive) ? isInactive : (bool?)null,
-        //                IS_PRICE_REQUIRED = bool.TryParse(dr["IS_PRICE_REQUIRED"]?.ToString(), out var isPriceRequired) ? isPriceRequired : (bool?)null,
-        //                IS_NOT_DISCOUNTABLE = bool.TryParse(dr["IS_NOT_DISCOUNTABLE"]?.ToString(), out var isNotDiscountable) ? isNotDiscountable : (bool?)null,
-        //                IS_NOT_PURCH_ITEM = bool.TryParse(dr["IS_NOT_PURCH_ITEM"]?.ToString(), out var isNotPurchItem) ? isNotPurchItem : (bool?)null,
-        //                IS_NOT_SALE_ITEM = bool.TryParse(dr["IS_NOT_SALE_ITEM"]?.ToString(), out var isNotSaleItem) ? isNotSaleItem : (bool?)null,
-        //                IS_NOT_SALE_RETURN = bool.TryParse(dr["IS_NOT_SALE_RETURN"]?.ToString(), out var isNotSaleReturn) ? isNotSaleReturn : (bool?)null,
-        //                IS_BLOCKED = bool.TryParse(dr["IS_BLOCKED"]?.ToString(), out var isBlocked) ? isBlocked : (bool?)null,
-        //                IMAGE_NAME = dr["IMAGE_NAME"] != DBNull.Value ? Convert.ToString(dr["IMAGE_NAME"]) : string.Empty,
-        //                ITEM_SL = int.TryParse(dr["ITEM_SL"]?.ToString(), out var itemSl) ? itemSl : 0,
-        //                SALE_PRICE1 = float.TryParse(dr["SALE_PRICE1"]?.ToString(), out var salePrice1) ? salePrice1 : (float?)null,
-        //                SALE_PRICE2 = float.TryParse(dr["SALE_PRICE2"]?.ToString(), out var salePrice2) ? salePrice2 : (float?)null,
-        //                SALE_PRICE3 = float.TryParse(dr["SALE_PRICE3"]?.ToString(), out var salePrice3) ? salePrice3 : (float?)null,
-        //                SALE_PRICE4 = float.TryParse(dr["SALE_PRICE4"]?.ToString(), out var salePrice4) ? salePrice4 : (float?)null,
-        //                SALE_PRICE5 = float.TryParse(dr["SALE_PRICE5"]?.ToString(), out var salePrice5) ? salePrice5 : (float?)null,
-        //                PURCH_PRICE = float.TryParse(dr["PURCH_PRICE"]?.ToString(), out var purchPrice) ? purchPrice : (float?)null,
-        //                PURCH_CURRENCY = int.TryParse(dr["PURCH_CURRENCY"]?.ToString(), out var purchCurrency) ? purchCurrency : 0,
-        //                IS_CONSIGNMENT = bool.TryParse(dr["IS_CONSIGNMENT"]?.ToString(), out var isConsignment) ? isConsignment : (bool?)null,
-        //                VAT_CLASS_ID = int.TryParse(dr["VAT_CLASS_ID"]?.ToString(), out var vatClassId) ? vatClassId : 0,
-        //                VAT_NAME = dr["VAT_NAME"] != DBNull.Value ? Convert.ToString(dr["VAT_NAME"]) : string.Empty,
-        //                ITEM_PROPERTY1 = int.TryParse(dr["ITEM_PROPERTY1"]?.ToString(), out var itemProperty1) ? itemProperty1 : 0,
-        //                ITEM_PROPERTY2 = int.TryParse(dr["ITEM_PROPERTY2"]?.ToString(), out var itemProperty2) ? itemProperty2 : 0,
-        //                ITEM_PROPERTY3 = int.TryParse(dr["ITEM_PROPERTY3"]?.ToString(), out var itemProperty3) ? itemProperty3 : 0,
-        //                ITEM_PROPERTY4 = int.TryParse(dr["ITEM_PROPERTY4"]?.ToString(), out var itemProperty4) ? itemProperty4 : 0,
-        //                ITEM_PROPERTY5 = int.TryParse(dr["ITEM_PROPERTY5"]?.ToString(), out var itemProperty5) ? itemProperty5 : 0,
-        //                COSTING_METHOD = int.TryParse(dr["COSTING_METHOD"]?.ToString(), out var costingMethod) ? costingMethod : 0,
-        //                COSTINGMETHOD = dr["COSTING_METHOD"] != DBNull.Value ? Convert.ToString(dr["COSTING_METHOD"]) : string.Empty,
-        //                POS_DESCRIPTION = dr["POS_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["POS_DESCRIPTION"]) : string.Empty,
-        //                IS_DIFFERENT_UOM_PURCH = bool.TryParse(dr["IS_DIFFERENT_UOM_PURCH"]?.ToString(), out var isDifferentUomPurch) ? isDifferentUomPurch : (bool?)null,
-        //                UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
-        //                UOM_MULTPLE = int.TryParse(dr["UOM_MULTPLE"]?.ToString(), out var uomMultiple) ? uomMultiple : 0,
-        //                MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
-        //                item_stores = itemstores,
-        //                item_alias = itemalias,
-        //                item_suppliers = itemsuppliers
-        //            }).ToList();
-
-        //            return itemsList;
-        //        }
         public List<Items> GetAllItems(ItemListRequest request)
         {
             List<Items> list = new List<Items>();
@@ -206,6 +87,8 @@ namespace MicroApi.DataLayer.Services
                             COSTINGMETHOD = ADO.ToString(dr["COSTING_METHOD"]),
 
                             MATRIX_CODE = ADO.ToString(dr["MATRIX_CODE"]),
+                            GST_PERC = ADO.ToDecimal(dr["GST_PERC"]),
+                            HSN_CODE = ADO.ToString(dr["HSN_CODE"]),
 
                             item_stores = new List<ITEM_STORES>(),
                             item_alias = new List<ITEM_ALIAS>(),
@@ -316,7 +199,7 @@ namespace MicroApi.DataLayer.Services
                     {
                         if (items.TYPE_ID != 8)
                         {
-                            if (string.IsNullOrEmpty(ur.SUPP_ID) || ur.SUPP_ID == "0")
+                            if (!ur.SUPP_ID.HasValue || ur.SUPP_ID.Value == 0)
                             {
                                 return (0, "Select Supplier.");
                             }
@@ -430,6 +313,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
                 cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
+                cmd.Parameters.AddWithValue("GST_PERC", items.GST_PERC);
+                cmd.Parameters.AddWithValue("HSN_CODE", items.HSN_CODE);
 
 
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
@@ -483,7 +368,7 @@ namespace MicroApi.DataLayer.Services
 
                 if (items.TYPE_ID != 8)
                 {
-                    if (items.item_suppliers != null && items.item_suppliers.Any(ur => string.IsNullOrEmpty(ur.SUPP_ID) || ur.SUPP_ID == "0"))
+                    if (items.item_suppliers != null && items.item_suppliers.Any(ur => !ur.SUPP_ID.HasValue || ur.SUPP_ID.Value == 0))
                     {
                         throw new Exception("Alert:Select Supplier...!");
                     }
@@ -659,6 +544,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
                 cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
+                cmd.Parameters.AddWithValue("GST_PERC", items.GST_PERC);
+                cmd.Parameters.AddWithValue("HSN_CODE", items.HSN_CODE);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
@@ -698,7 +585,7 @@ namespace MicroApi.DataLayer.Services
                                 "TB_ITEMS.ITEM_SL, TB_ITEMS.SALE_PRICE1, TB_ITEMS.SALE_PRICE2, TB_ITEMS.SALE_PRICE3, TB_ITEMS.SALE_PRICE4, TB_ITEMS.SALE_PRICE5, " +
                                 "TB_ITEMS.PURCH_PRICE, TB_ITEMS.PURCH_CURRENCY, TB_ITEMS.IS_CONSIGNMENT, TB_ITEMS.VAT_CLASS_ID, TB_ITEMS.ITEM_PROPERTY1, " +
                                 "TB_ITEMS.IS_DELETED, TB_ITEMS.ITEM_PROPERTY2, TB_ITEMS.ITEM_PROPERTY3, TB_ITEMS.ITEM_PROPERTY4, TB_ITEMS.ITEM_PROPERTY5, " +
-                                "TB_ITEMS.COSTING_METHOD,TB_ITEMS.COMPANY_ID, " +
+                                "TB_ITEMS.COSTING_METHOD,TB_ITEMS.COMPANY_ID,TB_ITEMS.GST_PERC,TB_ITEMS.HSN_CODE, " +
                                 "TB_ITEMS.RESTOCK_LEVEL, TB_ITEMS.REORDER_POINT, TB_ITEMS.BIN_LOCATION, TB_ITEMS.POS_DESCRIPTION, " +
 
                                 "TB_ITEMS.IS_DIFFERENT_UOM_PURCH, TB_ITEMS.UOM_PURCH, TB_ITEMS.UOM_MULTPLE,TB_ITEMS.MATRIX_CODE, " +
@@ -800,6 +687,8 @@ namespace MicroApi.DataLayer.Services
                         UOM_PURCH = dr["UOM_PURCH"] != DBNull.Value ? Convert.ToString(dr["UOM_PURCH"]) : string.Empty,
                         UOM_MULTPLE = dr["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(dr["UOM_MULTPLE"]) : 0,
                         MATRIX_CODE = dr["MATRIX_CODE"] != DBNull.Value ? Convert.ToString(dr["MATRIX_CODE"]) : string.Empty,
+                        GST_PERC = dr["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(dr["GST_PERC"]) : 0,
+                        HSN_CODE = dr["HSN_CODE"] != DBNull.Value ? Convert.ToString(dr["HSN_CODE"]) : string.Empty,
 
 
                     };
@@ -860,7 +749,7 @@ namespace MicroApi.DataLayer.Services
                     itemsuppliers.Add(new ITEM_SUPPLIERS
                     {
                         ID = dr2["ID"] != DBNull.Value ? Convert.ToInt32(dr2["ID"]) : 0,
-                        SUPP_ID = dr2["SUPP_ID"] != DBNull.Value ? Convert.ToString(dr2["SUPP_ID"]) : string.Empty,
+                        SUPP_ID = dr2["SUPP_ID"] != DBNull.Value ? Convert.ToInt32(dr2["SUPP_ID"]) : 0,
                         SUPP_NAME = dr2["SUPP_NAME"] != DBNull.Value ? Convert.ToString(dr2["SUPP_NAME"]) : string.Empty,
                         REORDER_NO = dr2["REORDER_NO"] != DBNull.Value ? Convert.ToString(dr2["REORDER_NO"]) : string.Empty,
                         COST = dr2["COST"] != DBNull.Value ? Convert.ToSingle(dr2["COST"]) : 0f,

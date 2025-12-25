@@ -19,14 +19,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<Suppliers> List()
+        public List<Suppliers> List(SuppListReq request)
         {
             List<Suppliers> Suppliers = new List<Suppliers>();
 
             try
             {
                 
-                Suppliers = _supplierService.GetAllSuppliers();
+                Suppliers = _supplierService.GetAllSuppliers(request);
             }
             catch (Exception ex)
             {
@@ -109,14 +109,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("suppdtl")]
-        public List<Supp_stateName> Getsupplist()
+        public List<Supp_stateName> Getsupplist(SuppListReq request)
         {
             List<Supp_stateName> suppliers = new List<Supp_stateName>();
 
             try
             {
 
-                suppliers = _supplierService.Getsupplist();
+                suppliers = _supplierService.Getsupplist(request);
             }
             catch (Exception ex)
             {

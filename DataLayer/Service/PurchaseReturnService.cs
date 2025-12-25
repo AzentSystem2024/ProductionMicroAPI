@@ -764,7 +764,10 @@ namespace MicroApi.DataLayer.Services
                             UOM = row["UOM"] != DBNull.Value ? row["UOM"].ToString() : "",
                             UOM_PURCH = row["UOM_PURCH"] != DBNull.Value ? row["UOM_PURCH"].ToString() : "",
                             UOM_MULTIPLE = row["UOM_MULTPLE"] != DBNull.Value ? Convert.ToInt32(row["UOM_MULTPLE"]) : 0,
-                           
+                            HSN_CODE = row["HSN_CODE"] != DBNull.Value ? row["HSN_CODE"].ToString() : "",
+                            GST_PERC = row["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(row["GST_PERC"]) : 0
+
+
 
                         });
                     }

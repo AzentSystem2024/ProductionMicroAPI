@@ -202,8 +202,9 @@
         public string UOM { get; set; }
         public decimal INVOICE_QTY { get; set; }
         public decimal PENDING_QTY { get; set; }
-        //public float? GST_PERC { get; set; }
-        //public string HSN_CODE { get; set; }
+        public decimal PRICE { get; set; }
+        public decimal? GST_PERC { get; set; }
+        public string HSN_CODE { get; set; }
     }
     public class GrnPendingQtyResponse
     {

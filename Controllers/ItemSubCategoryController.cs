@@ -5,7 +5,7 @@ using MicroApi.Models;
 
 namespace MicroApi.Controllers
 {
-   // [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ItemSubCategoryController : ControllerBase
@@ -17,14 +17,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<ItemSubCategory> List()
+        public List<ItemSubCategory> List(ItemSubCategoryList request)
         {
             List<ItemSubCategory> itemSubCategories = new List<ItemSubCategory>();
 
             try
             {
                 
-                itemSubCategories = _itemSubCategoryService.GetAllItemSubCategory();
+                itemSubCategories = _itemSubCategoryService.GetAllItemSubCategory(request);
             }
             catch (Exception ex)
             {

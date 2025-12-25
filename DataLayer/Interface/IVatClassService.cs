@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IVatClassService
     {
-        public List<VatClass> GetAllVatClass();
+        public List<VatClass> GetAllVatClass(VatClassList request);
         public Int32 SaveData(VatClass company);
         public VatClass GetItems(int id);
         public bool DeleteVatClass(int id);

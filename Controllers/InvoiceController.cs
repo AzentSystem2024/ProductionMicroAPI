@@ -155,14 +155,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("cust")]
-        public List<InvoiceCust_stateName> Getcustlist()
+        public List<InvoiceCust_stateName> Getcustlist(InvoiceListRequest request)
         {
             List<InvoiceCust_stateName> customers = new List<InvoiceCust_stateName>();
 
             try
             {
 
-                customers = _invoiceService.Getcustlist();
+                customers = _invoiceService.Getcustlist(request);
             }
             catch (Exception ex)
             {

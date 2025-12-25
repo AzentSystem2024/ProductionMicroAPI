@@ -24,6 +24,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@HEAD_ID", request.HEAD_ID);
                         cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

@@ -18,12 +18,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public FixedAssetListResponse FixedAssetList()
+        public FixedAssetListResponse FixedAssetList(FixedAssetListReq request)
         {
             FixedAssetListResponse response = new FixedAssetListResponse();
             try
             {
-                response = _fixedAssetService.GetFixedAssetList();
+                response = _fixedAssetService.GetFixedAssetList(request);
             }
             catch (Exception ex)
             {

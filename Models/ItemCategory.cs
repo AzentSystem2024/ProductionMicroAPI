@@ -29,4 +29,9 @@
         public string message { get; set; }
         public ItemCategory data { get; set; }
     }
+    public class ItemCategoryList
+    {
+        public int COMPANY_ID { get; set; }
+
+    }
 }
