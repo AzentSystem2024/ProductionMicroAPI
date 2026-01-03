@@ -18,7 +18,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_ITEM_SUBCATEGORY";
                 cmd.Parameters.AddWithValue("ACTION", 0);
-                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -35,8 +35,8 @@ namespace MicroApi.DataLayer.Services
                         CAT_ID = Convert.ToInt32(dr["CAT_ID"]),
 
                         CAT_NAME = Convert.ToString(dr["CAT_NAME"]),
-                        DEPT_ID = Convert.ToInt32(dr["DEPT_ID"]),
-                        DEPT_NAME = Convert.ToString(dr["DEPT_NAME"])
+                        //DEPT_ID = Convert.ToInt32(dr["DEPT_ID"]),
+                        //DEPT_NAME = Convert.ToString(dr["DEPT_NAME"])
 
                     });
                 }
@@ -85,8 +85,8 @@ namespace MicroApi.DataLayer.Services
                   " TB_ITEM_SUBCATEGORY.CAT_ID, TB_ITEM_CATEGORY.CAT_NAME,TB_ITEM_SUBCATEGORY.COMPANY_ID, " +
                   " TB_ITEM_DEPARTMENT.ID AS DEPT_ID, TB_ITEM_DEPARTMENT.DEPT_NAME " +
                   " FROM TB_ITEM_SUBCATEGORY " +
-                  " INNER JOIN TB_ITEM_CATEGORY ON TB_ITEM_SUBCATEGORY.CAT_ID = TB_ITEM_CATEGORY.ID " +
-                  " INNER JOIN TB_ITEM_DEPARTMENT ON TB_ITEM_CATEGORY.DEPT_ID = TB_ITEM_DEPARTMENT.ID " +
+                  " LEFT JOIN TB_ITEM_CATEGORY ON TB_ITEM_SUBCATEGORY.CAT_ID = TB_ITEM_CATEGORY.ID " +
+                  " LEFT JOIN TB_ITEM_DEPARTMENT ON TB_ITEM_CATEGORY.DEPT_ID = TB_ITEM_DEPARTMENT.ID " +
                   " WHERE TB_ITEM_SUBCATEGORY.ID = " + id;
 
 

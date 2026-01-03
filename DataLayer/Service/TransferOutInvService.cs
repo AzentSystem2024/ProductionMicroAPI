@@ -331,7 +331,8 @@ namespace MicroApi.DataLayer.Service
                                     EXPIRY_DATE = dr["EXPIRY_DATE"] == DBNull.Value ? null : Convert.ToDateTime(dr["EXPIRY_DATE"]),
                                     QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
                                     BARCODE = dr["BARCODE"]?.ToString(),
-                                    DESCRIPTION = dr["DESCRIPTION"]?.ToString()
+                                    DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
+                                    HSN_CODE = ADO.ToString(dr["HSN_CODE"]),
                                 };
 
                                 transfer.DETAILS.Add(d);

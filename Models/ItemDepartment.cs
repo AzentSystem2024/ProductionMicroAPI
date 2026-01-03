@@ -6,7 +6,7 @@
         public string CODE { get; set; }
         public string DEPT_NAME { get; set; }
         public string COMPANY_ID { get; set; }
-        public string COMPANY_NAME { get; set; }
+        public string? COMPANY_NAME { get; set; }
     }
     public class ItemDepartmentResponse
     {

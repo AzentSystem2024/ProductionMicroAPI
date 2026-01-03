@@ -165,6 +165,7 @@
         public float? TOTAL_AMOUNT { get; set; }
         public decimal? CGST { get; set; }
         public decimal? SGST { get; set; }
+        public string? HSN_CODE { get; set; }
     }
     public class PurchResponce
     {

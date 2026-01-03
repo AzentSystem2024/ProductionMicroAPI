@@ -378,7 +378,7 @@ namespace MicroApi.DataLayer.Services
                     };
                 }
 
-                strSQL = " SELECT distinct TB_PURCH_RET_DETAIL.*,  TB_COMPANY_MASTER.COMPANY_NAME,TB_STORES.STORE_NAME, " +
+                strSQL = " SELECT distinct TB_PURCH_RET_DETAIL.*,  TB_COMPANY_MASTER.COMPANY_NAME,TB_STORES.STORE_NAME,TB_ITEMS.HSN_CODE, " +
                 " TB_ITEMS.DESCRIPTION,TB_ITEMS.BARCODE,TB_GRN_DETAIL.DISC_PERCENT,TB_GRN_DETAIL.SUPP_PRICE,TB_GRN_DETAIL.RETURN_QTY,TB_ITEM_STOCK.QTY_STOCK," +
                 "TB_PURCH_HEADER.PURCH_DATE,TB_PURCH_HEADER.DOC_NO FROM TB_PURCH_RET_DETAIL " +
                 " LEFT JOIN TB_COMPANY_MASTER ON TB_PURCH_RET_DETAIL.COMPANY_ID = TB_COMPANY_MASTER.ID " +
@@ -427,7 +427,8 @@ namespace MicroApi.DataLayer.Services
                         PURCH_DATE = Convert.ToDateTime(dr3["PURCH_DATE"]),
                         DOC_NO = ADO.ToString(dr3["DOC_NO"]),
                         CGST = dr3["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["CGST"]) : null,
-                        SGST = dr3["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["SGST"]) : null
+                        SGST = dr3["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["SGST"]) : null,
+                        HSN_CODE = ADO.ToString(dr3["HSN_CODE"]),
 
                     });
                 }

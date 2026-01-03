@@ -421,6 +421,7 @@ namespace MicroApi.DataLayer.Service
                                     TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0,
                                     CGST = reader["CGST"] != DBNull.Value ? Convert.ToDecimal(reader["CGST"]) : 0,
                                     SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0,
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                 });
                             }
 

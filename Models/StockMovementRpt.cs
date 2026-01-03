@@ -24,7 +24,7 @@
     public class StockMovementRequest
     {
         public int COMPANY_ID { get; set; }
-        public int STORE_ID { get; set; }
+      //  public int STORE_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
         public int? ITEM_ID { get; set; } = 0; 

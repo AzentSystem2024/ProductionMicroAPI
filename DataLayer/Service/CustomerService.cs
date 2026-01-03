@@ -472,7 +472,7 @@ namespace MicroApi.DataLayer.Services
             }
             return deliveryAddresses;
         }
-        public List<Cust_stateName> Getcustlist()
+        public List<Cust_stateName> Getcustlist(CustomerListReq request)
         {
             var Cust_stateName = new List<Cust_stateName>();
             try
@@ -483,6 +483,7 @@ namespace MicroApi.DataLayer.Services
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 6);
+                        cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
 
                         if (connection.State != ConnectionState.Open)
                             connection.Open();

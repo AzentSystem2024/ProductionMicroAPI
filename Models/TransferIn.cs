@@ -56,7 +56,8 @@
         public double? QUANTITY_ISSUED { get; set; }
         public string? BARCODE { get; set; }
         public string? DESCRIPTION { get; set; }
-        
+        public string? HSN_CODE { get; set; }
+
     }
     public class TransferInListResponse
     {

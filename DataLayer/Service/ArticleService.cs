@@ -42,7 +42,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@PACK_QTY", article.PACK_QTY);
                         cmd.Parameters.AddWithValue("@PART_NO", article.PART_NO ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@ALIAS_NO", article.ALIAS_NO ?? (object)DBNull.Value);
-                        //cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID);
+                        cmd.Parameters.AddWithValue("@NEXT_SERIAL", article.NEXT_SERIAL);
                         cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", article.ARTICLE_TYPE);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", article.CATEGORY_ID);
@@ -142,6 +142,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@PACK_QTY", article.PACK_QTY);
                         cmd.Parameters.AddWithValue("@PART_NO", article.PART_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@ALIAS_NO", article.ALIAS_NO ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@NEXT_SERIAL", article.NEXT_SERIAL);
                         //cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? 0);
                         //cmd.Parameters.AddWithValue("@UNIT_ID", article.UNIT_ID ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@ARTICLE_TYPE", article.ARTICLE_TYPE ?? 0);
@@ -273,6 +274,7 @@ namespace MicroApi.Service
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString(),
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
+                                    NEXT_SERIAL = reader["NEXT_SERIAL"] != DBNull.Value ? Convert.ToInt32(reader["NEXT_SERIAL"]) : 0,
                                     SIZES = new List<Sizes>(),
                                     Units = new List<ArticleUnits>()
                                 };
@@ -318,8 +320,8 @@ namespace MicroApi.Service
                                         ARTICLE_ID = reader["ARTICLE_ID"] != DBNull.Value ? Convert.ToInt32(reader["ARTICLE_ID"]) : 0,
                                         ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
                                         QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
-                                        //ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
-                                        DESCRIPTION = reader["ITEM_NAME"]?.ToString(),
+                                        ITEM_CODE = reader["ITEM_NAME"]?.ToString(),
+                                        DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
                                         UOM = reader["UOM"]?.ToString()
                                     });
                                 }

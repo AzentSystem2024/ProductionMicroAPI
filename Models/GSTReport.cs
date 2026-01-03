@@ -16,6 +16,7 @@
         public decimal IGST { get; set; }
         public decimal TOTAL_GST { get; set; }
         public decimal TAXABLE_AMOUNT { get; set; }
+        public string? HSN_CODE { get; set; }
     }
     public class GSTReportRequest
     {
@@ -45,6 +46,7 @@
         public decimal IGST { get; set; }
         public decimal TOTAL_GST { get; set; }
         public decimal TAXABLE_AMOUNT { get; set; }
+        public string? HSN_CODE { get; set; }
     }
     public class GSTB2CLReportResponse
     {

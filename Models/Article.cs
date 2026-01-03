@@ -28,6 +28,7 @@ namespace MicroApi.Models
         public string? HSN_CODE { get; set; }
         public decimal? GST_PERC { get; set; }
         public int? COMPANY_ID { get; set; }
+        public int? NEXT_SERIAL { get; set; }
         public List<ArticleBOM> BOM { get; set; }
         public List<Sizes> Sizes { get; set; }
         public List<ArticleUnits> Units { get; set; }

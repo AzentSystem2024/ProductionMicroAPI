@@ -829,7 +829,7 @@ namespace MicroApi.DataLayer.Services
                     };
                 }
 
-                strSQL = "SELECT TB_PO_DETAIL.*, TB_ITEMS.DESCRIPTION, TB_ITEMS.ITEM_CODE ," +
+                strSQL = "SELECT TB_PO_DETAIL.*, TB_ITEMS.DESCRIPTION, TB_ITEMS.ITEM_CODE ,TB_ITEMS.HSN_CODE, " +
                     "TB_STORES.STORE_NAME FROM TB_PO_DETAIL " +
                     " LEFT JOIN TB_ITEMS ON TB_PO_DETAIL.ITEM_ID = TB_ITEMS.ID" +
                     " LEFT JOIN TB_STORES ON TB_PO_DETAIL.STORE_ID = TB_STORES.ID" +
@@ -863,6 +863,7 @@ namespace MicroApi.DataLayer.Services
                         ITEM_CODE = ADO.ToString(dr3["ITEM_CODE"]),
                         CGST = ADO.ToDecimal(dr3["CGST"]),
                         SGST = ADO.ToDecimal(dr3["SGST"]),
+                        HSN_CODE = ADO.ToString(dr3["HSN_CODE"]),
 
                     });
                 }

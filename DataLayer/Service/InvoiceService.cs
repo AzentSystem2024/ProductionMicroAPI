@@ -613,6 +613,7 @@ namespace MicroApi.DataLayer.Service
                                     DN_DETAIL_ID = reader["DN_DETAIL_ID"] != DBNull.Value ? Convert.ToInt32(reader["DN_DETAIL_ID"]) : (int?)null,
                                     CGST = reader["CGST"] != DBNull.Value ? Convert.ToDecimal(reader["CGST"]) : 0,
                                     SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0,
+                                    HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                 });
                             }
 

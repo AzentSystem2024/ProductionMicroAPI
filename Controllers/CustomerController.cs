@@ -140,14 +140,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("custdtl")]
-        public List<Cust_stateName> Getcustlist()
+        public List<Cust_stateName> Getcustlist(CustomerListReq request)
         {
             List<Cust_stateName> customers = new List<Cust_stateName>();
 
             try
             {
 
-                customers = _customerService.Getcustlist();
+                customers = _customerService.Getcustlist(request);
             }
             catch (Exception ex)
             {

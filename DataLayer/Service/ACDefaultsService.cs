@@ -31,6 +31,7 @@ namespace MicroApi.DataLayer.Service
                             response.DATA.Add(new AcDefaultsList
                             {
                                 NAME = rdr["NAME"].ToString(),
+                                HEAD_NAME = rdr["HEAD_NAME"].ToString(),
                                 HEAD_ID = Convert.ToInt32(rdr["HEAD_ID"])
                             });
                         }

@@ -80,6 +80,7 @@
         public string? DOC_NO { get; set; }
         public decimal? CGST { get; set; }
         public decimal? SGST { get; set; }
+        public string? HSN_CODE { get; set; }
 
     }
     public class Input

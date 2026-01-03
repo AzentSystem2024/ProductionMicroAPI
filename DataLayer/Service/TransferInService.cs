@@ -307,6 +307,7 @@ namespace MicroApi.DataLayer.Service
                                     BARCODE = dr["BARCODE"] == DBNull.Value ? null : ADO.ToString(dr["BARCODE"]),
                                     DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : ADO.ToString(dr["DESCRIPTION"]),
                                     ISSUE_DETAIL_ID = ADO.ToInt32(dr["ISSUE_DETAIL_ID"]),
+                                    HSN_CODE = ADO.ToString(dr["HSN_CODE"]),
 
                                 };
                                 transfer.DETAILS.Add(detail);

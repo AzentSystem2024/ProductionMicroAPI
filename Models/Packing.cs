@@ -32,6 +32,7 @@
         public bool? IS_ANY_COMB { get; set; }
         public DateTime? CreatedDate { get; set; }
         //public string? SIZE { get; set; }
+        public List<PackingBOM> BOM { get; set; }
         public List<PackingEntry> PackingEntries { get; set; }
     }
     public class PackingEntry
@@ -41,7 +42,18 @@
         public string? SIZE { get; set; }
     }
 
+    public class PackingBOM
+    {
 
+        public int? ITEM_ID { get; set; }
+        public float? QUANTITY { get; set; }
+        public int? PACKING_ID { get; set; }
+        public int? BOM_ID { get; set; }// FOR SELECT
+        public string? DESCRIPTION { get; set; }
+        public string? UOM { get; set; }
+        public string? ITEM_CODE { get; set; }
+
+    }
     public class PackingResponse
     {
         public int flag { get; set; }
@@ -84,6 +96,7 @@
         public bool? IS_INACTIVE { get; set; }
         public DateTime?  CreatedDate { get; set; }
         public float? COST { get; set; }
+        public List<PackingBOM> BOM { get; set; }
         public List<PackingEntry> PackingEntries { get; set; }
 
     }
@@ -165,6 +178,7 @@
         public bool IS_INACTIVE { get; set; }
         public DateTime CreatedDate { get; set; }
         public float? COST { get; set; }
+        public List<PackingBOM> BOM { get; set; }
         public List<Packing_Entry> PackingEntries { get; set; }
 
     }

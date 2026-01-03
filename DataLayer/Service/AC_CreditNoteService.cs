@@ -380,7 +380,7 @@ namespace MicroApi.DataLayer.Service
                                     LEDGER_CODE = reader["HEAD_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["HEAD_NAME"]?.ToString(),
                                     CGST = reader["CGST"] != DBNull.Value ? Convert.ToDecimal(reader["CGST"]) : 0,
-                                    SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0
+                                    SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0,
 
                                 });
                             }

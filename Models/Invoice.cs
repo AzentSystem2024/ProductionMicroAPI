@@ -224,6 +224,7 @@
         public int? DN_DETAIL_ID { get; set; }
         public decimal? CGST { get; set; }
         public decimal? SGST { get; set; }
+        public string? HSN_CODE { get; set; }
     }
     public class InvoiceHeaderSelectResponse
     {

@@ -19,6 +19,7 @@
     {
         public string NAME { get; set; }
         public int HEAD_ID { get; set; }
+        public string HEAD_NAME { get; set; }
     }
     public class AcDefaultsListResponse
     {

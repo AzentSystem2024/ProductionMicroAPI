@@ -158,6 +158,7 @@
         public double TOTAL_PAIR_QTY { get; set; }
         public decimal? CGST {  get; set; }
         public decimal? SGST { get; set; }
+        public string? HSN_CODE { get; set; }
 
     }
     public class Trout_InvoiceSelectResponse

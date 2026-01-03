@@ -167,7 +167,7 @@ namespace MicroApi.DataLayer.Service
                                         QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString() ?? "",
                                         SELLING_PRICE_INCL_VAT= reader["SELLING_PRICE_INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
                                         HSN_CODE = reader["FT_HSN_CODE"]?.ToString() ?? "",
-                                        GST_PERC = reader["FT_GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["FT_GST_PERC"]) : 0,
+                                        //GST_PERC = reader["FT_GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["FT_GST_PERC"]) : 0,
                                     };
                                 }
 

@@ -25,7 +25,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
-                        cmd.Parameters.Add("@STORE_ID", SqlDbType.Int).Value = request.STORE_ID;
+                        //cmd.Parameters.Add("@STORE_ID", SqlDbType.Int).Value = request.STORE_ID;
                         cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
                         cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
                         cmd.Parameters.Add("@ITEM_ID", SqlDbType.Int).Value = request.ITEM_ID ?? 0;

@@ -302,7 +302,7 @@ namespace MicroApi.DataLayer.Service
                                   TB_GRN_DETAIL.QUANTITY AS GRN_QTY,
                                   TB_GRN_DETAIL.INVOICE_QTY,
                                   TB_GRN_DETAIL.UOM,
-                                  TB_GRN_HEADER.GRN_NO,
+                                  TB_GRN_HEADER.GRN_NO,TB_ITEMS.HSN_CODE,
                                   TB_GRN_HEADER.GRN_DATE,TB_GRN_DETAIL.QUANTITY - TB_GRN_DETAIL.INVOICE_QTY AS PENDING_QTY
                                 FROM TB_PURCH_DETAIL
                                 LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID
@@ -352,7 +352,8 @@ namespace MicroApi.DataLayer.Service
                         PENDING_QTY = dr["PENDING_QTY"] != DBNull.Value ? Convert.ToDecimal(dr["PENDING_QTY"]) : 0,
                         TOTAL_AMOUNT = dr["AMOUNT"] != DBNull.Value ? Convert.ToSingle(dr["AMOUNT"]) : 0f,
                         CGST = dr["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["CGST"]) : null,
-                        SGST = dr["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["SGST"]) : null
+                        SGST = dr["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["SGST"]) : null,
+                        HSN_CODE = ADO.ToString(dr["HSN_CODE"]),
                     });
                 }
 

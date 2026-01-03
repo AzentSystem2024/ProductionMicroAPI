@@ -36,6 +36,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             response.DATA.Add(new GSTReport
                             {
+                                HSN_CODE = rdr["HSN_CODE"].ToString(),
                                 GSTIN = rdr["GSTIN"].ToString(),
                                 RECEIVER_NAME = rdr["RECEIVER_NAME"].ToString(),
                                 TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),
@@ -94,6 +95,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             response.DATA.Add(new GSTReportB2CL
                             {
+                                HSN_CODE = rdr["HSN_CODE"].ToString(),
                                 RECEIVER_NAME = rdr["RECEIVER_NAME"].ToString(),
                                 TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),
                                 DOC_TYPE = rdr["DOC_TYPE"].ToString(),
@@ -151,6 +153,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             response.DATA.Add(new GSTReport
                             {
+                                HSN_CODE = rdr["HSN_CODE"].ToString(),
                                 GSTIN = rdr["GSTIN"].ToString(),
                                 RECEIVER_NAME = rdr["RECEIVER_NAME"].ToString(),
                                 TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),

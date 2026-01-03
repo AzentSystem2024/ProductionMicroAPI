@@ -70,6 +70,7 @@
         public string? BARCODE { get; set; }
         public string? DESCRIPTION { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
+        public string? HSN_CODE { get; set; }
 
     }
     public class TransferOutDetailList
