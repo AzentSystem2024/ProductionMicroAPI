@@ -86,5 +86,41 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("delivery-note")]
+        public SyncResponse UploadProductionDN(ProductionDN model)
+        {
+            SyncResponse res = new SyncResponse();
+
+            try
+            {
+                res = _syncService.UploadProductionDN(model);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("delivery-return")]
+        public SyncResponse UploadProductionDR(ProductionDR model)
+        {
+            SyncResponse res = new SyncResponse();
+
+            try
+            {
+                res = _syncService.UploadProductionDR(model);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }

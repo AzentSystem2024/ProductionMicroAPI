@@ -23,6 +23,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("REMARKS", typeof(string));
                     tbl.Columns.Add("UOM", typeof(string));
                     tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
 
                     if (deliveryreturn.DETAILS != null && deliveryreturn.DETAILS.Any())
                     {
@@ -35,6 +36,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
                             dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["PACKING_ID"] = 0;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -94,6 +96,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("REMARKS", typeof(string));
                     tbl.Columns.Add("UOM", typeof(string));
                     tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
 
                     if (deliveryreturn.DETAILS != null && deliveryreturn.DETAILS.Any())
                     {
@@ -106,6 +109,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
                             dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["PACKING_ID"] = 0;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -388,6 +392,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("REMARKS", typeof(string));
                     tbl.Columns.Add("UOM", typeof(string));
                     tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
 
                     if (deliveryReturn.DETAILS != null && deliveryReturn.DETAILS.Any())
                     {
@@ -400,6 +405,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
                             dRow["UOM"] = d.UOM;
                             dRow["QUANTITY"] = d.QUANTITY;
+                            dRow["PACKING_ID"] = 0;
                             tbl.Rows.Add(dRow);
                         }
                     }

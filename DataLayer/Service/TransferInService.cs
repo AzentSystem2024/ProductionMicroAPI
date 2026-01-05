@@ -64,7 +64,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("QUANTITY", typeof(double));
                     tbl.Columns.Add("BATCH_NO", typeof(string));
                     tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
-
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
                     foreach (var d in transferIn.DETAILS)
                     {
                         tbl.Rows.Add(
@@ -75,7 +75,8 @@ namespace MicroApi.DataLayer.Service
                             d.QUANTITY_ISSUED,
                             d.QUANTITY_RECEIVED,
                             (object?)d.BATCH_NO ?? DBNull.Value,
-                            (object?)d.EXPIRY_DATE ?? DBNull.Value
+                            (object?)d.EXPIRY_DATE ?? DBNull.Value,
+                            0
                         );
                     }
 
@@ -118,6 +119,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("QUANTITY", typeof(double));
                     tbl.Columns.Add("BATCH_NO", typeof(string));
                     tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
 
                     if (transferIn.DETAILS != null && transferIn.DETAILS.Any())
                     {
@@ -132,7 +134,8 @@ namespace MicroApi.DataLayer.Service
                             dRow["QUANTITY"] = d.QUANTITY_RECEIVED;
                             dRow["BATCH_NO"] = (object?)d.BATCH_NO ?? DBNull.Value;
                             dRow["EXPIRY_DATE"] = (object?)d.EXPIRY_DATE ?? DBNull.Value;
-                            tbl.Rows.Add(dRow);
+                            dRow["PACKING_ID"] = 0;
+                           tbl.Rows.Add(dRow);
                         }
                     }
 
@@ -397,7 +400,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("QUANTITY", typeof(double));
                     tbl.Columns.Add("BATCH_NO", typeof(string));
                     tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
-
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
                     if (transferIn.DETAILS != null && transferIn.DETAILS.Any())
                     {
                         foreach (var d in transferIn.DETAILS)
@@ -411,6 +414,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["QUANTITY"] = d.QUANTITY_RECEIVED;
                             dRow["BATCH_NO"] = (object?)d.BATCH_NO ?? DBNull.Value;
                             dRow["EXPIRY_DATE"] = (object?)d.EXPIRY_DATE ?? DBNull.Value;
+                            dRow["PACKING_ID"] = 0;
                             tbl.Rows.Add(dRow);
                         }
                     }

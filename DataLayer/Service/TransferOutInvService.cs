@@ -26,6 +26,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("AMOUNT", typeof(double));
                 tbl.Columns.Add("BATCH_NO", typeof(string));
                 tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+                tbl.Columns.Add("PACKING_ID", typeof(int));
 
                 if (transferOut.DETAILS != null && transferOut.DETAILS.Any())
                 {
@@ -39,6 +40,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["AMOUNT"] = (ur.QUANTITY ?? 0) * ur.COST;
                         dRow["BATCH_NO"] = ur.BATCH_NO ?? "";
                         dRow["EXPIRY_DATE"] = (object?)ur.EXPIRY_DATE ?? DBNull.Value;
+                        dRow["PACKING_ID"] = 0;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -96,6 +98,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("AMOUNT", typeof(double));
                     tbl.Columns.Add("BATCH_NO", typeof(string));
                     tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
 
                     if (transferOut.DETAILS != null && transferOut.DETAILS.Any())
                     {
@@ -113,7 +116,7 @@ namespace MicroApi.DataLayer.Service
 
                             dRow["BATCH_NO"] = ur.BATCH_NO ?? "";
                             dRow["EXPIRY_DATE"] = ur.EXPIRY_DATE ?? (object)DBNull.Value;
-
+                            dRow["PACKING_ID"] = 0;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -423,6 +426,7 @@ namespace MicroApi.DataLayer.Service
                     tbl.Columns.Add("AMOUNT", typeof(double));
                     tbl.Columns.Add("BATCH_NO", typeof(string));
                     tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
 
                     if (transferOut.DETAILS != null && transferOut.DETAILS.Any())
                     {
@@ -436,6 +440,7 @@ namespace MicroApi.DataLayer.Service
                             dRow["AMOUNT"] = (ur.QUANTITY ?? 0) * (ur.COST ?? 0);
                             dRow["BATCH_NO"] = (object?)ur.BATCH_NO ?? DBNull.Value;
                             dRow["EXPIRY_DATE"] = (object?)ur.EXPIRY_DATE ?? DBNull.Value;
+                            dRow["PACKING_ID"] = 0;
                             tbl.Rows.Add(dRow);
                         }
                     }

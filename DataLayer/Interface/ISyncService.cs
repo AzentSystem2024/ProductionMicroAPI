@@ -8,6 +8,8 @@ namespace MicroApi.DataLayer.Interface
         SyncResponse UploadPackProduction(PackProductionSync model);
         SyncResponse UploadProductionTransferOut(ProductionTransferOut model);
         SyncResponse UploadProductionTransferIn(ProductionTransferIn model);
+        SyncResponse UploadProductionDN(ProductionDN model);
+        SyncResponse UploadProductionDR(ProductionDR model);
 
     }
 }

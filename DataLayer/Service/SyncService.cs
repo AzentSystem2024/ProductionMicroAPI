@@ -132,15 +132,15 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.AddWithValue("@ID", 0);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
                     cmd.Parameters.AddWithValue("@TRANSFER_DATE", model.TRANSFER_DATE);
                     cmd.Parameters.AddWithValue("@DEST_STORE_ID", model.DEST_STORE_ID);
-                    cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT);
                     cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                     cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? "");
-                    cmd.Parameters.AddWithValue("@REASON_ID", (object)model.REASON_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@REASON_ID", (object?)model.REASON_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@TRANS_ID", 0);
 
                     // 🔹 Build TVP
@@ -148,30 +148,42 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("ITEM_ID", typeof(int));
                     dt.Columns.Add("UOM", typeof(string));
                     dt.Columns.Add("QUANTITY", typeof(decimal));
-                    dt.Columns.Add("COST", typeof(double));
-                    dt.Columns.Add("AMOUNT", typeof(double));
+                    dt.Columns.Add("COST", typeof(decimal));
+                    dt.Columns.Add("AMOUNT", typeof(decimal));
                     dt.Columns.Add("BATCH_NO", typeof(string));
                     dt.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+                    dt.Columns.Add("PACKING_ID", typeof(int));
+
+                    decimal netAmount = 0;
 
                     foreach (var item in model.TransferItems)
                     {
-                        decimal quantity = item.QUANTITY ?? 0;
-                        double cost = item.COST ?? 0;
-                        double amount = (double)quantity * cost;
+                        decimal qty = item.QUANTITY ?? 0m;
+                        decimal cost = (decimal)(item.COST ?? 0);
+                        decimal amount = qty * cost;
+
+                        netAmount += amount;
 
                         dt.Rows.Add(
                             item.ITEM_ID,
                             item.UOM ?? "",
-                            quantity,cost, amount,
+                            qty,
+                            cost,
+                            amount,
                             item.BATCH_NO ?? "",
-                            item.EXPIRY_DATE ?? (object)DBNull.Value
+                            item.EXPIRY_DATE ?? (object)DBNull.Value,
+                            item.PACKING_ID
                         );
                     }
+
+                    // 🔹 Send computed NET_AMOUNT
+                    cmd.Parameters.AddWithValue("@NET_AMOUNT", netAmount);
 
                     SqlParameter tvp = cmd.Parameters.Add("@UDT_TB_TRANSFER_DETAIL", SqlDbType.Structured);
                     tvp.TypeName = "UDT_TB_TRANSFER_DETAIL";
                     tvp.Value = dt;
 
+                   // connection.Open();
                     cmd.ExecuteNonQuery();
 
                     response.Flag = 1;
@@ -186,6 +198,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
         public SyncResponse UploadProductionTransferIn(ProductionTransferIn model)
         {
             SyncResponse response = new SyncResponse();
@@ -201,17 +214,19 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
                     cmd.Parameters.AddWithValue("@REC_DATE", model.REC_DATE);
-                    cmd.Parameters.AddWithValue("@TROUT_ID", 0);
                     cmd.Parameters.AddWithValue("@ORIGIN_STORE_ID", model.ORIGIN_STORE_ID);
                     cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                     cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? "");
                     cmd.Parameters.AddWithValue("@ISSUE_ID", (object?)model.ISSUE_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@REASON_ID", (object?)model.REASON_ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT);
+
+                    // 🔹 Calculate NET_AMOUNT properly
+                    decimal netAmount = model.Items.Sum(x => (x.QUANTITY ?? 0) * (x.COST ?? 0));
+                    cmd.Parameters.AddWithValue("@NET_AMOUNT", netAmount);
                     cmd.Parameters.AddWithValue("@TRANS_ID", 0);
 
-                    // 🔹 Build TVP
+                    // 🔹 Build TVP DataTable
                     DataTable dt = new DataTable();
                     dt.Columns.Add("ISSUE_DETAIL_ID", typeof(int));
                     dt.Columns.Add("ITEM_ID", typeof(int));
@@ -221,18 +236,20 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("QUANTITY", typeof(decimal));
                     dt.Columns.Add("BATCH_NO", typeof(string));
                     dt.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+                    dt.Columns.Add("PACKING_ID", typeof(int));
 
                     foreach (var item in model.Items)
                     {
                         dt.Rows.Add(
-                            0,
+                            item.ISSUE_DETAIL_ID ?? 0,
                             item.ITEM_ID,
                             item.UOM ?? "",
-                            item.COST,
-                            item.QUANTITY,
-                            item.QUANTITY,
+                            item.COST ?? 0,
+                            item.QUANTITY_ISSUED ?? 0,
+                            item.QUANTITY ?? 0,
                             item.BATCH_NO ?? "",
-                            (object?)item.EXPIRY_DATE ?? DBNull.Value
+                            (object?)item.EXPIRY_DATE ?? DBNull.Value,
+                            item.PACKING_ID
                         );
                     }
 
@@ -240,7 +257,7 @@ namespace MicroApi.DataLayer.Service
                     tvp.TypeName = "UDT_TB_TRANSFERINV_IN";
                     tvp.Value = dt;
 
-                    con.Open();
+                   // con.Open();
                     cmd.ExecuteNonQuery();
 
                     response.Flag = 1;
@@ -250,11 +267,153 @@ namespace MicroApi.DataLayer.Service
             catch (Exception ex)
             {
                 response.Flag = 0;
-                response.Message = "ERROR : " + ex.Message;
+                response.Message = "ERROR: " + ex.Message;
             }
 
             return response;
         }
+        public SyncResponse UploadProductionDN(ProductionDN model)
+        {
+            SyncResponse response = new SyncResponse();
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_PRODUCTION_DN", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ID", 0);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
+                    cmd.Parameters.AddWithValue("@DN_DATE", model.DN_DATE);
+                    cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? "");
+                    cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
+
+                    cmd.Parameters.AddWithValue("@CONTACT_NAME", model.CONTACT_NAME ?? "");
+                    cmd.Parameters.AddWithValue("@CONTACT_PHONE", model.CONTACT_PHONE ?? "");
+                    cmd.Parameters.AddWithValue("@CONTACT_FAX", model.CONTACT_FAX ?? "");
+                    cmd.Parameters.AddWithValue("@CONTACT_MOBILE", model.CONTACT_MOBILE ?? "");
+
+                    cmd.Parameters.AddWithValue("@SALESMAN_ID", model.SALESMAN_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                    cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
+                    cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? "");
+                    cmd.Parameters.AddWithValue("@DN_TYPE", model.DN_TYPE);
+
+                    // 🔹 Build TVP
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("SO_DETAIL_ID", typeof(int));
+                    dt.Columns.Add("REMARKS", typeof(string));
+                    dt.Columns.Add("QUANTITY", typeof(decimal));
+                    dt.Columns.Add("PACKING_ID", typeof(int));
+
+                    decimal totalQty = 0;
+
+                    foreach (var item in model.Items)
+                    {
+                        totalQty += item.QUANTITY;
+                        dt.Rows.Add(item.SO_DETAIL_ID, item.REMARKS ?? "", item.QUANTITY, item.PACKING_ID);
+                    }
+
+                    cmd.Parameters.AddWithValue("@TOTAL_QTY", totalQty);
+
+                    SqlParameter tvp = cmd.Parameters.Add("@UDT_TB_DN_DETAIL", SqlDbType.Structured);
+                    tvp.TypeName = "UDT_TB_DN_DETAIL";
+                    tvp.Value = dt;
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+
+                    response.Flag = 1;
+                    response.Message = "Delivery Note created successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "ERROR: " + ex.Message;
+            }
+
+            return response;
+        }
+        public SyncResponse UploadProductionDR(ProductionDR model)
+        {
+            SyncResponse response = new SyncResponse();
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_PRODUCTION_DR", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ID", 0);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
+                    cmd.Parameters.AddWithValue("@DR_DATE", model.DR_DATE);
+                    cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? "");
+                    cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
+
+                    cmd.Parameters.AddWithValue("@CONTACT_NAME", model.CONTACT_NAME ?? "");
+                    cmd.Parameters.AddWithValue("@CONTACT_PHONE", model.CONTACT_PHONE ?? "");
+                    cmd.Parameters.AddWithValue("@CONTACT_FAX", model.CONTACT_FAX ?? "");
+                    cmd.Parameters.AddWithValue("@CONTACT_MOBILE", model.CONTACT_MOBILE ?? "");
+
+                    cmd.Parameters.AddWithValue("@SALESMAN_ID", model.SALESMAN_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                    cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
+                    cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? "");
+
+                    // 🔹 Build TVP
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("SO_DETAIL_ID", typeof(int));
+                    dt.Columns.Add("DN_DETAIL_ID", typeof(int));
+                    dt.Columns.Add("ITEM_ID", typeof(int));
+                    dt.Columns.Add("REMARKS", typeof(string));
+                    dt.Columns.Add("UOM", typeof(string));
+                    dt.Columns.Add("QUANTITY", typeof(decimal));
+                    dt.Columns.Add("PACKING_ID", typeof(int));
+
+                    decimal totalQty = 0;
+
+                    foreach (var item in model.Items)
+                    {
+                        totalQty += item.QUANTITY;
+
+                        dt.Rows.Add(
+                            item.SO_DETAIL_ID,
+                            item.DN_DETAIL_ID,
+                            item.ITEM_ID,
+                            item.REMARKS ?? "",
+                            item.UOM ?? "",
+                            item.QUANTITY,
+                            item.PACKING_ID
+                        );
+                    }
+
+                    cmd.Parameters.AddWithValue("@TOTAL_QTY", totalQty);
+
+                    SqlParameter tvp = cmd.Parameters.Add("@UDT_TB_DR_DETAIL", SqlDbType.Structured);
+                    tvp.TypeName = "UDT_TB_DR_DETAIL";
+                    tvp.Value = dt;
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+
+                    response.Flag = 1;
+                    response.Message = "Delivery Receipt created successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "ERROR: " + ex.Message;
+            }
+
+            return response;
+        }
+
 
     }
 }
