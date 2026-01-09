@@ -11,7 +11,9 @@ namespace MicroApi.DataLayer.Service
         public LoginResponse VerifyLogin(Login loginInput)
         {
             var response = new LoginResponse();
-            if (string.IsNullOrWhiteSpace(loginInput.LOGIN_NAME) || string.IsNullOrWhiteSpace(loginInput.PASSWORD))
+
+            if (string.IsNullOrWhiteSpace(loginInput.LOGIN_NAME) ||
+                string.IsNullOrWhiteSpace(loginInput.PASSWORD))
             {
                 response.flag = 0;
                 response.Message = "Username and password are required.";
@@ -20,190 +22,190 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                using (var connection = ADO.GetConnection())
+                using var connection = ADO.GetConnection();
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using var cmd = new SqlCommand("SP_VERIFY_LOGIN", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+
+                // Required params
+                cmd.Parameters.AddWithValue("@LOGIN_NAME", loginInput.LOGIN_NAME);
+                cmd.Parameters.AddWithValue("@PASSWORD", AzentLibrary.Library.EncryptString(loginInput.PASSWORD));
+                cmd.Parameters.AddWithValue("@COMPANY_ID", loginInput.COMPANY_ID ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@FINANCIAL_YEAR_ID", loginInput.FINANCIAL_YEAR_ID ?? (object)DBNull.Value);
+
+                // Audit params (very important)
+                cmd.Parameters.AddWithValue("@LOCAL_IP", loginInput.LOCAL_IP ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@COMPUTER_NAME", loginInput.COMPUTER_NAME ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@DOMAIN_NAME", loginInput.DOMAIN_NAME ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@COMPUTER_USER", loginInput.COMPUTER_USER ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@INTERNET_IP", loginInput.INTERNET_IP ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@SYSTEM_TIME_UTC", DateTime.UtcNow);
+                cmd.Parameters.AddWithValue("@FORCE_LOGIN", false);
+                cmd.Parameters.AddWithValue("@TOKEN", Guid.NewGuid().ToString("N"));
+
+                using var reader = cmd.ExecuteReader();
+
+                // ---------- RESULT 1 : FLAG + MESSAGE ----------
+                if (reader.Read())
                 {
-                    if (connection.State == ConnectionState.Closed)
-                        connection.Open();
+                    response.flag = Convert.ToInt32(reader["FLAG"]);
+                    response.Message = reader["MESSAGE"].ToString();
+                }
 
-                    using (var cmd = new SqlCommand("SP_VERIFY_LOGIN", connection))
+                if (response.flag != 1)
+                    return response;
+
+                // ---------- RESULT 2 : USER INFO ----------
+                if (reader.NextResult() && reader.Read())
+                {
+                    response.USER_ID = reader["USER_ID"] as int?;
+                    response.USER_NAME = reader["USER_NAME"]?.ToString();
+                    response.DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString();
+                    response.COUNTRY_NAME = reader["COUNTRY_NAME"]?.ToString();
+
+                    response.USER_ROLE_ID = Convert.ToInt32(reader["USER_ROLE"]);
+                    response.USER_ROLE_NAME = reader["UserRole"]?.ToString();
+                }
+
+                // ---------- RESULT 3 : ASSIGNED COMPANIES ----------
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@LOGIN_NAME", loginInput.LOGIN_NAME);
-                        cmd.Parameters.AddWithValue("@PASSWORD", AzentLibrary.Library.EncryptString(loginInput.PASSWORD ?? ""));
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", loginInput.COMPANY_ID ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@FINANCIAL_YEAR_ID", loginInput.FINANCIAL_YEAR_ID ?? (object)DBNull.Value);
-
-                        using (var reader = cmd.ExecuteReader())
+                        response.Companies.Add(new CompanyList
                         {
-                            // Result 1: FLAG + MESSAGE
-                            if (reader.Read())
+                            COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
+                            COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
+                        });
+                    }
+                }
+
+                // ---------- RESULT 4 : SELECTED COMPANY ----------
+                if (reader.NextResult() && reader.Read())
+                {
+                    response.SELECTED_COMPANY = new CompanyList
+                    {
+                        COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
+                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                        STATE_ID = Convert.ToInt32(reader["ID"]),
+                        STATE_NAME = reader["STATE_NAME"]?.ToString()
+                    };
+                }
+
+                // ---------- RESULT 5 : MENU ----------
+                if (reader.NextResult())
+                {
+                    var menuGroups = new Dictionary<int, MenuGroup>();
+
+                    while (reader.Read())
+                    {
+                        int groupId = Convert.ToInt32(reader["MenuGroupID"]);
+
+                        if (!menuGroups.TryGetValue(groupId, out var group))
+                        {
+                            group = new MenuGroup
                             {
-                                response.flag = reader["FLAG"] != DBNull.Value ? Convert.ToInt32(reader["FLAG"]) : 0;
-                                response.Message = reader["MESSAGE"]?.ToString();
-                            }
-
-                            if (response.flag == 1)
-                            {
-                                // Result 2: USER INFO
-                                if (reader.NextResult() && reader.Read())
-                                {
-                                    response.USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]) : (int?)null;
-                                    response.USER_NAME = reader["USER_NAME"]?.ToString();
-                                    response.DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString();
-                                    response.COUNTRY_NAME = reader["COUNTRY_NAME"]?.ToString();
-                                    response.USER_ROLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null;
-                                    response.USER_ROLE_NAME = reader["UserRole"]?.ToString();
-                                }
-
-                                // Result 3: Assigned Companies
-                                if (reader.NextResult())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        response.Companies.Add(new CompanyList
-                                        {
-                                            COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
-                                            COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
-                                            //STATE_NAME = reader["STATE_NAME"]?.ToString()
-                                        });
-                                    }
-                                }
-
-                                // Result 4: Selected Company
-                                if (reader.NextResult() && reader.Read())
-                                {
-                                    response.SELECTED_COMPANY = new CompanyList
-                                    {
-                                        COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
-                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
-                                        STATE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                                        STATE_NAME = reader["STATE_NAME"]?.ToString()
-                                    };
-                                }
-
-
-                                // Result 5: Menu Permissions
-                                if (reader.NextResult())
-                                {
-                                    var menuGroups = new Dictionary<int, MenuGroup>();
-                                    while (reader.Read())
-                                    {
-                                        int menuGroupId = reader["MenuGroupID"] != DBNull.Value ? Convert.ToInt32(reader["MenuGroupID"]) : 0;
-                                        if (!menuGroups.ContainsKey(menuGroupId))
-                                        {
-                                            menuGroups[menuGroupId] = new MenuGroup
-                                            {
-                                                MenuGroupID = menuGroupId,
-                                                Text = reader["Text"]?.ToString(),
-                                                Icon = reader["Icon"]?.ToString(),
-                                                MenuGroupOrder = reader["MenuGroupOrder"] != DBNull.Value ? Convert.ToDecimal(reader["MenuGroupOrder"]) : 0,
-                                                Menus = new List<Menu>()
-                                            };
-                                        }
-                                        var group = menuGroups[menuGroupId];
-                                        group.Menus.Add(new Menu
-                                        {
-                                            MenuID = reader["MenuID"] != DBNull.Value ? Convert.ToInt32(reader["MenuID"]) : 0,
-                                            MenuName = reader["MenuName"]?.ToString(),
-                                            MenuOrder = reader["MenuOrder"] != DBNull.Value ? Convert.ToDecimal(reader["MenuOrder"]) : 0,
-                                            Selected = reader["Selected"] != DBNull.Value && Convert.ToBoolean(reader["Selected"]),
-                                            CanAdd = reader["CanAdd"] != DBNull.Value && Convert.ToBoolean(reader["CanAdd"]),
-                                            CanView = reader["CanView"] != DBNull.Value && Convert.ToBoolean(reader["CanView"]),
-                                            CanEdit = reader["CanEdit"] != DBNull.Value && Convert.ToBoolean(reader["CanEdit"]),
-                                            CanApprove = reader["CanApprove"] != DBNull.Value && Convert.ToBoolean(reader["CanApprove"]),
-                                            CanDelete = reader["CanDelete"] != DBNull.Value && Convert.ToBoolean(reader["CanDelete"]),
-                                            CanPrint = reader["CanPrint"] != DBNull.Value && Convert.ToBoolean(reader["CanPrint"]),
-                                            Path = reader["Path"]?.ToString()
-                                        });
-                                    }
-                                    response.MenuGroups = menuGroups.Values.ToList();
-                                }
-
-                                // Result 6: Financial Years
-                                if (reader.NextResult())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        response.FINANCIAL_YEARS.Add(new FinancialYear
-                                        {
-                                            FIN_ID = reader["FIN_ID"] != DBNull.Value ? Convert.ToInt32(reader["FIN_ID"]) : 0,
-                                            FIN_CODE = reader["FIN_CODE"]?.ToString(),
-                                            DATE_FROM = reader["DATE_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["DATE_FROM"]) : DateTime.MinValue,
-                                            DATE_TO = reader["DATE_TO"] != DBNull.Value ? Convert.ToDateTime(reader["DATE_TO"]) : DateTime.MinValue,
-                                            IS_CLOSED = reader["IS_CLOSED"] != DBNull.Value && Convert.ToBoolean(reader["IS_CLOSED"])
-                                        });
-                                    }
-                                }
-
-                                if (reader.NextResult())
-                                {
-                                }
-
-                                // Result 8: GENERAL SETTINGS
-                                if (reader.NextResult() && reader.Read())
-                                {
-                                    response.GeneralSettings = new GeneralSettings
-                                    {
-                                        ID_PREFIX = reader["ID_PREFIX"]?.ToString() ?? "",
-                                        DateFormat = reader["DateFormat"]?.ToString() ?? "dd-mm-yyyy",
-                                        CURRENCY_NAME = reader["CURRENCY_NAME"]?.ToString() ?? "",
-                                        SYMBOL = reader["SYMBOL"]?.ToString() ?? "",
-                                        CODE = reader["CODE"]?.ToString() ?? "",
-                                        CUST_CODE_AUTO = reader["CUST_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["CUST_CODE_AUTO"]),
-                                        SUPP_CODE_AUTO = reader["SUPP_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["SUPP_CODE_AUTO"]),
-                                        EMP_CODE_AUTO = reader["EMP_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["EMP_CODE_AUTO"]),
-                                        ITEM_CODE_AUTO = reader["ITEM_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["ITEM_CODE_AUTO"]),
-                                        DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString() ?? "",
-                                        ITEM_PROPERTY1 = reader["ITEM_PROPERTY1"]?.ToString() ?? "",
-                                        ITEM_PROPERTY2 = reader["ITEM_PROPERTY2"]?.ToString() ?? "",
-                                        ITEM_PROPERTY3 = reader["ITEM_PROPERTY3"]?.ToString() ?? "",
-                                        ITEM_PROPERTY4 = reader["ITEM_PROPERTY4"]?.ToString() ?? "",
-                                        ITEM_PROPERTY5 = reader["ITEM_PROPERTY5"]?.ToString() ?? "",
-                                        REFERENCE_LABEL = reader["REFERENCE_LABEL"]?.ToString() ?? "",
-                                        COMMENT_LABEL = reader["COMMENT_LABEL"]?.ToString() ?? "",
-                                        STATE_LABEL = reader["STATE_LABEL"]?.ToString() ?? "",
-                                        VAT_TITLE = reader["VAT_TITLE"]?.ToString() ?? "",
-                                        STORE_TITLE = reader["STORE_TITLE"]?.ToString() ?? "",
-                                        ENABLE_MATRIX_CODE= reader["ENABLE_MATRIX_CODE"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_MATRIX_CODE"]),
-                                        QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString() ?? "",
-                                        SELLING_PRICE_INCL_VAT= reader["SELLING_PRICE_INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
-                                        HSN_CODE = reader["FT_HSN_CODE"]?.ToString() ?? "",
-                                        //GST_PERC = reader["FT_GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["FT_GST_PERC"]) : 0,
-                                    };
-                                }
-
-                                // Result 9: VAT Info
-                                if (reader.NextResult() && reader.Read())
-                                {
-                                    response.VAT_ID = reader["VAT_ID"] != DBNull.Value ? Convert.ToInt32(reader["VAT_ID"]) : (int?)null;
-                                    response.VAT_NAME = reader["VAT_NAME"]?.ToString();
-                                }
-                                if (reader.NextResult())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        response.Configuration.Add(new StoreInfo
-                                        {
-                                            STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
-                                            STORE_NAME = reader["STORE_NAME"]?.ToString()
-                                        });
-                                    }
-                                }
-                            }
+                                MenuGroupID = groupId,
+                                Text = reader["Text"]?.ToString(),
+                                Icon = reader["Icon"]?.ToString(),
+                                MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
+                            };
+                            menuGroups[groupId] = group;
                         }
+
+                        group.Menus.Add(new Menu
+                        {
+                            MenuID = Convert.ToInt32(reader["MenuID"]),
+                            MenuName = reader["MenuName"]?.ToString(),
+                            MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
+                            Selected = Convert.ToBoolean(reader["Selected"]),
+                            CanAdd = Convert.ToBoolean(reader["CanAdd"]),
+                            CanView = Convert.ToBoolean(reader["CanView"]),
+                            CanEdit = Convert.ToBoolean(reader["CanEdit"]),
+                            CanApprove = Convert.ToBoolean(reader["CanApprove"]),
+                            CanDelete = Convert.ToBoolean(reader["CanDelete"]),
+                            CanPrint = Convert.ToBoolean(reader["CanPrint"]),
+                            Path = reader["Path"]?.ToString()
+                        });
+                    }
+
+                    response.MenuGroups = menuGroups.Values.ToList();
+                }
+
+                // ---------- RESULT 6 : FINANCIAL YEAR ----------
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        response.FINANCIAL_YEARS.Add(new FinancialYear
+                        {
+                            FIN_ID = Convert.ToInt32(reader["FIN_ID"]),
+                            FIN_CODE = reader["FIN_CODE"]?.ToString(),
+                            DATE_FROM = Convert.ToDateTime(reader["DATE_FROM"]),
+                            DATE_TO = Convert.ToDateTime(reader["DATE_TO"]),
+                            IS_CLOSED = Convert.ToBoolean(reader["IS_CLOSED"])
+                        });
+                    }
+                }
+
+                // ---------- RESULT 7 : PRIVILEGE (SKIP FULLY) ----------
+                if (reader.NextResult())
+                {
+                    while (reader.Read()) { }
+                }
+
+                // ---------- RESULT 8 : GENERAL SETTINGS ----------
+                if (reader.NextResult() && reader.Read())
+                {
+                    response.GeneralSettings = new GeneralSettings
+                    {
+                        ID_PREFIX = reader["ID_PREFIX"]?.ToString(),
+                        DateFormat = reader["DateFormat"]?.ToString(),
+                        CURRENCY_NAME = reader["CURRENCY_NAME"]?.ToString(),
+                        SYMBOL = reader["SYMBOL"]?.ToString(),
+                        CODE = reader["CODE"]?.ToString(),
+                        DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString(),
+                        VAT_TITLE = reader["VAT_TITLE"]?.ToString(),
+                        STORE_TITLE = reader["STORE_TITLE"]?.ToString(),
+                        ENABLE_MATRIX_CODE = Convert.ToBoolean(reader["ENABLE_MATRIX_CODE"]),
+                        QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString(),
+                        SELLING_PRICE_INCL_VAT = Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
+                        HSN_CODE = reader["FT_HSN_CODE"]?.ToString()
+                    };
+                }
+
+                // ---------- RESULT 9 : VAT INFO ----------
+                if (reader.NextResult() && reader.Read())
+                {
+                    response.VAT_ID = Convert.ToInt32(reader["VAT_ID"]);
+                    response.VAT_NAME = reader["VAT_NAME"]?.ToString();
+                }
+
+                // ---------- RESULT 10 : STORE CONFIG ----------
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        response.Configuration.Add(new StoreInfo
+                        {
+                            STORE_ID = Convert.ToInt32(reader["STORE_ID"]),
+                            STORE_NAME = reader["STORE_NAME"]?.ToString()
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
                 response.flag = 0;
-                response.Message = "An error occurred: " + ex.Message;
+                response.Message = ex.Message;
             }
-
-            response.GeneralSettings ??= new GeneralSettings();
 
             return response;
         }
+
         public InitLoginResponse InitLoginData(string loginName)
         {
             var response = new InitLoginResponse();

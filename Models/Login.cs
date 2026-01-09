@@ -6,6 +6,12 @@
         public string? PASSWORD { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? FINANCIAL_YEAR_ID { get; set; }
+
+        public string? LOCAL_IP { get; set; }
+        public string? COMPUTER_NAME { get; set; }
+        public string? DOMAIN_NAME { get; set; }
+        public string? COMPUTER_USER { get; set; }
+        public string? INTERNET_IP { get; set; }
     }
 
     public class LoginResponse
