@@ -26,6 +26,7 @@
         public string COUNTRY_NAME { get; set; }
         public int? USER_ROLE_ID { get; set; }
         public string? USER_ROLE_NAME { get; set; }
+        public string Token { get; set; }
         public int SESSION_ID { get; set; }
         public List<FinancialYear> FINANCIAL_YEARS { get; set; } = new();
         public CompanyList SELECTED_COMPANY { get; set; } = new CompanyList();

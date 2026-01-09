@@ -70,6 +70,12 @@ namespace MicroApi.DataLayer.Service
                     response.USER_ROLE_NAME = reader["UserRole"]?.ToString();
                 }
 
+                // Generate token
+                string localIP = !string.IsNullOrEmpty(loginInput.LOCAL_IP) ? loginInput.LOCAL_IP : "192.168.0.1";
+                string systemTimeUTC = DateTime.UtcNow.ToString("o");
+                string token = GenerateToken(localIP, systemTimeUTC, response.USER_ID.Value);
+                response.Token = token;
+
                 // ---------- RESULT 3 : ASSIGNED COMPANIES ----------
                 if (reader.NextResult())
                 {
@@ -196,12 +202,26 @@ namespace MicroApi.DataLayer.Service
                         });
                     }
                 }
+                // Log the successful login with the token
+                if (response.flag == 1)
+                {
+                    string strSQL = $@"INSERT INTO TB_USER_LOGIN
+                (LoginName, LoginPassword, LocalIP, ComputerName, DomainName, ComputerUser, InternetIP, SystemTimeUTC, LoginSuccess, LoginFailReason, ForceLogin, UserID, Token)
+                VALUES
+                ({ADO.SQLString(loginInput.LOGIN_NAME)}, {ADO.SQLString(AzentLibrary.Library.EncryptString(loginInput.PASSWORD))}, {ADO.SQLString(loginInput.LOCAL_IP)},
+                {ADO.SQLString(loginInput.COMPUTER_NAME)}, {ADO.SQLString(loginInput.DOMAIN_NAME)}, {ADO.SQLString(loginInput.COMPUTER_USER)},
+                {ADO.SQLString(loginInput.INTERNET_IP)}, {ADO.SQLString(DateTime.UtcNow.ToString("o"))}, 1, '', 0, {response.USER_ID}, {ADO.SQLString(response.Token)})";
+                    ADO.ExecuteNonQuery(strSQL);
+                }
+            
+
                 //---------- RESULT11: USER_LOGIN_ID ----------
                 if (reader.NextResult() && reader.Read())
                 {
                     response.SESSION_ID = Convert.ToInt32(reader["USER_LOGIN_ID"]);
                 }
             }
+
             catch (Exception ex)
             {
                 response.flag = 0;
@@ -209,6 +229,14 @@ namespace MicroApi.DataLayer.Service
             }
 
             return response;
+        }
+
+        private string GenerateToken(string localip, string systemtime, int userId)
+        {
+            string cleanedLocalIp = localip.Replace("-", "").Replace(":", "").Replace(".", "");
+            string timePart = DateTime.Parse(systemtime).ToString("HHmmss");
+            string token = cleanedLocalIp + timePart + userId.ToString();
+            return token;
         }
 
         public InitLoginResponse InitLoginData(string loginName)
