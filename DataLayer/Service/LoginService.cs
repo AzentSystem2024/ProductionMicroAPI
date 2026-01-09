@@ -81,6 +81,7 @@ namespace MicroApi.DataLayer.Service
                                     };
                                 }
 
+
                                 // Result 5: Menu Permissions
                                 if (reader.NextResult())
                                 {
