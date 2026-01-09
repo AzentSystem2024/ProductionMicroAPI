@@ -2,7 +2,7 @@
 {
     public class Sync
     {
-        public int UNIT_ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public int USER_ID { get; set; }
         public int FIN_ID { get; set; }
         public List<SyncArticleProduction> Articles { get; set; }
@@ -15,6 +15,7 @@
         public int BOX_ID { get; set; }
         public string BARCODE { get; set; }
         public float PRICE { get; set; }
+        public DateTime PRODUCTION_DATE { get; set; }
     }
     public class SyncResponse
     {
@@ -23,10 +24,9 @@
     }
     public class PackProductionSync
     {
-        public int UNIT_ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public int USER_ID { get; set; }
         public int FIN_ID { get; set; }
-
         public List<PackProductionItem> PackItems { get; set; }
     }
 
@@ -40,6 +40,7 @@
         public int MASTER_CARTON_ID { get; set; }
         public string BARCODE { get; set; }
         public float BOX_PRICE { get; set; }
+        public DateTime PRODUCTION_DATE { get; set; }
     }
     public class ProductionTransferOut
     {

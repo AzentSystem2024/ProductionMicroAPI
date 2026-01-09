@@ -7,7 +7,7 @@ using MicroApi.Models;
 
 namespace MicroApi.Controllers
 {
-    [Route("api/Environment")]
+    [Route("api/listGroupHead")]
     [ApiController]
     public class ListController : ControllerBase
     {

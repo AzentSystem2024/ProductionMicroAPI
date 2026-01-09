@@ -20,17 +20,19 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
                         cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                        
 
                         DataTable dtUDT = new DataTable();
                         dtUDT.Columns.Add("ARTICLE_ID", typeof(long));
                         dtUDT.Columns.Add("ARTICLE_PRODUCTION_ID", typeof(long));
-                        dtUDT.Columns.Add("PAIRS", typeof(int));
+                        //dtUDT.Columns.Add("PAIRS", typeof(int));
                         dtUDT.Columns.Add("BOX_ID", typeof(long));
                         dtUDT.Columns.Add("BARCODE", typeof(string));
                         dtUDT.Columns.Add("PRICE", typeof(double));
+                        dtUDT.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
 
                         if (model.Articles != null && model.Articles.Count > 0)
                         {
@@ -39,10 +41,10 @@ namespace MicroApi.DataLayer.Service
                                 dtUDT.Rows.Add(
                                     item.ARTICLE_ID,
                                     item.ARTICLE_PRODUCTION_ID,
-                                    item.PAIRS,
+                                    //item.PAIRS,
                                     item.BOX_ID,
                                     item.BARCODE ?? "",
-                                    Convert.ToDouble(item.PRICE)
+                                    Convert.ToDouble(item.PRICE),item.PRODUCTION_DATE
                                 );
                             }
 
@@ -78,7 +80,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
                     cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
 
@@ -91,6 +93,7 @@ namespace MicroApi.DataLayer.Service
                     dtUDT.Columns.Add("QTY", typeof(float));
                     dtUDT.Columns.Add("BARCODE", typeof(string));
                     dtUDT.Columns.Add("BOX_PRICE", typeof(float));
+                    dtUDT.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
 
                     foreach (var item in model.PackItems)
                     {
@@ -99,7 +102,7 @@ namespace MicroApi.DataLayer.Service
                             item.PACKING_ID, item.SMALL_BOX_ID, item.MASTER_CARTON_ID,
                             item.BOX_SERIAL ?? "",item.QTY,
                             item.BARCODE ?? "",
-                            item.BOX_PRICE
+                            item.BOX_PRICE,item.PRODUCTION_DATE
                         );
                     }
 
