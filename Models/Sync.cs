@@ -11,7 +11,7 @@
     {
         public long ARTICLE_PRODUCTION_ID { get; set; }
         public long ARTICLE_ID { get; set; }
-        public int PAIRS { get; set; }
+        //public int PAIRS { get; set; }
         public int BOX_ID { get; set; }
         public string BARCODE { get; set; }
         public float PRICE { get; set; }

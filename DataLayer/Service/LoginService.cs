@@ -196,6 +196,11 @@ namespace MicroApi.DataLayer.Service
                         });
                     }
                 }
+                //---------- RESULT11: USER_LOGIN_ID ----------
+                if (reader.NextResult() && reader.Read())
+                {
+                    response.SESSION_ID = Convert.ToInt32(reader["USER_LOGIN_ID"]);
+                }
             }
             catch (Exception ex)
             {
