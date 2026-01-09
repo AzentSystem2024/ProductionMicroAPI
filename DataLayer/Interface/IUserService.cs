@@ -10,6 +10,7 @@ namespace MicroApi.DataLayer.Interface
         UserListResponse GetUserList();
 
         UserResponse DeleteUserData(int id);
+        public int Logout(UserLogout logout);
 
 
     }

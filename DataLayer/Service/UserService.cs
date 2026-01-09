@@ -330,7 +330,50 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
+        private string GenerateToken(string localip, string systemtime, int userId)
+        {
+            string cleanedLocalIp = localip.Replace("-", "").Replace(":", "").Replace(".", "");
+            string timePart = DateTime.Parse(systemtime).ToString("HHmmss");
+            string token = cleanedLocalIp + timePart + userId.ToString();
+            return token;
+        }
 
+        public int Logout(UserLogout logout)
+        {
+            try
+            {
+                string strSQL = "UPDATE TB_USER_LOGIN SET LogoutTimeUTC = GETUTCDATE() " +
+                                "WHERE Token = " + ADO.SQLString(logout.Token);
+                ADO.ExecuteNonQuery(strSQL);
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ADO.LogError(ex, "Users", "Logout()");
+            }
+            return 0;
+        }
+
+        public Int32 GetUserIDWithToken(string Token)
+        {
+            Int32 intUserID = 0;
+
+            try
+            {
+                string strSQL = "SELECT UserID FROM TB_USER_LOGIN WHERE LogoutTimeUTC IS NULL " +
+                                "AND Token = " + ADO.SQLString(Token);
+
+                intUserID = Convert.ToInt32(ADO.ExecuteScalar(strSQL));
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return intUserID;
+        }
     }
 }
 

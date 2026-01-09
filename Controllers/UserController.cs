@@ -101,5 +101,28 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+
+        [HttpPost]
+        [Route("logout")]
+        public IActionResult LogoutUser([FromBody] UserLogout logout)
+        {
+            try
+            {
+                int rowsAffected = _userService.Logout(logout);
+
+                if (rowsAffected > 0)
+                {
+                    return Ok(new { Success = true, Message = "Logout successful" });
+                }
+                else
+                {
+                    return BadRequest("Invalid token or logout failed");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal Server Error", Error = ex.Message });
+            }
+        }
     }
 }
