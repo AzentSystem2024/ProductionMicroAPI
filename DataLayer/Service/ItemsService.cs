@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class ItemsService:IItemsService
     {
-        public List<Items> GetAllItems(ItemListRequest request)
+        public List<Items> GetAllItems()
         {
             List<Items> list = new List<Items>();
 
@@ -21,7 +21,6 @@ namespace MicroApi.DataLayer.Services
 
                     // === REQUIRED PARAMETERS FOR ACTION 2 ===
                     cmd.Parameters.AddWithValue("@ACTION", 2);
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     // OPTIONAL / UNUSED PARAMETERS (PASS NULL)
                     cmd.Parameters.AddWithValue("@ID", DBNull.Value);
@@ -36,7 +35,6 @@ namespace MicroApi.DataLayer.Services
                         {
                             ID = ADO.ToInt32(dr["ID"]),
                             HQID = ADO.ToInt32(dr["HQID"]),
-                            COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
 
                             ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
                             BARCODE = ADO.ToString(dr["BARCODE"]),
@@ -312,7 +310,6 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
-                cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
                 cmd.Parameters.AddWithValue("GST_PERC", items.GST_PERC);
                 cmd.Parameters.AddWithValue("HSN_CODE", items.HSN_CODE);
 
@@ -543,7 +540,6 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
                 cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
                 cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
-                cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
                 cmd.Parameters.AddWithValue("GST_PERC", items.GST_PERC);
                 cmd.Parameters.AddWithValue("HSN_CODE", items.HSN_CODE);
 
@@ -585,7 +581,7 @@ namespace MicroApi.DataLayer.Services
                                 "TB_ITEMS.ITEM_SL, TB_ITEMS.SALE_PRICE1, TB_ITEMS.SALE_PRICE2, TB_ITEMS.SALE_PRICE3, TB_ITEMS.SALE_PRICE4, TB_ITEMS.SALE_PRICE5, " +
                                 "TB_ITEMS.PURCH_PRICE, TB_ITEMS.PURCH_CURRENCY, TB_ITEMS.IS_CONSIGNMENT, TB_ITEMS.VAT_CLASS_ID, TB_ITEMS.ITEM_PROPERTY1, " +
                                 "TB_ITEMS.IS_DELETED, TB_ITEMS.ITEM_PROPERTY2, TB_ITEMS.ITEM_PROPERTY3, TB_ITEMS.ITEM_PROPERTY4, TB_ITEMS.ITEM_PROPERTY5, " +
-                                "TB_ITEMS.COSTING_METHOD,TB_ITEMS.COMPANY_ID,TB_ITEMS.GST_PERC,TB_ITEMS.HSN_CODE, " +
+                                "TB_ITEMS.COSTING_METHOD,TB_ITEMS.GST_PERC,TB_ITEMS.HSN_CODE, " +
                                 "TB_ITEMS.RESTOCK_LEVEL, TB_ITEMS.REORDER_POINT, TB_ITEMS.BIN_LOCATION, TB_ITEMS.POS_DESCRIPTION, " +
 
                                 "TB_ITEMS.IS_DIFFERENT_UOM_PURCH, TB_ITEMS.UOM_PURCH, TB_ITEMS.UOM_MULTPLE,TB_ITEMS.MATRIX_CODE, " +
@@ -615,7 +611,6 @@ namespace MicroApi.DataLayer.Services
                     item = new Items
                     {
                         ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
-                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
                         HQID = dr["HQID"] != DBNull.Value ? Convert.ToInt32(dr["HQID"]) : 0,
                         ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? Convert.ToString(dr["ITEM_CODE"]) : string.Empty,
                         BARCODE = dr["BARCODE"] != DBNull.Value ? Convert.ToString(dr["BARCODE"]) : string.Empty,

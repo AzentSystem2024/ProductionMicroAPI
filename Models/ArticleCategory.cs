@@ -33,7 +33,6 @@
     public class Category
     {
         public int ID { get; set; }
-        public int COMPANY_ID { get; set; }
         public string CODE { get; set; }
         public string NAME { get; set; }
         public bool? IS_INACTIVE { get; set; }
@@ -52,7 +51,6 @@
         public string CODE { get; set; }
         public string DESCRIPTION { get; set; }
         public bool IS_INACTIVE { get; set; }
-        public int COMPANY_ID { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
         public List<PackingMaster> PACKING { get; set; } = new List<PackingMaster>();
     }
@@ -67,7 +65,6 @@
         public string CODE { get; set; } = string.Empty;
         public string DESCRIPTION { get; set; } = string.Empty;
         public bool IS_INACTIVE { get; set; }
-        public int COMPANY_ID { get; set; }
         public List<int> SIZES { get; set; } = new List<int>();
         public List<PackingMaster> PACKING { get; set; } = new List<PackingMaster>();
     }
@@ -116,10 +113,6 @@
         public string DESCRIPTION { get; set; }
         public bool? IS_INACTIVE { get; set; }
     }
-    public class ArticleCategoryListReq
-    {
-        public int COMPANY_ID { get; set; }
-       
-    }
+   
 
 }

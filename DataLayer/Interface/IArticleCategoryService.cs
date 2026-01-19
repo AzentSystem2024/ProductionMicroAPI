@@ -11,7 +11,7 @@ namespace MicroApi.DataLayer.Interface
         PackingListResponse GetPackingListByCategoryName(string categoryName);
         ArticleCategoryResponse SavePackingDetails(PackingSave request);
         ArticleCategoryResponse DeleteArticleCategoryData(int id);
-        CategoryListResponse GetAllArticleCategories(ArticleCategoryListReq request);
+        CategoryListResponse GetAllArticleCategories();
 
 
     }

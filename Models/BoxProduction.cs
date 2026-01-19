@@ -1,6 +1,6 @@
 ﻿namespace MicroApi.Models
 {
-    public class ArticleProduction
+    public class BoxProduction
     {
         public int COMPANY_ID { get; set; }
         public int USER_ID { get; set; }
@@ -16,9 +16,9 @@
         public DateTime? PRODUCTION_DATE { get; set; }
         public int PRODUCTION_TYPE { get; set; }
 
-        public List<ProductionRawMaterialRequest> RawMaterials { get; set; }
+        public List<BoxProdRequest> RawMaterials { get; set; }
     }
-    public class ProductionRawMaterialRequest
+    public class BoxProdRequest
     {
         public int ID { get; set; }
         public string UOM { get; set; }
@@ -28,23 +28,22 @@
         public float AMOUNT { get; set; }
         public float REQUIRED_QTY { get; set; }
     }
-   
-    public class ArticleProduction_Item
-    {
-        public long ARTICLE_PRODUCTION_ID { get; set; }  
-        public long ARTICLE_ID { get; set; }            
-        public int PAIRS { get; set; }
-        public int BOX_ID { get; set; }
-        public string BARCODE { get; set; }
-        public float PRICE { get; set; }
-
-    }
-    public class ArticleProdResponse
+    public class BoxProdResponse
     {
         public int Flag { get; set; }
         public string Message { get; set; }
     }
-    public class ArticleBomItem
+    public class PackingBOMResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<PackingBOMItem> Data { get; set; }
+    }
+    public class PackingBOMRequest
+    {
+        public int ITEM_ID { get; set; }
+    }
+    public class PackingBOMItem
     {
         public int ID { get; set; }
         public string ITEM_CODE { get; set; }
@@ -54,51 +53,16 @@
         public decimal COST { get; set; }
         public decimal QTY_AVAILABLE { get; set; }
     }
-
-    public class ArticleBomResponse
-    {
-        public int Flag { get; set; }
-        public string Message { get; set; }
-        public List<ArticleBomItem> Data { get; set; }
-    }
-    public class ArticleBomRequest
-    {
-        public int ARTICLE_ID { get; set; }
-    }
-    public class ProductionListRequest
-    {
-        public int COMPANY_ID { get; set; }
-    }
-
-    public class ProductionListResponse
-    {
-        public int Flag { get; set; }
-        public string Message { get; set; }
-        public List<ProductionListItem> Data { get; set; }
-    }
-
-    public class ProductionListItem
-    {
-        public long PRODUCTION_ID { get; set; }
-        public string PROD_NO { get; set; }
-        public DateTime? PROD_DATE { get; set; }
-        public decimal PRODUCED_QTY { get; set; }
-        public decimal TOTAL_COST { get; set; }
-        public long TRANS_ID { get; set; }
-        public string VOUCHER_NO { get; set; }
-        public string ITEM_CODE { get; set; }
-        public string DESCRIPTION { get; set; }
-    }
-    public class ProductionViewResponse
+    public class BoxProductionSelectResponse
     {
         public int Flag { get; set; }
         public string Message { get; set; }
 
-        public ProductionHeader Header { get; set; }
-        public List<ProductionRawMaterial> RawMaterials { get; set; }
+        public BoxProductionHeader Header { get; set; }
+        public List<BoxProdRequestMaterial> RawMaterials { get; set; }
     }
 
-    public class ProductionHeader
+    public class BoxProductionHeader
     {
         public long PRODUCTION_ID { get; set; }
         public string PROD_NO { get; set; }
@@ -116,7 +80,7 @@
         public decimal COST_PRODUCTION { get; set; }
     }
 
-    public class ProductionRawMaterial
+    public class BoxProdRequestMaterial
     {
         public long ID { get; set; }
         public int ITEM_ID { get; set; }
@@ -129,7 +93,28 @@
         public decimal TOTAL_COST { get; set; }
         public string ITEM_CODE { get; set; }
     }
+    public class BoxProductionListRequest
+    {
+        public int COMPANY_ID { get; set; }
+    }
 
-    
+    public class BoxProductionListResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<BoxProductionListItem> Data { get; set; }
+    }
 
+    public class BoxProductionListItem
+    {
+        public long PRODUCTION_ID { get; set; }
+        public string PROD_NO { get; set; }
+        public DateTime? PROD_DATE { get; set; }
+        public decimal PRODUCED_QTY { get; set; }
+        public decimal TOTAL_COST { get; set; }
+        public long TRANS_ID { get; set; }
+        public string VOUCHER_NO { get; set; }
+        public string ITEM_CODE { get; set; }
+        public string DESCRIPTION { get; set; }
+    }
 }

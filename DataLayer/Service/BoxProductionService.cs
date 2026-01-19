@@ -6,69 +6,16 @@ using System.Data.SqlClient;
 
 namespace MicroApi.DataLayer.Service
 {
-    public class ArticleProductionService:IArticleProductionService
+    public class BoxProductionService:IBoxProductionService
     {
-        //public ArticleProdResponse Insert(ArticleProduction model)
-        //{
-        //    ArticleProdResponse response = new ArticleProdResponse();
-
-        //    try
-        //    {
-        //        using (SqlConnection connection = ADO.GetConnection())
-        //        {
-        //            using (SqlCommand cmd = new SqlCommand("SP_ARTICLE_PRODUCTION_UPLOAD", connection))
-        //            {
-        //                cmd.CommandType = CommandType.StoredProcedure;
-
-        //                // Parameters
-        //                cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID);
-        //                cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
-
-        //                // Prepare table-valued parameter
-        //                DataTable dtUDT = new DataTable();
-
-        //                dtUDT.Columns.Add("ARTICLE_ID", typeof(long));
-        //                dtUDT.Columns.Add("ARTICLE_PRODUCTION_ID", typeof(long));
-        //                dtUDT.Columns.Add("PAIRS", typeof(int));
-        //                dtUDT.Columns.Add("BOX_ID", typeof(int));
-        //                dtUDT.Columns.Add("BARCODE", typeof(string));
-        //                dtUDT.Columns.Add("PRICE", typeof(float));
-
-        //                if (model.Articles != null && model.Articles.Count > 0)
-        //                {
-        //                    foreach (var item in model.Articles)
-        //                    {
-        //                        dtUDT.Rows.Add(item.ARTICLE_ID, item.ARTICLE_PRODUCTION_ID,item.PAIRS,item.BOX_ID,item.BARCODE,item.PRICE);
-        //                    }
-        //                }
-
-        //                SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_ARTICLE_PRODUCTION", dtUDT);
-        //                tvpParam.SqlDbType = SqlDbType.Structured;
-        //                tvpParam.TypeName = "UDT_ARTICLE_PRODUCTION";
-
-        //                cmd.ExecuteNonQuery();
-
-        //                response.Flag = 1;
-        //                response.Message = "Article production uploaded successfully.";
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Flag = 0;
-        //        response.Message = "ERROR: " + ex.Message;
-        //    }
-
-        //    return response;
-        //}
-        public ArticleProdResponse Insert(ArticleProduction model)
+        public BoxProdResponse Insert(BoxProduction model)
         {
-            ArticleProdResponse response = new ArticleProdResponse();
+            BoxProdResponse response = new BoxProdResponse();
 
             try
             {
                 using (SqlConnection con = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_TB_ARTICLE_PRODUCTION_ENTRY", con))
+                using (SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_ENTRY", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -119,7 +66,7 @@ namespace MicroApi.DataLayer.Service
                     pRaw.SqlDbType = SqlDbType.Structured;
                     pRaw.TypeName = "UDT_PRODUCTION_DETAIL";
 
-                   // con.Open();
+                    // con.Open();
                     cmd.ExecuteNonQuery();
 
                     response.Flag = 1;
@@ -134,31 +81,29 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-
-
-        public ArticleBomResponse GetArticleBomList(ArticleBomRequest model)
+        public PackingBOMResponse GetPackingBomList(PackingBOMRequest model)
         {
-            ArticleBomResponse res = new ArticleBomResponse
+            PackingBOMResponse res = new PackingBOMResponse
             {
-                Data = new List<ArticleBomItem>()
+                Data = new List<PackingBOMItem>()
             };
 
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_TB_ARTICLE_PRODUCTION_ENTRY", connection))
+                using (SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_ENTRY", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 2);
-                    cmd.Parameters.AddWithValue("@ARTICLEID", model.ARTICLE_ID);
+                    cmd.Parameters.AddWithValue("@PACKINGID", model.ITEM_ID);
 
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            ArticleBomItem item = new ArticleBomItem
+                            PackingBOMItem item = new PackingBOMItem
                             {
                                 ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
                                 ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
@@ -185,18 +130,17 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-
-        public ProductionViewResponse GetProductionById(int id)
+        public BoxProductionSelectResponse GetProductionById(int id)
         {
-            var response = new ProductionViewResponse
+            var response = new BoxProductionSelectResponse
             {
-                RawMaterials = new List<ProductionRawMaterial>(),
+                RawMaterials = new List<BoxProdRequestMaterial>(),
             };
 
             try
             {
                 using (SqlConnection con = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_TB_ARTICLE_PRODUCTION_ENTRY", con))
+                using (SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_ENTRY", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 3);
@@ -209,7 +153,7 @@ namespace MicroApi.DataLayer.Service
                         // ===== Header =====
                         if (dr.Read())
                         {
-                            response.Header = new ProductionHeader
+                            response.Header = new BoxProductionHeader
                             {
                                 PRODUCTION_ID = Convert.ToInt64(dr["PRODUCTION_ID"]),
                                 PROD_NO = dr["PROD_NO"]?.ToString(),
@@ -232,7 +176,7 @@ namespace MicroApi.DataLayer.Service
                         dr.NextResult();
                         while (dr.Read())
                         {
-                            response.RawMaterials.Add(new ProductionRawMaterial
+                            response.RawMaterials.Add(new BoxProdRequestMaterial
                             {
                                 ID = Convert.ToInt64(dr["ID"]),
                                 ITEM_ID = Convert.ToInt32(dr["ITEM_ID"]),
@@ -247,7 +191,7 @@ namespace MicroApi.DataLayer.Service
                             });
                         }
 
-                       
+
                     }
                 }
 
@@ -262,24 +206,25 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public ProductionListResponse articleprodlist(ProductionListRequest model)
+        public BoxProductionListResponse packingprodlist(BoxProductionListRequest model)
         {
-            ProductionListResponse response = new ProductionListResponse();
-            List<ProductionListItem> list = new List<ProductionListItem>();
+            BoxProductionListResponse response = new BoxProductionListResponse();
+            List<BoxProductionListItem> list = new List<BoxProductionListItem>();
 
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_GET_PRODUCTION_LIST", connection))
+                using (SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_ENTRY", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 4);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            ProductionListItem item = new ProductionListItem();
+                            BoxProductionListItem item = new BoxProductionListItem();
 
                             item.PRODUCTION_ID = dr["PRODUCTION_ID"] == DBNull.Value ? 0 : Convert.ToInt64(dr["PRODUCTION_ID"]);
                             item.PROD_NO = dr["PROD_NO"] == DBNull.Value ? "" : dr["PROD_NO"].ToString();
@@ -305,11 +250,10 @@ namespace MicroApi.DataLayer.Service
             {
                 response.Flag = 0;
                 response.Message = "ERROR : " + ex.Message;
-                response.Data = new List<ProductionListItem>();
+                response.Data = new List<BoxProductionListItem>();
             }
 
             return response;
         }
-
     }
 }

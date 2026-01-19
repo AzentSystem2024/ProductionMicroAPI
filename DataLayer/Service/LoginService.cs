@@ -45,6 +45,8 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SYSTEM_TIME_UTC", DateTime.UtcNow);
                 cmd.Parameters.AddWithValue("@FORCE_LOGIN", false);
                 cmd.Parameters.AddWithValue("@TOKEN", Guid.NewGuid().ToString("N"));
+               // cmd.Parameters.AddWithValue("@TOKEN", DBNull.Value);
+
 
                 using var reader = cmd.ExecuteReader();
 
@@ -203,21 +205,22 @@ namespace MicroApi.DataLayer.Service
                     }
                 }
                 // Log the successful login with the token
-                if (response.flag == 1)
-                {
-                    string strSQL = $@"INSERT INTO TB_USER_LOGIN
-                (LoginName, LoginPassword, LocalIP, ComputerName, DomainName, ComputerUser, InternetIP, SystemTimeUTC, LoginSuccess, LoginFailReason, ForceLogin, UserID, Token)
-                VALUES
-                ({ADO.SQLString(loginInput.LOGIN_NAME)}, {ADO.SQLString(AzentLibrary.Library.EncryptString(loginInput.PASSWORD))}, {ADO.SQLString(loginInput.LOCAL_IP)},
-                {ADO.SQLString(loginInput.COMPUTER_NAME)}, {ADO.SQLString(loginInput.DOMAIN_NAME)}, {ADO.SQLString(loginInput.COMPUTER_USER)},
-                {ADO.SQLString(loginInput.INTERNET_IP)}, {ADO.SQLString(DateTime.UtcNow.ToString("o"))}, 1, '', 0, {response.USER_ID}, {ADO.SQLString(response.Token)})";
-                    ADO.ExecuteNonQuery(strSQL);
-                }
-            
+                //if (response.flag == 1)
+                //{
+                //    string strSQL = $@"INSERT INTO TB_USER_LOGIN
+                //(LoginName, LoginPassword, LocalIP, ComputerName, DomainName, ComputerUser, InternetIP, SystemTimeUTC, LoginSuccess, LoginFailReason, ForceLogin, UserID, Token)
+                //VALUES
+                //({ADO.SQLString(loginInput.LOGIN_NAME)}, {ADO.SQLString(AzentLibrary.Library.EncryptString(loginInput.PASSWORD))}, {ADO.SQLString(loginInput.LOCAL_IP)},
+                //{ADO.SQLString(loginInput.COMPUTER_NAME)}, {ADO.SQLString(loginInput.DOMAIN_NAME)}, {ADO.SQLString(loginInput.COMPUTER_USER)},
+                //{ADO.SQLString(loginInput.INTERNET_IP)}, {ADO.SQLString(DateTime.UtcNow.ToString("o"))}, 1, '', 0, {response.USER_ID}, {ADO.SQLString(response.Token)})";
+                //    ADO.ExecuteNonQuery(strSQL);
+                //}
+
 
                 //---------- RESULT11: USER_LOGIN_ID ----------
                 if (reader.NextResult() && reader.Read())
                 {
+                    response.Token = reader["TOKEN"]?.ToString();
                     response.SESSION_ID = Convert.ToInt32(reader["USER_LOGIN_ID"]);
                 }
             }

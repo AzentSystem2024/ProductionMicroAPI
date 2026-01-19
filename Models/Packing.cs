@@ -208,7 +208,6 @@
         public string color { get; set; }
         public int categoryID { get; set; }
         public int unitID { get; set; }
-        public int COMPANY_ID { get; set; }
     }
 
 

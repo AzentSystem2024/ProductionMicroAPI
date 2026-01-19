@@ -5,6 +5,8 @@
         public int COMPANY_ID { get; set; }
         public int USER_ID { get; set; }
         public int FIN_ID { get; set; }
+        public double ADDL_COST { get; set; }
+        public string ADDL_DESCRIPTION { get; set; }
         public List<SyncArticleProduction> Articles { get; set; }
     }
     public class SyncArticleProduction
@@ -28,16 +30,15 @@
         public int USER_ID { get; set; }
         public int FIN_ID { get; set; }
         public List<PackProductionItem> PackItems { get; set; }
+        public List<SyncArticleProduction> Articles { get; set; }
+
     }
 
     public class PackProductionItem
     {
         public long PACK_PRODUCTION_ID { get; set; }
         public long PACKING_ID { get; set; }
-        public string BOX_SERIAL { get; set; }
-        public float QTY { get; set; }
-        public int SMALL_BOX_ID { get; set; }
-        public int MASTER_CARTON_ID { get; set; }
+        public int BOX_SERIAL { get; set; }
         public string BARCODE { get; set; }
         public float BOX_PRICE { get; set; }
         public DateTime PRODUCTION_DATE { get; set; }
@@ -96,27 +97,15 @@
     public class ProductionDN
     {
         public int COMPANY_ID { get; set; }
-        public int STORE_ID { get; set; }
         public DateTime DN_DATE { get; set; }
-        public string? REF_NO { get; set; }
         public int CUST_ID { get; set; }
-        public string? CONTACT_NAME { get; set; }
-        public string? CONTACT_PHONE { get; set; }
-        public string? CONTACT_FAX { get; set; }
-        public string? CONTACT_MOBILE { get; set; }
-        public int SALESMAN_ID { get; set; }
         public int FIN_ID { get; set; }
         public int USER_ID { get; set; }
-        public string? NARRATION { get; set; }
-        public int DN_TYPE { get; set; }
         public List<ProductionDNItem> Items { get; set; }
     }
 
     public class ProductionDNItem
     {
-        public int SO_DETAIL_ID { get; set; }
-        public string? REMARKS { get; set; }
-        public decimal QUANTITY { get; set; }
         public int PACKING_ID { get; set; }
     }
     public class ProductionDR
@@ -148,4 +137,90 @@
         public decimal QUANTITY { get; set; }
         public int PACKING_ID { get; set; }
     }
+
+    public class DNList
+    {
+        public int? ID { get; set; }
+        public DateTime? DN_DATE { get; set; }
+        public string? DN_NO { get; set; }
+        public double? TOTAL_QTY { get; set; }
+        public string? STATUS { get; set; }
+        public string? CUSTOMER_NAME { get; set; }
+        public string COMPANY_NAME { get; set; }
+    }
+    public class DNListResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<DNList> Data { get; set; }
+    }
+    public class DNViewResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public DNViewHeader Data { get; set; }
+    }
+
+    public class DNViewHeader
+    {
+        public int ID { get; set; }
+        public string DN_NO { get; set; }
+        public DateTime DN_DATE { get; set; }
+        public double TOTAL_QTY { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int CUST_ID { get; set; }
+        public string CONTACT_NAME { get; set; }
+        public string CONTACT_PHONE { get; set; }
+        public string CONTACT_MOBILE { get; set; }
+        public string CONTACT_FAX { get; set; }
+        public string COMPANY_NAME { get; set; }
+        public List<DNViewDetail> Details { get; set; }
+    }
+
+    public class DNViewDetail
+    {
+        public int DETAIL_ID { get; set; }
+        public string ITEM_CODE { get; set; }
+        public string DESCRIPTION { get; set; }
+        public decimal QUANTITY { get; set; }
+        public string UOM { get; set; }
+    }
+    public class ProductionTransferInGRN
+    {
+        public int COMPANY_ID { get; set; }
+        public int SUPP_ID { get; set; }   
+        public DateTime GRN_DATE { get; set; }
+        public int FIN_ID { get; set; }
+        public int USER_ID { get; set; }
+
+        public List<ProductionTransferInGRNItem> Items { get; set; }
+    }
+    public class ProductionTransferInGRNItem
+    {
+        public int ITEM_ID { get; set; }
+    }
+    public class GRNUploadResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public int GRN_ID { get; set; }
+    }
+    public class ProductionTransferInGRNList
+    {
+        public int TRANS_ID { get; set; }
+        public int ID { get; set; }              
+        public string DOC_NO { get; set; }
+        public DateTime GRN_DATE { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+        public string SUPPPLIER_NAME { get; set; }
+        public string COMPANY_NAME { get; set; }
+        public int STATUS { get; set; }
+    }
+    public class ProductionTransferInGRNListResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<ProductionTransferInGRNList> Data { get; set; }
+    }
+
 }

@@ -57,7 +57,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
+                        //cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
@@ -180,7 +180,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? string.Empty);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
+                       // cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
@@ -290,7 +290,6 @@ namespace MicroApi.Service
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
                                     CREATED_DATE = reader["CREATED_DATE"] != DBNull.Value ?
                                         ((DateTimeOffset)reader["CREATED_DATE"]).DateTime : (DateTime?)null,
-                                    COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString(),
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
@@ -376,7 +375,7 @@ namespace MicroApi.Service
 
 
 
-        public ArticleListResponse GetArticleList(ArticleListReq request)
+        public ArticleListResponse GetArticleList()
         {
             var res = new ArticleListResponse();
             res.Data = new List<ArticleUpdate>();
@@ -393,7 +392,7 @@ namespace MicroApi.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.CommandTimeout = 1000;
                         cmd.Parameters.AddWithValue("@ACTION", 0);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        //cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -413,7 +412,6 @@ namespace MicroApi.Service
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
                                     ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
-                                    COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? "",
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
@@ -448,7 +446,7 @@ namespace MicroApi.Service
 
 
 
-        public ListItemsResponse GetItems(ArticleListReq request)
+        public ListItemsResponse GetItems()
         {
             ListItemsResponse res = new ListItemsResponse();
             res.DataList = new List<ItemData>();
@@ -465,14 +463,12 @@ namespace MicroApi.Service
                     ID, 
                     ITEM_CODE + '-' + DESCRIPTION AS ITEM_NAME 
                 FROM TB_ITEMS 
-                WHERE IS_DELETED = 0 
-                  AND COMPANY_ID = @COMPANY_ID
+                WHERE IS_DELETED = 0
                 ORDER BY ID ASC";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        // ✅ PASS COMPANY_ID FROM REQUEST BODY
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                       
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -587,7 +583,7 @@ namespace MicroApi.Service
             return res;
         }
 
-        public string GetLastOrderNoByUnitId(ArticleListReq request)
+        public string GetLastOrderNoByUnitId()
         {
             string lastOrderNo = "0";
 
@@ -598,14 +594,10 @@ namespace MicroApi.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    string query = @"
-                SELECT ISNULL(MAX(ORDER_NO), 0) 
-                FROM TB_ARTICLE
-                WHERE COMPANY_ID = @COMPANY_ID";
+                    string query = @"SELECT ISNULL(MAX(ORDER_NO), 0) + 1 FROM TB_ARTICLE";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         object result = cmd.ExecuteScalar();
 
@@ -623,7 +615,39 @@ namespace MicroApi.Service
 
             return lastOrderNo;
         }
+        public string GetAliasNo()
+        {
+            string aliasno = "0";
 
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT ISNULL(MAX(ALIAS_NO), 0) + 1 FROM TB_ARTICLE
+";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            aliasno = result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return aliasno;
+        }
 
     }
 }

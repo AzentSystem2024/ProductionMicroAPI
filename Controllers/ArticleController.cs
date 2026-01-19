@@ -70,12 +70,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("List")]
-        public ArticleListResponse ArticleLogList(ArticleListReq request)
+        public ArticleListResponse ArticleLogList()
         {
             ArticleListResponse res = new ArticleListResponse();
             try
             {
-                res = _articleService.GetArticleList(request);
+                res = _articleService.GetArticleList();
             }
             catch (Exception ex)
             {
@@ -86,12 +86,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("listitem")]
-        public ListItemsResponse GetItems(ArticleListReq request)
+        public ListItemsResponse GetItems()
         {
             ListItemsResponse res = new ListItemsResponse();
             try
             {
-                res = _articleService.GetItems(request);
+                res = _articleService.GetItems();
             }
             catch (Exception ex)
             {
@@ -136,12 +136,26 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("LastOrderNo")]
-        public IActionResult GetLastOrderNo(ArticleListReq request)
+        public IActionResult GetLastOrderNo()
         {
             try
             {
-                var lastOrderNo = _articleService.GetLastOrderNoByUnitId(request);
+                var lastOrderNo = _articleService.GetLastOrderNoByUnitId();
                 return Ok(new { LastOrderNo = lastOrderNo });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { flag = 0, message = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("Lastaliasno")]
+        public IActionResult GetAliasNo()
+        {
+            try
+            {
+                var GetAliasNo = _articleService.GetAliasNo();
+                return Ok(new { GetAliasNo = GetAliasNo });
             }
             catch (Exception ex)
             {

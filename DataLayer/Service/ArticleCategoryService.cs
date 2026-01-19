@@ -67,7 +67,7 @@ namespace MicroApi.DataLayer.Service
                 using (SqlConnection con = ADO.GetConnection())
                 {
                     // Load category basic details
-                    var catCmd = new SqlCommand("SELECT ID, CODE, DESCRIPTION,IS_INACTIVE,COMPANY_ID FROM TB_ARTICLE_CATEGORY WHERE IS_DELETED=0 AND ID = @catId", con);
+                    var catCmd = new SqlCommand("SELECT ID, CODE, DESCRIPTION,IS_INACTIVE  FROM TB_ARTICLE_CATEGORY WHERE IS_DELETED=0 AND ID = @catId", con);
                     catCmd.Parameters.AddWithValue("@catId", Id);
 
                     using var reader = catCmd.ExecuteReader();
@@ -81,7 +81,6 @@ namespace MicroApi.DataLayer.Service
                     var category = new Category
                     {
                         ID = Convert.ToInt32(reader["ID"]),
-                        COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
                         CODE = Convert.ToString(reader["CODE"]),
                         NAME = Convert.ToString(reader["DESCRIPTION"]),
                         IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
@@ -172,8 +171,8 @@ namespace MicroApi.DataLayer.Service
                 using (SqlTransaction tx = con.BeginTransaction())
                 {
                     // 1️⃣ Insert into TB_ARTICLE_CATEGORY
-                    string catSql = @"INSERT INTO TB_ARTICLE_CATEGORY (CODE, DESCRIPTION,IS_DELETED,IS_INACTIVE,COMPANY_ID) 
-                              VALUES (@CODE, @DESC,0,@IS_INACTIVE,@COMPANY_ID); 
+                    string catSql = @"INSERT INTO TB_ARTICLE_CATEGORY (CODE, DESCRIPTION,IS_DELETED,IS_INACTIVE) 
+                              VALUES (@CODE, @DESC,0,@IS_INACTIVE); 
                               SELECT SCOPE_IDENTITY();";
 
                     int categoryId;
@@ -182,7 +181,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CODE", request.CODE);
                         cmd.Parameters.AddWithValue("@DESC", request.DESCRIPTION);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", request.IS_INACTIVE);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         categoryId = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
@@ -276,13 +274,12 @@ namespace MicroApi.DataLayer.Service
                             // Update main category
                             var updateCmd = new SqlCommand(@"
                         UPDATE TB_ARTICLE_CATEGORY 
-                        SET CODE = @CODE, DESCRIPTION = @DESC ,IS_INACTIVE = @IS_INACTIVE,COMPANY_ID=@COMPANY_ID
+                        SET CODE = @CODE, DESCRIPTION = @DESC ,IS_INACTIVE = @IS_INACTIVE
                         WHERE IS_DELETED=0 AND ID = @ID", con, tran);
                             updateCmd.Parameters.AddWithValue("@CODE", request.CODE);
                             updateCmd.Parameters.AddWithValue("@DESC", request.DESCRIPTION);
                             updateCmd.Parameters.AddWithValue("@IS_INACTIVE", request.IS_INACTIVE);
                             updateCmd.Parameters.AddWithValue("@ID", request.ID);
-                            updateCmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                             updateCmd.ExecuteNonQuery();
 
                             // Delete old data
@@ -559,7 +556,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public CategoryListResponse GetAllArticleCategories(ArticleCategoryListReq request)
+        public CategoryListResponse GetAllArticleCategories()
         {
             var res = new CategoryListResponse
             {
@@ -579,13 +576,11 @@ namespace MicroApi.DataLayer.Service
                 SELECT ID, CODE, DESCRIPTION, IS_INACTIVE
                 FROM TB_ARTICLE_CATEGORY
                 WHERE IS_DELETED = 0 
-                  AND COMPANY_ID = @COMPANY_ID
                 ORDER BY TRY_CAST(CODE AS INT) ASC";
 
                     using (var cmd = new SqlCommand(sql, connection))
                     {
                         // ✅ PASS COMPANY_ID FROM REQUEST BODY
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                         using (var reader = cmd.ExecuteReader())
                         {

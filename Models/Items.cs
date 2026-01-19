@@ -74,10 +74,9 @@
         public string? UOM_PURCH { get; set; }
         public int? UOM_MULTPLE { get; set; }
         public string? MATRIX_CODE {get; set; }
-        public int? COMPANY_ID { get; set; }
         public string? HSN_CODE { get; set; }
         public decimal? GST_PERC { get; set; }
-        public List<ITEM_STORES> item_stores { get; set; }
+        public List<ITEM_STORES>? item_stores { get; set; }
         public List<ITEM_ALIAS> item_alias { get; set; }
         public List<ITEM_SUPPLIERS> item_suppliers { get; set; }
         public List<ITEM_COMPONENTS> item_components { get; set; }
@@ -169,9 +168,6 @@
         public DateTime? DATE_FROM { get; set; }
         public DateTime? DATE_TO { get; set; }
     }
-    public class ItemListRequest
-    {
-        public int COMPANY_ID { get; set; }
-    }
+   
 
 }

@@ -28,7 +28,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CODE", articleBrand.CODE);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", articleBrand.DESCRIPTION);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", articleBrand.IS_INACTIVE);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", articleBrand.COMPANY_ID);
+                        //cmd.Parameters.AddWithValue("@COMPANY_ID", articleBrand.COMPANY_ID);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -73,7 +73,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CODE", articleBrand.CODE);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", articleBrand.DESCRIPTION);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", articleBrand.IS_INACTIVE);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", articleBrand.COMPANY_ID);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -125,7 +124,6 @@ namespace MicroApi.DataLayer.Service
                                     CODE = reader["CODE"].ToString(),
                                     DESCRIPTION = reader["DESCRIPTION"].ToString(),
                                     IS_INACTIVE = Convert.ToBoolean(reader["IS_INACTIVE"]),
-                                    COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"])
                                 };
                                 res.flag = 1;
                                 res.Message = "Success";
@@ -149,7 +147,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
-        public ArticleBrandListResponse GetLogList(ArticleBrandListRequest request)
+        public ArticleBrandListResponse GetLogList()
         {
             ArticleBrandListResponse res = new ArticleBrandListResponse();
             List<ArticleBrandUpdate> Lstarticlebrand = new List<ArticleBrandUpdate>();
@@ -163,7 +161,6 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@CODE", DBNull.Value);
                 cmd.Parameters.AddWithValue("@DESCRIPTION", DBNull.Value);
                 cmd.Parameters.AddWithValue("@IS_INACTIVE", DBNull.Value);
-                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                 try
                 {
@@ -177,7 +174,6 @@ namespace MicroApi.DataLayer.Service
                             Lstarticlebrand.Add(new ArticleBrandUpdate
                             {
                                 ID = Convert.ToInt32(dr["ID"]),
-                                COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
                                 CODE = dr["CODE"].ToString(),
                                 DESCRIPTION = dr["DESCRIPTION"].ToString(),
                                 IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"])

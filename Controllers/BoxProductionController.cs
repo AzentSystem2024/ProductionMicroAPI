@@ -7,23 +7,23 @@ namespace MicroApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ArticleProductionController : ControllerBase
+    public class BoxProductionController : ControllerBase
     {
-        private readonly IArticleProductionService _articleProductionService;
+        private readonly IBoxProductionService _boxProductionService;
 
-        public ArticleProductionController(IArticleProductionService articleProductionService)
+        public BoxProductionController(IBoxProductionService boxProductionService)
         {
-            _articleProductionService = articleProductionService;
+            _boxProductionService = boxProductionService;
         }
         [HttpPost]
         [Route("insert")]
-        public ArticleProdResponse Insert(ArticleProduction model)
+        public BoxProdResponse Insert(BoxProduction model)
         {
-            ArticleProdResponse res = new ArticleProdResponse();
+            BoxProdResponse res = new BoxProdResponse();
 
             try
             {
-                res = _articleProductionService.Insert(model);
+                res = _boxProductionService.Insert(model);
             }
             catch (Exception ex)
             {
@@ -34,14 +34,14 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
-        [Route("articlebomlist")]
-        public ArticleBomResponse GetArticleBomList(ArticleBomRequest model)
+        [Route("packingbomlist")]
+        public PackingBOMResponse GetPackingBomList(PackingBOMRequest model)
         {
-            ArticleBomResponse res = new ArticleBomResponse();
+            PackingBOMResponse res = new PackingBOMResponse();
 
             try
             {
-                res = _articleProductionService.GetArticleBomList(model);
+                res = _boxProductionService.GetPackingBomList(model);
             }
             catch (Exception ex)
             {
@@ -51,16 +51,15 @@ namespace MicroApi.Controllers
 
             return res;
         }
-       
         [HttpPost]
         [Route("select/{id:int}")]
-        public ProductionViewResponse GetProductionById(int id)
+        public BoxProductionSelectResponse GetProductionById(int id)
         {
-            ProductionViewResponse res = new ProductionViewResponse();
+            BoxProductionSelectResponse res = new BoxProductionSelectResponse();
 
             try
             {
-                res = _articleProductionService.GetProductionById(id);
+                res = _boxProductionService.GetProductionById(id);
             }
             catch (Exception ex)
             {
@@ -71,14 +70,14 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
-        [Route("articlelist")]
-        public ProductionListResponse articleprodlist(ProductionListRequest model)
+        [Route("packinglist")]
+        public BoxProductionListResponse articleprodlist(BoxProductionListRequest model)
         {
-            ProductionListResponse res = new ProductionListResponse();
+            BoxProductionListResponse res = new BoxProductionListResponse();
 
             try
             {
-                res = _articleProductionService.articleprodlist(model);
+                res = _boxProductionService.packingprodlist(model);
             }
             catch (Exception ex)
             {

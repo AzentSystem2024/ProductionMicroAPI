@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
         ArticleTypeResponse Insert(ArticleType articleType);
         ArticleTypeResponse Update(ArticleTypeUpdate articleType);
         ArticleTypeResponse GetArticleTypeById(int id);
-        ArticleTypeListResponse GetLogList(ArticleTypeListReq request);
+        ArticleTypeListResponse GetLogList();
         ArticleTypeResponse DeleteArticleTypeData(int id);
     }
 }

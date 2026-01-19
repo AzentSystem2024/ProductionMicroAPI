@@ -3,13 +3,11 @@
     public class ArticleType
     {
         public string DESCRIPTION { get; set; }
-        public int COMPANY_ID { get; set; }
     }
     public class ArticleTypeUpdate
     {
         public int ID { get; set; }
         public string DESCRIPTION { get; set; }
-        public int COMPANY_ID { get; set; }
     }
     public class ArticleTypeResponse
     {
@@ -25,9 +23,5 @@
         public List<ArticleTypeUpdate> Data { get; set; }
 
     }
-    public class ArticleTypeListReq
-    {
-        public int COMPANY_ID { get; set; }
-      
-    }
+    
 }

@@ -10,11 +10,12 @@ namespace MicroApi.DataLayer.Interface
         ArticleResponse Insert(Article article);
         ArticleResponse Update(ArticleUpdate article);
         ArticleResponse GetArticleById(int id);
-        ArticleListResponse GetArticleList(ArticleListReq request);
-        ListItemsResponse GetItems(ArticleListReq request);
+        ArticleListResponse GetArticleList();
+        ListItemsResponse GetItems();
         ItemdataResponse GetItemByCode(ItemcodeRequest request);
         ArticleResponse DeleteArticleData(DeleteArticleRequest request);
-        string GetLastOrderNoByUnitId(ArticleListReq request);
+        string GetLastOrderNoByUnitId();
+        string GetAliasNo();
         //ArticleUpdate GetArticleDetails(int unitId, string artNo, string color, int categoryId, decimal price);
     }
 }
