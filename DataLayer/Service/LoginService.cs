@@ -170,18 +170,30 @@ namespace MicroApi.DataLayer.Service
                 {
                     response.GeneralSettings = new GeneralSettings
                     {
-                        ID_PREFIX = reader["ID_PREFIX"]?.ToString(),
-                        DateFormat = reader["DateFormat"]?.ToString(),
-                        CURRENCY_NAME = reader["CURRENCY_NAME"]?.ToString(),
-                        SYMBOL = reader["SYMBOL"]?.ToString(),
-                        CODE = reader["CODE"]?.ToString(),
-                        DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString(),
-                        VAT_TITLE = reader["VAT_TITLE"]?.ToString(),
-                        STORE_TITLE = reader["STORE_TITLE"]?.ToString(),
-                        ENABLE_MATRIX_CODE = Convert.ToBoolean(reader["ENABLE_MATRIX_CODE"]),
-                        QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString(),
-                        SELLING_PRICE_INCL_VAT = Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
-                        HSN_CODE = reader["FT_HSN_CODE"]?.ToString()
+                        ID_PREFIX = reader["ID_PREFIX"]?.ToString() ?? "",
+                        DateFormat = reader["DateFormat"]?.ToString() ?? "dd-mm-yyyy",
+                        CURRENCY_NAME = reader["CURRENCY_NAME"]?.ToString() ?? "",
+                        SYMBOL = reader["SYMBOL"]?.ToString() ?? "",
+                        CODE = reader["CODE"]?.ToString() ?? "",
+                        CUST_CODE_AUTO = reader["CUST_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["CUST_CODE_AUTO"]),
+                        SUPP_CODE_AUTO = reader["SUPP_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["SUPP_CODE_AUTO"]),
+                        EMP_CODE_AUTO = reader["EMP_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["EMP_CODE_AUTO"]),
+                        ITEM_CODE_AUTO = reader["ITEM_CODE_AUTO"] != DBNull.Value && Convert.ToBoolean(reader["ITEM_CODE_AUTO"]),
+                        DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString() ?? "",
+                        ITEM_PROPERTY1 = reader["ITEM_PROPERTY1"]?.ToString() ?? "",
+                        ITEM_PROPERTY2 = reader["ITEM_PROPERTY2"]?.ToString() ?? "",
+                        ITEM_PROPERTY3 = reader["ITEM_PROPERTY3"]?.ToString() ?? "",
+                        ITEM_PROPERTY4 = reader["ITEM_PROPERTY4"]?.ToString() ?? "",
+                        ITEM_PROPERTY5 = reader["ITEM_PROPERTY5"]?.ToString() ?? "",
+                        REFERENCE_LABEL = reader["REFERENCE_LABEL"]?.ToString() ?? "",
+                        COMMENT_LABEL = reader["COMMENT_LABEL"]?.ToString() ?? "",
+                        STATE_LABEL = reader["STATE_LABEL"]?.ToString() ?? "",
+                        VAT_TITLE = reader["VAT_TITLE"]?.ToString() ?? "",
+                        STORE_TITLE = reader["STORE_TITLE"]?.ToString() ?? "",
+                        ENABLE_MATRIX_CODE = reader["ENABLE_MATRIX_CODE"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_MATRIX_CODE"]),
+                        QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString() ?? "",
+                        SELLING_PRICE_INCL_VAT = reader["SELLING_PRICE_INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
+                        //HSN_CODE = reader["FT_HSN_CODE"]?.ToString() ?? "",
                     };
                 }
 

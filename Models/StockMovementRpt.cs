@@ -12,8 +12,8 @@
         public decimal OPENING_QTY { get; set; }
         public decimal GRN_QTY { get; set; }
         public decimal PURCHASE_RETURN_QTY { get; set; }
-        public decimal TRANSFEROUT_QTY { get; set; }
-        public decimal TRANSFERIN_QTY { get; set; }
+        public decimal PRODUCTION_QTY { get; set; }
+        public decimal CONSUMPTION_QTY { get; set; }
         public decimal DELIVERY_QTY { get; set; }
         public decimal DELIVERY_RETURN_QTY { get; set; }
         public decimal SALE_QTY { get; set; }
@@ -27,7 +27,7 @@
       //  public int STORE_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
-        public int? ITEM_ID { get; set; } = 0; 
+        public int? ITEM_TYPE { get; set; } = 0; 
     }
     public class StockMovementRptResponse
     {

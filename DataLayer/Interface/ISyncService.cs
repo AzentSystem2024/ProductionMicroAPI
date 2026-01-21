@@ -17,6 +17,6 @@ namespace MicroApi.DataLayer.Interface
         DNListResponse GetDNList(ProductionListRequest model);
         DNViewResponse GetProductionDNById(int id);
         GRNUploadResponse SaveProductionTransferInGRN(ProductionTransferInGRN model);
-        ProductionTransferInGRNListResponse GetProductionTransferInGRNList(ProductionListRequest model);
+        SyncResponse SaveDispatch(DispatchSave model);
     }
 }

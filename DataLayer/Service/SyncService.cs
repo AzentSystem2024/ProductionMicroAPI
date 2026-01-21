@@ -1,6 +1,8 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -174,31 +176,24 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
                 cmd.Parameters.AddWithValue("@DN_DATE", model.DN_DATE);
-                //cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? "");
                 cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
-                //cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? "");
 
                 // TVP
                 DataTable dt = new DataTable();
-                dt.Columns.Add("SO_DETAIL_ID", typeof(int));
-                dt.Columns.Add("ITEM_ID", typeof(int));
-                dt.Columns.Add("REMARKS", typeof(string));
-                dt.Columns.Add("UOM", typeof(string));
-                dt.Columns.Add("QUANTITY", typeof(decimal));
-                dt.Columns.Add("PACKING_ID", typeof(int));                
                 
-                // dt.Columns.Add("REMARKS", typeof(string));
-
+                dt.Columns.Add("PACKING_ID", typeof(int));
+                dt.Columns.Add("PO_NO", typeof(string));
+                dt.Columns.Add("ORDER_ENTRY_ID", typeof(int));
                 foreach (var item in model.Items)
                 {
-                    dt.Rows.Add(0,0,null,null,0,item.PACKING_ID); //item.REMARKS ?? "");
+                    dt.Rows.Add(item.PACKING_ID,item.PO_NO,item.ORDER_ENTRY_ID); 
                 }
 
                 SqlParameter tvp = cmd.Parameters.AddWithValue(
-                    "@UDT_TB_DN_DETAIL", dt);
+                    "@UDT_TRANSFER_OUT_DN", dt);
                 tvp.SqlDbType = SqlDbType.Structured;
-                tvp.TypeName = "UDT_TB_DN_DETAIL";
+                tvp.TypeName = "UDT_TRANSFER_OUT_DN";
 
                 //con.Open();
                 cmd.ExecuteNonQuery();
@@ -619,6 +614,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
         public DNListResponse GetDNList(ProductionListRequest model)
         {
             DNListResponse response = new DNListResponse();
@@ -626,49 +622,57 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                using (SqlConnection connection = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_PRODUCTION_TRANSFER_OUT(DN)", connection))
+                using (SqlConnection con = ADO.GetConnection())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@ACTION", 2);
-                    cmd.Parameters.AddWithValue("@ID", DBNull.Value);
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
-
-                    //connection.Open();
-
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand("SP_PRODUCTION_TRANSFER_OUT(DN)", con))
                     {
-                        while (dr.Read())
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 2);
+                        cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+
+                        if (con.State != ConnectionState.Open)
+                            con.Open(); // Ensure connection is open
+
+                        using (SqlDataReader dr = cmd.ExecuteReader())
                         {
-                            DNList item = new DNList();
+                            while (dr.Read())
+                            {
+                                DNList item = new DNList
+                                {
+                                    ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : (int?)null,
+                                    DN_DATE = dr["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["DN_DATE"]) : (DateTime?)null,
+                                    DN_NO = dr["DN_NO"] != DBNull.Value ? dr["DN_NO"].ToString() : null,
+                                    TOTAL_QTY = dr["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(dr["TOTAL_QTY"]) : 0,
+                                    STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : "UNKNOWN",
+                                    CUSTOMER_NAME = dr["CUSTOMER_NAME"] != DBNull.Value ? dr["CUSTOMER_NAME"].ToString() : string.Empty,
+                                    COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? dr["COMPANY_NAME"].ToString() : string.Empty
+                                };
 
-                            item.ID = dr["ID"] == DBNull.Value ? null : Convert.ToInt32(dr["ID"]);
-                            item.DN_DATE = dr["DN_DATE"] == DBNull.Value ? null : Convert.ToDateTime(dr["DN_DATE"]);
-                            item.DN_NO = dr["DN_NO"] == DBNull.Value ? "" : dr["DN_NO"].ToString();
-                            item.TOTAL_QTY = dr["TOTAL_QTY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["TOTAL_QTY"]);
-                            item.STATUS = dr["STATUS"] == DBNull.Value ? "" : dr["STATUS"].ToString();
-                            item.CUSTOMER_NAME = dr["CUSTOMER_NAME"] == DBNull.Value ? "" : dr["CUSTOMER_NAME"].ToString();
-                            item.COMPANY_NAME = dr["COMPANY_NAME"] == DBNull.Value ? "" : dr["COMPANY_NAME"].ToString();
-
-                            list.Add(item);
+                                list.Add(item);
+                            }
                         }
                     }
                 }
 
                 response.Flag = 1;
-                response.Message = "Success";
+                response.Message = list.Count > 0 ? "Success" : "No records found";
                 response.Data = list;
             }
             catch (Exception ex)
             {
                 response.Flag = 0;
-                response.Message = "ERROR: " + ex.Message;
+                response.Message = "Error: " + ex.Message;
                 response.Data = new List<DNList>();
             }
 
             return response;
         }
+
+
+
         public DNViewResponse GetProductionDNById(int id)
         {
             var response = new DNViewResponse
@@ -754,27 +758,27 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@ACTION", 1);
+                    // SP Parameters
                     cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
-                    cmd.Parameters.AddWithValue("@SUPP_ID", model.SUPP_ID);
                     cmd.Parameters.AddWithValue("@GRN_DATE", model.GRN_DATE);
                     cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                     cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
+                    cmd.Parameters.AddWithValue("@SUPP_ID", model.SUPP_ID);
 
-                    // ===== TVP =====
                     DataTable dt = new DataTable();
-                    dt.Columns.Add("ITEM_ID", typeof(int));
+                    dt.Columns.Add("PACKING_ID", typeof(int));
 
                     foreach (var item in model.Items)
                     {
-                        dt.Rows.Add(item.ITEM_ID);
+                        dt.Rows.Add(item.PACKING_ID); 
                     }
 
-                    SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TB_GRN_DATA", dt);
+                    SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TRANSFER_IN_GRN", dt);
                     tvp.SqlDbType = SqlDbType.Structured;
-                    tvp.TypeName = "UDT_TB_GRN_DATA";
+                    tvp.TypeName = "UDT_TRANSFER_IN_GRN";
 
-                    //con.Open();
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -795,50 +799,85 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public ProductionTransferInGRNListResponse GetProductionTransferInGRNList(ProductionListRequest request)
+
+        public SyncResponse SaveDispatch(DispatchSave model)
         {
-            var response = new ProductionTransferInGRNListResponse
-            {
-                Data = new List<ProductionTransferInGRNList>()
-            };
+            SyncResponse response = new SyncResponse();
 
             try
             {
-                using (SqlConnection con = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_PRODUCTION_TRANSFER_IN(GRN)", con))
+                using (SqlConnection connection = ADO.GetConnection())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@ACTION", 2);
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-
-                    //con.Open();
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_DISPATCH", connection))
                     {
-                        while (dr.Read())
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // ---------- HEADER PARAMS ----------
+                        cmd.Parameters.AddWithValue("@ACTION", 1);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                        cmd.Parameters.AddWithValue("@UNIT_ID", model.UNIT_ID);
+
+                        cmd.Parameters.AddWithValue("@DISTRIBUTOR_ID", (object?)model.DISTRIBUTOR_ID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@SUBDEALER_ID", (object?)model.SUBDEALER_ID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@LOCATION_ID", (object?)model.LOCATION_ID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BRAND_ID", (object?)model.BRAND_ID ?? DBNull.Value);
+
+                        cmd.Parameters.AddWithValue("@IS_SHIPPED", model.IS_SHIPPED);
+                        cmd.Parameters.AddWithValue("@SO_NO", model.SO_NO ?? "");
+                        cmd.Parameters.AddWithValue("@TRANSPORTATION", model.TRANSPORTATION ?? "");
+
+                        cmd.Parameters.AddWithValue("@DISPATCH_TIME", (object?)model.DISPATCH_TIME ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@SHIPPED_TIME", (object?)model.SHIPPED_TIME ?? DBNull.Value);
+
+                        cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
+
+                        cmd.Parameters.AddWithValue("@IS_RETURN", model.IS_RETURN);
+                        cmd.Parameters.AddWithValue("@RETURN_TIME", (object?)model.RETURN_TIME ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@RETURN_USER_ID", model.RETURN_USER_ID);
+                        cmd.Parameters.AddWithValue("@RETURN_REASON", model.RETURN_REASON ?? "");
+
+                        cmd.Parameters.AddWithValue("@IS_COMMITTED", model.IS_COMMITTED);
+                        cmd.Parameters.AddWithValue("@UPDATED_DATE", (object?)model.UPDATED_DATE ?? DBNull.Value);
+
+                        // ---------- BUILD UDT ----------
+                        DataTable dtDispatch = new DataTable();
+                        dtDispatch.Columns.Add("BOX_ID", typeof(int));
+                        dtDispatch.Columns.Add("ORDER_DETAIL_ID", typeof(int));
+
+                        if (model.Boxes != null && model.Boxes.Count > 0)
                         {
-                            response.Data.Add(new ProductionTransferInGRNList
+                            foreach (var box in model.Boxes)
                             {
-                                TRANS_ID = Convert.ToInt32(dr["TRANS_ID"]),
-                                ID = Convert.ToInt32(dr["ID"]),
-                                DOC_NO = dr["GRN_NO"].ToString(),
-                                GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
-                                NET_AMOUNT = Convert.ToDecimal(dr["NET_AMOUNT"]),
-                                SUPPPLIER_NAME = dr["SUPP_NAME"].ToString(),
-                                COMPANY_NAME = dr["COMPANY_NAME"].ToString(),
-                                STATUS = Convert.ToInt32(dr["TRANS_STATUS"])
-                            });
+                                dtDispatch.Rows.Add(
+                                    box.BOX_ID,
+                                    box.ORDER_DETAIL_ID ?? 0
+                                );
+                            }
+                        }
+
+                        SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_DISPATCH_DETAIL", dtDispatch);
+                        tvp.SqlDbType = SqlDbType.Structured;
+                        tvp.TypeName = "dbo.UDT_DISPATCH_DETAIL";
+
+                        // ---------- EXEC ----------
+                       // connection.Open();
+
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                response.Flag = Convert.ToInt32(dr["Flag"]);
+                                response.Message = dr["Message"].ToString();
+                               
+                            }
                         }
                     }
                 }
-
-                response.Flag = 1;
-                response.Message = "GRN List fetched successfully";
             }
             catch (Exception ex)
             {
                 response.Flag = 0;
-                response.Message = ex.Message;
+                response.Message = "ERROR: " + ex.Message;
             }
 
             return response;

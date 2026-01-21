@@ -28,7 +28,7 @@ namespace MicroApi.DataLayer.Service
                         //cmd.Parameters.Add("@STORE_ID", SqlDbType.Int).Value = request.STORE_ID;
                         cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
                         cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
-                        cmd.Parameters.Add("@ITEM_ID", SqlDbType.Int).Value = request.ITEM_ID ?? 0;
+                        cmd.Parameters.Add("@ITEM_TYPE", SqlDbType.Int).Value = request.ITEM_TYPE ?? 0;
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -46,8 +46,8 @@ namespace MicroApi.DataLayer.Service
                                     OPENING_QTY = reader["OPENING_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["OPENING_QTY"]) : 0,
                                     GRN_QTY = reader["GRN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["GRN_QTY"]) : 0,
                                     PURCHASE_RETURN_QTY = reader["PURCHASE_RETURN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["PURCHASE_RETURN_QTY"]) : 0,
-                                    TRANSFEROUT_QTY = reader["TRANSFER_OUT_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["TRANSFER_OUT_QTY"]) : 0,
-                                    TRANSFERIN_QTY = reader["TRANSFER_IN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["TRANSFER_IN_QTY"]) : 0,
+                                    PRODUCTION_QTY = reader["PRODUCTION_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["PRODUCTION_QTY"]) : 0,
+                                    CONSUMPTION_QTY = reader["CONSUMPTION_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["CONSUMPTION_QTY"]) : 0,
                                     DELIVERY_QTY = reader["DELIVERY_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["DELIVERY_QTY"]) : 0,
                                     DELIVERY_RETURN_QTY = reader["DELIVERY_RETURN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["DELIVERY_RETURN_QTY"]) : 0,
                                     SALE_QTY = reader["SALE_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["SALE_QTY"]) : 0,

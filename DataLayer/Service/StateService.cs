@@ -81,7 +81,7 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = "SELECT TB_STATE.ID,TB_STATE.STATE_NAME,TB_STATE.CODE, " +
-               "TB_STATE.COUNTRY_ID,TB_STATE.IS_DELETED,TB_STATE.COMPANY_ID " +
+               "TB_STATE.COUNTRY_ID,TB_STATE.IS_DELETED, " +
                "TB_COUNTRY.COUNTRY_NAME " +
                "FROM TB_STATE " +
                "INNER JOIN TB_COUNTRY ON TB_STATE.COUNTRY_ID = TB_COUNTRY.ID " +

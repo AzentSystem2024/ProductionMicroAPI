@@ -233,14 +233,14 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
-        [Route("grnlist")]
-        public ProductionTransferInGRNListResponse GetProductionTransferInGRNList(ProductionListRequest model)
+        [Route("savedispatch")]
+        public SyncResponse SaveDispatch(DispatchSave model)
         {
-            ProductionTransferInGRNListResponse res = new ProductionTransferInGRNListResponse();
+            SyncResponse res = new SyncResponse();
 
             try
             {
-                res = _syncService.GetProductionTransferInGRNList(model);
+                res = _syncService.SaveDispatch(model);
             }
             catch (Exception ex)
             {

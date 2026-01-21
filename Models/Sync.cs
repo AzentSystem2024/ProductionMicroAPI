@@ -107,6 +107,8 @@
     public class ProductionDNItem
     {
         public int PACKING_ID { get; set; }
+        public string? PO_NO { get; set; }
+        public int ORDER_ENTRY_ID { get; set; }
     }
     public class ProductionDR
     {
@@ -197,7 +199,7 @@
     }
     public class ProductionTransferInGRNItem
     {
-        public int ITEM_ID { get; set; }
+        public int PACKING_ID { get; set; }
     }
     public class GRNUploadResponse
     {
@@ -205,22 +207,38 @@
         public string Message { get; set; }
         public int GRN_ID { get; set; }
     }
-    public class ProductionTransferInGRNList
+    public class DispatchSave
     {
-        public int TRANS_ID { get; set; }
-        public int ID { get; set; }              
-        public string DOC_NO { get; set; }
-        public DateTime GRN_DATE { get; set; }
-        public decimal NET_AMOUNT { get; set; }
-        public string SUPPPLIER_NAME { get; set; }
-        public string COMPANY_NAME { get; set; }
-        public int STATUS { get; set; }
-    }
-    public class ProductionTransferInGRNListResponse
-    {
-        public int Flag { get; set; }
-        public string Message { get; set; }
-        public List<ProductionTransferInGRNList> Data { get; set; }
-    }
+        public int FIN_ID { get; set; }
+        public int UNIT_ID { get; set; }
 
+        public int? DISTRIBUTOR_ID { get; set; }
+        public int? SUBDEALER_ID { get; set; }
+        public int? LOCATION_ID { get; set; }
+        public int? BRAND_ID { get; set; }
+
+        public bool IS_SHIPPED { get; set; }
+        public string? SO_NO { get; set; }
+        public string? TRANSPORTATION { get; set; }
+
+        public DateTime? DISPATCH_TIME { get; set; }
+        public DateTime? SHIPPED_TIME { get; set; }
+
+        public int USER_ID { get; set; }
+
+        public bool? IS_RETURN { get; set; }
+        public DateTime? RETURN_TIME { get; set; }
+        public int? RETURN_USER_ID { get; set; }
+        public string? RETURN_REASON { get; set; }
+
+        public bool? IS_COMMITTED { get; set; }
+        public DateTime? UPDATED_DATE { get; set; }
+
+        public List<DispatchBoxItem> Boxes { get; set; }
+    }
+    public class DispatchBoxItem
+    {
+        public int BOX_ID { get; set; }
+        public int? ORDER_DETAIL_ID { get; set; }
+    }
 }
