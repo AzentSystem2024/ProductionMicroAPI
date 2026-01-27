@@ -311,7 +311,10 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 4);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                        
+                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+
+
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -871,7 +874,10 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 36); 
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                       
+                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+
+
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
