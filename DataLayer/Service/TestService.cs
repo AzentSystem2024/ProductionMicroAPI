@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using MicroApi.Models;
 
-namespace RetailApi.DAL.Services
+namespace MicroApi.DAL.Services
 {
     public class TestService:ITestService
     {

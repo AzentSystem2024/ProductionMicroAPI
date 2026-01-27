@@ -43,7 +43,6 @@ namespace MicroApi.DataLayer.Service
                     dtRaw.Columns.Add("USED_QTY", typeof(float));
                     dtRaw.Columns.Add("UNIT_COST", typeof(float));
                     dtRaw.Columns.Add("TOTAL_COST", typeof(float));
-                    //dtRaw.Columns.Add("QTY_AVAILABLE", typeof(float));
 
 
                     if (model.RawMaterials != null && model.RawMaterials.Count > 0)
@@ -81,6 +80,149 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public BoxProdResponse Update(BoxProductionUpdate model)
+        {
+            BoxProdResponse response = new BoxProdResponse();
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_TB_ARTICLE_PRODUCTION_ENTRY", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // ===== Header Parameters =====
+                    cmd.Parameters.AddWithValue("@ACTION", 2);
+                    cmd.Parameters.AddWithValue("@ID", model.ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                    cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? "");
+                    cmd.Parameters.AddWithValue("@ADDL_COST", model.ADDL_COST);
+                    cmd.Parameters.AddWithValue("@ADDL_DESCRIPTION", model.REMARKS ?? "");
+                    cmd.Parameters.AddWithValue("@PRODUCT_ID", model.PRODUCT_ID);
+                    cmd.Parameters.AddWithValue("@PROD_QTY", model.PROD_QTY);
+                    cmd.Parameters.AddWithValue("@PRODUCTION_DATE", model.PRODUCTION_DATE ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ITEM_COST", model.TOTAL_ITEM_COST);
+                    cmd.Parameters.AddWithValue("@UNIT_COST", model.UNIT_PRODUCT_COST);
+                    cmd.Parameters.AddWithValue("@PRODUCTION_TYPE", model.PRODUCTION_TYPE);
+
+                    // ===== RAW MATERIALS UDT =====
+                    DataTable dtRaw = new DataTable();
+                    dtRaw.Columns.Add("ITEM_ID", typeof(int));
+                    dtRaw.Columns.Add("UOM", typeof(string));
+                    dtRaw.Columns.Add("BOM_QTY", typeof(float));
+                    dtRaw.Columns.Add("REQUIRED_QTY", typeof(float));
+                    dtRaw.Columns.Add("USED_QTY", typeof(float));
+                    dtRaw.Columns.Add("UNIT_COST", typeof(float));
+                    dtRaw.Columns.Add("TOTAL_COST", typeof(float));
+
+                    if (model.RawMaterials != null && model.RawMaterials.Count > 0)
+                    {
+                        foreach (var r in model.RawMaterials)
+                        {
+                            dtRaw.Rows.Add(
+                                r.ID,
+                                r.UOM ?? "",
+                                r.QUANTITY,
+                                r.REQUIRED_QTY,
+                                r.USED_QTY,
+                                r.COST,
+                                r.AMOUNT
+                            );
+                        }
+                    }
+
+                    SqlParameter pRaw = cmd.Parameters.AddWithValue("@UDT_PRODUCTION_DETAIL", dtRaw);
+                    pRaw.SqlDbType = SqlDbType.Structured;
+                    pRaw.TypeName = "UDT_PRODUCTION_DETAIL";
+
+                    cmd.ExecuteNonQuery();
+
+                    response.Flag = 1;
+                    response.Message = "Article Production updated successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+        public BoxProdResponse commit(BoxProductionUpdate model)
+        {
+            BoxProdResponse response = new BoxProdResponse();
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_TB_ARTICLE_PRODUCTION_ENTRY", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // ===== Header Parameters =====
+                    cmd.Parameters.AddWithValue("@ACTION", 3);
+                    cmd.Parameters.AddWithValue("@ID", model.ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                    cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? "");
+                    cmd.Parameters.AddWithValue("@ADDL_COST", model.ADDL_COST);
+                    cmd.Parameters.AddWithValue("@ADDL_DESCRIPTION", model.REMARKS ?? "");
+                    cmd.Parameters.AddWithValue("@PRODUCT_ID", model.PRODUCT_ID);
+                    cmd.Parameters.AddWithValue("@PROD_QTY", model.PROD_QTY);
+                    cmd.Parameters.AddWithValue("@PRODUCTION_DATE", model.PRODUCTION_DATE ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ITEM_COST", model.TOTAL_ITEM_COST);
+                    cmd.Parameters.AddWithValue("@UNIT_COST", model.UNIT_PRODUCT_COST);
+                    cmd.Parameters.AddWithValue("@PRODUCTION_TYPE", model.PRODUCTION_TYPE);
+
+                    // ===== RAW MATERIALS UDT =====
+                    DataTable dtRaw = new DataTable();
+                    dtRaw.Columns.Add("ITEM_ID", typeof(int));
+                    dtRaw.Columns.Add("UOM", typeof(string));
+                    dtRaw.Columns.Add("BOM_QTY", typeof(float));
+                    dtRaw.Columns.Add("REQUIRED_QTY", typeof(float));
+                    dtRaw.Columns.Add("USED_QTY", typeof(float));
+                    dtRaw.Columns.Add("UNIT_COST", typeof(float));
+                    dtRaw.Columns.Add("TOTAL_COST", typeof(float));
+
+                    if (model.RawMaterials != null && model.RawMaterials.Count > 0)
+                    {
+                        foreach (var r in model.RawMaterials)
+                        {
+                            dtRaw.Rows.Add(
+                                r.ID,
+                                r.UOM ?? "",
+                                r.QUANTITY,
+                                r.REQUIRED_QTY,
+                                r.USED_QTY,
+                                r.COST,
+                                r.AMOUNT
+                            );
+                        }
+                    }
+
+                    SqlParameter pRaw = cmd.Parameters.AddWithValue("@UDT_PRODUCTION_DETAIL", dtRaw);
+                    pRaw.SqlDbType = SqlDbType.Structured;
+                    pRaw.TypeName = "UDT_PRODUCTION_DETAIL";
+
+                    cmd.ExecuteNonQuery();
+
+                    response.Flag = 1;
+                    response.Message = "Article Production updated successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
+
         public PackingBOMResponse GetPackingBomList(PackingBOMRequest model)
         {
             PackingBOMResponse res = new PackingBOMResponse
@@ -95,7 +237,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@ACTION", 2);
+                    cmd.Parameters.AddWithValue("@ACTION", 4);
                     cmd.Parameters.AddWithValue("@PACKINGID", model.ITEM_ID);
 
 
@@ -254,6 +396,42 @@ namespace MicroApi.DataLayer.Service
             }
 
             return response;
+        }
+        public BoxProdResponse Delete(int id)
+        {
+            BoxProdResponse res = new BoxProdResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == System.Data.ConnectionState.Closed)
+                        connection.Open();
+
+                    string procedureName = "SP_BOX_PRODUCTION_ENTRY";
+
+                    using (var cmd = new SqlCommand(procedureName, connection))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 7);
+                        cmd.Parameters.AddWithValue("@ID", id);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+
+                    }
+
+                }
+                res.Flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
         }
     }
 }

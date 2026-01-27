@@ -1,34 +1,34 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MicroApi.DataLayer.Interface;
+﻿using Microsoft.AspNetCore.Mvc;
 using MicroApi.Helper;
+using MicroApi.Models;
 using System.Data.SqlClient;
 
-namespace RetailApi.Controllers
+namespace MicroApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class TestController : ControllerBase
     {
-        private readonly ITestService _testService;
-        public TestController(ITestService testService)
-        {
-            _testService = testService;
-        }
         [HttpGet]
-        public bool Get()
+        public IActionResult Get()
         {
+            Test response = new Test();
+
             try
             {
-                using(SqlConnection conn = ADO.GetConnection())
+                using (SqlConnection conn = ADO.GetConnection())
                 {
-                    return true;
+                    response.Flag = 1;
+                    response.Message = "Success";
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                response.Flag = 0;
+                response.Message = ex.Message;
             }
+
+            return Ok(response);
         }
     }
 }

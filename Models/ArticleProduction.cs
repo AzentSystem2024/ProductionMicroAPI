@@ -28,7 +28,26 @@
         public float AMOUNT { get; set; }
         public float REQUIRED_QTY { get; set; }
     }
-   
+    public class ArticleProductionUpdate
+    {
+        public int ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? USER_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public string? REF_NO { get; set; }
+        public double? ADDL_COST { get; set; }
+        public string? REMARKS { get; set; }
+        public int? PRODUCT_ID { get; set; }
+        public double? PROD_QTY { get; set; }
+        public double? TOTAL_ITEM_COST { get; set; }
+        public double? COST_OF_PRODUCTION { get; set; }
+        public double? UNIT_PRODUCT_COST { get; set; }
+        public DateTime? PRODUCTION_DATE { get; set; }
+        public int? PRODUCTION_TYPE { get; set; }
+
+        public List<ProductionRawMaterialRequest> RawMaterials { get; set; }
+    }
+
     public class ArticleProduction_Item
     {
         public long ARTICLE_PRODUCTION_ID { get; set; }  
@@ -67,7 +86,9 @@
     }
     public class ProductionListRequest
     {
-        public int COMPANY_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public DateTime? DATE_FROM { get; set; }
+        public DateTime? DATE_TO { get; set; }
     }
 
     public class ProductionListResponse
@@ -88,6 +109,8 @@
         public string VOUCHER_NO { get; set; }
         public string ITEM_CODE { get; set; }
         public string DESCRIPTION { get; set; }
+        public string UOM { get; set; }
+        public string STATUS { get; set; }
     }
     public class ProductionViewResponse
     {
@@ -108,7 +131,7 @@
         public decimal TOTAL_COST { get; set; }
         public decimal UNIT_COST { get; set; }
         public decimal ADDL_COST { get; set; }
-        public string ADDL_DESCRIPTION { get; set; }
+        public string REMARKS { get; set; }
         public long TRANS_ID { get; set; }
         public string VOUCHER_NO { get; set; }
         public string DESCRIPTION { get; set; }
@@ -128,8 +151,10 @@
         public decimal UNIT_COST { get; set; }
         public decimal TOTAL_COST { get; set; }
         public string ITEM_CODE { get; set; }
+        public decimal QTY_AVAILABLE { get; set; }
+
     }
 
-    
+
 
 }

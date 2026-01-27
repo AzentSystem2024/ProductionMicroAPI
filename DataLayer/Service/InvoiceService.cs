@@ -452,6 +452,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
 
 
                         using (var reader = cmd.ExecuteReader())

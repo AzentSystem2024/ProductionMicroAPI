@@ -34,6 +34,60 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Update")]
+        public ArticleProdResponse Update(ArticleProductionUpdate model)
+        {
+            ArticleProdResponse res = new ArticleProdResponse();
+
+            try
+            {
+                res = _articleProductionService.Update(model);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("commit")]
+        public ArticleProdResponse commit(ArticleProductionUpdate model)
+        {
+            ArticleProdResponse res = new ArticleProdResponse();
+
+            try
+            {
+                res = _articleProductionService.commit(model);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("delete")]
+        public ArticleProdResponse delete(int id)
+        {
+            ArticleProdResponse res = new ArticleProdResponse();
+
+            try
+            {
+                res = _articleProductionService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("articlebomlist")]
         public ArticleBomResponse GetArticleBomList(ArticleBomRequest model)
         {

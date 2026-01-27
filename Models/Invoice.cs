@@ -253,5 +253,8 @@
     public class InvoiceListRequest
     {
         public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+
     }
 }

@@ -10,71 +10,65 @@ namespace MicroApi.DataLayer.Service
 {
     public class SyncService: ISyncService
     {
-        public SyncResponse Insert(Sync model)
+        public SyncResponse Insert(List<SyncArticleProduction> model)
         {
-            SyncResponse response = new SyncResponse();
+            SyncResponse response = new SyncResponse
+            {
+                Flag = 0,               
+                Message = "Unknown error"
+            };
 
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_ARTICLE_PRODUCTION_UPLOAD", connection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("SP_ARTICLE_PRODUCTION_UPLOAD", connection))
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 1);
+
+                    // Prepare UDT
+                    DataTable dtUDT = new DataTable();
+                    dtUDT.Columns.Add("ARTICLE_ID", typeof(long));
+                    dtUDT.Columns.Add("ARTICLE_PRODUCTION_ID", typeof(long));
+                    dtUDT.Columns.Add("BOX_ID", typeof(int));
+                    dtUDT.Columns.Add("BARCODE", typeof(string));
+                    dtUDT.Columns.Add("PRICE", typeof(decimal));
+                    dtUDT.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
+                    dtUDT.Columns.Add("UNIT_ID", typeof(int));
+
+                    foreach (var item in model)
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        // ----------- HEADER PARAMETERS -------------
-                        cmd.Parameters.AddWithValue("@ACTION", 1);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
-                        cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
-                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
-                        
-
-                        // ----------- BUILD UDT TABLE ----------------
-                        DataTable dtUDT = new DataTable();
-
-                        dtUDT.Columns.Add("ARTICLE_ID", typeof(long));
-                        dtUDT.Columns.Add("ARTICLE_PRODUCTION_ID", typeof(long));
-                        dtUDT.Columns.Add("BOX_ID", typeof(long));
-                        dtUDT.Columns.Add("BARCODE", typeof(string));
-                        dtUDT.Columns.Add("PRICE", typeof(double));
-                        dtUDT.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
-
-                        if (model.Articles != null && model.Articles.Count > 0)
-                        {
-                            foreach (var item in model.Articles)
-                            {
-                                dtUDT.Rows.Add(
-                                    item.ARTICLE_ID,
-                                    item.ARTICLE_PRODUCTION_ID,
-                                    item.BOX_ID,
-                                    item.BARCODE ?? "",
-                                    Convert.ToDouble(item.PRICE),
-                                    item.PRODUCTION_DATE
-                                );
-                            }
-                        }
-
-                        // ---------- TVP PARAMETER -----------------
-                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_ARTICLE_PRODUCTION", dtUDT);
-                        tvpParam.SqlDbType = SqlDbType.Structured;
-                        tvpParam.TypeName = "UDT_ARTICLE_PRODUCTION";
-
-                        //connection.Open();
-                        cmd.ExecuteNonQuery();
-
-                        response.Flag = 1;
-                        response.Message = "Article production uploaded successfully.";
+                        dtUDT.Rows.Add(
+                            item.ARTICLE_ID,
+                            item.ARTICLE_PRODUCTION_ID,
+                            item.BOX_ID ?? 0,
+                            item.BARCODE ?? string.Empty,
+                            Convert.ToDecimal(item.PRICE),
+                            item.PRODUCTION_DATE,
+                            item.UNIT_ID
+                        );
                     }
+
+                    SqlParameter tvp = cmd.Parameters.Add("@UDT_ARTICLE_PRODUCTION", SqlDbType.Structured);
+                    tvp.TypeName = "UDT_ARTICLE_PRODUCTION";
+                    tvp.Value = dtUDT;
+
+                    cmd.ExecuteNonQuery();
+
+                    response.Flag = 1;  
+                    response.Message = "Article production uploaded successfully";
                 }
             }
             catch (Exception ex)
             {
-                response.Flag = 0;
-                response.Message = "ERROR : " + ex.Message;
+                response.Flag = 0;          
+                response.Message = ex.Message; 
             }
 
             return response;
         }
+
+
 
         public SyncResponse UploadPackProduction(PackProductionSync model)
         {
@@ -82,84 +76,88 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                using (SqlConnection connection = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_UPLOAD", connection))
+                using SqlConnection connection = ADO.GetConnection();
+                using SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_UPLOAD", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ACTION", 1);
+
+                // ---------------- UDT_BOX_PRODUCTION ----------------
+                DataTable dtBox = new DataTable();
+                dtBox.Columns.Add("PACK_PRODUCTION_ID", typeof(long));
+                dtBox.Columns.Add("PACKING_ID", typeof(long));
+                dtBox.Columns.Add("BOX_SERIAL", typeof(int));
+                dtBox.Columns.Add("BARCODE", typeof(string));
+                dtBox.Columns.Add("BOX_PRICE", typeof(decimal));
+                dtBox.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
+                dtBox.Columns.Add("UNIT_ID", typeof(int));
+                dtBox.Columns.Add("CURRENT_UNIT_ID", typeof(int));
+                dtBox.Columns.Add("BOX_STATUS", typeof(int));
+
+                foreach (var item in model.PackItems)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ACTION", 1);
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
-                    cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
-                    cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                    dtBox.Rows.Add(
+                        item.PACK_PRODUCTION_ID,
+                        item.PACKING_ID,
+                        item.BOX_SERIAL,
+                        item.BARCODE ?? string.Empty,
+                        item.BOX_PRICE,
+                        item.PRODUCTION_DATE,
+                        item.UNIT_ID,item.CURRENT_UNIT_ID,item.BOX_STATUS
+                    );
+                }
 
-                    // UDT_BOX_PRODUCTION DataTable
-                    DataTable dtUDT = new DataTable();
-                    dtUDT.Columns.Add("PACK_PRODUCTION_ID", typeof(long));
-                    dtUDT.Columns.Add("PACKING_ID", typeof(long));
-                    dtUDT.Columns.Add("BOX_SERIAL", typeof(int));
-                    dtUDT.Columns.Add("BARCODE", typeof(string));
-                    dtUDT.Columns.Add("BOX_PRICE", typeof(float));
-                    dtUDT.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
+                SqlParameter tvpBox = cmd.Parameters.Add("@UDT_BOX_PRODUCTION", SqlDbType.Structured);
+                tvpBox.TypeName = "UDT_BOX_PRODUCTION";
+                tvpBox.Value = dtBox;
 
-                    foreach (var item in model.PackItems)
+                // ---------------- UDT_ARTICLE_PRODUCTION ----------------
+                DataTable dtArticle = new DataTable();
+                dtArticle.Columns.Add("ARTICLE_ID", typeof(long));
+                dtArticle.Columns.Add("ARTICLE_PRODUCTION_ID", typeof(long));
+                dtArticle.Columns.Add("BOX_ID", typeof(long));
+                dtArticle.Columns.Add("BARCODE", typeof(string));
+                dtArticle.Columns.Add("PRICE", typeof(decimal));
+                dtArticle.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
+                dtArticle.Columns.Add("UNIT_ID", typeof(int));
+
+                foreach (var box in model.PackItems)
+                {
+                    if (box.ARTICLE_PRODUCTION_ID != null && box.ARTICLE_PRODUCTION_ID.Count > 0)
                     {
-                        dtUDT.Rows.Add(
-                            item.PACK_PRODUCTION_ID,
-                            item.PACKING_ID,
-                            item.BOX_SERIAL,
-                            item.BARCODE ?? string.Empty,
-                            item.BOX_PRICE,
-                            item.PRODUCTION_DATE
-                        );
-                    }
-
-                    SqlParameter tvp = cmd.Parameters.Add("@UDT_BOX_PRODUCTION", SqlDbType.Structured);
-                    tvp.TypeName = "UDT_BOX_PRODUCTION";
-                    tvp.Value = dtUDT;
-
-                    // UDT_ARTICLE_PRODUCTION (OPTIONAL)
-                   
-                    if (model.Articles != null && model.Articles.Count > 0)
-                    {
-                        DataTable dtArticle = new DataTable();
-                        dtArticle.Columns.Add("ARTICLE_PRODUCTION_ID", typeof(long));
-                        dtArticle.Columns.Add("ARTICLE_ID", typeof(long));
-                        dtArticle.Columns.Add("BOX_ID", typeof(long));
-                        dtArticle.Columns.Add("BARCODE", typeof(string));
-                        dtArticle.Columns.Add("PRICE", typeof(float));
-                        dtArticle.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
-
-                        foreach (var a in model.Articles)
+                        foreach (var article in box.ARTICLE_PRODUCTION_ID)
                         {
                             dtArticle.Rows.Add(
-                                a.ARTICLE_PRODUCTION_ID,
-                                a.ARTICLE_ID,
-                                a.BOX_ID,  
-                                a.BARCODE ?? string.Empty,
-                                a.PRICE,
-                                a.PRODUCTION_DATE
+                                0, // ARTICLE_ID (if unknown, set 0 or get from your logic)
+                                article.ID,
+                                box.PACK_PRODUCTION_ID,
+                                box.BARCODE ?? string.Empty,
+                                box.BOX_PRICE,
+                                box.PRODUCTION_DATE,
+                                box.UNIT_ID
                             );
                         }
-
-                        SqlParameter tvpArticle = cmd.Parameters.Add("@UDT_ARTICLE_PRODUCTION", SqlDbType.Structured);
-                        tvpArticle.TypeName = "UDT_ARTICLE_PRODUCTION";
-                        tvpArticle.Value = dtArticle;
                     }
-
-                   // connection.Open();
-                    cmd.ExecuteNonQuery();
-
-                    response.Flag = 1;
-                    response.Message = "Pack production uploaded successfully";
                 }
+
+                SqlParameter tvpArticle = cmd.Parameters.Add("@UDT_ARTICLE_PRODUCTION", SqlDbType.Structured);
+                tvpArticle.TypeName = "UDT_ARTICLE_PRODUCTION";
+                tvpArticle.Value = dtArticle;
+
+                cmd.ExecuteNonQuery();
+
+                response.Flag = 1;
+                response.Message = "Pack production uploaded successfully";
             }
             catch (Exception ex)
             {
                 response.Flag = 0;
-                response.Message = "ERROR : " + ex.Message;
+                response.Message = ex.Message;
             }
 
             return response;
         }
+
 
         public SyncResponse UploadProductionDN(ProductionDN model)
         {
@@ -366,7 +364,8 @@ namespace MicroApi.DataLayer.Service
         {
             var response = new ProductionViewResponse
             {
-                RawMaterials = new List<ProductionRawMaterial>(),
+                Header = new ProductionHeader(),   // IMPORTANT
+                RawMaterials = new List<ProductionRawMaterial>()
             };
 
             try
@@ -378,52 +377,62 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ACTION", 0);
                     cmd.Parameters.AddWithValue("@ID", id);
 
-                    // con.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        // ===== Header =====
+                        // ================= HEADER =================
                         if (dr.Read())
                         {
                             response.Header = new ProductionHeader
                             {
-                                PRODUCTION_ID = Convert.ToInt64(dr["PRODUCTION_ID"]),
+                                PRODUCTION_ID = dr["PRODUCTION_ID"] == DBNull.Value ? 0 : Convert.ToInt64(dr["PRODUCTION_ID"]),
                                 PROD_NO = dr["PROD_NO"]?.ToString(),
-                                PROD_DATE = dr["PROD_DATE"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(dr["PROD_DATE"]),
-                                PRODUCT_ID = Convert.ToInt32(dr["PRODUCT_ID"]),
-                                PRODUCED_QTY = Convert.ToDecimal(dr["PRODUCED_QTY"]),
-                                TOTAL_COST = Convert.ToDecimal(dr["TOTAL_COST"]),
-                                UNIT_COST = Convert.ToDecimal(dr["UNIT_COST"]),
-                                ADDL_COST = Convert.ToDecimal(dr["ADDL_COST"]),
-                                ADDL_DESCRIPTION = dr["ADDL_DESCRIPTION"]?.ToString(),
-                                TRANS_ID = Convert.ToInt64(dr["TRANS_ID"]),
+
+                                PROD_DATE = dr["PROD_DATE"] == DBNull.Value
+                                    ? null
+                                    : Convert.ToDateTime(dr["PROD_DATE"]),
+
+                                PRODUCT_ID = dr["PRODUCT_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PRODUCT_ID"]),
+                                PRODUCED_QTY = dr["PRODUCED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["PRODUCED_QTY"]),
+                                TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
+                                UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["UNIT_COST"]),
+                                ADDL_COST = dr["ADDL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["ADDL_COST"]),
+
+                                REMARKS = dr["ADDL_DESCRIPTION"]?.ToString(),
+
+                                TRANS_ID = dr["TRANS_ID"] == DBNull.Value ? 0 : Convert.ToInt64(dr["TRANS_ID"]),
                                 VOUCHER_NO = dr["VOUCHER_NO"]?.ToString(),
                                 REF_NO = dr["REF_NO"]?.ToString(),
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
-                                COST_PRODUCTION = Convert.ToDecimal(dr["COST_PRODUCTION"]),
+
+                                COST_PRODUCTION = dr["COST_PRODUCTION"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDecimal(dr["COST_PRODUCTION"])
                             };
                         }
 
-                        // ===== Raw Materials =====
-                        dr.NextResult();
-                        while (dr.Read())
+                        // ================= RAW MATERIALS =================
+                        if (dr.NextResult())
                         {
-                            response.RawMaterials.Add(new ProductionRawMaterial
+                            while (dr.Read())
                             {
-                                ID = Convert.ToInt64(dr["ID"]),
-                                ITEM_ID = Convert.ToInt32(dr["ITEM_ID"]),
-                                DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
-                                UOM = dr["UOM"]?.ToString(),
-                                BOM_QTY = Convert.ToDecimal(dr["BOM_QTY"]),
-                                REQUIRED_QTY = Convert.ToDecimal(dr["REQUIRED_QTY"]),
-                                USED_QTY = Convert.ToDecimal(dr["USED_QTY"]),
-                                UNIT_COST = Convert.ToDecimal(dr["UNIT_COST"]),
-                                TOTAL_COST = Convert.ToDecimal(dr["TOTAL_COST"]),
-                                ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
-                            });
+                                response.RawMaterials.Add(new ProductionRawMaterial
+                                {
+                                    ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt64(dr["ID"]),
+                                    ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ITEM_ID"]),
+                                    DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
+                                    UOM = dr["UOM"]?.ToString(),
+                                    BOM_QTY = dr["BOM_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BOM_QTY"]),
+                                    REQUIRED_QTY = dr["REQUIRED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["REQUIRED_QTY"]),
+                                    USED_QTY = dr["USED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["USED_QTY"]),
+                                    UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["UNIT_COST"]),
+                                    TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
+                                    ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
+                                    QTY_AVAILABLE = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["QTY_STOCK"])
+
+                                });
+                            }
                         }
-
-
                     }
                 }
 
@@ -438,6 +447,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
         public ProductionListResponse GetProductionList(ProductionListRequest model)
         {
             ProductionListResponse response = new ProductionListResponse();
@@ -446,12 +456,13 @@ namespace MicroApi.DataLayer.Service
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_ARTICLE_PRODUCTION_UPLOAD", connection))
+                using (SqlCommand cmd = new SqlCommand("SP_ARTICLE_PRODUCTION_LIST", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ACTION", 0);
-                    cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", (object?)model.DATE_FROM ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DATE_TO", (object?)model.DATE_TO ?? DBNull.Value);
+
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -468,6 +479,8 @@ namespace MicroApi.DataLayer.Service
                             item.VOUCHER_NO = dr["VOUCHER_NO"] == DBNull.Value ? "" : dr["VOUCHER_NO"].ToString();
                             item.ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? "" : dr["ITEM_CODE"].ToString();
                             item.DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? "" : dr["DESCRIPTION"].ToString();
+                            item.UOM = dr["UOM"] == DBNull.Value ? "" : dr["UOM"].ToString();
+                            item.STATUS = dr["TRANS_STATUS"] == DBNull.Value ? "" : dr["TRANS_STATUS"].ToString();
 
 
                             list.Add(item);
@@ -513,21 +526,23 @@ namespace MicroApi.DataLayer.Service
                         {
                             response.Header = new ProductionHeader
                             {
-                                PRODUCTION_ID = Convert.ToInt64(dr["PRODUCTION_ID"]),
+                                PRODUCTION_ID = dr["PRODUCTION_ID"] == DBNull.Value ? 0 : Convert.ToInt64(dr["PRODUCTION_ID"]),
                                 PROD_NO = dr["PROD_NO"]?.ToString(),
-                                PROD_DATE = dr["PROD_DATE"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(dr["PROD_DATE"]),
-                                PRODUCT_ID = Convert.ToInt32(dr["PRODUCT_ID"]),
-                                PRODUCED_QTY = Convert.ToDecimal(dr["PRODUCED_QTY"]),
-                                TOTAL_COST = Convert.ToDecimal(dr["TOTAL_COST"]),
-                                UNIT_COST = Convert.ToDecimal(dr["UNIT_COST"]),
-                                ADDL_COST = Convert.ToDecimal(dr["ADDL_COST"]),
-                                ADDL_DESCRIPTION = dr["ADDL_DESCRIPTION"]?.ToString(),
-                                TRANS_ID = Convert.ToInt64(dr["TRANS_ID"]),
+                                PROD_DATE = dr["PROD_DATE"] == DBNull.Value ? null : Convert.ToDateTime(dr["PROD_DATE"]),
+                                PRODUCT_ID = dr["PRODUCT_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PRODUCT_ID"]),
+                                PRODUCED_QTY = dr["PRODUCED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["PRODUCED_QTY"]),
+                                TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
+                                UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["UNIT_COST"]),
+                                ADDL_COST = dr["ADDL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["ADDL_COST"]),
+                                REMARKS = dr["ADDL_DESCRIPTION"]?.ToString(),
+                                TRANS_ID = dr["TRANS_ID"] == DBNull.Value ? 0 : Convert.ToInt64(dr["TRANS_ID"]),
                                 VOUCHER_NO = dr["VOUCHER_NO"]?.ToString(),
                                 REF_NO = dr["REF_NO"]?.ToString(),
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
-                                COST_PRODUCTION = Convert.ToDecimal(dr["COST_PRODUCTION"]),
+
+                                COST_PRODUCTION = dr["COST_PRODUCTION"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST_PRODUCTION"]),
                             };
+
                         }
 
                         // ===== Raw Materials =====
@@ -536,18 +551,23 @@ namespace MicroApi.DataLayer.Service
                         {
                             response.RawMaterials.Add(new ProductionRawMaterial
                             {
-                                ID = Convert.ToInt64(dr["ID"]),
-                                ITEM_ID = Convert.ToInt32(dr["ITEM_ID"]),
+                                ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt64(dr["ID"]),
+                                ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ITEM_ID"]),
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
                                 UOM = dr["UOM"]?.ToString(),
-                                BOM_QTY = Convert.ToDecimal(dr["BOM_QTY"]),
-                                REQUIRED_QTY = Convert.ToDecimal(dr["REQUIRED_QTY"]),
-                                USED_QTY = Convert.ToDecimal(dr["USED_QTY"]),
-                                UNIT_COST = Convert.ToDecimal(dr["UNIT_COST"]),
-                                TOTAL_COST = Convert.ToDecimal(dr["TOTAL_COST"]),
+
+                                BOM_QTY = dr["BOM_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BOM_QTY"]),
+                                REQUIRED_QTY = dr["REQUIRED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["REQUIRED_QTY"]),
+                                USED_QTY = dr["USED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["USED_QTY"]),
+
+                                UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["UNIT_COST"]),
+                                TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
+
                                 ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
+                                QTY_AVAILABLE = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["QTY_STOCK"])
                             });
                         }
+
 
 
                     }
@@ -572,12 +592,14 @@ namespace MicroApi.DataLayer.Service
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
-                using (SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_UPLOAD", connection))
+                using (SqlCommand cmd = new SqlCommand("SP_BOX_PRODUCTION_LIST", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ACTION", 0);
-                    cmd.Parameters.AddWithValue("@ID", DBNull.Value);
+                    //cmd.Parameters.AddWithValue("@ACTION", 0);
+                    //cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", (object?)model.DATE_FROM ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DATE_TO", (object?)model.DATE_TO ?? DBNull.Value);
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {

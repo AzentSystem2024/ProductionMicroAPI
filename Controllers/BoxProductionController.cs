@@ -34,6 +34,60 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("update")]
+        public BoxProdResponse Update(BoxProductionUpdate model)
+        {
+            BoxProdResponse res = new BoxProdResponse();
+
+            try
+            {
+                res = _boxProductionService.Update(model);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("commit")]
+        public BoxProdResponse commit(BoxProductionUpdate model)
+        {
+            BoxProdResponse res = new BoxProdResponse();
+
+            try
+            {
+                res = _boxProductionService.commit(model);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("delete")]
+        public BoxProdResponse delete(int id)
+        {
+            BoxProdResponse res = new BoxProdResponse();
+
+            try
+            {
+                res = _boxProductionService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("packingbomlist")]
         public PackingBOMResponse GetPackingBomList(PackingBOMRequest model)
         {

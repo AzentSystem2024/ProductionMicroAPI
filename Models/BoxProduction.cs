@@ -16,17 +16,36 @@
         public DateTime? PRODUCTION_DATE { get; set; }
         public int PRODUCTION_TYPE { get; set; }
 
-        public List<BoxProdRequest> RawMaterials { get; set; }
+        public List<BoxProdRequest>? RawMaterials { get; set; }
     }
     public class BoxProdRequest
     {
+        public int? ID { get; set; }
+        public string? UOM { get; set; }
+        public float? QUANTITY { get; set; }
+        public float? USED_QTY { get; set; }
+        public float? COST { get; set; }
+        public float? AMOUNT { get; set; }
+        public float? REQUIRED_QTY { get; set; }
+    }
+    public class BoxProductionUpdate
+    {
         public int ID { get; set; }
-        public string UOM { get; set; }
-        public float QUANTITY { get; set; }
-        public float USED_QTY { get; set; }
-        public float COST { get; set; }
-        public float AMOUNT { get; set; }
-        public float REQUIRED_QTY { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? USER_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public string? REF_NO { get; set; }
+        public double? ADDL_COST { get; set; }
+        public string? REMARKS { get; set; }
+        public int? PRODUCT_ID { get; set; }
+        public double? PROD_QTY { get; set; }
+        public double? TOTAL_ITEM_COST { get; set; }
+        public double? COST_OF_PRODUCTION { get; set; }
+        public double? UNIT_PRODUCT_COST { get; set; }
+        public DateTime? PRODUCTION_DATE { get; set; }
+        public int? PRODUCTION_TYPE { get; set; }
+
+        public List<BoxProdRequest>? RawMaterials { get; set; }
     }
     public class BoxProdResponse
     {

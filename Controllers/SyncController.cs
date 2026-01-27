@@ -17,7 +17,7 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("article-production")]
-        public SyncResponse Insert(Sync model)
+        public SyncResponse Insert(List<SyncArticleProduction> model)
         {
             SyncResponse res = new SyncResponse();
 

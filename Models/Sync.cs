@@ -1,23 +1,16 @@
 ﻿namespace MicroApi.Models
 {
-    public class Sync
-    {
-        public int COMPANY_ID { get; set; }
-        public int USER_ID { get; set; }
-        public int FIN_ID { get; set; }
-        public double ADDL_COST { get; set; }
-        public string ADDL_DESCRIPTION { get; set; }
-        public List<SyncArticleProduction> Articles { get; set; }
-    }
+    
     public class SyncArticleProduction
     {
         public long ARTICLE_PRODUCTION_ID { get; set; }
         public long ARTICLE_ID { get; set; }
-        //public int PAIRS { get; set; }
-        public int BOX_ID { get; set; }
+        public int? BOX_ID { get; set; }
         public string BARCODE { get; set; }
         public float PRICE { get; set; }
         public DateTime PRODUCTION_DATE { get; set; }
+        public int UNIT_ID { get; set; }
+
     }
     public class SyncResponse
     {
@@ -26,11 +19,8 @@
     }
     public class PackProductionSync
     {
-        public int COMPANY_ID { get; set; }
-        public int USER_ID { get; set; }
-        public int FIN_ID { get; set; }
+       
         public List<PackProductionItem> PackItems { get; set; }
-        public List<SyncArticleProduction> Articles { get; set; }
 
     }
 
@@ -42,6 +32,15 @@
         public string BARCODE { get; set; }
         public float BOX_PRICE { get; set; }
         public DateTime PRODUCTION_DATE { get; set; }
+        public int UNIT_ID { get; set; }
+        public int CURRENT_UNIT_ID { get; set; }
+        public int BOX_STATUS { get; set; }
+        public List<ArticleProductionId> ARTICLE_PRODUCTION_ID { get; set; }
+
+    }
+    public class ArticleProductionId
+    {
+        public long ID { get; set; }
     }
     public class ProductionTransferOut
     {
