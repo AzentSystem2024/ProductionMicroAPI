@@ -217,6 +217,9 @@ namespace MicroApi.DataLayer.Services
             cmd.CommandText = "SP_TB_PURCHASE_ORDER";
             cmd.Parameters.AddWithValue("@ACTION", 0);
             cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+            cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+            cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable tbl = new DataTable();

@@ -35,7 +35,7 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("box-production")]
-        public SyncResponse UploadPackProduction(PackProductionSync model)
+        public SyncResponse UploadPackProduction(List<PackProductionItem> model)
         {
             SyncResponse res = new SyncResponse();
 

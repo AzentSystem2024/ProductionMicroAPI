@@ -5,7 +5,7 @@ namespace MicroApi.DataLayer.Interface
     public interface ISyncService
     {
         SyncResponse Insert(List<SyncArticleProduction> model);
-        SyncResponse UploadPackProduction(PackProductionSync model);
+        SyncResponse UploadPackProduction(List<PackProductionItem> model);
         SyncResponse UploadProductionDN(ProductionDN model);
         //SyncResponse UploadProductionTransferIn(ProductionTransferIn model);
        // SyncResponse UploadProductionDN(ProductionDN model);
