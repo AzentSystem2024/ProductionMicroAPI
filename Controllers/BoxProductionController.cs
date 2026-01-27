@@ -70,7 +70,7 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
-        [Route("delete")]
+        [Route("delete/{id:int}")]
         public BoxProdResponse delete(int id)
         {
             BoxProdResponse res = new BoxProdResponse();
