@@ -242,6 +242,8 @@
     {
         public int CUST_ID { get; set; }
         public int COMPANY_ID { get; set; }
+        public string DATE_FROM { get; set; }
+        public string DATE_TO { get; set; }
     }
     public class InvoiceCust_stateName
     {
@@ -253,8 +255,8 @@
     public class InvoiceListRequest
     {
         public int COMPANY_ID { get; set; }
-        public DateTime DATE_FROM { get; set; }
-        public DateTime DATE_TO { get; set; }
+        public string? DATE_FROM { get; set; }
+        public string? DATE_TO { get; set; }
 
     }
 }

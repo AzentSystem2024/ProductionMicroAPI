@@ -70,7 +70,7 @@ namespace MicroApi.DataLayer.Service
 
 
 
-        public SyncResponse UploadPackProduction(PackProductionSync model)
+        public SyncResponse UploadPackProduction(List<PackProductionItem> model)
         {
             SyncResponse response = new SyncResponse();
 
@@ -94,8 +94,8 @@ namespace MicroApi.DataLayer.Service
                 dtBox.Columns.Add("CURRENT_UNIT_ID", typeof(int));
                 dtBox.Columns.Add("BOX_STATUS", typeof(int));
 
-                foreach (var item in model.PackItems)
-                {
+                foreach (var item in model)
+                    {
                     dtBox.Rows.Add(
                         item.PACK_PRODUCTION_ID,
                         item.PACKING_ID,
@@ -121,7 +121,7 @@ namespace MicroApi.DataLayer.Service
                 dtArticle.Columns.Add("PRODUCTION_DATE", typeof(DateTime));
                 dtArticle.Columns.Add("UNIT_ID", typeof(int));
 
-                foreach (var box in model.PackItems)
+                foreach (var box in model)
                 {
                     if (box.ARTICLE_PRODUCTION_ID != null && box.ARTICLE_PRODUCTION_ID.Count > 0)
                     {
