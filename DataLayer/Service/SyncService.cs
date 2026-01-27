@@ -407,7 +407,8 @@ namespace MicroApi.DataLayer.Service
 
                                 COST_PRODUCTION = dr["COST_PRODUCTION"] == DBNull.Value
                                     ? 0
-                                    : Convert.ToDecimal(dr["COST_PRODUCTION"])
+                                    : Convert.ToDecimal(dr["COST_PRODUCTION"]),
+                                STATUS = dr["TRANS_STATUS"] == DBNull.Value ? "" : dr["TRANS_STATUS"].ToString()
                             };
                         }
 
@@ -541,6 +542,8 @@ namespace MicroApi.DataLayer.Service
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
 
                                 COST_PRODUCTION = dr["COST_PRODUCTION"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST_PRODUCTION"]),
+                                STATUS = dr["TRANS_STATUS"] == DBNull.Value ? "" : dr["TRANS_STATUS"].ToString()
+
                             };
 
                         }
@@ -616,6 +619,8 @@ namespace MicroApi.DataLayer.Service
                             item.VOUCHER_NO = dr["VOUCHER_NO"] == DBNull.Value ? "" : dr["VOUCHER_NO"].ToString();
                             item.ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? "" : dr["ITEM_CODE"].ToString();
                             item.DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? "" : dr["DESCRIPTION"].ToString();
+                            item.STATUS = dr["TRANS_STATUS"] == DBNull.Value ? "" : dr["TRANS_STATUS"].ToString();
+
 
 
                             list.Add(item);

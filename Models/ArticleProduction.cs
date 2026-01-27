@@ -137,6 +137,7 @@
         public string DESCRIPTION { get; set; }
         public string REF_NO { get; set; }
         public decimal COST_PRODUCTION { get; set; }
+        public string STATUS { get; set; }
     }
 
     public class ProductionRawMaterial
