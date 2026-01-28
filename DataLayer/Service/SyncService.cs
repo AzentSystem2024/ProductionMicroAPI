@@ -174,6 +174,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
                 cmd.Parameters.AddWithValue("@DN_DATE", model.DN_DATE);
+                cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO);
                 cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
 

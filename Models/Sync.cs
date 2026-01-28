@@ -97,6 +97,7 @@
     {
         public int COMPANY_ID { get; set; }
         public DateTime DN_DATE { get; set; }
+        public string REF_NO { get; set; }
         public int CUST_ID { get; set; }
         public int FIN_ID { get; set; }
         public int USER_ID { get; set; }
