@@ -1,11 +1,13 @@
 ﻿using MicroApi.DataLayer.Interface;
-using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
-using System.Data;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [Route("api/listarticle")]
     [ApiController]
     public class ArticleLookUpController : ControllerBase

@@ -95,20 +95,19 @@
     }
     public class ProductionDN
     {
+        public int ID { get; set; }
         public int COMPANY_ID { get; set; }
         public DateTime DN_DATE { get; set; }
         public string REF_NO { get; set; }
         public int CUST_ID { get; set; }
-        public int FIN_ID { get; set; }
-        public int USER_ID { get; set; }
-        public List<ProductionDNItem> Items { get; set; }
+        public List<ProductionDNItem> DETAILS { get; set; }
     }
 
     public class ProductionDNItem
     {
-        public int PACKING_ID { get; set; }
+        public int ID { get; set; }
+        public int PACK_PRODUCTION_ID { get; set; }
         public string? PO_NO { get; set; }
-        public int ORDER_ENTRY_ID { get; set; }
     }
     public class ProductionDR
     {
@@ -149,6 +148,7 @@
         public string? STATUS { get; set; }
         public string? CUSTOMER_NAME { get; set; }
         public string COMPANY_NAME { get; set; }
+        public string REF_NO { get; set; }
     }
     public class DNListResponse
     {
@@ -176,6 +176,8 @@
         public string CONTACT_MOBILE { get; set; }
         public string CONTACT_FAX { get; set; }
         public string COMPANY_NAME { get; set; }
+        public string REF_NO { get; set; }
+        public string CUSTOMER_NAME { get; set; }
         public List<DNViewDetail> Details { get; set; }
     }
 
@@ -192,14 +194,12 @@
         public int COMPANY_ID { get; set; }
         public int SUPP_ID { get; set; }   
         public DateTime GRN_DATE { get; set; }
-        public int FIN_ID { get; set; }
-        public int USER_ID { get; set; }
 
         public List<ProductionTransferInGRNItem> Items { get; set; }
     }
     public class ProductionTransferInGRNItem
     {
-        public int PACKING_ID { get; set; }
+        public int PACK_PRODUCTION_ID { get; set; }
     }
     public class GRNUploadResponse
     {

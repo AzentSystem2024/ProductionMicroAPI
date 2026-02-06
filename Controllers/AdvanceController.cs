@@ -7,8 +7,8 @@ using MicroApi.DataLayer.Interface;
 
 namespace MicroApi.Controllers
 {
-    
-    
+
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AdvanceController : ControllerBase

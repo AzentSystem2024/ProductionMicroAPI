@@ -2,10 +2,12 @@
 using MicroApi.DataLayer.Service;
 using MicroApi.DataLayer.Services;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class Trout_InvoiceController : ControllerBase

@@ -5,8 +5,8 @@ namespace MicroApi.DataLayer.Interface
     public interface ILoginService
     {
         LoginResponse VerifyLogin(Login loginInput);
-        InitLoginResponse InitLoginData(string loginName); 
-
+        InitLoginResponse InitLoginData(string loginName);
+        LogOutResponse Logout(LogOutRequest request);
 
     }
 }

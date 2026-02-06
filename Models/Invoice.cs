@@ -83,6 +83,8 @@
         public decimal PRICE { get; set; }
         public decimal GST_PERC { get; set; }
         public string HSN_CODE { get; set; }
+        public string REF_NO { get; set; }
+        public string DN_NO { get; set; }
 
     }
     public class InvoiceHeader
@@ -225,6 +227,7 @@
         public decimal? CGST { get; set; }
         public decimal? SGST { get; set; }
         public string? HSN_CODE { get; set; }
+        public string? DN_NO { get; set; }
     }
     public class InvoiceHeaderSelectResponse
     {

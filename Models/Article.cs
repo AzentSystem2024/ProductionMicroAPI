@@ -94,6 +94,7 @@ namespace MicroApi.Models
         public string? STANDARD_PACKING { get; set; }
         public List<ArticleBOM>? BOM { get; set; }
 
+
     }
 
 
@@ -125,6 +126,9 @@ namespace MicroApi.Models
     public class DeleteArticleRequest
     {
        public string? ART_NO { get; set; }
+        public string? COLOR { get; set; }
+        public int? CATEGORY_ID { get; set; }
+        public decimal? PRICE { get; set; }
     }
 
     public class ItemdataResponse

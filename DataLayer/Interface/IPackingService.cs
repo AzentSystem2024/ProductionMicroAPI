@@ -14,7 +14,8 @@ namespace MicroApi.DataLayer.Interface
         PackingSelectResponse GetPackingById(int id);
         PackingListResponses GetPackingList(PackingListReq request);
         PackingResponse DeletePackingData(int id);
-        
-       
+        string GetAliasNo();
+        PackingResponse ChangeStandardPrice(ChangeStandardPriceModel model);
+        List<PackingPriceLog> GetPackingPriceLog(PackingPriceLogrequest request);
     }
 }

@@ -216,6 +216,7 @@
         public float BALANCE_AMOUNT { get; set; }
         public decimal? GST_PERC { get; set; }
         public string HSN_CODE { get; set; }
+        public string ITEM_NAME { get; set; }
     }
     public class CreditNoteInvoiceListResponse
     {

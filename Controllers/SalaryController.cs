@@ -1,11 +1,13 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static MicroApi.DataLayer.Service.SalaryService;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SalaryController : ControllerBase

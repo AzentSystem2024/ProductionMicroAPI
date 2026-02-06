@@ -55,7 +55,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ART_NO", request.artNo);
                     cmd.Parameters.AddWithValue("@COLOR", request.color);
                     cmd.Parameters.AddWithValue("@CATEGORY_ID", request.categoryID);
-                    cmd.Parameters.AddWithValue("@UNIT_ID", request.unitID);
+                    //cmd.Parameters.AddWithValue("@UNIT_ID", request.unitID);
                     //cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     using (var reader = cmd.ExecuteReader())
@@ -77,8 +77,6 @@ namespace MicroApi.DataLayer.Service
 
             return articleSizes;
         }
-
-
 
 
         //public List<ArticleWithSize> GetArticlesWithSizes()
@@ -157,10 +155,10 @@ namespace MicroApi.DataLayer.Service
                         insertCmd.CommandType = CommandType.StoredProcedure;
 
                         insertCmd.Parameters.AddWithValue("@ActionType", "InsertPacking");
-                        //insertCmd.Parameters.AddWithValue("@COMPANY_ID", packing.COMPANY_ID);
                         insertCmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO ?? (object)DBNull.Value);
                         insertCmd.Parameters.AddWithValue("@ART_NO", packing.ART_NO);
                         insertCmd.Parameters.AddWithValue("@DESCRIPTION", packing.DESCRIPTION);
+                        insertCmd.Parameters.AddWithValue("@ITEM_DESCRIPTION", packing.ITEM_DESCRIPTION);
                         insertCmd.Parameters.AddWithValue("@CATEGORY_ID", packing.CATEGORY_ID);
                         insertCmd.Parameters.AddWithValue("@COLOR", packing.COLOR);
                         insertCmd.Parameters.AddWithValue("@PAIR_QTY", packing.PAIR_QTY);
@@ -179,6 +177,10 @@ namespace MicroApi.DataLayer.Service
                         insertCmd.Parameters.AddWithValue("@BRAND_ID", packing.BRAND_ID);
                         insertCmd.Parameters.AddWithValue("@COMBINATION", packing.COMBINATION);
                         insertCmd.Parameters.AddWithValue("@NEW_ARRIVAL_DAYS", packing.NEW_ARRIVAL_DAYS);
+                        insertCmd.Parameters.AddWithValue("@STD_PRICE", packing.STD_PRICE);
+                        insertCmd.Parameters.AddWithValue("@STD_PRICE_EFFECT_FROM", packing.STD_PRICE_EFFECT_FROM);
+                        insertCmd.Parameters.AddWithValue("@STD_PACKING", packing.STANDARD_PACKING);
+
 
                         // ---------- Packing Entry ----------
                         DataTable entryTable = new DataTable();
@@ -194,6 +196,28 @@ namespace MicroApi.DataLayer.Service
                         SqlParameter entryParam = insertCmd.Parameters.Add("@UDT_PACKING_ENTRY", SqlDbType.Structured);
                         entryParam.TypeName = "UDT_PACKING_ENTRY";
                         entryParam.Value = entryTable;
+
+                        // ---------- PackingUnits ----------
+                        DataTable unitTable = new DataTable();
+                        unitTable.Columns.Add("UNIT_ID", typeof(int));
+
+                        if (packing.Units != null && packing.Units.Count > 0)
+                        {
+                            foreach (var unit in packing.Units)
+                            {
+                                if (unit.UNIT_ID.HasValue)
+                                    unitTable.Rows.Add(unit.UNIT_ID.Value);
+                            }
+                        }
+
+                        SqlParameter unitParam = insertCmd.Parameters.Add(
+                            "@UDT_TB_PACKING_UNITS",
+                            SqlDbType.Structured
+                        );
+                        unitParam.TypeName = "dbo.UDT_TB_PACKING_UNITS";
+                        unitParam.Value = unitTable;
+
+
 
                         // ---------- Packing BOM ----------
                         DataTable bomTable = new DataTable();
@@ -229,7 +253,7 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
-
+      
 
         public PackingResponse Update(PackingUpdate packing)
         {
@@ -251,6 +275,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ART_NO", packing.ART_NO);
                         cmd.Parameters.AddWithValue("@ORDER_NO", packing.ORDER_NO ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", packing.DESCRIPTION);
+                        cmd.Parameters.AddWithValue("@ITEM_DESCRIPTION", packing.ITEM_DESCRIPTION);
                         cmd.Parameters.AddWithValue("@CATEGORY_ID", packing.CATEGORY_ID);
                         cmd.Parameters.AddWithValue("@COLOR", packing.COLOR);
                         cmd.Parameters.AddWithValue("@PAIR_QTY", packing.PAIR_QTY);
@@ -269,6 +294,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@BRAND_ID", packing.BRAND_ID);
                         cmd.Parameters.AddWithValue("@COMBINATION", packing.COMBINATION);
                         cmd.Parameters.AddWithValue("@NEW_ARRIVAL_DAYS", packing.NEW_ARRIVAL_DAYS);
+                        cmd.Parameters.AddWithValue("@STD_PACKING", packing.STANDARD_PACKING);
 
                         // ---------- Packing Entry TVP ----------
                         DataTable entryTable = new DataTable();
@@ -285,6 +311,8 @@ namespace MicroApi.DataLayer.Service
                         entryParam.TypeName = "UDT_PACKING_ENTRY";
                         entryParam.Value = entryTable;
 
+
+
                         // ---------- Packing BOM TVP ----------
                         DataTable bomTable = new DataTable();
                         bomTable.Columns.Add("ITEM_ID", typeof(int));
@@ -298,6 +326,27 @@ namespace MicroApi.DataLayer.Service
                         SqlParameter bomParam = cmd.Parameters.Add("@UDT_TB_PACKING_BOM", SqlDbType.Structured);
                         bomParam.TypeName = "dbo.UDT_TB_PACKING_BOM";
                         bomParam.Value = bomTable;
+
+                        // ---------- Packing Units TVP ----------
+                        DataTable unitTable = new DataTable();
+                        unitTable.Columns.Add("UNIT_ID", typeof(int));
+
+                        if (packing.Units != null && packing.Units.Count > 0)
+                        {
+                            foreach (var unit in packing.Units)
+                            {
+                                if (unit.UNIT_ID.HasValue)
+                                    unitTable.Rows.Add(unit.UNIT_ID.Value);
+                            }
+                        }
+
+                        SqlParameter unitParam = cmd.Parameters.Add(
+                            "@UDT_TB_PACKING_UNITS",
+                            SqlDbType.Structured
+                        );
+                        unitParam.TypeName = "dbo.UDT_TB_PACKING_UNITS";
+                        unitParam.Value = unitTable;
+
 
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {
@@ -371,8 +420,13 @@ namespace MicroApi.DataLayer.Service
                                     IS_INACTIVE = reader["IsInactive"] == DBNull.Value ? false : Convert.ToBoolean(reader["IsInactive"]),
                                     CreatedDate = reader["CreatedDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["CreatedDate"]),
                                     COST = reader["Cost"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Cost"]),
+                                    STD_PRICE = reader["STD_PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["STD_PRICE"]) : 0,
+                                    STD_PRICE_EFFECT_FROM = reader["STD_PRICE_EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["STD_PRICE_EFFECT_FROM"]) : DateTime.MinValue,
+                                    STANDARD_PACKING = reader["STD_PACKING"]?.ToString(),
+                                    ITEM_DESCRIPTION = reader["ITEM_DESCRIPTION"]?.ToString(),
                                     PackingEntries = new List<Packing_Entry>(),
-                                    BOM = new List<PackingBOM>()
+                                    BOM = new List<PackingBOM>(),
+                                    Units = new List<PackingUnits>()
                                 };
                             }
 
@@ -410,6 +464,21 @@ namespace MicroApi.DataLayer.Service
                                     });
                                 }
                             }
+                            // ---------- 4️⃣ PACKING UNITS ----------
+                            if (reader.NextResult() && packing != null)
+                            {
+                                while (reader.Read())
+                                {
+                                    packing.Units.Add(new PackingUnits
+                                    {
+                                        UNIT_ID = reader["UNIT_ID"] == DBNull.Value
+                                                    ? null
+                                                    : Convert.ToInt32(reader["UNIT_ID"])
+                                    });
+                                }
+                            }
+
+
 
                             response.Data = packing;
                         }
@@ -468,7 +537,10 @@ namespace MicroApi.DataLayer.Service
                                     PartNo = reader.IsDBNull(reader.GetOrdinal("PartNo")) ? null : reader.GetString(reader.GetOrdinal("PartNo")),
                                     AliasNo = reader.IsDBNull(reader.GetOrdinal("AliasNo")) ? null : reader.GetString(reader.GetOrdinal("AliasNo")),
                                     PairQty = reader.IsDBNull(reader.GetOrdinal("PairQty")) ? 0 : reader.GetInt32(reader.GetOrdinal("PairQty")),
-                                    Status = reader.IsDBNull(reader.GetOrdinal("Status")) ? null : reader.GetString(reader.GetOrdinal("Status"))
+                                    Status = reader.IsDBNull(reader.GetOrdinal("Status")) ? null : reader.GetString(reader.GetOrdinal("Status")),
+                                    STD_PRICE = reader["STD_PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["STD_PRICE"]) : 0,
+                                    STD_PRICE_EFFECT_FROM = reader["STD_PRICE_EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["STD_PRICE_EFFECT_FROM"]) : DateTime.MinValue,
+                                    STANDARD_PACKING = reader.IsDBNull(reader.GetOrdinal("STD_PACKING")) ? null : reader.GetString(reader.GetOrdinal("STD_PACKING"))
                                 });
                             }
                         }
@@ -518,6 +590,118 @@ namespace MicroApi.DataLayer.Service
             }
             return res;
         }
+        public string GetAliasNo()
+        {
+            string aliasno = "0";
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT ISNULL(MAX(TRY_CAST(ALIAS_NO AS INT)), 0) + 1 FROM TB_PACKING";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            aliasno = result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return aliasno;
+        }
+        public PackingResponse ChangeStandardPrice(ChangeStandardPriceModel model)
+        {
+            PackingResponse response = new PackingResponse();
+
+            using (SqlConnection con = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_ManagePackingData", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ActionType", "ChangeStandardPrice");
+                    cmd.Parameters.AddWithValue("@ID", model.ID);
+                    cmd.Parameters.AddWithValue("@STD_PRICE", model.STD_PRICE);
+                    cmd.Parameters.AddWithValue("@STD_PRICE_EFFECT_FROM", model.STD_PRICE_EFFECT_FROM);
+                    cmd.Parameters.AddWithValue("@CHANGE_USER_ID", model.CHANGE_USER_ID);
+
+                    //con.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            response.flag = Convert.ToInt32(dr["flag"]);
+                            response.Message = dr["Message"].ToString();
+                        }
+                    }
+                }
+            }
+
+            return response;
+        }
+
+        public List<PackingPriceLog> GetPackingPriceLog(PackingPriceLogrequest request)
+        {
+            List<PackingPriceLog> list = new List<PackingPriceLog>();
+
+            using (SqlConnection con = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_ManagePackingData", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ActionType", "GetPackingPriceLog");
+                    cmd.Parameters.AddWithValue("@ID", request.PACKING_ID);
+
+                    //con.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            list.Add(new PackingPriceLog
+                            {
+                                STD_PRICE = dr["STD_PRICE"] != DBNull.Value
+                                    ? Convert.ToDecimal(dr["STD_PRICE"])
+                                    : 0,
+
+                                STD_PRICE_EFFECT_FROM = dr["EFFECT_FROM"] != DBNull.Value
+                                    ? Convert.ToDateTime(dr["EFFECT_FROM"])
+                                    : DateTime.MinValue,
+
+                                CREATED_TIME = dr["CREATED_TIME"] != DBNull.Value
+                                    ? Convert.ToDateTime(dr["CREATED_TIME"])
+                                    : DateTime.MinValue,
+
+                                CREATED_USER_ID = dr["CREATED_USER_ID"] != DBNull.Value
+                                    ? Convert.ToInt32(dr["CREATED_USER_ID"])
+                                    : 0,
+                                USER_NAME = dr["USER_NAME"] != DBNull.Value
+                                    ? Convert.ToString(dr["USER_NAME"])
+                                    : null
+                            });
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
     }
 }
 

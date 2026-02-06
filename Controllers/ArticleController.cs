@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MicroApi.DataLayer.Interface;
+﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [Route("api/article")]
     [ApiController]
     public class ArticleController : ControllerBase

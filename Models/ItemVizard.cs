@@ -126,7 +126,7 @@
 
     public class ItemPriceWizardInput
     {
-        public string STORE_ID { get; set; }
+        public int? ITEM_TYPE_ID { get; set; }
     }
     public class ItemPriceWizard
     {
@@ -144,6 +144,7 @@
         public float SALE_PRICE4 { get; set; }
         public float SALE_PRICE5 { get; set; }
         public float COST { get; set; }
-
+        public string ITEM_CODE { get; set; }
+        public string ITEM_TYPE { get; set; }
     }
 }

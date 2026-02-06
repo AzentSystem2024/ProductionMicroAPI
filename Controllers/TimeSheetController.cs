@@ -1,13 +1,12 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
 
 namespace MicroApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TimeSheetController : ControllerBase

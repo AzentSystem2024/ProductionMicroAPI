@@ -1,11 +1,13 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class JournalBookController : ControllerBase

@@ -414,6 +414,7 @@ namespace MicroApi.Service
                                     ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? "",
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
+                                    CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
                                     SIZES = new List<Sizes>()
                                 };
@@ -556,6 +557,7 @@ namespace MicroApi.Service
         public ArticleResponse DeleteArticleData(DeleteArticleRequest request)
         {
             var res = new ArticleResponse();
+
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
@@ -566,12 +568,21 @@ namespace MicroApi.Service
                     using (var cmd = new SqlCommand("SP_TB_ARTICLE", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 3);
-                        cmd.Parameters.AddWithValue("@ART_NO", request.ART_NO); // Pass the ART_NO parameter
-                        cmd.ExecuteNonQuery();
 
-                        res.flag = 1;
-                        res.Message = "Deleted successfully";
+                        cmd.Parameters.AddWithValue("@ACTION", 3);
+                        cmd.Parameters.AddWithValue("@ART_NO", request.ART_NO);
+                        cmd.Parameters.AddWithValue("@COLOR", request.COLOR);
+                        cmd.Parameters.AddWithValue("@CATEGORY_ID", request.CATEGORY_ID);
+                        cmd.Parameters.AddWithValue("@PRICE", request.PRICE);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                res.flag = Convert.ToInt32(reader["flag"]);
+                                res.Message = reader["Message"].ToString();
+                            }
+                        }
                     }
                 }
             }
@@ -580,6 +591,7 @@ namespace MicroApi.Service
                 res.flag = 0;
                 res.Message = ex.Message;
             }
+
             return res;
         }
 
@@ -626,8 +638,7 @@ namespace MicroApi.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    string query = @"SELECT ISNULL(MAX(ALIAS_NO), 0) + 1 FROM TB_ARTICLE
-";
+                    string query = @"SELECT ISNULL(MAX(TRY_CAST(ALIAS_NO AS INT)), 0) + 1 FROM TB_ARTICLE";
 
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {

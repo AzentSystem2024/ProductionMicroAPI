@@ -651,6 +651,7 @@ namespace MicroApi.DataLayer.Service
                                     BALANCE_AMOUNT = reader["BALANCE_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["BALANCE_AMOUNT"]) : 0,
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
                                     HSN_CODE = reader["HSN_CODE"] != DBNull.Value ? reader["HSN_CODE"].ToString() : "",
+                                    ITEM_NAME = reader["PACKING"] != DBNull.Value ? reader["PACKING"].ToString() : "",
                                 };
 
                                 response.Data.Add(item);

@@ -166,7 +166,7 @@ namespace MicroApi.DataLayer.Services
             cmd.Connection = connection;  // Set the connection
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SP_ITEMPRICE_VIZARD_LIST";
-            cmd.Parameters.AddWithValue("STORE_ID", pricewizardinput.STORE_ID);
+            cmd.Parameters.AddWithValue("ITEM_TYPE_ID", pricewizardinput.ITEM_TYPE_ID);
 
             // Create and execute a data adapter to fill the dataset
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
@@ -195,7 +195,9 @@ namespace MicroApi.DataLayer.Services
                         SALE_PRICE3 = ADO.ToFloat(dr["SALE_PRICE3"]),
                         SALE_PRICE4 = ADO.ToFloat(dr["SALE_PRICE4"]),
                         SALE_PRICE5 = ADO.ToFloat(dr["SALE_PRICE5"]),
-                        COST = ADO.ToFloat(dr["COST"])
+                        COST = ADO.ToFloat(dr["COST"]),
+                        ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
+                        ITEM_TYPE = ADO.ToString(dr["TYPE_NAME"])
                     });
                 }
             }

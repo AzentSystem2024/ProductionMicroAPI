@@ -1,13 +1,24 @@
-﻿using MicroApi.Helper;
+﻿using MicroApi.DataLayer.Interface;
+using MicroApi.Helper;
 using MicroApi.Models;
-using System.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
-using MicroApi.DataLayer.Interface;
+using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace MicroApi.DataLayer.Service
 {
     public class LoginService : ILoginService
+
     {
+        private readonly IConfiguration _configuration;
+
+        public LoginService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public LoginResponse VerifyLogin(Login loginInput)
         {
             var response = new LoginResponse();
@@ -44,8 +55,15 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@INTERNET_IP", loginInput.INTERNET_IP ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SYSTEM_TIME_UTC", DateTime.UtcNow);
                 cmd.Parameters.AddWithValue("@FORCE_LOGIN", false);
-                cmd.Parameters.AddWithValue("@TOKEN", Guid.NewGuid().ToString("N"));
-               // cmd.Parameters.AddWithValue("@TOKEN", DBNull.Value);
+                string localIP = !string.IsNullOrEmpty(loginInput.LOCAL_IP) ? loginInput.LOCAL_IP : "192.168.0.1";
+                string systemTimeUTC = DateTime.UtcNow.ToString("o");
+
+                // temp USER_ID not known yet → pass 0 for now (or LOGIN_NAME)
+                // OR generate simple token here if SP only stores it
+                string token = GenerateJwtToken(1);
+
+                cmd.Parameters.AddWithValue("@TOKEN", token);
+                // cmd.Parameters.AddWithValue("@TOKEN", DBNull.Value);
 
 
                 using var reader = cmd.ExecuteReader();
@@ -72,10 +90,10 @@ namespace MicroApi.DataLayer.Service
                     response.USER_ROLE_NAME = reader["UserRole"]?.ToString();
                 }
 
-                // Generate token
-                string localIP = !string.IsNullOrEmpty(loginInput.LOCAL_IP) ? loginInput.LOCAL_IP : "192.168.0.1";
-                string systemTimeUTC = DateTime.UtcNow.ToString("o");
-                string token = GenerateToken(localIP, systemTimeUTC, response.USER_ID.Value);
+                //// Generate token
+                //string localIP = !string.IsNullOrEmpty(loginInput.LOCAL_IP) ? loginInput.LOCAL_IP : "192.168.0.1";
+                //string systemTimeUTC = DateTime.UtcNow.ToString("o");
+                //string token = GenerateToken(localIP, systemTimeUTC, response.USER_ID.Value);
                 response.Token = token;
 
                 // ---------- RESULT 3 : ASSIGNED COMPANIES ----------
@@ -86,7 +104,9 @@ namespace MicroApi.DataLayer.Service
                         response.Companies.Add(new CompanyList
                         {
                             COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
-                            COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
+                            COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                            COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
+
                         });
                     }
                 }
@@ -98,6 +118,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
                         COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                        COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
                         STATE_ID = Convert.ToInt32(reader["ID"]),
                         STATE_NAME = reader["STATE_NAME"]?.ToString()
                     };
@@ -245,7 +266,29 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        private string GenerateJwtToken(int userId)
+        {
+            var claims = new[]
+            {
+                new Claim("UserId", userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(12),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
         private string GenerateToken(string localip, string systemtime, int userId)
         {
             string cleanedLocalIp = localip.Replace("-", "").Replace(":", "").Replace(".", "");
@@ -315,6 +358,46 @@ namespace MicroApi.DataLayer.Service
             {
                 response.flag = 0;
                 response.Message = "An error occurred: " + ex.Message;
+            }
+
+            return response;
+        }
+        public LogOutResponse Logout(LogOutRequest request)
+        {
+            var response = new LogOutResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (var cmd = new SqlCommand(@"UPDATE TB_USER_LOGIN SET LogoutTimeUTC = GETUTCDATE()
+                                            WHERE ID = @SESSION_ID", connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.AddWithValue("@SESSION_ID", request.SESSION_ID);
+
+                        int rows = cmd.ExecuteNonQuery();
+
+                        if (rows > 0)
+                        {
+                            response.flag = 1;
+                            response.Message = "Logout successful";
+                        }
+                        else
+                        {
+                            response.flag = 0;
+                            response.Message = "Session not found";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = ex.Message;
             }
 
             return response;

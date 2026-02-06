@@ -53,6 +53,24 @@ namespace MicroApi.Controllers
             return res;
         }
 
+        [HttpPost]
+        [Route("logout")]
+        public LogOutResponse Logout(LogOutRequest request)
+        {
+            LogOutResponse res = new LogOutResponse();
 
+            try
+            {
+                res = _loginService.Logout(request);
+            }
+
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+
+        }
     }
 }

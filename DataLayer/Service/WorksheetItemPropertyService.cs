@@ -695,7 +695,7 @@ namespace MicroApi.DataLayer.Services
             List<ItemStoreProperty> itemsuppliers = new List<ItemStoreProperty>();
             try
             {
-                string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE from TB_WORKSHEET WHERE WS_TYPE = 2 and TB_WORKSHEET.ID = " + id;
+                string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE,TB_AC_TRANS_HEADER.NARRATION from TB_WORKSHEET INNER JOIN TB_AC_TRANS_HEADER ON TB_WORKSHEET.TRANS_ID=TB_AC_TRANS_HEADER.TRANS_ID WHERE WS_TYPE = 2 and TB_WORKSHEET.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "ItemProperty");
 
@@ -707,7 +707,8 @@ namespace MicroApi.DataLayer.Services
                     {
                         ID = ADO.ToInt32(dr["ID"]),
                         WS_NO = ADO.ToString(dr["WS_NO"]),
-                        WS_DATE = Convert.ToDateTime(dr["WS_DATE"])
+                        WS_DATE = Convert.ToDateTime(dr["WS_DATE"]),
+                        NARRATION = ADO.ToString(dr["NARRATION"]),
                     };
                 }
                 SqlCommand cmd = new SqlCommand();
@@ -726,7 +727,7 @@ namespace MicroApi.DataLayer.Services
                     itemstores.Add(new WorksheetItemPrice
                     {
                         ID = ADO.ToInt32(dr2["ID"]),
-                        ITEM_ID = ADO.ToInt32(dr2["ITEM_ID"]),
+                        ITEM_ID = ADO.ToInt32(dr2["ITEMS_ID"]),
                         SALE_PRICE = ADO.ToFloat(dr2["PRICE"]),
                         SALE_PRICE1 = ADO.ToFloat(dr2["PRICE_LEVEL1"]),
                         SALE_PRICE2 = ADO.ToFloat(dr2["PRICE_LEVEL2"]),
@@ -744,10 +745,9 @@ namespace MicroApi.DataLayer.Services
                         PRICE_LEVEL2_NEW = ADO.ToFloat(dr2["PRICE_LEVEL2_NEW"]),
                         PRICE_LEVEL3_NEW = ADO.ToFloat(dr2["PRICE_LEVEL3_NEW"]),
                         PRICE_LEVEL4_NEW = ADO.ToFloat(dr2["PRICE_LEVEL4_NEW"]),
-                        PRICE_LEVEL5_NEW = ADO.ToFloat(dr2["PRICE_LEVEL5_NEW"])
-
-                        //STORE_ID = ADO.ToInt32(dr2["STORE_ID"]),
-                        //STORE_NAME = ADO.ToString(dr2["STORE_NAME"])
+                        PRICE_LEVEL5_NEW = ADO.ToFloat(dr2["PRICE_LEVEL5_NEW"]),
+                        ITEM_CODE = ADO.ToString(dr2["ITEM_CODE"]),
+                        ITEM_TYPE = ADO.ToString(dr2["TYPE_NAME"])
 
                     });
                 }

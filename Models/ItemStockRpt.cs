@@ -9,6 +9,7 @@
         public string SUB_CATEGORY { get; set; }
         public string BRAND { get; set; }
         public double CURRENT_STOCK { get; set; }
+        public string? ITEM_TYPE { get; set; }
     }
     public class ItemStockViewResponse
     {

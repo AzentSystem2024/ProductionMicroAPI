@@ -1,12 +1,14 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
-using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
-using System.Data;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [Route("api/listGroupHead")]
     [ApiController]
     public class ListController : ControllerBase

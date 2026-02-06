@@ -1,9 +1,12 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using MicroApi.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
+    //[Authorize]
     [Route("api/packing")]
     [ApiController]
     public class PackingController : ControllerBase
@@ -120,19 +123,56 @@ namespace MicroApi.Controllers
             return res;
         }
 
-        //[HttpPost]
-        //[Route("LastOrderNo/{unitId:int}")]
-        //public IActionResult GetLastOrderNo(int unitId)
-        //{
-        //    try
-        //    {
-        //        var lastOrderNo = _articleService.GetLastOrderNoByUnitId(unitId);
-        //        return Ok(new { LastOrderNo = lastOrderNo });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { flag = 0, message = ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("Lastaliasno")]
+        public IActionResult GetAliasNo()
+        {
+            try
+            {
+                var GetAliasNo = _packingService.GetAliasNo();
+                return Ok(new { GetAliasNo = GetAliasNo });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { flag = 0, message = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("InsertPackingPriceLog")]
+        public PackingResponse ChangeStandardPrice(ChangeStandardPriceModel model)
+        {
+            PackingResponse res = new PackingResponse();
+            try
+            {
+                res = _packingService.ChangeStandardPrice(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("GetPackingPriceLog")]
+        public PackingPriceLogResponse GetPackingPriceLog(PackingPriceLogrequest request)
+        {
+            PackingPriceLogResponse res = new PackingPriceLogResponse();
+
+            try
+            {
+                res.Data = _packingService.GetPackingPriceLog(request);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+
     }
 }

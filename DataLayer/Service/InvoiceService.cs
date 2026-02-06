@@ -400,12 +400,14 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     DN_DETAIL_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
                                     TRANSFER_NO = reader["ART_NO"]?.ToString(),
-                                    ARTICLE = reader["ARTICLE"]?.ToString(),
+                                    ARTICLE = reader["DESCRIPTION"]?.ToString(),
                                     TRANSFER_DATE = reader["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["DN_DATE"]).ToString("dd-MM-yyyy") : null,
                                     TOTAL_PAIR_QTY = reader["TOTAL_PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL_PAIR_QTY"]) : 0,
                                     PRICE = reader["PACK_PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["PACK_PRICE"]) :0,
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
-                                    HSN_CODE = reader["HSN_CODE"] == DBNull.Value ? null : reader["HSN_CODE"].ToString()
+                                    HSN_CODE = reader["HSN_CODE"] == DBNull.Value ? null : reader["HSN_CODE"].ToString(),
+                                    REF_NO = reader["REF_NO"] == DBNull.Value ? null : reader["REF_NO"].ToString(),
+                                    DN_NO = reader["DN_NO"]?.ToString(),
 
                                 };
 
@@ -594,6 +596,7 @@ namespace MicroApi.DataLayer.Service
                                         DELIVERY_ADD2 = reader["CUST_DELIVERY_ADD2"]?.ToString(),
                                         DELIVERY_ADD3 = reader["CUST_DELIVERY_ADD3"]?.ToString(),
                                         MOBILE = reader["MOBILE"]?.ToString(),
+                                        
                                         SALE_DETAILS = new List<SaleDetailUpdate>()
                                     };
                                 }
@@ -617,6 +620,7 @@ namespace MicroApi.DataLayer.Service
                                     CGST = reader["CGST"] != DBNull.Value ? Convert.ToDecimal(reader["CGST"]) : 0,
                                     SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0,
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
+                                    DN_NO = reader["DN_NO"]?.ToString(),
                                 });
                             }
 

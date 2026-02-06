@@ -99,6 +99,8 @@ namespace MicroApi.Models
         public bool? Selected { get; set; }
         public int? STORE_ID { get; set; }
         public string? STORE_NAME { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? ITEM_TYPE { get; set; }
     }
     public class ItemPriceProperties
     {

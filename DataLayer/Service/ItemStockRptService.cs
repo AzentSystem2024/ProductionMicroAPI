@@ -35,7 +35,8 @@ namespace MicroApi.DataLayer.Service
                                 CATEGORY = dr["CATEGORY"]?.ToString(),
                                 SUB_CATEGORY = dr["SUB_CATEGORY"]?.ToString(),
                                 BRAND = dr["BRAND"]?.ToString(),
-                                CURRENT_STOCK = dr["CURRENT_STOCK"] == DBNull.Value ? 0 : Convert.ToDouble(dr["CURRENT_STOCK"])
+                                CURRENT_STOCK = dr["CURRENT_STOCK"] == DBNull.Value ? 0 : Convert.ToDouble(dr["CURRENT_STOCK"]),
+                                ITEM_TYPE = dr["TYPE_NAME"]?.ToString(),
                             };
 
                             list.Add(item);

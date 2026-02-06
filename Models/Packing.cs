@@ -31,9 +31,17 @@
        
         public bool? IS_ANY_COMB { get; set; }
         public DateTime? CreatedDate { get; set; }
-        //public string? SIZE { get; set; }
+        public decimal? STD_PRICE { get; set; }
+        public DateTime? STD_PRICE_EFFECT_FROM { get; set; }
+        public string? STANDARD_PACKING { get; set; }
+        public string? ITEM_DESCRIPTION { get; set; }
         public List<PackingBOM> BOM { get; set; }
         public List<PackingEntry> PackingEntries { get; set; }
+        public List<PackingUnits> Units { get; set; }
+    }
+    public class PackingUnits
+    {
+        public int? UNIT_ID { get; set; }
     }
     public class PackingEntry
     {
@@ -96,8 +104,11 @@
         public bool? IS_INACTIVE { get; set; }
         public DateTime?  CreatedDate { get; set; }
         public float? COST { get; set; }
+        public string? STANDARD_PACKING { get; set; }
+        public string? ITEM_DESCRIPTION { get; set; }
         public List<PackingBOM> BOM { get; set; }
         public List<PackingEntry> PackingEntries { get; set; }
+        public List<PackingUnits> Units { get; set; }
 
     }
     public class PackingListItem
@@ -117,6 +128,11 @@
         public string AliasNo { get; set; }
         public int PairQty { get; set; }
         public string Status { get; set; }
+        public decimal? STD_PRICE { get; set; }
+        public string? STANDARD_PACKING { get; set; }
+        public DateTime? STD_PRICE_EFFECT_FROM { get; set; }
+        
+
     }
 
     public class PackingListResponses
@@ -178,8 +194,14 @@
         public bool IS_INACTIVE { get; set; }
         public DateTime CreatedDate { get; set; }
         public float? COST { get; set; }
+        public decimal? STD_PRICE { get; set; }
+        public DateTime? STD_PRICE_EFFECT_FROM { get; set; }
+        public string? STANDARD_PACKING { get; set; }
+        public string? ITEM_DESCRIPTION { get; set; }
         public List<PackingBOM> BOM { get; set; }
         public List<Packing_Entry> PackingEntries { get; set; }
+        public List<PackingUnits> Units { get; set; }
+
 
     }
     public class Packing_Entry
@@ -207,8 +229,35 @@
         public string artNo { get; set; }
         public string color { get; set; }
         public int categoryID { get; set; }
-        public int unitID { get; set; }
+        //public int unitID { get; set; }
     }
+    public class ChangeStandardPriceModel
+    {
+        public int ID { get; set; }
+        public decimal STD_PRICE { get; set; }
+        public DateTime STD_PRICE_EFFECT_FROM { get; set; }
+        public int CHANGE_USER_ID { get; set; }
+    }
+    public class PackingPriceLog
+    {
+        public decimal STD_PRICE { get; set; }
+        public DateTime STD_PRICE_EFFECT_FROM { get; set; }
+        public DateTime CREATED_TIME { get; set; }
+        public int CREATED_USER_ID { get; set; }
+        public string USER_NAME { get; set; }
+    }
+    public class PackingPriceLogrequest
+    {
+        public decimal PACKING_ID { get; set; }
+       
+    }
+    public class PackingPriceLogResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<PackingPriceLog> Data { get; set; }
+    }
+
 
 
 }

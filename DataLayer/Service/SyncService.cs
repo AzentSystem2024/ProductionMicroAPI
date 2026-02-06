@@ -1,4 +1,5 @@
-﻿using MicroApi.DataLayer.Interface;
+﻿using Azure.Core;
+using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
 using System;
@@ -170,23 +171,22 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ACTION", 1);
-                cmd.Parameters.AddWithValue("@ID", 0);
+                cmd.Parameters.AddWithValue("@ID", model.ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
                 cmd.Parameters.AddWithValue("@DN_DATE", model.DN_DATE);
                 cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO);
-                cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
-                cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
+               
 
                 // TVP
                 DataTable dt = new DataTable();
-                
-                dt.Columns.Add("PACKING_ID", typeof(int));
+                dt.Columns.Add("ID", typeof(int));
+                dt.Columns.Add("PACK_PRODUCTION_ID", typeof(int));
                 dt.Columns.Add("PO_NO", typeof(string));
-                dt.Columns.Add("ORDER_ENTRY_ID", typeof(int));
-                foreach (var item in model.Items)
+                
+                foreach (var item in model.DETAILS)
                 {
-                    dt.Rows.Add(item.PACKING_ID,item.PO_NO,item.ORDER_ENTRY_ID); 
+                    dt.Rows.Add(item.ID,item.PACK_PRODUCTION_ID,item.PO_NO); 
                 }
 
                 SqlParameter tvp = cmd.Parameters.AddWithValue(
@@ -660,6 +660,9 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", model.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(model.DATE_FROM));
+                        cmd.Parameters.AddWithValue("@DATE_TO", model.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(model.DATE_TO));
+
 
                         if (con.State != ConnectionState.Open)
                             con.Open(); // Ensure connection is open
@@ -676,7 +679,9 @@ namespace MicroApi.DataLayer.Service
                                     TOTAL_QTY = dr["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(dr["TOTAL_QTY"]) : 0,
                                     STATUS = dr["STATUS"] != DBNull.Value ? dr["STATUS"].ToString() : "UNKNOWN",
                                     CUSTOMER_NAME = dr["CUSTOMER_NAME"] != DBNull.Value ? dr["CUSTOMER_NAME"].ToString() : string.Empty,
-                                    COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? dr["COMPANY_NAME"].ToString() : string.Empty
+                                    COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? dr["COMPANY_NAME"].ToString() : string.Empty,
+                                    REF_NO = dr["REF_NO"] != DBNull.Value ? dr["REF_NO"].ToString() : string.Empty
+
                                 };
 
                                 list.Add(item);
@@ -732,11 +737,13 @@ namespace MicroApi.DataLayer.Service
 
                             response.Data.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
                             response.Data.CUST_ID = Convert.ToInt32(dr["CUST_ID"]);
-                            response.Data.COMPANY_NAME = dr["CUST_NAME"]?.ToString();
+                            response.Data.COMPANY_NAME = dr["COMPANY_NAME"]?.ToString();
                             response.Data.CONTACT_NAME = dr["CONTACT_NAME"]?.ToString();
                             response.Data.CONTACT_PHONE = dr["CONTACT_PHONE"]?.ToString();
                             response.Data.CONTACT_MOBILE = dr["CONTACT_MOBILE"]?.ToString();
                             response.Data.CONTACT_FAX = dr["CONTACT_FAX"]?.ToString();
+                            response.Data.REF_NO = dr["REF_NO"]?.ToString();
+                            response.Data.CUSTOMER_NAME = dr["CUST_NAME"]?.ToString();
 
                             // ===== first detail row =====
                             response.Data.Details.Add(new DNViewDetail
@@ -789,16 +796,14 @@ namespace MicroApi.DataLayer.Service
                     // SP Parameters
                     cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@GRN_DATE", model.GRN_DATE);
-                    cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
-                    cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID);
                     cmd.Parameters.AddWithValue("@SUPP_ID", model.SUPP_ID);
 
                     DataTable dt = new DataTable();
-                    dt.Columns.Add("PACKING_ID", typeof(int));
+                    dt.Columns.Add("PACK_PRODUCTION_ID", typeof(int));
 
                     foreach (var item in model.Items)
                     {
-                        dt.Rows.Add(item.PACKING_ID); 
+                        dt.Rows.Add(item.PACK_PRODUCTION_ID); 
                     }
 
                     SqlParameter tvp = cmd.Parameters.AddWithValue("@UDT_TRANSFER_IN_GRN", dt);

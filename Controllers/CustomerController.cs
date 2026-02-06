@@ -7,7 +7,7 @@ using System.Diagnostics.Metrics;
 
 namespace MicroApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase

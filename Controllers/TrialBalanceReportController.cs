@@ -1,5 +1,6 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Globalization;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/AcReports/TrialBalance")]
     public class TrialBalanceReportController : ControllerBase

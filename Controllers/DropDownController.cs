@@ -1,5 +1,6 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers

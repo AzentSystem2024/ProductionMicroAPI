@@ -1,14 +1,16 @@
 ﻿using MicroApi.DataLayer.Interface;
-using MicroApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
-using System.Data;
 using MicroApi.DataLayer.Service;
+using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace MicroApi.Controllers
 {
+    [Authorize]
     [Route("api/grouplist")]
     [ApiController]
     public class GroupController : ControllerBase
