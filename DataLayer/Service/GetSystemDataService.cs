@@ -22,6 +22,7 @@ namespace MicroApi.DataLayer.Service
                 res.Data = new GetSystemData
                 {
                     SYSTEMDATETIME = now,
+                    GETUTCTIME= DateTime.UtcNow,
                     SYSTEM_NAME = Environment.MachineName,
                     CULTURE = culture.Name,
 

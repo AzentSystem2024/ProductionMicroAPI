@@ -12,6 +12,8 @@
         public string? DOMAIN_NAME { get; set; }
         public string? COMPUTER_USER { get; set; }
         public string? INTERNET_IP { get; set; }
+        public DateTime? SYSTEM_DATETIME { get; set; }
+
     }
 
     public class LoginResponse
@@ -28,6 +30,11 @@
         public string? USER_ROLE_NAME { get; set; }
         public string Token { get; set; }
         public int SESSION_ID { get; set; }
+        public DateTime CLIENT_DATETIME { get; set; }
+        public DateTime UTC_DATETIME { get; set; }
+        public int UTC_DIFF_MINUTES { get; set; }
+        public string UTC_DIFF_HOURS { get; set; }
+        public string UTC_DIFF_MESSAGE { get; set; }
         public List<FinancialYear> FINANCIAL_YEARS { get; set; } = new();
         public CompanyList SELECTED_COMPANY { get; set; } = new CompanyList();
         public List<CompanyList> Companies { get; set; } = new List<CompanyList>();

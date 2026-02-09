@@ -3,6 +3,7 @@
     public class GetSystemData
     {
         public DateTime SYSTEMDATETIME { get; set; }
+        public DateTime GETUTCTIME { get; set; }
         public string SYSTEM_NAME { get; set; }
         public string CULTURE { get; set; }
 

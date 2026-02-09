@@ -519,7 +519,25 @@ namespace MicroApi.DataLayer.Service
                                     NARRATION = dr["NARRATION"]?.ToString(),
                                     TRANS_STATUS = dr["TRANS_STATUS"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["TRANS_STATUS"]),
                                     CUST_NAME = dr["CUST_NAME"]?.ToString(),
-                                    COMPANY_NAME = dr["COMPANY_NAME"]?.ToString()
+                                    COMPANY_NAME = dr["COMPANY_NAME"]?.ToString(),
+                                    ADDRESS1 = dr["ADDRESS1"]?.ToString(),
+                                    ADDRESS2 = dr["ADDRESS2"]?.ToString(),
+                                    ADDRESS3 = dr["ADDRESS3"]?.ToString(),
+                                    COMPANY_CODE = dr["COMPANY_CODE"]?.ToString(),
+                                    EMAIL = dr["EMAIL"]?.ToString(),
+                                    PHONE = dr["PHONE"]?.ToString(),
+                                    CUST_CODE = dr["CUST_CODE"]?.ToString(),
+                                    CUST_ADDRESS1 = dr["CUST_ADDRESS1"]?.ToString(),
+                                    CUST_ADDRESS2 = dr["CUST_ADDRESS2"]?.ToString(),
+                                    CUST_ADDRESS3 = dr["CUST_ADDRESS3"]?.ToString(),
+                                    CUST_ZIP = dr["ZIP"]?.ToString(),
+                                    CUST_CITY = dr["CITY"]?.ToString(),
+                                    CUST_STATE = dr["STATE_NAME"]?.ToString(),
+                                    CUST_PHONE = dr["CUST_PHONE"]?.ToString(),
+                                    CUST_EMAIL = dr["CUST_EMAIL"]?.ToString(),
+                                    GST_NO = dr["GST_NO"]?.ToString(),
+                                    PAN_NO = dr["PAN_NO"]?.ToString(),
+                                    CIN = dr["CIN"]?.ToString(),
                                 };
 
 
@@ -532,7 +550,7 @@ namespace MicroApi.DataLayer.Service
                                 DETAIL_ID = dr["DETAIL_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["DETAIL_ID"]),
                                 SALE_DET_ID = dr["SALE_DET_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["SALE_DET_ID"]),
                                 ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ITEM_ID"]),
-                                DN_QTY = dr["DN_QTY"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dr["DN_QTY"]),
+                                PENDING_QTY = dr["PENDING_QTY"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dr["PENDING_QTY"]),
                                 QUANTITY = dr["QUANTITY"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dr["QUANTITY"]),
                                 PRICE = dr["RATE"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dr["RATE"]),
                                 AMOUNT = dr["AMOUNT"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dr["AMOUNT"]),
@@ -575,7 +593,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_SALE_RETURN";
                 cmd.Parameters.AddWithValue("ACTION", 8);
-                cmd.Parameters.AddWithValue("@TRANS_ID", id);
+                cmd.Parameters.AddWithValue("@ID", id);
                 cmd.ExecuteNonQuery();
 
                 connection.Close();

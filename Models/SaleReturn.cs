@@ -161,6 +161,25 @@
 
         public string? CUST_NAME { get; set; }
         public string? COMPANY_NAME { get; set; }
+        public string? ADDRESS1 { get; set; }
+        public string? ADDRESS2 { get; set; }
+        public string? ADDRESS3 { get; set; }
+        public string? COMPANY_CODE { get; set; }
+        public string? EMAIL { get; set; }
+        public string? PHONE { get; set; }
+        public string? CUST_CODE { get; set; }
+        public string? CUST_ADDRESS1 { get; set; }
+        public string? CUST_ADDRESS2 { get; set; }
+        public string? CUST_ADDRESS3 { get; set; }
+        public string? CUST_ZIP { get; set; }
+        public string? CUST_CITY { get; set; }
+        public string? CUST_STATE { get; set; }
+        public string? CUST_PHONE { get; set; }
+        public string? CUST_EMAIL { get; set; }
+        public string? GST_NO { get; set; }
+        public string? PAN_NO { get; set; }
+        public string? CIN { get; set; }
+
     }
 
     public class SaleReturnViewDetail
@@ -168,7 +187,7 @@
         public int? DETAIL_ID { get; set; }
         public int? SALE_DET_ID { get; set; }
         public int? ITEM_ID { get; set; }
-        public decimal? DN_QTY { get; set; }
+        public decimal? PENDING_QTY { get; set; }
         public decimal? QUANTITY { get; set; }
         public decimal? PRICE { get; set; }
         public decimal? AMOUNT { get; set; }

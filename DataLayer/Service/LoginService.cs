@@ -53,7 +53,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@DOMAIN_NAME", loginInput.DOMAIN_NAME ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@COMPUTER_USER", loginInput.COMPUTER_USER ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@INTERNET_IP", loginInput.INTERNET_IP ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@SYSTEM_TIME_UTC", DateTime.UtcNow);
+                cmd.Parameters.AddWithValue("@SYSTEM_TIME_UTC",loginInput.SYSTEM_DATETIME ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@FORCE_LOGIN", false);
                 string localIP = !string.IsNullOrEmpty(loginInput.LOCAL_IP) ? loginInput.LOCAL_IP : "192.168.0.1";
                 string systemTimeUTC = DateTime.UtcNow.ToString("o");
@@ -256,6 +256,16 @@ namespace MicroApi.DataLayer.Service
                     response.Token = reader["TOKEN"]?.ToString();
                     response.SESSION_ID = Convert.ToInt32(reader["USER_LOGIN_ID"]);
                 }
+                // RESULT: TIME DIFFERENCE
+                if (reader.NextResult() && reader.Read())
+                {
+                    response.CLIENT_DATETIME = Convert.ToDateTime(reader["CLIENT_TIME"]);
+                    response.UTC_DATETIME = Convert.ToDateTime(reader["UTC_TIME"]);
+                    response.UTC_DIFF_MINUTES = Convert.ToInt32(reader["UTC_DIFF_MINUTES"]);
+                    response.UTC_DIFF_MESSAGE = reader["UTC_DIFF_MESSAGE"]?.ToString();
+                    response.UTC_DIFF_HOURS = reader["UTC_DIFF_HOURS"]?.ToString(); 
+                }
+
             }
 
             catch (Exception ex)
