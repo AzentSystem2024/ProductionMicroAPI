@@ -95,6 +95,7 @@ namespace MicroApi.DataLayer.Service
                             res.Data.Add(new SaleReturnList
                             {
                                 ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                                TRANS_ID = dr["TRANS_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TRANS_ID"]),
                                 RET_DATE = dr["RET_DATE"] == DBNull.Value ? null : Convert.ToDateTime(dr["RET_DATE"]),
                                 GROSS_AMOUNT = dr["GROSS_AMOUNT"] == DBNull.Value ? null : Convert.ToDecimal(dr["GROSS_AMOUNT"]),
                                 VAT_AMOUNT = dr["VAT_AMOUNT"] == DBNull.Value ? null : Convert.ToDecimal(dr["VAT_AMOUNT"]),
@@ -338,7 +339,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@ACTION", 6);
-                cmd.Parameters.AddWithValue("@ID", model.ID);
+                cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
@@ -434,7 +435,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@ACTION", 7);
-                cmd.Parameters.AddWithValue("@ID", model.ID);
+                cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
@@ -486,7 +487,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 5);
-                    cmd.Parameters.AddWithValue("@ID", id);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", id);
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -564,7 +565,8 @@ namespace MicroApi.DataLayer.Service
                                 SGST = dr["SGST"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dr["SGST"]),
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
                                 BARCODE = dr["BARCODE"]?.ToString(),
-                                HSN_CODE = dr["HSN_CODE"]?.ToString()
+                                HSN_CODE = dr["HSN_CODE"]?.ToString(),
+                                SALE_NO = dr["SALE_NO"]?.ToString()
                             });
 
                         }
@@ -593,7 +595,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_SALE_RETURN";
                 cmd.Parameters.AddWithValue("ACTION", 8);
-                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.Parameters.AddWithValue("@TRANS_ID", id);
                 cmd.ExecuteNonQuery();
 
                 connection.Close();

@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class UomService:IUomService
     {
-        public List<Uom> GetAllUom(UOMListReq request)
+        public List<Uom> GetAllUom()
         {
             List<Uom> uomList = new List<Uom>();
             using (SqlConnection connection = ADO.GetConnection())
@@ -18,7 +18,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_UOM";
                 cmd.Parameters.AddWithValue("ACTION", 0);
-                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
+                //cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -49,7 +49,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandText = "SP_TB_UOM";
                 cmd.Parameters.AddWithValue("ACTION", 1);
                 cmd.Parameters.AddWithValue("UOM", uom.UOM);
-                cmd.Parameters.AddWithValue("COMPANY_ID", uom.COMPANY_ID);
+               // cmd.Parameters.AddWithValue("COMPANY_ID", uom.COMPANY_ID);
                 cmd.ExecuteNonQuery();
                 objtrans.Commit();
                 connection.Close();
@@ -113,7 +113,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("ACTION", 3);
                 cmd.Parameters.AddWithValue("ID", uom.ID);
                 cmd.Parameters.AddWithValue("UOM", uom.UOM);
-                cmd.Parameters.AddWithValue("COMPANY_ID", uom.COMPANY_ID);
+               // cmd.Parameters.AddWithValue("COMPANY_ID", uom.COMPANY_ID);
                 cmd.ExecuteNonQuery();
                 objtrans.Commit();
                 connection.Close();

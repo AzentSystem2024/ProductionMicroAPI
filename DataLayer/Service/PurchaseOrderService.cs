@@ -857,7 +857,7 @@ namespace MicroApi.DataLayer.Services
                         VAT_PERC = ADO.ToDecimal(dr3["TAX_PERCENT"]),
                         TAX_AMOUNT = ADO.ToDecimal(dr3["TAX_AMOUNT"]),
                         TOTAL_AMOUNT = ADO.ToDecimal(dr3["TOTAL_AMOUNT"]),
-                        ITEM_DESC = ADO.ToString(dr3["ITEM_DESC"]),
+                        ITEM_DESC = ADO.ToString(dr3["DESCRIPTION"]),
                         UOM = ADO.ToString(dr3["UOM"]),
                         GRN_QTY = ADO.ToFloat(dr3["GRN_QTY"]),
                         INVOICE_QTY = ADO.ToFloat(dr3["INVOICE_QTY"]),

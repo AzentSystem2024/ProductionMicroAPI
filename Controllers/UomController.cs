@@ -17,14 +17,14 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public List<Uom> List(UOMListReq request)
+        public List<Uom> List()
         {
             List<Uom> uoms = new List<Uom>();
             UomResponse res = new UomResponse();
             try
             {
                 
-                uoms = _uomService.GetAllUom(request);
+                uoms = _uomService.GetAllUom();
 
                 res.flag = "1";
                 res.message = "Success";

@@ -20,6 +20,7 @@
     public class SaleReturnList
     {
         public int ID { get; set; }
+        public int TRANS_ID { get; set; }
         public DateTime? RET_DATE { get; set; }
         public decimal? GROSS_AMOUNT { get; set; }
         public decimal? VAT_AMOUNT { get; set; }
@@ -104,7 +105,7 @@
     }
     public class SaleReturnInsertRequest
     {
-        public int? ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? CUST_ID { get; set; }
@@ -203,6 +204,7 @@
         public string? DESCRIPTION { get; set; }
         public string? BARCODE { get; set; }
         public string? HSN_CODE { get; set; }
+        public string? SALE_NO { get; set; }
     }
 
 }
