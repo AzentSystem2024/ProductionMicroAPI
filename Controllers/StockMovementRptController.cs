@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class StockMovementRptController : ControllerBase
@@ -24,6 +24,23 @@ namespace MicroApi.Controllers
             try
             {
                 res = _stockMovementRptService.GetStockMovementReport(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("stockDrilldown")]
+        public StockMovementDrilldownResponse GetStockMovementDrilldown(StockMovementDrillDownRequest request)
+        {
+            var res = new StockMovementDrilldownResponse();
+            try
+            {
+                res = _stockMovementRptService.GetStockMovementDrilldown(request);
             }
             catch (Exception ex)
             {

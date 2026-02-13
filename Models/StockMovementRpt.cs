@@ -35,4 +35,29 @@
         public string message { get; set; }
         public List<StockMovementRpt> data { get; set; }
     }
+    public class StockMovementDrilldown
+    {
+        public string TRANS_TYPE { get; set; } 
+        public string DOC_NO { get; set; }
+        public DateTime DOC_DATE { get; set; }
+        public decimal QUANTITY { get; set; }     
+        public long TRANS_ID { get; set; }
+        public int ID { get; set; }
+        public int PRODUCTION_TYPE { get; set; }
+        public string NAME { get; set; }
+    }
+    public class StockMovementDrilldownResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; } 
+        public List<StockMovementDrilldown> data { get; set; }
+    }
+    public class StockMovementDrillDownRequest
+    {
+        public int? COMPANY_ID { get; set; }
+          public int? ITEM_ID { get; set; }
+        public DateTime? DATE_FROM { get; set; }
+        public DateTime? DATE_TO { get; set; }
+        public string? TRANS_TYPE { get; set; }
+    }
 }

@@ -72,5 +72,69 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public StockMovementDrilldownResponse GetStockMovementDrilldown(StockMovementDrillDownRequest request)
+        {
+            var response = new StockMovementDrilldownResponse
+            {
+                data = new List<StockMovementDrilldown>()
+            };
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_STOCK_DRILLDOWN", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                    cmd.Parameters.Add("@ITEM_ID", SqlDbType.Int).Value = request.ITEM_ID;
+                    cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
+                    cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
+                    cmd.Parameters.Add("@TRANS_TYPE", SqlDbType.VarChar, 50).Value = request.TRANS_TYPE;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var row = new StockMovementDrilldown
+                            {
+                                TRANS_TYPE = reader["TRANS_TYPE"]?.ToString(),
+                                DOC_NO = reader["DOC_NO"]?.ToString(),
+                                DOC_DATE = reader["DOC_DATE"] != DBNull.Value
+                                            ? Convert.ToDateTime(reader["DOC_DATE"])
+                                            : DateTime.MinValue,
+                                QUANTITY = reader["QTY"] != DBNull.Value
+                                            ? Convert.ToDecimal(reader["QTY"])
+                                            : 0,
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value
+                                            ? Convert.ToInt64(reader["TRANS_ID"])
+                                            : 0,
+                                ID = reader["ID"] != DBNull.Value
+                                            ? Convert.ToInt32(reader["ID"])
+                                            : 0,
+                                PRODUCTION_TYPE = reader["PRODUCTION_TYPE"] != DBNull.Value
+                                            ? Convert.ToInt32(reader["PRODUCTION_TYPE"])
+                                            : 0,
+                                NAME = reader["NAME"]?.ToString(),
+
+                            };
+
+                            response.data.Add(row);
+                        }
+                    }
+                }
+
+                response.flag = 1;
+                response.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = "Error fetching drilldown data: " + ex.Message;
+            }
+
+            return response;
+        }
+
     }
 }
