@@ -206,6 +206,7 @@
         public decimal PRICE { get; set; }
         public decimal? GST_PERC { get; set; }
         public string HSN_CODE { get; set; }
+        public decimal? VAT_PERC { get; set; }
     }
     public class GrnPendingQtyResponse
     {

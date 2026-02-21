@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Interface
         int SaveData(SalesOrder salesOrder);
         SalesOrderResponse EditData(SalesOrderUpdate salesOrder);
         bool DeleteSalesOrder(int soId);
-        ItemListsResponse GetSalesOrderItems();
+        ItemListsResponse GetSalesOrderItems(PendingListReq request);
         ItemListsResponse GetarticleType();
         ItemListsResponse Getcategory(SalesOrderRequest request);
         ItemListsResponse GetArtNo(SalesOrderRequest request);

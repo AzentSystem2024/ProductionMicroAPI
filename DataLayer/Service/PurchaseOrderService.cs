@@ -120,8 +120,9 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
-                        dRow["CGST"] = ur.CGST;
-                        dRow["SGST"] = ur.SGST;
+                        dRow["CGST"] = ur.CGST == 0 ? (object)DBNull.Value : ur.CGST;
+                        dRow["SGST"] = ur.SGST == 0 ? (object)DBNull.Value : ur.SGST;
+
 
                         tbl.Rows.Add(dRow);
                     }
@@ -311,8 +312,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
-                        dRow["CGST"] = ur.CGST;
-                        dRow["SGST"] = ur.SGST;
+                        dRow["CGST"] = ur.CGST == 0 ? (object)DBNull.Value : ur.CGST;
+                        dRow["SGST"] = ur.SGST == 0 ? (object)DBNull.Value : ur.SGST;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -458,8 +459,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
-                        dRow["CGST"] = ur.CGST;
-                        dRow["SGST"] = ur.SGST;
+                        dRow["CGST"] = ur.CGST == 0 ? (object)DBNull.Value : ur.CGST;
+                        dRow["SGST"] = ur.SGST == 0 ? (object)DBNull.Value : ur.SGST;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -606,8 +607,8 @@ namespace MicroApi.DataLayer.Services
                         dRow["SUPP_PRICE"] = ur.SUPP_PRICE;
                         dRow["SUPP_AMOUNT"] = ur.SUPP_AMOUNT;
                         dRow["CREATE_STORE_ID"] = ur.CREATE_STORE_ID ?? (object)DBNull.Value;
-                        dRow["CGST"] = ur.CGST;
-                        dRow["SGST"] = ur.SGST;
+                        dRow["CGST"] = ur.CGST == 0 ? (object)DBNull.Value : ur.CGST;
+                        dRow["SGST"] = ur.SGST == 0 ? (object)DBNull.Value : ur.SGST;
 
                         tbl.Rows.Add(dRow);
                     }

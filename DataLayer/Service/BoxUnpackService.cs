@@ -33,6 +33,11 @@ namespace MicroApi.DataLayer.Service
                 res.Flag = 1;
                 res.Message = "Box unpacked successfully";
             }
+            catch (SqlException ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
             catch (Exception ex)
             {
                 res.Flag = 0;

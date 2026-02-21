@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SalesOrderController : ControllerBase
@@ -123,12 +123,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("getitem")]
-        public ItemListsResponse GetSalesOrderItems()
+        public ItemListsResponse GetSalesOrderItems(PendingListReq request)
         {
             ItemListsResponse response = new ItemListsResponse();
             try
             {
-                response = _salesOrderService.GetSalesOrderItems();
+                response = _salesOrderService.GetSalesOrderItems(request);
             }
             catch (Exception ex)
             {

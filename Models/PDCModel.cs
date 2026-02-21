@@ -74,6 +74,10 @@
     public class PDCListRequest
     {
         public int COMPANY_ID { get; set; }
+        public DateTime? ENTRY_DATE_FROM { get; set; }
+        public DateTime? ENTRY_DATE_TO { get; set; }
+        public DateTime? DUE_DATE_FROM { get; set; }
+        public DateTime? DUE_DATE_TO { get; set; }
     }
 }
 

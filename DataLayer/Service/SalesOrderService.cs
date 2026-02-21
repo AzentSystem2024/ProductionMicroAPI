@@ -38,25 +38,41 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("CONTENT", typeof(string));
                         tvp.Columns.Add("PACKING_ID", typeof(string));
                         tvp.Columns.Add("QUANTITY", typeof(float));
-                        
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("PRICE", typeof(float));
+                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
+                        tvp.Columns.Add("AMOUNT", typeof(float));
+                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
+                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
+                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
+
 
 
 
                         foreach (var detail in salesOrder.Details)
                         {
                             tvp.Rows.Add(
-                                detail.BRAND_ID ?? 0,
-                                detail.ARTICLE_TYPE ?? 0,
-                                detail.CATEGORY_ID ?? string.Empty,
-                                detail.ART_NO ?? string.Empty,
-                                detail.COLOR_ID ?? string.Empty,
-                                detail.CONTENT ?? string.Empty,
-                                detail.PACKING_ID ?? string.Empty,
-                                detail.QUANTITY ?? 0
-                                
-                            );
+                             detail.BRAND_ID ?? (object)DBNull.Value,
+                             detail.ARTICLE_TYPE ?? (object)DBNull.Value,
+                             detail.CATEGORY_ID ?? (object)DBNull.Value,
+                             detail.ART_NO ?? (object)DBNull.Value,
+                             detail.COLOR_ID ?? (object)DBNull.Value,
+                             detail.CONTENT ?? (object)DBNull.Value,
+                             detail.PACKING_ID ?? (object)DBNull.Value,
+                             detail.QUANTITY ?? (object)DBNull.Value,
+                             detail.ITEM_ID ?? (object)DBNull.Value,
+                             detail.UOM ?? (object)DBNull.Value,
+                             detail.PRICE ?? (object)DBNull.Value,
+                             detail.DISC_PERCENT ?? (object)DBNull.Value,
+                             detail.AMOUNT ?? (object)DBNull.Value,
+                             detail.TAX_PERCENT ?? (object)DBNull.Value,
+                             detail.TAX_AMOUNT ?? (object)DBNull.Value,
+                             detail.TOTAL_AMOUNT ?? (object)DBNull.Value
+                         );
+
                         }
-                       
+
 
                         using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection, transaction))
                         {
@@ -73,6 +89,10 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@WAREHOUSE", salesOrder.WAREHOUSE ?? 0);
                             cmd.Parameters.AddWithValue("@TOTAL_QTY", salesOrder.TOTAL_QTY ?? 0);
                             cmd.Parameters.AddWithValue("@SUBDEALER_ID", salesOrder.SUBDEALER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@QTN_ID", salesOrder.QTN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SALESMAN_ID", salesOrder.SALESMAN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", salesOrder.GROSS_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? 0);
                             cmd.Parameters.AddWithValue("@IS_APPROVED", salesOrder.IS_APPROVED == true ? 1 : 0);
 
                             // Add QTN_ID_LIST as a structured parameter
@@ -117,20 +137,36 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("CONTENT", typeof(string));
                         tvp.Columns.Add("PACKING_ID", typeof(string));
                         tvp.Columns.Add("QUANTITY", typeof(float));
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("PRICE", typeof(float));
+                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
+                        tvp.Columns.Add("AMOUNT", typeof(float));
+                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
+                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
+                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
 
                         if (salesOrder.Details != null && salesOrder.Details.Any())
                         {
                             foreach (var detail in salesOrder.Details)
                             {
                                 tvp.Rows.Add(
-                                 detail.BRAND_ID ?? 0,
-                                detail.ARTICLE_TYPE ?? 0,
-                                detail.CATEGORY_ID ?? string.Empty,
-                                detail.ART_NO ?? string.Empty,
-                                detail.COLOR_ID ?? string.Empty,
-                                detail.CONTENT ?? string.Empty,
-                                detail.PACKING_ID ?? string.Empty,
-                                detail.QUANTITY ?? 0
+                             detail.BRAND_ID ?? (object)DBNull.Value,
+                             detail.ARTICLE_TYPE ?? (object)DBNull.Value,
+                             detail.CATEGORY_ID ?? (object)DBNull.Value,
+                             detail.ART_NO ?? (object)DBNull.Value,
+                             detail.COLOR_ID ?? (object)DBNull.Value,
+                             detail.CONTENT ?? (object)DBNull.Value,
+                             detail.PACKING_ID ?? (object)DBNull.Value,
+                             detail.QUANTITY ?? (object)DBNull.Value,
+                             detail.ITEM_ID ?? (object)DBNull.Value,
+                             detail.UOM ?? (object)DBNull.Value,
+                             detail.PRICE ?? (object)DBNull.Value,
+                             detail.DISC_PERCENT ?? (object)DBNull.Value,
+                             detail.AMOUNT ?? (object)DBNull.Value,
+                             detail.TAX_PERCENT ?? (object)DBNull.Value,
+                             detail.TAX_AMOUNT ?? (object)DBNull.Value,
+                             detail.TOTAL_AMOUNT ?? (object)DBNull.Value
                                 );
                             }
                         }
@@ -158,6 +194,10 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@WAREHOUSE", salesOrder.WAREHOUSE ?? 0);
                             cmd.Parameters.AddWithValue("@TOTAL_QTY", salesOrder.TOTAL_QTY ?? 0);
                             cmd.Parameters.AddWithValue("@SUBDEALER_ID", salesOrder.SUBDEALER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@QTN_ID", salesOrder.QTN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SALESMAN_ID", salesOrder.SALESMAN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", salesOrder.GROSS_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", salesOrder.NET_AMOUNT ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
@@ -239,6 +279,11 @@ namespace MicroApi.DataLayer.Service
                                // response.Data.DELIVERY_ADDRESS = reader["ADDRESS1"]?.ToString();
                                 response.Data.ADDRESS = reader["DELIVERY_ADDRESS_FULL"]?.ToString();
                                 response.Data.SUBDEALER_ID = reader["SUBDEALER_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUBDEALER_ID"]) : 0;
+                                response.Data.COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0;
+                                response.Data.QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : 0;
+                                response.Data.SALESMAN_ID = reader["SALESMAN_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALESMAN_ID"]) : 0;
+                                response.Data.GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToInt32(reader["GROSS_AMOUNT"]) : 0;
+                                response.Data.NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToInt32(reader["NET_AMOUNT"]) : 0;
                                 isHeaderSet = true;
                             }
 
@@ -252,7 +297,17 @@ namespace MicroApi.DataLayer.Service
                                 CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToString(reader["CATEGORY_ID"]) : null,
                                 ART_NO = reader["ART_NO"] != DBNull.Value ? Convert.ToString(reader["ART_NO"]) : null,
                                 COLOR_ID = reader["COLOR"] != DBNull.Value ? Convert.ToString(reader["COLOR"]) : null,
-                                QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0
+                                QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : 0,
+                                ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
+                                UOM = reader["UOM"] != DBNull.Value ? Convert.ToString(reader["UOM"]) : null,
+                                PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToSingle(reader["PRICE"]) : 0,
+                                DISC_PERCENT = reader["DISC_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["DISC_PERCENT"]) : 0,
+                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
+                                TAX_PERCENT = reader["TAX_PERCENT"] != DBNull.Value ? Convert.ToSingle(reader["TAX_PERCENT"]) : 0,
+                                TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TAX_AMOUNT"]) : 0,
+                                TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_AMOUNT"]) : 0,
+                                ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? Convert.ToString(reader["ITEM_CODE"]) : null,
+                                ITEM_DESCRIPTION = reader["ITEM_DESCRIPTION"] != DBNull.Value ? Convert.ToString(reader["ITEM_DESCRIPTION"]) : null,
                             };
 
                             response.Data.Details.Add(detail);
@@ -324,7 +379,7 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public ItemListsResponse GetSalesOrderItems()
+        public ItemListsResponse GetSalesOrderItems(PendingListReq request)
         {
             ItemListsResponse response = new ItemListsResponse { Data = new List<ITEMS>() };
             try
@@ -337,6 +392,8 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 6);
+                        cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -345,6 +402,14 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
+                                    QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : (int?)null,
+                                    SALESMAN_ID = reader["SALESMAN_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALESMAN_ID"]) : (int?)null,
+                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
+                                    UOM = reader["UOM"] != DBNull.Value ? Convert.ToString(reader["UOM"]) : null,
+                                    PRICE = reader["PRICE"] != DBNull.Value? Convert.ToSingle(reader["PRICE"]): (float?)null,
+                                    QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToSingle(reader["QUANTITY"]) : (float?)null,
+                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? Convert.ToString(reader["ITEM_CODE"]) : null,
+                                    TAX_PERCENT = reader["VAT_PERC"] != DBNull.Value ? Convert.ToSingle(reader["VAT_PERC"]) : (float?)null,
 
                                 };
                                 response.Data.Add(item);
@@ -757,21 +822,37 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("CONTENT", typeof(string));
                         tvp.Columns.Add("PACKING_ID", typeof(string));
                         tvp.Columns.Add("QUANTITY", typeof(float));
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("PRICE", typeof(float));
+                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
+                        tvp.Columns.Add("AMOUNT", typeof(float));
+                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
+                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
+                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
 
                         if (request.Details != null && request.Details.Any())
                         {
                             foreach (var detail in request.Details)
                             {
                                 tvp.Rows.Add(
-                                 detail.BRAND_ID ?? 0,
-                                 detail.ARTICLE_TYPE ?? 0,
-                                 detail.CATEGORY_ID ?? string.Empty,
-                                 detail.ART_NO ?? string.Empty,
-                                 detail.COLOR_ID ?? string.Empty,
-                                 detail.CONTENT ?? string.Empty,
-                                 detail.PACKING_ID ?? string.Empty,
-                                 detail.QUANTITY ?? 0
-                                );
+                                detail.BRAND_ID ?? (object)DBNull.Value,
+                                detail.ARTICLE_TYPE ?? (object)DBNull.Value,
+                                detail.CATEGORY_ID ?? (object)DBNull.Value,
+                                detail.ART_NO ?? (object)DBNull.Value,
+                                detail.COLOR_ID ?? (object)DBNull.Value,
+                                detail.CONTENT ?? (object)DBNull.Value,
+                                detail.PACKING_ID ?? (object)DBNull.Value,
+                                detail.QUANTITY ?? (object)DBNull.Value,
+                                detail.ITEM_ID ?? (object)DBNull.Value,
+                                detail.UOM ?? (object)DBNull.Value,
+                                detail.PRICE ?? (object)DBNull.Value,
+                                detail.DISC_PERCENT ?? (object)DBNull.Value,
+                                detail.AMOUNT ?? (object)DBNull.Value,
+                                detail.TAX_PERCENT ?? (object)DBNull.Value,
+                                detail.TAX_AMOUNT ?? (object)DBNull.Value,
+                                detail.TOTAL_AMOUNT ?? (object)DBNull.Value
+                             );
                             }
                         }
 
@@ -799,6 +880,10 @@ namespace MicroApi.DataLayer.Service
                             cmd.Parameters.AddWithValue("@WAREHOUSE", request.WAREHOUSE ?? 0);
                             cmd.Parameters.AddWithValue("@TOTAL_QTY", request.TOTAL_QTY ?? 0);
                             cmd.Parameters.AddWithValue("@SUBDEALER_ID", request.SUBDEALER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@QTN_ID", request.QTN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SALESMAN_ID", request.SALESMAN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", request.GROSS_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", request.NET_AMOUNT ?? 0);
 
                             // Add QTN_ID_LIST as a structured parameter
                             //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);

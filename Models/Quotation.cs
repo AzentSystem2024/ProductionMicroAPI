@@ -277,5 +277,7 @@
     public class QuotationListRequest
     {
         public int COMPANY_ID { get; set; }
+        public string? DATE_FROM { get; set; }
+        public string? DATE_TO { get; set; }
     }
 }

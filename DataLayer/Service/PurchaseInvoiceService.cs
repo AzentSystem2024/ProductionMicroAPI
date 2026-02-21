@@ -998,6 +998,7 @@ namespace MicroApi.DataLayer.Service
                             PRICE = row["PURCH_PRICE"] != DBNull.Value ? Convert.ToDecimal(row["PURCH_PRICE"]) : 0,
                             GST_PERC = row["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(row["GST_PERC"]) : 0,
                             HSN_CODE = row["HSN_CODE"] != DBNull.Value ? row["HSN_CODE"].ToString() : "",
+                            VAT_PERC = row["VAT_PERC"] != DBNull.Value ? Convert.ToDecimal(row["VAT_PERC"]) : 0,
                         });
                     }
 

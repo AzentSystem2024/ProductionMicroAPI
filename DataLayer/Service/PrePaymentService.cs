@@ -194,11 +194,12 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@SUPP_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@EXP_HEAD_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@PREPAY_HEAD_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@DATE_FROM", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@DATE_TO", DBNull.Value);
                         cmd.Parameters.AddWithValue("@NO_OF_DAYS", DBNull.Value);
                         cmd.Parameters.AddWithValue("@EXPENSE_AMOUNT", DBNull.Value);
                         cmd.Parameters.AddWithValue("@NO_OF_MONTHS", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

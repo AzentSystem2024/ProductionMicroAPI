@@ -37,6 +37,17 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 3);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@ENTRY_DATE_FROM",
+                    request.ENTRY_DATE_FROM ?? (object)DBNull.Value);
+
+                        cmd.Parameters.AddWithValue("@ENTRY_DATE_TO",
+                            request.ENTRY_DATE_TO ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@DUE_DATE_FROM",
+                            request.DUE_DATE_FROM ?? (object)DBNull.Value);
+
+                        cmd.Parameters.AddWithValue("@DUE_DATE_TO",
+                            request.DUE_DATE_TO ?? (object)DBNull.Value);
+
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
