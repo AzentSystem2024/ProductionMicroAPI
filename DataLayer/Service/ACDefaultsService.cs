@@ -28,12 +28,19 @@ namespace MicroApi.DataLayer.Service
                     {
                         while (rdr.Read())
                         {
-                            response.DATA.Add(new AcDefaultsList
+                            AcDefaultsList obj = new AcDefaultsList
                             {
                                 NAME = rdr["NAME"].ToString(),
-                                HEAD_NAME = rdr["HEAD_NAME"].ToString(),
-                                HEAD_ID = Convert.ToInt32(rdr["HEAD_ID"])
-                            });
+                                HEAD_NAME = rdr["HEAD_NAME"] == DBNull.Value
+                                                ? null
+                                                : rdr["HEAD_NAME"].ToString(),
+                                HEAD_ID = rdr["HEAD_ID"] == DBNull.Value
+                                                ? null
+                                                : Convert.ToInt32(rdr["HEAD_ID"])
+                            };
+
+                            // 🔥 THIS WAS MISSING
+                            response.DATA.Add(obj);
                         }
                     }
                 }
@@ -49,6 +56,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+
         public AcDefaultsListResponse Save(ACDefaults request)
         {
             var response = new AcDefaultsListResponse
