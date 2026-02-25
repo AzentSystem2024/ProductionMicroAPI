@@ -60,7 +60,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
                         cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
                         cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
                         cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
                         // === UDT Table ===
@@ -80,6 +79,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("JOB_ID", typeof(int));
                         dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                         dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+                        dt.Columns.Add("DEPT_ID", typeof(int));
 
                         int slno = 1;
 
@@ -100,7 +100,8 @@ namespace MicroApi.DataLayer.Service
                                 detail.BILL_NO ?? "",
                                 detail.JOB_ID ?? 0,
                                 detail.CREATED_STORE_ID ?? string.Empty,
-                                detail.STORE_AUTO_ID?.ToString() ?? ""
+                                detail.STORE_AUTO_ID?.ToString() ?? "",
+                                detail.DEPT_ID ?? 0
                             );
                         }
 
@@ -162,6 +163,7 @@ namespace MicroApi.DataLayer.Service
                             dt.Columns.Add("JOB_ID", typeof(int));
                             dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                             dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+                            dt.Columns.Add("DEPT_ID", typeof(int));
 
                             int slno = 1;
                             foreach (var detail in header.DETAILS)
@@ -181,7 +183,9 @@ namespace MicroApi.DataLayer.Service
                                     detail.BILL_NO ?? "",
                                     detail.JOB_ID ?? 0,
                                     detail.CREATED_STORE_ID ?? string.Empty,
-                                    detail.STORE_AUTO_ID ?? string.Empty
+                                    detail.STORE_AUTO_ID ?? string.Empty,
+                                    detail.DEPT_ID ?? 0
+
                                 );
                             }
 
@@ -223,7 +227,6 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@PAY_HEAD_ID", header.PAY_HEAD_ID ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@ADD_TIME", DateTime.Now);
                                 cmd.Parameters.AddWithValue("@CREATED_STORE_ID", header.CREATED_STORE_ID ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@DEPT_ID", header.DEPT_ID ?? (object)DBNull.Value);
 
                                 var tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
                                 tvp.SqlDbType = SqlDbType.Structured;
@@ -354,7 +357,9 @@ namespace MicroApi.DataLayer.Service
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     PARTICULARS = reader["PARTICULARS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
-                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0
+                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
+                                    DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+
                                 });
                             }
 
@@ -430,7 +435,8 @@ namespace MicroApi.DataLayer.Service
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     PARTICULARS = reader["PARTICULARS"]?.ToString(),
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
-                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0
+                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
+                                    DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                 });
                             }
 
@@ -565,6 +571,7 @@ namespace MicroApi.DataLayer.Service
                             dt.Columns.Add("JOB_ID", typeof(int));
                             dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                             dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+                            dt.Columns.Add("DEPT_ID", typeof(int));
 
                             int slno = 1;
                             foreach (var detail in header.DETAILS)
@@ -584,7 +591,8 @@ namespace MicroApi.DataLayer.Service
                                     detail.BILL_NO ?? "",
                                     detail.JOB_ID ?? 0,
                                     detail.CREATED_STORE_ID ?? string.Empty,
-                                    detail.STORE_AUTO_ID ?? string.Empty
+                                    detail.STORE_AUTO_ID ?? string.Empty,
+                                    detail.DEPT_ID ?? 0
                                 );
                             }
 

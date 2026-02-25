@@ -22,7 +22,7 @@
         public string UOM { get; set; }
         public double? QUANTITY { get; set; }
         public double COST { get; set; }
-        //public double AMOUNT { get; set; }
+        public double AMOUNT { get; set; }
         public string? BATCH_NO { get; set; }
         public DateTime? EXPIRY_DATE { get; set; }
     }
@@ -135,6 +135,8 @@
     public class TransferOutListRequest
     {
         public int COMPANY_ID { get; set; }
+        public string? DATE_FROM { get; set; }
+        public string? DATE_TO { get; set; }
 
     }
 }

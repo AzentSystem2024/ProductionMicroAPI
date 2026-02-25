@@ -49,7 +49,6 @@ namespace MicroApi.DataLayer.Service
         {
             using (SqlConnection connection = ADO.GetConnection())
             {
-                //connection.Open();
 
                 using (SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection))
                 {
@@ -92,7 +91,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ISSUE_ID", transferIn.ISSUE_ID);
                     cmd.Parameters.AddWithValue("@REASON_ID", transferIn.REASON_ID);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", transferIn.NET_AMOUNT);
-                    cmd.Parameters.AddWithValue("@IS_APPROVED", transferIn.IS_APPROVED == true ? 1 : 0);
+                    cmd.Parameters.Add("@IS_APPROVED", SqlDbType.Bit).Value = transferIn.IS_APPROVED;
 
                     var tvp = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFERINV_IN", tbl);
                     tvp.SqlDbType = SqlDbType.Structured;
@@ -109,7 +108,6 @@ namespace MicroApi.DataLayer.Service
                 SqlTransaction objtrans = connection.BeginTransaction();
                 try
                 {
-                    // Build DataTable for UDT
                     DataTable tbl = new DataTable();
                     tbl.Columns.Add("ISSUE_DETAIL_ID", typeof(Int32));
                     tbl.Columns.Add("ITEM_ID", typeof(Int32));
@@ -142,7 +140,7 @@ namespace MicroApi.DataLayer.Service
                     SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection, objtrans);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@ACTION", 2); // UPDATE
+                    cmd.Parameters.AddWithValue("@ACTION", 2); 
                     cmd.Parameters.AddWithValue("@TRANS_ID", transferIn.TRANS_ID);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", transferIn.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", transferIn.STORE_ID);
@@ -192,6 +190,9 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ACTION", 0); 
                     cmd.Parameters.AddWithValue("@ID", DBNull.Value);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
@@ -248,7 +249,7 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@ACTION", 0); // Fetch by ID
+                        cmd.Parameters.AddWithValue("@ACTION", 0); 
                         cmd.Parameters.AddWithValue("@TRANS_ID", id);
 
                         DataTable tbl = new DataTable();
@@ -257,7 +258,6 @@ namespace MicroApi.DataLayer.Service
 
                         if (tbl.Rows.Count > 0)
                         {
-                            // Initialize header from first row
                             DataRow firstRow = tbl.Rows[0];
                             transfer = new TransferInInvUpdate
                             {
@@ -293,7 +293,6 @@ namespace MicroApi.DataLayer.Service
                                 DETAILS = new List<TransferInDetailUpdate>()
                             };
 
-                            // Loop through all rows to fill detail list
                             foreach (DataRow dr in tbl.Rows)
                             {
                                 var detail = new TransferInDetailUpdate
@@ -422,7 +421,7 @@ namespace MicroApi.DataLayer.Service
                     SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection, objtrans);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@ACTION", 5); // UPDATE
+                    cmd.Parameters.AddWithValue("@ACTION", 5); 
                     cmd.Parameters.AddWithValue("@TRANS_ID", transferIn.TRANS_ID);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", transferIn.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@STORE_ID", transferIn.STORE_ID);

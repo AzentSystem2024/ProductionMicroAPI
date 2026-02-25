@@ -50,6 +50,7 @@
         public int? JOB_ID { get; set; }
         public string? CREATED_STORE_ID { get; set; }
         public string? STORE_AUTO_ID { get; set; }
+        public int? DEPT_ID { get; set; }
     }
 
     public class JournalUpdateHeader
@@ -88,7 +89,6 @@
         public int? PDC_ID { get; set; }
         public int? CREATE_USER_ID { get; set; }
         public string? ADD_TIME { get; set; }
-        public int? DEPT_ID { get; set; }
         public List<JournalUpdateDetail> DETAILS { get; set; }
     }
 
@@ -107,6 +107,7 @@
         public int? JOB_ID { get; set; }
         public string? CREATED_STORE_ID { get; set; }
         public string? STORE_AUTO_ID { get; set; }
+        public int? DEPT_ID { get; set; }
     }
 
     public class JournalResponse
@@ -148,6 +149,7 @@
         public string? PARTICULARS { get; set; }
         public decimal? DEBIT_AMOUNT { get; set; }
         public decimal? CREDIT_AMOUNT { get; set; }
+        public int? DEPT_ID { get; set; }
     }
     public class JournalViewHeader
     {

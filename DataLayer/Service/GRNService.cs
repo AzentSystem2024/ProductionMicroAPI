@@ -71,7 +71,7 @@ namespace MicroApi.DataLayer.Service
                     ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
                     DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
                     PRICE = ADO.ToDecimal(dr["PRICE"]),
-                    QUANTITY = ADO.ToDecimal(dr["QUANTITY"]),
+                    PO_QUANTITY = ADO.ToDecimal(dr["QUANTITY"]),
                     UOM = ADO.ToString(dr["UOM"]),
                     UOM_MULTIPLE = ADO.ToInt32(dr["UOM_MULTPLE"]),
                     UOM_PURCH = ADO.ToString(dr["UOM_PURCH"]),

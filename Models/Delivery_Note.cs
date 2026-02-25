@@ -16,9 +16,8 @@
         public double TOTAL_QTY { get; set; }
         public int USER_ID { get; set; }
         public string NARRATION { get; set; }
-        public int? DN_TYPE { get; set; }
         public bool? IS_APPROVED { get; set; }
-        public List<DELIVERY_NOTE_DETAIL> DETAILS { get; set; }
+        public List<DELIVERY_NOTE_DETAIL> Details { get; set; }
     }
     public class DELIVERY_NOTE_DETAIL
     {
@@ -47,7 +46,7 @@
         public int? USER_ID { get; set; }
         public string? NARRATION { get; set; }
         public int? DN_TYPE { get; set; }
-        public List<DELIVERY_NOTE_DETAILUPDATE>? DETAILS { get; set; }
+        public List<DELIVERY_NOTE_DETAILUPDATE>? Details { get; set; }
     }
     public class DELIVERY_NOTE_DETAILUPDATE
     {
@@ -67,15 +66,13 @@
     public class SODetail
     {
         public int? SO_DETAIL_ID { get; set; }
-        public int? PACKING_ID { get; set; }
-        public string? PACKING { get; set; }
-        public string? ART_NO { get; set; }
-        public string? BRAND { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? UOM { get; set; }
         public double? QUANTITY { get; set; }
-        public string? ARTICLE_TYPE { get; set; }
-        public string? COLOR { get; set; }
-        public string? CATEGORY { get; set; }
         public string? REMARKS { get; set; }
+
     }
     public class SODetailResponse
     {
@@ -129,7 +126,7 @@
         public int? TRANS_ID { get; set; }
         public string? NARRATION { get; set; }
         public int? DN_TYPE { get; set; }
-        public List<Delivery_Note_Detail_Select>? DETAILS { get; set; }
+        public List<Delivery_Note_Detail_Select>? Details { get; set; }
     }
     public class Delivery_Note_Detail_Select
     {

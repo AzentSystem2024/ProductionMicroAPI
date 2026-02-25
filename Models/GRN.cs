@@ -133,7 +133,7 @@
         public string ITEM_CODE { get; set; }
         public string DESCRIPTION { get; set; }
         public decimal PRICE { get; set; }
-        public decimal QUANTITY { get; set; }
+        public decimal PO_QUANTITY { get; set; }
         public string UOM { get; set; }
         public int UOM_MULTIPLE { get; set; }
         public string UOM_PURCH { get; set; }

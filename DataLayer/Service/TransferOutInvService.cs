@@ -17,7 +17,6 @@ namespace MicroApi.DataLayer.Service
 
             try
             {
-                // BUILD TVP
                 DataTable tbl = new DataTable();
                 tbl.Columns.Add("ITEM_ID", typeof(int));
                 tbl.Columns.Add("UOM", typeof(string));
@@ -37,7 +36,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["UOM"] = ur.UOM ?? "";
                         dRow["QUANTITY"] = ur.QUANTITY ?? 0;
                         dRow["COST"] = ur.COST;
-                        dRow["AMOUNT"] = (ur.QUANTITY ?? 0) * ur.COST;
+                        dRow["AMOUNT"] = ur.AMOUNT;
                         dRow["BATCH_NO"] = ur.BATCH_NO ?? "";
                         dRow["EXPIRY_DATE"] = (object?)ur.EXPIRY_DATE ?? DBNull.Value;
                         dRow["PACKING_ID"] = 0;
@@ -106,13 +105,12 @@ namespace MicroApi.DataLayer.Service
                         {
                             DataRow dRow = tbl.NewRow();
 
-                            dRow["ITEM_ID"] = ur.ITEM_ID;   // ITEM_ID cannot be null in most UDTs
+                            dRow["ITEM_ID"] = ur.ITEM_ID;   
                             dRow["UOM"] = ur.UOM ?? "";
                             dRow["QUANTITY"] = ur.QUANTITY ?? 0;
                             dRow["COST"] = ur.COST ?? 0;
 
-                            // If SP calculates AMOUNT, set 0. Otherwise:
-                            dRow["AMOUNT"] = (ur.QUANTITY ?? 0) * (ur.COST ?? 0);
+                            dRow["AMOUNT"] = ur.AMOUNT;
 
                             dRow["BATCH_NO"] = ur.BATCH_NO ?? "";
                             dRow["EXPIRY_DATE"] = ur.EXPIRY_DATE ?? (object)DBNull.Value;
@@ -141,7 +139,6 @@ namespace MicroApi.DataLayer.Service
 
                     object result = cmd.ExecuteScalar();
 
-                    // Commit the transaction (VERY IMPORTANT)
                     objtrans.Commit();
 
                     return result != null ? Convert.ToInt32(result) : 0;
@@ -199,8 +196,11 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 0);
-                    cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);// Action=0 to get list
+                    cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+
                     DataTable dt = new DataTable();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     da.Fill(dt);
@@ -222,7 +222,6 @@ namespace MicroApi.DataLayer.Service
                             STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                             STATUS = ADO.ToString(dr["STATUS"])
 
-                            // No DETAILS list needed since only header info
                         };
 
                         list.Add(header);
@@ -247,7 +246,6 @@ namespace MicroApi.DataLayer.Service
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", id);
-                        // Add other parameters that might be required
                         cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@STORE_ID", DBNull.Value);
 
@@ -258,12 +256,10 @@ namespace MicroApi.DataLayer.Service
                         if (tbl.Rows.Count == 0)
                             return transfer;
 
-                        // Check if this is the header-only query (no DETAIL_ID column)
                         bool hasDetails = tbl.Columns.Contains("DETAIL_ID");
 
                         if (!hasDetails)
                         {
-                            // This is header-only data from the first query
                             DataRow h = tbl.Rows[0];
                             transfer = new TransferOutInvUpdate
                             {
@@ -281,7 +277,6 @@ namespace MicroApi.DataLayer.Service
                         }
                         else
                         {
-                            // This is the detailed query with item details
                             DataRow h = tbl.Rows[0];
 
                             transfer = new TransferOutInvUpdate
@@ -416,6 +411,7 @@ namespace MicroApi.DataLayer.Service
             using (SqlConnection connection = ADO.GetConnection())
             {
                 SqlTransaction objtrans = connection.BeginTransaction();
+
                 try
                 {
                     DataTable tbl = new DataTable();
@@ -437,10 +433,11 @@ namespace MicroApi.DataLayer.Service
                             dRow["UOM"] = (object?)ur.UOM ?? DBNull.Value;
                             dRow["QUANTITY"] = ur.QUANTITY ?? 0;
                             dRow["COST"] = ur.COST ?? 0;
-                            dRow["AMOUNT"] = (ur.QUANTITY ?? 0) * (ur.COST ?? 0);
+                            dRow["AMOUNT"] = ur.AMOUNT;
                             dRow["BATCH_NO"] = (object?)ur.BATCH_NO ?? DBNull.Value;
                             dRow["EXPIRY_DATE"] = (object?)ur.EXPIRY_DATE ?? DBNull.Value;
                             dRow["PACKING_ID"] = 0;
+
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -460,20 +457,23 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@NARRATION", (object?)transferOut.NARRATION ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@REASON_ID", (object?)transferOut.REASON_ID ?? DBNull.Value);
 
-                    // Pass DataTable as TVP
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
 
-                    object result = cmd.ExecuteScalar();
-                    int transId = Convert.ToInt32(result);
-                    return transId;
+                    cmd.ExecuteNonQuery();   // ⚠ better than ExecuteScalar()
+
+                    objtrans.Commit();       // ✅ THIS WAS MISSING
+
+                    return transferOut.TRANS_ID;
                 }
-                catch (Exception ex)
+                catch
                 {
                     objtrans.Rollback();
                     throw;
                 }
             }
         }
+
     }
 }
+
