@@ -27,7 +27,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@p_IS_DIRECT", accountHead.IS_DIRECT);
                         cmd.Parameters.AddWithValue("@p_ARABIC_NAME", (object)accountHead.ARABIC_NAME ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@p_IS_INACTIVE", accountHead.IS_INACTIVE);
-                        // cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -44,7 +44,7 @@ namespace MicroApi.DataLayer.Service
                                     ARABIC_NAME = accountHead.ARABIC_NAME,
                                     IS_INACTIVE = true,
                                     SERIAL_NO = Convert.ToInt32(reader["SERIAL_NO"]),
-                                   // CostTypeID = accountHead.CostTypeID
+                                    CostTypeID = accountHead.CostTypeID
                                 };
                             }
                         }
@@ -79,7 +79,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@p_IS_DIRECT", accountHead.IS_DIRECT);
                         cmd.Parameters.AddWithValue("@p_ARABIC_NAME", (object)accountHead.ARABIC_NAME ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@p_IS_INACTIVE", accountHead.IS_INACTIVE);
-                       // cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@p_CostTypeID", (object)accountHead.CostTypeID ?? DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -132,7 +132,7 @@ namespace MicroApi.DataLayer.Service
                                     ARABIC_NAME = reader["ARABIC_NAME"].ToString(),
                                     IS_INACTIVE = Convert.ToBoolean(reader["IS_INACTIVE"]),
                                     SERIAL_NO = Convert.ToInt32(reader["SERIAL_NO"]),
-                                    //CostTypeID = reader["CostTypeID"] != DBNull.Value ? Convert.ToInt32(reader["CostTypeID"]) : (int?)null,
+                                    CostTypeID = reader["CostTypeID"] != DBNull.Value ? Convert.ToInt32(reader["CostTypeID"]) : (int?)null,
                                     MAIN_GROUP_ID = reader["MainGROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["MainGROUP_ID"]) : (int?)null,
                                     SUB_GROUP_ID = reader["SubGROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["SubGROUP_ID"]) : (int?)null
                                 };

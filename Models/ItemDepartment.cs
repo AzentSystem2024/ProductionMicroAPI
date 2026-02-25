@@ -2,11 +2,13 @@
 {
     public class ItemDepartment
     {
-        public int ID { get; set; }
-        public string CODE { get; set; }
-        public string DEPT_NAME { get; set; }
-        public string COMPANY_ID { get; set; }
+        public int? ID { get; set; }
+        public string? CODE { get; set; }
+        public string? DEPT_NAME { get; set; }
+        public string? COMPANY_ID { get; set; }
         public string? COMPANY_NAME { get; set; }
+        public int? COST_BUCKET_ID { get; set; }
+        public string? COST_BUCKET_NAME { get; set; }
     }
     public class ItemDepartmentResponse
     {

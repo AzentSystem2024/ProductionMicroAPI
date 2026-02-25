@@ -47,6 +47,8 @@ namespace MicroApi.DataLayer.Service
                                     HeadName = reader["HEAD_NAME"].ToString(),
                                     ID = !reader.IsDBNull(reader.GetOrdinal("ID")) ? reader.GetInt32(reader.GetOrdinal("ID")) : 0,
                                     IS_INACTIVE = reader["STATUS"].ToString(),
+                                    CostType = reader["CostType"].ToString()
+
 
 
                                 });
