@@ -44,7 +44,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
                         cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
 
@@ -67,6 +66,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("JOB_ID", typeof(int));
                         dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                         dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+                        dt.Columns.Add("DEPT_ID", typeof(int));
 
                         int slno = 1;
 
@@ -87,7 +87,7 @@ namespace MicroApi.DataLayer.Service
                                 DBNull.Value,
                                 DBNull.Value,
                                 DBNull.Value,
-                                DBNull.Value
+                                DBNull.Value, detail.DEPT_ID ?? 0
                             );
                         }
 
@@ -172,7 +172,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
 
                         // === UDT Table ===
@@ -192,6 +191,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("JOB_ID", typeof(int));
                         dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                         dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+                        dt.Columns.Add("DEPT_ID", typeof(int));
 
                         int slno = 1;
 
@@ -212,7 +212,7 @@ namespace MicroApi.DataLayer.Service
                                 DBNull.Value,
                                 DBNull.Value,
                                 DBNull.Value,
-                                DBNull.Value
+                                DBNull.Value, detail.DEPT_ID ?? 0
                             );
                         }
 
@@ -291,7 +291,6 @@ namespace MicroApi.DataLayer.Service
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
-                                        DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DETAILS = new List<MiscListDetail>()
                                     };
                                 }
@@ -306,7 +305,9 @@ namespace MicroApi.DataLayer.Service
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
                                     CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
                                     OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
-                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
+                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null,
+                                    DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+
                                 });
                             }
 
@@ -380,7 +381,6 @@ namespace MicroApi.DataLayer.Service
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_TYPE_ID"]) : 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
-                                        DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DETAILS = new List<MiscListDetail>()
                                     };
                                 }
@@ -395,7 +395,9 @@ namespace MicroApi.DataLayer.Service
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
                                     CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
                                     OPP_HEAD_ID = reader["OPP_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["OPP_HEAD_ID"]) : 0,
-                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null
+                                    OPP_HEAD_NAME = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : null,
+                                    DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+
                                 });
                             }
 
@@ -523,7 +525,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
 
                         // === UDT Table ===
@@ -543,6 +544,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("JOB_ID", typeof(int));
                         dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                         dt.Columns.Add("STORE_AUTO_ID", typeof(string));
+                        dt.Columns.Add("DEPT_ID", typeof(int));
 
                         int slno = 1;
 
@@ -563,7 +565,7 @@ namespace MicroApi.DataLayer.Service
                                 DBNull.Value,
                                 DBNull.Value,
                                 DBNull.Value,
-                                DBNull.Value
+                                DBNull.Value, detail.DEPT_ID ?? 0
                             );
                         }
 

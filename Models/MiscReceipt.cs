@@ -14,7 +14,6 @@
         public int? CREATE_USER_ID { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-        public int? DEPT_ID { get; set; }
         public int? STORE_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
         public List<MiscReceiptDetail> DETAILS { get; set; }
@@ -29,7 +28,9 @@
         public decimal? CREDIT_AMOUNT { get; set; }
         public int? OPP_HEAD_ID { get; set; }
         public string? OPP_HEAD_NAME { get; set; }
-      
+        public int? DEPT_ID { get; set; }
+
+
     }
     public class MiscReceiptResponse
     {
@@ -54,7 +55,6 @@
         public int? CREATE_USER_ID { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-        public int? DEPT_ID { get; set; }
         public List<MiscReceiptDetail> DETAILS { get; set; }
     }
     public class MiscReceiptListResponse
@@ -77,7 +77,6 @@
         public string? BANK_NAME { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-        public int? DEPT_ID { get; set; }
         public List<MiscListDetail> DETAILS { get; set; }
     }
     public class MiscListDetail
@@ -91,6 +90,8 @@
         public decimal? CREDIT_AMOUNT { get; set; }
         public int? OPP_HEAD_ID { get; set; }
         public string? OPP_HEAD_NAME { get; set; }
+        public int? DEPT_ID { get; set; }
+
     }
     public class MiscReceiptViewHeader
     {
@@ -106,7 +107,6 @@
         public string? BANK_NAME { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-        public int? DEPT_ID { get; set; }
         public List<MiscListDetail> DETAILS { get; set; }
     }
     public class LasrVoucherResponse

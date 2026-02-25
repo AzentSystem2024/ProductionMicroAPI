@@ -634,7 +634,6 @@ namespace MicroApi.DataLayer.Service
                                 cmd.Parameters.AddWithValue("@PAY_HEAD_ID", header.PAY_HEAD_ID ?? (object)DBNull.Value);
                                 cmd.Parameters.AddWithValue("@ADD_TIME", DateTime.Now);
                                 cmd.Parameters.AddWithValue("@CREATED_STORE_ID", header.CREATED_STORE_ID ?? (object)DBNull.Value);
-                                cmd.Parameters.AddWithValue("@DEPT_ID", header.DEPT_ID ?? (object)DBNull.Value);
 
                                 var tvp = cmd.Parameters.AddWithValue("@UDT_TB_AC_TRANS_DETAIL", dt);
                                 tvp.SqlDbType = SqlDbType.Structured;

@@ -51,10 +51,10 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("REMARKS", typeof(string));
                         dt.Columns.Add("AMOUNT", typeof(decimal));
-                       // dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
+                        // dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
                         //dt.Columns.Add("VAT_REGN", typeof(string));
                         //dt.Columns.Add("VAT_PERCENT", typeof(double));
-
+                        dt.Columns.Add("DEPT_ID", typeof(int));
                         int slno = 1;
                         // Add rows from your model
                         foreach (var item in model.MISC_DETAIL)
@@ -63,10 +63,11 @@ namespace MicroApi.DataLayer.Service
                                 slno++,0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
-                                item.AMOUNT
+                                item.AMOUNT,
                                 //item.VAT_AMOUNT,
                                 //item.VAT_REGN ,
-                                //item.VAT_PERCENT
+                                //item.VAT_PERCENT,
+                                item.DEPT_ID ?? 0
                             );
                         }
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_PAYMENT", dt);
@@ -132,6 +133,7 @@ namespace MicroApi.DataLayer.Service
                         //dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
                         //dt.Columns.Add("VAT_REGN", typeof(string));
                         //dt.Columns.Add("VAT_PERCENT", typeof(double));
+                        dt.Columns.Add("DEPT_ID", typeof(int));
 
                         int slno = 1;
                         // Add rows from your model
@@ -140,10 +142,11 @@ namespace MicroApi.DataLayer.Service
                             dt.Rows.Add(0, slno++,0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
-                                item.AMOUNT
+                                item.AMOUNT,
                                 //item.VAT_AMOUNT,
                                 //item.VAT_REGN,
                                 //item.VAT_PERCENT
+                                item.DEPT_ID ?? 0
                             );
                         }
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_PAYMENT", dt);
@@ -308,7 +311,6 @@ namespace MicroApi.DataLayer.Service
                                         LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                         LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                         VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
-                                        DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
                                         DetailList = new List<MiscPaymentDetail>()
                                     };
                                 }
@@ -324,7 +326,9 @@ namespace MicroApi.DataLayer.Service
                                     //VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
                                     REMARKS = reader["REMARKS"]?.ToString(),
                                     LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
-                                    LEDGER_NAME = reader["LEDGER_NAME"]?.ToString()
+                                    LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
+                                    DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+
                                 });
                             }
 
@@ -380,7 +384,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_TYPE_ID", model.PAY_TYPE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@PAY_HEAD_ID", model.PAY_HEAD_ID ?? 0);
-                        cmd.Parameters.AddWithValue("@DEPT_ID", model.DEPT_ID ?? 0);
 
 
 
@@ -396,6 +399,7 @@ namespace MicroApi.DataLayer.Service
                         //dt.Columns.Add("VAT_AMOUNT", typeof(decimal));
                         //dt.Columns.Add("VAT_REGN", typeof(string));
                         //dt.Columns.Add("VAT_PERCENT", typeof(double));
+                        dt.Columns.Add("DEPT_ID", typeof(int));
 
                         int slno = 1;
                         // Add rows from your model
@@ -404,10 +408,11 @@ namespace MicroApi.DataLayer.Service
                             dt.Rows.Add(0, slno++, 0,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
-                                item.AMOUNT
+                                item.AMOUNT,
                                 //item.VAT_AMOUNT,
                                 //item.VAT_REGN,
-                                //item.VAT_PERCENT
+                                //item.VAT_PERCENT,
+                                item.DEPT_ID ?? 0
                             );
                         }
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_AC_PAYMENT", dt);
