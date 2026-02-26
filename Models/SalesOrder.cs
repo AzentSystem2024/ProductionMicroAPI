@@ -121,6 +121,7 @@
         public string? DELIVERY_ADDRESS { get; set; }
         public string? ADDRESS { get; set; }
         public int? SUBDEALER_ID { get; set; }
+        public float? NET_AMOUNT { get; set; }
     }
 
 

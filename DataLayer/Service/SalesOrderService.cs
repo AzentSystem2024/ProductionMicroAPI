@@ -365,6 +365,7 @@ namespace MicroApi.DataLayer.Service
                                 DELIVERY_ADDRESS = reader["ADDRESS"] != DBNull.Value ? reader["ADDRESS"].ToString() : null,
                                 ADDRESS = reader["DELIVERY_ADDRESS_FULL"] != DBNull.Value ? reader["DELIVERY_ADDRESS_FULL"].ToString() : null,
                                 SUBDEALER_ID = reader["SUBDEALER_ID"] != DBNull.Value ? Convert.ToInt32(reader["SUBDEALER_ID"]) : (int?)null,
+                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : (float?)null,
                             };
 
                             response.Data.Add(salesOrder);

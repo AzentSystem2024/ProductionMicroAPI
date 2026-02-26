@@ -56,7 +56,7 @@
         public decimal AMOUNT { get; set; }
         public decimal TAXABLE_AMOUNT { get; set; }
         public decimal TAX_AMOUNT { get; set; }
-        public decimal TAX_PERC { get; set; }
+        public decimal VAT_PERC { get; set; }
         public float? QTY_STOCK { get; set; }
         public string BARCODE { get; set; }
         public string UOM { get; set; }

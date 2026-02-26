@@ -157,7 +157,7 @@ namespace MicroApi.DataLayer.Service
                             AMOUNT = row["PRICE"] != DBNull.Value ? Convert.ToDecimal(row["PRICE"]) : 0,
                             TAXABLE_AMOUNT = row["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(row["TAXABLE_AMOUNT"]) : 0,
                             TAX_AMOUNT = row["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(row["TAX_AMOUNT"]) : 0,
-                            TAX_PERC = row["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(row["TAX_PERC"]) : 0,
+                            VAT_PERC = row["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(row["TAX_PERC"]) : 0,
                             QTY_STOCK = row["QTY_STOCK"] != DBNull.Value ? Convert.ToSingle(row["QTY_STOCK"]) : 0,
                             BARCODE = row["BARCODE"] != DBNull.Value ? row["BARCODE"].ToString() : "",
                             UOM = row["UOM"] != DBNull.Value ? row["UOM"].ToString() : "",
