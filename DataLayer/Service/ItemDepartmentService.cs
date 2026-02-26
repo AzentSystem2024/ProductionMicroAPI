@@ -31,6 +31,7 @@ namespace MicroApi.DataLayer.Services
                         DEPT_NAME = Convert.ToString(dr["DEPT_NAME"]),
                         COMPANY_NAME = dr["COMPANY_NAME"].ToString(),
                         COMPANY_ID = dr["COMPANY_ID"].ToString(),
+                        COST_BUCKET_NAME = dr["CostBucket"].ToString(),
                         //IS_DELETED=dr["IS_DELETED"].ToString()
                     });
                 }
@@ -56,6 +57,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("CODE", department.CODE);
                     cmd.Parameters.AddWithValue("DEPT_NAME", department.DEPT_NAME);
                     cmd.Parameters.AddWithValue("COMPANY_ID", department.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("COST_BUCKET_ID", department.COST_BUCKET_ID);
 
                     Int32 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -78,9 +80,11 @@ namespace MicroApi.DataLayer.Services
             {
                 string strSQL = "SELECT TB_ITEM_DEPARTMENT.ID,TB_ITEM_DEPARTMENT.CODE,TB_ITEM_DEPARTMENT.DEPT_NAME, " +
                "TB_ITEM_DEPARTMENT.COMPANY_ID," +
-               "TB_COMPANY_MASTER.COMPANY_NAME " +
+               "TB_COMPANY_MASTER.COMPANY_NAME, " +
+               "TB_COST_BUCKETS.ID AS COST_BUCKET_ID " +
                "FROM TB_ITEM_DEPARTMENT " +
                "INNER JOIN TB_COMPANY_MASTER ON TB_ITEM_DEPARTMENT.COMPANY_ID = TB_COMPANY_MASTER.ID " +
+               "LEFT JOIN TB_COST_BUCKETS ON TB_ITEM_DEPARTMENT.COST_BUCKET_ID = TB_COST_BUCKETS.ID " +
                "WHERE TB_ITEM_DEPARTMENT.ID =" + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Department");
@@ -92,6 +96,7 @@ namespace MicroApi.DataLayer.Services
                     department.DEPT_NAME = Convert.ToString(dr["DEPT_NAME"]);
                     department.COMPANY_ID = Convert.ToString(dr["COMPANY_ID"]);
                     department.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
+                    department.COST_BUCKET_ID = Convert.ToInt32(dr["COST_BUCKET_ID"]);
                 }
             }
             catch (Exception ex)

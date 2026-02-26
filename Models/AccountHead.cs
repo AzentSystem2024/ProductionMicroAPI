@@ -11,7 +11,7 @@
         public string ARABIC_NAME { get; set; }
         public bool IS_INACTIVE { get; set; }
         public int SERIAL_NO { get; set; }
-        //public int CostTypeID {  get; set; }
+        public int? CostTypeID { get; set; }
 
     }
     public class AccountHeadListResponse
@@ -42,6 +42,7 @@
         public int? SERIAL_NO { get; set; }
         public int? MAIN_GROUP_ID { get; set; }
         public int? SUB_GROUP_ID { get; set; }
+        public int? CostTypeID { get; set; }
 
     }
     
