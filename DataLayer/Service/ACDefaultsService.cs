@@ -39,7 +39,6 @@ namespace MicroApi.DataLayer.Service
                                                 : Convert.ToInt32(rdr["HEAD_ID"])
                             };
 
-                            // 🔥 THIS WAS MISSING
                             response.DATA.Add(obj);
                         }
                     }
@@ -87,6 +86,35 @@ namespace MicroApi.DataLayer.Service
 
                 response.Flag = 1;
                 response.Message = "AC Defaults saved successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+        public ACDefaultsResponse DeleteAcDefault(AcDefaultsDeleteReq request)
+        {
+            var response = new ACDefaultsResponse();
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_TB_AC_DEFAULTS", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ACTION", 3);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@HEAD_ID", request.HEAD_ID);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                response.Flag = 1;
+                response.Message = "Deleted Successfully";
             }
             catch (Exception ex)
             {

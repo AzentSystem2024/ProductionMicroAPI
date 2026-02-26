@@ -6,5 +6,6 @@ namespace MicroApi.DataLayer.Interface
     {
         AcDefaultsListResponse GetACDefaultsList(AcDefaultsListReq request);
         AcDefaultsListResponse Save(ACDefaults request);
+        ACDefaultsResponse DeleteAcDefault(AcDefaultsDeleteReq request);
     }
 }

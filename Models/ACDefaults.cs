@@ -27,5 +27,16 @@
         public string Message { get; set; }
         public List<AcDefaultsList> DATA { get; set; }
     }
+    public class AcDefaultsDeleteReq
+    {
+        public int COMPANY_ID { get; set; }
+        public int HEAD_ID { get; set; }
+    }
+    public class ACDefaultsResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+    }
+
 
 }

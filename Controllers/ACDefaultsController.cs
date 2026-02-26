@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ACDefaultsController : ControllerBase
@@ -54,5 +54,24 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("delete")]
+        public ACDefaultsResponse Delete(AcDefaultsDeleteReq request)
+        {
+            var res = new ACDefaultsResponse();
+
+            try
+            {
+                res = _ACDefaultsService.DeleteAcDefault(request);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+
     }
 }
