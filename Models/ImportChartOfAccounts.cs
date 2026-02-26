@@ -27,11 +27,11 @@ namespace MicroApi.Models
 
     public class ImportAccountsInput
     {
-        public int CompanyID { get; set; }
-        public int UserID { get; set; }
-        public string BatchNo { get; set; }
-        public int Action { get; set; }
-        public List<ImportChartOfAccountsData> data { get; set; }
+        public int? CompanyID { get; set; }
+        public int? UserID { get; set; }
+        public string? BatchNo { get; set; }
+        public int? Action { get; set; }
+        public List<ImportChartOfAccountsData>? data { get; set; }
     }
 
     public class ImportAccountsResponse
@@ -39,5 +39,17 @@ namespace MicroApi.Models
         public int flag { get; set; }
         public string message { get; set; }
         public List<ImportAccountsLog> data { get; set; }
+    }
+
+    public class viewImportAccountsDataResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<ImportChartOfAccountsData> data { get; set; }
+    }
+
+    public class viewImportAccountsInput
+    {
+        public int LogID { get; set; }
     }
 }

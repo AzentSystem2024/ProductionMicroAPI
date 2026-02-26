@@ -41,5 +41,42 @@ namespace MicroApi.Controllers
             return res;
         }
 
+        [HttpPost]
+        [Route("list")]
+        public ImportAccountsResponse List(ImportAccountsInput vinput)
+        {
+            ImportAccountsResponse res = new ImportAccountsResponse();
+
+            try
+            {
+
+                res = _importItemLogService.List(vinput);
+
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("view")]
+        public viewImportAccountsDataResponse ViewDetails(viewImportAccountsInput vInput)
+        {
+            viewImportAccountsDataResponse res = new viewImportAccountsDataResponse();
+            try
+            {
+                res = _importItemLogService.ViewDetails(vInput);
+            }
+            catch(Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+
     }
 }
