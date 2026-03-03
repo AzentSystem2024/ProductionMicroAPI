@@ -9,5 +9,6 @@ namespace MicroApi.DataLayer.Interface
         PDCSaveResponse UpdateData(PDCModel pdc);
         PDCSelectResponse GetPDCById(int? id = null);
         PDCSaveResponse Delete(int id);
+        DocResponse GetLastDocNo();
     }
 }

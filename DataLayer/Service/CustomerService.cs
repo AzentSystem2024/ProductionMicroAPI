@@ -150,12 +150,13 @@ namespace MicroApi.DataLayer.Services
                         dtAddress.Columns.Add("LOCATION", typeof(string));
                         dtAddress.Columns.Add("MOBILE", typeof(string));
                         dtAddress.Columns.Add("PHONE", typeof(string));
+                        dtAddress.Columns.Add("COUNTRY_CODE", typeof(string));
 
                         if (customer.DeliveryAddresses != null && customer.DeliveryAddresses.Count > 0)
                         {
                             foreach (var addr in customer.DeliveryAddresses)
                             {
-                                dtAddress.Rows.Add(addr.ADDRESS1, addr.ADDRESS2, addr.ADDRESS3, addr.LOCATION, addr.MOBILE, addr.PHONE);
+                                dtAddress.Rows.Add(addr.ADDRESS1, addr.ADDRESS2, addr.ADDRESS3, addr.LOCATION, addr.MOBILE, addr.PHONE,addr.COUNTRY_CODE ?? (object)DBNull.Value);
                             }
                         }
 
@@ -262,12 +263,13 @@ namespace MicroApi.DataLayer.Services
                         dtAddress.Columns.Add("LOCATION", typeof(string));
                         dtAddress.Columns.Add("MOBILE", typeof(string));
                         dtAddress.Columns.Add("PHONE", typeof(string));
+                        dtAddress.Columns.Add("COUNTRY_CODE", typeof(string));
 
                         if (customer.DeliveryAddresses != null && customer.DeliveryAddresses.Count > 0)
                         {
                             foreach (var addr in customer.DeliveryAddresses)
                             {
-                                dtAddress.Rows.Add(addr.ADDRESS1, addr.ADDRESS2, addr.ADDRESS3, addr.LOCATION, addr.MOBILE, addr.PHONE);
+                                dtAddress.Rows.Add(addr.ADDRESS1, addr.ADDRESS2, addr.ADDRESS3, addr.LOCATION, addr.MOBILE, addr.PHONE, addr.COUNTRY_CODE ?? (object)DBNull.Value);
                             }
                         }
 
@@ -379,7 +381,7 @@ namespace MicroApi.DataLayer.Services
                     //customer.WAREHOUSE_ID = Convert.ToInt32(dr["WAREHOUSE_ID"]);
                 }
                 string addressSQL = @"
-                        SELECT ID, ADDRESS1, ADDRESS2, ADDRESS3, LOCATION, MOBILE, PHONE
+                        SELECT ID, ADDRESS1, ADDRESS2, ADDRESS3, LOCATION, MOBILE, PHONE,COUNTRY_CODE
                         FROM TB_CUST_DELIVERY_ADDRESS
                         WHERE CUST_ID = " + id;
 
@@ -394,8 +396,9 @@ namespace MicroApi.DataLayer.Services
                         ADDRESS3 = Convert.ToString(adr["ADDRESS3"]),
                         LOCATION = Convert.ToString(adr["LOCATION"]),
                         MOBILE = Convert.ToString(adr["MOBILE"]),
-                        PHONE = Convert.ToString(adr["PHONE"])
-                        
+                        PHONE = Convert.ToString(adr["PHONE"]),
+                        COUNTRY_CODE = Convert.ToString(adr["COUNTRY_CODE"]),
+
                     };
                     customer.DeliveryAddresses.Add(addr);
                 }

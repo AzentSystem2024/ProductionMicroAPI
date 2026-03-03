@@ -63,23 +63,27 @@
         public List<Menu> Menus { get; set; } = new List<Menu>();
         public List<MenuGroup> SubGroups { get; set; } = new List<MenuGroup>();
 
-    }
-
+    }  
     public class Menu
     {
         public int MenuID { get; set; }
         public string MenuName { get; set; }
         public decimal MenuOrder { get; set; }
-        public bool? Selected { get; set; }
+        public string Path { get; set; }
+
+        public int? ParentMenuID { get; set; }
+
+        public bool Selected { get; set; }
         public bool CanAdd { get; set; }
         public bool CanView { get; set; }
         public bool CanEdit { get; set; }
         public bool CanApprove { get; set; }
         public bool CanDelete { get; set; }
         public bool CanPrint { get; set; }
-        public string Path { get; set; }
-        public List<Menu> SubMenus { get; set; } = new List<Menu>();
+
+        public List<Menu> Children { get; set; } = new();
     }
+
 
     public class InitLoginResponse
     {

@@ -7,7 +7,7 @@ using System.Data;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PhysicalStockController : ControllerBase

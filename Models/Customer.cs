@@ -131,6 +131,7 @@
         public string? LOCATION { get; set; }
         public string? MOBILE { get; set; }
         public string? PHONE { get; set; }
+        public string? COUNTRY_CODE { get; set; }
     }
     public class CustDeliveryAddressSelect
     {

@@ -278,5 +278,38 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public DocResponse GetLastDocNo()
+        {
+            var res = new DocResponse();
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = "SELECT  ISNULL(CAST(MAX(CAST(ENTRY_NO AS INT)) AS NVARCHAR(50)), '0') + 1 FROM TB_PDC";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        //cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
+                        //cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
+                        object result = cmd.ExecuteScalar();
+
+                        res.flag = 1;
+                        res.DOC_NO = result != null ? result.ToString() : "0";
+                        res.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 }

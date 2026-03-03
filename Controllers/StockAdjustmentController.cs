@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class StockAdjustmentController : ControllerBase
@@ -17,12 +17,12 @@ namespace MicroApi.Controllers
         }
         [HttpPost]
         [Route("list")]
-        public StockAdjustmentListResponse List()
+        public StockAdjustmentListResponse List(StockAdjListRequest request)
         {
             StockAdjustmentListResponse response = new StockAdjustmentListResponse();
             try
             {
-                response = _stockAdjustmentService.GetAllStockAdjustments();
+                response = _stockAdjustmentService.GetAllStockAdjustments(request);
             }
             catch (Exception ex)
             {

@@ -5,7 +5,7 @@ namespace MicroApi.DataLayer.Interface
     public interface IStockAdjustmentService
     {
         
-        StockAdjustmentListResponse GetAllStockAdjustments();
+        StockAdjustmentListResponse GetAllStockAdjustments(StockAdjListRequest request);
         int SaveData(StockAdjustment stockAdjustment);
         StockAdjustmentResponse EditData(StockAdjustmentUpdate stockAdjustment);
         StockAdjustmentDetailResponse GetStockAdjustment(int adjId);

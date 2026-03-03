@@ -104,6 +104,24 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("DocNo")]
+        public DocResponse GetLastDocNo()
+        {
+            DocResponse res = new DocResponse();
+
+            try
+            {
+                res = _pdcService.GetLastDocNo();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
     }
 
 }
