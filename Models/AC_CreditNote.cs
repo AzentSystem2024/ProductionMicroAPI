@@ -39,6 +39,7 @@
         public bool? IS_APPROVED { get; set; }
         public string? VEHICLE_NO { get; set; }
         public bool? ROUND_OFF { get; set; }
+        public int? SUB_TYPE_ID { get; set; }
         public List<CreditNoteDetail> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteDetail
@@ -190,6 +191,7 @@
         public string? DELIVERY_ADDRESS2 { get; set; }
         public string? DELIVERY_ADDRESS3 { get; set; }
         public string? MOBILE { get; set; }
+        public string? SUB_TYPE_NAME { get; set; }
         public List<CreditNoteDetailUpdate> NOTE_DETAIL { get; set; }
     }
     public class CreditNoteCommitRequest
@@ -247,6 +249,7 @@
     {
         public int TRANS_TYPE { get; set; }
         public int COMPANY_ID { get; set; }
+        public int? SUB_TYPE_ID { get; set; }
     }
     public class CreditlistRequest
     {
@@ -254,5 +257,15 @@
         public string? DATE_FROM { get; set; }
         public string? DATE_TO { get; set; }
     }
+    public class SubType
+    {
+        public int SUB_TYPE_ID { get; set; }
+        public string SUB_TYPE_NAME { get; set; }
+    }
+    public class SubTypeRequest
+    {
+        public int TRANS_TYPE { get; set; }
+    }
+
 }
 

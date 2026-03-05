@@ -292,9 +292,6 @@ namespace MicroApi.DataLayer.Service
 
                     using (var cmd = new SqlCommand(query, connection))
                     {
-                        //cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
-                        //cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-
                         object result = cmd.ExecuteScalar();
 
                         res.flag = 1;

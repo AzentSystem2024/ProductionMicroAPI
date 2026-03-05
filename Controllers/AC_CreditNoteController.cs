@@ -174,5 +174,31 @@ namespace MicroApi.Controllers
             }
             return History.ToList();
         }
+        [HttpPost]
+        [Route("getsubtype")]
+        public IActionResult GetSubTypes(SubTypeRequest request)
+        {
+            try
+            {
+                var data = _creditNoteService.GetSubTypes(request);
+
+                return Ok(new
+                {
+                    flag = 1,
+                    Message = "Success",
+                    Data = data
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    flag = 0,
+                    Message = "Error: " + ex.Message,
+                    Data = new List<SubType>()
+                });
+            }
+        }
+
     }
 }

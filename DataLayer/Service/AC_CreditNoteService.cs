@@ -63,6 +63,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
                         cmd.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
+                        cmd.Parameters.AddWithValue("@SUB_TYPE_ID", model.SUB_TYPE_ID);
 
                         // UDT setup
                         DataTable dt = new DataTable();
@@ -366,6 +367,7 @@ namespace MicroApi.DataLayer.Service
                                         DELIVERY_ADDRESS2 = reader["CUST_DELIVERY_ADD2"]?.ToString(),
                                         DELIVERY_ADDRESS3 = reader["CUST_DELIVERY_ADD3"]?.ToString(),
                                         MOBILE = reader["MOBILE"]?.ToString(),
+                                        SUB_TYPE_NAME = Convert.ToString(reader["SUB_TYPE_NAME"]),
                                         NOTE_DETAIL = new List<CreditNoteDetailUpdate>()
                                     };
                                 }
@@ -504,10 +506,9 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        //public DocResponse GetLastDocNo()
+        //public DocResponse GetLastDocNo(CreditVoucherRequest request)
         //{
-        //    DocResponse res = new DocResponse();
-
+        //    var res = new DocResponse();
         //    try
         //    {
         //        using (var connection = ADO.GetConnection())
@@ -515,17 +516,18 @@ namespace MicroApi.DataLayer.Service
         //            if (connection.State == ConnectionState.Closed)
         //                connection.Open();
 
-        //            string query = @"
-        //            SELECT TOP 1 VOUCHER_NO + 1
-        //            FROM TB_AC_TRANS_HEADER 
-        //            WHERE TRANS_TYPE = 37 
-        //            ORDER BY TRANS_ID DESC";
+        //            // Call the SQL function directly
+        //            string query = "SELECT dbo.fn_NextVoucherNo(@TRANS_TYPE, @COMPANY_ID) AS VOUCHER_NO";
 
         //            using (var cmd = new SqlCommand(query, connection))
         //            {
+        //                cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
+        //                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+
         //                object result = cmd.ExecuteScalar();
+
         //                res.flag = 1;
-        //                res.DOC_NO = result != null ? Convert.ToInt32(result) : 0;
+        //                res.DOC_NO = result != null ? result.ToString() : "0";
         //                res.Message = "Success";
         //            }
         //        }
@@ -538,6 +540,7 @@ namespace MicroApi.DataLayer.Service
 
         //    return res;
         //}
+
         public DocResponse GetLastDocNo(CreditVoucherRequest request)
         {
             var res = new DocResponse();
@@ -549,17 +552,18 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     // Call the SQL function directly
-                    string query = "SELECT dbo.fn_NextVoucherNo(@TRANS_TYPE, @COMPANY_ID) AS VOUCHER_NO";
+                    string query = "SELECT dbo.fn_NextVoucherNo(@TRANS_TYPE,@COMPANY_ID,@SUB_TYPE_ID) AS VOUCHER_NO";
 
                     using (var cmd = new SqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@SUB_TYPE_ID", request.SUB_TYPE_ID ?? 0);
 
                         object result = cmd.ExecuteScalar();
 
                         res.flag = 1;
-                        res.DOC_NO = result != null ? result.ToString() : "0";  
+                        res.DOC_NO = result != null ? result.ToString() : "0";
                         res.Message = "Success";
                     }
                 }
@@ -572,6 +576,41 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public List<SubType> GetSubTypes(SubTypeRequest request)
+        {
+            var list = new List<SubType>();
+
+            using (var con = ADO.GetConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                string query = @"SELECT SUB_TYPE_ID, SUB_TYPE_NAME 
+                         FROM TB_TRANS_SUBTYPE 
+                         WHERE TRANS_TYPE_ID = @TRANS_TYPE
+                         ORDER BY SUB_TYPE_ID";
+
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new SubType
+                            {
+                                SUB_TYPE_ID = Convert.ToInt32(reader["SUB_TYPE_ID"]),
+                                SUB_TYPE_NAME = reader["SUB_TYPE_NAME"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
 
         public CreditNoteResponse Delete(int id)
         {

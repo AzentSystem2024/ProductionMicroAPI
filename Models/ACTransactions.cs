@@ -241,6 +241,7 @@
         public bool? IS_APPROVED { get; set; }
         public string? VEHICLE_NO { get; set; }
         public bool? ROUND_OFF { get; set; }
+        public int? SUB_TYPE_ID { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
 
@@ -362,6 +363,7 @@
         public string? GST_NO { get; set; }
         public string? PAN_NO { get; set; }
         public string? CIN { get; set; }
+        public string? SUB_TYPE_NAME { get; set; }
         public List<DebitNoteDetail> NOTE_DETAIL { get; set; }
     }
     public class AC_DebitNoteSelect

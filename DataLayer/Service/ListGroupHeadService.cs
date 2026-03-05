@@ -49,8 +49,6 @@ namespace MicroApi.DataLayer.Service
                                     IS_INACTIVE = reader["STATUS"].ToString(),
                                     CostType = reader["CostType"].ToString()
 
-
-
                                 });
                             }
                         }

@@ -125,49 +125,9 @@ namespace MicroApi.DataLayer.Service
                 }
 
                 // ---------- RESULT 5 : MENU ----------
-                //if (reader.NextResult())
-                //{
-                //    var menuGroups = new Dictionary<int, MenuGroup>();
-
-                //    while (reader.Read())
-                //    {
-                //        int groupId = Convert.ToInt32(reader["MenuGroupID"]);
-
-                //        if (!menuGroups.TryGetValue(groupId, out var group))
-                //        {
-                //            group = new MenuGroup
-                //            {
-                //                MenuGroupID = groupId,
-                //                Text = reader["Text"]?.ToString(),
-                //                Icon = reader["Icon"]?.ToString(),
-                //                MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
-                //            };
-                //            menuGroups[groupId] = group;
-                //        }
-
-                //        group.Menus.Add(new Menu
-                //        {
-                //            MenuID = Convert.ToInt32(reader["MenuID"]),
-                //            MenuName = reader["MenuName"]?.ToString(),
-                //            MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
-                //            Selected = Convert.ToBoolean(reader["Selected"]),
-                //            CanAdd = Convert.ToBoolean(reader["CanAdd"]),
-                //            CanView = Convert.ToBoolean(reader["CanView"]),
-                //            CanEdit = Convert.ToBoolean(reader["CanEdit"]),
-                //            CanApprove = Convert.ToBoolean(reader["CanApprove"]),
-                //            CanDelete = Convert.ToBoolean(reader["CanDelete"]),
-                //            CanPrint = Convert.ToBoolean(reader["CanPrint"]),
-                //            Path = reader["Path"]?.ToString()
-                //        });
-                //    }
-
-                //    response.MenuGroups = menuGroups.Values.ToList();
-                //}
-                // ---------- RESULT 5 : MENU (3 LEVEL) ----------
                 if (reader.NextResult())
                 {
                     var menuGroups = new Dictionary<int, MenuGroup>();
-                    var allMenus = new List<Menu>();
 
                     while (reader.Read())
                     {
@@ -182,52 +142,92 @@ namespace MicroApi.DataLayer.Service
                                 Icon = reader["Icon"]?.ToString(),
                                 MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
                             };
-
                             menuGroups[groupId] = group;
                         }
 
-                        var menu = new Menu
+                        group.Menus.Add(new Menu
                         {
                             MenuID = Convert.ToInt32(reader["MenuID"]),
                             MenuName = reader["MenuName"]?.ToString(),
                             MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
-                            Path = reader["Path"]?.ToString(),
-                            ParentMenuID = reader["ParentMenuID"] == DBNull.Value
-                                                ? null
-                                                : Convert.ToInt32(reader["ParentMenuID"]),
                             Selected = Convert.ToBoolean(reader["Selected"]),
                             CanAdd = Convert.ToBoolean(reader["CanAdd"]),
                             CanView = Convert.ToBoolean(reader["CanView"]),
                             CanEdit = Convert.ToBoolean(reader["CanEdit"]),
                             CanApprove = Convert.ToBoolean(reader["CanApprove"]),
                             CanDelete = Convert.ToBoolean(reader["CanDelete"]),
-                            CanPrint = Convert.ToBoolean(reader["CanPrint"])
-                        };
-
-                        allMenus.Add(menu);
-                        group.Menus.Add(menu);
+                            CanPrint = Convert.ToBoolean(reader["CanPrint"]),
+                            Path = reader["Path"]?.ToString()
+                        });
                     }
 
-                    // Build hierarchy
-                    foreach (var group in menuGroups.Values)
-                    {
-                        var parents = group.Menus.Where(m => m.ParentMenuID == null).ToList();
-
-                        foreach (var parent in parents)
-                        {
-                            parent.Children = group.Menus
-                                .Where(m => m.ParentMenuID == parent.MenuID)
-                                .OrderBy(m => m.MenuOrder)
-                                .ToList();
-                        }
-
-                        group.Menus = parents.OrderBy(m => m.MenuOrder).ToList();
-                    }
-
-                    response.MenuGroups = menuGroups.Values
-                        .OrderBy(g => g.MenuGroupOrder)
-                        .ToList();
+                    response.MenuGroups = menuGroups.Values.ToList();
                 }
+                // ---------- RESULT 5 : MENU (3 LEVEL) ----------
+                //if (reader.NextResult())
+                //{
+                //    var menuGroups = new Dictionary<int, MenuGroup>();
+                //    var allMenus = new List<Menu>();
+
+                //    while (reader.Read())
+                //    {
+                //        int groupId = Convert.ToInt32(reader["MenuGroupID"]);
+
+                //        if (!menuGroups.TryGetValue(groupId, out var group))
+                //        {
+                //            group = new MenuGroup
+                //            {
+                //                MenuGroupID = groupId,
+                //                Text = reader["Text"]?.ToString(),
+                //                Icon = reader["Icon"]?.ToString(),
+                //                MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
+                //            };
+
+                //            menuGroups[groupId] = group;
+                //        }
+
+                //        var menu = new Menu
+                //        {
+                //            MenuID = Convert.ToInt32(reader["MenuID"]),
+                //            MenuName = reader["MenuName"]?.ToString(),
+                //            MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
+                //            Path = reader["Path"]?.ToString(),
+                //            ParentMenuID = reader["ParentMenuID"] == DBNull.Value
+                //                                ? null
+                //                                : Convert.ToInt32(reader["ParentMenuID"]),
+                //            Selected = Convert.ToBoolean(reader["Selected"]),
+                //            CanAdd = Convert.ToBoolean(reader["CanAdd"]),
+                //            CanView = Convert.ToBoolean(reader["CanView"]),
+                //            CanEdit = Convert.ToBoolean(reader["CanEdit"]),
+                //            CanApprove = Convert.ToBoolean(reader["CanApprove"]),
+                //            CanDelete = Convert.ToBoolean(reader["CanDelete"]),
+                //            CanPrint = Convert.ToBoolean(reader["CanPrint"])
+                //        };
+
+                //        allMenus.Add(menu);
+                //        group.Menus.Add(menu);
+                //    }
+
+                //    // Build hierarchy
+                //    foreach (var group in menuGroups.Values)
+                //    {
+                //        var parents = group.Menus.Where(m => m.ParentMenuID == null).ToList();
+
+                //        foreach (var parent in parents)
+                //        {
+                //            parent.Children = group.Menus
+                //                .Where(m => m.ParentMenuID == parent.MenuID)
+                //                .OrderBy(m => m.MenuOrder)
+                //                .ToList();
+                //        }
+
+                //        group.Menus = parents.OrderBy(m => m.MenuOrder).ToList();
+                //    }
+
+                //    response.MenuGroups = menuGroups.Values
+                //        .OrderBy(g => g.MenuGroupOrder)
+                //        .ToList();
+                //}
 
 
                 // ---------- RESULT 6 : FINANCIAL YEAR ----------
@@ -299,7 +299,8 @@ namespace MicroApi.DataLayer.Service
                         response.Configuration.Add(new StoreInfo
                         {
                             STORE_ID = Convert.ToInt32(reader["STORE_ID"]),
-                            STORE_NAME = reader["STORE_NAME"]?.ToString()
+                            STORE_NAME = reader["STORE_NAME"]?.ToString(),
+                            SUB_TYPE_ID = Convert.ToBoolean(reader["ENABLE_SUBTYPE"]),
                         });
                     }
                 }

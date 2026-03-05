@@ -31,42 +31,42 @@ namespace MicroApi.Models
 
     public class saveTimeSheetData
     {
-        public object ID { get; set; }
+        public object? ID { get; set; }
+        public object? EMP_CODE { get; set; }
+        public object? EMP_NAME { get; set; }
+        public object? STATUS { get; set; }
         public string TS_MONTH { get; set; }
-        public object EMP_ID { get; set; }
-        public object EMP_CODE { get; set; }
-        public object EMP_NAME { get; set; }
-        public object STATUS { get; set; }
-        public object DAYS { get; set; }
-        public object NORMAL_OT { get; set; }
-        public object HOLIDAY_OT { get; set; }
+        public int EMP_ID { get; set; }
+        public float DAYS { get; set; }
+        public float NORMAL_OT { get; set; }
+        public float HOLIDAY_OT { get; set; }
         public string LEAVE_FROM { get; set; }
         public string LEAVE_TO { get; set; }
-        public object WORKED_DAYS { get; set; }
-        public object DAYS_DEDUCTED { get; set; }
-        public object REMARKS { get; set; }
-        public List<saveTimeSheetDetailData> TIMESHEET_DETAIL { get; set; }
-        public List<saveTimeSheetSalaryData> TIMESHEET_SALARY { get; set; }
+        public float WORKED_DAYS { get; set; }
+        public float? DAYS_DEDUCTED { get; set; }
+        public string REMARKS { get; set; }
+        public List<saveTimeSheetDetailData>? TIMESHEET_DETAIL { get; set; }
+        public List<saveTimeSheetSalaryData>? TIMESHEET_SALARY { get; set; }
     }
 
     public class saveTimeSheetDetailData
     {
-        public object ID { get; set; }
-        public object TS_ID { get; set; }
-        public object STORE_ID { get; set; }
-        public object STORE_NAME { get;set; }
-        public object DAYS { get; set; }
-        public object NORMAL_OT { get; set; }
-        public object HOLIDAY_OT { get; set; }
+        public object? ID { get; set; }
+        public object? TS_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public object? STORE_NAME { get;set; }
+        public float? DAYS { get; set; }
+        public float? NORMAL_OT { get; set; }
+        public float? HOLIDAY_OT { get; set; }
     }
 
     public class saveTimeSheetSalaryData
     {
-        public object ID { get; set; }
-        public object TS_ID { get; set; }
-        public object SALARY_HEAD_NAME { get; set; }
-        public object SALARY_HEAD_ID { get; set; }
-        public object AMOUNT { get; set; }
+        public object? ID { get; set; }
+        public object? TS_ID { get; set; }
+        public object? SALARY_HEAD_NAME { get; set; }
+        public int? SALARY_HEAD_ID { get; set; }
+        public float? AMOUNT { get; set; }
     }
 
 

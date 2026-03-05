@@ -52,6 +52,8 @@
         public int? DEALER_ID { get; set; }
         public int? CUST_TYPE { get; set; }
         //public int? WAREHOUSE_ID { get; set; }
+        public string? MOB_CODE { get; set; }
+        public string? PHONE_CODE { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
 
     }
@@ -118,7 +120,9 @@
         public int? IS_COMPANY_BRANCH { get; set; }
         public int? DEALER_ID { get; set; }
         public int? CUST_TYPE { get; set; }
-       // public int? WAREHOUSE_ID { get; set; }
+        // public int? WAREHOUSE_ID { get; set; }
+        public string? MOB_CODE { get; set; }
+        public string? PHONE_CODE { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
 
     }

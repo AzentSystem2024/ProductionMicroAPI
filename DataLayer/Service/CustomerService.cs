@@ -79,7 +79,9 @@ namespace MicroApi.DataLayer.Services
                         VAT_RULE_DESCRIPTION = Convert.IsDBNull(dr["VAT_RULE_DESCRIPTION"]) ? null : Convert.ToString(dr["VAT_RULE_DESCRIPTION"]),
                         CUST_TYPE = Convert.IsDBNull(dr["CUST_TYPE"]) ? 0 : Convert.ToInt32(dr["CUST_TYPE"]),
                         DEALER_ID = Convert.IsDBNull(dr["DEALER_ID"]) ? 0 : Convert.ToInt32(dr["DEALER_ID"]),
-                       // WAREHOUSE_ID = Convert.IsDBNull(dr["WAREHOUSE_ID"]) ? 0 : Convert.ToInt32(dr["WAREHOUSE_ID"])
+                        MOB_CODE = Convert.IsDBNull(dr["MOB_CODE"]) ? null : Convert.ToString(dr["MOB_CODE"]),
+                        PHONE_CODE = Convert.IsDBNull(dr["PHONE_CODE"]) ? null : Convert.ToString(dr["PHONE_CODE"]),
+                        // WAREHOUSE_ID = Convert.IsDBNull(dr["WAREHOUSE_ID"]) ? 0 : Convert.ToInt32(dr["WAREHOUSE_ID"])
 
 
                     });
@@ -140,6 +142,8 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? 0);
                         cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@MOB_CODE", customer.MOB_CODE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PHONE_CODE", customer.PHONE_CODE ?? string.Empty);
                         //cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
 
                         // 🔹 UDT parameter for delivery address
@@ -253,6 +257,8 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@IS_COMPANY_BRANCH", customer.IS_COMPANY_BRANCH ?? 0);
                         cmd.Parameters.AddWithValue("@CUST_TYPE", customer.CUST_TYPE ?? 0);
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@MOB_CODE", customer.MOB_CODE ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PHONE_CODE", customer.PHONE_CODE ?? string.Empty);
                         //cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
 
                         // 🔹 Add UDT Delivery Address
@@ -311,7 +317,7 @@ namespace MicroApi.DataLayer.Services
                     " TB_CUSTOMER.DOJ, TB_CUSTOMER.COMPANY_ID, TB_CUSTOMER.CUST_TYPE, TB_CUSTOMER.STORE_ID, TB_CUSTOMER.CUST_VAT_RULE_ID," +
                     " TB_CUSTOMER.VAT_REGNO, TB_CUSTOMER.IS_DELETED, TB_CUSTOMER.LOYALTY_POINT," +
                     " TB_STATE.STATE_NAME, TB_COUNTRY.COUNTRY_NAME, TB_EMPLOYEE.EMP_NAME, " +
-                    " TB_PAYMENT_TERMS.CODE, TB_PRICE_CLASS.CLASS_NAME," +
+                    " TB_PAYMENT_TERMS.CODE, TB_PRICE_CLASS.CLASS_NAME,TB_CUSTOMER.MOB_CODE,TB_CUSTOMER.PHONE_CODE," +
                     " TB_COMPANY.COMPANY_NAME, TB_STORES.STORE_NAME,TB_CUSTOMER.WAREHOUSE_ID," +
                     " TB_VAT_RULE_CUSTOMER.DESCRIPTION AS VAT_RULE_DESCRIPTION, TB_CUSTOMER.CUST_VAT_RULE_ID, TB_CUSTOMER.IS_COMPANY_BRANCH, TB_CUSTOMER.DEALER_ID, TB_CUSTOMER.CUST_TYPE" +
                     " FROM TB_CUSTOMER " +
@@ -378,6 +384,8 @@ namespace MicroApi.DataLayer.Services
                     customer.VAT_RULE_DESCRIPTION = Convert.ToString(dr["VAT_RULE_DESCRIPTION"]);
                     customer.CUST_TYPE = Convert.ToInt32(dr["CUST_TYPE"]);
                     customer.DEALER_ID = Convert.ToInt32(dr["DEALER_ID"]);
+                    customer.MOB_CODE = Convert.ToString(dr["MOB_CODE"]);
+                    customer.PHONE_CODE = Convert.ToString(dr["PHONE_CODE"]);
                     //customer.WAREHOUSE_ID = Convert.ToInt32(dr["WAREHOUSE_ID"]);
                 }
                 string addressSQL = @"

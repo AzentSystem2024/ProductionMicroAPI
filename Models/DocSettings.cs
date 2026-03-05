@@ -10,6 +10,7 @@
     public class DocSettingItem
     {
         public int TRANS_TYPE { get; set; }
+        public int? SUB_TYPE_ID { get; set; }   
         public string GROUP_CODE { get; set; }
         public string PREFIX { get; set; }
         public int START { get; set; }
@@ -30,6 +31,7 @@
     {
         public int ID { get; set; }
         public string CODE { get; set; }
+        public int? SUB_TYPE_ID { get; set; }
         public string DESCRIPTION { get; set; }
         public string PREFIX { get; set; }
         public int? START { get; set; }
@@ -37,6 +39,7 @@
         public bool? VERIFY_REQUIRED { get; set; }
         public string LAST_NO { get; set; }
         public string NEXT_VOUCHER_NO { get; set; }
+        public string? SUB_TYPE_NAME { get; set; }
     }
     public class DocSettingsListResponse
     {

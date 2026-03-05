@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PurchaseInvoiceController : ControllerBase

@@ -728,6 +728,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
                         cmd.Parameters.AddWithValue("@IS_APPROVED", model.IS_APPROVED == true ? 1 : 0);
+                        cmd.Parameters.AddWithValue("@SUB_TYPE_ID", model.SUB_TYPE_ID);
 
                         // Table-valued parameter
                         DataTable dt = new DataTable();
@@ -993,6 +994,7 @@ namespace MicroApi.DataLayer.Service
                                         GST_NO = reader["GST_NO"]?.ToString(),
                                         PAN_NO = reader["PAN_NO"]?.ToString(),
                                         CIN = reader["CIN"]?.ToString(),
+                                        SUB_TYPE_NAME = Convert.ToString(reader["SUB_TYPE_NAME"]),
                                         NOTE_DETAIL = new List<DebitNoteDetail>()
                                     };
                                 }

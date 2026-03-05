@@ -146,14 +146,14 @@ namespace MicroApi.DataLayer.Service
                     DataRow dr = tblHeader.Rows[0];
                     ts.ID = ADO.ToInt32(dr["ID"]);
                     ts.TS_MONTH = Convert.ToDateTime(dr["TS_MONTH"]).ToString("MMMM yyyy");
-                    ts.EMP_ID = ADO.ToString(dr["EMP_ID"]);
-                    ts.DAYS = ADO.ToString(dr["TOTAL_DAYS"]);
-                    ts.NORMAL_OT = ADO.ToString(dr["NORMAL_OT"]);
-                    ts.HOLIDAY_OT = ADO.ToString(dr["HOLIDAY_OT"]);
+                    ts.EMP_ID = ADO.ToInt32(dr["EMP_ID"]);
+                    ts.DAYS = ADO.ToFloat(dr["TOTAL_DAYS"]);
+                    ts.NORMAL_OT = ADO.ToFloat(dr["NORMAL_OT"]);
+                    ts.HOLIDAY_OT = ADO.ToFloat(dr["HOLIDAY_OT"]);
                     ts.LEAVE_FROM = ADO.ToString(dr["LEAVE_FROM"]);
                     ts.LEAVE_TO = ADO.ToString(dr["LEAVE_TO"]);
-                    ts.WORKED_DAYS = ADO.ToString(dr["WORKED_DAYS"]);
-                    ts.DAYS_DEDUCTED = ADO.ToString(dr["DEDUCT_DAYS"]);
+                    ts.WORKED_DAYS = ADO.ToFloat(dr["WORKED_DAYS"]);
+                    ts.DAYS_DEDUCTED = ADO.ToFloat(dr["DEDUCT_DAYS"]);
                     ts.REMARKS = ADO.ToString(dr["REMARKS"]);
                     ts.STATUS = ADO.ToString(dr["STATUS"]);
                 }
@@ -173,11 +173,11 @@ namespace MicroApi.DataLayer.Service
                     {
                         ts.TIMESHEET_DETAIL.Add(new saveTimeSheetDetailData
                         {
-                            STORE_ID = ADO.ToString(dr["STORE_ID"]),
+                            STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                             STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
-                            DAYS = ADO.ToString(dr["DAYS"]),
-                            NORMAL_OT = ADO.ToString(dr["NORMAL_OT"]),
-                            HOLIDAY_OT = ADO.ToString(dr["HOLIDAY_OT"])
+                            DAYS = ADO.ToFloat(dr["DAYS"]),
+                            NORMAL_OT = ADO.ToFloat(dr["NORMAL_OT"]),
+                            HOLIDAY_OT = ADO.ToFloat(dr["HOLIDAY_OT"])
                         });
                     }
  
@@ -199,9 +199,9 @@ namespace MicroApi.DataLayer.Service
                         ts.TIMESHEET_SALARY.Add(new saveTimeSheetSalaryData
                         {
                    
-                            SALARY_HEAD_ID = ADO.ToString(dr["HEAD_ID"]),
+                            SALARY_HEAD_ID = ADO.ToInt32(dr["HEAD_ID"]),
                             SALARY_HEAD_NAME = ADO.ToString(dr["HEAD_NAME"]),
-                            AMOUNT = ADO.ToString(dr["AMOUNT"]),
+                            AMOUNT = ADO.ToFloat(dr["AMOUNT"]),
                            
                         });
                     }

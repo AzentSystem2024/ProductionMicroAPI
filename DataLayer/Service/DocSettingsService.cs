@@ -36,6 +36,7 @@ namespace MicroApi.DataLayer.Service
                         DT.Columns.Add("WIDTH", typeof(int));
                         DT.Columns.Add("VERIFY_REQUIRED", typeof(bool));
                         DT.Columns.Add("GROUP_CODE", typeof(string));
+                        DT.Columns.Add("SUB_TYPE_ID", typeof(int));
 
                         foreach (var ITEM in model.DOC_SETTINGS)
                         {
@@ -45,7 +46,7 @@ namespace MicroApi.DataLayer.Service
                                 ITEM.START,
                                 ITEM.WIDTH,
                                 ITEM.VERIFY_REQUIRED,
-                                ITEM.GROUP_CODE ?? string.Empty
+                                ITEM.GROUP_CODE ?? string.Empty, ITEM.SUB_TYPE_ID ?? 0
                             );
                         }
 
@@ -95,6 +96,7 @@ namespace MicroApi.DataLayer.Service
                                 RESPONSE.Data.Add(new DocSettingsList
                                 {
                                     ID = DR["ID"] != DBNull.Value ? Convert.ToInt32(DR["ID"]) : 0,
+                                    SUB_TYPE_ID = DR["SUB_TYPE_ID"] != DBNull.Value ? Convert.ToInt32(DR["SUB_TYPE_ID"]) : (int?)null, 
                                     CODE = DR["CODE"]?.ToString(),
                                     DESCRIPTION = DR["DESCRIPTION"]?.ToString(),
                                     PREFIX = DR["PREFIX"]?.ToString(),
@@ -102,7 +104,8 @@ namespace MicroApi.DataLayer.Service
                                     WIDTH = DR["WIDTH"] != DBNull.Value ? Convert.ToInt32(DR["WIDTH"]) : (int?)null,
                                     VERIFY_REQUIRED = DR["VERIFY_REQUIRED"] != DBNull.Value ? Convert.ToBoolean(DR["VERIFY_REQUIRED"]) : (bool?)null,
                                     LAST_NO = DR["LastNo"]?.ToString(),
-                                    NEXT_VOUCHER_NO = DR["NextVoucherNo"]?.ToString()
+                                    NEXT_VOUCHER_NO = DR["NextVoucherNo"]?.ToString(),
+                                    SUB_TYPE_NAME = DR["SUB_TYPE_NAME"]?.ToString()
                                 });
                             }
                         }

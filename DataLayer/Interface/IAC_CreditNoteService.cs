@@ -13,5 +13,6 @@ namespace MicroApi.DataLayer.Interface
         CreditNoteResponse Delete(int id);
         CreditNoteInvoiceListResponse GetCreditNoteInvoiceList(Pendingrequest request);
         List<Credithis> GetcreditHis(CreditHisRequest request);
+        List<SubType> GetSubTypes(SubTypeRequest request);
     }
 }
