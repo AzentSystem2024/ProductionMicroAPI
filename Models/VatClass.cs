@@ -11,6 +11,15 @@
         public decimal? VAT_PERC { get; set; }
 
         public string? IS_DELETED { get; set; }
+        public decimal? CGST_PERC { get; set; }
+        public decimal? SGST_PERC { get; set; }
+        public decimal? IGST_PERC { get; set; }
+        public int? CGST_INPUT_HEAD_ID { get; set; }
+        public int? CGST_OUTPUT_HEAD_ID { get; set; }
+        public int? SGST_INPUT_HEAD_ID { get; set; }
+        public int? SGST_OUTPUT_HEAD_ID { get; set; }
+        public int? IGST_INPUT_HEAD_ID { get; set; }
+        public int? IGST_OUTPUT_HEAD_ID { get; set; }
     }
     public class VatClassResponse
     {

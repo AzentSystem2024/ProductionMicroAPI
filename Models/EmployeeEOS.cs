@@ -35,28 +35,30 @@ namespace MicroApi.Models
 
     public class saveEmployeeEOSData
     {
-        public object? ID { get; set; }
-        public object? USER_ID { get; set; }
-        public object? STORE_ID { get; set; }
-        public object DOC_NO { get; set; }
-        public object EMP_ID { get; set; }
-        public object EMP_NAME { get; set; }
-        public object EOS_DATE { get; set; }
-        public object REASON_ID { get; set; }
-        public object REASON_NAME { get; set; }
-        public object DAYS { get; set; }
-        public object EOS_AMOUNT { get; set; }
-        public object LEAVE_AMOUNT { get; set; }
-        public object PENDING_SALARY { get; set; }
-        public object ADD_AMOUNT { get; set; }
-        public object DED_AMOUNT { get; set; }
-        public object ADD_REMARKS { get; set; }
-        public object DED_REMARKS { get; set; }
+        public int? ID { get; set; }
+        public int? USER_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public string? DOC_NO { get; set; }
+        public int? EMP_ID { get; set; }
+        public string? EMP_NAME { get; set; }
+        public DateTime? EOS_DATE { get; set; }
+        public int? REASON_ID { get; set; }
+        public string? REASON_NAME { get; set; }
+        public string? DAYS { get; set; }
+        public string? EOS_AMOUNT { get; set; }
+        public string? LEAVE_AMOUNT { get; set; }
+        public string? PENDING_SALARY { get; set; }
+        public string? ADD_AMOUNT { get; set; }
+        public string? DED_AMOUNT { get; set; }
+        public string? ADD_REMARKS { get; set; }
+        public string? DED_REMARKS { get; set; }
 
-        public object REMARKS { get; set; }
-        public object STATUS { get; set; }
-        public object TRANS_ID { get; set; }
-        public object PAY_TRANS_ID { get; set; }
+        public string? REMARKS { get; set; }
+        public string? STATUS { get; set; }
+        public int? TRANS_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? PAY_TRANS_ID { get; set; }
+        public DateTime? RELIEVING_DATE { get; set; }
 
     }
 

@@ -33,12 +33,17 @@ namespace MicroApi.DataLayer.Services
                         ID = Convert.IsDBNull(dr["ID"]) ? 0 : Convert.ToInt32(dr["ID"]),
                         DOC_NO = Convert.IsDBNull(dr["DOC_NO"]) ? null : Convert.ToString(dr["DOC_NO"]),
                         EMP_NO = Convert.IsDBNull(dr["EMP_CODE"]) ? null : Convert.ToString(dr["EMP_CODE"]),
-                        DEPT_DATE = Convert.IsDBNull(dr["DEPT_DATE"]) ? null : Convert.ToString(dr["DEPT_DATE"]),
-                        REJOIN_DATE = Convert.IsDBNull(dr["REJOIN_DATE"]) ? null : Convert.ToString(dr["REJOIN_DATE"]),
-                        EXPECT_RETURN = Convert.IsDBNull(dr["EXPECT_RETURN"]) ? null : Convert.ToString(dr["EXPECT_RETURN"]),
+                        DEPT_DATE = dr["DEPT_DATE"] == DBNull.Value ? (DateTime?)null
+                     : Convert.ToDateTime(dr["DEPT_DATE"]),
+                        REJOIN_DATE = dr["REJOIN_DATE"] == DBNull.Value ? (DateTime?)null
+                                         : Convert.ToDateTime(dr["REJOIN_DATE"]),
+                        EXPECT_RETURN = dr["EXPECT_RETURN"] == DBNull.Value ? (DateTime?)null
+                     : Convert.ToDateTime(dr["EXPECT_RETURN"]),
                         EMP_ID = Convert.IsDBNull(dr["EMP_ID"]) ? null : Convert.ToInt32(dr["EMP_ID"]),
                         EMP_NAME = Convert.IsDBNull(dr["EMP_NAME"]) ? null : Convert.ToString(dr["EMP_NAME"]),
-                        DATE = Convert.IsDBNull(dr["DOC_DATE"]) ? null : Convert.ToDateTime(dr["DOC_DATE"]).ToString("dd/MM/yy"),
+                        DATE = dr["DOC_DATE"] == DBNull.Value ? (DateTime?)null
+                     : Convert.ToDateTime(dr["DOC_DATE"]),
+                        
                         LEAVE_TYPE = Convert.IsDBNull(dr["LEAVE_TYPE"]) ? null : Convert.ToString(dr["LEAVE_TYPE"]),
                         REMARKS = Convert.IsDBNull(dr["REMARKS"]) ? null : Convert.ToString(dr["REMARKS"]),
                         STATUS = Convert.IsDBNull(dr["STATUS"]) ? null : Convert.ToString(dr["STATUS"]),
@@ -119,24 +124,24 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dr = tblVacation.Rows[0];
                     vac.ID = ADO.ToInt32(dr["ID"]);
-                    vac.DOC_NO = ADO.ToInt32(dr["DOC_NO"]);
+                    vac.DOC_NO = Convert.IsDBNull(dr["DOC_NO"]) ? null : Convert.ToString(dr["DOC_NO"]);
                     vac.DOC_DATE = dr["DOC_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["DOC_DATE"]);
                     vac.EMP_ID = ADO.ToInt32(dr["EMP_ID"]);
                     vac.EMP_NAME = ADO.ToString(dr["EMP_NAME"]);
-                    vac.VAC_DAYS = ADO.ToString(dr["VAC_DAYS"]);
+                    vac.VAC_DAYS = Convert.IsDBNull(dr["VAC_DAYS"]) ? null : Convert.ToInt32(dr["VAC_DAYS"]);
                     vac.DEPT_DATE = dr["DEPT_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["DEPT_DATE"]);
                     vac.EXPECT_RETURN = dr["EXPECT_RETURN"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["EXPECT_RETURN"]);
                     vac.LEAVE_TYPE_ID = ADO.ToInt32(dr["LEAVE_TYPE_ID"]);
                     vac.LEAVE_TYPE_NAME = ADO.ToString(dr["LEAVE_TYPE"]);
-                    vac.LEAVE_CREDIT = ADO.ToString(dr["LEAVE_CREDIT"]);
+                    vac.LEAVE_CREDIT = Convert.IsDBNull(dr["LEAVE_CREDIT"]) ? null : Convert.ToInt32(dr["LEAVE_CREDIT"]);
                     vac.LS_PAYABLE = ADO.Toboolean(dr["LS_PAYABLE"]);
                     vac.IS_TICKET = ADO.Toboolean(dr["IS_TICKET"]);
                     vac.LAST_REJOIN_DATE = dr["LAST_REJOIN_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["LAST_REJOIN_DATE"]);
                     vac.TRAVELLED_DATE = dr["TRAVELLED_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["TRAVELLED_DATE"]);
                     vac.REJOIN_DATE = dr["REJOIN_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["REJOIN_DATE"]);
-                    vac.ACTUAL_DAYS = ADO.ToString(dr["ACTUAL_DAYS"]);
-                    vac.DEDUCT_DAYS = ADO.ToString(dr["DEDUCT_DAYS"]);
-                    vac.LEFT_REASON = ADO.ToString(dr["LEFT_REASON"]);
+                    vac.ACTUAL_DAYS = Convert.IsDBNull(dr["ACTUAL_DAYS"]) ? null : Convert.ToInt32(dr["ACTUAL_DAYS"]);
+                    vac.DEDUCT_DAYS = Convert.IsDBNull(dr["DEDUCT_DAYS"]) ? null : Convert.ToInt32(dr["DEDUCT_DAYS"]);
+                    vac.LEFT_REASON = Convert.IsDBNull(dr["LEFT_REASON"]) ? null : Convert.ToInt32(dr["LEFT_REASON"]);
                     vac.REMARKS = ADO.ToString(dr["REMARKS"]);
                     vac.STATUS = ADO.ToString(dr["STATUS"]);
                 }
@@ -340,6 +345,53 @@ namespace MicroApi.DataLayer.Services
                 throw ex;
             }
         }
+        public EmployeeLeaveCreditResponse GetEmployeeLeaveCredit(EmployeeLeaveCreditRequest request)
+        {
+            EmployeeLeaveCreditResponse res = new EmployeeLeaveCreditResponse();
+            res.data = new List<EmployeeLeaveCreditData>();
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE_VACATION", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ACTION", 6);
+                    cmd.Parameters.AddWithValue("@EMP_ID", (object)request.EMP_ID ?? DBNull.Value);
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        EmployeeLeaveCreditData obj = new EmployeeLeaveCreditData();
+
+                        obj.EMP_ID = ADO.ToInt32(dr["EMP_ID"]);
+                        obj.EMP_NAME = ADO.ToString(dr["EMP_NAME"]);
+                        obj.EMP_CODE = ADO.ToString(dr["EMP_CODE"]);
+                        obj.LEAVE_CREDIT = ADO.ToInt32(dr["LEAVE_CREDIT"]);
+                        obj.LEAVE_DAY_BALANCE = ADO.ToInt32(dr["LEAVE_DAY_BALANCE"]);
+                        obj.LAST_REJOIN_DATE = dr["LAST_REJOIN_DATE"] != DBNull.Value
+                                               ? Convert.ToDateTime(dr["LAST_REJOIN_DATE"])
+                                               : (DateTime?)null;
+
+
+                        res.data.Add(obj);
+                    }
+
+                    res.flag = "1";
+                    res.message = "Success";
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = "0";
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+
 
     }
 

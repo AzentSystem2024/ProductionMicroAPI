@@ -5,7 +5,7 @@ using MicroApi.Models;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EmployeeVacationController : ControllerBase
@@ -163,6 +163,22 @@ namespace MicroApi.Controllers
             }
 
             return res;
+        }
+        [HttpPost]
+        [Route("emplist")]
+        public EmployeeLeaveCreditResponse GetEmployeeLeaveCredit(EmployeeLeaveCreditRequest request)
+        {
+            EmployeeLeaveCreditResponse loglist = new EmployeeLeaveCreditResponse();
+            try
+            {
+                loglist = _employeeVacationService.GetEmployeeLeaveCredit(request);
+            }
+            catch (Exception ex)
+            {
+                loglist.flag = "0";
+                loglist.message = ex.Message;
+            }
+            return loglist;
         }
     }
 }

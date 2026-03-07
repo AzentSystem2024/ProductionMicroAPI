@@ -11,5 +11,6 @@ namespace MicroApi.DataLayer.Interface
         public saveEmployeeVacationData DeleteEmployeeVacation(int id);
         public saveEmployeeVacationResponseData VerifyData(saveEmployeeVacationData vacationData);
         public saveEmployeeVacationResponseData ApproveData(saveEmployeeVacationData vacationData);
+        public EmployeeLeaveCreditResponse GetEmployeeLeaveCredit(EmployeeLeaveCreditRequest request);
     }
 }

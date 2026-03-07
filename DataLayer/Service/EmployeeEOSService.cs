@@ -74,6 +74,7 @@ namespace MicroApi.DAL.Services
                     cmd.Parameters.AddWithValue("@REASON_ID", (object)eos.REASON_ID ?? DBNull.Value);
 
                     cmd.Parameters.AddWithValue("@REMARKS", (object)eos.REMARKS ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RELIEVING_DATE", (object)eos.RELIEVING_DATE ?? DBNull.Value);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -107,7 +108,7 @@ namespace MicroApi.DAL.Services
                 {
                     DataRow dr = tblEos.Rows[0];
                     eos.ID = ADO.ToInt32(dr["ID"]);
-                    eos.DOC_NO = ADO.ToInt32(dr["DOC_NO"]);
+                    eos.DOC_NO = ADO.ToString(dr["DOC_NO"]);
                     eos.EOS_DATE = Convert.ToDateTime(dr["EOS_DATE"]);
                     eos.EMP_ID = ADO.ToInt32(dr["EMP_ID"]);
                     eos.EMP_NAME = ADO.ToString(dr["EMP_NAME"]);
@@ -125,6 +126,9 @@ namespace MicroApi.DAL.Services
                     eos.STATUS = ADO.ToString(dr["STATUS"]);
                     eos.TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]);
                     eos.PAY_TRANS_ID = ADO.ToInt32(dr["PAY_TRANS_ID"]);
+                    eos.RELIEVING_DATE = dr["RELIEVING_DATE"] == DBNull.Value ? (DateTime?)null
+                                         : Convert.ToDateTime(dr["RELIEVING_DATE"]);
+
                 }
             }
             catch (Exception ex)
@@ -150,6 +154,7 @@ namespace MicroApi.DAL.Services
 
                     cmd.Parameters.AddWithValue("ID", eos.ID);
                     cmd.Parameters.AddWithValue("@USER_ID", (object)eos.USER_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@FIN_ID", (object)eos.FIN_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@STORE_ID", (object)eos.STORE_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@EMP_ID", (object)eos.EMP_ID ?? DBNull.Value);
 
@@ -166,6 +171,7 @@ namespace MicroApi.DAL.Services
                     cmd.Parameters.AddWithValue("@DED_AMOUNT", (object)eos.DED_AMOUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@ADD_REMARKS", (object)eos.ADD_REMARKS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DED_REMARKS", (object)eos.DED_REMARKS ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RELIEVING_DATE", (object)eos.RELIEVING_DATE ?? DBNull.Value);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -237,6 +243,7 @@ namespace MicroApi.DAL.Services
                     cmd.Parameters.AddWithValue("@DED_AMOUNT", (object)eos.DED_AMOUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@ADD_REMARKS", (object)eos.ADD_REMARKS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DED_REMARKS", (object)eos.DED_REMARKS ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RELIEVING_DATE", (object)eos.RELIEVING_DATE ?? DBNull.Value);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -282,6 +289,7 @@ namespace MicroApi.DAL.Services
                     cmd.Parameters.AddWithValue("@DED_AMOUNT", (object)eos.DED_AMOUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@ADD_REMARKS", (object)eos.ADD_REMARKS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DED_REMARKS", (object)eos.DED_REMARKS ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RELIEVING_DATE", (object)eos.RELIEVING_DATE ?? DBNull.Value);
 
                     cmd.ExecuteNonQuery();
                 }

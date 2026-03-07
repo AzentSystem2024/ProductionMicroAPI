@@ -33,6 +33,9 @@
         public string? STATE_NAME { get; set; }
         public string? IS_DELETED { get; set; }
         public bool? IS_COMPANY_BRANCH { get; set; }
+        public int? SUPP_CAT_ID { get; set; }
+        public string? SUPP_CAT_NAME { get; set; }
+        public int? PURCH_TYPE { get; set; }
         public List<SupplierCost> Supplier_cost { get; set; }
     }
     public class SupplierCost

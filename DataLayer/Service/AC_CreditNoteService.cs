@@ -9,6 +9,24 @@ namespace MicroApi.DataLayer.Service
 {
     public class AC_CreditNoteService:IAC_CreditNoteService
     {
+        public string GetAppType()
+        {
+            string appType = "";
+
+            using (SqlConnection con = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SELECT TOP 1 APP_TYPE FROM TB_CONFIGURATION", con);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result != null)
+                {
+                    appType = result.ToString();
+                }
+            }
+
+            return appType;
+        }
         public CreditNoteResponse SaveCreditNote(AC_CreditNote model)
         {
             CreditNoteResponse response = new CreditNoteResponse();
@@ -551,14 +569,27 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    // Call the SQL function directly
-                    string query = "SELECT dbo.fn_NextVoucherNo(@TRANS_TYPE,@COMPANY_ID,@SUB_TYPE_ID) AS VOUCHER_NO";
+                    string appType = GetAppType();
+                    string query = "";
+
+                    if (appType == "MARK")
+                    {
+                        query = "SELECT dbo.fn_NextVoucherNo(@TRANS_TYPE,@COMPANY_ID,@SUB_TYPE_ID) AS VOUCHER_NO";
+                    }
+                    else
+                    {
+                        query = "SELECT dbo.fn_NextVoucherNo(@TRANS_TYPE,@COMPANY_ID) AS VOUCHER_NO";
+                    }
 
                     using (var cmd = new SqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", request.TRANS_TYPE);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                        cmd.Parameters.AddWithValue("@SUB_TYPE_ID", request.SUB_TYPE_ID ?? 0);
+
+                        if (appType == "MARK")
+                        {
+                            cmd.Parameters.AddWithValue("@SUB_TYPE_ID", request.SUB_TYPE_ID ?? 0);
+                        }
 
                         object result = cmd.ExecuteScalar();
 
@@ -576,6 +607,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+
         public List<SubType> GetSubTypes(SubTypeRequest request)
         {
             var list = new List<SubType>();

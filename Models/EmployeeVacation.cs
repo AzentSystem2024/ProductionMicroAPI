@@ -8,18 +8,18 @@ namespace MicroApi.Models
 
     public class EmployeeVacationLogListData
     {
-        public int ID { get; set; }
-        public object DOC_NO { get; set; }
-        public object DATE { get; set; }
-        public object DEPT_DATE { get; set; }
-        public object REJOIN_DATE { get; set; }
-        public object EXPECT_RETURN { get; set; }   
-        public object EMP_ID { get; set; }
-        public object EMP_NO { get; set; }
-        public object EMP_NAME { get; set; }
-        public object LEAVE_TYPE { get; set; }
-        public object REMARKS { get; set; }
-        public object STATUS { get; set; }
+        public int? ID { get; set; }
+        public string? DOC_NO { get; set; }
+        public DateTime? DATE { get; set; }
+        public DateTime? DEPT_DATE { get; set; }
+        public DateTime? REJOIN_DATE { get; set; }
+        public DateTime? EXPECT_RETURN { get; set; }   
+        public int? EMP_ID { get; set; }
+        public string? EMP_NO { get; set; }
+        public string? EMP_NAME { get; set; }
+        public string? LEAVE_TYPE { get; set; }
+        public string? REMARKS { get; set; }
+        public string? STATUS { get; set; }
     }
 
     public class EmployeeVacationLogListResponseData
@@ -37,29 +37,29 @@ namespace MicroApi.Models
 
     public class saveEmployeeVacationData
     {
-        public object ID { get; set; }
-        public object USER_ID { get; set; }
-        public object STORE_ID { get; set; }
-        public object DOC_NO { get; set; }
-        public object DOC_DATE { get; set; }
-        public object EMP_ID { get; set; }
-        public object EMP_NAME { get; set; }
-        public object LEAVE_TYPE_ID { get; set; }
-        public object LEAVE_TYPE_NAME { get; set; }
-        public object LEAVE_CREDIT { get; set; }
-        public object IS_TICKET { get; set; }
-        public object LAST_REJOIN_DATE { get; set; }
-        public object VAC_DAYS { get; set; }
-        public object LS_PAYABLE { get; set; }
-        public object DEPT_DATE { get; set; }
-        public object EXPECT_RETURN { get; set; }
-        public object TRAVELLED_DATE { get; set; }
-        public object ACTUAL_DAYS { get; set; }
-        public object DEDUCT_DAYS { get; set; }
-        public object LEFT_REASON { get; set; }
-        public object REJOIN_DATE { get; set; }
-        public object REMARKS { get; set; }
-        public object STATUS { get; set; }
+        public int? ID { get; set; }
+        public int? USER_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public string? DOC_NO { get; set; }
+        public DateTime? DOC_DATE { get; set; }
+        public int? EMP_ID { get; set; }
+        public string? EMP_NAME { get; set; }
+        public int? LEAVE_TYPE_ID { get; set; }
+        public string? LEAVE_TYPE_NAME { get; set; }
+        public int? LEAVE_CREDIT { get; set; }
+        public bool? IS_TICKET { get; set; }
+        public DateTime? LAST_REJOIN_DATE { get; set; }
+        public int? VAC_DAYS { get; set; }
+        public bool? LS_PAYABLE { get; set; }
+        public DateTime? DEPT_DATE { get; set; }
+        public DateTime? EXPECT_RETURN { get; set; }
+        public DateTime? TRAVELLED_DATE { get; set; }
+        public int? ACTUAL_DAYS { get; set; }
+        public int? DEDUCT_DAYS { get; set; }
+        public int? LEFT_REASON { get; set; }
+        public DateTime? REJOIN_DATE { get; set; }
+        public string? REMARKS { get; set; }
+        public string? STATUS { get; set; }
     }
 
 
@@ -68,5 +68,26 @@ namespace MicroApi.Models
     //    public string flag { get; set; }
     //    public string message { get; set; }
     //}
+    public class EmployeeLeaveCreditData
+    {
+        public int? EMP_ID { get; set; }
+        public string? EMP_NAME { get; set; }
+        public string? EMP_CODE { get; set; }
+        public int? LEAVE_CREDIT { get; set; }
+        public int? LEAVE_DAY_BALANCE { get; set; }
+        public DateTime? LAST_REJOIN_DATE { get; set; }
+    }
+
+    public class EmployeeLeaveCreditResponse
+    {
+        public string flag { get; set; }
+        public string message { get; set; }
+        public List<EmployeeLeaveCreditData> data { get; set; }
+    }
+
+    public class EmployeeLeaveCreditRequest
+    {
+        public int? EMP_ID { get; set; }
+    }
 
 }

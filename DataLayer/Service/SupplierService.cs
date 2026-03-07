@@ -61,6 +61,8 @@ namespace MicroApi.DataLayer.Service
                                 STATE_NAME = dr.Table.Columns.Contains("STATE_NAME") ? dr["STATE_NAME"]?.ToString() : null,
                                 IS_DELETED = dr.Table.Columns.Contains("IS_DELETED") ? dr["IS_DELETED"]?.ToString() : null,
                                 IS_COMPANY_BRANCH = dr.Table.Columns.Contains("IS_COMPANY_BRANCH") && dr["IS_COMPANY_BRANCH"] != DBNull.Value ? Convert.ToBoolean(dr["IS_COMPANY_BRANCH"]) : false,
+                                SUPP_CAT_ID = dr.Table.Columns.Contains("SUPP_CAT_ID") && dr["SUPP_CAT_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUPP_CAT_ID"]) : 0,
+                                SUPP_CAT_NAME = dr.Table.Columns.Contains("CATEGORY_NAME") ? dr["CATEGORY_NAME"]?.ToString() : null,
 
                                 Supplier_cost = new List<SupplierCost>()  // Initialize as empty list
                             };
@@ -131,6 +133,8 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("VAT_RULE_ID", (object)supplier.VAT_RULE_ID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("VAT_REGNO", (object)supplier.VAT_REGNO ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("IS_COMPANY_BRANCH", (object)supplier.IS_COMPANY_BRANCH ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("SUPP_CAT_ID", (object)supplier.SUPP_CAT_ID ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("PURCHASE_TYPE", (object)supplier.PURCH_TYPE ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@UDT_TB_SUPPLIER_COST", tbl);
 
                 cmd.ExecuteNonQuery();
@@ -164,9 +168,9 @@ namespace MicroApi.DataLayer.Service
                 string strSQL = "SELECT TB_SUPPLIER.ID, TB_SUPPLIER.HQID, TB_SUPPLIER.AC_HEAD_ID, TB_SUPPLIER.SUPP_CODE, TB_SUPPLIER.SUPP_NAME, " +
                    "TB_SUPPLIER.CONTACT_NAME, TB_SUPPLIER.ADDRESS1, TB_SUPPLIER.ADDRESS2, TB_SUPPLIER.ADDRESS3, TB_SUPPLIER.ZIP, " +
                    "TB_SUPPLIER.CITY, TB_SUPPLIER.PHONE, TB_SUPPLIER.EMAIL, TB_SUPPLIER.IS_INACTIVE, TB_SUPPLIER.MOBILE_NO, " +
-                   "TB_SUPPLIER.NOTES, TB_SUPPLIER.FAX_NO, TB_SUPPLIER.VAT_REGNO,TB_SUPPLIER.IS_DELETED," +
+                   "TB_SUPPLIER.NOTES, TB_SUPPLIER.FAX_NO, TB_SUPPLIER.VAT_REGNO,TB_SUPPLIER.IS_DELETED,TB_SUPPLIER.PURCHASE_TYPE," +
                    "TB_SUPPLIER.COUNTRY_ID,TB_SUPPLIER.CURRENCY_ID,TB_SUPPLIER.PAY_TERM_ID,TB_SUPPLIER.VAT_RULE_ID," +
-                   "TB_SUPPLIER.STATE_ID,TB_SUPPLIER.IS_COMPANY_BRANCH,TB_SUPPLIER.COMPANY_ID," +
+                   "TB_SUPPLIER.STATE_ID,TB_SUPPLIER.IS_COMPANY_BRANCH,TB_SUPPLIER.COMPANY_ID,TB_SUPPLIER.SUPP_CAT_ID,TB_SUPPLIER_CATEGORY.CATEGORY_NAME," +
 
                    "TB_COUNTRY.COUNTRY_NAME,TB_CURRENCY.CODE AS CURRENCY_CODE,TB_PAYMENT_TERMS.CODE AS PAYMENT_CODE," +
                    "TB_VAT_RULE_SUPPLIER.DESCRIPTION ,TB_STATE.STATE_NAME " +
@@ -177,7 +181,7 @@ namespace MicroApi.DataLayer.Service
                    "LEFT JOIN TB_PAYMENT_TERMS ON TB_SUPPLIER.PAY_TERM_ID = TB_PAYMENT_TERMS.ID " +
                    "LEFT JOIN TB_VAT_RULE_SUPPLIER ON TB_SUPPLIER.VAT_RULE_ID = TB_VAT_RULE_SUPPLIER.ID " +
                    "LEFT JOIN TB_STATE ON TB_SUPPLIER.STATE_ID = TB_STATE.ID " +
-
+                   "LEFT JOIN TB_SUPPLIER_CATEGORY ON TB_SUPPLIER.SUPP_CAT_ID = TB_SUPPLIER_CATEGORY.ID " +
                    "WHERE TB_SUPPLIER.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Suppliers");
@@ -216,6 +220,9 @@ namespace MicroApi.DataLayer.Service
                     supplier.COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]);
                     supplier.IS_COMPANY_BRANCH = Convert.ToBoolean(dr["IS_COMPANY_BRANCH"]);
                     supplier.COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]);
+                    supplier.SUPP_CAT_ID = ADO.ToInt32(dr["SUPP_CAT_ID"]);
+                    supplier.SUPP_CAT_NAME = Convert.ToString(dr["CATEGORY_NAME"]);
+                    supplier.PURCH_TYPE = ADO.ToInt32(dr["PURCHASE_TYPE"]);
                 }
 
                 strSQL = "SELECT * FROM TB_SUPPLIER_COSTS WHERE SUPP_ID = " + id;
