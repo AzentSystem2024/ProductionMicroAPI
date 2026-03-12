@@ -138,6 +138,20 @@ namespace MicroApi.Controllers
             }
         }
         [HttpPost]
+        [Route("Lastpartno")]
+        public IActionResult GetPartNo()
+        {
+            try
+            {
+                var GetPartNo = _packingService.GetPartNo();
+                return Ok(new { GetPartNo = GetPartNo });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { flag = 0, message = ex.Message });
+            }
+        }
+        [HttpPost]
         [Route("InsertPackingPriceLog")]
         public PackingResponse ChangeStandardPrice(ChangeStandardPriceModel model)
         {
