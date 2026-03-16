@@ -16,6 +16,7 @@ namespace MicroApi.DataLayer.Interface
         ArticleResponse DeleteArticleData(DeleteArticleRequest request);
         string GetLastOrderNoByUnitId();
         string GetAliasNo();
+        string GetPartNo();
         //ArticleUpdate GetArticleDetails(int unitId, string artNo, string color, int categoryId, decimal price);
     }
 }

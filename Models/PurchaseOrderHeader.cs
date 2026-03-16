@@ -181,6 +181,9 @@ namespace MicroApi.Models
         public string STATE_NAME { get; set; }
         public string HSN_CODE { get; set; }
         public decimal GST_PERC { get; set; }
+        public string? COMPANY_ADDRESS { get; set; }
+        public string? COMPANY_CONTACT { get; set; }
+        public string? COMPANY_MOBILE { get; set; }
 
     }
     public class ItemInput

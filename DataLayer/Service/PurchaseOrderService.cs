@@ -53,7 +53,10 @@ namespace MicroApi.DataLayer.Services
                     STATE_ID = ADO.ToInt32(dr["STATE_ID"]),
                     STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
                     HSN_CODE = ADO.ToString(dr["HSN_CODE"]),
-                    GST_PERC = ADO.ToDecimal(dr["GST_PERC"])
+                    GST_PERC = ADO.ToDecimal(dr["GST_PERC"]),
+                    COMPANY_ADDRESS = ADO.ToString(dr["COMPANY_ADDRESS"]),
+                    COMPANY_CONTACT = ADO.ToString(dr["COMPANY_CONTACT"]),
+                    COMPANY_MOBILE = ADO.ToString(dr["COMPANY_PHONE"])
 
                 });
             }

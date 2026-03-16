@@ -1,4 +1,5 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using System.Security.Principal;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/article")]
     [ApiController]
     public class ArticleController : ControllerBase
@@ -158,6 +159,20 @@ namespace MicroApi.Controllers
             {
                 var GetAliasNo = _articleService.GetAliasNo();
                 return Ok(new { GetAliasNo = GetAliasNo });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { flag = 0, message = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("Lastpartno")]
+        public IActionResult GetPartNo()
+        {
+            try
+            {
+                var GetPartNo = _articleService.GetPartNo();
+                return Ok(new { GetPartNo = GetPartNo });
             }
             catch (Exception ex)
             {

@@ -659,6 +659,37 @@ namespace MicroApi.Service
 
             return aliasno;
         }
+        public string GetPartNo()
+        {
+            string aliasno = "0";
 
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT ISNULL(MAX(TRY_CAST(PART_NO AS INT)), 0) + 1 FROM TB_ARTICLE";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            aliasno = result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return aliasno;
+        }
     }
 }
