@@ -9,7 +9,6 @@ namespace MicroApi.DataLayer.Interface
         CompanyListResponse GetCompanyList();
         CompanyResponse GetCompanyById(int id);
         CompanyResponse DeleteCompany(int id);
-
-
+        MobileDigitsResponse GetMobileDigits(MobileDigitsRequest request);
     }
 }

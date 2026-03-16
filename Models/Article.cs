@@ -148,8 +148,9 @@ namespace MicroApi.Models
     public class ItemData
     {
         public long ID { get; set; }
-        public string DESCRIPTION { get; set; }
-        public string UOM { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? UOM { get; set; }
     }
 
     public class ItemcodeRequest

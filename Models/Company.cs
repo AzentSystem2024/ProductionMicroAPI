@@ -53,4 +53,23 @@
         public string Message { get; set; }
         public List<CompanyUpdate> Data { get; set; }
     }
+    public class MobileDigitsResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<MobileDigits> Data { get; set; }
+
+    }
+    public class MobileDigitsRequest
+    {
+        public string COUNTRY_CODE { get; set; }
+
+    }
+    public class MobileDigits
+    {
+        public string? COUNTRY_CODE { get; set; }
+        public string? COUNTRY_NAME { get; set; }
+        public string? MOBILE_DIGITS { get; set; }
+
+    }
 }

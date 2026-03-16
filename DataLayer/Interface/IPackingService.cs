@@ -18,5 +18,6 @@ namespace MicroApi.DataLayer.Interface
         string GetPartNo();
         PackingResponse ChangeStandardPrice(ChangeStandardPriceModel model);
         List<PackingPriceLog> GetPackingPriceLog(PackingPriceLogrequest request);
+        ListItemResponse GetallItems();
     }
 }
