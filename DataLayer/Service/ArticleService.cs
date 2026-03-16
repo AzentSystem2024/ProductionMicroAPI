@@ -691,5 +691,55 @@ namespace MicroApi.Service
 
             return aliasno;
         }
+        public ListItemsResponse GetallItems()
+        {
+            ListItemsResponse res = new ListItemsResponse();
+            res.DataList = new List<ItemData>();
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT ID,ITEM_CODE,DESCRIPTION,UOM 
+                                    FROM TB_ITEMS 
+                                    WHERE IS_DELETED = 0 AND TYPE_ID IN (1,2)
+                                    ORDER BY ID ASC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.DataList.Add(new ItemData
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString() ?? string.Empty,
+                                    ITEM_CODE = reader["ITEM_CODE"]?.ToString() ?? string.Empty,
+                                    UOM = reader["UOM"]?.ToString() ?? string.Empty,
+
+                                });
+                            }
+                        }
+                    }
+                }
+
+                res.flag = res.DataList.Count > 0 ? 1 : 0;
+                res.Message = res.DataList.Count > 0 ? "Success" : "No record found";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.DataList = new List<ItemData>();
+            }
+
+            return res;
+        }
     }
 }

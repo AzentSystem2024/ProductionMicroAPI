@@ -424,6 +424,7 @@ namespace MicroApi.DataLayer.Service
                                     STD_PRICE_EFFECT_FROM = reader["STD_PRICE_EFFECT_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["STD_PRICE_EFFECT_FROM"]) : DateTime.MinValue,
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString(),
                                     ITEM_DESCRIPTION = reader["ITEM_DESCRIPTION"]?.ToString(),
+                                    CATEGORY_NAME = reader["Category"]?.ToString(),
                                     PackingEntries = new List<Packing_Entry>(),
                                     BOM = new List<PackingBOM>(),
                                     Units = new List<PackingUnits>()
@@ -733,7 +734,56 @@ namespace MicroApi.DataLayer.Service
 
             return list;
         }
+        public ListItemResponse GetallItems()
+        {
+            ListItemResponse res = new ListItemResponse();
+            res.DataList = new List<ListItems>();
 
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT ID,ITEM_CODE,DESCRIPTION,UOM 
+                                    FROM TB_ITEMS 
+                                    WHERE IS_DELETED = 0 AND TYPE_ID IN (1,2,9)
+                                    ORDER BY ID ASC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.DataList.Add(new ListItems
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt64(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString() ?? string.Empty,
+                                    ITEM_CODE = reader["ITEM_CODE"]?.ToString() ?? string.Empty,
+                                    UOM = reader["UOM"]?.ToString() ?? string.Empty,
+
+                                });
+                            }
+                        }
+                    }
+                }
+
+                res.flag = res.DataList.Count > 0 ? 1 : 0;
+                res.Message = res.DataList.Count > 0 ? "Success" : "No record found";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.DataList = new List<ListItems>();
+            }
+
+            return res;
+        }
     }
 }
 

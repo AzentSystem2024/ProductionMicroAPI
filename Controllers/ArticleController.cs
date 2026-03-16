@@ -8,7 +8,7 @@ using System.Security.Principal;
 
 namespace MicroApi.Controllers
 {
-   // [Authorize]
+    [Authorize]
     [Route("api/article")]
     [ApiController]
     public class ArticleController : ControllerBase
@@ -178,6 +178,22 @@ namespace MicroApi.Controllers
             {
                 return StatusCode(500, new { flag = 0, message = ex.Message });
             }
+        }
+        [HttpPost]
+        [Route("getitems")]
+        public ListItemsResponse GetallItems()
+        {
+            ListItemsResponse res = new ListItemsResponse();
+            try
+            {
+                res = _articleService.GetallItems();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
         }
     }
 }

@@ -318,6 +318,61 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+        public MobileDigitsResponse GetMobileDigits(MobileDigitsRequest request)
+        {
+            MobileDigitsResponse res = new MobileDigitsResponse();
+            res.Data = new List<MobileDigits>();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    string query = @"SELECT DISTINCT MOBILE_DIGITS, COUNTRY_NAME, COUNTRY_CODE
+                             FROM TB_COUNTRY_PHONE_CODE
+                             WHERE COUNTRY_CODE = @COUNTRY_CODE";
+
+                    using (var cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.AddWithValue("@COUNTRY_CODE", request.COUNTRY_CODE);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.Data.Add(new MobileDigits
+                                {
+                                    COUNTRY_NAME = reader["COUNTRY_NAME"].ToString(),
+                                    COUNTRY_CODE = reader["COUNTRY_CODE"].ToString(),
+                                    MOBILE_DIGITS = reader["MOBILE_DIGITS"].ToString()
+                                });
+                            }
+                        }
+
+                        if (res.Data.Count > 0)
+                        {
+                            res.flag = 1;
+                            res.Message = "Success";
+                        }
+                        else
+                        {
+                            res.flag = 0;
+                            res.Message = "Country code not found";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
 
 
     }

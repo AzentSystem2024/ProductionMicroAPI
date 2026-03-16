@@ -17,6 +17,7 @@ namespace MicroApi.DataLayer.Interface
         string GetLastOrderNoByUnitId();
         string GetAliasNo();
         string GetPartNo();
+        ListItemsResponse GetallItems();
         //ArticleUpdate GetArticleDetails(int unitId, string artNo, string color, int categoryId, decimal price);
     }
 }

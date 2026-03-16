@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CompanyController : ControllerBase
@@ -100,7 +100,23 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost]
+        [Route("getdigit")]
+        public MobileDigitsResponse GetMobileDigits(MobileDigitsRequest request)
+        {
+            MobileDigitsResponse res = new MobileDigitsResponse();
+            try
+            {
+                res = _companyService.GetMobileDigits(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
 
+            return res;
+        }
 
 
     }

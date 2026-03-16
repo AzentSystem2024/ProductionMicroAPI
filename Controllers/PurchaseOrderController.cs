@@ -6,7 +6,7 @@ using MicroApi.DataLayer.Services;
 
 namespace MicroApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PurchaseOrderController : ControllerBase

@@ -198,6 +198,7 @@
         public DateTime? STD_PRICE_EFFECT_FROM { get; set; }
         public string? STANDARD_PACKING { get; set; }
         public string? ITEM_DESCRIPTION { get; set; }
+        public string? CATEGORY_NAME { get; set; }
         public List<PackingBOM> BOM { get; set; }
         public List<Packing_Entry> PackingEntries { get; set; }
         public List<PackingUnits> Units { get; set; }
@@ -258,6 +259,17 @@
         public List<PackingPriceLog> Data { get; set; }
     }
 
-
-
+    public class ListItems
+    {
+        public long ID { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? UOM { get; set; }
+    }
+    public class ListItemResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<ListItems> DataList { get; set; }
+    }
 }

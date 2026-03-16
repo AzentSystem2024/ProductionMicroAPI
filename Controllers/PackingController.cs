@@ -187,6 +187,21 @@ namespace MicroApi.Controllers
 
             return res;
         }
-
+        [HttpPost]
+        [Route("getitems")]
+        public ListItemResponse GetallItems()
+        {
+            ListItemResponse res = new ListItemResponse();
+            try
+            {
+                res = _packingService.GetallItems();
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
 }

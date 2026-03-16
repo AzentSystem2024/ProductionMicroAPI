@@ -672,14 +672,22 @@ namespace MicroApi.DataLayer.Service
                     };
                 }
 
-                strSQL = "SELECT TB_GRN_DETAIL.*, TB_STORES.STORE_NAME, TB_ITEMS.DESCRIPTION,TB_ITEMS.ITEM_CODE , " +
-                    "TB_PO_DETAIL.GRN_QTY, TB_PO_DETAIL.QUANTITY as PO_QUANTITY,TB_PO_DETAIL.PRICE " +
-                    "FROM TB_GRN_DETAIL " +
-                    "LEFT JOIN TB_STORES ON TB_GRN_DETAIL.STORE_ID = TB_STORES.ID " +
-                    "LEFT JOIN TB_ITEMS ON TB_GRN_DETAIL.ITEM_ID = TB_ITEMS.ID " +
-
-                    "LEFT JOIN TB_PO_DETAIL ON TB_GRN_DETAIL.PO_DETAIL_ID = TB_PO_DETAIL.ID " +
-                    " WHERE TB_GRN_DETAIL.GRN_ID = " + id;
+                strSQL = "SELECT GD.*, S.STORE_NAME, I.DESCRIPTION, I.ITEM_CODE, " +
+                        "ISNULL(GRN_SUM.APPROVED_GRN_QTY,0) AS GRN_QTY, " +
+                        "POD.QUANTITY AS PO_QUANTITY, POD.PRICE " +
+                        "FROM TB_GRN_DETAIL GD " +
+                        "LEFT JOIN TB_STORES S ON GD.STORE_ID = S.ID " +
+                        "LEFT JOIN TB_ITEMS I ON GD.ITEM_ID = I.ID " +
+                        "LEFT JOIN TB_PO_DETAIL POD ON GD.PO_DETAIL_ID = POD.ID " +
+                        "LEFT JOIN ( " +
+                        "   SELECT GD2.PO_DETAIL_ID, SUM(GD2.QUANTITY) AS APPROVED_GRN_QTY " +
+                        "   FROM TB_GRN_DETAIL GD2 " +
+                        "   INNER JOIN TB_GRN_HEADER GH ON GD2.GRN_ID = GH.ID " +
+                        "   INNER JOIN TB_AC_TRANS_HEADER ATH ON GH.TRANS_ID = ATH.TRANS_ID " +
+                        "   WHERE ATH.TRANS_STATUS = 5 " +
+                        "   GROUP BY GD2.PO_DETAIL_ID " +
+                        ") GRN_SUM ON GD.PO_DETAIL_ID = GRN_SUM.PO_DETAIL_ID " +
+                        "WHERE GD.GRN_ID = " + id;
 
                 DataTable tblgrndetail = ADO.GetDataTable(strSQL, "GrnDetails");
 
