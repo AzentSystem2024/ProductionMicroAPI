@@ -4,6 +4,7 @@
     {
         public int? ID { get; set; }
         public int? HQID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public string? ITEM_CODE { get; set; }
         public string? BARCODE { get; set; }
         public string? DESCRIPTION { get; set; }
@@ -94,6 +95,7 @@
     {
         public int? ID { get; set; }
         public int? STORE_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public float SALE_PRICE { get; set; }
         public float? SALE_PRICE1 { get; set; }
         public float? SALE_PRICE2 { get; set; }
