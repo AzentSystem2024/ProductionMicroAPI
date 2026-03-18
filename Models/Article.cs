@@ -31,6 +31,8 @@ namespace MicroApi.Models
         public List<ArticleBOM> BOM { get; set; }
         public List<Sizes> Sizes { get; set; }
         public List<ArticleUnits> Units { get; set; }
+        public List<ArticleComponent> Components { get; set; }
+
     }
     public class ArticleUnits
     {
@@ -93,7 +95,7 @@ namespace MicroApi.Models
         public List<ArticleUnits> Units { get; set; }
         public string? STANDARD_PACKING { get; set; }
         public List<ArticleBOM>? BOM { get; set; }
-
+        public List<ArticleComponent>? Components { get; set; }
 
     }
 
@@ -157,5 +159,12 @@ namespace MicroApi.Models
     {
         public string ITEM_CODE { get; set; }
     }
+    public class ArticleComponent
+    {
+        public int? COMPONENT_ARTICLE_ID { get; set; }
+        public string? COMPONENT_ART_NO { get; set; }
+        public string? COMPONENT_NAME { get; set; }
+    }
+   
 
 }

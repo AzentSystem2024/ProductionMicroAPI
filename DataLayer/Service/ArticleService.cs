@@ -18,12 +18,13 @@ namespace MicroApi.Service
             try
             {
                 // Business validation
-                if (article.IS_COMPONENT && article.COMPONENT_ARTICLE_ID.HasValue && article.COMPONENT_ARTICLE_ID.Value != 0)
+                if (article.IS_COMPONENT && article.Components != null && article.Components.Count > 0)
                 {
                     res.flag = 0;
-                    res.Message = "IS_COMPONENT cannot be true while COMPONENT_ARTICLE_ID is set.";
+                    res.Message = "IS_COMPONENT cannot be true while Components are provided.";
                     return res;
                 }
+
 
                 using (SqlConnection connection = ADO.GetConnection())
                 {
@@ -61,9 +62,7 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
-                        // ==========================
-                        // SIZES (UDT)
-                        // ==========================
+                        // SIZES 
                         DataTable sizeTable = new DataTable();
                         sizeTable.Columns.Add("SIZE", typeof(string));
 
@@ -77,9 +76,7 @@ namespace MicroApi.Service
                         sizeParam.SqlDbType = SqlDbType.Structured;
                         sizeParam.TypeName = "dbo.UDT_TB_ARTICLE_SIZE";
 
-                        // ==========================
-                        // BOM (UDT)
-                        // ==========================
+                        // BOM 
                         DataTable bomTable = new DataTable();
                         bomTable.Columns.Add("ITEM_ID", typeof(int));
                         bomTable.Columns.Add("QUANTITY", typeof(decimal));
@@ -94,9 +91,25 @@ namespace MicroApi.Service
                         bomParam.SqlDbType = SqlDbType.Structured;
                         bomParam.TypeName = "dbo.UDT_TB_ARTICLE_BOM";
 
-                        // ==========================
-                        // UNITS (UDT)
-                        // ==========================
+                        // COMPONENTS (UDT)
+                        DataTable compTable = new DataTable();
+                        compTable.Columns.Add("COMPONENT_ARTICLE_ID", typeof(int));
+
+                        if (article.Components != null)
+                        {
+                            foreach (var c in article.Components)
+                            {
+                                compTable.Rows.Add(c.COMPONENT_ARTICLE_ID);
+                            }
+                        }
+
+                        var compParam = cmd.Parameters.AddWithValue("@UDT_TB_ARTICLE_COMPONENT", compTable);
+                        compParam.SqlDbType = SqlDbType.Structured;
+                        compParam.TypeName = "dbo.UDT_TB_ARTICLE_COMPONENT";
+
+
+                        // UNITS 
+
                         DataTable unitTable = new DataTable();
                         unitTable.Columns.Add("UNIT_ID", typeof(int));
 
@@ -110,9 +123,6 @@ namespace MicroApi.Service
                         unitParam.SqlDbType = SqlDbType.Structured;
                         unitParam.TypeName = "dbo.UDT_TB_ARTICLE_UNITS";
 
-                        // ==========================
-                        // Execute & Read SP Result
-                        // ==========================
                         using (var reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
@@ -209,6 +219,23 @@ namespace MicroApi.Service
                         bomParam.SqlDbType = SqlDbType.Structured;
                         bomParam.TypeName = "dbo.UDT_TB_ARTICLE_BOM";
 
+                        // COMPONENTS (UDT)
+                        DataTable compTable = new DataTable();
+                        compTable.Columns.Add("COMPONENT_ARTICLE_ID", typeof(int));
+
+                        if (article.Components != null)
+                        {
+                            foreach (var c in article.Components)
+                            {
+                                compTable.Rows.Add(c.COMPONENT_ARTICLE_ID);
+                            }
+                        }
+
+                        var compParam = cmd.Parameters.AddWithValue("@UDT_TB_ARTICLE_COMPONENT", compTable);
+                        compParam.SqlDbType = SqlDbType.Structured;
+                        compParam.TypeName = "dbo.UDT_TB_ARTICLE_COMPONENT";
+
+
                         // 🔹 Units table
                         var unitTable = new DataTable();
                         unitTable.Columns.Add("UNIT_ID", typeof(int));
@@ -296,7 +323,9 @@ namespace MicroApi.Service
                                     NEXT_SERIAL = reader["NEXT_SERIAL"] != DBNull.Value ? Convert.ToInt32(reader["NEXT_SERIAL"]) : 0,
                                     LAST_ORDER_NO = reader["ORDER_NO"]?.ToString(),
                                     SIZES = new List<Sizes>(),
-                                    Units = new List<ArticleUnits>()
+                                    Units = new List<ArticleUnits>(),
+                                    Components = new List<ArticleComponent>()
+
                                 };
 
                                 // Parse sizes JSON
@@ -348,10 +377,29 @@ namespace MicroApi.Service
 
                                 articleDetails.BOM = bomList;
                             }
+                            //  COMPONENTS 
+                            if (reader.NextResult())
+                            {
+                                var compList = new List<ArticleComponent>();
 
-                            // ───────────────────────────────────────────────────────────────
-                            // 4️⃣ STATUS RESULT
-                            // ───────────────────────────────────────────────────────────────
+                                while (reader.Read())
+                                {
+                                    compList.Add(new ArticleComponent
+                                    {
+                                        COMPONENT_ARTICLE_ID = reader["COMPONENT_ARTICLE_ID"] != DBNull.Value
+                                            ? Convert.ToInt32(reader["COMPONENT_ARTICLE_ID"])
+                                            : 0,
+
+                                        COMPONENT_ART_NO = reader["COMPONENT_ART_NO"]?.ToString(),
+
+                                        COMPONENT_NAME = reader["COMPONENT_NAME"]?.ToString()
+                                    });
+                                }
+
+                                articleDetails.Components = compList;
+                            }
+
+                            //  STATUS RESULT
                             if (reader.NextResult() && reader.Read())
                             {
                                 res.flag = Convert.ToInt32(reader["flag"]);
@@ -410,16 +458,26 @@ namespace MicroApi.Service
                                     BRAND_NAME = reader["BRAND_NAME"]?.ToString(),
                                     ARTICLE_TYPE_NAME = reader["ARTICLE_TYPE_NAME"]?.ToString(),
                                     IS_COMPONENT = reader["IS_COMPONENT"] != DBNull.Value && Convert.ToBoolean(reader["IS_COMPONENT"]),
-                                    ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
-                                    ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
+                                    //ComponentArticleNo = reader["COMPONENT_ARTICLE_NO"]?.ToString(),
+                                    //ComponentArticleName = reader["COMPONENT_ARTICLE_NAME"]?.ToString(),
                                     STANDARD_PACKING = reader["STD_PACKING"]?.ToString() ?? "",
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
                                     GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["GST_PERC"]) : 0,
-                                    SIZES = new List<Sizes>()
-                                };
+                                    SIZES = new List<Sizes>(),
+                                    Components = new List<ArticleComponent>()
 
-                                // 🟦 Parse SIZES JSON column
+                                };
+                                // COMPONENTS 
+                                if (reader["COMPONENTS"] != DBNull.Value)
+                                {
+                                    var compJson = reader["COMPONENTS"].ToString();
+
+                                    article.Components = JsonConvert.DeserializeObject<List<ArticleComponent>>(compJson);
+                                }
+
+
+                                //  SIZES 
                                 if (reader["SIZES"] != DBNull.Value)
                                 {
                                     var json = reader["SIZES"].ToString();

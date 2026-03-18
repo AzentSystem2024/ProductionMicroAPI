@@ -331,8 +331,8 @@ namespace MicroApi.DataLayer.Service
                         connection.Open();
 
                     string query = @"SELECT DISTINCT MOBILE_DIGITS, COUNTRY_NAME, COUNTRY_CODE
-                             FROM TB_COUNTRY_PHONE_CODE
-                             WHERE COUNTRY_CODE = @COUNTRY_CODE";
+                                    FROM TB_COUNTRY_PHONE_CODE
+                                    WHERE REPLACE(COUNTRY_CODE,'+','') = REPLACE(@COUNTRY_CODE,'+','')";
 
                     using (var cmd = new SqlCommand(query, connection))
                     {
