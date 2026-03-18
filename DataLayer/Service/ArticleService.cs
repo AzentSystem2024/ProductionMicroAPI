@@ -503,8 +503,6 @@ namespace MicroApi.Service
             return res;
         }
 
-
-
         public ListItemsResponse GetItems()
         {
             ListItemsResponse res = new ListItemsResponse();

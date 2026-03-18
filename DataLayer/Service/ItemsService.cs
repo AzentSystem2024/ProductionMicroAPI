@@ -252,6 +252,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("ACTION", 1);
                 //cmd.Parameters.AddWithValue("ID", items.ID);
                 cmd.Parameters.AddWithValue("HQID", items.HQID);
+                cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
                 cmd.Parameters.AddWithValue("ITEM_CODE", items.ITEM_CODE);
                 cmd.Parameters.AddWithValue("BARCODE", items.BARCODE);
                 cmd.Parameters.AddWithValue("DESCRIPTION", items.DESCRIPTION);
@@ -482,6 +483,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("ACTION", 3);
                 cmd.Parameters.AddWithValue("ID", items.ID);
                 cmd.Parameters.AddWithValue("HQID", items.HQID);
+                cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
                 cmd.Parameters.AddWithValue("ITEM_CODE", items.ITEM_CODE);
                 cmd.Parameters.AddWithValue("BARCODE", items.BARCODE);
                 cmd.Parameters.AddWithValue("DESCRIPTION", items.DESCRIPTION);
@@ -573,7 +575,7 @@ namespace MicroApi.DataLayer.Services
                 string strSQL = "SELECT TB_ITEMS.ID, TB_ITEMS.HQID, TB_ITEMS.ITEM_CODE, TB_ITEMS.BARCODE, TB_ITEMS.DESCRIPTION, " +
                                 "TB_ITEMS.ARABIC_DESCRIPTION, TB_ITEMS.TYPE_ID, TB_ITEMS.DEPT_ID, TB_ITEMS.CAT_ID, TB_ITEMS.SUBCAT_ID, " +
                                 "TB_ITEMS.BRAND_ID, TB_ITEMS.PACKING_ID, TB_ITEMS.UNIT_ID, TB_ITEMS.LONG_DESCRIPTION, TB_ITEMS.SALE_PRICE, " +
-                                "TB_ITEMS.COST, TB_ITEMS.PROFIT_MARGIN, TB_ITEMS.QTY_STOCK, TB_ITEMS.QTY_COMMITTED, TB_ITEMS.CREATED_DATE, " +
+                                "TB_ITEM_COST.COST, TB_ITEMS.PROFIT_MARGIN, TB_ITEMS.QTY_STOCK, TB_ITEMS.QTY_COMMITTED, TB_ITEMS.CREATED_DATE, " +
                                 "TB_ITEMS.LAST_PO_DATE, TB_ITEMS.LAST_GRN_DATE, TB_ITEMS.LAST_SALE_DATE, TB_ITEMS.RESTOCK_LEVEL, " +
                                 "TB_ITEMS.REORDER_POINT, TB_ITEMS.PARENT_ITEM_ID, TB_ITEMS.CHILD_QTY, TB_ITEMS.ORIGIN_COUNTRY, TB_ITEMS.SHELF_LIFE, " +
                                 "TB_ITEMS.BIN_LOCATION, TB_ITEMS.NOTES, TB_ITEMS.IS_INACTIVE, TB_ITEMS.IS_PRICE_REQUIRED, TB_ITEMS.IS_NOT_DISCOUNTABLE, " +
@@ -591,6 +593,7 @@ namespace MicroApi.DataLayer.Services
                                 "TB_COSTING_METHOD.COSTING_METHOD, TB_PACKING.DESCRIPTION, TB_UOM.UOM " +
                                 "FROM TB_ITEMS " +
                                 "LEFT JOIN TB_ITEM_TYPE ON TB_ITEMS.TYPE_ID = TB_ITEM_TYPE.ID " +
+                                "LEFT JOIN TB_ITEM_COST ON TB_ITEMS.ID = TB_ITEM_COST.ITEM_ID " +
                                 "LEFT JOIN TB_ITEM_DEPARTMENT ON TB_ITEMS.DEPT_ID = TB_ITEM_DEPARTMENT.ID " +
                                 "LEFT JOIN TB_ITEM_CATEGORY ON TB_ITEMS.CAT_ID = TB_ITEM_CATEGORY.ID " +
                                 "LEFT JOIN TB_ITEM_SUBCATEGORY ON TB_ITEMS.SUBCAT_ID = TB_ITEM_SUBCATEGORY.ID " +
