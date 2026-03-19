@@ -8,7 +8,7 @@ using System.Security.Principal;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/article")]
     [ApiController]
     public class ArticleController : ControllerBase

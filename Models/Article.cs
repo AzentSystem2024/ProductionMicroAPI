@@ -164,7 +164,8 @@ namespace MicroApi.Models
         public int? COMPONENT_ARTICLE_ID { get; set; }
         public string? COMPONENT_ART_NO { get; set; }
         public string? COMPONENT_NAME { get; set; }
+        public string? CATEGORY { get; set; }
+        public string? ARTICLE_TYPE { get; set; }
     }
-   
 
 }

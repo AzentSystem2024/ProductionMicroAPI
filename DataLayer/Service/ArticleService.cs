@@ -347,7 +347,7 @@ namespace MicroApi.Service
                                     unitList.Add(new ArticleUnits
                                     {
                                         UNIT_ID = reader["UNIT_ID"] != DBNull.Value ? Convert.ToInt32(reader["UNIT_ID"]) : 0,
-                                       
+
                                     });
                                 }
 
@@ -392,7 +392,9 @@ namespace MicroApi.Service
 
                                         COMPONENT_ART_NO = reader["COMPONENT_ART_NO"]?.ToString(),
 
-                                        COMPONENT_NAME = reader["COMPONENT_NAME"]?.ToString()
+                                        COMPONENT_NAME = reader["COMPONENT_NAME"]?.ToString(),
+                                        CATEGORY = reader["CATEGORY"]?.ToString(),
+                                        ARTICLE_TYPE = reader["ARTICLE_TYPE"]?.ToString(),
                                     });
                                 }
 
@@ -419,7 +421,6 @@ namespace MicroApi.Service
 
             return res;
         }
-
 
 
 
