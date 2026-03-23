@@ -11,7 +11,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class TimeSheetService : ITimeSheetService
     {
-        public TimeSheetLogListResponseData GetAllTimeSheet()
+        public TimeSheetLogListResponseData GetAllTimeSheet(TimeSheetRequestlist request)
         {
             TimeSheetLogListResponseData loglist = new TimeSheetLogListResponseData();
             loglist.data = new List<TimeSheetLogListData>();
@@ -23,6 +23,8 @@ namespace MicroApi.DataLayer.Service
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_TIMESHEET";
                 cmd.Parameters.AddWithValue("@ACTION", 0);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@TS_MONTH", DateTime.ParseExact(request.MONTH, "MMMMyyyy", CultureInfo.InvariantCulture));
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -33,6 +35,7 @@ namespace MicroApi.DataLayer.Service
                     loglist.data.Add(new TimeSheetLogListData
                     {
                         ID = Convert.IsDBNull(dr["ID"]) ? 0 : Convert.ToInt32(dr["ID"]),
+                        COMPANY_ID = Convert.IsDBNull(dr["COMPANY_ID"]) ? 0 : Convert.ToInt32(dr["COMPANY_ID"]),
                         TS_MONTH = Convert.IsDBNull(dr["TS_MONTH"]) ? null : Convert.ToDateTime(dr["TS_MONTH"]).ToString("MMMM yyyy"),
                         EMP_NO = Convert.IsDBNull(dr["EMP_CODE"]) ? null : Convert.ToString(dr["EMP_CODE"]),
                         EMP_ID = Convert.IsDBNull(dr["EMP_ID"]) ? null : Convert.ToString(dr["EMP_ID"]),
@@ -67,6 +70,7 @@ namespace MicroApi.DataLayer.Service
                     //cmd.Parameters.AddWithValue("ID", employee.ID);
 
                     cmd.Parameters.AddWithValue("EMP_ID", (object)ts.EMP_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)ts.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("TS_MONTH", string.IsNullOrEmpty(ts.TS_MONTH) ? DBNull.Value : DateTime.ParseExact(ts.TS_MONTH, "MMMM yyyy", CultureInfo.InvariantCulture));
                     cmd.Parameters.AddWithValue("DAYS", (object)ts.DAYS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("NORMAL_OT", (object)ts.NORMAL_OT ?? DBNull.Value);
@@ -132,7 +136,7 @@ namespace MicroApi.DataLayer.Service
             try
             {
                 string strSQL = " SELECT header.ID, header.TS_MONTH , header.EMP_ID, header.TOTAL_DAYS, header.NORMAL_OT , " +
-                    " header.HOLIDAY_OT, header.LEAVE_FROM, header.LEAVE_TO, header.WORKED_DAYS, " +
+                    " header.HOLIDAY_OT, header.LEAVE_FROM, header.LEAVE_TO, header.WORKED_DAYS,header.COMPANY_ID, " +
                     " header.DEDUCT_DAYS, header.REMARKS , status.STATUS_DESC as STATUS " +
                     " FROM TB_PAY_TS_HEADER header " +
                     " LEFT JOIN TB_STATUS status ON " +
@@ -145,6 +149,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     DataRow dr = tblHeader.Rows[0];
                     ts.ID = ADO.ToInt32(dr["ID"]);
+                    ts.COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]);
                     ts.TS_MONTH = Convert.ToDateTime(dr["TS_MONTH"]).ToString("MMMM yyyy");
                     ts.EMP_ID = ADO.ToInt32(dr["EMP_ID"]);
                     ts.DAYS = ADO.ToFloat(dr["TOTAL_DAYS"]);
@@ -162,7 +167,7 @@ namespace MicroApi.DataLayer.Service
                 string strSQL1 = " SELECT detail.STORE_ID, store.STORE_NAME , detail.DAYS, detail.NORMAL_OT, " +
                     "detail.HOLIDAY_OT FROM TB_PAY_TS_DETAIL detail INNER JOIN TB_PAY_TS_HEADER header " +
                     " ON detail.TS_ID = header.ID  " +
-                    "INNER JOIN TB_STORES store ON store.ID = detail.STORE_ID " +
+                    "LEFT JOIN TB_STORES store ON store.ID = detail.STORE_ID " +
                     " WHERE detail.TS_ID = " + id;
 
                 DataTable tblDetail = ADO.GetDataTable(strSQL1, "TSDetail");
@@ -232,6 +237,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("ID", ts.ID);
 
                     cmd.Parameters.AddWithValue("EMP_ID", (object)ts.EMP_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)ts.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("TS_MONTH", string.IsNullOrEmpty(ts.TS_MONTH) ? DBNull.Value : DateTime.ParseExact(ts.TS_MONTH, "MMMM yyyy", CultureInfo.InvariantCulture));
                     cmd.Parameters.AddWithValue("DAYS", (object)ts.DAYS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("NORMAL_OT", (object)ts.NORMAL_OT ?? DBNull.Value);
@@ -331,6 +337,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("ID", ts.ID);
 
                     cmd.Parameters.AddWithValue("EMP_ID", (object)ts.EMP_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)ts.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("TS_MONTH", string.IsNullOrEmpty(ts.TS_MONTH) ? DBNull.Value : DateTime.ParseExact(ts.TS_MONTH, "MMMM yyyy", CultureInfo.InvariantCulture));
                     cmd.Parameters.AddWithValue("DAYS", (object)ts.DAYS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("NORMAL_OT", (object)ts.NORMAL_OT ?? DBNull.Value);
@@ -404,6 +411,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("ID", ts.ID);
 
                     cmd.Parameters.AddWithValue("EMP_ID", (object)ts.EMP_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)ts.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("TS_MONTH", string.IsNullOrEmpty(ts.TS_MONTH) ? DBNull.Value : DateTime.ParseExact(ts.TS_MONTH, "MMMM yyyy", CultureInfo.InvariantCulture));
                     cmd.Parameters.AddWithValue("DAYS", (object)ts.DAYS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("NORMAL_OT", (object)ts.NORMAL_OT ?? DBNull.Value);

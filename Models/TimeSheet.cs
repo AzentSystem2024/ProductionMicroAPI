@@ -7,6 +7,7 @@ namespace MicroApi.Models
     public class TimeSheetLogListData
     {
         public int ID { get; set; }
+        public int COMPANY_ID { get; set; }
         public object TS_MONTH { get; set; }
         public object EMP_NO { get; set; }
         public object EMP_NAME { get; set; }
@@ -32,6 +33,7 @@ namespace MicroApi.Models
     public class saveTimeSheetData
     {
         public object? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public object? EMP_CODE { get; set; }
         public object? EMP_NAME { get; set; }
         public object? STATUS { get; set; }
@@ -105,6 +107,10 @@ namespace MicroApi.Models
     {
         public List<int> IDs { get; set; }
     }
-
+    public class TimeSheetRequestlist
+    {
+        public int COMPANY_ID { get; set; }
+        public string MONTH { get; set; }
+    }
 
 }

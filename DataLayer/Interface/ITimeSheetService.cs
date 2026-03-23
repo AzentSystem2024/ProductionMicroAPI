@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface ITimeSheetService
     {
-        public TimeSheetLogListResponseData GetAllTimeSheet();
+        public TimeSheetLogListResponseData GetAllTimeSheet(TimeSheetRequestlist request);
         public saveTimeSheetResponseData SaveData(saveTimeSheetData advData);
         public saveTimeSheetData selectTimeSheetData(int id);
         public saveTimeSheetResponseData UpdateData(saveTimeSheetData advData);
