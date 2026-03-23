@@ -137,7 +137,7 @@
         public int STORE_ID { get; set; }
         public string STORE_NAME { get; set; }
         public bool SUB_TYPE_ID { get; set; }
-
+        public bool SALARY_EXPENSE_HEAD_WISE { get; set; }
     }
     public class LogOutResponse
     {

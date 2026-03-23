@@ -9,19 +9,15 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\CollectionController.cs" />
-    <Compile Remove="Controllers\DepartmentController.cs" />
     <Compile Remove="Controllers\InsuranceController.cs" />
     <Compile Remove="Controllers\SchemaController.cs" />
     <Compile Remove="DataLayer\Interface\ICollectionService.cs" />
-    <Compile Remove="DataLayer\Interface\IDepartmentService.cs" />
     <Compile Remove="DataLayer\Interface\IInsuranceService.cs" />
     <Compile Remove="DataLayer\Interface\ISchemaService.cs" />
     <Compile Remove="DataLayer\Service\CollectionService.cs" />
-    <Compile Remove="DataLayer\Service\DepartmentService.cs" />
     <Compile Remove="DataLayer\Service\InsuranceService.cs" />
     <Compile Remove="DataLayer\Service\SchemaService.cs" />
     <Compile Remove="Models\Collection.cs" />
-    <Compile Remove="Models\Department.cs" />
     <Compile Remove="Models\Insurance.cs" />
     <Compile Remove="Models\Item.cs" />
     <Compile Remove="Models\Schema.cs" />

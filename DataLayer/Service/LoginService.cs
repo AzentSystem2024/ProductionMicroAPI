@@ -423,10 +423,8 @@ namespace MicroApi.DataLayer.Service
                 // ---------- RESULT 10 : STORE CONFIG ----------
                 if (reader.NextResult())
                 {
-                    bool hasEnableSubtype = reader.GetSchemaTable()
-                                                  .Rows
-                                                  .Cast<DataRow>()
-                                                  .Any(r => r["ColumnName"].ToString() == "ENABLE_SUBTYPE");
+                    bool hasEnableSubtype = reader.GetSchemaTable() .Rows .Cast<DataRow>() .Any(r => r["ColumnName"].ToString() == "ENABLE_SUBTYPE");
+                    bool hassalaryexpenseenable = reader.GetSchemaTable().Rows.Cast<DataRow>().Any(r => r["ColumnName"].ToString() == "SALARY_EXPENSE_HEAD_WISE");
 
                     while (reader.Read())
                     {
@@ -434,9 +432,8 @@ namespace MicroApi.DataLayer.Service
                         {
                             STORE_ID = Convert.ToInt32(reader["STORE_ID"]),
                             STORE_NAME = reader["STORE_NAME"]?.ToString(),
-                            SUB_TYPE_ID = hasEnableSubtype
-                                            ? Convert.ToBoolean(reader["ENABLE_SUBTYPE"])
-                                            : false
+                            SUB_TYPE_ID = hasEnableSubtype ? Convert.ToBoolean(reader["ENABLE_SUBTYPE"]) : false,
+                            SALARY_EXPENSE_HEAD_WISE = hassalaryexpenseenable ? Convert.ToBoolean(reader["SALARY_EXPENSE_HEAD_WISE"]) : false,
                         });
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Service;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -124,6 +125,22 @@ namespace MicroApi.Controllers
                 res.message = ex.Message;
             }
             return res;
+        }
+        [HttpPost]
+        [Route("getsubdept")]
+        public List<SubDepartmentList> GetSubDept(SubDepartmentListReq request)
+        {
+            List<SubDepartmentList> subdept = new List<SubDepartmentList>();
+
+            try
+            {
+
+                subdept = _employeeService.GetSubDept(request);
+            }
+            catch (Exception ex)
+            {
+            }
+            return subdept.ToList();
         }
     }
 }

@@ -78,7 +78,7 @@ namespace MicroApi.DataLayer.Service
                         LEAVE_DAY_BALANCE = Convert.IsDBNull(dr["LEAVE_DAY_BALANCE"]) ? 0 : Convert.ToDecimal(dr["LEAVE_DAY_BALANCE"]),
                         DAYS_DEDUCTED = Convert.IsDBNull(dr["DAYS_DEDUCTED"]) ? 0 : Convert.ToDecimal(dr["DAYS_DEDUCTED"]),
                         LEAVE_CREDIT = Convert.IsDBNull(dr["LEAVE_CREDIT"]) ? 0 : Convert.ToDecimal(dr["LEAVE_CREDIT"]),
-                        //COMPANY_ID = Convert.IsDBNull(dr["COMPANY_ID"]) ? 0 : Convert.ToInt32(dr["COMPANY_ID"]),
+                        SUB_DEPT_ID = Convert.IsDBNull(dr["SUB_DEPT_ID"]) ? 0 : Convert.ToInt32(dr["SUB_DEPT_ID"])
                     });
                 }
                 connection.Close();
@@ -254,6 +254,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@LEAVE_DAY_BALANCE", (object)employee.LEAVE_DAY_BALANCE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@DAYS_DEDUCTED", (object)employee.DAYS_DEDUCTED ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", (object)employee.COMPANY_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@SUB_DEPT_ID", (object)employee.SUB_DEPT_ID ?? DBNull.Value);
 
                     Int32 employeeID = Convert.ToInt32(cmd.ExecuteScalar());
                     return employeeID;
@@ -360,6 +361,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@DAYS_DEDUCTED", employee.DAYS_DEDUCTED);
                 if (employee.COMPANY_ID.HasValue)
                     cmd.Parameters.AddWithValue("@COMPANY_ID", employee.COMPANY_ID);
+                if (employee.SUB_DEPT_ID.HasValue)
+                    cmd.Parameters.AddWithValue("@SUB_DEPT_ID", employee.SUB_DEPT_ID);
 
                 // Handle attachments only during update
                 if (employee.Attachment != null && employee.Attachment.Any())
@@ -417,7 +420,7 @@ namespace MicroApi.DataLayer.Service
                 "TB_EMPLOYEE.IBAN_NO, TB_EMPLOYEE.DAMAN_NO,TB_EMPLOYEE.PF_AC_NO,TB_EMPLOYEE.ESI_NO,TB_EMPLOYEE.ESI_PERCENT, TB_EMPLOYEE.DAMAN_CATEGORY, " +
                 "TB_EMPLOYEE.LEAVE_CREDIT, TB_EMPLOYEE.LESS_SERVICE_DAYS, TB_EMPLOYEE.HOLD_SALARY, " +
                 "TB_EMPLOYEE.MOL_NUMBER, TB_EMPLOYEE.LAST_REJOIN_DATE, TB_EMPLOYEE.INCENTIVE_PERCENT, " +
-                "TB_EMPLOYEE.IS_DELETED, " +
+                "TB_EMPLOYEE.IS_DELETED,TB_EMPLOYEE.SUB_DEPT_ID, " +
                 "TB_EMPLOYEE.BANK_NAME, TB_EMPLOYEE.PAYMENT_TYPE, " +
                 "TB_EMPLOYEE.IS_INACTIVE, TB_EMPLOYEE.LEAVE_DAY_BALANCE, TB_EMPLOYEE.DAYS_DEDUCTED, " +
 
@@ -522,9 +525,7 @@ namespace MicroApi.DataLayer.Service
 
                     employee.LEAVE_DAY_BALANCE = dr["LEAVE_DAY_BALANCE"] != DBNull.Value ? Convert.ToDecimal(dr["LEAVE_DAY_BALANCE"]) : 0;
                     employee.DAYS_DEDUCTED = dr["DAYS_DEDUCTED"] != DBNull.Value ? Convert.ToDecimal(dr["DAYS_DEDUCTED"]) : 0;
-                    //employee.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : (int?)null;
-
-
+                    employee.SUB_DEPT_ID = dr["SUB_DEPT_ID"] != DBNull.Value ? Convert.ToInt32(dr["SUB_DEPT_ID"]) : (int?)null;
 
                 }
                 string strAttachmentsSQL = @"SELECT ID, TRANS_TYPE, TRANS_ID, FILE_NAME, FILE_DATA, REMARKS, CREATED_USER_ID, CREATED_TIME, IS_DELETED, DELETED_USER_ID, DELETED_TIME FROM TB_ATTACHEMENTS WHERE TRANS_ID = " + id;
@@ -579,6 +580,42 @@ namespace MicroApi.DataLayer.Service
             {
                 throw ex;
             }
+        }
+        public List<SubDepartmentList> GetSubDept(SubDepartmentListReq request)
+        {
+            var SubDepartmentList = new List<SubDepartmentList>();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_EMPLOYEE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ACTION", 5);
+                        cmd.Parameters.AddWithValue("@DEPT_ID", request.DEPT_ID);
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var address = new SubDepartmentList
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty
+                                };
+                                SubDepartmentList.Add(address);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return SubDepartmentList;
         }
     }
 }

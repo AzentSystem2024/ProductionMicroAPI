@@ -9,5 +9,6 @@ namespace MicroApi.DataLayer.Interface
         bool UpdateEmployee(EmployeeUpdate employee);
         public EmployeeUpdate GetItems(int id);
         public bool DeleteEmployees(int id);
+        List<SubDepartmentList> GetSubDept(SubDepartmentListReq request);
     }
 }
