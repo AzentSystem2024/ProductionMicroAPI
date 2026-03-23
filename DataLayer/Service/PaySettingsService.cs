@@ -8,7 +8,7 @@ namespace MicroApi.DataLayer.Services
 {
     public class PaySettingsService:IPaySettingsService
     {
-        public PaySettings GetPaySettings()
+        public PaySettings GetPaySettings(PaySettingslist request)
         {
             PaySettings settings = new PaySettings();
 
@@ -22,6 +22,7 @@ namespace MicroApi.DataLayer.Services
                 };
 
                 cmd.Parameters.AddWithValue("ACTION", 0); // Select action
+                cmd.Parameters.AddWithValue("COMPANY_ID", request.COMPANY_ID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -29,6 +30,7 @@ namespace MicroApi.DataLayer.Services
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];
+                    settings.COMPANY_ID = dr["COMPANY_ID"] as int?;
                     settings.DAILY_HOURS = dr["DAILY_HOURS"] as int?;
                     settings.MAX_OT_MTS = dr["MAX_OT_MTS"] as int?;
                     settings.NORMAL_OT_RATE = ADO.ToDecimal(dr["NORMAL_OT_RATE"]);
@@ -65,6 +67,7 @@ namespace MicroApi.DataLayer.Services
                     };
 
                     cmd.Parameters.AddWithValue("ACTION", 1); // Save action
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object?)settings.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("DAILY_HOURS", (object?)settings.DAILY_HOURS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("MAX_OT_MTS", (object?)settings.MAX_OT_MTS ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("NORMAL_OT_RATE", (object?)settings.NORMAL_OT_RATE ?? DBNull.Value);

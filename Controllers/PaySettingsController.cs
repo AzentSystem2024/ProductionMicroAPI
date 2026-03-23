@@ -17,13 +17,13 @@ namespace MicroApi.Controllers
         {
             _PaySettingsService = PaySettingsService;
         }
-        [HttpPost("get")]
-        public ActionResult<PaySettingsResponce> Get()
+        [HttpPost("list")]
+        public ActionResult<PaySettingsResponce> Get(PaySettingslist request)
         {
             try
             {
                 PaySettingsResponce responce = new PaySettingsResponce();
-                responce.data = _PaySettingsService.GetPaySettings();
+                responce.data = _PaySettingsService.GetPaySettings(request);
                 responce.flag = "1";
                 responce.message = "success";
 
@@ -42,7 +42,12 @@ namespace MicroApi.Controllers
             {
                 PaySettingsResponce responce = new PaySettingsResponce();
                 _PaySettingsService.SavePaySettings(settings);
-                responce.data = _PaySettingsService.GetPaySettings();
+                PaySettingslist request = new PaySettingslist
+                {
+                    COMPANY_ID = settings.COMPANY_ID
+                };
+
+                responce.data = _PaySettingsService.GetPaySettings(request);
                 responce.flag = "1";
                 responce.message = "Saved successfully";
                 return Ok(responce);
