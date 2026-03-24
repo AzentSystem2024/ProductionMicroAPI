@@ -249,114 +249,178 @@ namespace MicroApi.DataLayer.Service
                 //        .ToList();
                 //}
 
-                string appType = GetAppType();
+                //string appType = GetAppType();
 
+                //if (reader.NextResult())
+                //{
+                //    if (appType == "MARK")
+                //    {
+                //        // MARK → NORMAL MENU
+                //        var menuGroups = new Dictionary<int, MenuGroup>();
+
+                //        while (reader.Read())
+                //        {
+                //            int groupId = Convert.ToInt32(reader["MenuGroupID"]);
+
+                //            if (!menuGroups.TryGetValue(groupId, out var group))
+                //            {
+                //                group = new MenuGroup
+                //                {
+                //                    MenuGroupID = groupId,
+                //                    Text = reader["Text"]?.ToString(),
+                //                    Icon = reader["Icon"]?.ToString(),
+                //                    MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
+                //                };
+
+                //                menuGroups[groupId] = group;
+                //            }
+
+                //            group.Menus.Add(new Menu
+                //            {
+                //                MenuID = Convert.ToInt32(reader["MenuID"]),
+                //                MenuName = reader["MenuName"]?.ToString(),
+                //                MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
+                //                Selected = Convert.ToBoolean(reader["Selected"]),
+                //                CanAdd = Convert.ToBoolean(reader["CanAdd"]),
+                //                CanView = Convert.ToBoolean(reader["CanView"]),
+                //                CanEdit = Convert.ToBoolean(reader["CanEdit"]),
+                //                CanApprove = Convert.ToBoolean(reader["CanApprove"]),
+                //                CanDelete = Convert.ToBoolean(reader["CanDelete"]),
+                //                CanPrint = Convert.ToBoolean(reader["CanPrint"]),
+                //                Path = reader["Path"]?.ToString()
+                //            });
+                //        }
+
+                //        response.MenuGroups = menuGroups.Values.ToList();
+                //    }
+                //    else
+                //    {
+                //        // OTHER APPLICATIONS → 3 LEVEL MENU
+                //        var menuGroups = new Dictionary<int, MenuGroup>();
+                //        var allMenus = new List<Menu>();
+
+                //        while (reader.Read())
+                //        {
+                //            int groupId = Convert.ToInt32(reader["MenuGroupID"]);
+
+                //            if (!menuGroups.TryGetValue(groupId, out var group))
+                //            {
+                //                group = new MenuGroup
+                //                {
+                //                    MenuGroupID = groupId,
+                //                    Text = reader["Text"]?.ToString(),
+                //                    Icon = reader["Icon"]?.ToString(),
+                //                    MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
+                //                };
+
+                //                menuGroups[groupId] = group;
+                //            }
+
+                //            var menu = new Menu
+                //            {
+                //                MenuID = Convert.ToInt32(reader["MenuID"]),
+                //                MenuName = reader["MenuName"]?.ToString(),
+                //                MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
+                //                Path = reader["Path"]?.ToString(),
+                //                ParentMenuID = reader["ParentMenuID"] == DBNull.Value
+                //                                    ? null
+                //                                    : Convert.ToInt32(reader["ParentMenuID"]),
+                //                Selected = Convert.ToBoolean(reader["Selected"]),
+                //                CanAdd = Convert.ToBoolean(reader["CanAdd"]),
+                //                CanView = Convert.ToBoolean(reader["CanView"]),
+                //                CanEdit = Convert.ToBoolean(reader["CanEdit"]),
+                //                CanApprove = Convert.ToBoolean(reader["CanApprove"]),
+                //                CanDelete = Convert.ToBoolean(reader["CanDelete"]),
+                //                CanPrint = Convert.ToBoolean(reader["CanPrint"])
+                //            };
+
+                //            allMenus.Add(menu);
+                //            group.Menus.Add(menu);
+                //        }
+
+                //        foreach (var group in menuGroups.Values)
+                //        {
+                //            var parents = group.Menus.Where(m => m.ParentMenuID == null).ToList();
+
+                //            foreach (var parent in parents)
+                //            {
+                //                parent.Children = group.Menus
+                //                    .Where(m => m.ParentMenuID == parent.MenuID)
+                //                    .OrderBy(m => m.MenuOrder)
+                //                    .ToList();
+                //            }
+
+                //            group.Menus = parents.OrderBy(m => m.MenuOrder).ToList();
+                //        }
+
+                //        response.MenuGroups = menuGroups.Values
+                //            .OrderBy(g => g.MenuGroupOrder)
+                //            .ToList();
+                //    }
+                //}
                 if (reader.NextResult())
                 {
-                    if (appType == "MARK")
+                    var menuGroups = new Dictionary<int, MenuGroup>();
+                    var allMenus = new List<Menu>();
+
+                    while (reader.Read())
                     {
-                        // MARK → NORMAL MENU
-                        var menuGroups = new Dictionary<int, MenuGroup>();
+                        int groupId = Convert.ToInt32(reader["MenuGroupID"]);
 
-                        while (reader.Read())
+                        if (!menuGroups.TryGetValue(groupId, out var group))
                         {
-                            int groupId = Convert.ToInt32(reader["MenuGroupID"]);
-
-                            if (!menuGroups.TryGetValue(groupId, out var group))
+                            group = new MenuGroup
                             {
-                                group = new MenuGroup
-                                {
-                                    MenuGroupID = groupId,
-                                    Text = reader["Text"]?.ToString(),
-                                    Icon = reader["Icon"]?.ToString(),
-                                    MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
-                                };
-
-                                menuGroups[groupId] = group;
-                            }
-
-                            group.Menus.Add(new Menu
-                            {
-                                MenuID = Convert.ToInt32(reader["MenuID"]),
-                                MenuName = reader["MenuName"]?.ToString(),
-                                MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
-                                Selected = Convert.ToBoolean(reader["Selected"]),
-                                CanAdd = Convert.ToBoolean(reader["CanAdd"]),
-                                CanView = Convert.ToBoolean(reader["CanView"]),
-                                CanEdit = Convert.ToBoolean(reader["CanEdit"]),
-                                CanApprove = Convert.ToBoolean(reader["CanApprove"]),
-                                CanDelete = Convert.ToBoolean(reader["CanDelete"]),
-                                CanPrint = Convert.ToBoolean(reader["CanPrint"]),
-                                Path = reader["Path"]?.ToString()
-                            });
-                        }
-
-                        response.MenuGroups = menuGroups.Values.ToList();
-                    }
-                    else
-                    {
-                        // OTHER APPLICATIONS → 3 LEVEL MENU
-                        var menuGroups = new Dictionary<int, MenuGroup>();
-                        var allMenus = new List<Menu>();
-
-                        while (reader.Read())
-                        {
-                            int groupId = Convert.ToInt32(reader["MenuGroupID"]);
-
-                            if (!menuGroups.TryGetValue(groupId, out var group))
-                            {
-                                group = new MenuGroup
-                                {
-                                    MenuGroupID = groupId,
-                                    Text = reader["Text"]?.ToString(),
-                                    Icon = reader["Icon"]?.ToString(),
-                                    MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
-                                };
-
-                                menuGroups[groupId] = group;
-                            }
-
-                            var menu = new Menu
-                            {
-                                MenuID = Convert.ToInt32(reader["MenuID"]),
-                                MenuName = reader["MenuName"]?.ToString(),
-                                MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
-                                Path = reader["Path"]?.ToString(),
-                                ParentMenuID = reader["ParentMenuID"] == DBNull.Value
-                                                    ? null
-                                                    : Convert.ToInt32(reader["ParentMenuID"]),
-                                Selected = Convert.ToBoolean(reader["Selected"]),
-                                CanAdd = Convert.ToBoolean(reader["CanAdd"]),
-                                CanView = Convert.ToBoolean(reader["CanView"]),
-                                CanEdit = Convert.ToBoolean(reader["CanEdit"]),
-                                CanApprove = Convert.ToBoolean(reader["CanApprove"]),
-                                CanDelete = Convert.ToBoolean(reader["CanDelete"]),
-                                CanPrint = Convert.ToBoolean(reader["CanPrint"])
+                                MenuGroupID = groupId,
+                                Text = reader["Text"]?.ToString(),
+                                Icon = reader["Icon"]?.ToString(),
+                                MenuGroupOrder = Convert.ToDecimal(reader["MenuGroupOrder"])
                             };
 
-                            allMenus.Add(menu);
-                            group.Menus.Add(menu);
+                            menuGroups[groupId] = group;
                         }
 
-                        foreach (var group in menuGroups.Values)
+                        var menu = new Menu
                         {
-                            var parents = group.Menus.Where(m => m.ParentMenuID == null).ToList();
+                            MenuID = Convert.ToInt32(reader["MenuID"]),
+                            MenuName = reader["MenuName"]?.ToString(),
+                            MenuOrder = Convert.ToDecimal(reader["MenuOrder"]),
+                            Path = reader["Path"]?.ToString(),
+                            ParentMenuID = reader["ParentMenuID"] == DBNull.Value
+                                                ? null
+                                                : Convert.ToInt32(reader["ParentMenuID"]),
+                            Selected = Convert.ToBoolean(reader["Selected"]),
+                            CanAdd = Convert.ToBoolean(reader["CanAdd"]),
+                            CanView = Convert.ToBoolean(reader["CanView"]),
+                            CanEdit = Convert.ToBoolean(reader["CanEdit"]),
+                            CanApprove = Convert.ToBoolean(reader["CanApprove"]),
+                            CanDelete = Convert.ToBoolean(reader["CanDelete"]),
+                            CanPrint = Convert.ToBoolean(reader["CanPrint"])
+                        };
 
-                            foreach (var parent in parents)
-                            {
-                                parent.Children = group.Menus
-                                    .Where(m => m.ParentMenuID == parent.MenuID)
-                                    .OrderBy(m => m.MenuOrder)
-                                    .ToList();
-                            }
+                        allMenus.Add(menu);
+                        group.Menus.Add(menu);
+                    }
 
-                            group.Menus = parents.OrderBy(m => m.MenuOrder).ToList();
+                    // 🔹 Build hierarchy (Parent → Child)
+                    foreach (var group in menuGroups.Values)
+                    {
+                        var parents = group.Menus.Where(m => m.ParentMenuID == null).ToList();
+
+                        foreach (var parent in parents)
+                        {
+                            parent.Children = group.Menus
+                                .Where(m => m.ParentMenuID == parent.MenuID)
+                                .OrderBy(m => m.MenuOrder)
+                                .ToList();
                         }
 
-                        response.MenuGroups = menuGroups.Values
-                            .OrderBy(g => g.MenuGroupOrder)
-                            .ToList();
+                        group.Menus = parents.OrderBy(m => m.MenuOrder).ToList();
                     }
+
+                    response.MenuGroups = menuGroups.Values
+                        .OrderBy(g => g.MenuGroupOrder)
+                        .ToList();
                 }
 
                 // ---------- RESULT 6 : FINANCIAL YEAR ----------

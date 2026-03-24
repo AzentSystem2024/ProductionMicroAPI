@@ -20,12 +20,12 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("list")]
-        public TimeSheetLogListResponseData LogList()
+        public TimeSheetLogListResponseData LogList(TimeSheetRequestlist request)
         {
             TimeSheetLogListResponseData loglist = new TimeSheetLogListResponseData();
             try
             {
-                loglist = _timeSheetService.GetAllTimeSheet();
+                loglist = _timeSheetService.GetAllTimeSheet(request);
             }
             catch (Exception ex)
             {
