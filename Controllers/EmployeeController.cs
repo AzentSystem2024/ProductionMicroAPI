@@ -10,7 +10,6 @@ using System.Globalization;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase

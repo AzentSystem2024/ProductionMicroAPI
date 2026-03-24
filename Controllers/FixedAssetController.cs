@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+  
     [ApiController]
     [Route("api/[controller]")]
     public class FixedAssetController : ControllerBase

@@ -4,6 +4,8 @@
     {
         public int ID { get; set; }
         public int COMPANY_ID { get; set; }
+        public int DEPT_ID { get; set; }
+        public int SUB_DEPT_ID { get; set; }
         public string CODE { get; set; }
         public string? DESCRIPTION { get; set; }
         public int? ASSET_TYPE_ID { get; set; }
@@ -22,6 +24,9 @@
     {
         public int ID { get; set; }
         public string CODE { get; set; }
+        public int DEPT_ID { get; set; }
+        public int SUB_DEPT_ID { get; set; }
+        public string LOCATION { get; set; } 
         public string DESCRIPTION { get; set; }
         public string ASSET_TYPE { get; set; }
         //public int ASSET_LEDGER_ID { get; set; }
@@ -41,6 +46,8 @@
     {
         public int ID { get; set; }
         public int COMPANY_ID { get; set; }
+        public int DEPT_ID { get; set; }
+        public int SUB_DEPT_ID { get; set; }
         public string CODE { get; set; }
         public string DESCRIPTION { get; set; }
         public int ASSET_TYPE_ID { get; set; }

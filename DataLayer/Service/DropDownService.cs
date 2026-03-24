@@ -23,6 +23,7 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.Parameters.AddWithValue("@NAME", input.NAME);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", (object)input.COMPANY_ID ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@DEPT_ID", (object)input.DEPT_ID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAGE_NUMBER", input.PAGE_NUMBER);
                 cmd.Parameters.AddWithValue("@PAGE_SIZE", input.PAGE_SIZE);
 
