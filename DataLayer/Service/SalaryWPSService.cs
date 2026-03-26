@@ -23,7 +23,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                    cmd.Parameters.AddWithValue("@DEPARTMENT_ID", request.DEPARTMENT_ID);
+                    cmd.Parameters.AddWithValue("@DEPARTMENT_ID",string.IsNullOrEmpty(request.DEPARTMENT_ID) ? "" : request.DEPARTMENT_ID);
+
                     cmd.Parameters.AddWithValue("@SAL_MONTH", request.SAL_MONTH);
 
                     using (SqlDataReader rdr = cmd.ExecuteReader())
