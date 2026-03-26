@@ -967,7 +967,8 @@ namespace MicroApi.DataLayer.Services
                                 DOC_TYPE_ID = reader["DOC_TYPE_ID"] != DBNull.Value? Convert.ToInt32(reader["DOC_TYPE_ID"]) : 0,
                                 USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt32(reader["USER_ID"]): 0,
                                 USER_NAME = reader["USER_NAME"] != DBNull.Value? reader["USER_NAME"].ToString() : string.Empty,
-                                TIME = reader["TIME"] != DBNull.Value  ? Convert.ToDateTime(reader["TIME"]) : DateTime.MinValue,
+                                //TIME = reader["TIME"] != DBNull.Value  ? Convert.ToDateTime(reader["TIME"]) : DateTime.MinValue,
+                                TIME = reader["TIME"] != DBNull.Value ? ((DateTimeOffset)reader["TIME"]).DateTime : DateTime.MinValue,
                                 DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : string.Empty,
                             };
 

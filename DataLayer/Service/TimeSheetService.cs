@@ -83,7 +83,7 @@ namespace MicroApi.DataLayer.Service
 
                     DataTable tbl1 = new DataTable();
 
-                    tbl1.Columns.Add("STORE_ID", typeof(Int32));
+                    tbl1.Columns.Add("DEPT_ID", typeof(Int32));
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
@@ -91,7 +91,10 @@ namespace MicroApi.DataLayer.Service
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
                         DataRow dRow1 = tbl1.NewRow();
-                        dRow1["STORE_ID"] = ur1.STORE_ID;
+                        //dRow1["STORE_ID"] = ur1.STORE_ID;
+                        dRow1["DEPT_ID"] = ur1.DEPT_ID == null
+                                        ? DBNull.Value
+                                        : (object)ur1.DEPT_ID;
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
@@ -164,10 +167,10 @@ namespace MicroApi.DataLayer.Service
                 }
 
 
-                string strSQL1 = " SELECT detail.STORE_ID, store.STORE_NAME , detail.DAYS, detail.NORMAL_OT, " +
+                string strSQL1 = " SELECT detail.DEPT_ID, dept.DEPT_NAME , detail.DAYS, detail.NORMAL_OT, " +
                     "detail.HOLIDAY_OT FROM TB_PAY_TS_DETAIL detail INNER JOIN TB_PAY_TS_HEADER header " +
                     " ON detail.TS_ID = header.ID  " +
-                    "LEFT JOIN TB_STORES store ON store.ID = detail.STORE_ID " +
+                    "LEFT JOIN  TB_DEPARTMENT dept ON dept.ID = detail.DEPT_ID " +
                     " WHERE detail.TS_ID = " + id;
 
                 DataTable tblDetail = ADO.GetDataTable(strSQL1, "TSDetail");
@@ -178,8 +181,8 @@ namespace MicroApi.DataLayer.Service
                     {
                         ts.TIMESHEET_DETAIL.Add(new saveTimeSheetDetailData
                         {
-                            STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                            STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
+                            DEPT_ID = ADO.ToInt32(dr["DEPT_ID"]),
+                            DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
                             DAYS = ADO.ToFloat(dr["DAYS"]),
                             NORMAL_OT = ADO.ToFloat(dr["NORMAL_OT"]),
                             HOLIDAY_OT = ADO.ToFloat(dr["HOLIDAY_OT"])
@@ -239,18 +242,28 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("EMP_ID", (object)ts.EMP_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("COMPANY_ID", (object)ts.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("TS_MONTH", string.IsNullOrEmpty(ts.TS_MONTH) ? DBNull.Value : DateTime.ParseExact(ts.TS_MONTH, "MMMM yyyy", CultureInfo.InvariantCulture));
-                    cmd.Parameters.AddWithValue("DAYS", (object)ts.DAYS ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("NORMAL_OT", (object)ts.NORMAL_OT ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("HOLIDAY_OT", (object)ts.HOLIDAY_OT ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("LEAVE_FROM", string.IsNullOrEmpty(ts.LEAVE_FROM) ? DBNull.Value : DateTime.ParseExact(ts.LEAVE_FROM, "dd-MM-yyyy", CultureInfo.InvariantCulture));
-                    cmd.Parameters.AddWithValue("LEAVE_TO", string.IsNullOrEmpty(ts.LEAVE_TO) ? DBNull.Value : DateTime.ParseExact(ts.LEAVE_TO, "dd-MM-yyyy", CultureInfo.InvariantCulture));
-                    cmd.Parameters.AddWithValue("WORKED_DAYS", (object)ts.WORKED_DAYS ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DAYS_DEDUCTED", (object)ts.DAYS_DEDUCTED ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("DAYS", ts.DAYS == null ? DBNull.Value : (object)Convert.ToInt32(ts.DAYS));
+                    cmd.Parameters.AddWithValue("NORMAL_OT", ts.NORMAL_OT == null ? DBNull.Value : (object)Convert.ToDecimal(ts.NORMAL_OT));
+                    cmd.Parameters.AddWithValue("HOLIDAY_OT", ts.HOLIDAY_OT == null ? DBNull.Value : (object)Convert.ToDecimal(ts.HOLIDAY_OT));
+                    //cmd.Parameters.AddWithValue("LEAVE_FROM", string.IsNullOrEmpty(ts.LEAVE_FROM) ? DBNull.Value : DateTime.ParseExact(ts.LEAVE_FROM, "dd-MM-yyyy", CultureInfo.InvariantCulture));
+                    //cmd.Parameters.AddWithValue("LEAVE_TO", string.IsNullOrEmpty(ts.LEAVE_TO) ? DBNull.Value : DateTime.ParseExact(ts.LEAVE_TO, "dd-MM-yyyy", CultureInfo.InvariantCulture));
+                    cmd.Parameters.AddWithValue("LEAVE_FROM",
+                                     string.IsNullOrWhiteSpace(ts.LEAVE_FROM)
+                                     ? DBNull.Value
+                                     : (object)Convert.ToDateTime(ts.LEAVE_FROM.Trim()));
+
+                    cmd.Parameters.AddWithValue("LEAVE_TO",
+                        string.IsNullOrWhiteSpace(ts.LEAVE_TO)
+                        ? DBNull.Value
+                        : (object)Convert.ToDateTime(ts.LEAVE_TO.Trim()));
+                    cmd.Parameters.AddWithValue("WORKED_DAYS", ts.WORKED_DAYS == null ? DBNull.Value : (object)Convert.ToInt32(ts.WORKED_DAYS));
+                    cmd.Parameters.AddWithValue("DAYS_DEDUCTED", ts.DAYS_DEDUCTED == null ? DBNull.Value : (object)Convert.ToInt32(ts.DAYS_DEDUCTED));
                     cmd.Parameters.AddWithValue("REMARKS", (object)ts.REMARKS ?? DBNull.Value);
+
 
                     DataTable tbl1 = new DataTable();
 
-                    tbl1.Columns.Add("STORE_ID", typeof(Int32));
+                    tbl1.Columns.Add("DEPT_ID", typeof(Int32));
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
@@ -258,7 +271,10 @@ namespace MicroApi.DataLayer.Service
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
                         DataRow dRow1 = tbl1.NewRow();
-                        dRow1["STORE_ID"] = ur1.STORE_ID;
+                        //dRow1["STORE_ID"] = ur1.STORE_ID;
+                        dRow1["DEPT_ID"] = ur1.DEPT_ID == null
+                                        ? DBNull.Value
+                                        : (object)ur1.DEPT_ID;
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
@@ -293,6 +309,7 @@ namespace MicroApi.DataLayer.Service
                 throw ex;
             }
         }
+        
 
         public saveTimeSheetResponseData DeleteTimeSheet(int id)
         {
@@ -350,7 +367,7 @@ namespace MicroApi.DataLayer.Service
 
                     DataTable tbl1 = new DataTable();
 
-                    tbl1.Columns.Add("STORE_ID", typeof(Int32));
+                    tbl1.Columns.Add("DEPT_ID", typeof(Int32));
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
@@ -358,7 +375,7 @@ namespace MicroApi.DataLayer.Service
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
                         DataRow dRow1 = tbl1.NewRow();
-                        dRow1["STORE_ID"] = ur1.STORE_ID;
+                        dRow1["DEPT_ID"] = ur1.DEPT_ID;
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
@@ -424,7 +441,7 @@ namespace MicroApi.DataLayer.Service
 
                     DataTable tbl1 = new DataTable();
 
-                    tbl1.Columns.Add("STORE_ID", typeof(Int32));
+                    tbl1.Columns.Add("DEPT_ID", typeof(Int32));
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
@@ -432,7 +449,7 @@ namespace MicroApi.DataLayer.Service
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
                         DataRow dRow1 = tbl1.NewRow();
-                        dRow1["STORE_ID"] = ur1.STORE_ID;
+                        dRow1["DEPT_ID"] = ur1.DEPT_ID;
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
@@ -550,6 +567,34 @@ namespace MicroApi.DataLayer.Service
                         STATUS = reader["STATUS"].ToString(),
                         SALARY_ID = reader["SALARY_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALARY_ID"]) : (int?)null,
                         //AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : (decimal?)null
+                    });
+                }
+            }
+
+            response.flag = "1";
+            response.message = "Success";
+            return response;
+        }
+        public EmployeeVacationListResponseData GetEmployeeVacation(EmployeeVacationRequest request)
+        {
+            EmployeeVacationListResponseData response = new EmployeeVacationListResponseData();
+            response.data = new List<EmployeeVacationResponse>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SP_GET_EMPLOYEE_VACCATION", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                // Add parameters if needed, e.g.:
+                // cmd.Parameters.AddWithValue("@EmployeeId", request.EmployeeId);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    response.data.Add(new EmployeeVacationResponse
+                    {
+                        LEAVE_FROM = reader["LEAVE_FROM"] != DBNull.Value ? Convert.ToDateTime(reader["LEAVE_FROM"]) : (DateTime?)null,
+                        LEAVE_TO = reader["LEAVE_TO"] != DBNull.Value ? Convert.ToDateTime(reader["LEAVE_TO"]) : (DateTime?)null,
+                        TOTAL_DAYS = Convert.ToInt32(reader["TOTAL_DAYS"])
                     });
                 }
             }

@@ -32,11 +32,11 @@ namespace MicroApi.Models
 
     public class saveTimeSheetData
     {
-        public object? ID { get; set; }
+        public int? ID { get; set; }
         public int? COMPANY_ID { get; set; }
-        public object? EMP_CODE { get; set; }
-        public object? EMP_NAME { get; set; }
-        public object? STATUS { get; set; }
+        public string? EMP_CODE { get; set; }
+        public string? EMP_NAME { get; set; }
+        public string? STATUS { get; set; }
         public string TS_MONTH { get; set; }
         public int EMP_ID { get; set; }
         public float DAYS { get; set; }
@@ -53,10 +53,10 @@ namespace MicroApi.Models
 
     public class saveTimeSheetDetailData
     {
-        public object? ID { get; set; }
-        public object? TS_ID { get; set; }
-        public int? STORE_ID { get; set; }
-        public object? STORE_NAME { get;set; }
+        public int? ID { get; set; }
+        public int? TS_ID { get; set; }
+        public int? DEPT_ID { get; set; }
+        public string? DEPT_NAME { get;set; }
         public float? DAYS { get; set; }
         public float? NORMAL_OT { get; set; }
         public float? HOLIDAY_OT { get; set; }
@@ -64,9 +64,9 @@ namespace MicroApi.Models
 
     public class saveTimeSheetSalaryData
     {
-        public object? ID { get; set; }
-        public object? TS_ID { get; set; }
-        public object? SALARY_HEAD_NAME { get; set; }
+        public int? ID { get; set; }
+        public int? TS_ID { get; set; }
+        public string? SALARY_HEAD_NAME { get; set; }
         public int? SALARY_HEAD_ID { get; set; }
         public float? AMOUNT { get; set; }
     }
@@ -111,6 +111,24 @@ namespace MicroApi.Models
     {
         public int COMPANY_ID { get; set; }
         public string MONTH { get; set; }
+    }
+    public class EmployeeVacationRequest
+    {
+        // public int EmployeeId { get; set; }
+        // public int CompanyId { get; set; }
+    }
+    public class EmployeeVacationResponse
+    {
+        public DateTime? LEAVE_FROM { get; set; }
+        public DateTime? LEAVE_TO { get; set; }
+        public int TOTAL_DAYS { get; set; }
+    }
+
+    public class EmployeeVacationListResponseData
+    {   
+        public string flag { get; set; }
+        public string message { get; set; }
+        public List<EmployeeVacationResponse> data { get; set; }
     }
 
 }

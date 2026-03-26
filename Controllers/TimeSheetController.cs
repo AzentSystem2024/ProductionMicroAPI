@@ -1,12 +1,13 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
+using MicroApi.DataLayer.Services;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-   // [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TimeSheetController : ControllerBase
@@ -206,6 +207,19 @@ namespace MicroApi.Controllers
                 return BadRequest(new { flag = "0", message = ex.Message });
             }
         }
-
+        [HttpPost]
+        [Route("employee-vacation")]
+        public IActionResult GetEmployeeVacation([FromBody] EmployeeVacationRequest request)
+        {
+            try
+            {
+                var response = _timeSheetService.GetEmployeeVacation(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { flag = "0", message = ex.Message });
+            }
+        }
     }
 }

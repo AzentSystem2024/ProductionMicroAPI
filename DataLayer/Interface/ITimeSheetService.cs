@@ -14,6 +14,8 @@ namespace MicroApi.DataLayer.Interface
         TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(TimeSheetRequest request);
         TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request);
         TimeSheetHeaderListResponseData GetPayrollPendingTimeSheets(TimeSheetRequest request);
+        EmployeeVacationListResponseData GetEmployeeVacation(EmployeeVacationRequest request);
+
 
     }
 }

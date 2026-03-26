@@ -13,7 +13,7 @@ using System.Configuration;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("api/[controller]")] 
     public class UserRoleController : ControllerBase
