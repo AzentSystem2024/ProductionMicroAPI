@@ -19,7 +19,7 @@
     public class SalaryWPSRequest
     {
         public int COMPANY_ID { get; set; }
-        public int DEPARTMENT_ID { get; set; }
+        public string? DEPARTMENT_ID { get; set; }
         public DateTime SAL_MONTH { get; set; }
     }
 

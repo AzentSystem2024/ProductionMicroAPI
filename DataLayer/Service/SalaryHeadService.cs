@@ -112,6 +112,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", salaryHead.IS_INACTIVE.ToString() ?? "");
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", salaryHead.AC_HEAD_ID?.ToString() ?? "");
                         cmd.Parameters.AddWithValue("@COMPANY_ID", salaryHead.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@IS_TIMESHEET_ENTRY", salaryHead.IS_TIMESHEET_ENTRY);
                         //cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", salaryHead.PERCENT_HEAD_ID?.ToString() ?? "");
                         string percentHeadIds = salaryHead.PERCENT_HEAD_ID != null
                              ? string.Join(",", salaryHead.PERCENT_HEAD_ID)
@@ -177,6 +178,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@AC_HEAD_ID", GetDbValue(salaryHead.AC_HEAD_ID));
                         cmd.Parameters.AddWithValue("@HEAD_ORDER", GetDbValue(salaryHead.HEAD_ORDER));
                         cmd.Parameters.AddWithValue("@COMPANY_ID", GetDbValue(salaryHead.COMPANY_ID));
+                        cmd.Parameters.AddWithValue("@IS_TIMESHEET_ENTRY", salaryHead.IS_TIMESHEET_ENTRY);
                         //cmd.Parameters.AddWithValue("@PERCENT_HEAD_ID", GetDbValue(salaryHead.PERCENT_HEAD_ID));
                         string percentHeadIds = salaryHead.PERCENT_HEAD_ID != null
                             ? string.Join(",", salaryHead.PERCENT_HEAD_ID)
@@ -237,6 +239,7 @@ namespace MicroApi.DataLayer.Service
                                 salaryHead.IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["IS_INACTIVE"]) : false;
                                 salaryHead.AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : (int?)null;
                                 salaryHead.HEAD_ORDER = dr["HEAD_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_ORDER"]) : (int?)null;
+                                salaryHead.IS_TIMESHEET_ENTRY = dr["IS_TIMESHEET_ENTRY"] != DBNull.Value ? Convert.ToBoolean(dr["IS_TIMESHEET_ENTRY"]) : (bool?)null;
 
                                 // ✅ Correct parsing of comma-separated PERCENT_HEAD_ID
                                 if (dr["PERCENT_HEAD_ID"] != DBNull.Value)

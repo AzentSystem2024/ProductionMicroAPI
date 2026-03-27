@@ -22,7 +22,7 @@
         public int? AC_HEAD_ID { get; set; }
         //public int? PERCENT_HEAD_ID { get; set; }
         public List<int>? PERCENT_HEAD_ID { get; set; }
-
+        public bool? IS_TIMESHEET_ENTRY { get; set; }
 
     }
     public class SalaryHeadUpdate
@@ -47,6 +47,7 @@
         public int? AC_HEAD_ID { get; set; }
         //public int? PERCENT_HEAD_ID { get; set; }
         public List<int>? PERCENT_HEAD_ID { get; set; }
+        public bool? IS_TIMESHEET_ENTRY { get; set; }
 
     }
     public class SalaryHeadResponse
