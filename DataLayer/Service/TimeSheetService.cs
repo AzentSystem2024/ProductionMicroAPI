@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net.Mail;
+using System.Text.Json;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -521,15 +522,18 @@ namespace MicroApi.DataLayer.Service
         public TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request)
         {
             TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
-           // response.data = new List<TimeSheetHeader>();
+            // response.data = new List<TimeSheetHeader>();
+            //string ids = string.Join(",", request.IDs);
 
             using (SqlConnection connection = ADO.GetConnection())
            
             {
-                SqlCommand cmd = new SqlCommand("SP_TIMESHEET_HEADER", connection);
+                SqlCommand cmd = new SqlCommand("SP_TB_TIMESHEET", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@ACTION", 2);
+                cmd.Parameters.AddWithValue("@ACTION", 6);
+                //cmd.Parameters.AddWithValue("@IDS", ids);
                 cmd.Parameters.AddWithValue("@IDs", string.Join(",", request.IDs));
+
 
                 cmd.ExecuteNonQuery();
             }
