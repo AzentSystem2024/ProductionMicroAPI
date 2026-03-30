@@ -100,26 +100,26 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = @"
-SELECT 
-    adv.*, 
-    salheader.HEAD_NAME, 
-    emp.EMP_NAME, 
-    trans.NARRATION AS REMARKS, 
-    stat.STATUS_DESC AS STATUS,
-    trans.CHEQUE_NO,
-    trans.CHEQUE_DATE,
-    trans.PAY_HEAD_ID,
-    trans.PAY_TYPE_ID
-FROM TB_PAY_ADVANCE adv
-LEFT JOIN TB_AC_TRANS_HEADER trans 
-    ON adv.TRANS_ID = trans.TRANS_ID
-LEFT JOIN TB_STATUS stat 
-    ON trans.TRANS_STATUS = stat.ID
-INNER JOIN TB_EMPLOYEE emp 
-    ON emp.ID = adv.EMP_ID
-INNER JOIN TB_SALARY_HEAD salheader 
-    ON salheader.ID = adv.ADV_HEAD_ID
-WHERE trans.TRANS_ID = " + id; // ✅ changed adv.TRANS_ID → trans.TRANS_ID
+                            SELECT 
+                            adv.*, 
+                            salheader.HEAD_NAME, 
+                            emp.EMP_NAME, 
+                            trans.NARRATION AS REMARKS, 
+                            stat.STATUS_DESC AS STATUS,
+                            trans.CHEQUE_NO,
+                            trans.CHEQUE_DATE,
+                            trans.PAY_HEAD_ID,
+                            trans.PAY_TYPE_ID
+                            FROM TB_PAY_ADVANCE adv
+                            LEFT JOIN TB_AC_TRANS_HEADER trans 
+                            ON adv.TRANS_ID = trans.TRANS_ID
+                            LEFT JOIN TB_STATUS stat 
+                            ON trans.TRANS_STATUS = stat.ID
+                            INNER JOIN TB_EMPLOYEE emp 
+                            ON emp.ID = adv.EMP_ID
+                            INNER JOIN TB_SALARY_HEAD salheader 
+                            ON salheader.ID = adv.ADV_HEAD_ID
+                            WHERE trans.TRANS_ID = " + id; // ✅ changed adv.TRANS_ID → trans.TRANS_ID
 
                 DataTable tblHeader = ADO.GetDataTable(strSQL, "PayAdvance");
 
