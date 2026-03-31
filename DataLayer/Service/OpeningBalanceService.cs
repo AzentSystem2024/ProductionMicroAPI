@@ -97,6 +97,7 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("TRANS_ID", typeof(int));
                     dt.Columns.Add("COMPANY_ID", typeof(int));
                     dt.Columns.Add("STORE_ID", typeof(int));
+                    dt.Columns.Add("BRANCH_ID", typeof(int));
                     dt.Columns.Add("SL_NO", typeof(int));
                     dt.Columns.Add("HEAD_ID", typeof(int));
                     dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -119,6 +120,7 @@ namespace MicroApi.DataLayer.Service
                             0,
                             item.STORE_ID,
                             slno++,
+                            item.BRANCH_ID ?? 0,
                             item.HEAD_ID,
                             item.DR_AMOUNT,
                             item.CR_AMOUNT,
@@ -249,6 +251,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("TRANS_ID", typeof(int));
                         dt.Columns.Add("COMPANY_ID", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(int));
+                        dt.Columns.Add("BRANCH_ID", typeof(int));
                         dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -269,6 +272,7 @@ namespace MicroApi.DataLayer.Service
                                 request.COMPANY_ID,
                                 item.STORE_ID,
                                 slno++,
+                                item.BRANCH_ID ?? 0,
                                 item.HEAD_ID,
                                 item.DR_AMOUNT,
                                 item.CR_AMOUNT,

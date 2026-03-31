@@ -8,5 +8,6 @@ namespace MicroApi.DataLayer.Interface
         FixedAssetReportResponse GetFixedAssetReport(FixedAssetReportRequest request);
         DepreciationReportResponse GetDepreciationReport(DepreciationReportRequest request);
         PrepaymentReportResponse GetPrepaymentReport(PrepaymentReportRequest request);
+        ProfitLossBranchResponse GetProfitLossBranch(ProfitLossBranchRequest request);
     }
 }

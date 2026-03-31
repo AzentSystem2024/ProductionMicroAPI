@@ -10,6 +10,7 @@
         public int? OPP_HEAD_ID { get; set; }
         public string? OPP_HEAD_NAME { get; set; }
         public int? STORE_ID { get; set; }
+        public int? BRANCH_ID { get; set; }
         public string? REMARKS { get; set; }
         public int? JOB_ID { get; set; }
         public int? CREATED_STORE_ID { get; set; }

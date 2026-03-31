@@ -5,7 +5,7 @@
         public int? ID { get; set; }
 
         public int? COMPANY_ID { get; set; }
-
+        public List<int> DEPT_IDS { get; set; }
         public string? CODE { get; set; }
 
         public string? STORE_NAME { get; set; }

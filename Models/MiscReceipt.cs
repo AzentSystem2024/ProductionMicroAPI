@@ -3,6 +3,7 @@
     public class MiscReceipt
     {
         public int? COMPANY_ID { get; set; }
+        public int? BRANCH_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? TRANS_TYPE { get; set; }
         public string? TRANS_DATE { get; set; }
@@ -21,6 +22,7 @@
     public class MiscReceiptDetail
     {
         public int? HEAD_ID { get; set; }
+        public int? BRANCH_ID { get; set; }
         public string? LEDGER_CODE { get; set; }
         public string? LEDGER_NAME { get; set; }
         public string? REMARKS { get; set; }
@@ -44,6 +46,7 @@
     {
         public int? TRANS_ID { get; set; }
         public int? COMPANY_ID { get; set; }
+        public int? BRANCH_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? TRANS_TYPE { get; set; }
         public string? TRANS_DATE { get; set; }
@@ -96,6 +99,7 @@
     public class MiscReceiptViewHeader
     {
         public int TRANS_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public string DOC_NO { get; set; }
         public string TRANS_DATE { get; set; }
         public string PARTY_NAME { get; set; }

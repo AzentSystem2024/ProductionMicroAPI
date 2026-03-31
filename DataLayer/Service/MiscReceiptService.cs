@@ -56,6 +56,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("COMPANY_ID", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(string));
                         dt.Columns.Add("SL_NO", typeof(int));
+                        dt.Columns.Add("BRANCH_ID", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("DR_AMOUNT", typeof(decimal));
                         dt.Columns.Add("CR_AMOUNT", typeof(decimal));
@@ -78,6 +79,7 @@ namespace MicroApi.DataLayer.Service
                                 model.COMPANY_ID ?? 0,
                                 DBNull.Value,
                                 slno++,
+                                detail.BRANCH_ID ?? 0,
                                 detail.HEAD_ID ?? 0,
                                 detail.DEBIT_AMOUNT ?? 0,
                                 detail.CREDIT_AMOUNT ?? 0,
@@ -180,6 +182,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("TRANS_ID", typeof(int));
                         dt.Columns.Add("COMPANY_ID", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(string));
+                        dt.Columns.Add("BRANCH_ID", typeof(int));
                         dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -203,6 +206,7 @@ namespace MicroApi.DataLayer.Service
                                 model.COMPANY_ID ?? 0,
                                 DBNull.Value,
                                 slno++,
+                                model.BRANCH_ID ?? 0,
                                 detail.HEAD_ID ?? 0,
                                 detail.DEBIT_AMOUNT ?? 0,
                                 detail.CREDIT_AMOUNT ?? 0,
@@ -370,6 +374,7 @@ namespace MicroApi.DataLayer.Service
                                     header = new MiscReceiptViewHeader
                                     {
                                         TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                        STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
                                         DOC_NO = reader["VOUCHER_NO"]?.ToString(),
                                         TRANS_DATE = reader["TRANS_DATE"]?.ToString(),
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
@@ -533,6 +538,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("TRANS_ID", typeof(int));
                         dt.Columns.Add("COMPANY_ID", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(string));
+                        dt.Columns.Add("BRANCH_ID", typeof(int));
                         dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -556,6 +562,7 @@ namespace MicroApi.DataLayer.Service
                                 model.COMPANY_ID ?? 0,
                                 DBNull.Value,
                                 slno++,
+                                model.BRANCH_ID ?? 0,
                                 detail.HEAD_ID ?? 0,
                                 detail.DEBIT_AMOUNT ?? 0,
                                 detail.CREDIT_AMOUNT ?? 0,

@@ -118,4 +118,33 @@
         public decimal TOTAL_ACCUR { get; set; }
         public decimal BALANCE_ACCUR { get; set; }
     }
+    public class ProfitLossBranchRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public int FIN_ID { get; set; }
+        public string DATE_FROM { get; set; }
+        public string DATE_TO { get; set; }
+        public string STORE_ID { get; set; } 
+    }
+    public class ProfitLossBranchResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<ProfitLossBranch> ProfitLossDetails { get; set; }
+    }
+    public class ProfitLossBranch
+    {
+        public int TYPE_ID { get; set; }
+        public string TYPE_NAME { get; set; }
+        public int GROUP_ID { get; set; }
+        public string GROUP_NAME { get; set; }
+        public int CATEGORY_ID { get; set; }
+        public string CATEGORY_NAME { get; set; }
+        public int HEAD_ID { get; set; }
+        public string HEAD_CODE { get; set; }
+        public string HEAD_NAME { get; set; }
+
+        // Dynamic store columns
+        public Dictionary<string, decimal?> StoreAmounts { get; set; }
+    }
 }

@@ -4,6 +4,7 @@
     {
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
+        public int? BRANCH_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? TRANS_TYPE { get; set; }
         public string? TRANS_DATE { get; set; } 
@@ -82,6 +83,7 @@
         public int? PAY_HEAD_ID { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
+        public int? BRANCH_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? CREATED_STORE_ID { get; set; }
         public int? RECEIPT_NO { get; set; }

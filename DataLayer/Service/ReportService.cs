@@ -197,6 +197,72 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public ProfitLossBranchResponse GetProfitLossBranch(ProfitLossBranchRequest request)
+        {
+            ProfitLossBranchResponse response = new ProfitLossBranchResponse
+            {
+                ProfitLossDetails = new List<ProfitLossBranch>()
+            };
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_PROFIT_LOSS_BRANCH", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var item = new ProfitLossBranch
+                            {
+                                TYPE_ID = Convert.ToInt32(reader["TYPE_ID"]),
+                                TYPE_NAME = reader["TYPE_NAME"]?.ToString(),
+                                GROUP_ID = Convert.ToInt32(reader["GROUP_ID"]),
+                                GROUP_NAME = reader["GROUP_NAME"]?.ToString(),
+                                CATEGORY_ID = Convert.ToInt32(reader["CATEGORY_ID"]),
+                                CATEGORY_NAME = reader["CATEGORY_NAME"]?.ToString(),
+                                HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
+                                HEAD_CODE = reader["HEAD_CODE"]?.ToString(),
+                                HEAD_NAME = reader["HEAD_NAME"]?.ToString(),
+                                StoreAmounts = new Dictionary<string, decimal?>()
+                            };
+
+                            // Handle dynamic columns (stores + TOTAL)
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+
+                                // Skip fixed columns
+                                if (!new[]
+                                {
+                            "TYPE_ID","TYPE_NAME","GROUP_ID","GROUP_NAME",
+                            "CATEGORY_ID","CATEGORY_NAME","HEAD_ID",
+                            "HEAD_CODE","HEAD_NAME"
+                        }.Contains(columnName))
+                                {
+                                    item.StoreAmounts[columnName] =
+                                        reader.IsDBNull(i) ? (decimal?)null : Convert.ToDecimal(reader.GetValue(i));
+                                }
+                            }
+
+                            response.ProfitLossDetails.Add(item);
+                        }
+                    }
+                }
+            }
+
+            response.Flag = (response.ProfitLossDetails.Count > 0) ? 1 : 0;
+            response.Message = response.Flag == 1 ? "Success" : "No records found";
+
+            return response;
+        }
     }
 }
 

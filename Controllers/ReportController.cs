@@ -83,6 +83,23 @@ namespace MicroApi.Controllers
 
             return response;
         }
+        [HttpPost("profitlossbranch")]
+        public ProfitLossBranchResponse GetProfitLossBranch(ProfitLossBranchRequest request)
+        {
+            var response = new ProfitLossBranchResponse();
+
+            try
+            {
+                response = _service.GetProfitLossBranch(request);
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
     }
 }
 

@@ -72,8 +72,11 @@ namespace MicroApi.DataLayer.Services
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "SP_TB_STORES";
 
+                    string deptIdsString = string.Join(",", stores.DEPT_IDS);
+
                     cmd.Parameters.AddWithValue("ACTION", 1);
                     cmd.Parameters.AddWithValue("ID", stores.ID);
+                    cmd.Parameters.AddWithValue("@DEPT_IDS", (object)deptIdsString ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("CODE", stores.CODE);
                     cmd.Parameters.AddWithValue("COMPANY_ID", stores.COMPANY_ID);
                     cmd.Parameters.AddWithValue("STORE_NAME", stores.STORE_NAME);
@@ -113,7 +116,7 @@ namespace MicroApi.DataLayer.Services
 
             try
             {
-                string strSQL = "SELECT TB_STORES.ID, TB_STORES.CODE, TB_STORES.STORE_NAME, TB_STORES.AC_HEAD_ID, TB_STORES.IS_ACTIVE, " +
+                string strSQL = "SELECT TB_STORES.ID, TB_STORES.CODE, TB_STORES.STORE_NAME,TB_STORES.DEPT_ID, TB_STORES.AC_HEAD_ID, TB_STORES.IS_ACTIVE, " +
                  "TB_STORES.IS_PRODUCTION, TB_STORES.IS_DEFAULT_STORE, TB_STORES.ADDRESS1, TB_STORES.ADDRESS2, TB_STORES.ADDRESS3, " +
                  "TB_STORES.CITY,TB_STORES.ZIP_CODE, TB_STORES.PHONE, TB_STORES.EMAIL, TB_STORES.STORE_NO, TB_STORES.VAT_REGNO, " +
                  "TB_STORES.VAT_REGNO, TB_STORES.IS_DELETED, TB_STORES.COMPANY_ID, TB_STORES.COUNTRY_ID, TB_STORES.GROUP_ID, TB_STORES.STATE_ID, " +
