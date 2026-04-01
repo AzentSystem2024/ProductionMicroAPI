@@ -135,6 +135,8 @@
     {
         public long? ID { get; set; }
         public int COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public int? DEPT_ID { get; set; }
         public int? GRN_DET_ID { get; set; }
         public int? ITEM_ID { get; set; }
         public int PURCH_ID { get; set; }
@@ -166,6 +168,7 @@
         public decimal? CGST { get; set; }
         public decimal? SGST { get; set; }
         public string? HSN_CODE { get; set; }
+
     }
     public class PurchResponce
     {

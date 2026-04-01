@@ -60,7 +60,7 @@ namespace MicroApi.DataLayer.Service
                         foreach (var item in model.MISC_DETAIL)
                         {
                             dt.Rows.Add( 0,
-                                slno++,0,
+                                slno++,item.STORE_ID,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
                                 item.AMOUNT,
@@ -139,7 +139,7 @@ namespace MicroApi.DataLayer.Service
                         // Add rows from your model
                         foreach (var item in model.MISC_DETAIL)
                         {
-                            dt.Rows.Add(0, slno++,0,
+                            dt.Rows.Add(0, slno++,item.STORE_ID,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
                                 item.AMOUNT,
@@ -328,6 +328,7 @@ namespace MicroApi.DataLayer.Service
                                     LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                     DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
 
                                 });
                             }
@@ -405,7 +406,7 @@ namespace MicroApi.DataLayer.Service
                         // Add rows from your model
                         foreach (var item in model.MISC_DETAIL)
                         {
-                            dt.Rows.Add(0, slno++, 0,
+                            dt.Rows.Add(0, slno++, item.STORE_ID,
                                 item.HEAD_ID,
                                 item.REMARKS ?? string.Empty,
                                 item.AMOUNT,

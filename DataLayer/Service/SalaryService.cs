@@ -72,14 +72,15 @@ namespace MicroApi.DataLayer.Service
                             {
                                 response.Data.Add(new SalaryLookup
                                 {
-                                    SALARY_BILL_NO = Convert.ToInt32(reader["SALARY_BILL_NO"]),
-                                    SAL_MONTH = Convert.ToDateTime(reader["SAL_MONTH"]),
-                                    EMPLOYEE_NO = Convert.ToString(reader["EMP_CODE"]),
-                                    EMPLOYEE_NAME = Convert.ToString(reader["EMP_NAME"]),
-                                    WORKED_DAYS = Convert.ToDecimal(reader["WORKED_DAYS"]),
-                                    NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
-                                    TIMESHEET_ID = Convert.ToInt32(reader["TS_ID"]),
-                                    STATUS = Convert.ToString(reader["STATUS"]),
+                                    SALARY_BILL_NO = reader["SALARY_BILL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SALARY_BILL_NO"]) : 0,
+                                    SAL_MONTH = reader["SAL_MONTH"] != DBNull.Value ? Convert.ToDateTime(reader["SAL_MONTH"]) : DateTime.MinValue,
+                                    EMPLOYEE_NO = reader["EMP_CODE"] != DBNull.Value ? Convert.ToString(reader["EMP_CODE"]) : string.Empty,
+                                    EMPLOYEE_NAME = reader["EMP_NAME"] != DBNull.Value ? Convert.ToString(reader["EMP_NAME"]) : string.Empty,
+                                    WORKED_DAYS = reader["WORKED_DAYS"] != DBNull.Value ? Convert.ToDecimal(reader["WORKED_DAYS"]) : 0,
+                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
+                                    TIMESHEET_ID = reader["TS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TS_ID"]) : 0,
+                                    STATUS = reader["STATUS"] != DBNull.Value ? Convert.ToString(reader["STATUS"]) : string.Empty,
+
                                 });
                             }
                         }

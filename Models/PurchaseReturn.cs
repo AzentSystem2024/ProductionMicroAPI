@@ -49,6 +49,7 @@
         public int? COMPANY_ID { get; set; }
         public string? COMPANY_NAME { get; set; }
         public int? STORE_ID { get; set; }
+        public int? DEPT_ID { get; set; }
         public string? STORE_NAME { get; set; }
 
         public string? BAR_CODE { get; set; }

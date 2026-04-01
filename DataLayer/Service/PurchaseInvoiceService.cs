@@ -321,6 +321,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         ID = dr["ID"] != DBNull.Value ? Convert.ToInt64(dr["ID"]) : 0,
                         COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
+                        STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : 0,
                         PURCH_ID = dr["PURCH_ID"] != DBNull.Value ? Convert.ToInt32(dr["PURCH_ID"]) : 0,
                         GRN_DET_ID = dr["GRN_DET_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["GRN_DET_ID"]) : null,
                         ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? (int?)Convert.ToInt32(dr["ITEM_ID"]) : null,
@@ -354,6 +355,7 @@ namespace MicroApi.DataLayer.Service
                         CGST = dr["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["CGST"]) : null,
                         SGST = dr["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr["SGST"]) : null,
                         HSN_CODE = ADO.ToString(dr["HSN_CODE"]),
+                        //DEPT_ID = dr["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(dr["DEPT_ID"]) : 0,
                     });
                 }
 
@@ -400,6 +402,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
                 tbl.Columns.Add("CGST", typeof(decimal));
                 tbl.Columns.Add("SGST", typeof(decimal));
+               // tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -408,6 +411,7 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["STORE_ID"] = (object?)ur.STORE_ID ?? DBNull.Value;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -428,7 +432,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
                         dRow["CGST"] = (object?)ur.CGST ?? DBNull.Value;
                         dRow["SGST"] = (object?)ur.SGST ?? DBNull.Value;
-
+                       //// dRow["DEPT_ID"] = (object?)ur.DEPT_ID ?? DBNull.Value;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -533,6 +537,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
                 tbl.Columns.Add("CGST", typeof(decimal));
                 tbl.Columns.Add("SGST", typeof(decimal));
+               // tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -541,6 +546,7 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["STORE_ID"] = (object?)ur.STORE_ID ?? DBNull.Value;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -561,7 +567,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
                         dRow["CGST"] = (object?)ur.CGST ?? DBNull.Value;
                         dRow["SGST"] = (object?)ur.SGST ?? DBNull.Value;
-
+                       // dRow["DEPT_ID"] = (object?)ur.DEPT_ID ?? DBNull.Value;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -663,6 +669,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
+                //tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -671,6 +678,7 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["STORE_ID"] = (object?)ur.STORE_ID ?? DBNull.Value;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -689,6 +697,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
+                       // dRow["DEPT_ID"] = (object?)ur.DEPT_ID ?? DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -792,6 +801,7 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
                 tbl.Columns.Add("CGST", typeof(decimal));
                 tbl.Columns.Add("SGST", typeof(decimal));
+               // tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -800,6 +810,7 @@ namespace MicroApi.DataLayer.Service
                         DataRow dRow = tbl.NewRow();
 
                         dRow["COMPANY_ID"] = ur.COMPANY_ID;
+                        dRow["STORE_ID"] = (object?)ur.STORE_ID ?? DBNull.Value;
                         dRow["GRN_DET_ID"] = (object?)ur.GRN_DET_ID ?? DBNull.Value;
                         dRow["ITEM_ID"] = (object?)ur.ITEM_ID ?? DBNull.Value;
                         dRow["PACKING"] = ur.PACKING ?? string.Empty;
@@ -820,6 +831,7 @@ namespace MicroApi.DataLayer.Service
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
                         dRow["CGST"] = (object?)ur.CGST ?? DBNull.Value;
                         dRow["SGST"] = (object?)ur.SGST ?? DBNull.Value;
+                       // dRow["DEPT_ID"] = (object?)ur.DEPT_ID ?? DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }

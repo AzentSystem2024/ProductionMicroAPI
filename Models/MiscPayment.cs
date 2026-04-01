@@ -45,6 +45,7 @@
     public class MiscPaymentDetail
     {
         public int? SL_NO { get; set; }
+        public int? STORE_ID { get; set; }
         public int? HEAD_ID { get; set; }
         public string? REMARKS { get; set; }
         public double? AMOUNT { get; set; }

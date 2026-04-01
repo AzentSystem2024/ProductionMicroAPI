@@ -156,7 +156,6 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@ID", fixedAsset.ID);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", (object)fixedAsset.COMPANY_ID ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", (object)fixedAsset.COMPANY_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@DEPT_ID", (object)fixedAsset.DEPT_ID ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@CODE", (object)fixedAsset.CODE ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@DESCRIPTION", (object)fixedAsset.DESCRIPTION ?? DBNull.Value);

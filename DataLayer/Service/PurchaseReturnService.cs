@@ -131,6 +131,7 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
                 tbl.Columns.Add("CGST", typeof(decimal));
                 tbl.Columns.Add("SGST", typeof(decimal));
+               // tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
                 {
@@ -157,6 +158,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
                         dRow["CGST"] = ur.CGST;
                         dRow["SGST"] = ur.SGST;
+                        //dRow["DEPT_ID"] = ur.DEPT_ID;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -232,6 +234,7 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
                 tbl.Columns.Add("CGST", typeof(decimal));
                 tbl.Columns.Add("SGST", typeof(decimal));
+               // tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
                 {
@@ -258,6 +261,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
                         dRow["CGST"] = ur.CGST;
                         dRow["SGST"] = ur.SGST;
+                        //dRow["DEPT_ID"] = ur.DEPT_ID;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -429,6 +433,7 @@ namespace MicroApi.DataLayer.Services
                         CGST = dr3["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["CGST"]) : null,
                         SGST = dr3["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["SGST"]) : null,
                         HSN_CODE = ADO.ToString(dr3["HSN_CODE"]),
+                       // DEPT_ID = ADO.ToInt32(dr3["DEPT_ID"])
 
                     });
                 }
@@ -552,6 +557,7 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("UOM_PURCH", typeof(string));
                 tbl.Columns.Add("UOM_MULTIPLE", typeof(int));
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
+                //tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
                 {
@@ -576,6 +582,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
+                       // dRow["DEPT_ID"] = ur.DEPT_ID;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -652,6 +659,7 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
                 tbl.Columns.Add("CGST", typeof(decimal));
                 tbl.Columns.Add("SGST", typeof(decimal));
+                //tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
                 {
@@ -678,6 +686,7 @@ namespace MicroApi.DataLayer.Services
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
                         dRow["CGST"] = ur.CGST;
                         dRow["SGST"] = ur.SGST;
+                       // dRow["DEPT_ID"] = ur.DEPT_ID;
                         tbl.Rows.Add(dRow);
                     }
                 }

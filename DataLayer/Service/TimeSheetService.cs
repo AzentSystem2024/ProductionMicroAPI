@@ -88,6 +88,7 @@ namespace MicroApi.DataLayer.Service
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
+                    tbl1.Columns.Add("STORE_ID", typeof(int));
 
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
@@ -99,6 +100,7 @@ namespace MicroApi.DataLayer.Service
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
+                        dRow1["STORE_ID"] = ur1.STORE_ID;
                         tbl1.Rows.Add(dRow1);
                     }
 
@@ -168,7 +170,7 @@ namespace MicroApi.DataLayer.Service
                 }
 
 
-                string strSQL1 = " SELECT detail.DEPT_ID, dept.DEPT_NAME , detail.DAYS, detail.NORMAL_OT, " +
+                string strSQL1 = " SELECT detail.DEPT_ID, dept.DEPT_NAME , detail.DAYS, detail.NORMAL_OT,detail.STORE_ID, " +
                     "detail.HOLIDAY_OT FROM TB_PAY_TS_DETAIL detail INNER JOIN TB_PAY_TS_HEADER header " +
                     " ON detail.TS_ID = header.ID  " +
                     "LEFT JOIN  TB_DEPARTMENT dept ON dept.ID = detail.DEPT_ID " +
@@ -186,7 +188,8 @@ namespace MicroApi.DataLayer.Service
                             DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
                             DAYS = ADO.ToFloat(dr["DAYS"]),
                             NORMAL_OT = ADO.ToFloat(dr["NORMAL_OT"]),
-                            HOLIDAY_OT = ADO.ToFloat(dr["HOLIDAY_OT"])
+                            HOLIDAY_OT = ADO.ToFloat(dr["HOLIDAY_OT"]),
+                            STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         });
                     }
  
@@ -268,6 +271,7 @@ namespace MicroApi.DataLayer.Service
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
+                    tbl1.Columns.Add("STORE_ID", typeof(int));
 
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
@@ -279,6 +283,7 @@ namespace MicroApi.DataLayer.Service
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
+                        dRow1["STORE_ID"] = ur1.STORE_ID;
                         tbl1.Rows.Add(dRow1);
                     }
 
@@ -372,6 +377,7 @@ namespace MicroApi.DataLayer.Service
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
+                    tbl1.Columns.Add("STORE_ID", typeof(int));
 
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
@@ -380,6 +386,7 @@ namespace MicroApi.DataLayer.Service
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
+                        dRow1["STORE_ID"] = ur1.STORE_ID;
                         tbl1.Rows.Add(dRow1);
                     }
 
@@ -446,6 +453,7 @@ namespace MicroApi.DataLayer.Service
                     tbl1.Columns.Add("DAYS", typeof(float));
                     tbl1.Columns.Add("NORMAL_OT", typeof(float));
                     tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
+                    tbl1.Columns.Add("STORE_ID", typeof(int));
 
                     foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
                     {
@@ -454,6 +462,7 @@ namespace MicroApi.DataLayer.Service
                         dRow1["DAYS"] = ur1.DAYS;
                         dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
                         dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
+                        dRow1["STORE_ID"] = ur1.STORE_ID;
                         tbl1.Rows.Add(dRow1);
                     }
 

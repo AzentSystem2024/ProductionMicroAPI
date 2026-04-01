@@ -60,6 +60,7 @@ namespace MicroApi.Models
         public float? DAYS { get; set; }
         public float? NORMAL_OT { get; set; }
         public float? HOLIDAY_OT { get; set; }
+        public int? STORE_ID { get; set; }
     }
 
     public class saveTimeSheetSalaryData
