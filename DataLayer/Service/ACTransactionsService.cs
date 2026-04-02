@@ -68,7 +68,6 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("TRANS_ID", typeof(int));
                         dt.Columns.Add("COMPANY_ID", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(string));
-                        dt.Columns.Add("BRANCH_ID", typeof(int));
                         dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -81,7 +80,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                         dt.Columns.Add("STORE_AUTO_ID", typeof(string));
                         dt.Columns.Add("DEPT_ID", typeof(int));
-
+                        dt.Columns.Add("BRANCH_ID", typeof(int));
                         int slno = 1;
 
                         foreach (var detail in model.DETAILS)
@@ -90,9 +89,8 @@ namespace MicroApi.DataLayer.Service
                                 DBNull.Value,                                
                                 0,                                           
                                 model.COMPANY_ID ?? 0,
-                                model.STORE_ID?.ToString() ?? "",
+                                detail.STORE_ID ?? 0,
                                 slno++,
-                                model.BRANCH_ID ?? 0,
                                 int.Parse(detail.LEDGER_CODE ?? "0"),
                                 detail.DEBIT_AMOUNT ?? 0,
                                 detail.CREDIT_AMOUNT ?? 0,
@@ -103,7 +101,7 @@ namespace MicroApi.DataLayer.Service
                                 detail.JOB_ID ?? 0,
                                 detail.CREATED_STORE_ID ?? string.Empty,
                                 detail.STORE_AUTO_ID?.ToString() ?? "",
-                                detail.DEPT_ID ?? 0
+                                detail.DEPT_ID ?? 0, detail.STORE_ID ?? 0
                             );
                         }
 
@@ -154,7 +152,6 @@ namespace MicroApi.DataLayer.Service
                             dt.Columns.Add("TRANS_ID", typeof(int));
                             dt.Columns.Add("COMPANY_ID", typeof(int));
                             dt.Columns.Add("STORE_ID", typeof(string));
-                            dt.Columns.Add("BRANCH_ID", typeof(int));
                             dt.Columns.Add("SL_NO", typeof(int));
                             dt.Columns.Add("HEAD_ID", typeof(int));
                             dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -167,6 +164,7 @@ namespace MicroApi.DataLayer.Service
                             dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                             dt.Columns.Add("STORE_AUTO_ID", typeof(string));
                             dt.Columns.Add("DEPT_ID", typeof(int));
+                            dt.Columns.Add("BRANCH_ID", typeof(int));
 
                             int slno = 1;
                             foreach (var detail in header.DETAILS)
@@ -175,9 +173,8 @@ namespace MicroApi.DataLayer.Service
                                     DBNull.Value,
                                      0,
                                     header.COMPANY_ID ?? 0,
-                                    header.STORE_ID?.ToString() ?? "",
+                                    detail.STORE_ID ?? 0,
                                     slno++,
-                                    header.BRANCH_ID ?? 0,
                                     int.Parse(detail.LEDGER_CODE ?? "0"), 
                                     detail.DEBIT_AMOUNT ?? 0,
                                     detail.CREDIT_AMOUNT ?? 0,
@@ -188,7 +185,7 @@ namespace MicroApi.DataLayer.Service
                                     detail.JOB_ID ?? 0,
                                     detail.CREATED_STORE_ID ?? string.Empty,
                                     detail.STORE_AUTO_ID ?? string.Empty,
-                                    detail.DEPT_ID ?? 0
+                                    detail.DEPT_ID ?? 0, detail.STORE_ID ?? 0
 
                                 );
                             }
@@ -441,6 +438,7 @@ namespace MicroApi.DataLayer.Service
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
                                     CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
                                     DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
                                 });
                             }
 
@@ -564,7 +562,6 @@ namespace MicroApi.DataLayer.Service
                             dt.Columns.Add("TRANS_ID", typeof(int));
                             dt.Columns.Add("COMPANY_ID", typeof(int));
                             dt.Columns.Add("STORE_ID", typeof(string));
-                            dt.Columns.Add("BRANCH_ID", typeof(int));
                             dt.Columns.Add("SL_NO", typeof(int));
                             dt.Columns.Add("HEAD_ID", typeof(int));
                             dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -577,6 +574,7 @@ namespace MicroApi.DataLayer.Service
                             dt.Columns.Add("CREATED_STORE_ID", typeof(string));
                             dt.Columns.Add("STORE_AUTO_ID", typeof(string));
                             dt.Columns.Add("DEPT_ID", typeof(int));
+                            dt.Columns.Add("BRANCH_ID", typeof(int));
 
                             int slno = 1;
                             foreach (var detail in header.DETAILS)
@@ -585,9 +583,8 @@ namespace MicroApi.DataLayer.Service
                                     DBNull.Value,
                                      0,
                                     header.COMPANY_ID ?? 0,
-                                    header.STORE_ID?.ToString() ?? "",
+                                     detail.STORE_ID ?? 0,
                                     slno++,
-                                    header.BRANCH_ID ?? 0,
                                     int.Parse(detail.LEDGER_CODE ?? "0"),
                                     detail.DEBIT_AMOUNT ?? 0,
                                     detail.CREDIT_AMOUNT ?? 0,
@@ -598,7 +595,7 @@ namespace MicroApi.DataLayer.Service
                                     detail.JOB_ID ?? 0,
                                     detail.CREATED_STORE_ID ?? string.Empty,
                                     detail.STORE_AUTO_ID ?? string.Empty,
-                                    detail.DEPT_ID ?? 0
+                                    detail.DEPT_ID ?? 0, detail.STORE_ID ?? 0
                                 );
                             }
 

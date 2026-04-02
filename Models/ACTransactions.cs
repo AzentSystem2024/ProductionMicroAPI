@@ -52,6 +52,7 @@
         public string? CREATED_STORE_ID { get; set; }
         public string? STORE_AUTO_ID { get; set; }
         public int? DEPT_ID { get; set; }
+        public int? STORE_ID { get; set; }
     }
 
     public class JournalUpdateHeader
@@ -110,6 +111,7 @@
         public string? CREATED_STORE_ID { get; set; }
         public string? STORE_AUTO_ID { get; set; }
         public int? DEPT_ID { get; set; }
+        public int? STORE_ID { get; set; }
     }
 
     public class JournalResponse
@@ -152,6 +154,7 @@
         public decimal? DEBIT_AMOUNT { get; set; }
         public decimal? CREDIT_AMOUNT { get; set; }
         public int? DEPT_ID { get; set; }
+        public int? STORE_ID { get; set; }
     }
     public class JournalViewHeader
     {

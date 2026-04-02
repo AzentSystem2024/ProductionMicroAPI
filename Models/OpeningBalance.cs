@@ -15,6 +15,7 @@
         public int? JOB_ID { get; set; }
         public int? CREATED_STORE_ID { get; set; }
         public int? STORE_AUTO_ID { get; set; }
+        public int DEPT_ID { get; set; }
     }
     public class AcOpeningBalanceInsertRequest
     {
@@ -33,6 +34,8 @@
         public decimal? CREDIT_AMOUNT { get; set; }
         public int? TRANS_ID { get; set; }
         public int? TRANS_STATUS { get; set; }
+        public int? STORE_ID { get; set; }
+        public int? DEPT_ID { get; set; }
     }
     public class OBRequest
     {

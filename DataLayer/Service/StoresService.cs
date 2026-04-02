@@ -27,31 +27,38 @@ namespace MicroApi.DataLayer.Services
                 {
                     storeList.Add(new Stores
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        STORE_NAME = Convert.ToString(dr["STORE_NAME"]),
-                        AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
-                        IS_ACTIVE = Convert.ToBoolean(dr["IS_ACTIVE"]),
-                        IS_PRODUCTION = Convert.ToBoolean(dr["IS_PRODUCTION"]),
-                        IS_DEFAULT_STORE = Convert.ToBoolean(dr["IS_DEFAULT_STORE"]),
-                        ADDRESS1 = Convert.ToString(dr["ADDRESS1"]),
-                        ADDRESS2 = Convert.ToString(dr["ADDRESS2"]),
-                        ADDRESS3 = Convert.ToString(dr["ADDRESS3"]),
-                        CITY = Convert.ToString(dr["CITY"]),
-                        STATE_ID = Convert.ToInt32(dr["STATE_ID"]),
-                        COUNTRY_ID = Convert.ToInt32(dr["COUNTRY_ID"]),
-                        ZIP_CODE = Convert.ToString(dr["ZIP_CODE"]),
-                        PHONE = Convert.ToString(dr["PHONE"]),
-                        EMAIL = Convert.ToString(dr["EMAIL"]),
-                        STORE_NO = Convert.ToString(dr["STORE_NO"]),
-                        VAT_REGNO = Convert.ToString(dr["VAT_REGNO"]),
-                        GROUP_ID = Convert.ToInt32(dr["GROUP_ID"]),
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
+                        CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : null,
+                        STORE_NAME = dr["STORE_NAME"] != DBNull.Value ? Convert.ToString(dr["STORE_NAME"]) : null,
+                        AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : 0,
 
-                        COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]),
-                        COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]),
-                        GROUP_NAME = Convert.ToString(dr["GROUP_NAME"]),
-                        STATE_NAME = Convert.ToString(dr["STATE_NAME"]),
+                        IS_ACTIVE = dr["IS_ACTIVE"] != DBNull.Value && Convert.ToBoolean(dr["IS_ACTIVE"]),
+                        IS_PRODUCTION = dr["IS_PRODUCTION"] != DBNull.Value && Convert.ToBoolean(dr["IS_PRODUCTION"]),
+                        IS_DEFAULT_STORE = dr["IS_DEFAULT_STORE"] != DBNull.Value && Convert.ToBoolean(dr["IS_DEFAULT_STORE"]),
+
+                        ADDRESS1 = dr["ADDRESS1"] != DBNull.Value ? Convert.ToString(dr["ADDRESS1"]) : null,
+                        ADDRESS2 = dr["ADDRESS2"] != DBNull.Value ? Convert.ToString(dr["ADDRESS2"]) : null,
+                        ADDRESS3 = dr["ADDRESS3"] != DBNull.Value ? Convert.ToString(dr["ADDRESS3"]) : null,
+                        CITY = dr["CITY"] != DBNull.Value ? Convert.ToString(dr["CITY"]) : null,
+
+                        STATE_ID = dr["STATE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STATE_ID"]) : 0,
+                        COUNTRY_ID = dr["COUNTRY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COUNTRY_ID"]) : 0,
+                        ZIP_CODE = dr["ZIP_CODE"] != DBNull.Value ? Convert.ToString(dr["ZIP_CODE"]) : null,
+
+                        PHONE = dr["PHONE"] != DBNull.Value ? Convert.ToString(dr["PHONE"]) : null,
+                        EMAIL = dr["EMAIL"] != DBNull.Value ? Convert.ToString(dr["EMAIL"]) : null,
+
+                        STORE_NO = dr["STORE_NO"] != DBNull.Value ? Convert.ToString(dr["STORE_NO"]) : null,
+                        VAT_REGNO = dr["VAT_REGNO"] != DBNull.Value ? Convert.ToString(dr["VAT_REGNO"]) : null,
+
+                        GROUP_ID = dr["GROUP_ID"] != DBNull.Value ? Convert.ToInt32(dr["GROUP_ID"]) : 0,
+
+                        COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : null,
+                        COUNTRY_NAME = dr["COUNTRY_NAME"] != DBNull.Value ? Convert.ToString(dr["COUNTRY_NAME"]) : null,
+                        GROUP_NAME = dr["GROUP_NAME"] != DBNull.Value ? Convert.ToString(dr["GROUP_NAME"]) : null,
+                        STATE_NAME = dr["STATE_NAME"] != DBNull.Value ? Convert.ToString(dr["STATE_NAME"]) : null
+
 
 
                     });
