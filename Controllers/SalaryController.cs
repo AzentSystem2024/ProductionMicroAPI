@@ -7,7 +7,7 @@ using static MicroApi.DataLayer.Service.SalaryService;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SalaryController : ControllerBase

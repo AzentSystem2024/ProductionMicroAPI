@@ -132,10 +132,10 @@ namespace MicroApi.DataLayer.Services
             {
                 string apType = GetAppType();
 
-                string strSQL = "SELECT ID,CODE,VAT_NAME,VAT_PERC,CGST_PERC,SGST_PERC,IGST_PERC," +
-                                "CGST_INPUT_HEAD_ID,CGST_OUTPUT_HEAD_ID," +
-                                "SGST_INPUT_HEAD_ID,SGST_OUTPUT_HEAD_ID," +
-                                "IGST_INPUT_HEAD_ID,IGST_OUTPUT_HEAD_ID," +
+                string strSQL = "SELECT ID,CODE,VAT_NAME,VAT_PERC,0 AS CGST_PERC,0 AS SGST_PERC,0 AS IGST_PERC," +
+                                "0 AS CGST_INPUT_HEAD_ID,0 AS CGST_OUTPUT_HEAD_ID," +
+                                "0 AS SGST_INPUT_HEAD_ID,0 AS SGST_OUTPUT_HEAD_ID," +
+                                "VAT_INPUT_HEAD_ID AS IGST_INPUT_HEAD_ID ,VAT_OUTPUT_HEAD_ID AS IGST_OUTPUT_HEAD_ID," +
                                 "IS_DELETED,COMPANY_ID " +
                                 "FROM TB_VAT_CLASS WHERE ID=" + id;
 

@@ -42,7 +42,9 @@ namespace MicroApi.DataLayer.Service
                                     DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : (decimal?)null,
                                     CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : (decimal?)null,
                                     TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : null,
-                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0
+                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
+                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : null,
+                                    DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : null
                                 });
                             }
 
@@ -97,7 +99,6 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("TRANS_ID", typeof(int));
                     dt.Columns.Add("COMPANY_ID", typeof(int));
                     dt.Columns.Add("STORE_ID", typeof(int));
-                    dt.Columns.Add("BRANCH_ID", typeof(int));
                     dt.Columns.Add("SL_NO", typeof(int));
                     dt.Columns.Add("HEAD_ID", typeof(int));
                     dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -110,6 +111,7 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("CREATED_STORE_ID", typeof(int));
                     dt.Columns.Add("STORE_AUTO_ID", typeof(int));
                     dt.Columns.Add("DEPT_ID", typeof(int));
+                    dt.Columns.Add("BRANCH_ID", typeof(int));
 
                     int slno = 1;
 
@@ -120,7 +122,6 @@ namespace MicroApi.DataLayer.Service
                             0,
                             item.STORE_ID,
                             slno++,
-                            item.BRANCH_ID ?? 0,
                             item.HEAD_ID,
                             item.DR_AMOUNT,
                             item.CR_AMOUNT,
@@ -130,7 +131,7 @@ namespace MicroApi.DataLayer.Service
                             item.BILL_NO ?? string.Empty,
                             item.JOB_ID,
                             item.CREATED_STORE_ID,
-                            item.STORE_AUTO_ID,0
+                            item.STORE_AUTO_ID,item.DEPT_ID,item.STORE_ID
                         );
                     }
 
@@ -251,7 +252,6 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("TRANS_ID", typeof(int));
                         dt.Columns.Add("COMPANY_ID", typeof(int));
                         dt.Columns.Add("STORE_ID", typeof(int));
-                        dt.Columns.Add("BRANCH_ID", typeof(int));
                         dt.Columns.Add("SL_NO", typeof(int));
                         dt.Columns.Add("HEAD_ID", typeof(int));
                         dt.Columns.Add("DR_AMOUNT", typeof(decimal));
@@ -264,15 +264,17 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("CREATED_STORE_ID", typeof(int));
                         dt.Columns.Add("STORE_AUTO_ID", typeof(int));
                         dt.Columns.Add("DEPT_ID", typeof(int));
+                        dt.Columns.Add("BRANCH_ID", typeof(int));
+
                         int slno = 1;
+
                         foreach (var item in request.Details)
                         {
                             dt.Rows.Add(DBNull.Value,
-                                request.TRANS_ID,
-                                request.COMPANY_ID,
+                                0,
+                                0,
                                 item.STORE_ID,
                                 slno++,
-                                item.BRANCH_ID ?? 0,
                                 item.HEAD_ID,
                                 item.DR_AMOUNT,
                                 item.CR_AMOUNT,
@@ -282,7 +284,7 @@ namespace MicroApi.DataLayer.Service
                                 item.BILL_NO ?? string.Empty,
                                 item.JOB_ID,
                                 item.CREATED_STORE_ID,
-                                item.STORE_AUTO_ID,0
+                                item.STORE_AUTO_ID, item.DEPT_ID, item.STORE_ID
                             );
                         }
 
