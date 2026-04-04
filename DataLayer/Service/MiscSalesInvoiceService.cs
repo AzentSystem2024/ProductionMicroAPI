@@ -44,6 +44,8 @@ namespace MicroApi.DataLayer.Service
                         CMD.Parameters.AddWithValue("@PATIENT_NAME", model.PATIENT_NAME);
 
                         CMD.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
+                        CMD.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
+                        CMD.Parameters.AddWithValue("@USER_ID", model.USER_ID);
 
 
                         // ⭐ Required new parameter
@@ -63,6 +65,7 @@ namespace MicroApi.DataLayer.Service
 
                         DT.Columns.Add("PATIENT_SHARE", typeof(decimal));
                         DT.Columns.Add("VAT_CODE", typeof(string));
+                        DT.Columns.Add("VAT_CLASS_ID", typeof(int));
                         DT.Columns.Add("VAT_PERC", typeof(decimal));
                         DT.Columns.Add("VAT_AMOUNT", typeof(decimal));
                         DT.Columns.Add("NET_AMOUNT", typeof(decimal));
@@ -80,6 +83,7 @@ namespace MicroApi.DataLayer.Service
                                 ITEM.GROSS_AMOUNT, 
                                 ITEM.PATIENT_SHARE,
                                 ITEM.VAT_CODE,
+                                ITEM.VAT_CLASS_ID,
                                 ITEM.VAT_PERC,
                                 ITEM.VAT_AMOUNT,
                                 ITEM.NET_AMOUNT
@@ -441,6 +445,7 @@ namespace MicroApi.DataLayer.Service
                                 response.data.Add(new MiscSalesInvoiceLookupData
                                 {
                                     ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
 
                                     // SALE_NO is string in DB → keep as string (IMPORTANT)
                                     DOC_NO = reader["SALE_NO"]?.ToString(),
@@ -576,6 +581,7 @@ namespace MicroApi.DataLayer.Service
                         TB_SALE_DETAIL.TAX_PERC,
                         TB_SALE_DETAIL.TAX_AMOUNT,
                         TB_SALE_DETAIL.TOTAL_AMOUNT,
+                        TB_SALE_DETAIL.VAT_CLASS_ID,
 	                    TB_ITEMS.DESCRIPTION AS ITEM_DESRIPTION
                     FROM TB_SALE_DETAIL
                     INNER JOIN TB_ITEMS ON 
@@ -605,6 +611,7 @@ namespace MicroApi.DataLayer.Service
                                     PATIENT_SHARE = reader["PATIENT_SHARE"] != DBNull.Value ? Convert.ToDecimal(reader["PATIENT_SHARE"]) : 0,
                                     VAT_CODE = reader["TAX_CODE"]?.ToString(),
                                     VAT_PERC = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
+                                    VAT_CLASS_ID = reader["VAT_CLASS_ID"] as int?,
                                     VAT_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
                                     NET_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0
                                 });
@@ -769,13 +776,13 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == System.Data.ConnectionState.Closed)
                         connection.Open();
 
-                    string procedureName = "SP_SALE_INVOICE";
+                    string procedureName = "SP_MISC_SALE_INVOICE";
 
                     using (var cmd = new SqlCommand(procedureName, connection))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 4);
-                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+                        cmd.Parameters.AddWithValue("@ID", id);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -856,7 +863,8 @@ namespace MicroApi.DataLayer.Service
                     SELECT 
                         TB_ITEMS.DESCRIPTION, 
                         TB_ITEMS.GST_PERC, 
-                        TB_VAT_CLASS.CODE
+                        TB_VAT_CLASS.CODE,
+	                    TB_VAT_CLASS.ID AS VAT_CLASS_ID
                     FROM TB_ITEMS
                     INNER JOIN TB_VAT_CLASS 
                         ON TB_VAT_CLASS.ID = TB_ITEMS.VAT_CLASS_ID
@@ -878,7 +886,10 @@ namespace MicroApi.DataLayer.Service
                                     VAT_PERC = reader["GST_PERC"] != DBNull.Value
                                                 ? Convert.ToDecimal(reader["GST_PERC"])
                                                 : 0,
-                                    VAT_CODE = reader["CODE"]?.ToString()
+                                    VAT_CODE = reader["CODE"]?.ToString(),
+                                    VAT_CLASS_ID = reader["VAT_CLASS_ID"] != DBNull.Value
+                                                    ? Convert.ToInt32(reader["VAT_CLASS_ID"])
+                                                    : 0
                                 });
                             }
                         }
