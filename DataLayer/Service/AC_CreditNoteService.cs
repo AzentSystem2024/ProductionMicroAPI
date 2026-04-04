@@ -90,7 +90,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("AMOUNT", typeof(double));
                         dt.Columns.Add("VAT_AMOUNT", typeof(double));
                         dt.Columns.Add("REMARKS", typeof(string));
-                        dt.Columns.Add("GST_PERC", typeof(float));
+                        dt.Columns.Add("GST_PERC", typeof(int));
                         dt.Columns.Add("HSN_CODE", typeof(string));
                         dt.Columns.Add("CGST", typeof(decimal));
                         dt.Columns.Add("SGST", typeof(decimal));
@@ -205,7 +205,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("AMOUNT", typeof(float));
                         dt.Columns.Add("VAT_AMOUNT", typeof(float));
                         dt.Columns.Add("REMARKS", typeof(string));
-                        dt.Columns.Add("GST_PERC", typeof(float));
+                        dt.Columns.Add("GST_PERC", typeof(int));
                         dt.Columns.Add("HSN_CODE", typeof(string));
                         dt.Columns.Add("CGST", typeof(decimal));
                         dt.Columns.Add("SGST", typeof(decimal));
@@ -397,7 +397,7 @@ namespace MicroApi.DataLayer.Service
                                     AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
                                     GST_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["VAT_AMOUNT"]) : 0,
                                     REMARKS = reader["REMARKS"]?.ToString(),
-                                    GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToSingle(reader["GST_PERC"]) : 0,
+                                    GST_PERC = reader["GST_PERC"] != DBNull.Value ? Convert.ToInt32(reader["GST_PERC"]) : 0,
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     LEDGER_CODE = reader["HEAD_CODE"]?.ToString(),
                                     LEDGER_NAME = reader["HEAD_NAME"]?.ToString(),
@@ -493,7 +493,7 @@ namespace MicroApi.DataLayer.Service
                         dt.Columns.Add("AMOUNT", typeof(float));
                         dt.Columns.Add("VAT_AMOUNT", typeof(float));
                         dt.Columns.Add("REMARKS", typeof(string));
-                        dt.Columns.Add("GST_PERC", typeof(float));
+                        dt.Columns.Add("GST_PERC", typeof(int));
                         dt.Columns.Add("HSN_CODE", typeof(string));
                         dt.Columns.Add("CGST", typeof(decimal));
                         dt.Columns.Add("SGST", typeof(decimal));
