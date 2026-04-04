@@ -90,7 +90,7 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
-        [Route("delete")]
+        [Route("delete/{id:int}")]
         public EmployeeListResponse Delete(int batchId)
         {
             EmployeeListResponse res = new EmployeeListResponse();
