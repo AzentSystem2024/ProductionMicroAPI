@@ -9,7 +9,7 @@
         public string DAMAN_NO { get; set; }
         public string BANK_AC_NO { get; set; }
         public float BASIC_SALARY { get; set; }
-        public DateTime TS_MONTH { get; set; }
+        public DateTime? TS_MONTH { get; set; }
         public float TOTAL_DAYS { get; set; }
         public float OT_HOURS { get; set; }
         public float LESS_HOURS { get; set; }
@@ -28,6 +28,7 @@
     {
         public DateTime Month { get; set; }
         public List<int> EmployeeIDs { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class PayslipReportResponse
     {
