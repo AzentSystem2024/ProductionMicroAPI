@@ -7,6 +7,7 @@ namespace MicroApi.Models
         public string ITEM_DESCRIPTION { get; set; }
         public string VAT_CODE { get; set; }
         public decimal VAT_PERC { get; set; }
+        public int VAT_CLASS_ID { get; set; }
     }
 
     public class getItemsResponse
@@ -42,6 +43,8 @@ namespace MicroApi.Models
         public string? PATIENT_NAME { get; set; }
         public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }  
+        public int? FIN_ID { get; set; }
+        public int? USER_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
         public int? TRANS_STATUS { get; set; }
         public List<MiscSalesInvoiceDetailData> DETAILS { get; set; }
@@ -60,6 +63,7 @@ namespace MicroApi.Models
         public decimal? GROSS_AMOUNT { get; set; }
         public decimal? PATIENT_SHARE { get; set; }
         public string? VAT_CODE { get; set; }
+        public int? VAT_CLASS_ID { get; set; }
         public decimal? VAT_PERC { get; set; }
         public decimal? VAT_AMOUNT { get; set; }
         public decimal? NET_AMOUNT { get; set; }
@@ -68,6 +72,7 @@ namespace MicroApi.Models
     public class MiscSalesInvoiceLookupData
     {
         public int ID { get; set; }
+        public int TRANS_ID { get; set; }
         public string DOC_NO { get; set; }
         public int TRANS_STATUS { get; set; }
         public DateTime SALE_DATE { get; set; }
