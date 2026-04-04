@@ -257,7 +257,7 @@
         public double AMOUNT { get; set; }
         public double GST_AMOUNT { get; set; }
         public string REMARKS { get; set; }
-        public float? GST_PERC { get; set; }
+        public int? GST_PERC { get; set; }
         public string? HSN_CODE { get; set; }
         public decimal? CGST { get; set; }
         public decimal? SGST { get; set; }
