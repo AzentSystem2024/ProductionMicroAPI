@@ -529,7 +529,7 @@ namespace MicroApi.DataLayer.Service
                     FROM TB_SALE_HEADER
                     INNER JOIN TB_AC_TRANS_HEADER ON 
                     TB_AC_TRANS_HEADER.TRANS_ID = TB_SALE_HEADER.TRANS_ID
-                    WHERE TB_SALE_HEADER.ID = @ID";
+                    WHERE TB_AC_TRANS_HEADER.TRANS_ID = @ID";
 
                         var param = cmd.CreateParameter();
                         param.ParameterName = "@ID";
@@ -586,7 +586,8 @@ namespace MicroApi.DataLayer.Service
                     FROM TB_SALE_DETAIL
                     INNER JOIN TB_ITEMS ON 
                     TB_ITEMS.ID = TB_SALE_DETAIL.ITEM_ID
-                    WHERE SALE_ID = @SALE_ID";
+                    INNER JOIN TB_SALE_HEADER ON TB_SALE_HEADER.ID = TB_SALE_DETAIL.SALE_ID
+                    WHERE TB_SALE_HEADER.TRANS_ID = @SALE_ID";
 
                         var param = cmd.CreateParameter();
                         param.ParameterName = "@SALE_ID";
