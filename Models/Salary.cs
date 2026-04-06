@@ -63,6 +63,7 @@
         public int HEAD_TYPE { get; set; }
         public decimal GROSS_AMOUNT { get; set; }    
         public decimal DEDUCTION_AMOUNT { get; set; }
+        public decimal OTHER_AMOUNT { get; set; }
     }
     public class SalaryItemUpdate
     {

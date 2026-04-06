@@ -142,7 +142,8 @@ namespace MicroApi.DataLayer.Service
                                     HEAD_NAME = reader["HEAD_NAME"].ToString(),
                                     HEAD_TYPE = Convert.ToInt32(reader["HEAD_TYPE"]),
                                     GROSS_AMOUNT = Convert.ToDecimal(reader["GROSS_AMOUNT"]),
-                                    DEDUCTION_AMOUNT = Convert.ToDecimal(reader["DEDUCTION_AMOUNT"])
+                                    DEDUCTION_AMOUNT = Convert.ToDecimal(reader["DEDUCTION_AMOUNT"]),
+                                    OTHER_AMOUNT = Convert.ToDecimal(reader["OTHER_AMOUNT"])
                                 };
 
                                 response.DATA.Add(head);

@@ -9,6 +9,8 @@
         public int COMPANY_ID { get; set; }
         public bool IS_ACTIVE { get; set; }
         public bool IS_DELETED { get; set; }
+        public int? COST_BUCKET_ID { get; set; }
+        public string? COST_BUCKET_NAME { get; set; }
     }
     public class DepartmentResponse
     {
