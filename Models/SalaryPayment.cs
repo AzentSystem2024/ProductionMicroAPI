@@ -79,6 +79,7 @@
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
         public int TRANS_STATUS { get; set; }
+        public string? EMP_NAME { get; set; }
 
     }
     public class SalaryPaymentListResponse
@@ -128,5 +129,7 @@
     public class SalaryPendingListRequest
     {
         public int COMPANY_ID { get; set; }
+        public string? DATE_FROM { get; set; }
+        public string? DATE_TO { get; set; }
     }
 }
