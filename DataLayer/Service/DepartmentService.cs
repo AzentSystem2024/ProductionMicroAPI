@@ -36,7 +36,8 @@ namespace MicroApi.DataLayer.Services
                         DEPT_NAME = Convert.IsDBNull(dr["DEPT_NAME"]) ? null : Convert.ToString(dr["DEPT_NAME"]),
                         COMPANY_NAME = Convert.IsDBNull(dr["COMPANY_NAME"]) ? null : Convert.ToString(dr["COMPANY_NAME"]),
                         COMPANY_ID = Convert.IsDBNull(dr["COMPANY_ID"]) ? 0 : Convert.ToInt32(dr["COMPANY_ID"]),
-                        IS_ACTIVE = Convert.IsDBNull(dr["IS_ACTIVE"]) ? true : Convert.ToBoolean(dr["IS_ACTIVE"])
+                        IS_ACTIVE = Convert.IsDBNull(dr["IS_ACTIVE"]) ? true : Convert.ToBoolean(dr["IS_ACTIVE"]),
+                        COST_BUCKET_NAME = dr["CostBucket"].ToString(),
                     });
                 }
 
@@ -64,6 +65,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("DEPT_NAME", (object)department.DEPT_NAME ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("COMPANY_ID", (object)department.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("IS_ACTIVE", (object)department.IS_ACTIVE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("COST_BUCKET_ID", department.COST_BUCKET_ID);
 
                     int departmentID = Convert.ToInt32(cmd.ExecuteScalar());
                     return departmentID;
@@ -82,8 +84,10 @@ namespace MicroApi.DataLayer.Services
 
             try
             {
-                string strSQL = "SELECT TB_DEPARTMENT.ID, TB_DEPARTMENT.CODE, TB_DEPARTMENT.DEPT_NAME, TB_DEPARTMENT.COMPANY_ID,TB_DEPARTMENT.IS_ACTIVE, TB_DEPARTMENT.IS_DELETED,TB_COMPANY_MASTER.COMPANY_NAME FROM TB_DEPARTMENT " +
-                    "INNER JOIN TB_COMPANY_MASTER ON TB_DEPARTMENT.COMPANY_ID=TB_COMPANY_MASTER.ID WHERE TB_DEPARTMENT.ID = " + id;
+                string strSQL = "SELECT TB_DEPARTMENT.ID, TB_DEPARTMENT.CODE, TB_DEPARTMENT.DEPT_NAME, TB_DEPARTMENT.COMPANY_ID,TB_DEPARTMENT.IS_ACTIVE, TB_DEPARTMENT.IS_DELETED,TB_COMPANY_MASTER.COMPANY_NAME,TB_COST_BUCKETS.ID AS COST_BUCKET_ID FROM TB_DEPARTMENT " +
+                    "INNER JOIN TB_COMPANY_MASTER ON TB_DEPARTMENT.COMPANY_ID=TB_COMPANY_MASTER.ID " +
+                    "LEFT JOIN TB_COST_BUCKETS ON TB_DEPARTMENT.COST_BUCKET_ID=TB_COST_BUCKETS.ID " +
+                    " WHERE TB_DEPARTMENT.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Department");
                 if (tbl.Rows.Count > 0)
@@ -97,6 +101,7 @@ namespace MicroApi.DataLayer.Services
                     department.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
                     department.IS_ACTIVE = Convert.ToBoolean(dr["IS_ACTIVE"]);
                     department.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
+                    department.COST_BUCKET_ID = Convert.ToInt32(dr["COST_BUCKET_ID"]);
                 }
             }
             catch (Exception ex)
