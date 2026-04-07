@@ -338,6 +338,68 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public PayrollViewResponse GetPayrollApprove(int id)
+        {
+            PayrollViewResponse response = null;
 
+            using (SqlConnection con = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_SALARY_LIST", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 5);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", id);
+
+                    //con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                if (response == null)
+                                {
+                                    response = new PayrollViewResponse
+                                    {
+                                        PAYDETAIL_ID = Convert.ToInt32(reader["PAYDETAIL_ID"]),
+                                        EMPLOYEE_ID = Convert.ToInt32(reader["EMP_ID"]),
+                                        EMPLOYEE_CODE = reader["EMP_CODE"].ToString(),
+                                        EMPLOYEE_NAME = reader["EMP_NAME"].ToString(),
+                                        MONTH = Convert.ToDateTime(reader["SAL_MONTH"]).ToString("dd-MM-yyyy"),
+                                        BASIC_SALARY = Convert.ToDecimal(reader["BASIC_PAY"]),
+                                        WORKED_DAYS = Convert.ToDecimal(reader["WORKED_DAYS"]),
+                                        OT_HOURS = Convert.ToDecimal(reader["NOT_HOURS"]),
+                                        LESS_HOURS = Convert.ToDecimal(reader["LESS_HOURS"]),
+                                        NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
+                                        STATUS = Convert.ToString(reader["STATUS"]),
+                                        DATA = new List<SalaryHeadData>()
+                                    };
+                                }
+
+                                SalaryHeadData head = new SalaryHeadData
+                                {
+                                    HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
+                                    HEAD_NAME = reader["HEAD_NAME"].ToString(),
+                                    HEAD_TYPE = Convert.ToInt32(reader["HEAD_TYPE"]),
+                                    GROSS_AMOUNT = Convert.ToDecimal(reader["GROSS_AMOUNT"]),
+                                    DEDUCTION_AMOUNT = Convert.ToDecimal(reader["DEDUCTION_AMOUNT"])
+                                };
+
+                                response.DATA.Add(head);
+                            }
+
+                            response.flag = 1;
+                            response.Message = "Success";
+                        }
+                    }
+                }
+            }
+
+            return response ?? new PayrollViewResponse
+            {
+                flag = 0,
+                Message = "No data found"
+            };
+        }
     }
 }

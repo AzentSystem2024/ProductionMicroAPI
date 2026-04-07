@@ -127,7 +127,24 @@ namespace MicroApi.Controllers
         }
 
 
+        [HttpPost]
+        [Route("select/{id:int}")]
+        public PayrollViewResponse GetPayrollApprove(int id)
+        {
+            PayrollViewResponse response = new PayrollViewResponse();
 
+            try
+            {
+                response = _SalaryService.GetPayrollApprove(id);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
 
     }
 }
