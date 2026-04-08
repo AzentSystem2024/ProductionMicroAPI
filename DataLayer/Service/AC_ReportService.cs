@@ -69,6 +69,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@HEAD_ID", request.HEAD_ID);
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
 
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
@@ -84,7 +85,9 @@ namespace MicroApi.DataLayer.Service
                                 PARTICULARS = rdr["PARTICULARS"].ToString(),
                                 DR_AMOUNT = Convert.ToDecimal(rdr["DR_AMOUNT"]),
                                 CR_AMOUNT = Convert.ToDecimal(rdr["CR_AMOUNT"]),
-                                BALANCE = rdr["BALANCE"].ToString()
+                                BALANCE = rdr["BALANCE"].ToString(),
+                                DEPT_NAME = rdr["DEPT_NAME"].ToString(),
+                                STORE_NAME = rdr["STORE_NAME"].ToString(),
                             });
                         }
                     }

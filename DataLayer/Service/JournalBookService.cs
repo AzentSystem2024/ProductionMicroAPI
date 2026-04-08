@@ -1,4 +1,5 @@
-﻿using MicroApi.DataLayer.Interface;
+﻿using Azure.Core;
+using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
 using System;
@@ -10,7 +11,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class JournalBookService : IJournalBookService
     {
-        public List<JournalBook> GetJournalBookData(int companyId, int finId, DateTime dateFrom, DateTime dateTo)
+        public List<JournalBook> GetJournalBookData(int companyId, int finId, DateTime dateFrom, DateTime dateTo, string STORE_ID)
         {
             List<JournalBook> journalBookList = new List<JournalBook>();
 
@@ -28,6 +29,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@FIN_ID", finId);
                         cmd.Parameters.AddWithValue("@DATE_FROM", dateFrom.Date);
                         cmd.Parameters.AddWithValue("@DATE_TO", dateTo.Date);
+                        cmd.Parameters.AddWithValue("@STORE_ID", STORE_ID ?? "");
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -43,7 +45,9 @@ namespace MicroApi.DataLayer.Service
                                     Particulars = reader["OPP_HEAD_NAME"] != DBNull.Value ? reader["OPP_HEAD_NAME"].ToString() : string.Empty,
                                     Remarks = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : string.Empty,
                                     DebitAmount = reader[7] != DBNull.Value ? Convert.ToDecimal(reader[7]) : 0, 
-                                    CreditAmount = reader[8] != DBNull.Value ? Convert.ToDecimal(reader[8]) : 0 
+                                    CreditAmount = reader[8] != DBNull.Value ? Convert.ToDecimal(reader[8]) : 0 ,
+                                    DEPT_NAME = reader["DEPT_NAME"] != DBNull.Value ? reader["DEPT_NAME"].ToString() : string.Empty,
+                                    STORE_NAME = reader["STORE_NAME"] != DBNull.Value ? reader["STORE_NAME"].ToString() : string.Empty,
                                 });
                             }
                         }

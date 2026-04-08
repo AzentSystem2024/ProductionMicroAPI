@@ -33,7 +33,7 @@ namespace MicroApi.Controllers
                     return BadRequest("Request body cannot be null.");
                 }
 
-                var journalBookData = _journalBookService.GetJournalBookData(request.CompanyId, request.FinId, dateFrom, dateTo);
+                var journalBookData = _journalBookService.GetJournalBookData(request.CompanyId, request.FinId, dateFrom, dateTo,request.STORE_ID);
                 return Ok(new { flag = 1, message = "Success", data = journalBookData });
             }
             catch (Exception ex)

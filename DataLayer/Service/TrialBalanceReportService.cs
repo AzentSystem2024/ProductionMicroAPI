@@ -47,7 +47,8 @@ namespace MicroApi.DataLayer.Service
                                     DuringThePeriodDebit = reader["TR_DR"] != DBNull.Value ? Convert.ToDecimal(reader["TR_DR"]) : 0,
                                     DuringThePeriodCredit = reader["TR_CR"] != DBNull.Value ? Convert.ToDecimal(reader["TR_CR"]) : 0,
                                     ClosingBalanceDebit = reader["CL_DR"] != DBNull.Value ? Convert.ToDecimal(reader["CL_DR"]) : 0,
-                                    ClosingBalanceCredit = reader["CL_CR"] != DBNull.Value ? Convert.ToDecimal(reader["CL_CR"]) : 0
+                                    ClosingBalanceCredit = reader["CL_CR"] != DBNull.Value ? Convert.ToDecimal(reader["CL_CR"]) : 0,
+                                    STORE_NAME = reader["STORE_NAME"] != DBNull.Value ? reader["STORE_NAME"].ToString() : string.Empty
                                 });
                             }
                         }

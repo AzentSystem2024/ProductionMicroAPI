@@ -7,6 +7,7 @@
         public int HEAD_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
+        public string? STORE_ID { get; set; }
     }
     public class LedgerStatementItem
     {
@@ -19,6 +20,8 @@
         public decimal DR_AMOUNT { get; set; }
         public decimal CR_AMOUNT { get; set; }
         public string BALANCE { get; set; }
+        public string? DEPT_NAME { get; set; }
+        public string? STORE_NAME { get; set; }
     }
 
     public class LedgerStatementResponse
@@ -134,6 +137,7 @@
         public int HEAD_ID { get; set; }
         public string PARTICULARS { get; set; }
         public decimal AMOUNT { get; set; }
+        
     }
 
     public class BalanceSheetResponse

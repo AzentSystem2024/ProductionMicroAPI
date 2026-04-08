@@ -11,6 +11,8 @@
         public string Remarks { get; set; }
         public decimal DebitAmount { get; set; }
         public decimal CreditAmount { get; set; }
+        public string? DEPT_NAME { get; set; }
+        public string? STORE_NAME { get; set; }
     }
     public class JournalBookRequest
     {
@@ -18,5 +20,6 @@
         public int FinId { get; set; }
         public string DateFrom { get; set; }
         public string DateTo { get; set; }
+        public string? STORE_ID { get; set; }
     }
 }

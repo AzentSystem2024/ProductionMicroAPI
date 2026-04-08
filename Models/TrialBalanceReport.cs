@@ -15,6 +15,7 @@
         public decimal DuringThePeriodCredit { get; set; }
         public decimal ClosingBalanceDebit { get; set; }
         public decimal ClosingBalanceCredit { get; set; }
+        public string? STORE_NAME { get; set; }
     }
     public class ReportRequest
     {
