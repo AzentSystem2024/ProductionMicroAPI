@@ -312,6 +312,7 @@ namespace MicroApi.DataLayer.Service
                                 TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TOTAL_AMOUNT"]) : 0,
                                 ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? Convert.ToString(reader["ITEM_CODE"]) : null,
                                 ITEM_DESCRIPTION = reader["ITEM_DESCRIPTION"] != DBNull.Value ? Convert.ToString(reader["ITEM_DESCRIPTION"]) : null,
+                                QTN_DETAIL_ID = reader["QTN_DETAIL_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_DETAIL_ID"]) : 0,
                             };
 
                             response.Data.Details.Add(detail);
