@@ -6,6 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         public List<PO> GetPendingPo(poinput input);
         public GRNResponse GetPoList(PODetailsInput input);
+        public GRNResponse GetPoPendingItems(PendingPODetailsInput input);
         public List<GRN> GetGRNList(GRNListRequest request);
         public Int32 Insert(GRN company);
         public Int32 Update(GRN company);

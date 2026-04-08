@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class GRNController : ControllerBase
@@ -71,6 +71,37 @@ namespace MicroApi.Controllers
 
 
                 return res; // Return the error response
+            }
+        }
+        [HttpPost]
+        [Route("pendingpolist")]
+        public GRNResponse GetPoPendingItems(PendingPODetailsInput input)
+        {
+            GRNResponse res = new GRNResponse();
+
+            try
+            {
+
+
+
+                var result = _grnService.GetPoPendingItems(input);
+
+
+                res.Flag = 1;
+                res.Message = "Success";
+                res.Podetails = result.Podetails;
+                res.LandedCosts = result.LandedCosts;
+
+                return res; 
+            }
+            catch (Exception ex)
+            {
+
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message; 
+
+
+                return res; 
             }
         }
 

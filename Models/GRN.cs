@@ -146,7 +146,7 @@
         public float SUPP_PRICE { get; set; }
         public int ITEM_ID { get; set; }
         public int PO_DETAIL_ID { get; set; }
-
+        public float PENDING_QTY { get; set; }
     }
     public class LandedCosts
     {
@@ -161,6 +161,10 @@
     {
         public int PO_ID { get; set; }
         public int COMPANY_ID { get; set; }
+    }
+    public class PendingPODetailsInput
+    {
+        public int GRN_ID { get; set; }
     }
     public class GRNListRequest
     {

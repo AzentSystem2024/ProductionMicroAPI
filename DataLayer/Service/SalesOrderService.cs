@@ -46,6 +46,7 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("TAX_PERCENT", typeof(float));
                         tvp.Columns.Add("TAX_AMOUNT", typeof(float));
                         tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
+                        tvp.Columns.Add("QTN_DETAIL_ID", typeof(int));
 
 
 
@@ -68,7 +69,8 @@ namespace MicroApi.DataLayer.Service
                              detail.AMOUNT ?? (object)DBNull.Value,
                              detail.TAX_PERCENT ?? (object)DBNull.Value,
                              detail.TAX_AMOUNT ?? (object)DBNull.Value,
-                             detail.TOTAL_AMOUNT ?? (object)DBNull.Value
+                             detail.TOTAL_AMOUNT ?? (object)DBNull.Value,
+                             detail.QTN_DETAIL_ID ?? (object)DBNull.Value
                          );
 
                         }
@@ -145,6 +147,7 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("TAX_PERCENT", typeof(float));
                         tvp.Columns.Add("TAX_AMOUNT", typeof(float));
                         tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
+                        tvp.Columns.Add("QTN_DETAIL_ID", typeof(int));
 
                         if (salesOrder.Details != null && salesOrder.Details.Any())
                         {
@@ -166,7 +169,8 @@ namespace MicroApi.DataLayer.Service
                              detail.AMOUNT ?? (object)DBNull.Value,
                              detail.TAX_PERCENT ?? (object)DBNull.Value,
                              detail.TAX_AMOUNT ?? (object)DBNull.Value,
-                             detail.TOTAL_AMOUNT ?? (object)DBNull.Value
+                             detail.TOTAL_AMOUNT ?? (object)DBNull.Value,
+                             detail.QTN_DETAIL_ID ?? (object)DBNull.Value
                                 );
                             }
                         }
@@ -404,6 +408,7 @@ namespace MicroApi.DataLayer.Service
                                     ARTICLE_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                     QTN_ID = reader["QTN_ID"] != DBNull.Value ? Convert.ToInt32(reader["QTN_ID"]) : (int?)null,
+                                    QTN_DETAIL_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
                                     SALESMAN_ID = reader["SALESMAN_ID"] != DBNull.Value ? Convert.ToInt32(reader["SALESMAN_ID"]) : (int?)null,
                                     ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
                                     UOM = reader["UOM"] != DBNull.Value ? Convert.ToString(reader["UOM"]) : null,
@@ -831,6 +836,7 @@ namespace MicroApi.DataLayer.Service
                         tvp.Columns.Add("TAX_PERCENT", typeof(float));
                         tvp.Columns.Add("TAX_AMOUNT", typeof(float));
                         tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
+                        tvp.Columns.Add("QTN_DETAIL_ID", typeof(int));
 
                         if (request.Details != null && request.Details.Any())
                         {
@@ -852,7 +858,8 @@ namespace MicroApi.DataLayer.Service
                                 detail.AMOUNT ?? (object)DBNull.Value,
                                 detail.TAX_PERCENT ?? (object)DBNull.Value,
                                 detail.TAX_AMOUNT ?? (object)DBNull.Value,
-                                detail.TOTAL_AMOUNT ?? (object)DBNull.Value
+                                detail.TOTAL_AMOUNT ?? (object)DBNull.Value,
+                                detail.QTN_DETAIL_ID ?? (object)DBNull.Value
                              );
                             }
                         }

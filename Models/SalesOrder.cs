@@ -40,7 +40,7 @@
         public float? TAX_PERCENT { get; set; }
         public float? TAX_AMOUNT { get; set; }
         public float? TOTAL_AMOUNT { get; set; }
-
+        public int? QTN_DETAIL_ID { get; set; }
     }
     public class SalesOrderSelect
     {
@@ -138,6 +138,7 @@
         public int? PACKING_ID { get; set; }
         public string? DESCRIPTION { get; set; }
         public int? QTN_ID { get; set; }
+        public int? QTN_DETAIL_ID { get; set; }
         public int? SALESMAN_ID { get; set; }
         public int? ITEM_ID { get; set; }
         public string? UOM { get; set; }

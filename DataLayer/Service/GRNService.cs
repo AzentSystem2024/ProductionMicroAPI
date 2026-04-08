@@ -125,6 +125,56 @@ namespace MicroApi.DataLayer.Service
             connection.Close();
             return response;
         }
+        public GRNResponse GetPoPendingItems(PendingPODetailsInput input)
+        {
+            GRNResponse response = new GRNResponse();
+            List<PODetails> poDetailsList = new List<PODetails>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_GET_PO_PENDING_ITEMS", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@GRN_ID", input.GRN_ID);
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable tbl = new DataTable();
+                    da.Fill(tbl);
+
+                    foreach (DataRow dr in tbl.Rows)
+                    {
+                        PODetails poDetail = new PODetails
+                        {
+                            ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
+                            DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
+                            PRICE = ADO.ToDecimal(dr["PRICE"]),
+                            PO_QUANTITY = ADO.ToDecimal(dr["QUANTITY"]),
+                            UOM = ADO.ToString(dr["UOM"]),
+                            UOM_MULTIPLE = ADO.ToInt32(dr["UOM_MULTPLE"]),
+                            UOM_PURCH = ADO.ToString(dr["UOM_PURCH"]),
+                            GRN_QTY = ADO.ToFloat(dr["GRN_QTY"]),
+                            PENDING_QTY = ADO.ToFloat(dr["PENDING_QTY"]),
+                            CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
+                            CURRENCY_NAME = ADO.ToString(dr["CURRENCY_NAME"]),
+                            DISC_PERCENT = ADO.ToFloat(dr["DISC_PERCENT"]),
+                            CURRENCY_SYMBOL = ADO.ToString(dr["CURRENCY_SYMBOL"]),
+                            SUPP_PRICE = ADO.ToFloat(dr["SUPP_PRICE"]),
+                            ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
+                            PO_DETAIL_ID = ADO.ToInt32(dr["PO_DETAIL_ID"])
+                        };
+
+                        poDetailsList.Add(poDetail);
+                    }
+
+                    response.Flag = 1;
+                    response.Message = "Success";
+                    response.Podetails = poDetailsList;
+                }
+            }
+
+            return response;
+        }
+
         public Int32 Insert(GRN grnHeader)
         {
             SqlConnection connection = ADO.GetConnection();
