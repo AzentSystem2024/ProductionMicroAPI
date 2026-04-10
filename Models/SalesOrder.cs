@@ -87,7 +87,7 @@
         public float? TOTAL_AMOUNT { get; set; }
         public string? ITEM_CODE { get; set; }
         public string? ITEM_DESCRIPTION { get; set; }
-
+        public int? QTN_DETAIL_ID { get; set; }
     }
 
 
