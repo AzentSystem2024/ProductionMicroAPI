@@ -129,6 +129,7 @@
         public bool ENABLE_MATRIX_CODE { get; set; }
         public string? QTN_SUBJECT { get; set; }
         public bool? SELLING_PRICE_INCL_VAT { get; set; }
+        public bool? IS_HQ_APP { get; set; }
         //public string? HSN_CODE { get; set; }
         //public float? GST_PERC { get; set; }
     }

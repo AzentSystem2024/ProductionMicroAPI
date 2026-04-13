@@ -311,7 +311,7 @@ namespace MicroApi.DataLayer.Service
                                         PAY_TYPE_ID = reader["PAY_TYPE_ID"] as int? ?? 0,
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] as int? ?? 0,
                                         ADD_TIME = reader["ADD_TIME"] != DBNull.Value ? Convert.ToDateTime(reader["ADD_TIME"]).ToString("dd-MM-yyyy") : null,
-                                        NET_AMOUNT = reader["NET_AMOUNT"] as decimal? ?? 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NET_AMOUNT"]) : 0,
                                         CHEQUE_NO = reader["CHEQUE_NO"]?.ToString(),
                                         CHEQUE_DATE = reader["CHEQUE_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["CHEQUE_DATE"]).ToString("dd-MM-yyyy") : null,
                                         BANK_NAME = reader["BANK_NAME"]?.ToString(),
@@ -333,7 +333,7 @@ namespace MicroApi.DataLayer.Service
                                         PENDING_AMOUNT = reader["PENDING_AMOUNT"] as double? ?? 0,
                                         SUPP_INV_DATE = reader["SUPP_INV_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["SUPP_INV_DATE"]).ToString("dd-MM-yyyy") : null,
                                         SUPP_INV_NO = reader["SUPP_INV_NO"]?.ToString(),
-                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["NET_AMOUNT"]) : 0,
+                                        NET_AMOUNT = reader["PURCH_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["PURCH_AMOUNT"]) : 0,
                                     };
 
                                     detailList.Add(detail);
