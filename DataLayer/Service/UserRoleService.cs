@@ -74,7 +74,8 @@ namespace MicroApi.Services
                                 CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
                                 CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
                                 CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"]),
-                                CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"])
+                                CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
+                                HideCost = row["HideCost"] != DBNull.Value && Convert.ToBoolean(row["HideCost"])
                             });
                         }
 
@@ -166,6 +167,7 @@ namespace MicroApi.Services
                     tbl.Columns.Add("CanApprove", typeof(bool));
                     tbl.Columns.Add("CanDelete", typeof(bool));
                     tbl.Columns.Add("CanPrint", typeof(bool));
+                    tbl.Columns.Add("HideCost", typeof(bool));
 
                     if (userRole.usermenulist != null && userRole.usermenulist.Any())
                     {
@@ -179,6 +181,7 @@ namespace MicroApi.Services
                             dRow["CanApprove"] = ur.CanApprove;
                             dRow["CanDelete"] = ur.CanDelete;
                             dRow["CanPrint"] = ur.CanPrint;
+                            dRow["HideCost"] = ur.HideCost;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -220,6 +223,7 @@ namespace MicroApi.Services
                     tbl.Columns.Add("CanApprove", typeof(bool));
                     tbl.Columns.Add("CanDelete", typeof(bool));
                     tbl.Columns.Add("CanPrint", typeof(bool));
+                    tbl.Columns.Add("HideCost", typeof(bool));
 
                     if (userRole.usermenulist != null && userRole.usermenulist.Any())
                     {
@@ -233,6 +237,7 @@ namespace MicroApi.Services
                             dRow["CanApprove"] = ur.CanApprove;
                             dRow["CanDelete"] = ur.CanDelete;                           
                             dRow["CanPrint"] = ur.CanPrint;
+                            dRow["HideCost"] = ur.HideCost;
                             tbl.Rows.Add(dRow);
                         }
                     }
@@ -338,7 +343,8 @@ namespace MicroApi.Services
                                     CanEdit = row["CanEdit"] != DBNull.Value && Convert.ToBoolean(row["CanEdit"]),
                                     CanApprove = row["CanApprove"] != DBNull.Value && Convert.ToBoolean(row["CanApprove"]),
                                     CanDelete = row["CanDelete"] != DBNull.Value && Convert.ToBoolean(row["CanDelete"]),
-                                    CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"])
+                                    CanPrint = row["CanPrint"] != DBNull.Value && Convert.ToBoolean(row["CanPrint"]),
+                                    HideCost = row["HideCost"] != DBNull.Value && Convert.ToBoolean(row["HideCost"])
                                 });
                             }
                         }
