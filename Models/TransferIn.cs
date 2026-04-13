@@ -86,6 +86,11 @@
     }
     public class TransferInInput
     {
+        public int TRANSFER_ID { get; set; }
+        public int COMPANY_ID { get; set; }
+    }
+    public class TransferInReqInput
+    {
         public int STORE_ID { get; set; }
         public int COMPANY_ID { get; set; }
     }
@@ -103,6 +108,7 @@
         public int ISSUE_DETAIL_ID { get; set; }
         public decimal GST_PERC { get; set; }
         public string HSN_CODE { get; set; }
+        public int TRANSFER_ID { get; set; }
     }
     public class TransferInList
     {
@@ -172,5 +178,21 @@
         public int COMPANY_ID { get; set; }
         public string? DATE_FROM { get; set; }
         public string? DATE_TO { get; set; }
+    }
+    public class TransferOutHeaderList
+    {
+        public int TRANS_ID { get; set; }
+        public int TRANSFER_ID { get; set; }
+        public string TRANSFER_NO { get; set; }
+        public DateTime TRANSFER_DATE { get; set; }
+        public string SOURCE_STORE { get; set; }
+        public string DESTINATION_STORE { get; set; }
+    }
+    public class ListResponse1
+    {
+        public int Flag { get; set; }
+
+        public string message { get; set; }
+        public List<TransferOutHeaderList> data { get; set; }
     }
 }

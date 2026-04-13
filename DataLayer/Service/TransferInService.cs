@@ -8,7 +8,38 @@ namespace MicroApi.DataLayer.Service
 {
     public class TransferInService:ITransferInService
     {
-    public List<TransferInItemList> GetTransferInItems(TransferInInput input)
+        public List<TransferOutHeaderList> GetTransferOutHeaders(TransferInReqInput input)
+        {
+            List<TransferOutHeaderList> list = new List<TransferOutHeaderList>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ACTION", 6);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@ORIGIN_STORE_ID", input.STORE_ID); 
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                list = tbl.AsEnumerable().Select(dr => new TransferOutHeaderList
+                {
+                    TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
+                    TRANSFER_ID = ADO.ToInt32(dr["ID"]),
+                    TRANSFER_NO = ADO.ToString(dr["TRANSFER_NO"]),
+                    TRANSFER_DATE = Convert.ToDateTime(dr["TRANSFER_DATE"]),
+                    SOURCE_STORE = ADO.ToString(dr["SOURCE_STORE"]),
+                    DESTINATION_STORE = ADO.ToString(dr["DESTINATION_STORE"])
+                }).ToList();
+            }
+
+            return list;
+        }
+
+        public List<TransferInItemList> GetTransferInItems(TransferInInput input)
         {
             List<TransferInItemList> items = new List<TransferInItemList>();
 
@@ -17,10 +48,10 @@ namespace MicroApi.DataLayer.Service
                 SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_IN", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                // Parameters
+                // Correct Parameters
                 cmd.Parameters.AddWithValue("@ACTION", 3);
-                cmd.Parameters.AddWithValue("@STORE_ID", input.STORE_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@TRANSFER_ID", input.TRANSFER_ID); 
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
@@ -35,8 +66,10 @@ namespace MicroApi.DataLayer.Service
                     COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDouble(dr["UNIT_COST"]),
                     QUANTITY_AVAILABLE = dr["QTY_AVAILABLE"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_AVAILABLE"]),
                     QUANTITY_ISSUED = dr["QTY_ISSUED"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_ISSUED"]),
-                    ISSUE_ID = ADO.ToInt32(dr["ISSUE_ID"]),
+
+                    TRANSFER_ID = ADO.ToInt32(dr["TRANSFER_ID"]), 
                     ISSUE_DETAIL_ID = ADO.ToInt32(dr["ISSUE_DETAIL_ID"]),
+
                     GST_PERC = dr["GST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["GST_PERC"]),
                     HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
                 }).ToList();
@@ -44,6 +77,7 @@ namespace MicroApi.DataLayer.Service
 
             return items;
         }
+
 
         public int Insert(TransferIn transferIn)
         {

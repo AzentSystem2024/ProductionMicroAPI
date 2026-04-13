@@ -19,6 +19,26 @@ namespace MicroApi.Controllers
         }
 
         [HttpPost]
+        [Route("gettrout")]
+        public ListResponse1 GetTransferOutHeaders([FromBody] TransferInReqInput input)
+        {
+            var res = new ListResponse1();
+            try
+            {
+                var result = _transferInService.GetTransferOutHeaders(input);
+                res.Flag = 1;
+                res.message = "Success";
+                res.data = result;
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+
+        [HttpPost]
         [Route("getitem")]
         public TransferInListResponse GetTransferInItems([FromBody] TransferInInput input)
         {

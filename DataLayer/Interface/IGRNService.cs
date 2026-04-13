@@ -4,7 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface IGRNService
     {
-        public List<PO> GetPendingPo(poinput input);
+        public List<PO> GetPendingPo(Poinput input);
         public GRNResponse GetPoList(PODetailsInput input);
         public GRNResponse GetPoPendingItems(PendingPODetailsInput input);
         public List<GRN> GetGRNList(GRNListRequest request);

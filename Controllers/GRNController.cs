@@ -19,7 +19,7 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("pendingpo")]
-        public GRNResponse PendingPoList(poinput input)
+        public GRNResponse PendingPoList(Poinput input)
         {
             GRNResponse res = new GRNResponse();
 
