@@ -25,7 +25,7 @@ namespace MicroApi.DataLayer.Service
                         CMD.CommandType = CommandType.StoredProcedure;
 
                         CMD.Parameters.AddWithValue("@ACTION", 1);
-                        CMD.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);   // ok
+                        CMD.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);   
                         CMD.Parameters.AddWithValue("@TRANS_TYPE", model.TRANS_TYPE);
                         CMD.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                         CMD.Parameters.AddWithValue("@STORE_ID", model.STORE_ID ?? 0);

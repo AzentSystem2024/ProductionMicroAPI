@@ -395,7 +395,8 @@ namespace MicroApi.DataLayer.Service
                             CanEdit = Convert.ToBoolean(reader["CanEdit"]),
                             CanApprove = Convert.ToBoolean(reader["CanApprove"]),
                             CanDelete = Convert.ToBoolean(reader["CanDelete"]),
-                            CanPrint = Convert.ToBoolean(reader["CanPrint"])
+                            CanPrint = Convert.ToBoolean(reader["CanPrint"]),
+                            HideCost = Convert.ToBoolean(reader["HideCost"])
                         };
 
                         allMenus.Add(menu);
