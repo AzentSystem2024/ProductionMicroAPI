@@ -427,7 +427,13 @@ namespace MicroApi.DataLayer.Services
                         IS_INACTIVE_NEW = ADO.Toboolean(dr2["IS_INACTIVE_NEW"]),
                         Selected = ADO.Toboolean(dr2["Selected"]),
                         STORE_ID = ADO.ToInt32(dr2["STORE_ID"]),
-                        STORE_NAME = ADO.ToString(dr2["STORE_NAME"])
+                        STORE_NAME = ADO.ToString(dr2["STORE_NAME"]),
+                        IS_PRICE_REQUIRED = dr2["IS_PRICE_REQUIRED_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_PRICE_REQUIRED_OLD"]),
+                        IS_NOT_DISCOUNTABLE = dr2["IS_NOT_DISCOUNTABLE_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_DISCOUNTABLE_OLD"]),
+                        IS_NOT_SALE_ITEM = dr2["IS_NOT_SALE_ITEM_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_SALE_ITEM_OLD"]),
+                        IS_NOT_SALE_RETURN = dr2["IS_NOT_SALE_RETURN_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_SALE_RETURN_OLD"]),
+                        IS_INACTIVE = dr2["IS_INACTIVE_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_INACTIVE_OLD"]),
+
 
                     });
                 }
