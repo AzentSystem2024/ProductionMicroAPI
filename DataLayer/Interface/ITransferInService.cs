@@ -4,6 +4,7 @@ namespace MicroApi.DataLayer.Interface
 {
     public interface ITransferInService
     {
+        public List<TransferOutHeaderList> GetTransferOutHeaders(TransferInReqInput input);
         public List<TransferInItemList> GetTransferInItems(TransferInInput input);
         public Int32 Insert(TransferIn transferIn);
         public Int32 Update(TransferInUpdate transferIn);

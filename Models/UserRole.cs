@@ -47,6 +47,7 @@ namespace MicroApi.Models
         public bool CanApprove { get; set; }        
         public bool CanDelete { get; set; }
         public bool CanPrint { get; set; }
+        public bool HideCost { get; set; }
     }
     public class UserMenuResponse
     {

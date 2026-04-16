@@ -299,18 +299,20 @@ namespace MicroApi.DataLayer.Service
                                   TB_ITEMS.ITEM_CODE, 
                                   TB_PO_DETAIL.GRN_QTY, 
                                   TB_PO_DETAIL.QUANTITY AS PO_QUANTITY,
-                                  TB_GRN_DETAIL.QUANTITY AS GRN_QTY,
-                                  TB_GRN_DETAIL.INVOICE_QTY,
-                                  TB_GRN_DETAIL.UOM,
+                                  GRN.QUANTITY AS GRN_QTY,
+                                  GRN.INVOICE_QTY,
+                                  GRN.UOM,
                                   TB_GRN_HEADER.GRN_NO,TB_ITEMS.HSN_CODE,
-                                  TB_GRN_HEADER.GRN_DATE,TB_GRN_DETAIL.QUANTITY - TB_GRN_DETAIL.INVOICE_QTY AS PENDING_QTY
+                                  TB_GRN_HEADER.GRN_DATE,GRN.QUANTITY - GRN.INVOICE_QTY AS PENDING_QTY
                                 FROM TB_PURCH_DETAIL
                                 LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID
                                 LEFT JOIN TB_STORES ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID 
                                 LEFT JOIN TB_ITEMS ON TB_PURCH_DETAIL.ITEM_ID = TB_ITEMS.ID 
                                 LEFT JOIN TB_PO_DETAIL ON TB_PURCH_DETAIL.PO_DET_ID = TB_PO_DETAIL.ID 
-                                LEFT JOIN TB_GRN_DETAIL ON TB_PURCH_DETAIL.GRN_DET_ID = TB_GRN_DETAIL.ID
-                                LEFT JOIN TB_GRN_HEADER ON TB_GRN_DETAIL.GRN_ID = TB_GRN_HEADER.ID
+                                LEFT JOIN (SELECT  ID,GRN_ID, SUM(QUANTITY) AS QUANTITY,SUM(INVOICE_QTY) AS INVOICE_QTY, MAX(UOM) AS UOM
+                                FROM TB_GRN_DETAIL
+                                GROUP BY ID, GRN_ID) GRN ON TB_PURCH_DETAIL.GRN_DET_ID = GRN.ID
+                                LEFT JOIN TB_GRN_HEADER ON GRN.GRN_ID = TB_GRN_HEADER.ID
                                 WHERE TB_PURCH_HEADER.TRANS_ID = " + id;
 
                 DataTable tblpurchdetail = ADO.GetDataTable(strDetailSQL, "PurchDetails");

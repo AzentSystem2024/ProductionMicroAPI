@@ -107,7 +107,7 @@
         public int PO_ID { get; set; }
         public int SUPP_ID { get; set; }
     }
-    public class poinput
+    public class Poinput
     {
         public int STORE_ID { get; set; }
         public int SUPP_ID { get; set; }

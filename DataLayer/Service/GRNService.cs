@@ -10,7 +10,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class GRNService:IGRNService
     {
-        public List<PO> GetPendingPo(poinput input)
+        public List<PO> GetPendingPo(Poinput input)
         {
             List<PO> POlist = new List<PO>();
             SqlConnection connection = ADO.GetConnection();

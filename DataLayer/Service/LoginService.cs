@@ -395,7 +395,8 @@ namespace MicroApi.DataLayer.Service
                             CanEdit = Convert.ToBoolean(reader["CanEdit"]),
                             CanApprove = Convert.ToBoolean(reader["CanApprove"]),
                             CanDelete = Convert.ToBoolean(reader["CanDelete"]),
-                            CanPrint = Convert.ToBoolean(reader["CanPrint"])
+                            CanPrint = Convert.ToBoolean(reader["CanPrint"]),
+                            HideCost = Convert.ToBoolean(reader["HideCost"])
                         };
 
                         allMenus.Add(menu);
@@ -473,6 +474,7 @@ namespace MicroApi.DataLayer.Service
                         ENABLE_MATRIX_CODE = reader["ENABLE_MATRIX_CODE"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_MATRIX_CODE"]),
                         QTN_SUBJECT = reader["QTN_SUBJECT"]?.ToString() ?? "",
                         SELLING_PRICE_INCL_VAT = reader["SELLING_PRICE_INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
+                        IS_HQ_APP = reader["IS_HQ_APP"] != DBNull.Value && Convert.ToBoolean(reader["IS_HQ_APP"]),
                         //HSN_CODE = reader["FT_HSN_CODE"]?.ToString() ?? "",
                     };
                 }
