@@ -33,21 +33,22 @@ namespace MicroApi.DataLayer.Services
                         CURRENCY_ID = Convert.ToInt32(dr["CURRENCY_ID"]),
                         REGISTER_ID = Convert.ToInt32(dr["REGISTER_ID"]),
                         DISPLAY_ORDER = Convert.ToInt32(dr["DISPLAY_ORDER"]),
-                        ROUND_VALUE = Convert.ToBoolean(dr["ROUND_VALUE"]),
-                        ALLOW_MULTIPLE = Convert.ToBoolean(dr["ALLOW_MULTIPLE"]),
-                        ALLOW_OPENING = Convert.ToBoolean(dr["ALLOW_OPENING"]),
-                        ALLOW_DECLARATION = Convert.ToBoolean(dr["ALLOW_DECLARATION"]),
-                        AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
-                        ENTER_CARD_INFO = Convert.ToBoolean(dr["ENTER_CARD_INFO"]),
-                        PRINT_CUSTMER_COPY = Convert.ToBoolean(dr["PRINT_CUSTMER_COPY"]),
-                        CAPTURE_CARD_INFO = Convert.ToBoolean(dr["CAPTURE_CARD_INFO"]),
-                        ADDITIONAL_INFO_REQUIRED = Convert.ToBoolean(dr["ADDITIONAL_INFO_REQUIRED"]),
+                        //ROUND_VALUE = Convert.ToBoolean(dr["ROUND_VALUE"]),
+                        //ALLOW_MULTIPLE = Convert.ToBoolean(dr["ALLOW_MULTIPLE"]),
+                        //ALLOW_OPENING = Convert.ToBoolean(dr["ALLOW_OPENING"]),
+                        //ALLOW_DECLARATION = Convert.ToBoolean(dr["ALLOW_DECLARATION"]),
+                        //AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
+                        //ENTER_CARD_INFO = Convert.ToBoolean(dr["ENTER_CARD_INFO"]),
+                        //PRINT_CUSTMER_COPY = Convert.ToBoolean(dr["PRINT_CUSTMER_COPY"]),
+                        //CAPTURE_CARD_INFO = Convert.ToBoolean(dr["CAPTURE_CARD_INFO"]),
+                        //ADDITIONAL_INFO_REQUIRED = Convert.ToBoolean(dr["ADDITIONAL_INFO_REQUIRED"]),
                         IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]),
                         ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]),
 
                         IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]),
                         TENDERTYPE_DESCRIPTION = Convert.ToString(dr["TENDERTYPE_DESCRIPTION"]),
                         CURRENCY_DESCRIPTION = Convert.ToString(dr["CURRENCY_DESCRIPTION"]),
+                        STATUS = Convert.ToString(dr["Status"]),
 
 
                     });
@@ -139,14 +140,14 @@ namespace MicroApi.DataLayer.Services
                     tenders.CURRENCY_ID = Convert.ToInt32(dr["CURRENCY_ID"]);
                     tenders.REGISTER_ID = Convert.ToInt32(dr["REGISTER_ID"]);
                     tenders.DISPLAY_ORDER = Convert.ToInt32(dr["DISPLAY_ORDER"]);
-                    tenders.ROUND_VALUE = Convert.ToBoolean(dr["ROUND_VALUE"]);
-                    tenders.ALLOW_MULTIPLE = Convert.ToBoolean(dr["ALLOW_MULTIPLE"]);
+                    //tenders.ROUND_VALUE = Convert.ToBoolean(dr["ROUND_VALUE"]);
+                    //tenders.ALLOW_MULTIPLE = Convert.ToBoolean(dr["ALLOW_MULTIPLE"]);
                     tenders.ALLOW_OPENING = Convert.ToBoolean(dr["ALLOW_OPENING"]);
                     tenders.ALLOW_DECLARATION = Convert.ToBoolean(dr["ALLOW_DECLARATION"]);
-                    tenders.AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]);
-                    tenders.ENTER_CARD_INFO = Convert.ToBoolean(dr["ENTER_CARD_INFO"]);
-                    tenders.PRINT_CUSTMER_COPY = Convert.ToBoolean(dr["PRINT_CUSTMER_COPY"]);
-                    tenders.CAPTURE_CARD_INFO = Convert.ToBoolean(dr["CAPTURE_CARD_INFO"]);
+                    //tenders.AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]);
+                    //tenders.ENTER_CARD_INFO = Convert.ToBoolean(dr["ENTER_CARD_INFO"]);
+                    //tenders.PRINT_CUSTMER_COPY = Convert.ToBoolean(dr["PRINT_CUSTMER_COPY"]);
+                    //tenders.CAPTURE_CARD_INFO = Convert.ToBoolean(dr["CAPTURE_CARD_INFO"]);
                     tenders.ADDITIONAL_INFO_REQUIRED = Convert.ToBoolean(dr["ADDITIONAL_INFO_REQUIRED"]);
                     tenders.IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]);
                     tenders.ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]);

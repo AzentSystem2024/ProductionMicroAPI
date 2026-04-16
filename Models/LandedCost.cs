@@ -18,7 +18,7 @@ namespace MicroApi.Models
 
         public float VALUE { get; set; }
 
-        public string COMPANY_NAME { get; set; }
+        public string? COMPANY_NAME { get; set; }
 
         public bool IS_INACTIVE { get; set; }
 

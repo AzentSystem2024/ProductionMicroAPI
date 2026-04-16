@@ -41,6 +41,7 @@
         public bool? IS_DELETED { get; set; }
         public string? TENDERTYPE_DESCRIPTION { get; set; }
         public string? CURRENCY_DESCRIPTION { get; set; }
+        public string? STATUS { get; set; }
 
     }
     public class TendersResponse

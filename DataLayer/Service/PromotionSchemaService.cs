@@ -60,8 +60,8 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dRow = tbl.NewRow();
 
-                    dRow["ID"] = ur.ID;
-                    dRow["PROMOTION_ID"] = ur.PROMOTION_ID;
+                    dRow["ID"] = 0;
+                    dRow["PROMOTION_ID"] = 0;
                     dRow["QTY_BUY"] = ur.QTY_BUY;
                     dRow["DISC_PERCENT"] = ur.DISC_PERCENT;
                     dRow["DESCRIPTION"] = ur.DESCRIPTION;
