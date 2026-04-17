@@ -7,8 +7,8 @@
         public string DESCRIPTION { get; set; }
         public string BARCODE { get; set; }
         public string UOM { get; set; }
-        public decimal VAT_PERC { get; set; }
-        public decimal COST { get; set; }
+        public decimal TAX_PERC { get; set; }
+        public decimal PRICE { get; set; }
         public string HSN_CODE { get; set; }
     }
     public class SalesInvoiceRequest
