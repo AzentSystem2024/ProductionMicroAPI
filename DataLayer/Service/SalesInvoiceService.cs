@@ -35,8 +35,8 @@ namespace MicroApi.DataLayer.Service
                         DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
                         BARCODE = ADO.ToString(dr["BARCODE"]),
                         UOM = ADO.ToString(dr["UOM"]),
-                        VAT_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]),
-                        COST = dr["COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST"]),
+                        TAX_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]),
+                        PRICE = dr["COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST"]),
                         HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
                     }).ToList();
 

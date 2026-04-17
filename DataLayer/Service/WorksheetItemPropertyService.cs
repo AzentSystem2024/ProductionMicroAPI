@@ -376,7 +376,7 @@ namespace MicroApi.DataLayer.Services
             List<ItemStoreProperty> itemsuppliers = new List<ItemStoreProperty>();
             try
             {
-                string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE from TB_WORKSHEET WHERE TB_WORKSHEET.ID = " + id;
+                string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE ,TB_AC_TRANS_HEADER.CREATE_USER_ID,TB_AC_TRANS_HEADER.VERIFY_USER_ID,TB_AC_TRANS_HEADER.APPROVE3_USER_ID,TB_AC_TRANS_HEADER.TRANS_STATUS,TB_AC_TRANS_HEADER.NARRATION,TB_AC_TRANS_HEADER.COMPANY_ID FROM TB_WORKSHEET INNER JOIN TB_AC_TRANS_HEADER ON TB_WORKSHEET.TRANS_ID=TB_AC_TRANS_HEADER.TRANS_ID WHERE TB_WORKSHEET.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "ItemProperty");
 
@@ -389,8 +389,12 @@ namespace MicroApi.DataLayer.Services
                         ID = ADO.ToInt32(dr["ID"]),
                         WS_NO = ADO.ToString(dr["WS_NO"]),
                         WS_DATE = Convert.ToDateTime(dr["WS_DATE"]),
-                        //Narration = ADO.ToString(dr["NARRATION"]),
-                        //Status = ADO.ToString(dr["STATUS_DESC"])
+                        NARRATION = ADO.ToString(dr["NARRATION"]),
+                        Status = ADO.ToString(dr["TRANS_STATUS"]),
+                        CREATE_USER_ID = ADO.ToInt32(dr["CREATE_USER_ID"]),
+                        VERIFY_USER_ID = ADO.ToInt32(dr["VERIFY_USER_ID"]),
+                        APPROVE_USER_ID = ADO.ToInt32(dr["APPROVE3_USER_ID"]),
+                        COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"])
 
                     };
                 }
@@ -427,7 +431,13 @@ namespace MicroApi.DataLayer.Services
                         IS_INACTIVE_NEW = ADO.Toboolean(dr2["IS_INACTIVE_NEW"]),
                         Selected = ADO.Toboolean(dr2["Selected"]),
                         STORE_ID = ADO.ToInt32(dr2["STORE_ID"]),
-                        STORE_NAME = ADO.ToString(dr2["STORE_NAME"])
+                        STORE_NAME = ADO.ToString(dr2["STORE_NAME"]),
+                        IS_PRICE_REQUIRED = dr2["IS_PRICE_REQUIRED_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_PRICE_REQUIRED_OLD"]),
+                        IS_NOT_DISCOUNTABLE = dr2["IS_NOT_DISCOUNTABLE_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_DISCOUNTABLE_OLD"]),
+                        IS_NOT_SALE_ITEM = dr2["IS_NOT_SALE_ITEM_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_SALE_ITEM_OLD"]),
+                        IS_NOT_SALE_RETURN = dr2["IS_NOT_SALE_RETURN_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_SALE_RETURN_OLD"]),
+                        IS_INACTIVE = dr2["IS_INACTIVE_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_INACTIVE_OLD"]),
+
 
                     });
                 }

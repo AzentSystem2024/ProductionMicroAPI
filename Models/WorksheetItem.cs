@@ -25,6 +25,12 @@ namespace MicroApi.Models
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? NARRATION { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? CREATE_USER_ID { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? VERIFY_USER_ID { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? APPROVE_USER_ID { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<WorksheetItemProperties>? worksheet_item_property { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<ItemStoreProperty>? worksheet_item_store { get; set; }
