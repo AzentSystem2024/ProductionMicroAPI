@@ -173,7 +173,7 @@ namespace MicroApi.DataLayer.Services
                     ID = Convert.ToInt32(dr["ID"]),
                     TEMPLATE_NAME = Convert.ToString(dr["TEMPLATE_NAME"]),
                     REMARKS = Convert.ToString(dr["REMARKS"]),
-                    UserID = Convert.ToString(dr["LAST_MODIFIED_USER_ID"])
+                    UserID = Convert.ToInt32(dr["LAST_MODIFIED_USER_ID"])
                 };
                 SqlCommand cmd = new SqlCommand();
 
