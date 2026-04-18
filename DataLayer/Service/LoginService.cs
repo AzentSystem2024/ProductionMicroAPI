@@ -101,13 +101,14 @@ namespace MicroApi.DataLayer.Service
                 // ---------- RESULT 2 : USER INFO ----------
                 if (reader.NextResult() && reader.Read())
                 {
-                    response.USER_ID = reader["USER_ID"] as int?;
-                    response.USER_NAME = reader["USER_NAME"]?.ToString();
-                    response.DEFAULT_COUNTRY_CODE = reader["DEFAULT_COUNTRY_CODE"]?.ToString();
-                    response.COUNTRY_NAME = reader["COUNTRY_NAME"]?.ToString();
+                    response.USER_ID = DbHelper.GetNullableInt(reader["USER_ID"]);
+                    response.USER_NAME = DbHelper.GetString(reader["USER_NAME"]);
+                    response.DEFAULT_COUNTRY_CODE = DbHelper.GetString(reader["DEFAULT_COUNTRY_CODE"]);
+                    response.COUNTRY_NAME = DbHelper.GetString(reader["COUNTRY_NAME"]);
 
-                    response.USER_ROLE_ID = Convert.ToInt32(reader["USER_ROLE"]);
-                    response.USER_ROLE_NAME = reader["UserRole"]?.ToString();
+                    response.USER_ROLE_ID = DbHelper.GetInt(reader["USER_ROLE"]);
+                    response.USER_ROLE_NAME = DbHelper.GetString(reader["UserRole"]);
+
                 }
 
                 //// Generate token
@@ -123,9 +124,10 @@ namespace MicroApi.DataLayer.Service
                     {
                         response.Companies.Add(new CompanyList
                         {
-                            COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
-                            COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
-                            COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
+                            COMPANY_ID = DbHelper.GetInt(reader["COMPANY_ID"]),
+                            COMPANY_NAME = DbHelper.GetString(reader["COMPANY_NAME"]),
+                            COMPANY_CODE = DbHelper.GetString(reader["COMPANY_CODE"]),
+
 
                         });
                     }
@@ -136,12 +138,13 @@ namespace MicroApi.DataLayer.Service
                 {
                     response.SELECTED_COMPANY = new CompanyList
                     {
-                        COMPANY_ID = Convert.ToInt32(reader["COMPANY_ID"]),
-                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
-                        COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
-                        STATE_ID = Convert.ToInt32(reader["ID"]),
-                        STATE_NAME = reader["STATE_NAME"]?.ToString()
+                        COMPANY_ID = DbHelper.GetInt(reader["COMPANY_ID"]),
+                        COMPANY_NAME = DbHelper.GetString(reader["COMPANY_NAME"]),
+                        COMPANY_CODE = DbHelper.GetString(reader["COMPANY_CODE"]),
+                        STATE_ID = DbHelper.GetInt(reader["ID"]),
+                        STATE_NAME = DbHelper.GetString(reader["STATE_NAME"])
                     };
+
                 }
 
                 // ---------- RESULT 5 : MENU ----------
@@ -396,7 +399,8 @@ namespace MicroApi.DataLayer.Service
                             CanApprove = Convert.ToBoolean(reader["CanApprove"]),
                             CanDelete = Convert.ToBoolean(reader["CanDelete"]),
                             CanPrint = Convert.ToBoolean(reader["CanPrint"]),
-                            HideCost = Convert.ToBoolean(reader["HideCost"])
+                            HideCost = reader["HideCost"] != DBNull.Value && Convert.ToBoolean(reader["HideCost"])
+
                         };
 
                         allMenus.Add(menu);
@@ -436,6 +440,7 @@ namespace MicroApi.DataLayer.Service
                             DATE_FROM = Convert.ToDateTime(reader["DATE_FROM"]),
                             DATE_TO = Convert.ToDateTime(reader["DATE_TO"]),
                             IS_CLOSED = Convert.ToBoolean(reader["IS_CLOSED"])
+
                         });
                     }
                 }
@@ -543,6 +548,34 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public static class DbHelper
+        {
+            public static int GetInt(object value)
+            {
+                return value == DBNull.Value ? 0 : Convert.ToInt32(value);
+            }
+
+            public static int? GetNullableInt(object value)
+            {
+                return value == DBNull.Value ? (int?)null : Convert.ToInt32(value);
+            }
+
+            public static bool GetBool(object value)
+            {
+                return value != DBNull.Value && Convert.ToBoolean(value);
+            }
+
+            public static string GetString(object value)
+            {
+                return value == DBNull.Value ? "" : value.ToString();
+            }
+
+            public static DateTime GetDate(object value)
+            {
+                return value == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(value);
+            }
+        }
+
         private string GenerateJwtToken(int userId)
         {
             var claims = new[]
