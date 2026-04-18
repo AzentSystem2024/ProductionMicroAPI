@@ -9,7 +9,7 @@ namespace MicroApi.Models
         public string MainGroup { get; set; }
         public string SubGroup { get; set; }
         public string Category { get; set; }
-        public string LedgerCode { get; set; }
+        public string? LedgerCode { get; set; }
         public string LedgerName { get; set; }
         public string? CostType { get; set; }
     }
