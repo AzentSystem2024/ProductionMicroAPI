@@ -5,7 +5,7 @@
         public int ID { get; set; }
         public string TEMPLATE_NAME { get; set; }
         public string REMARKS { get; set; }
-        public string UserID { get; set; }
+        public int UserID { get; set; }
         public List<ImportTemplateEntry> import_entry { get; set; }
     }
     public class ImportTemplateEntry
