@@ -96,7 +96,7 @@
         public int? ID { get; set; }
         public int? STORE_ID { get; set; }
         public int? COMPANY_ID { get; set; }
-        public float SALE_PRICE { get; set; }
+        public float? SALE_PRICE { get; set; }
         public float? SALE_PRICE1 { get; set; }
         public float? SALE_PRICE2 { get; set; }
         public float? SALE_PRICE3 { get; set; }
