@@ -16,6 +16,7 @@
         public bool IS_PRICE_REQUIRED { get; set; }
         public bool IS_NOT_DISCOUNTABLE { get; set; }
         public bool Selected { get; set; }
+        public List<StoreProperty>? STORES { get; set; }
     }
 
     public class ItemStorePropertiesResponse
@@ -23,5 +24,16 @@
         public string flag { get; set; }
         public string message { get; set; }
         public List<ItemStoreProperties> data { get; set; }
+    }
+    public class StoreProperty
+    {
+        public int? STORE_ID { get; set; }
+        public string? STORE_NAME { get; set; }
+
+        public bool? IS_INACTIVE { get; set; }
+        public bool? IS_NOT_SALE_ITEM { get; set; }
+        public bool? IS_NOT_SALE_RETURN { get; set; }
+        public bool? IS_PRICE_REQUIRED { get; set; }
+        public bool? IS_NOT_DISCOUNTABLE { get; set; }
     }
 }

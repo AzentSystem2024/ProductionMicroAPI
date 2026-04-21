@@ -6,5 +6,6 @@ namespace MicroApi.DataLayer.Interface
     {
         StockMovementRptResponse GetStockMovementReport(StockMovementRequest request);
         StockMovementDrilldownResponse GetStockMovementDrilldown(StockMovementDrillDownRequest request);
+        StoreWiseStockResponse GetStoreWiseStock(StoreWiseStockRequest request);
     }
 }

@@ -60,4 +60,31 @@
         public DateTime? DATE_TO { get; set; }
         public string? TRANS_TYPE { get; set; }
     }
+    public class StoreWiseStockRequest
+    {
+        public int? FIN_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        //public string DEPT_ID { get; set; }
+        //public string CAT_ID { get; set; }
+        //public string BRAND_ID { get; set; }
+        //public string SUPP_ID { get; set; }
+        public string? STORE_ID { get; set; }
+        public string? ITEM_ID { get; set; }
+    }
+
+    public class StoreWiseStockRow
+    {
+        public string CODE { get; set; }
+        public string DESCRIPTION { get; set; }
+
+        // Dynamic store columns
+        public Dictionary<string, decimal> StoreStock { get; set; } = new Dictionary<string, decimal>();
+    }
+
+    public class StoreWiseStockResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<StoreWiseStockRow> data { get; set; }
+    }
 }

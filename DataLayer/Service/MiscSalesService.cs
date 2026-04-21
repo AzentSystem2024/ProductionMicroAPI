@@ -16,7 +16,7 @@ namespace MicroApi.DataLayer.Service
             {
                 using (SqlConnection con = ADO.GetConnection())
                 {
-                    using (SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE", con))
+                    using (SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE_RETAIL", con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
@@ -110,7 +110,7 @@ namespace MicroApi.DataLayer.Service
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE", connection);
+                    SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE_RETAIL", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 0);
@@ -173,7 +173,7 @@ namespace MicroApi.DataLayer.Service
             {
                 using (SqlConnection con = ADO.GetConnection())
                 {
-                    using (SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE", con))
+                    using (SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE_RETAIL", con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
@@ -269,7 +269,7 @@ namespace MicroApi.DataLayer.Service
             {
                 using (SqlConnection con = ADO.GetConnection())
                 {
-                    using (SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE", con))
+                    using (SqlCommand cmd = new SqlCommand("SP_MISC_SALE_INVOICE_RETAIL", con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
@@ -371,7 +371,7 @@ namespace MicroApi.DataLayer.Service
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
 
-                    using (var cmd = new SqlCommand("SP_MISC_SALE_INVOICE", conn))
+                    using (var cmd = new SqlCommand("SP_MISC_SALE_INVOICE_RETAIL", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
@@ -452,7 +452,7 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == System.Data.ConnectionState.Closed)
                         connection.Open();
 
-                    string procedureName = "SP_MISC_SALE_INVOICE";
+                    string procedureName = "SP_MISC_SALE_INVOICE_RETAIL";
 
                     using (var cmd = new SqlCommand(procedureName, connection))
                     {

@@ -135,6 +135,74 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public StoreWiseStockResponse GetStoreWiseStock(StoreWiseStockRequest request)
+        {
+            var response = new StoreWiseStockResponse
+            {
+                data = new List<StoreWiseStockRow>()
+            };
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_GET_STOREWISE_STOCK", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
+                        cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+
+                        // ✅ FIXED PARAM NAME
+                        cmd.Parameters.Add("@STORE_ID", SqlDbType.NVarChar)
+                            .Value = string.IsNullOrEmpty(request.STORE_ID) ? "" : request.STORE_ID;
+
+                        cmd.Parameters.Add("@ITEM_ID", SqlDbType.VarChar)
+                            .Value = string.IsNullOrEmpty(request.ITEM_ID) ? "" : request.ITEM_ID;
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var row = new StoreWiseStockRow
+                                {
+                                    CODE = reader["CODE"]?.ToString(),
+                                    DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                    StoreStock = new Dictionary<string, decimal>() // ensure init
+                                };
+
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    string columnName = reader.GetName(i);
+
+                                    if (columnName != "CODE" && columnName != "DESCRIPTION")
+                                    {
+                                        decimal value = reader[columnName] != DBNull.Value
+                                            ? Convert.ToDecimal(reader[columnName])
+                                            : 0;
+
+                                        row.StoreStock[columnName] = value;
+                                    }
+                                }
+
+                                response.data.Add(row);
+                            }
+                        }
+                    }
+                }
+
+                response.flag = 1;
+                response.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = "Error fetching Store Wise Stock: " + ex.Message;
+            }
+
+            return response;
+        }
+
 
     }
 }

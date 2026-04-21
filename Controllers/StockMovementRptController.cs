@@ -50,5 +50,22 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost]
+        [Route("storewisestock")]
+        public StoreWiseStockResponse GetStoreWiseStock(StoreWiseStockRequest request)
+        {
+            var res = new StoreWiseStockResponse();
+            try
+            {
+                res = _stockMovementRptService.GetStoreWiseStock(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
     }
 }

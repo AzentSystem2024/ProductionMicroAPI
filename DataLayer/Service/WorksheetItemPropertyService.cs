@@ -467,43 +467,101 @@ namespace MicroApi.DataLayer.Services
 
             return item;
         }
+        //public List<ItemStoreProperties> GetItemPropertyList()
+        //{
+        //    List<ItemStoreProperties> ItemPropertyList = new List<ItemStoreProperties>();
+        //    SqlConnection connection = ADO.GetConnection();
+        //    SqlCommand cmd = new SqlCommand();
+        //    cmd.Connection = connection;
+        //    cmd.CommandType = CommandType.StoredProcedure;
+        //    cmd.CommandText = "SP_STORE_ITEM_NEW";
+        //    cmd.Parameters.AddWithValue("ACTION", 0);
+        //    SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //    DataTable tbl = new DataTable();
+        //    da.Fill(tbl);
+        //    foreach (DataRow dr in tbl.Rows)
+        //    {
+        //        ItemPropertyList.Add(new ItemStoreProperties
+        //        {
+        //            BARCODE = ADO.ToString(dr["BARCODE"]),
+        //            DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
+        //            DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
+        //            CAT_NAME = ADO.ToString(dr["CAT_NAME"]),
+        //            BRAND_NAME = ADO.ToString(dr["BRAND_NAME"]),
+        //            ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
+        //            STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
+        //            STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
+        //            IS_INACTIVE = ADO.Toboolean(dr["IS_INACTIVE"]),
+        //            IS_NOT_SALE_ITEM = ADO.Toboolean(dr["IS_NOT_SALE_ITEM"]),
+        //            IS_NOT_SALE_RETURN = ADO.Toboolean(dr["IS_NOT_SALE_RETURN"]),
+        //            IS_PRICE_REQUIRED = ADO.Toboolean(dr["IS_PRICE_REQUIRED"]),
+        //            IS_NOT_DISCOUNTABLE = ADO.Toboolean(dr["IS_NOT_DISCOUNTABLE"]),
+        //            Selected = ADO.Toboolean(dr["Selected"])
+
+        //        });
+        //    }
+        //    connection.Close();
+
+        //    return ItemPropertyList;
+        //}
         public List<ItemStoreProperties> GetItemPropertyList()
         {
-            List<ItemStoreProperties> ItemPropertyList = new List<ItemStoreProperties>();
-            SqlConnection connection = ADO.GetConnection();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = connection;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SP_STORE_ITEM_NEW";
-            cmd.Parameters.AddWithValue("ACTION", 0);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable tbl = new DataTable();
-            da.Fill(tbl);
-            foreach (DataRow dr in tbl.Rows)
+            List<ItemStoreProperties> itemList = new List<ItemStoreProperties>();
+
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                ItemPropertyList.Add(new ItemStoreProperties
+                using (SqlCommand cmd = new SqlCommand("SP_STORE_ITEM_NEW", connection))
                 {
-                    BARCODE = ADO.ToString(dr["BARCODE"]),
-                    DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
-                    DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
-                    CAT_NAME = ADO.ToString(dr["CAT_NAME"]),
-                    BRAND_NAME = ADO.ToString(dr["BRAND_NAME"]),
-                    ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
-                    STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                    STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
-                    IS_INACTIVE = ADO.Toboolean(dr["IS_INACTIVE"]),
-                    IS_NOT_SALE_ITEM = ADO.Toboolean(dr["IS_NOT_SALE_ITEM"]),
-                    IS_NOT_SALE_RETURN = ADO.Toboolean(dr["IS_NOT_SALE_RETURN"]),
-                    IS_PRICE_REQUIRED = ADO.Toboolean(dr["IS_PRICE_REQUIRED"]),
-                    IS_NOT_DISCOUNTABLE = ADO.Toboolean(dr["IS_NOT_DISCOUNTABLE"]),
-                    Selected = ADO.Toboolean(dr["Selected"])
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ACTION", 0);
 
-                });
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataSet ds = new DataSet();
+                    da.Fill(ds);
+
+                    DataTable itemTable = ds.Tables[0];   // Items
+                    DataTable storeTable = ds.Tables[1];  // Store mappings
+
+                    foreach (DataRow itemRow in itemTable.Rows)
+                    {
+                        int itemId = ADO.ToInt32(itemRow["ITEM_ID"]);
+
+                        var item = new ItemStoreProperties
+                        {
+                            ITEM_ID = itemId,
+                            BARCODE = ADO.ToString(itemRow["BARCODE"]),
+                            DESCRIPTION = ADO.ToString(itemRow["DESCRIPTION"]),
+                            DEPT_NAME = ADO.ToString(itemRow["DEPT_NAME"]),
+                            CAT_NAME = ADO.ToString(itemRow["CAT_NAME"]),
+                            BRAND_NAME = ADO.ToString(itemRow["BRAND_NAME"]),
+                            STORES = new List<StoreProperty>()
+                        };
+
+                        // 🔹 Get all stores for this item
+                        DataRow[] storeRows = storeTable.Select("ITEM_ID = " + itemId);
+
+                        foreach (DataRow storeRow in storeRows)
+                        {
+                            item.STORES.Add(new StoreProperty
+                            {
+                                STORE_ID = ADO.ToInt32(storeRow["STORE_ID"]),
+                                STORE_NAME = ADO.ToString(storeRow["STORE_NAME"]),
+                                IS_INACTIVE = ADO.Toboolean(storeRow["IS_INACTIVE"]),
+                                IS_NOT_SALE_ITEM = ADO.Toboolean(storeRow["IS_NOT_SALE_ITEM"]),
+                                IS_NOT_SALE_RETURN = ADO.Toboolean(storeRow["IS_NOT_SALE_RETURN"]),
+                                IS_PRICE_REQUIRED = ADO.Toboolean(storeRow["IS_PRICE_REQUIRED"]),
+                                IS_NOT_DISCOUNTABLE = ADO.Toboolean(storeRow["IS_NOT_DISCOUNTABLE"])
+                            });
+                        }
+
+                        itemList.Add(item);
+                    }
+                }
             }
-            connection.Close();
 
-            return ItemPropertyList;
+            return itemList;
         }
+
         public List<WorksheetItem> GetAllWorksheetItemPrice()
         {
             List<WorksheetItem> worksheetList = new List<WorksheetItem>();
