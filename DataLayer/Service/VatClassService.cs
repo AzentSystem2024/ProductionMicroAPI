@@ -130,53 +130,63 @@ namespace MicroApi.DataLayer.Services
 
             try
             {
-                string apType = GetAppType();
+                string appType = GetAppType();
 
-                string strSQL = "SELECT ID,CODE,VAT_NAME,VAT_PERC,0 AS CGST_PERC,0 AS SGST_PERC,0 AS IGST_PERC," +
-                                "0 AS CGST_INPUT_HEAD_ID,0 AS CGST_OUTPUT_HEAD_ID," +
-                                "0 AS SGST_INPUT_HEAD_ID,0 AS SGST_OUTPUT_HEAD_ID," +
-                                "VAT_INPUT_HEAD_ID AS IGST_INPUT_HEAD_ID ,VAT_OUTPUT_HEAD_ID AS IGST_OUTPUT_HEAD_ID," +
-                                "IS_DELETED,COMPANY_ID " +
-                                "FROM TB_VAT_CLASS WHERE ID=" + id;
-
-                DataTable tbl = ADO.GetDataTable(strSQL, "VatClass");
-
-                if (tbl.Rows.Count > 0)
+                using (SqlConnection con = ADO.GetConnection())
                 {
-                    DataRow dr = tbl.Rows[0];
+                    string query = "SELECT * FROM TB_VAT_CLASS WHERE ID = @ID";
 
-                    vatClass.ID = Convert.ToInt32(dr["ID"]);
-                    vatClass.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    vatClass.CODE = Convert.ToString(dr["CODE"]);
-                    vatClass.VAT_NAME = Convert.ToString(dr["VAT_NAME"]);
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@ID", id);
 
-                    
-                        vatClass.VAT_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]);
-                    
-                        vatClass.CGST_PERC = dr["CGST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["CGST_PERC"]);
-                        vatClass.SGST_PERC = dr["SGST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SGST_PERC"]);
-                        vatClass.IGST_PERC = dr["IGST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["IGST_PERC"]);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable tbl = new DataTable();
+                    da.Fill(tbl);
 
-                        vatClass.CGST_INPUT_HEAD_ID = dr["CGST_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CGST_INPUT_HEAD_ID"]);
-                        vatClass.CGST_OUTPUT_HEAD_ID = dr["CGST_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CGST_OUTPUT_HEAD_ID"]);
+                    if (tbl.Rows.Count > 0)
+                    {
+                        DataRow dr = tbl.Rows[0];
 
-                        vatClass.SGST_INPUT_HEAD_ID = dr["SGST_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SGST_INPUT_HEAD_ID"]);
-                        vatClass.SGST_OUTPUT_HEAD_ID = dr["SGST_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SGST_OUTPUT_HEAD_ID"]);
+                        vatClass.ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]);
+                        vatClass.COMPANY_ID = dr["COMPANY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["COMPANY_ID"]);
+                        vatClass.CODE = dr["CODE"] == DBNull.Value ? "" : dr["CODE"].ToString();
+                        vatClass.VAT_NAME = dr["VAT_NAME"] == DBNull.Value ? "" : dr["VAT_NAME"].ToString();
 
-                        vatClass.IGST_INPUT_HEAD_ID = dr["IGST_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IGST_INPUT_HEAD_ID"]);
-                        vatClass.IGST_OUTPUT_HEAD_ID = dr["IGST_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IGST_OUTPUT_HEAD_ID"]);
-                    
+                        if (appType == "MARK") // GST
+                        {
+                            vatClass.CGST_PERC = dr["CGST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["CGST_PERC"]);
+                            vatClass.SGST_PERC = dr["SGST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SGST_PERC"]);
+                            vatClass.IGST_PERC = dr["IGST_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["IGST_PERC"]);
 
-                    vatClass.IS_DELETED = Convert.ToString(dr["IS_DELETED"]);
+                            vatClass.CGST_INPUT_HEAD_ID = dr["CGST_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CGST_INPUT_HEAD_ID"]);
+                            vatClass.CGST_OUTPUT_HEAD_ID = dr["CGST_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CGST_OUTPUT_HEAD_ID"]);
+
+                            vatClass.SGST_INPUT_HEAD_ID = dr["SGST_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SGST_INPUT_HEAD_ID"]);
+                            vatClass.SGST_OUTPUT_HEAD_ID = dr["SGST_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SGST_OUTPUT_HEAD_ID"]);
+
+                            vatClass.IGST_INPUT_HEAD_ID = dr["IGST_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IGST_INPUT_HEAD_ID"]);
+                            vatClass.IGST_OUTPUT_HEAD_ID = dr["IGST_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IGST_OUTPUT_HEAD_ID"]);
+                        }
+                        else // VAT
+                        {
+                            vatClass.VAT_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]);
+
+                            vatClass.IGST_INPUT_HEAD_ID = dr["VAT_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["VAT_INPUT_HEAD_ID"]);
+                            vatClass.IGST_OUTPUT_HEAD_ID = dr["VAT_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["VAT_OUTPUT_HEAD_ID"]);
+                        }
+
+                        vatClass.IS_DELETED = dr["IS_DELETED"] == DBNull.Value ? "0" : dr["IS_DELETED"].ToString();
+                    }
                 }
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
 
             return vatClass;
         }
+
 
         public bool DeleteVatClass(int id)
         {

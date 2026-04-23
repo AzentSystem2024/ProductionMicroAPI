@@ -11,52 +11,46 @@ namespace MicroApi.DataLayer.Services
         public List<Tenders> GetAllTender()
         {
             List<Tenders> tendersList = new List<Tenders>();
+
             using (SqlConnection connection = ADO.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = connection;
+                SqlCommand cmd = new SqlCommand("SP_TB_TENDERS", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "SP_TB_TENDERS";
-                cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("@ACTION", 0);
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
 
                 foreach (DataRow dr in tbl.Rows)
                 {
-                    tendersList.Add(new Tenders
+                    Tenders obj = new Tenders
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]),
-                        TENDER_TYPE = Convert.ToInt32(dr["TENDER_TYPE"]),
-                        CURRENCY_ID = Convert.ToInt32(dr["CURRENCY_ID"]),
-                        REGISTER_ID = Convert.ToInt32(dr["REGISTER_ID"]),
-                        DISPLAY_ORDER = Convert.ToInt32(dr["DISPLAY_ORDER"]),
-                        //ROUND_VALUE = Convert.ToBoolean(dr["ROUND_VALUE"]),
-                        //ALLOW_MULTIPLE = Convert.ToBoolean(dr["ALLOW_MULTIPLE"]),
-                        //ALLOW_OPENING = Convert.ToBoolean(dr["ALLOW_OPENING"]),
-                        //ALLOW_DECLARATION = Convert.ToBoolean(dr["ALLOW_DECLARATION"]),
-                        //AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
-                        //ENTER_CARD_INFO = Convert.ToBoolean(dr["ENTER_CARD_INFO"]),
-                        //PRINT_CUSTMER_COPY = Convert.ToBoolean(dr["PRINT_CUSTMER_COPY"]),
-                        //CAPTURE_CARD_INFO = Convert.ToBoolean(dr["CAPTURE_CARD_INFO"]),
-                        //ADDITIONAL_INFO_REQUIRED = Convert.ToBoolean(dr["ADDITIONAL_INFO_REQUIRED"]),
-                        IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]),
-                        ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]),
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                        CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "",
+                        DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["DESCRIPTION"]) : "",
 
-                        IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]),
-                        TENDERTYPE_DESCRIPTION = Convert.ToString(dr["TENDERTYPE_DESCRIPTION"]),
-                        CURRENCY_DESCRIPTION = Convert.ToString(dr["CURRENCY_DESCRIPTION"]),
-                        STATUS = Convert.ToString(dr["Status"]),
+                        TENDER_TYPE = dr["TENDER_TYPE"] != DBNull.Value ? Convert.ToInt32(dr["TENDER_TYPE"]) : 0,
+                        CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : 0,
+                        REGISTER_ID = dr["REGISTER_ID"] != DBNull.Value ? Convert.ToInt32(dr["REGISTER_ID"]) : 0,
+                        DISPLAY_ORDER = dr["DISPLAY_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["DISPLAY_ORDER"]) : 0,
 
+                        IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(dr["IS_INACTIVE"]),
+                        IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]),
 
-                    });
+                        ARABIC_DESCRIPTION = dr["ARABIC_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["ARABIC_DESCRIPTION"]) : "",
+                        TENDERTYPE_DESCRIPTION = dr["TENDERTYPE_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["TENDERTYPE_DESCRIPTION"]) : "",
+                        CURRENCY_DESCRIPTION = dr["CURRENCY_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["CURRENCY_DESCRIPTION"]) : "",
+                        STATUS = dr["Status"] != DBNull.Value ? Convert.ToString(dr["Status"]) : ""
+                    };
+
+                    tendersList.Add(obj);
                 }
-                connection.Close();
             }
+
             return tendersList;
         }
+
 
         public Int32 SaveData(Tenders tenders)
         {
@@ -133,28 +127,25 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dr = tbl.Rows[0];
 
-                    tenders.ID = Convert.ToInt32(dr["ID"]);
-                    tenders.CODE = Convert.ToString(dr["CODE"]);
-                    tenders.DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]);
-                    tenders.TENDER_TYPE = Convert.ToInt32(dr["TENDER_TYPE"]);
-                    tenders.CURRENCY_ID = Convert.ToInt32(dr["CURRENCY_ID"]);
-                    tenders.REGISTER_ID = Convert.ToInt32(dr["REGISTER_ID"]);
-                    tenders.DISPLAY_ORDER = Convert.ToInt32(dr["DISPLAY_ORDER"]);
-                    //tenders.ROUND_VALUE = Convert.ToBoolean(dr["ROUND_VALUE"]);
-                    //tenders.ALLOW_MULTIPLE = Convert.ToBoolean(dr["ALLOW_MULTIPLE"]);
-                    tenders.ALLOW_OPENING = Convert.ToBoolean(dr["ALLOW_OPENING"]);
-                    tenders.ALLOW_DECLARATION = Convert.ToBoolean(dr["ALLOW_DECLARATION"]);
-                    //tenders.AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]);
-                    //tenders.ENTER_CARD_INFO = Convert.ToBoolean(dr["ENTER_CARD_INFO"]);
-                    //tenders.PRINT_CUSTMER_COPY = Convert.ToBoolean(dr["PRINT_CUSTMER_COPY"]);
-                    //tenders.CAPTURE_CARD_INFO = Convert.ToBoolean(dr["CAPTURE_CARD_INFO"]);
-                    tenders.ADDITIONAL_INFO_REQUIRED = Convert.ToBoolean(dr["ADDITIONAL_INFO_REQUIRED"]);
-                    tenders.IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]);
-                    tenders.ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]);
+                    tenders.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0;
+                    tenders.CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "";
+                    tenders.DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["DESCRIPTION"]) : "";
 
-                    //tenders.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
-                    tenders.TENDERTYPE_DESCRIPTION = Convert.ToString(dr["TENDERTYPE_DESCRIPTION"]);
-                    tenders.CURRENCY_DESCRIPTION = Convert.ToString(dr["CURRENCY_DESCRIPTION"]);
+                    tenders.TENDER_TYPE = dr["TENDER_TYPE"] != DBNull.Value ? Convert.ToInt32(dr["TENDER_TYPE"]) : 0;
+                    tenders.CURRENCY_ID = dr["CURRENCY_ID"] != DBNull.Value ? Convert.ToInt32(dr["CURRENCY_ID"]) : 0;
+                    tenders.REGISTER_ID = dr["REGISTER_ID"] != DBNull.Value ? Convert.ToInt32(dr["REGISTER_ID"]) : 0;
+                    tenders.DISPLAY_ORDER = dr["DISPLAY_ORDER"] != DBNull.Value ? Convert.ToInt32(dr["DISPLAY_ORDER"]) : 0;
+
+                    tenders.ALLOW_OPENING = dr["ALLOW_OPENING"] != DBNull.Value && Convert.ToBoolean(dr["ALLOW_OPENING"]);
+                    tenders.ALLOW_DECLARATION = dr["ALLOW_DECLARATION"] != DBNull.Value && Convert.ToBoolean(dr["ALLOW_DECLARATION"]);
+                    tenders.ADDITIONAL_INFO_REQUIRED = dr["ADDITIONAL_INFO_REQUIRED"] != DBNull.Value && Convert.ToBoolean(dr["ADDITIONAL_INFO_REQUIRED"]);
+                    tenders.IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(dr["IS_INACTIVE"]);
+
+                    tenders.ARABIC_DESCRIPTION = dr["ARABIC_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["ARABIC_DESCRIPTION"]) : "";
+
+                    tenders.TENDERTYPE_DESCRIPTION = dr["TENDERTYPE_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["TENDERTYPE_DESCRIPTION"]) : "";
+                    tenders.CURRENCY_DESCRIPTION = dr["CURRENCY_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["CURRENCY_DESCRIPTION"]) : "";
+
 
                 }
             }

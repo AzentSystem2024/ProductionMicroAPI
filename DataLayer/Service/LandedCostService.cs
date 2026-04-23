@@ -26,17 +26,22 @@ namespace MicroApi.DataLayer.Services
                 {
                     currencyList.Add(new LandedCost
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
 
-                        DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]),
-                        IS_LOCAL_CURRENCY = Convert.ToBoolean(dr["IS_LOCAL_CURRENCY"]),
-                        IS_FIXED_AMOUNT = Convert.ToBoolean(dr["IS_FIXED_AMOUNT"]),
-                        AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]),
-                        VALUE = float.Parse(dr["VALUE"].ToString()),
-                        COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]),
-                        IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]),
-                        IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"])
+                        DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["DESCRIPTION"]) : "",
+
+                        IS_LOCAL_CURRENCY = dr["IS_LOCAL_CURRENCY"] != DBNull.Value && Convert.ToBoolean(dr["IS_LOCAL_CURRENCY"]),
+                        IS_FIXED_AMOUNT = dr["IS_FIXED_AMOUNT"] != DBNull.Value && Convert.ToBoolean(dr["IS_FIXED_AMOUNT"]),
+
+                        AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : 0,
+
+                        VALUE = dr["VALUE"] != DBNull.Value ? Convert.ToSingle(dr["VALUE"]) : 0,
+
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
+                        COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "",
+
+                        IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(dr["IS_INACTIVE"]),
+                        IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"])
 
 
                     });
@@ -99,19 +104,22 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dr = tbl.Rows[0];
 
-                    landedCost.ID = Convert.ToInt32(dr["ID"]);
-                    landedCost.IS_LOCAL_CURRENCY = Convert.ToBoolean(dr["IS_LOCAL_CURRENCY"]);
-                    landedCost.DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]);
+                    landedCost.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0;
 
-                    landedCost.IS_FIXED_AMOUNT = Convert.ToBoolean(dr["IS_FIXED_AMOUNT"]);
+                    landedCost.IS_LOCAL_CURRENCY = dr["IS_LOCAL_CURRENCY"] != DBNull.Value && Convert.ToBoolean(dr["IS_LOCAL_CURRENCY"]);
+                    landedCost.DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["DESCRIPTION"]) : "";
 
-                    landedCost.VALUE = float.Parse(dr["VALUE"].ToString());
-                    landedCost.IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]);
-                    landedCost.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
+                    landedCost.IS_FIXED_AMOUNT = dr["IS_FIXED_AMOUNT"] != DBNull.Value && Convert.ToBoolean(dr["IS_FIXED_AMOUNT"]);
 
-                    landedCost.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    landedCost.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
-                    landedCost.AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]);
+                    landedCost.VALUE = dr["VALUE"] != DBNull.Value ? Convert.ToSingle(dr["VALUE"]) : 0;
+
+                    landedCost.IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(dr["IS_INACTIVE"]);
+                    landedCost.IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]);
+
+                    landedCost.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0;
+                    landedCost.COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "";
+
+                    landedCost.AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : 0;
 
 
                 }

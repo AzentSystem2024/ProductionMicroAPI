@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/accountHead")]
     [ApiController]
     public class AccountHeadController : ControllerBase

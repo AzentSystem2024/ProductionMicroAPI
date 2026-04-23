@@ -78,6 +78,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@TAX_AMOUNT", input.TAX_AMOUNT);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", input.NET_AMOUNT);
                     cmd.Parameters.AddWithValue("@IS_APPROVED", input.IS_APPROVED);
+                    cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", input.DISCOUNT_AMOUNT);
 
                     DataTable dt = new DataTable();
                     dt.Columns.Add("QUANTITY", typeof(float));
@@ -87,7 +88,9 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
                     dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
                     dt.Columns.Add("ITEM_ID", typeof(int));
-                    
+                    dt.Columns.Add("DISC_PERC", typeof(decimal));
+                    dt.Columns.Add("DISC_AMT", typeof(decimal));
+
 
                     foreach (var item in input.Details)
                     {
@@ -96,7 +99,9 @@ namespace MicroApi.DataLayer.Service
                             item.TAX_PERC,
                             item.TAX_AMOUNT,
                              item.TOTAL_AMOUNT,
-                            item.ITEM_ID
+                            item.ITEM_ID,
+                            item.DISC_PERC,
+                            item.DISC_AMT
                         );
                     }
 
@@ -148,8 +153,9 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@TAX_AMOUNT", input.TAX_AMOUNT ?? 0);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", input.NET_AMOUNT ?? 0);
                     cmd.Parameters.AddWithValue("@IS_APPROVED", input.IS_APPROVED);
+                    cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", input.DISCOUNT_AMOUNT);
 
-                    
+
 
                     // ✅ UDT
                     DataTable dt = new DataTable();
@@ -160,6 +166,8 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
                     dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
                     dt.Columns.Add("ITEM_ID", typeof(int));
+                    dt.Columns.Add("DISC_PERC", typeof(decimal));
+                    dt.Columns.Add("DISC_AMT", typeof(decimal));
 
                     if (input.Details != null)
                     {
@@ -171,7 +179,9 @@ namespace MicroApi.DataLayer.Service
                             item.TAX_PERC,
                             item.TAX_AMOUNT,
                              item.TOTAL_AMOUNT,
-                            item.ITEM_ID
+                            item.ITEM_ID,
+                            item.DISC_PERC,
+                            item.DISC_AMT
                             );
                         }
                     }
@@ -245,7 +255,8 @@ namespace MicroApi.DataLayer.Service
                                     GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
                                     GST_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
-                                    CUST_NAME = reader["CUST_NAME"]?.ToString()
+                                    CUST_NAME = reader["CUST_NAME"]?.ToString(),
+                                    DISCOUNT_AMOUNT = reader["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DISCOUNT_AMOUNT"]) : 0,
                                 });
                             }
                         }
@@ -296,16 +307,22 @@ namespace MicroApi.DataLayer.Service
                                 {
                                     header = new SalesInvoiceView
                                     {
-                                        TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
-                                        TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
+                                        TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
+                                        TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
                                         SALE_NO = reader["SALE_NO"]?.ToString(),
+
                                         TRANS_DATE = reader["SALE_DATE"] != DBNull.Value
-                                                        ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy")
-                                                        : null,
-                                        CUSTOMER_ID = Convert.ToInt32(reader["CUSTOMER_ID"]),
-                                        GROSS_AMOUNT = Convert.ToSingle(reader["GROSS_AMOUNT"]),
-                                        TAX_AMOUNT = Convert.ToSingle(reader["TAX_AMOUNT"]),
-                                        NET_AMOUNT = Convert.ToSingle(reader["NET_AMOUNT"]),
+                                            ? Convert.ToDateTime(reader["SALE_DATE"]).ToString("dd-MM-yyyy")
+                                            : null,
+
+                                        CUSTOMER_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
+
+                                        GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
+                                        TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["TAX_AMOUNT"]) : 0,
+                                        NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
+
+                                        DISCOUNT_AMOUNT = reader["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DISCOUNT_AMOUNT"]) : 0,
+
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
 
@@ -352,7 +369,10 @@ namespace MicroApi.DataLayer.Service
                                     AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAXABLE_AMOUNT"]) : 0,
                                     TAX_PERC = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
                                     TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
-                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0
+                                    TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0,
+                                    DISC_PERC = reader["DISC_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_PERC"]) : 0,
+                                    DISC_AMT = reader["DISC_AMT"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_AMT"]) : 0
+
                                 });
                             }
 
@@ -397,8 +417,9 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@TAX_AMOUNT", input.TAX_AMOUNT ?? 0);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", input.NET_AMOUNT ?? 0);
                     cmd.Parameters.AddWithValue("@IS_APPROVED", input.IS_APPROVED);
+                    cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", input.DISCOUNT_AMOUNT);
 
-                   
+
 
                     // ✅ UDT
                     DataTable dt = new DataTable();
@@ -409,6 +430,8 @@ namespace MicroApi.DataLayer.Service
                     dt.Columns.Add("TAX_AMOUNT", typeof(decimal));
                     dt.Columns.Add("TOTAL_AMOUNT", typeof(decimal));
                     dt.Columns.Add("ITEM_ID", typeof(int));
+                    dt.Columns.Add("DISC_PERC", typeof(decimal));
+                    dt.Columns.Add("DISC_AMT", typeof(decimal));
 
                     if (input.Details != null)
                     {
@@ -420,7 +443,9 @@ namespace MicroApi.DataLayer.Service
                             item.TAX_PERC,
                             item.TAX_AMOUNT,
                              item.TOTAL_AMOUNT,
-                            item.ITEM_ID
+                            item.ITEM_ID,
+                            item.DISC_PERC,
+                            item.DISC_AMT
                             );
                         }
                     }

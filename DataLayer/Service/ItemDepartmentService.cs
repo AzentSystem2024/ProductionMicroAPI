@@ -26,13 +26,15 @@ namespace MicroApi.DataLayer.Services
                 {
                     departmentList.Add(new ItemDepartment
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        DEPT_NAME = Convert.ToString(dr["DEPT_NAME"]),
-                        COMPANY_NAME = dr["COMPANY_NAME"].ToString(),
-                        COMPANY_ID = dr["COMPANY_ID"].ToString(),
-                        COST_BUCKET_NAME = dr["CostBucket"].ToString(),
-                        //IS_DELETED=dr["IS_DELETED"].ToString()
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                        CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "",
+                        DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : "",
+
+                        COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "",
+
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToString(dr["COMPANY_ID"]) : "",
+
+                        COST_BUCKET_NAME = dr["CostBucket"] != DBNull.Value ? Convert.ToString(dr["CostBucket"]) : ""
                     });
                 }
                 connection.Close();
@@ -91,12 +93,13 @@ namespace MicroApi.DataLayer.Services
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];
-                    department.ID = Convert.ToInt32(dr["ID"]);
-                    department.CODE = Convert.ToString(dr["CODE"]);
-                    department.DEPT_NAME = Convert.ToString(dr["DEPT_NAME"]);
-                    department.COMPANY_ID = Convert.ToString(dr["COMPANY_ID"]);
-                    department.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
-                    department.COST_BUCKET_ID = Convert.ToInt32(dr["COST_BUCKET_ID"]);
+                    department.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0;
+                    department.CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "";
+                    department.DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : "";
+                    department.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToString(dr["COMPANY_ID"]) : "";
+                    department.COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "";
+                    department.COST_BUCKET_ID = dr["COST_BUCKET_ID"] != DBNull.Value ? Convert.ToInt32(dr["COST_BUCKET_ID"]) : 0;
+
                 }
             }
             catch (Exception ex)

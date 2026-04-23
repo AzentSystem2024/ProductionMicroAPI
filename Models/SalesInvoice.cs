@@ -37,7 +37,7 @@
         public decimal? NET_AMOUNT { get; set; }
         public bool IS_APPROVED { get; set; }
         public int USER_ID { get; set; }
-
+        public decimal? DISCOUNT_AMOUNT { get; set; }
         public List<SalesInvoiceDetail>? Details { get; set; }
     }
 
@@ -50,6 +50,8 @@
         public decimal? TAX_PERC { get; set; }
         public decimal? TAX_AMOUNT { get; set; }
         public decimal? TOTAL_AMOUNT { get; set; }
+        public decimal? DISC_PERC { get; set; }
+        public decimal? DISC_AMT { get; set; }
     }
 
     public class SalesInvoiceInsertResponse
@@ -68,6 +70,7 @@
         public float GROSS_AMOUNT { get; set; }
         public float GST_AMOUNT { get; set; }
         public float NET_AMOUNT { get; set; }
+        public decimal DISCOUNT_AMOUNT { get; set; }
         public string CUST_NAME { get; set; }
     }
     public class SalesInvoiceListResponse
@@ -87,6 +90,7 @@
         public float GROSS_AMOUNT { get; set; }
         public float TAX_AMOUNT { get; set; }
         public float NET_AMOUNT { get; set; }
+        public decimal DISCOUNT_AMOUNT { get; set; }
         public string REF_NO { get; set; }
         public string PARTY_NAME { get; set; }
 
@@ -114,6 +118,7 @@
         public string EMAIL { get; set; }
         public string PHONE { get; set; }
 
+
         public List<SalesInvoiceItem> Details { get; set; }
     }
     public class SalesInvoiceItem
@@ -131,6 +136,9 @@
         public decimal TAX_PERC { get; set; }
         public decimal TAX_AMOUNT { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
+        public decimal? DISC_PERC { get; set; }
+        public decimal? DISC_AMT { get; set; }
+
     }
     public class SalesInvoiceViewResponse
     {

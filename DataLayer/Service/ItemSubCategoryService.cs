@@ -27,14 +27,14 @@ namespace MicroApi.DataLayer.Services
                 {
                     itemsubcategoryList.Add(new ItemSubCategory
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        SUBCAT_NAME = Convert.ToString(dr["SUBCAT_NAME"]),
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0,
 
-                        CAT_ID = Convert.ToInt32(dr["CAT_ID"]),
+                        CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "",
+                        SUBCAT_NAME = dr["SUBCAT_NAME"] != DBNull.Value ? Convert.ToString(dr["SUBCAT_NAME"]) : "",
 
-                        CAT_NAME = Convert.ToString(dr["CAT_NAME"]),
+                        CAT_ID = dr["CAT_ID"] != DBNull.Value ? Convert.ToInt32(dr["CAT_ID"]) : 0,
+                        CAT_NAME = dr["CAT_NAME"] != DBNull.Value ? Convert.ToString(dr["CAT_NAME"]) : ""
                         //DEPT_ID = Convert.ToInt32(dr["DEPT_ID"]),
                         //DEPT_NAME = Convert.ToString(dr["DEPT_NAME"])
 
@@ -96,14 +96,18 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dr = tbl.Rows[0];
 
-                    itemSubCategory.ID = Convert.ToInt32(dr["ID"]);
-                    itemSubCategory.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    itemSubCategory.CODE = Convert.ToString(dr["CODE"]);
-                    itemSubCategory.SUBCAT_NAME = Convert.ToString(dr["SUBCAT_NAME"]);
-                    itemSubCategory.CAT_ID = Convert.ToInt32(dr["CAT_ID"]);
-                    itemSubCategory.CAT_NAME = Convert.ToString(dr["CAT_NAME"]);
-                    itemSubCategory.DEPT_ID = Convert.ToInt32(dr["DEPT_ID"]);
-                    itemSubCategory.DEPT_NAME = Convert.ToString(dr["DEPT_NAME"]);
+                    itemSubCategory.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0;
+                    itemSubCategory.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0;
+
+                    itemSubCategory.CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "";
+                    itemSubCategory.SUBCAT_NAME = dr["SUBCAT_NAME"] != DBNull.Value ? Convert.ToString(dr["SUBCAT_NAME"]) : "";
+
+                    itemSubCategory.CAT_ID = dr["CAT_ID"] != DBNull.Value ? Convert.ToInt32(dr["CAT_ID"]) : 0;
+                    itemSubCategory.CAT_NAME = dr["CAT_NAME"] != DBNull.Value ? Convert.ToString(dr["CAT_NAME"]) : "";
+
+                    itemSubCategory.DEPT_ID = dr["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(dr["DEPT_ID"]) : 0;
+                    itemSubCategory.DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : "";
+
 
                 }
             }

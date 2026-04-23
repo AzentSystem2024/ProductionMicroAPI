@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MicroApi.DataLayer.Interface;
+﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace MicroApi.Controllers
 {
@@ -15,10 +16,33 @@ namespace MicroApi.Controllers
             _service = service;
         }
 
+        //[HttpPost("SalesSummary")]
+        //public IActionResult GetSalesSummary([FromBody] SalesSummaryFilter request)
+        //{
+        //    return Ok(_service.GetSalesSummary(request));
+        //}
         [HttpPost("SalesSummary")]
-        public IActionResult GetSalesSummary([FromBody] SalesSummaryFilter request)
+        public IActionResult GetSalesSummary([FromBody] SalesSummaryFilter filter)
         {
-            return Ok(_service.GetSalesSummary(request));
+            try
+            {
+                var dt = _service.GetSalesSummary(filter);
+
+                var result = dt.AsEnumerable()
+                    .Select(row => dt.Columns
+                        .Cast<DataColumn>()
+                        .ToDictionary(
+                            col => col.ColumnName,
+                            col => row[col] == DBNull.Value ? null : row[col]
+                        ))
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost("SalesDetail")]
@@ -38,5 +62,31 @@ namespace MicroApi.Controllers
         {
             return Ok(_service.GetConsignmentReturnDetail(request));
         }
+        [HttpPost("ItemWiseSales")]
+        public IActionResult GetItemWiseSales([FromBody] ItemWiseSalesFilter request)
+        {
+            return Ok(_service.GetItemWiseSales(request));
+        }
+        [HttpPost("ItemWiseSalesSummary")]
+        public IActionResult GetItemWiseSalesSummary([FromBody] ItemWiseSalesSummaryFilter request)
+        {
+            return Ok(_service.GetItemWiseSalesSummary(request));
+        }
+        [HttpPost("DiscountWiseSales")]
+        public IActionResult GetDiscountWiseSales([FromBody] DiscountWiseSalesFilter request)
+        {
+            return Ok(_service.GetDiscountWiseSales(request));
+        }
+        [HttpPost("TenderReport")]
+        public IActionResult GetTenderReport([FromBody] TenderReportFilter request)
+        {
+            return Ok(_service.GetTenderReport(request));
+        }
+        [HttpPost("TenderSummary")]
+        public IActionResult GetTenderSummary([FromBody] TenderSummaryFilter request)
+        {
+            return Ok(_service.GetTenderSummary(request));
+        }
+
     }
 }

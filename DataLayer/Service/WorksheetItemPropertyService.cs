@@ -1156,24 +1156,24 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROMOTION_SCHEMA", tbl);
 
-                cmd.ExecuteNonQuery();
+                object result = cmd.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    string existingItems = result.ToString();
+                    throw new Exception("Promotion already exists for Item IDs: " + existingItems);
+
+                }
 
                 objtrans.Commit();
-
-                connection.Close();
                 return true;
-
-                //Int32 CountryID = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
-                //return CountryID;
             }
-            catch (Exception ex)
+            catch
             {
-                objtrans.Rollback();
-                connection.Close();
-                throw ex;
+                if (objtrans.Connection != null)
+                    objtrans.Rollback();
+
+                throw;
             }
         }
         public bool UpdatePromotion(WorksheetItem worksheet)
@@ -1247,24 +1247,24 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROMOTION_SCHEMA", tbl);
 
-                cmd.ExecuteNonQuery();
+                object result = cmd.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    string existingItems = result.ToString();
+                    throw new Exception("Promotion already exists for Item IDs: " + existingItems);
+
+                }
 
                 objtrans.Commit();
-
-                connection.Close();
                 return true;
-
-                //Int32 CountryID = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
-                //return CountryID;
             }
-            catch (Exception ex)
+            catch
             {
-                objtrans.Rollback();
-                connection.Close();
-                throw ex;
+                if (objtrans.Connection != null)
+                    objtrans.Rollback();
+
+                throw;
             }
         }
 
@@ -1454,24 +1454,23 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROMOTION_SCHEMA", tbl);
 
-                cmd.ExecuteNonQuery();
+                object result = cmd.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    string existingItems = result.ToString();
+                    throw new Exception("Promotion already exists for Item IDs: " + existingItems);
+                }
 
                 objtrans.Commit();
-
-                connection.Close();
                 return true;
-
-                //Int32 CountryID = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
-                //return CountryID;
             }
-            catch (Exception ex)
+            catch
             {
-                objtrans.Rollback();
-                connection.Close();
-                throw ex;
+                if (objtrans.Connection != null)
+                    objtrans.Rollback();
+
+                throw;
             }
         }
 
@@ -1482,9 +1481,9 @@ namespace MicroApi.DataLayer.Services
             List<ItemStoreProperty> itemsuppliers = new List<ItemStoreProperty>();
             try
             {
-                string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE from TB_WORKSHEET WHERE WS_TYPE = 3 and TB_WORKSHEET.ID = " + id;
+                string strSQL = "SELECT TB_WORKSHEET.ID,TB_WORKSHEET.WS_TYPE, TB_WORKSHEET.WS_NO,TB_WORKSHEET.WS_DATE,TB_AC_TRANS_HEADER.TRANS_STATUS from TB_WORKSHEET INNER JOIN TB_AC_TRANS_HEADER ON TB_WORKSHEET.TRANS_ID=TB_AC_TRANS_HEADER.TRANS_ID  WHERE WS_TYPE = 3 and TB_WORKSHEET.ID= " + id;
 
-                DataTable tbl = ADO.GetDataTable(strSQL, "WorksheetPromotion");
+                DataTable tbl = ADO.GetDataTable(strSQL, "WorkshGetAllWorksheetPromotionSchemaeetPromotion");
 
                 if (tbl.Rows.Count > 0)
                 {
@@ -1494,7 +1493,8 @@ namespace MicroApi.DataLayer.Services
                     {
                         ID = ADO.ToInt32(dr["ID"]),
                         WS_NO = ADO.ToString(dr["WS_NO"]),
-                        WS_DATE = Convert.ToDateTime(dr["WS_DATE"])
+                        WS_DATE = Convert.ToDateTime(dr["WS_DATE"]),
+                        Status = ADO.ToString(dr["TRANS_STATUS"]),
                     };
                 }
 

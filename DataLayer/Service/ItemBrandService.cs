@@ -26,11 +26,13 @@ namespace RetailApi.DAL.Services
                 {
                     departmentList.Add(new ItemBrand
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        BRAND_NAME = Convert.ToString(dr["BRAND_NAME"]),
-                        COMPANY_NAME = dr["COMPANY_NAME"].ToString(),
-                        COMPANY_ID = dr["COMPANY_ID"].ToString(),
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                        CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "",
+                        BRAND_NAME = dr["BRAND_NAME"] != DBNull.Value ? Convert.ToString(dr["BRAND_NAME"]) : "",
+
+                        COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "",
+
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToString(dr["COMPANY_ID"]) : ""
                         //IS_DELETED=dr["IS_DELETED"].ToString()
                     });
                 }
@@ -79,9 +81,9 @@ namespace RetailApi.DAL.Services
             {
                 string strSQL = "SELECT TB_ITEM_BRAND.ID,TB_ITEM_BRAND.CODE,TB_ITEM_BRAND.BRAND_NAME, " +
                 "TB_ITEM_BRAND.COMPANY_ID," +
-                "TB_COMPANY.COMPANY_NAME " +
+                "TB_COMPANY_MASTER.COMPANY_NAME " +
                 "FROM TB_ITEM_BRAND " +
-                "INNER JOIN TB_COMPANY ON TB_ITEM_BRAND.COMPANY_ID = TB_COMPANY.ID " +
+                "INNER JOIN TB_COMPANY_MASTER ON TB_ITEM_BRAND.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                 "WHERE TB_ITEM_BRAND.ID =" + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Clinician");
@@ -92,11 +94,13 @@ namespace RetailApi.DAL.Services
 
                     itemBrands.Add(new ItemBrand
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        BRAND_NAME = Convert.ToString(dr["BRAND_NAME"]),
-                        COMPANY_NAME = dr["COMPANY_NAME"].ToString(),
-                        COMPANY_ID = dr["COMPANY_ID"].ToString()
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
+                        CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "",
+                        BRAND_NAME = dr["BRAND_NAME"] != DBNull.Value ? Convert.ToString(dr["BRAND_NAME"]) : "",
+
+                        COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "",
+
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToString(dr["COMPANY_ID"]) : ""
                     });
 
                 }

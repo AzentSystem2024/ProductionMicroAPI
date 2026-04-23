@@ -158,24 +158,31 @@ namespace MicroApi.DataLayer.Service
                             {
                                 CompanyUpdate company = new CompanyUpdate
                                 {
-                                    ID = Convert.ToInt32(reader["ID"]),
-                                    COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
-                                    COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
-                                    CONTACT_NAME = reader["CONTACT_NAME"]?.ToString(),
-                                    ADDRESS1 = reader["ADDRESS1"]?.ToString(),
-                                    ADDRESS2 = reader["ADDRESS2"]?.ToString(),
-                                    ADDRESS3 = reader["ADDRESS3"]?.ToString(),
-                                    PHONE = reader["PHONE"]?.ToString(),
-                                    MOBILE = reader["MOBILE"]?.ToString(),
-                                    EMAIL = reader["EMAIL"]?.ToString(),
-                                    WHATSAPP = reader["WHATSAPP"]?.ToString(),
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+
+                                    COMPANY_CODE = reader["COMPANY_CODE"] != DBNull.Value ? Convert.ToString(reader["COMPANY_CODE"]) : "",
+                                    COMPANY_NAME = reader["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(reader["COMPANY_NAME"]) : "",
+                                    CONTACT_NAME = reader["CONTACT_NAME"] != DBNull.Value ? Convert.ToString(reader["CONTACT_NAME"]) : "",
+
+                                    ADDRESS1 = reader["ADDRESS1"] != DBNull.Value ? Convert.ToString(reader["ADDRESS1"]) : "",
+                                    ADDRESS2 = reader["ADDRESS2"] != DBNull.Value ? Convert.ToString(reader["ADDRESS2"]) : "",
+                                    ADDRESS3 = reader["ADDRESS3"] != DBNull.Value ? Convert.ToString(reader["ADDRESS3"]) : "",
+
+                                    PHONE = reader["PHONE"] != DBNull.Value ? Convert.ToString(reader["PHONE"]) : "",
+                                    MOBILE = reader["MOBILE"] != DBNull.Value ? Convert.ToString(reader["MOBILE"]) : "",
+                                    EMAIL = reader["EMAIL"] != DBNull.Value ? Convert.ToString(reader["EMAIL"]) : "",
+                                    WHATSAPP = reader["WHATSAPP"] != DBNull.Value ? Convert.ToString(reader["WHATSAPP"]) : "",
+
                                     COMPANY_TYPE = reader["COMPANY_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_TYPE"]) : 0,
-                                    COMPANY_TYPE_NAME = reader["COMPANY_TYPE_NAME"]?.ToString(), 
-                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
-                                    STATE_ID = Convert.ToInt32(reader["STATE_ID"]),
-                                    GST_NO = reader["GST_NO"]?.ToString(),
-                                    PAN_NO = reader["PAN_NO"]?.ToString(),
-                                    CIN = reader["CIN"]?.ToString(),
+                                    COMPANY_TYPE_NAME = reader["COMPANY_TYPE_NAME"] != DBNull.Value ? Convert.ToString(reader["COMPANY_TYPE_NAME"]) : "",
+
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"]),
+
+                                    STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
+
+                                    GST_NO = reader["GST_NO"] != DBNull.Value ? Convert.ToString(reader["GST_NO"]) : "",
+                                    PAN_NO = reader["PAN_NO"] != DBNull.Value ? Convert.ToString(reader["PAN_NO"]) : "",
+                                    CIN = reader["CIN"] != DBNull.Value ? Convert.ToString(reader["CIN"]) : ""
                                 };
 
                                 res.Data.Add(company);
@@ -233,24 +240,31 @@ namespace MicroApi.DataLayer.Service
                             {
                                 var company = new CompanyUpdate
                                 {
-                                    ID = Convert.ToInt32(reader["ID"]),
-                                    COMPANY_CODE = reader["COMPANY_CODE"]?.ToString(),
-                                    COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
-                                    CONTACT_NAME = reader["CONTACT_NAME"]?.ToString(),
-                                    ADDRESS1 = reader["ADDRESS1"]?.ToString(),
-                                    ADDRESS2 = reader["ADDRESS2"]?.ToString(),
-                                    ADDRESS3 = reader["ADDRESS3"]?.ToString(),
-                                    PHONE = reader["PHONE"]?.ToString(),
-                                    MOBILE = reader["MOBILE"]?.ToString(),
-                                    EMAIL = reader["EMAIL"]?.ToString(),
-                                    WHATSAPP = reader["WHATSAPP"]?.ToString(),
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+
+                                    COMPANY_CODE = reader["COMPANY_CODE"] != DBNull.Value ? Convert.ToString(reader["COMPANY_CODE"]) : "",
+                                    COMPANY_NAME = reader["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(reader["COMPANY_NAME"]) : "",
+                                    CONTACT_NAME = reader["CONTACT_NAME"] != DBNull.Value ? Convert.ToString(reader["CONTACT_NAME"]) : "",
+
+                                    ADDRESS1 = reader["ADDRESS1"] != DBNull.Value ? Convert.ToString(reader["ADDRESS1"]) : "",
+                                    ADDRESS2 = reader["ADDRESS2"] != DBNull.Value ? Convert.ToString(reader["ADDRESS2"]) : "",
+                                    ADDRESS3 = reader["ADDRESS3"] != DBNull.Value ? Convert.ToString(reader["ADDRESS3"]) : "",
+
+                                    PHONE = reader["PHONE"] != DBNull.Value ? Convert.ToString(reader["PHONE"]) : "",
+                                    MOBILE = reader["MOBILE"] != DBNull.Value ? Convert.ToString(reader["MOBILE"]) : "",
+                                    EMAIL = reader["EMAIL"] != DBNull.Value ? Convert.ToString(reader["EMAIL"]) : "",
+                                    WHATSAPP = reader["WHATSAPP"] != DBNull.Value ? Convert.ToString(reader["WHATSAPP"]) : "",
+
                                     COMPANY_TYPE = reader["COMPANY_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_TYPE"]) : 0,
-                                    COMPANY_TYPE_NAME = reader["COMPANY_TYPE_NAME"]?.ToString(),
-                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value ? Convert.ToBoolean(reader["IS_INACTIVE"]) : false,
-                                    STATE_ID = Convert.ToInt32(reader["STATE_ID"]),
-                                    GST_NO = reader["GST_NO"]?.ToString(),
-                                    PAN_NO = reader["PAN_NO"]?.ToString(),
-                                    CIN = reader["CIN"]?.ToString()
+                                    COMPANY_TYPE_NAME = reader["COMPANY_TYPE_NAME"] != DBNull.Value ? Convert.ToString(reader["COMPANY_TYPE_NAME"]) : "",
+
+                                    IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"]),
+
+                                    STATE_ID = reader["STATE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STATE_ID"]) : 0,
+
+                                    GST_NO = reader["GST_NO"] != DBNull.Value ? Convert.ToString(reader["GST_NO"]) : "",
+                                    PAN_NO = reader["PAN_NO"] != DBNull.Value ? Convert.ToString(reader["PAN_NO"]) : "",
+                                    CIN = reader["CIN"] != DBNull.Value ? Convert.ToString(reader["CIN"]) : ""
                                 };
 
                                 res.flag = 1;

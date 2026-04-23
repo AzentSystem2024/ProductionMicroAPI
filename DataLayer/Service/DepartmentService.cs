@@ -94,14 +94,18 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dr = tbl.Rows[0];
 
-                    department.ID = Convert.ToInt32(dr["ID"]);
-                    department.CODE = Convert.ToString(dr["CODE"]);
-                    department.DEPT_NAME = Convert.ToString(dr["DEPT_NAME"]);
-                    department.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
-                    department.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    department.IS_ACTIVE = Convert.ToBoolean(dr["IS_ACTIVE"]);
-                    department.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
-                    department.COST_BUCKET_ID = Convert.ToInt32(dr["COST_BUCKET_ID"]);
+                    department.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0;
+                    department.CODE = dr["CODE"] != DBNull.Value ? Convert.ToString(dr["CODE"]) : "";
+                    department.DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : "";
+
+                    department.COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "";
+                    department.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : 0;
+
+                    department.IS_ACTIVE = dr["IS_ACTIVE"] != DBNull.Value && Convert.ToBoolean(dr["IS_ACTIVE"]);
+                    department.IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]);
+
+                    department.COST_BUCKET_ID = dr["COST_BUCKET_ID"] != DBNull.Value ? Convert.ToInt32(dr["COST_BUCKET_ID"]) : 0;
+
                 }
             }
             catch (Exception ex)
