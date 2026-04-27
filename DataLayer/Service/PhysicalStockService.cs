@@ -456,6 +456,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 9);
+                        cmd.Parameters.AddWithValue("@STORE_ID",request.STORE_ID.HasValue ? (object)request.STORE_ID.Value : DBNull.Value);
 
                         // Create a DataTable for the UDT parameter
                         DataTable itemCodesTable = new DataTable();

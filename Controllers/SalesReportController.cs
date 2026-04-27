@@ -2,6 +2,7 @@
 using MicroApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using static System.Net.WebRequestMethods;
 
 namespace MicroApi.Controllers
 {
@@ -34,21 +35,37 @@ namespace MicroApi.Controllers
                         .ToDictionary(
                             col => col.ColumnName,
                             col => row[col] == DBNull.Value ? null : row[col]
-                        ))
-                    .ToList();
+                        )).ToList();
 
-                return Ok(result);
+                return Ok(result);   // ✅ FIXED
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(ex.Message);
             }
         }
-
         [HttpPost("SalesDetail")]
         public IActionResult GetSalesDetail([FromBody] SalesDetailFilter request)
         {
-            return Ok(_service.GetSalesDetails(request));
+            //return Ok(_service.GetSalesDetails(request));
+            try
+            {
+                var dt = _service.GetSalesDetails(request);
+
+                var result = dt.AsEnumerable()
+                    .Select(row => dt.Columns
+                        .Cast<DataColumn>()
+                        .ToDictionary(
+                            col => col.ColumnName,
+                            col => row[col] == DBNull.Value ? null : row[col]
+                        )).ToList();
+
+                return Ok(result);   // ✅ FIXED
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("ConsignmentSummary")]
@@ -70,22 +87,91 @@ namespace MicroApi.Controllers
         [HttpPost("ItemWiseSalesSummary")]
         public IActionResult GetItemWiseSalesSummary([FromBody] ItemWiseSalesSummaryFilter request)
         {
-            return Ok(_service.GetItemWiseSalesSummary(request));
+            try
+            {
+                var dt = _service.GetItemWiseSalesSummary(request);
+
+                var result = dt.AsEnumerable()
+                    .Select(row => dt.Columns
+                        .Cast<DataColumn>()
+                        .ToDictionary(
+                            col => col.ColumnName,
+                            col => row[col] == DBNull.Value ? null : row[col]
+                        )).ToList();
+
+                return Ok(result);   // ✅ FIXED
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPost("DiscountWiseSales")]
+
         public IActionResult GetDiscountWiseSales([FromBody] DiscountWiseSalesFilter request)
         {
-            return Ok(_service.GetDiscountWiseSales(request));
+            try
+            {
+                var dt = _service.GetDiscountWiseSales(request);
+
+                var result = dt.AsEnumerable()
+                    .Select(row => dt.Columns
+                        .Cast<DataColumn>()
+                        .ToDictionary(
+                            col => col.ColumnName,
+                            col => row[col] == DBNull.Value ? null : row[col]
+                        )).ToList();
+
+                return Ok(result);   // ✅ FIXED
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPost("TenderReport")]
         public IActionResult GetTenderReport([FromBody] TenderReportFilter request)
         {
-            return Ok(_service.GetTenderReport(request));
+            try
+            {
+                var dt = _service.GetTenderReport(request);
+
+                var result = dt.AsEnumerable()
+                    .Select(row => dt.Columns
+                        .Cast<DataColumn>()
+                        .ToDictionary(
+                            col => col.ColumnName,
+                            col => row[col] == DBNull.Value ? null : row[col]
+                        )).ToList();
+
+                return Ok(result);   // ✅ FIXED
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPost("TenderSummary")]
         public IActionResult GetTenderSummary([FromBody] TenderSummaryFilter request)
         {
-            return Ok(_service.GetTenderSummary(request));
+            try
+            {
+                var dt = _service.GetTenderSummary(request);
+
+                var result = dt.AsEnumerable()
+                    .Select(row => dt.Columns
+                        .Cast<DataColumn>()
+                        .ToDictionary(
+                            col => col.ColumnName,
+                            col => row[col] == DBNull.Value ? null : row[col]
+                        )).ToList();
+
+                return Ok(result);   // ✅ FIXED
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

@@ -5,6 +5,7 @@ namespace MicroApi.DataLayer.Interface
     public interface IPurchaseOrderService
     {
         public List<SupplierList> GetSupplier(SupplierInput input);
+        public List<StoreList> GetStore(StoreListreq input);
         public Int32 Insert(PurchaseOrderHeader worksheet);
         public List<PurchaseOrderHeader> GetPOList(POListRequest request);
         public Int32 Update(PurchaseOrderHeader worksheet);

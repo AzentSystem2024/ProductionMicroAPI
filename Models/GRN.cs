@@ -8,7 +8,7 @@
         public int PO_ID { get; set; }
         public string PO_NO { get; set; }
         public string DOC_NO { get; set; }
-        public DateTime GRN_DATE { get; set; }
+        public DateTime? GRN_DATE { get; set; }
         public int SUPP_ID { get; set; }
         public float NET_AMOUNT { get; set; }
         public float? TOTAL_COST { get; set; }

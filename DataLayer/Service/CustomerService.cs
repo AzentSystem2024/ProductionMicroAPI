@@ -337,55 +337,75 @@ namespace MicroApi.DataLayer.Services
                 {
                     DataRow dr = tbl.Rows[0];
 
-                    customer.ID = Convert.ToInt32(dr["ID"]);
-                    customer.HQID = Convert.ToInt32(dr["HQID"]);
-                    customer.AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]);
-                    customer.FIRST_NAME = Convert.ToString(dr["FIRST_NAME"]);
-                    customer.CONTACT_NAME = Convert.ToString(dr["CONTACT_NAME"]);
-                    customer.CUST_CODE = Convert.ToString(dr["CUST_CODE"]);
-                    customer.ADDRESS1 = Convert.ToString(dr["ADDRESS1"]);
-                    customer.ADDRESS2 = Convert.ToString(dr["ADDRESS2"]);
-                    customer.ADDRESS3 = Convert.ToString(dr["ADDRESS3"]);
-                    customer.ZIP = Convert.ToString(dr["ZIP"]);
-                    customer.CITY = Convert.ToString(dr["CITY"]);
-                    customer.STATE_ID = Convert.ToInt32(dr["STATE_ID"]);
-                    customer.COUNTRY_ID = Convert.ToInt32(dr["COUNTRY_ID"]);
-                    customer.PHONE = Convert.ToString(dr["PHONE"]);
-                    customer.EMAIL = Convert.ToString(dr["EMAIL"]);
-                    customer.SALESMAN_ID = Convert.ToInt32(dr["SALESMAN_ID"]);
-                    customer.CREDIT_LIMIT = float.Parse(dr["CREDIT_LIMIT"].ToString());
-                    customer.CURRENT_CREDIT = float.Parse(dr["CURRENT_CREDIT"].ToString());
-                    customer.IS_BLOCKED = Convert.ToBoolean(dr["IS_BLOCKED"]);
-                    customer.MOBILE_NO = Convert.ToString(dr["MOBILE_NO"]);
-                    customer.FAX_NO = Convert.ToString(dr["FAX_NO"]);
-                    customer.LAST_NAME = Convert.ToString(dr["LAST_NAME"]);
-                    //customer.DOB = Convert.ToString(dr["DOB"]);
-                    //customer.NATIONALITY = Convert.ToInt32(dr["NATIONALITY"]);
-                    customer.NOTES = Convert.ToString(dr["NOTES"]);
-                    customer.CUST_NAME = Convert.ToString(dr["CUST_NAME"]);
-                    customer.CREDIT_DAYS = Convert.ToInt32(dr["CREDIT_DAYS"]);
-                    customer.PAY_TERM_ID = Convert.ToInt32(dr["PAY_TERM_ID"]);
-                    customer.PRICE_CLASS_ID = Convert.ToInt32(dr["PRICE_CLASS_ID"]);
-                    customer.DISCOUNT_PERCENT = float.Parse(dr["DISCOUNT_PERCENT"].ToString());
-                    customer.DOJ = Convert.ToString(dr["DOJ"]);
-                    customer.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    customer.STORE_ID = Convert.ToInt32(dr["STORE_ID"]);
-                    customer.CUST_VAT_RULE_ID = Convert.ToInt32(dr["CUST_VAT_RULE_ID"]);
-                    customer.VAT_REGNO = Convert.ToString(dr["VAT_REGNO"]);
-                    customer.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
-                    customer.LOYALTY_POINT = Convert.ToDecimal(dr["LOYALTY_POINT"]);
-                    customer.IS_COMPANY_BRANCH = Convert.ToInt32(dr["IS_COMPANY_BRANCH"]);
-                    customer.STATE_NAME = Convert.ToString(dr["STATE_NAME"]);
-                    customer.COUNTRY_NAME = Convert.ToString(dr["COUNTRY_NAME"]);
-                    customer.EMP_NAME = Convert.ToString(dr["EMP_NAME"]);
-                    customer.CLASS_NAME = Convert.ToString(dr["CLASS_NAME"]);
-                    customer.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
-                    customer.STORE_NAME = Convert.ToString(dr["STORE_NAME"]);
-                    customer.VAT_RULE_DESCRIPTION = Convert.ToString(dr["VAT_RULE_DESCRIPTION"]);
-                    customer.CUST_TYPE = Convert.ToInt32(dr["CUST_TYPE"]);
-                    customer.DEALER_ID = Convert.ToInt32(dr["DEALER_ID"]);
-                    customer.MOB_CODE = Convert.ToString(dr["MOB_CODE"]);
-                    customer.PHONE_CODE = Convert.ToString(dr["PHONE_CODE"]);
+                    customer.ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]);
+                    customer.HQID = dr["HQID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["HQID"]);
+                    customer.AC_HEAD_ID = dr["AC_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AC_HEAD_ID"]);
+
+                    customer.FIRST_NAME = dr["FIRST_NAME"]?.ToString();
+                    customer.CONTACT_NAME = dr["CONTACT_NAME"]?.ToString();
+                    customer.CUST_CODE = dr["CUST_CODE"]?.ToString();
+
+                    customer.ADDRESS1 = dr["ADDRESS1"]?.ToString();
+                    customer.ADDRESS2 = dr["ADDRESS2"]?.ToString();
+                    customer.ADDRESS3 = dr["ADDRESS3"]?.ToString();
+                    customer.ZIP = dr["ZIP"]?.ToString();
+                    customer.CITY = dr["CITY"]?.ToString();
+
+                    customer.STATE_ID = dr["STATE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["STATE_ID"]);
+                    customer.COUNTRY_ID = dr["COUNTRY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["COUNTRY_ID"]);
+
+                    customer.PHONE = dr["PHONE"]?.ToString();
+                    customer.EMAIL = dr["EMAIL"]?.ToString();
+
+                    customer.SALESMAN_ID = dr["SALESMAN_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SALESMAN_ID"]);
+
+                    customer.CREDIT_LIMIT = dr["CREDIT_LIMIT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["CREDIT_LIMIT"]);
+                    customer.CURRENT_CREDIT = dr["CURRENT_CREDIT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["CURRENT_CREDIT"]);
+
+                    customer.IS_BLOCKED = dr["IS_BLOCKED"] != DBNull.Value && Convert.ToBoolean(dr["IS_BLOCKED"]);
+
+                    customer.MOBILE_NO = dr["MOBILE_NO"]?.ToString();
+                    customer.FAX_NO = dr["FAX_NO"]?.ToString();
+                    customer.LAST_NAME = dr["LAST_NAME"]?.ToString();
+
+                    customer.NOTES = dr["NOTES"]?.ToString();
+                    customer.CUST_NAME = dr["CUST_NAME"]?.ToString();
+
+                    customer.CREDIT_DAYS = dr["CREDIT_DAYS"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CREDIT_DAYS"]);
+                    customer.PAY_TERM_ID = dr["PAY_TERM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PAY_TERM_ID"]);
+                    customer.PRICE_CLASS_ID = dr["PRICE_CLASS_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PRICE_CLASS_ID"]);
+
+                    customer.DISCOUNT_PERCENT = dr["DISCOUNT_PERCENT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["DISCOUNT_PERCENT"]);
+
+                    customer.DOJ = dr["DOJ"]?.ToString();
+
+                    customer.COMPANY_ID = dr["COMPANY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["COMPANY_ID"]);
+                    customer.STORE_ID = dr["STORE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["STORE_ID"]);
+
+                    customer.CUST_VAT_RULE_ID = dr["CUST_VAT_RULE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CUST_VAT_RULE_ID"]);
+
+                    customer.VAT_REGNO = dr["VAT_REGNO"]?.ToString();
+
+                    customer.IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]);
+
+                    customer.LOYALTY_POINT = dr["LOYALTY_POINT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["LOYALTY_POINT"]);
+
+                    customer.IS_COMPANY_BRANCH = dr["IS_COMPANY_BRANCH"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IS_COMPANY_BRANCH"]);
+
+                    customer.STATE_NAME = dr["STATE_NAME"]?.ToString();
+                    customer.COUNTRY_NAME = dr["COUNTRY_NAME"]?.ToString();
+                    customer.EMP_NAME = dr["EMP_NAME"]?.ToString();
+                    customer.CLASS_NAME = dr["CLASS_NAME"]?.ToString();
+                    customer.COMPANY_NAME = dr["COMPANY_NAME"]?.ToString();
+                    customer.STORE_NAME = dr["STORE_NAME"]?.ToString();
+                    customer.VAT_RULE_DESCRIPTION = dr["VAT_RULE_DESCRIPTION"]?.ToString();
+
+                    customer.CUST_TYPE = dr["CUST_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CUST_TYPE"]);
+                    customer.DEALER_ID = dr["DEALER_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DEALER_ID"]);
+
+                    customer.MOB_CODE = dr["MOB_CODE"]?.ToString();
+                    customer.PHONE_CODE = dr["PHONE_CODE"]?.ToString();
+
                     //customer.WAREHOUSE_ID = Convert.ToInt32(dr["WAREHOUSE_ID"]);
                 }
                 string addressSQL = @"

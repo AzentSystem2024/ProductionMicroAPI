@@ -12,9 +12,9 @@
 
         public int REASON_TYPE { get; set; }
 
-        public DateTime START_DATE { get; set; }
+        public DateTime? START_DATE { get; set; }
 
-        public DateTime END_DATE { get; set; }
+        public DateTime? END_DATE { get; set; }
 
         public string ARABIC_DESCRIPTION { get; set; }
 

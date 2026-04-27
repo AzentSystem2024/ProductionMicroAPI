@@ -26,17 +26,32 @@ namespace MicroApi.DataLayer.Services
                 {
                     productList.Add(new Reasons
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        //COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]),
-                        REASON_TYPE = Convert.ToInt32(dr["REASON_TYPE"]),
-                        START_DATE = Convert.ToDateTime(dr["START_DATE"]),
-                        END_DATE = Convert.ToDateTime(dr["END_DATE"]),
-                        ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]),
-                        DISCOUNT_TYPE = Convert.ToInt32(dr["DISCOUNT_TYPE"]),
-                        DISCOUNT_PERCENT = float.Parse(dr["DISCOUNT_PERCENT"].ToString()),
-                        AC_HEAD_ID = dr["AC_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AC_HEAD_ID"]),
+                        ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+
+                        CODE = dr["CODE"]?.ToString(),
+                        DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
+
+                        REASON_TYPE = dr["REASON_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["REASON_TYPE"]),
+
+                        START_DATE = dr["START_DATE"] == DBNull.Value
+                        ? (DateTime?)null
+                        : Convert.ToDateTime(dr["START_DATE"]),
+
+                        END_DATE = dr["END_DATE"] == DBNull.Value
+                        ? (DateTime?)null
+                        : Convert.ToDateTime(dr["END_DATE"]),
+
+                        ARABIC_DESCRIPTION = dr["ARABIC_DESCRIPTION"]?.ToString(),
+
+                        DISCOUNT_TYPE = dr["DISCOUNT_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DISCOUNT_TYPE"]),
+
+                        DISCOUNT_PERCENT = dr["DISCOUNT_PERCENT"] == DBNull.Value
+                        ? 0
+                        : Convert.ToSingle(dr["DISCOUNT_PERCENT"]),
+
+                        AC_HEAD_ID = dr["AC_HEAD_ID"] == DBNull.Value
+                        ? 0
+                        : Convert.ToInt32(dr["AC_HEAD_ID"])
                         //IS_DELETED=Convert.ToBoolean(dr["IS_DELETED"])
                     });
                 }
@@ -223,18 +238,24 @@ namespace MicroApi.DataLayer.Services
                 if (tbl.Rows.Count > 0)
                 {
                     DataRow dr = tbl.Rows[0];
-                    reasons.ID = Convert.ToInt32(dr["ID"]);
-                    reasons.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    reasons.CODE = Convert.ToString(dr["CODE"]);
-                    reasons.DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]);
-                    reasons.REASON_TYPE = Convert.ToInt32(dr["REASON_TYPE"]);
-                    reasons.START_DATE = Convert.ToDateTime(dr["START_DATE"]);
-                    reasons.END_DATE = Convert.ToDateTime(dr["END_DATE"]);
-                    reasons.ARABIC_DESCRIPTION = Convert.ToString(dr["ARABIC_DESCRIPTION"]);
-                    reasons.DISCOUNT_TYPE = Convert.ToInt32(dr["DISCOUNT_TYPE"]);
-                    reasons.DISCOUNT_PERCENT = float.Parse(dr["DISCOUNT_PERCENT"].ToString());
-                    reasons.IS_DELETED = Convert.ToBoolean(dr["IS_DELETED"]);
-                    reasons.AC_HEAD_ID = Convert.ToInt32(dr["AC_HEAD_ID"]);
+                    reasons.ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]);
+                    reasons.COMPANY_ID = dr["COMPANY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["COMPANY_ID"]);
+                    reasons.CODE = dr["CODE"]?.ToString();
+                    reasons.DESCRIPTION = dr["DESCRIPTION"]?.ToString();
+                    reasons.REASON_TYPE = dr["REASON_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["REASON_TYPE"]);
+
+                    reasons.START_DATE = dr["START_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["START_DATE"]);
+                    reasons.END_DATE = dr["END_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["END_DATE"]);
+
+                    reasons.ARABIC_DESCRIPTION = dr["ARABIC_DESCRIPTION"]?.ToString();
+
+                    reasons.DISCOUNT_TYPE = dr["DISCOUNT_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DISCOUNT_TYPE"]);
+                    reasons.DISCOUNT_PERCENT = dr["DISCOUNT_PERCENT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["DISCOUNT_PERCENT"]);
+
+                    reasons.IS_DELETED = dr["IS_DELETED"] != DBNull.Value && Convert.ToBoolean(dr["IS_DELETED"]);
+
+                    reasons.AC_HEAD_ID = dr["AC_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AC_HEAD_ID"]);
+
 
                     strSQL = @"
                 SELECT 
@@ -253,8 +274,8 @@ namespace MicroApi.DataLayer.Services
                         {
                             reasonstores.Add(new REASON_STORES
                             {
-                                ID = Convert.ToInt32(dr1["ID"]),
-                                STORE_ID = Convert.ToString(dr1["STORE_ID"]), 
+                                ID = dr1["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr1["ID"]),
+                                STORE_ID = dr1["STORE_ID"]?.ToString()
                             });
                         }
                     }

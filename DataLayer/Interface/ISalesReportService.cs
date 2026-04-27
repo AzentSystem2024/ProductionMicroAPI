@@ -7,19 +7,20 @@ namespace MicroApi.DataLayer.Interface
     {
         // SalesSummaryResponse GetSalesSummary(SalesSummaryFilter request);
         DataTable GetSalesSummary(SalesSummaryFilter filter);
-        SalesDetailResponse GetSalesDetails(SalesDetailFilter request);
+        //SalesDetailResponse GetSalesDetails(SalesDetailFilter request);
+        DataTable GetSalesDetails(SalesDetailFilter request);
 
         ConsignmentSummaryResponse GetConsignmentSummary(ConsignmentSummaryFilter request);
 
         ConsignmentReturnDetailResponse GetConsignmentReturnDetail(ConsignmentReturnDetailFilter request);
         ItemWiseSalesResponse GetItemWiseSales(ItemWiseSalesFilter request);
 
-        ItemWiseSalesSummaryResponse GetItemWiseSalesSummary(ItemWiseSalesSummaryFilter request);
+        //ItemWiseSalesSummaryResponse GetItemWiseSalesSummary(ItemWiseSalesSummaryFilter request);
+        DataTable GetItemWiseSalesSummary(ItemWiseSalesSummaryFilter request);
+        DataTable GetDiscountWiseSales(DiscountWiseSalesFilter request);
+        //DiscountWiseSalesResponse
+        DataTable GetTenderReport(TenderReportFilter request);
 
-        DiscountWiseSalesResponse GetDiscountWiseSales(DiscountWiseSalesFilter request);
-
-        TenderReportResponse GetTenderReport(TenderReportFilter request);
-
-        TenderSummaryResponse GetTenderSummary(TenderSummaryFilter request);
+        DataTable GetTenderSummary(TenderSummaryFilter request);
     }
 }

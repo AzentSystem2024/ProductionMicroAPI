@@ -64,6 +64,38 @@ namespace MicroApi.DataLayer.Services
 
             return worksheetList;
         }
+        public List<StoreList> GetStore(StoreListreq input)
+        {
+            List<StoreList> worksheetList = new List<StoreList>();
+            SqlConnection connection = ADO.GetConnection();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = connection;
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "SP_TB_PURCHASE_ORDER";
+            cmd.Parameters.AddWithValue("@ACTION", 8);
+            cmd.Parameters.AddWithValue("@STORE_ID", input.STORE_ID);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable tbl = new DataTable();
+            da.Fill(tbl);
+            foreach (DataRow dr in tbl.Rows)
+            {
+                worksheetList.Add(new StoreList
+                {
+                    ID = ADO.ToInt32(dr["ID"]),
+                    STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
+                    ADDRESS1 = ADO.ToString(dr["ADDRESS1"]),
+                    ADDRESS2 = ADO.ToString(dr["ADDRESS2"]),
+                    ADDRESS3 = ADO.ToString(dr["ADDRESS3"]),
+                    PHONE = ADO.ToString(dr["PHONE"]),
+                    EMAIL = ADO.ToString(dr["EMAIL"])                   
+
+                });
+            }
+            connection.Close();
+
+            return worksheetList;
+        }
 
         public Int32 Insert(PurchaseOrderHeader worksheet)
         {
@@ -770,68 +802,81 @@ namespace MicroApi.DataLayer.Services
 
                     schema = new PurchaseOrderHeader
                     {
-                        ID = ADO.ToInt32(dr["ID"]),
-                        COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]),
-                        STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                        STORE = ADO.ToString(dr["STORE_NAME"]),
-                        DOC_NO = ADO.ToString(dr["PO_NO"]),
-                        PO_DATE = Convert.ToString(dr["PO_DATE"]),
-                        SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
-                        SUPP_NAME = ADO.ToString(dr["SUPP_NAME"]),
-                        SUPP_CONTACT = ADO.ToString(dr["SUPP_CONTACT"]),
-                        SUPP_ADDRESS = ADO.ToString(dr["SUPP_ADDRESS"]),
-                        SUPP_MOBILE = ADO.ToString(dr["SUPP_MOBILE"]),
-                        REF_NO = ADO.ToString(dr["REF_NO"]),
-                        PAY_TERM_ID = ADO.ToInt32(dr["PAY_TERM_ID"]),
-                        DELIVERY_TERM_ID = ADO.ToInt32(dr["DELIVERY_TERM_ID"]),
-                        STATUS_ID = ADO.ToInt32(dr["PO_STATUS"]),
-                        STATUS = ADO.ToString(dr["STATUS_DESC"]),
-                        NOTES = ADO.ToString(dr["NOTES"]),
-                        GROSS_AMOUNT = ADO.ToFloat(dr["GROSS_AMOUNT"]),
-                        TAX_AMOUNT = ADO.ToFloat(dr["TAX_AMOUNT"]),
-                        NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
-                        FIN_ID = ADO.ToInt32(dr["FIN_ID"]),
-                        SHIP_TO = ADO.ToString(dr["SHIP_TO"]),
-                        PURPOSE = ADO.ToString(dr["PURPOSE"]),
-                        LOCATION = ADO.ToString(dr["LOCATION"]),
-                        CONTACT_NAME = ADO.ToString(dr["CONTACT_NAME"]),
-                        CONTACT_MOBILE = ADO.ToString(dr["CONTACT_MOBILE"]),
-                        DELIVERY_DESC = ADO.ToString(dr["DELIVERY_DESC"]),
-                        ISSUED_EMP_ID = ADO.ToInt32(dr["ISSUED_EMP_ID"]),
-                        PO_TYPE = ADO.ToInt32(dr["PO_TYPE"]),
-                        SUPP_GROSS_AMOUNT = ADO.ToFloat(dr["SUPP_GROSS_AMOUNT"]),
-                        SUPP_NET_AMOUNT = ADO.ToFloat(dr["SUPP_NET_AMOUNT"]),
-                        EXCHANGE_RATE = ADO.ToFloat(dr["EXCHANGE_RATE"]),
-                        CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
-                        //CURRENCY = ADO.ToString(dr["CURRENCY"]),
-                        //NARRATION = ADO.ToString(dr["NARRATION"]),
-                        DELIVERY_DATE = Convert.ToDateTime(dr["DELIVERY_DATE"]),
-                        PAY_TERM = ADO.ToString(dr["PAYMENT_NAME"]),
-                        DELIVERY_TERM = ADO.ToString(dr["DELIVERY_TERM"]),
-                        NARRATION = ADO.ToString(dr["NARRATION"]),
-                        TRANS_ID = ADO.ToInt32(dr["TRANS_ID"]),
-                        SUPPLIER_EMAIL = ADO.ToString(dr["EMAIL"]),
-                        CURRENCY_NAME = ADO.ToString(dr["CURRENCY_NAME"]),
-                        VAT_RULE_NAME = ADO.ToString(dr["VAT_RULE_NAME"]),
-                        COMPANY_NAME = ADO.ToString(dr["COMPANY_NAME"]),
-                        ADDRESS1 = ADO.ToString(dr["ADDRESS1"]),
-                        ADDRESS2 = ADO.ToString(dr["ADDRESS2"]),
-                        ADDRESS3 = ADO.ToString(dr["ADDRESS3"]),
-                        COMPANY_CODE = ADO.ToString(dr["COMPANY_CODE"]),
-                        EMAIL = ADO.ToString(dr["EMAIL"]),
-                        PHONE = ADO.ToString(dr["PHONE"]),
-                        SUPP_ADDRESS1 = ADO.ToString(dr["SUPP_ADDRESS1"]),
-                        SUPP_ADDRESS2 = ADO.ToString(dr["SUPP_ADDRESS2"]),
-                        SUPP_ADDRESS3 = ADO.ToString(dr["SUPP_ADDRESS3"]),
-                        SUPP_CITY = ADO.ToString(dr["CITY"]),
-                        SUPP_CODE = ADO.ToString(dr["SUPP_CODE"]),
-                        SUPP_ZIP = ADO.ToString(dr["ZIP"]),
-                        SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
-                        SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
-                        SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
-                        GST_NO = ADO.ToString(dr["GST_NO"]),
-                        PAN_NO = ADO.ToString(dr["PAN_NO"]),
-                        CIN = ADO.ToString(dr["CIN"]),
+                        ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                        COMPANY_ID = dr["COMPANY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["COMPANY_ID"]),
+                        STORE_ID = dr["STORE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["STORE_ID"]),
+                        STORE = dr["STORE_NAME"]?.ToString() ?? "",
+                        DOC_NO = dr["PO_NO"]?.ToString() ?? "",
+                        PO_DATE = dr["PO_DATE"]?.ToString() ?? "",
+
+                        SUPP_ID = dr["SUPP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SUPP_ID"]),
+                        SUPP_NAME = dr["SUPP_NAME"]?.ToString() ?? "",
+                        SUPP_CONTACT = dr["SUPP_CONTACT"]?.ToString() ?? "",
+                        SUPP_ADDRESS = dr["SUPP_ADDRESS"]?.ToString() ?? "",
+                        SUPP_MOBILE = dr["SUPP_MOBILE"]?.ToString() ?? "",
+
+                        REF_NO = dr["REF_NO"]?.ToString() ?? "",
+                        PAY_TERM_ID = dr["PAY_TERM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PAY_TERM_ID"]),
+                        DELIVERY_TERM_ID = dr["DELIVERY_TERM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DELIVERY_TERM_ID"]),
+                        STATUS_ID = dr["PO_STATUS"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PO_STATUS"]),
+                        STATUS = dr["STATUS_DESC"]?.ToString() ?? "",
+                        NOTES = dr["NOTES"]?.ToString() ?? "",
+
+                        GROSS_AMOUNT = dr["GROSS_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["GROSS_AMOUNT"]),
+                        TAX_AMOUNT = dr["TAX_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["TAX_AMOUNT"]),
+                        NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["NET_AMOUNT"]),
+
+                        FIN_ID = dr["FIN_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FIN_ID"]),
+                        SHIP_TO = dr["SHIP_TO"]?.ToString() ?? "",
+                        PURPOSE = dr["PURPOSE"]?.ToString() ?? "",
+                        LOCATION = dr["LOCATION"]?.ToString() ?? "",
+
+                        CONTACT_NAME = dr["CONTACT_NAME"]?.ToString() ?? "",
+                        CONTACT_MOBILE = dr["CONTACT_MOBILE"]?.ToString() ?? "",
+                        DELIVERY_DESC = dr["DELIVERY_DESC"]?.ToString() ?? "",
+
+                        ISSUED_EMP_ID = dr["ISSUED_EMP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ISSUED_EMP_ID"]),
+                        PO_TYPE = dr["PO_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PO_TYPE"]),
+
+                        SUPP_GROSS_AMOUNT = dr["SUPP_GROSS_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["SUPP_GROSS_AMOUNT"]),
+                        SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["SUPP_NET_AMOUNT"]),
+                        EXCHANGE_RATE = dr["EXCHANGE_RATE"] == DBNull.Value ? 0 : Convert.ToSingle(dr["EXCHANGE_RATE"]),
+
+                        CURRENCY_ID = dr["CURRENCY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CURRENCY_ID"]),
+                        DELIVERY_DATE = dr["DELIVERY_DATE"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dr["DELIVERY_DATE"]),
+
+                        PAY_TERM = dr["PAYMENT_NAME"]?.ToString() ?? "",
+                        DELIVERY_TERM = dr["DELIVERY_TERM"]?.ToString() ?? "",
+                        NARRATION = dr["NARRATION"]?.ToString() ?? "",
+
+                        TRANS_ID = dr["TRANS_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TRANS_ID"]),
+
+                        SUPPLIER_EMAIL = dr["EMAIL"]?.ToString() ?? "",
+                        CURRENCY_NAME = dr["CURRENCY_NAME"]?.ToString() ?? "",
+                        VAT_RULE_NAME = dr["VAT_RULE_NAME"]?.ToString() ?? "",
+
+                        COMPANY_NAME = dr["COMPANY_NAME"]?.ToString() ?? "",
+                        ADDRESS1 = dr["ADDRESS1"]?.ToString() ?? "",
+                        ADDRESS2 = dr["ADDRESS2"]?.ToString() ?? "",
+                        ADDRESS3 = dr["ADDRESS3"]?.ToString() ?? "",
+                        COMPANY_CODE = dr["COMPANY_CODE"]?.ToString() ?? "",
+
+                        EMAIL = dr["EMAIL"]?.ToString() ?? "",
+                        PHONE = dr["PHONE"]?.ToString() ?? "",
+
+                        SUPP_ADDRESS1 = dr["SUPP_ADDRESS1"]?.ToString() ?? "",
+                        SUPP_ADDRESS2 = dr["SUPP_ADDRESS2"]?.ToString() ?? "",
+                        SUPP_ADDRESS3 = dr["SUPP_ADDRESS3"]?.ToString() ?? "",
+                        SUPP_CITY = dr["CITY"]?.ToString() ?? "",
+                        SUPP_CODE = dr["SUPP_CODE"]?.ToString() ?? "",
+                        SUPP_ZIP = dr["ZIP"]?.ToString() ?? "",
+                        SUPP_EMAIL = dr["SUPP_EMAIL"]?.ToString() ?? "",
+                        SUPP_PHONE = dr["SUPP_PHONE"]?.ToString() ?? "",
+                        SUPP_STATE_NAME = dr["STATE_NAME"]?.ToString() ?? "",
+
+                        GST_NO = dr["GST_NO"]?.ToString() ?? "",
+                        PAN_NO = dr["PAN_NO"]?.ToString() ?? "",
+                        CIN = dr["CIN"]?.ToString() ?? ""
 
                     };
                 }
@@ -848,29 +893,35 @@ namespace MicroApi.DataLayer.Services
                 {
                     schemaEntries.Add(new PurchaseOrderDetail
                     {
-                        ID = ADO.ToInt32(dr3["ID"]),
-                        COMPANY_ID = ADO.ToInt32(dr3["COMPANY_ID"]),
-                        PO_ID = ADO.ToInt32(dr3["PO_ID"]),
-                        JOB_ID = ADO.ToInt32(dr3["JOB_ID"]),
-                        ITEM_ID = ADO.ToInt32(dr3["ITEM_ID"]),
-                        QUANTITY = ADO.ToFloat(dr3["QUANTITY"]),
-                        PACKING = ADO.ToString(dr3["PACKING"]),
-                        PRICE = ADO.ToFloat(dr3["PRICE"]),
-                        AMOUNT = ADO.ToFloat(dr3["AMOUNT"]),
-                        DISC_PERCENT = ADO.ToFloat(dr3["DISC_PERCENT"]),
-                        VAT_PERC = ADO.ToDecimal(dr3["TAX_PERCENT"]),
-                        TAX_AMOUNT = ADO.ToDecimal(dr3["TAX_AMOUNT"]),
-                        TOTAL_AMOUNT = ADO.ToDecimal(dr3["TOTAL_AMOUNT"]),
-                        ITEM_DESC = ADO.ToString(dr3["DESCRIPTION"]),
-                        UOM = ADO.ToString(dr3["UOM"]),
-                        GRN_QTY = ADO.ToFloat(dr3["GRN_QTY"]),
-                        INVOICE_QTY = ADO.ToFloat(dr3["INVOICE_QTY"]),
-                        SUPP_PRICE = ADO.ToFloat(dr3["SUPP_PRICE"]),
-                        SUPP_AMOUNT = ADO.ToFloat(dr3["SUPP_AMOUNT"]),
-                        ITEM_CODE = ADO.ToString(dr3["ITEM_CODE"]),
-                        CGST = ADO.ToDecimal(dr3["CGST"]),
-                        SGST = ADO.ToDecimal(dr3["SGST"]),
-                        HSN_CODE = ADO.ToString(dr3["HSN_CODE"]),
+                        ID = dr3["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr3["ID"]),
+                        COMPANY_ID = dr3["COMPANY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr3["COMPANY_ID"]),
+                        PO_ID = dr3["PO_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr3["PO_ID"]),
+                        JOB_ID = dr3["JOB_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr3["JOB_ID"]),
+                        ITEM_ID = dr3["ITEM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr3["ITEM_ID"]),
+
+                        QUANTITY = dr3["QUANTITY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["QUANTITY"]),
+                        PACKING = dr3["PACKING"]?.ToString() ?? "",
+                        PRICE = dr3["PRICE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PRICE"]),
+                        AMOUNT = dr3["AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["AMOUNT"]),
+
+                        DISC_PERCENT = dr3["DISC_PERCENT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["DISC_PERCENT"]),
+                        VAT_PERC = dr3["TAX_PERCENT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr3["TAX_PERCENT"]),
+                        TAX_AMOUNT = dr3["TAX_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr3["TAX_AMOUNT"]),
+                        TOTAL_AMOUNT = dr3["TOTAL_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr3["TOTAL_AMOUNT"]),
+
+                        ITEM_DESC = dr3["DESCRIPTION"]?.ToString() ?? "",
+                        UOM = dr3["UOM"]?.ToString() ?? "",
+
+                        GRN_QTY = dr3["GRN_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["GRN_QTY"]),
+                        INVOICE_QTY = dr3["INVOICE_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["INVOICE_QTY"]),
+
+                        SUPP_PRICE = dr3["SUPP_PRICE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["SUPP_PRICE"]),
+                        SUPP_AMOUNT = dr3["SUPP_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["SUPP_AMOUNT"]),
+
+                        ITEM_CODE = dr3["ITEM_CODE"]?.ToString() ?? "",
+                        CGST = dr3["CGST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr3["CGST"]),
+                        SGST = dr3["SGST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr3["SGST"]),
+                        HSN_CODE = dr3["HSN_CODE"]?.ToString() ?? ""
 
                     });
                 }

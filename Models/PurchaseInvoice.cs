@@ -168,7 +168,7 @@
         public decimal? CGST { get; set; }
         public decimal? SGST { get; set; }
         public string? HSN_CODE { get; set; }
-
+        public float? DISC_AMT { get; set; }
     }
     public class PurchResponce
     {

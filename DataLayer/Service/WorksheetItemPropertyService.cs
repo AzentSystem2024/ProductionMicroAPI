@@ -79,7 +79,17 @@ namespace MicroApi.DataLayer.Services
                     dRow["IS_INACTIVE_NEW"] = ur.IS_INACTIVE_NEW;
 
                     tbl.Rows.Add(dRow);
-                    tbl.AcceptChanges();
+                    //tbl.AcceptChanges();
+
+                }
+                DataTable storeTbl = new DataTable();
+                storeTbl.Columns.Add("STORE_ID", typeof(Int32));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow dr = storeTbl.NewRow();
+                    dr["STORE_ID"] = store.STORE_ID;
+                    storeTbl.Rows.Add(dr);
                 }
 
                 SqlCommand cmd = new SqlCommand();
@@ -93,9 +103,10 @@ namespace MicroApi.DataLayer.Services
                 //cmd.Parameters.AddWithValue("WS_TYPE", worksheet.WS_TYPE);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
                 cmd.Parameters.AddWithValue("USER_ID", worksheet.USER_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                //cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROPERTIE", tbl);
+                cmd.Parameters.AddWithValue("@UDT_WORKSHEET_STORE", storeTbl);
 
                 cmd.ExecuteNonQuery();
 
@@ -156,7 +167,16 @@ namespace MicroApi.DataLayer.Services
                     dRow["IS_INACTIVE_NEW"] = ur.IS_INACTIVE_NEW;
 
                     tbl.Rows.Add(dRow);
-                    tbl.AcceptChanges();
+                    //tbl.AcceptChanges();
+                }
+                DataTable storeTbl = new DataTable();
+                storeTbl.Columns.Add("STORE_ID", typeof(Int32));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow dr = storeTbl.NewRow();
+                    dr["STORE_ID"] = store.STORE_ID;
+                    storeTbl.Rows.Add(dr);
                 }
 
                 SqlCommand cmd = new SqlCommand();
@@ -170,9 +190,10 @@ namespace MicroApi.DataLayer.Services
                 //cmd.Parameters.AddWithValue("WS_TYPE", worksheet.WS_TYPE);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
                 cmd.Parameters.AddWithValue("USER_ID", worksheet.USER_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                //cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROPERTIE", tbl);
+                cmd.Parameters.AddWithValue("@UDT_WORKSHEET_STORE", storeTbl);
 
                 cmd.ExecuteNonQuery();
 
@@ -256,7 +277,16 @@ namespace MicroApi.DataLayer.Services
                     dRow["IS_INACTIVE_NEW"] = ur.IS_INACTIVE_NEW;
 
                     tbl.Rows.Add(dRow);
-                    tbl.AcceptChanges();
+                    //tbl.AcceptChanges();
+                }
+                DataTable storeTbl = new DataTable();
+                storeTbl.Columns.Add("STORE_ID", typeof(Int32));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow dr = storeTbl.NewRow();
+                    dr["STORE_ID"] = store.STORE_ID;
+                    storeTbl.Rows.Add(dr);
                 }
 
                 SqlCommand cmd = new SqlCommand();
@@ -270,8 +300,9 @@ namespace MicroApi.DataLayer.Services
                 //cmd.Parameters.AddWithValue("WS_TYPE", worksheet.WS_TYPE);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
                 cmd.Parameters.AddWithValue("USER_ID", worksheet.USER_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+                //cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROPERTIE", tbl);
+                cmd.Parameters.AddWithValue("@UDT_WORKSHEET_STORE", storeTbl);
 
                 cmd.ExecuteNonQuery();
 
@@ -332,7 +363,16 @@ namespace MicroApi.DataLayer.Services
                     dRow["IS_INACTIVE_NEW"] = ur.IS_INACTIVE_NEW;
 
                     tbl.Rows.Add(dRow);
-                    tbl.AcceptChanges();
+                    //tbl.AcceptChanges();
+                }
+                DataTable storeTbl = new DataTable();
+                storeTbl.Columns.Add("STORE_ID", typeof(Int32));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow dr = storeTbl.NewRow();
+                    dr["STORE_ID"] = store.STORE_ID;
+                    storeTbl.Rows.Add(dr);
                 }
 
                 SqlCommand cmd = new SqlCommand();
@@ -346,8 +386,9 @@ namespace MicroApi.DataLayer.Services
                 //cmd.Parameters.AddWithValue("WS_TYPE", worksheet.WS_TYPE);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
                 cmd.Parameters.AddWithValue("USER_ID", worksheet.USER_ID);
-                cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
+               // cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROPERTIE", tbl);
+                cmd.Parameters.AddWithValue("@UDT_WORKSHEET_STORE", storeTbl);
 
                 cmd.ExecuteNonQuery();
 
@@ -374,6 +415,7 @@ namespace MicroApi.DataLayer.Services
             WorksheetItem item = new WorksheetItem();
             List<WorksheetItemProperties> itemstores = new List<WorksheetItemProperties>();
             List<ItemStoreProperty> itemsuppliers = new List<ItemStoreProperty>();
+
             try
             {
                 string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE ,TB_AC_TRANS_HEADER.CREATE_USER_ID,TB_AC_TRANS_HEADER.VERIFY_USER_ID,TB_AC_TRANS_HEADER.APPROVE3_USER_ID,TB_AC_TRANS_HEADER.TRANS_STATUS,TB_AC_TRANS_HEADER.NARRATION,TB_AC_TRANS_HEADER.COMPANY_ID FROM TB_WORKSHEET INNER JOIN TB_AC_TRANS_HEADER ON TB_WORKSHEET.TRANS_ID=TB_AC_TRANS_HEADER.TRANS_ID WHERE TB_WORKSHEET.ID = " + id;
@@ -395,24 +437,20 @@ namespace MicroApi.DataLayer.Services
                         VERIFY_USER_ID = ADO.ToInt32(dr["VERIFY_USER_ID"]),
                         APPROVE_USER_ID = ADO.ToInt32(dr["APPROVE3_USER_ID"]),
                         COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"])
-
                     };
                 }
 
-
                 SqlCommand cmd = new SqlCommand();
-
                 cmd.Connection = ADO.GetConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_STORE_ITEM_NEW";
-                cmd.Parameters.AddWithValue("ACTION", 1);
+                cmd.Parameters.AddWithValue("@ACTION", 1);
                 cmd.Parameters.AddWithValue("@WS_ID", id);
+
                 DataTable tblItemStores = new DataTable();
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.Fill(tblItemStores);
 
-
-                // Process the results
                 foreach (DataRow dr2 in tblItemStores.Rows)
                 {
                     itemstores.Add(new WorksheetItemProperties
@@ -424,27 +462,25 @@ namespace MicroApi.DataLayer.Services
                         BRAND_NAME = ADO.ToString(dr2["BRAND_NAME"]),
                         ID = ADO.ToInt32(dr2["ID"]),
                         ITEM_ID = ADO.ToInt32(dr2["ITEM_ID"]),
+
                         IS_PRICE_REQUIRED_NEW = ADO.Toboolean(dr2["IS_PRICE_REQUIRED_NEW"]),
                         IS_NOT_DISCOUNTABLE_NEW = ADO.Toboolean(dr2["IS_NOT_DISCOUNTABLE_NEW"]),
                         IS_NOT_SALE_ITEM_NEW = ADO.Toboolean(dr2["IS_NOT_SALE_ITEM_NEW"]),
                         IS_NOT_SALE_RETURN_NEW = ADO.Toboolean(dr2["IS_NOT_SALE_RETURN_NEW"]),
                         IS_INACTIVE_NEW = ADO.Toboolean(dr2["IS_INACTIVE_NEW"]),
+
                         Selected = ADO.Toboolean(dr2["Selected"]),
-                        STORE_ID = ADO.ToInt32(dr2["STORE_ID"]),
-                        STORE_NAME = ADO.ToString(dr2["STORE_NAME"]),
+
                         IS_PRICE_REQUIRED = dr2["IS_PRICE_REQUIRED_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_PRICE_REQUIRED_OLD"]),
                         IS_NOT_DISCOUNTABLE = dr2["IS_NOT_DISCOUNTABLE_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_DISCOUNTABLE_OLD"]),
                         IS_NOT_SALE_ITEM = dr2["IS_NOT_SALE_ITEM_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_SALE_ITEM_OLD"]),
                         IS_NOT_SALE_RETURN = dr2["IS_NOT_SALE_RETURN_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_NOT_SALE_RETURN_OLD"]),
-                        IS_INACTIVE = dr2["IS_INACTIVE_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_INACTIVE_OLD"]),
-
-
+                        IS_INACTIVE = dr2["IS_INACTIVE_OLD"] == DBNull.Value ? (bool?)null : ADO.Toboolean(dr2["IS_INACTIVE_OLD"])
                     });
                 }
 
-                strSQL = "select * from TB_WORKSHEET_STORE WHERE TB_WORKSHEET_STORE.WS_ID = " + id;
-
-                DataTable tblItemSuppliers1 = ADO.GetDataTable(strSQL, "ItemPropertyStore");
+                string strSQL2 = "SELECT * FROM TB_WORKSHEET_STORE WHERE WS_ID = " + id;
+                DataTable tblItemSuppliers1 = ADO.GetDataTable(strSQL2, "ItemPropertyStore");
 
                 foreach (DataRow dr3 in tblItemSuppliers1.Rows)
                 {
@@ -453,20 +489,20 @@ namespace MicroApi.DataLayer.Services
                         ID = ADO.ToInt32(dr3["ID"]),
                         WS_ID = ADO.ToInt32(dr3["WS_ID"]),
                         STORE_ID = ADO.ToInt32(dr3["STORE_ID"])
-
                     });
                 }
+
                 item.worksheet_item_property = itemstores;
                 item.worksheet_item_store = itemsuppliers;
-
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
             return item;
         }
+
         //public List<ItemStoreProperties> GetItemPropertyList()
         //{
         //    List<ItemStoreProperties> ItemPropertyList = new List<ItemStoreProperties>();

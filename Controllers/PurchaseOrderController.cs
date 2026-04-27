@@ -32,6 +32,22 @@ namespace MicroApi.Controllers
             }
             return itemCategories.ToList();
         }
+        [HttpPost]
+        [Route("Getstore")]
+        public List<StoreList> GetStore(StoreListreq input)
+        {
+            List<StoreList> itemCategories = new List<StoreList>();
+
+            try
+            {
+
+                itemCategories = _purchaseOrderService.GetStore(input);
+            }
+            catch (Exception ex)
+            {
+            }
+            return itemCategories.ToList();
+        }
 
         [HttpPost]
         [Route("list")]

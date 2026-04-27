@@ -228,11 +228,13 @@ namespace MicroApi.DataLayer.Service
                     using (var cmd = new SqlCommand("SP_TB_SALES_INVOICE", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 0;
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
 
                         cmd.Parameters.AddWithValue("@DATE_FROM",
                             request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
@@ -257,6 +259,8 @@ namespace MicroApi.DataLayer.Service
                                     NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
                                     CUST_NAME = reader["CUST_NAME"]?.ToString(),
                                     DISCOUNT_AMOUNT = reader["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DISCOUNT_AMOUNT"]) : 0,
+                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                    STORE_NAME = reader["STORE_NAME"] != DBNull.Value ? Convert.ToString(reader["STORE_NAME"]) : null,
                                 });
                             }
                         }

@@ -72,6 +72,8 @@
         public float NET_AMOUNT { get; set; }
         public decimal DISCOUNT_AMOUNT { get; set; }
         public string CUST_NAME { get; set; }
+        public int? STORE_ID { get; set; }
+        public string? STORE_NAME { get; set; }
     }
     public class SalesInvoiceListResponse
     {

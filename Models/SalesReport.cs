@@ -5,8 +5,10 @@ namespace MicroApi.Models
 {
     public class SalesSummaryFilter
     {
-        public DateTime? DATE_FROM { get; set; }
-        public DateTime? DATE_TO { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public int COMPANY_ID { get; set; }
+        public int FIN_ID { get; set; }
         public string STORE_ID { get; set; } = "";
         public string CUST_ID { get; set; } = "";
         public int SALE_TYPE { get; set; }
@@ -15,6 +17,7 @@ namespace MicroApi.Models
 
     public class SalesSummaryItem
     {
+
         public int TRANS_ID { get; set; }
         public int SALE_ID { get; set; }
         public DateTime SALE_DATE { get; set; }
@@ -33,6 +36,8 @@ namespace MicroApi.Models
     public class SalesDetailFilter
     {
         public int COMPANY_ID { get; set; }
+        public int FIN_ID { get; set; }
+
         public string? ITEM_ID { get; set; }
         public string? CUSTOMER_ID { get; set; }
         public string? BRAND_ID { get; set; }
@@ -40,6 +45,16 @@ namespace MicroApi.Models
         public string? STORE_ID { get; set; }
         public DateTime? DATE_FROM { get; set; }
         public DateTime? DATE_TO { get; set; }
+
+        public int SALE_TYPE { get; set; }
+        public string? SALESMAN_ID { get; set; }
+        public string? DEPT_ID { get; set; }
+        public string? CAT_ID { get; set; }
+        public string? SUBCAT_ID { get; set; }
+        public int DISCOUNTED_ITEMS_ONLY { get; set; }
+        public string? CUSTOM1 { get; set; }
+        public string? CUSTOM2 { get; set; }
+        public int INCLUDE_SUMMARY { get; set; }
     }
 
     public class SalesDetailItem
@@ -53,7 +68,8 @@ namespace MicroApi.Models
     {
         public int flag { get; set; }
         public string message { get; set; }
-        public List<SalesDetailItem> data { get; set; } = new List<SalesDetailItem>();
+        //public List<SalesDetailItem> data { get; set; } = new List<SalesDetailItem>();
+        public List<SalesDetailModel> Data { get; set; } = new List<SalesDetailModel>();
     }
 
     public class ConsignmentSummaryFilter
@@ -66,7 +82,32 @@ namespace MicroApi.Models
         public DateTime? DATE_FROM { get; set; }
         public DateTime? DATE_TO { get; set; }
     }
+    public class SalesDetailModel
+    {
+        public string InvoiceNo { get; set; }
+        public DateTime? Date { get; set; }
+        public string Store { get; set; }
+        public string InvoiceType { get; set; }
+        public string Customer { get; set; }
+        public string WalkInCustomer { get; set; }
 
+        public string ItemCode { get; set; }
+        public string Description { get; set; }
+
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+
+        public decimal Discount { get; set; }
+        public string Reason { get; set; }
+
+        public decimal ExVatTotal { get; set; }
+        public decimal VatPercent { get; set; }
+        public decimal VatAmount { get; set; }
+        public decimal IncVatTotal { get; set; }
+
+        public string Salesman { get; set; }
+        public decimal Commission { get; set; }
+    }
     public class ConsignmentSummaryItem
     {
         public int CONSIGNMENT_ID { get; set; }
@@ -106,6 +147,8 @@ namespace MicroApi.Models
     }
     public class ItemWiseSalesFilter
     {
+        public int COMPANY_ID { get; set; }   // ✅ NEW
+        public int FIN_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
 
@@ -155,6 +198,8 @@ namespace MicroApi.Models
     }
     public class ItemWiseSalesSummaryFilter
     {
+        public int COMPANY_ID { get; set; }   // ✅ NEW
+        public int FIN_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
 
@@ -199,6 +244,8 @@ namespace MicroApi.Models
     }
     public class DiscountWiseSalesFilter
     {
+        public int COMPANY_ID { get; set; }   // ✅ NEW
+        public int FIN_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
 
@@ -248,10 +295,13 @@ namespace MicroApi.Models
     }
     public class TenderReportFilter
     {
+        public int COMPANY_ID { get; set; }   // ✅ NEW
+        public int FIN_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
         public string? STORE_ID { get; set; }
         public int SALE_TYPE { get; set; }
+        public string? CUSTOMER_ID { get; set; }
     }
 
     public class TenderReportItem
@@ -276,10 +326,13 @@ namespace MicroApi.Models
     ///
     public class TenderSummaryFilter
     {
+        public int COMPANY_ID { get; set; }   // ✅ NEW
+        public int FIN_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
         public string? STORE_ID { get; set; }
         public int SALE_TYPE { get; set; }
+        public string? CUSTOMER_ID { get; set; }
     }
 
     public class TenderSummaryItem

@@ -196,6 +196,7 @@
     public class ItemCodeRequest
     {
         public List<string> BarCodes { get; set; }
+        public int? STORE_ID { get; set; }
     }
     public class ItemCodeListResponse
     {

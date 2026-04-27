@@ -228,4 +228,19 @@ namespace MicroApi.Models
         public string? DATE_FROM { get; set; }
         public string? DATE_TO { get; set; }
     }
-}
+    public class StoreList
+    {
+        public int ID { get; set; }
+        public string STORE_NAME { get; set; }
+        public string ADDRESS1 { get; set; }
+        public string ADDRESS2 { get; set; }
+        public string ADDRESS3 { get; set; }
+        public string PHONE { get; set; }
+        public string EMAIL { get; set; }       
+
+    }
+    public class StoreListreq
+    {
+        public int STORE_ID { get; set; } 
+    }
+    }

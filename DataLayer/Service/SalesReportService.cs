@@ -15,35 +15,26 @@ namespace MicroApi.DataLayer.Service
             try
             {
                 using SqlConnection con = ADO.GetConnection();
-                using SqlCommand cmd = new SqlCommand("SP_RPT_SALE_SUMMARY_NEW", con);
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_RPT_SALE_SUMMARY_NEW", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = filter.COMPANY_ID;
+                        cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = filter.FIN_ID;
 
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandTimeout = 0; // important for large pivot reports
+                        cmd.Parameters.AddWithValue("@DATE_FROM", filter.DATE_FROM);
+                        cmd.Parameters.AddWithValue("@DATE_TO", filter.DATE_TO);
+                        cmd.Parameters.AddWithValue("@STORE_ID", filter.STORE_ID ?? "");
+                        cmd.Parameters.AddWithValue("@CUST_ID", filter.CUST_ID ?? "");
+                        cmd.Parameters.AddWithValue("@SALE_TYPE", filter.SALE_TYPE);
+                        cmd.Parameters.AddWithValue("@INCLUDE_SUMMARY", filter.INCLUDE_SUMMARY);
 
-                // ✅ Proper parameter handling
-
-                cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime)
-                    .Value = filter.DATE_FROM ?? (object)DBNull.Value;
-
-                cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime)
-                    .Value = filter.DATE_TO ?? (object)DBNull.Value;
-
-                cmd.Parameters.Add("@STORE_ID", SqlDbType.NVarChar)
-                    .Value = string.IsNullOrEmpty(filter.STORE_ID) ? "" : filter.STORE_ID;
-
-                cmd.Parameters.Add("@CUST_ID", SqlDbType.NVarChar)
-                    .Value = string.IsNullOrEmpty(filter.CUST_ID) ? "" : filter.CUST_ID;
-
-                cmd.Parameters.Add("@SALE_TYPE", SqlDbType.Int)
-                    .Value = filter.SALE_TYPE;
-
-                cmd.Parameters.Add("@INCLUDE_SUMMARY", SqlDbType.Int)
-                    .Value = filter.INCLUDE_SUMMARY;
-
-                //con.Open();
-
-                using SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dt);
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -53,48 +44,74 @@ namespace MicroApi.DataLayer.Service
             return dt;
         }
 
-        public SalesDetailResponse GetSalesDetails(SalesDetailFilter request)
+        public DataTable GetSalesDetails(SalesDetailFilter filter)
         {
-            var response = new SalesDetailResponse();
+            DataTable dt = new DataTable();
 
-            try
+            using (SqlConnection con = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_RPT_SALE_DETAIL", con))
             {
-                using SqlConnection con = ADO.GetConnection();
-                using SqlCommand cmd = new SqlCommand("SP_SalesDetails", con);
-
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@CompanyID", request.COMPANY_ID);
-                cmd.Parameters.AddWithValue("@ItemID", request.ITEM_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@CustID", request.CUSTOMER_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@DateFrom", request.DATE_FROM ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@DateTo", request.DATE_TO ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@StatusID", request.STATUS_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@BrandID", request.BRAND_ID ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@StoreID", request.STORE_ID ?? (object)DBNull.Value);
+                // 🔥 REQUIRED PARAMS
+                cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = filter.COMPANY_ID;
+                cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = filter.FIN_ID;
 
-                using SqlDataReader rdr = cmd.ExecuteReader();
+                cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime)
+                    .Value = Convert.ToDateTime(filter.DATE_FROM);
 
-                while (rdr.Read())
+                cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime)
+                    .Value = Convert.ToDateTime(filter.DATE_TO);
+
+                // 🔥 OPTIONAL PARAMS (VERY IMPORTANT FIX)
+                cmd.Parameters.Add("@STORE_ID", SqlDbType.VarChar)
+                    .Value = string.IsNullOrEmpty(filter.STORE_ID) ? "" : filter.STORE_ID;
+
+                cmd.Parameters.Add("@SALE_TYPE", SqlDbType.Int)
+                    .Value = filter.SALE_TYPE;
+
+                cmd.Parameters.Add("@CUST_ID", SqlDbType.NVarChar)
+                    .Value = filter.CUSTOMER_ID ?? "";
+
+                cmd.Parameters.Add("@SALESMAN_ID", SqlDbType.NVarChar)
+                    .Value = filter.SALESMAN_ID ?? "";
+
+                cmd.Parameters.Add("@DEPT_ID", SqlDbType.NVarChar)
+                    .Value = filter.DEPT_ID ?? "";
+
+                cmd.Parameters.Add("@CAT_ID", SqlDbType.NVarChar)
+                    .Value = filter.CAT_ID ?? "";
+
+                cmd.Parameters.Add("@SUBCAT_ID", SqlDbType.NVarChar)
+                    .Value = filter.SUBCAT_ID ?? "";
+
+                cmd.Parameters.Add("@BRAND_ID", SqlDbType.NVarChar)
+                    .Value = filter.BRAND_ID ?? "";
+
+                cmd.Parameters.Add("@CUSTOM1", SqlDbType.NVarChar)
+                    .Value = filter.CUSTOM1 ?? "";
+
+                cmd.Parameters.Add("@CUSTOM2", SqlDbType.NVarChar)
+                    .Value = filter.CUSTOM2 ?? "";
+
+                cmd.Parameters.Add("@ITEM_ID", SqlDbType.NVarChar)
+                    .Value = filter.ITEM_ID ?? "";
+
+                cmd.Parameters.Add("@DISCOUNTED_ITEMS_ONLY", SqlDbType.Int)
+                    .Value = filter.DISCOUNTED_ITEMS_ONLY;
+
+                cmd.Parameters.Add("@INCLUDE_SUMMARY", SqlDbType.Int)
+                    .Value = filter.INCLUDE_SUMMARY;
+
+                // con.Open();
+
+                using (var reader = cmd.ExecuteReader())
                 {
-                    response.data.Add(new SalesDetailItem
-                    {
-                        SALE_ID = Convert.ToInt32(rdr["ID"]),
-                        ITEM_NAME = rdr["DESCRIPTION"].ToString(),
-                        NET_AMOUNT = Convert.ToDecimal(rdr["NET_AMOUNT"])
-                    });
+                    dt.Load(reader);
                 }
-
-                response.flag = 1;
-                response.message = "Success";
-            }
-            catch (Exception ex)
-            {
-                response.flag = 0;
-                response.message = ex.Message;
             }
 
-            return response;
+            return dt;
         }
 
         public ConsignmentSummaryResponse GetConsignmentSummary(ConsignmentSummaryFilter request)
@@ -243,70 +260,57 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public ItemWiseSalesSummaryResponse GetItemWiseSalesSummary(ItemWiseSalesSummaryFilter request)
+        public DataTable GetItemWiseSalesSummary(ItemWiseSalesSummaryFilter request)
         {
-            ItemWiseSalesSummaryResponse response = new ItemWiseSalesSummaryResponse();
+            DataTable dt = new DataTable();
 
-            using (SqlConnection conn = ADO.GetConnection())
+            using (SqlConnection con = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_WISE_SALES_SUMMARY", con))
             {
-                using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_WISE_SALES_SUMMARY", conn))
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                // REQUIRED
+                cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
+
+                cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
+                cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
+
+                // OPTIONAL (SAFE NULL HANDLING)
+                cmd.Parameters.Add("@STORE_ID", SqlDbType.VarChar).Value = request.STORE_ID ?? "";
+                cmd.Parameters.Add("@SALE_TYPE", SqlDbType.Int).Value = request.SALE_TYPE;
+                cmd.Parameters.Add("@CUST_ID", SqlDbType.NVarChar).Value = request.CUST_ID ?? "";
+                cmd.Parameters.Add("@SALESMAN_ID", SqlDbType.NVarChar).Value = request.SALESMAN_ID ?? "";
+                cmd.Parameters.Add("@DEPT_ID", SqlDbType.NVarChar).Value = request.DEPT_ID ?? "";
+                cmd.Parameters.Add("@CAT_ID", SqlDbType.NVarChar).Value = request.CAT_ID ?? "";
+                cmd.Parameters.Add("@SUBCAT_ID", SqlDbType.NVarChar).Value = request.SUBCAT_ID ?? "";
+                cmd.Parameters.Add("@BRAND_ID", SqlDbType.NVarChar).Value = request.BRAND_ID ?? "";
+                cmd.Parameters.Add("@CUSTOM1", SqlDbType.NVarChar).Value = request.CUSTOM1 ?? "";
+                cmd.Parameters.Add("@CUSTOM2", SqlDbType.NVarChar).Value = request.CUSTOM2 ?? "";
+                cmd.Parameters.Add("@ITEM_ID", SqlDbType.NVarChar).Value = request.ITEM_ID ?? "";
+                cmd.Parameters.Add("@DISCOUNTED_ITEMS_ONLY", SqlDbType.Int).Value = request.DISCOUNTED_ITEMS_ONLY;
+                cmd.Parameters.Add("@INCLUDE_SUMMARY", SqlDbType.Int).Value = request.INCLUDE_SUMMARY;
+                cmd.Parameters.Add("@GROUP_BY_STORE", SqlDbType.Int).Value = request.GROUP_BY_STORE;
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
-                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
-                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
-                    cmd.Parameters.AddWithValue("@SALE_TYPE", request.SALE_TYPE);
-                    cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID ?? "");
-                    cmd.Parameters.AddWithValue("@SALESMAN_ID", request.SALESMAN_ID ?? "");
-                    cmd.Parameters.AddWithValue("@DEPT_ID", request.DEPT_ID ?? "");
-                    cmd.Parameters.AddWithValue("@CAT_ID", request.CAT_ID ?? "");
-                    cmd.Parameters.AddWithValue("@SUBCAT_ID", request.SUBCAT_ID ?? "");
-                    cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID ?? "");
-                    cmd.Parameters.AddWithValue("@CUSTOM1", request.CUSTOM1 ?? "");
-                    cmd.Parameters.AddWithValue("@CUSTOM2", request.CUSTOM2 ?? "");
-                    cmd.Parameters.AddWithValue("@ITEM_ID", request.ITEM_ID ?? "");
-                    cmd.Parameters.AddWithValue("@DISCOUNTED_ITEMS_ONLY", request.DISCOUNTED_ITEMS_ONLY);
-                    cmd.Parameters.AddWithValue("@INCLUDE_SUMMARY", request.INCLUDE_SUMMARY);
-                    cmd.Parameters.AddWithValue("@GROUP_BY_STORE", request.GROUP_BY_STORE);
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            response.data.Add(new ItemWiseSalesSummaryItem
-                            {
-                                ITEM_ID = Convert.ToInt32(reader["ITEM_ID"]),
-                                ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
-                                DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
-                                STORE_ID = Convert.ToInt32(reader["STORE_ID"]),
-                                STORE_NAME = reader["STORE_NAME"]?.ToString(),
-                                QUANTITY = Convert.ToDecimal(reader["QUANTITY"]),
-                                DISCOUNT = Convert.ToDecimal(reader["DISCOUNT"]),
-                                GROSS_AMOUNT = Convert.ToDecimal(reader["GROSS_AMOUNT"]),
-                                VAT_AMOUNT = Convert.ToDecimal(reader["VAT_AMOUNT"]),
-                                NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"])
-                            });
-                        }
-                    }
+                    da.Fill(dt);   // ✅ safer than ExecuteReader for summary
                 }
             }
 
-            response.flag = response.data.Count > 0 ? 1 : 0;
-            response.message = response.flag == 1 ? "Success" : "No records found";
-
-            return response;
+            return dt;
         }
-        public DiscountWiseSalesResponse GetDiscountWiseSales(DiscountWiseSalesFilter request)
+        public DataTable GetDiscountWiseSales(DiscountWiseSalesFilter request)
         {
             DiscountWiseSalesResponse response = new DiscountWiseSalesResponse();
-
+            DataTable dt = new DataTable();
             using (SqlConnection conn = ADO.GetConnection())
             {
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_DISCOUNT_WISE_SALES", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                    cmd.Parameters.AddWithValue("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
                     cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
@@ -323,45 +327,24 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@REASON_ID", request.REASON_ID ?? "");
                     cmd.Parameters.AddWithValue("@INCLUDE_SUMMARY", request.INCLUDE_SUMMARY);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
-                        while (reader.Read())
-                        {
-                            response.data.Add(new DiscountWiseSalesItem
-                            {
-                                ID = Convert.ToInt32(reader["ID"]),
-                                SALE_NO = reader["SALE_NO"]?.ToString(),
-                                SALE_DATE = Convert.ToDateTime(reader["SALE_DATE"]),
-                                STORE_NAME = reader["STORE_NAME"]?.ToString(),
-                                SALE_TYPE_NAME = reader["SALE_TYPE_NAME"]?.ToString(),
-                                CUST_NAME = reader["CUST_NAME"]?.ToString(),
-                                COMMENT = reader["COMMENT"]?.ToString(),
-                                ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
-                                DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
-                                QUANTITY = Convert.ToDecimal(reader["QUANTITY"]),
-                                PRICE = Convert.ToDecimal(reader["PRICE"]),
-                                DISCOUNT = Convert.ToDecimal(reader["DISCOUNT"]),
-                                DISC_REASON = reader["DISC_REASON"]?.ToString(),
-                                GROSS_AMOUNT = Convert.ToDecimal(reader["GROSS_AMOUNT"]),
-                                VAT_PERCENT = Convert.ToDecimal(reader["VAT_PERCENT"]),
-                                VAT_AMOUNT = Convert.ToDecimal(reader["VAT_AMOUNT"]),
-                                NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
-                                SALESMAN = reader["SALESMAN"]?.ToString(),
-                                COMMISSION = Convert.ToDecimal(reader["COMMISSION"])
-                            });
-                        }
+                        da.Fill(dt);   // ✅ safer than ExecuteReader for summary
                     }
+
                 }
+                return dt;
             }
 
-            response.flag = response.data.Count > 0 ? 1 : 0;
-            response.message = response.flag == 1 ? "Success" : "No records found";
+            //  response.flag = response.data.Count > 0 ? 1 : 0;
+            // response.message = response.flag == 1 ? "Success" : "No records found";
 
-            return response;
+
         }
-        public TenderReportResponse GetTenderReport(TenderReportFilter request)
+        public DataTable GetTenderReport(TenderReportFilter request)
         {
-            var response = new TenderReportResponse();
+            DataTable dt = new DataTable();
 
             try
             {
@@ -370,114 +353,66 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
-                cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
-                cmd.Parameters.AddWithValue("@STORE_ID",
-                    string.IsNullOrWhiteSpace(request.STORE_ID) ? "" : request.STORE_ID);
-                cmd.Parameters.AddWithValue("@SALE_TYPE", request.SALE_TYPE);
+                // ✅ Correct parameter usage
+                cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
+                cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
+                cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
 
-                using SqlDataReader rdr = cmd.ExecuteReader();
+                cmd.Parameters.Add("@STORE_ID", SqlDbType.NVarChar).Value =
+                    string.IsNullOrWhiteSpace(request.STORE_ID) ? "" : request.STORE_ID;
 
-                while (rdr.Read())
+                cmd.Parameters.Add("@SALE_TYPE", SqlDbType.Int).Value = request.SALE_TYPE;
+
+                // Optional (if SP expects it)
+                // cmd.Parameters.Add("@INCLUDE_SUMMARY", SqlDbType.Int).Value = request.INCLUDE_SUMMARY;
+
+
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    var item = new TenderReportItem
-                    {
-                        TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),
-                        INVOICE_NO = rdr["INVOICE NO"].ToString(),
-                        DATE = Convert.ToDateTime(rdr["DATE"]),
-                        STORE = rdr["STORE"].ToString(),
-                        INVOICE_TYPE = rdr["INVOICE TYPE"].ToString()
-                    };
-
-                    // Handle dynamic pivot columns
-                    for (int i = 0; i < rdr.FieldCount; i++)
-                    {
-                        string columnName = rdr.GetName(i);
-
-                        if (columnName != "TRANS_ID" &&
-                            columnName != "INVOICE NO" &&
-                            columnName != "DATE" &&
-                            columnName != "STORE" &&
-                            columnName != "INVOICE TYPE")
-                        {
-                            decimal value = rdr[i] == DBNull.Value ? 0 : Convert.ToDecimal(rdr[i]);
-                            item.TenderAmounts[columnName] = value;
-                        }
-                    }
-
-                    response.data.Add(item);
+                    da.Fill(dt);
                 }
-
-                response.flag = 1;
-                response.message = "Success";
             }
             catch (Exception ex)
             {
-                response.flag = 0;
-                response.message = ex.Message;
+                // 👉 Log this properly in your system
+                throw;
             }
 
-            return response;
+            return dt;
         }
-        public TenderSummaryResponse GetTenderSummary(TenderSummaryFilter request)
+        public DataTable GetTenderSummary(TenderSummaryFilter request)
         {
+            //TenderSummaryResponse
             var response = new TenderSummaryResponse();
-
+            DataTable dt = new DataTable();
             try
             {
                 using SqlConnection con = ADO.GetConnection();
                 using SqlCommand cmd = new SqlCommand("SP_RPT_TENDER_REPORT_PIVOT_SUMMARY", con);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-
+                cmd.Parameters.AddWithValue("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                cmd.Parameters.AddWithValue("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
                 cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                 cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
                 cmd.Parameters.AddWithValue("@STORE_ID",
                     string.IsNullOrWhiteSpace(request.STORE_ID) ? "" : request.STORE_ID);
                 cmd.Parameters.AddWithValue("@SALE_TYPE", request.SALE_TYPE);
 
-                using SqlDataReader rdr = cmd.ExecuteReader();
-
-                while (rdr.Read())
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
-                    var item = new TenderSummaryItem
-                    {
-                        TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),
-                        INVOICE_NO = rdr["INVOICE NO"].ToString(),
-                        DATE = Convert.ToDateTime(rdr["DATE"]),
-                        STORE = rdr["STORE"].ToString(),
-                        INVOICE_TYPE = rdr["INVOICE TYPE"].ToString()
-                    };
-
-                    // Handle dynamic pivot columns
-                    for (int i = 0; i < rdr.FieldCount; i++)
-                    {
-                        string columnName = rdr.GetName(i);
-
-                        if (columnName != "TRANS_ID" &&
-                            columnName != "INVOICE NO" &&
-                            columnName != "DATE" &&
-                            columnName != "STORE" &&
-                            columnName != "INVOICE TYPE")
-                        {
-                            decimal value = rdr[i] == DBNull.Value ? 0 : Convert.ToDecimal(rdr[i]);
-                            item.TenderAmounts[columnName] = value;
-                        }
-                    }
-
-                    response.data.Add(item);
+                    da.Fill(dt);
                 }
-
-                response.flag = 1;
-                response.message = "Success";
             }
             catch (Exception ex)
             {
-                response.flag = 0;
-                response.message = ex.Message;
+                // 👉 Log this properly in your system
+                throw;
             }
 
-            return response;
+            return dt;
         }
     }
 

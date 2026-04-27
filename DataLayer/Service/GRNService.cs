@@ -692,24 +692,30 @@ namespace MicroApi.DataLayer.Service
                         PO_ID = ADO.ToInt32(dr["PO_ID"]),
                         PO_NO = ADO.ToString(dr["PO_NO"]),
                         DOC_NO = ADO.ToString(dr["GRN_NO"]),
-                        GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
+
+                        GRN_DATE = dr["GRN_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["GRN_DATE"]),
+
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                         SUPPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
-                        NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
-                        TOTAL_COST = ADO.ToFloat(dr["TOTAL_COST"]),
-                        SUPP_GROSS_AMOUNT = ADO.ToFloat(dr["SUPP_GROSS_AMOUNT"]),
-                        SUPP_NET_AMOUNT = ADO.ToFloat(dr["SUPP_NET_AMOUNT"]),
-                        EXCHANGE_RATE = ADO.ToFloat(dr["EXCHANGE_RATE"]),
+
+                        NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["NET_AMOUNT"]),
+                        TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToSingle(dr["TOTAL_COST"]),
+                        SUPP_GROSS_AMOUNT = dr["SUPP_GROSS_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["SUPP_GROSS_AMOUNT"]),
+                        SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["SUPP_NET_AMOUNT"]),
+                        EXCHANGE_RATE = dr["EXCHANGE_RATE"] == DBNull.Value ? 0 : Convert.ToSingle(dr["EXCHANGE_RATE"]),
+
                         NARRATION = ADO.ToString(dr["NARRATION"]),
                         CURRENCY_ID = ADO.ToInt32(dr["CURRENCY_ID"]),
                         CURRENCY_SYMBOL = ADO.ToString(dr["SYMBOL"]),
                         STATUS = ADO.ToString(dr["STATUS"]),
+
                         ADDRESS1 = ADO.ToString(dr["ADDRESS1"]),
                         ADDRESS2 = ADO.ToString(dr["ADDRESS2"]),
                         ADDRESS3 = ADO.ToString(dr["ADDRESS3"]),
                         COMPANY_CODE = ADO.ToString(dr["COMPANY_CODE"]),
                         EMAIL = ADO.ToString(dr["EMAIL"]),
                         PHONE = ADO.ToString(dr["PHONE"]),
+
                         SUPP_ADDRESS1 = ADO.ToString(dr["SUPP_ADDRESS1"]),
                         SUPP_ADDRESS2 = ADO.ToString(dr["SUPP_ADDRESS2"]),
                         SUPP_ADDRESS3 = ADO.ToString(dr["SUPP_ADDRESS3"]),
@@ -718,7 +724,7 @@ namespace MicroApi.DataLayer.Service
                         SUPP_ZIP = ADO.ToString(dr["ZIP"]),
                         SUPP_EMAIL = ADO.ToString(dr["SUPP_EMAIL"]),
                         SUPP_PHONE = ADO.ToString(dr["SUPP_PHONE"]),
-                        SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"]),
+                        SUPP_STATE_NAME = ADO.ToString(dr["STATE_NAME"])
                     };
                 }
 
@@ -750,24 +756,27 @@ namespace MicroApi.DataLayer.Service
                         STORE_ID = ADO.ToInt32(dr3["STORE_ID"]),
                         PO_DETAIL_ID = ADO.ToInt32(dr3["PO_DETAIL_ID"]),
                         ITEM_ID = ADO.ToInt32(dr3["ITEM_ID"]),
-                        QUANTITY = ADO.ToFloat(dr3["QUANTITY"]),
-                        RATE = ADO.ToFloat(dr3["RATE"]),
-                        AMOUNT = ADO.ToFloat(dr3["AMOUNT"]),
-                        INVOICE_QTY = ADO.ToFloat(dr3["INVOICE_QTY"]),
-                        DISC_PERCENT = ADO.ToFloat(dr3["DISC_PERCENT"]),
-                        COST = ADO.ToFloat(dr3["COST"]),
-                        SUPP_PRICE = ADO.ToFloat(dr3["SUPP_PRICE"]),
-                        SUPP_AMOUNT = ADO.ToFloat(dr3["SUPP_AMOUNT"]),
-                        RECEIVED_QTY = ADO.ToFloat(dr3["RETURN_QTY"]),
+
+                        QUANTITY = dr3["QUANTITY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["QUANTITY"]),
+                        RATE = dr3["RATE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["RATE"]),
+                        AMOUNT = dr3["AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["AMOUNT"]),
+                        INVOICE_QTY = dr3["INVOICE_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["INVOICE_QTY"]),
+                        DISC_PERCENT = dr3["DISC_PERCENT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["DISC_PERCENT"]),
+                        COST = dr3["COST"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["COST"]),
+                        SUPP_PRICE = dr3["SUPP_PRICE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["SUPP_PRICE"]),
+                        SUPP_AMOUNT = dr3["SUPP_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["SUPP_AMOUNT"]),
+                        RECEIVED_QTY = dr3["RETURN_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["RETURN_QTY"]),
+
                         UOM_PURCH = ADO.ToString(dr3["UOM_PURCH"]),
                         UOM = ADO.ToString(dr3["UOM"]),
                         UOM_MULTIPLE = ADO.ToInt32(dr3["UOM_MULTIPLE"]),
                         STORE_NAME = ADO.ToString(dr3["STORE_NAME"]),
                         ITEM_NAME = ADO.ToString(dr3["DESCRIPTION"]),
                         ITEM_CODE = ADO.ToString(dr3["ITEM_CODE"]),
-                        PO_QUANTITY = ADO.ToFloat(dr3["PO_QUANTITY"]),
-                        GRN_QUANTITY = ADO.ToFloat(dr3["GRN_QTY"]),
-                        PRICE = ADO.ToFloat(dr3["PRICE"])
+
+                        PO_QUANTITY = dr3["PO_QUANTITY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PO_QUANTITY"]),
+                        GRN_QUANTITY = dr3["GRN_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["GRN_QTY"]),
+                        PRICE = dr3["PRICE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PRICE"])
                     });
                 }
 
@@ -854,42 +863,43 @@ namespace MicroApi.DataLayer.Service
         public List<GRN> GetGRNList(GRNListRequest request)
         {
             List<GRN> worksheetList = new List<GRN>();
-            SqlConnection connection = ADO.GetConnection();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = connection;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SP_TB_GRN";
-            cmd.Parameters.AddWithValue("@ACTION", 0);
-            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-            cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
-            cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
 
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable tbl = new DataTable();
-            da.Fill(tbl);
-            foreach (DataRow dr in tbl.Rows)
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_TB_GRN", connection))
             {
-                worksheetList.Add(new GRN
-                {
-                    ID = ADO.ToInt32(dr["ID"]),
-                    DOC_NO = ADO.ToString(dr["GRN_NO"]),
-                    GRN_DATE = Convert.ToDateTime(dr["GRN_DATE"]),
-                    SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
-                    STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
-                    STORE_NAME = ADO.ToString(dr["STORE"]),
-                    SUPPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
-                    NET_AMOUNT = ADO.ToFloat(dr["NET_AMOUNT"]),
-                    NARRATION = ADO.ToString(dr["NARRATION"]),
-                    STATUS = ADO.ToString(dr["STATUS"]),
-                    PO_NO = ADO.ToString(dr["PO_NO"])
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                });
+                cmd.Parameters.AddWithValue("@ACTION", 0);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+                cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                foreach (DataRow dr in tbl.Rows)
+                {
+                    worksheetList.Add(new GRN
+                    {
+                        ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                        DOC_NO = dr["GRN_NO"] == DBNull.Value ? null : dr["GRN_NO"].ToString(),
+                        GRN_DATE = dr["GRN_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["GRN_DATE"]),
+                        SUPP_ID = dr["SUPP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SUPP_ID"]),
+                        STORE_ID = dr["STORE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["STORE_ID"]),
+                        STORE_NAME = dr["STORE"] == DBNull.Value ? null : dr["STORE"].ToString(),
+                        SUPPPLIER_NAME = dr["SUPP_NAME"] == DBNull.Value ? null : dr["SUPP_NAME"].ToString(),
+                        NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["NET_AMOUNT"]),
+                        NARRATION = dr["NARRATION"] == DBNull.Value ? null : dr["NARRATION"].ToString(),
+                        STATUS = dr["STATUS"] == DBNull.Value ? null : dr["STATUS"].ToString(),
+                        PO_NO = dr["PO_NO"] == DBNull.Value ? null : dr["PO_NO"].ToString()
+                    });
+                }
             }
-            connection.Close();
 
             return worksheetList;
         }
+
         public Int32 Approve(GRN grnHeader)
         {
             SqlConnection connection = ADO.GetConnection();
