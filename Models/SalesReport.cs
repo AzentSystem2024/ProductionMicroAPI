@@ -353,4 +353,14 @@ namespace MicroApi.Models
         public string message { get; set; }
         public List<TenderSummaryItem> data { get; set; } = new();
     }
+    public class ZReportFilter
+    {
+        public int COMPANY_ID { get; set; }
+        public int FIN_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public int BATCH_ID { get; set; }
+        //public int SHIFT_ID { get; set; }
+        //public int STORE_ID { get; set; }
+    }
 }

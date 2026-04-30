@@ -91,6 +91,7 @@
     public class PhysicalStockList
     {
         public int? ID { get; set; }
+        public int? TRANS_ID { get; set; }
         public string? PHYSICAL_DATE { get; set; }
         public string? PHYSICAL_NO { get; set; }
         public int? COMPANY_ID { get; set; }

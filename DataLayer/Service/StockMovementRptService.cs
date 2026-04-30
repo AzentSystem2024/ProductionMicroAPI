@@ -29,6 +29,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
                         cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
                         cmd.Parameters.Add("@ITEM_TYPE", SqlDbType.Int).Value = request.ITEM_TYPE ?? 0;
+                        cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -53,6 +54,8 @@ namespace MicroApi.DataLayer.Service
                                     SALE_QTY = reader["SALE_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["SALE_QTY"]) : 0,
                                     SALE_RETURN_QTY = reader["SALE_RETURN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["SALE_RETURN_QTY"]) : 0,
                                     ADJUSTED = reader["ADJUSTED"] != DBNull.Value ? Convert.ToDecimal(reader["ADJUSTED"]) : 0,
+                                    TRANSFER_OUT_QTY = reader["TRANSFER_OUT"] != DBNull.Value ? Convert.ToDecimal(reader["TRANSFER_OUT"]) : 0,
+                                    TRANSFER_IN_QTY = reader["TRANSFER_IN"] != DBNull.Value ? Convert.ToDecimal(reader["TRANSFER_IN"]) : 0,
                                     BALANCE_STOCK = reader["BALANCE_STOCK"] != DBNull.Value ? Convert.ToDecimal(reader["BALANCE_STOCK"]) : 0
                                 };
                                 response.data.Add(rpt);

@@ -20,7 +20,8 @@
     public class ItemStockRptRequest
     {
         public int COMPANY_ID { get; set; }
-       
+        public int FIN_ID { get; set; }
+
     }
 
 }

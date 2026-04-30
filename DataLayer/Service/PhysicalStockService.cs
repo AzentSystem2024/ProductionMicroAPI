@@ -119,7 +119,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 2);
-                            cmd.Parameters.AddWithValue("@PHYSICAL_ID", physicalStock.ID ?? 0);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", physicalStock.TRANS_ID ?? 0);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", physicalStock.COMPANY_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", physicalStock.STORE_ID ?? 0);
                             cmd.Parameters.AddWithValue("@PHYSICAL_DATE", physicalStock.PHYSICAL_DATE);
@@ -160,7 +160,7 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 4);
-                    cmd.Parameters.AddWithValue("@PHYSICAL_ID", physicalId);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", physicalId);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -235,6 +235,7 @@ namespace MicroApi.DataLayer.Service
                             PhysicalStockList physicalStock = new PhysicalStockList
                             {
                                 ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : (int?)null,
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : (int?)null,
                                 PHYSICAL_DATE = reader["PHYSICAL_DATE"] != DBNull.Value ? reader["PHYSICAL_DATE"].ToString() : null,
                                 PHYSICAL_NO = reader["PHYSICAL_NO"] != DBNull.Value ? reader["PHYSICAL_NO"].ToString() : null,
                                 COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : (int?)null,
@@ -355,7 +356,7 @@ namespace MicroApi.DataLayer.Service
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@ACTION", 7);
-                            cmd.Parameters.AddWithValue("@PHYSICAL_ID", physicalStock.ID ?? 0);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", physicalStock.TRANS_ID ?? 0);
                             cmd.Parameters.AddWithValue("@COMPANY_ID", physicalStock.COMPANY_ID ?? 0);
                             cmd.Parameters.AddWithValue("@STORE_ID", physicalStock.STORE_ID ?? 0);
                             cmd.Parameters.AddWithValue("@PHYSICAL_DATE", physicalStock.PHYSICAL_DATE);

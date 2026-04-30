@@ -19,7 +19,8 @@ namespace MicroApi.DataLayer.Service
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_STOCK_VIEW", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@COMPANY_ID",request.COMPANY_ID );
+                    //cmd.Parameters.AddWithValue("@COMPANY_ID",request.COMPANY_ID );
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
 
                     //con.Open(); 
 

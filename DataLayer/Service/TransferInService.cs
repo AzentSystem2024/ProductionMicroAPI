@@ -51,7 +51,7 @@ namespace MicroApi.DataLayer.Service
                 // Correct Parameters
                 cmd.Parameters.AddWithValue("@ACTION", 3);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
-                cmd.Parameters.AddWithValue("@TRANSFER_ID", input.TRANSFER_ID); 
+                cmd.Parameters.Add("@TRANSFER_ID", SqlDbType.NVarChar).Value = input.TRANSFER_ID;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();

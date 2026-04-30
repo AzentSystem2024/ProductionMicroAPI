@@ -831,7 +831,7 @@ namespace MicroApi.DataLayer.Services
                     itemstores.Add(new WorksheetItemPrice
                     {
                         ID = ADO.ToInt32(dr2["ID"]),
-                        ITEM_ID = ADO.ToInt32(dr2["ITEMS_ID"]),
+                        ITEM_ID = ADO.ToInt32(dr2["ITEM_ID"]),
                         SALE_PRICE = ADO.ToFloat(dr2["PRICE"]),
                         SALE_PRICE1 = ADO.ToFloat(dr2["PRICE_LEVEL1"]),
                         SALE_PRICE2 = ADO.ToFloat(dr2["PRICE_LEVEL2"]),

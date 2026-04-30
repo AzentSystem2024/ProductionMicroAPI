@@ -86,7 +86,7 @@
     }
     public class TransferInInput
     {
-        public int TRANSFER_ID { get; set; }
+        public string TRANSFER_ID { get; set; }
         public int COMPANY_ID { get; set; }
     }
     public class TransferInReqInput

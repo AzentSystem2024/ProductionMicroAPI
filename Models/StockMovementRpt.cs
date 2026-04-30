@@ -19,6 +19,8 @@
         public decimal SALE_QTY { get; set; }
         public decimal SALE_RETURN_QTY { get; set; }
         public decimal ADJUSTED { get; set; }
+        public decimal TRANSFER_OUT_QTY { get; set; }
+        public decimal TRANSFER_IN_QTY { get; set; }
         public decimal BALANCE_STOCK { get; set; }
     }
     public class StockMovementRequest
@@ -27,7 +29,8 @@
       //  public int STORE_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
-        public int? ITEM_TYPE { get; set; } = 0; 
+        public int? ITEM_TYPE { get; set; } = 0;
+        public int FIN_ID { get; set; }
     }
     public class StockMovementRptResponse
     {

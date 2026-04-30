@@ -19,6 +19,7 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_RPT_SALE_SUMMARY_NEW", con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 0;
                         cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = filter.COMPANY_ID;
                         cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = filter.FIN_ID;
 
@@ -52,7 +53,7 @@ namespace MicroApi.DataLayer.Service
             using (SqlCommand cmd = new SqlCommand("SP_RPT_SALE_DETAIL", con))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-
+                cmd.CommandTimeout = 0;
                 // 🔥 REQUIRED PARAMS
                 cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = filter.COMPANY_ID;
                 cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = filter.FIN_ID;
@@ -124,7 +125,7 @@ namespace MicroApi.DataLayer.Service
                 using SqlCommand cmd = new SqlCommand("SP_ConsignmentSummary", con);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-
+                cmd.CommandTimeout = 0;
                 cmd.Parameters.AddWithValue("@CompanyID", request.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@BrandID", request.BRAND_ID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@CustID", request.CUSTOMER_ID ?? (object)DBNull.Value);
@@ -166,7 +167,7 @@ namespace MicroApi.DataLayer.Service
                 using SqlCommand cmd = new SqlCommand("SP_ConsignmentReturnDetails", con);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-
+                cmd.CommandTimeout = 0;
                 cmd.Parameters.AddWithValue("@CompanyID", request.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@StoreID", request.STORE_ID);
                 cmd.Parameters.AddWithValue("@CustID", request.CUSTOMER_ID ?? 0);
@@ -207,7 +208,7 @@ namespace MicroApi.DataLayer.Service
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_WISE_SALES", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-
+                    cmd.CommandTimeout = 0;
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
                     cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
@@ -268,7 +269,7 @@ namespace MicroApi.DataLayer.Service
             using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_WISE_SALES_SUMMARY", con))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-
+                cmd.CommandTimeout = 0;
                 // REQUIRED
                 cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
                 cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
@@ -309,6 +310,7 @@ namespace MicroApi.DataLayer.Service
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_DISCOUNT_WISE_SALES", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 0;
                     cmd.Parameters.AddWithValue("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
                     cmd.Parameters.AddWithValue("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
@@ -352,7 +354,7 @@ namespace MicroApi.DataLayer.Service
                 using SqlCommand cmd = new SqlCommand("SP_RPT_TENDER_REPORT_PIVOT", con);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-
+                cmd.CommandTimeout = 0;
                 // ✅ Correct parameter usage
                 cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
                 cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
@@ -363,7 +365,8 @@ namespace MicroApi.DataLayer.Service
                     string.IsNullOrWhiteSpace(request.STORE_ID) ? "" : request.STORE_ID;
 
                 cmd.Parameters.Add("@SALE_TYPE", SqlDbType.Int).Value = request.SALE_TYPE;
-
+                cmd.Parameters.AddWithValue("@CUSTOMER_ID",
+                    string.IsNullOrWhiteSpace(request.CUSTOMER_ID) ? "" : request.CUSTOMER_ID);
                 // Optional (if SP expects it)
                 // cmd.Parameters.Add("@INCLUDE_SUMMARY", SqlDbType.Int).Value = request.INCLUDE_SUMMARY;
 
@@ -393,6 +396,7 @@ namespace MicroApi.DataLayer.Service
                 using SqlCommand cmd = new SqlCommand("SP_RPT_TENDER_REPORT_PIVOT_SUMMARY", con);
 
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
                 cmd.Parameters.AddWithValue("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
                 cmd.Parameters.AddWithValue("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
                 cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
@@ -400,6 +404,46 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@STORE_ID",
                     string.IsNullOrWhiteSpace(request.STORE_ID) ? "" : request.STORE_ID);
                 cmd.Parameters.AddWithValue("@SALE_TYPE", request.SALE_TYPE);
+                cmd.Parameters.AddWithValue("@CUSTOMER_ID",
+                    string.IsNullOrWhiteSpace(request.CUSTOMER_ID) ? "" : request.CUSTOMER_ID);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                // 👉 Log this properly in your system
+                throw;
+            }
+
+            return dt;
+        }
+        public DataTable GetZReport(ZReportFilter request)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using SqlConnection con = ADO.GetConnection();
+                using SqlCommand cmd = new SqlCommand("SP_GENERATE_XREPORT", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
+                // ✅ Correct parameter usage
+                cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
+                cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
+                cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
+
+                //cmd.Parameters.Add("@SHIFT_ID", SqlDbType.Int).Value = request.SHIFT_ID;
+                //cmd.Parameters.Add("@STORE_ID", SqlDbType.Int).Value = request.STORE_ID;
+                cmd.Parameters.Add("@BATCH_ID", SqlDbType.Int).Value = request.BATCH_ID;
+
+                // Optional (if SP expects it)
+                // cmd.Parameters.Add("@INCLUDE_SUMMARY", SqlDbType.Int).Value = request.INCLUDE_SUMMARY;
+
+
 
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {

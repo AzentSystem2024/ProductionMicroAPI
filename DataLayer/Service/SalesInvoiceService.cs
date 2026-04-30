@@ -328,7 +328,7 @@ namespace MicroApi.DataLayer.Service
                                         DISCOUNT_AMOUNT = reader["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DISCOUNT_AMOUNT"]) : 0,
 
                                         REF_NO = reader["REF_NO"]?.ToString(),
-                                        PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
+                                        PARTY_NAME = reader["CUST_NAME"]?.ToString(),
 
                                         // Customer
                                         CUST_NAME = reader["CUST_NAME"]?.ToString(),
