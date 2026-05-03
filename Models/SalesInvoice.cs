@@ -13,6 +13,7 @@
     }
     public class SalesInvoiceRequest
     {
+        public int? CUSTOMER_ID { get; set; }
         public int ITEM_ID { get; set; }
     }
     public class SalesResponse

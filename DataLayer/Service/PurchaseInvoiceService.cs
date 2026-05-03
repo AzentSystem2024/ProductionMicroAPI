@@ -937,6 +937,7 @@ namespace MicroApi.DataLayer.Service
             using (SqlCommand cmd = new SqlCommand("SP_TB_PURCH", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
                 cmd.Parameters.AddWithValue("@ACTION", 0);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));

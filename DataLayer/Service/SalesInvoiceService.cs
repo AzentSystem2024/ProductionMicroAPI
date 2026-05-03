@@ -40,6 +40,8 @@ namespace MicroApi.DataLayer.Service
                         HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
                     }).ToList();
 
+
+
                     response.Data = items;
                     response.Message = "Success";
                     response.Flag = 1;
@@ -54,6 +56,97 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        //public SalesResponse GetSalesInvoiceItem(SalesInvoiceRequest input)
+        //{
+        //    SalesResponse response = new SalesResponse();
+        //    List<SalesInvoice> items = new List<SalesInvoice>();
+
+        //    try
+        //    {
+        //        using (SqlConnection connection = ADO.GetConnection())
+        //        {
+        //            if (connection.State == ConnectionState.Closed)
+        //                connection.Open();
+
+        //            // ✅ Step 1: Get PRICE_CLASS_ID
+        //            int priceClassId = 0;
+        //            using (SqlCommand cmdPrice = new SqlCommand("SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID", connection))
+        //            {
+        //                cmdPrice.Parameters.AddWithValue("@CUST_ID", input.CUSTOMER_ID);
+        //                priceClassId = Convert.ToInt32(cmdPrice.ExecuteScalar());
+        //            }
+
+        //            // ✅ Step 2: Fetch Item Data
+        //            SqlCommand cmd = new SqlCommand("SP_TB_SALES_INVOICE", connection);
+        //            cmd.CommandType = CommandType.StoredProcedure;
+
+        //            cmd.Parameters.AddWithValue("@ACTION", 5);
+        //            cmd.Parameters.AddWithValue("@ITEM_ID", input.ITEM_ID);
+
+        //            SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //            DataTable tbl = new DataTable();
+        //            da.Fill(tbl);
+
+        //            // ✅ Step 3: Apply Price Logic
+        //            items = tbl.AsEnumerable().Select(dr => new SalesInvoice
+        //            {
+        //                ID = ADO.ToInt32(dr["ID"]),
+        //                ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
+        //                DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
+        //                BARCODE = ADO.ToString(dr["BARCODE"]),
+        //                UOM = ADO.ToString(dr["UOM"]),
+
+        //                TAX_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]),
+
+        //                PRICE =
+        //                (
+        //                    priceClassId == 1
+        //                        ? (dr["SALE_PRICE1"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE1"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE1"]))
+
+        //                    : priceClassId == 2
+        //                        ? (dr["SALE_PRICE2"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE2"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE2"]))
+
+        //                    : priceClassId == 3
+        //                        ? (dr["SALE_PRICE3"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE3"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE3"]))
+
+        //                    : priceClassId == 4
+        //                        ? (dr["SALE_PRICE4"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE4"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE4"]))
+
+        //                    : priceClassId == 5
+        //                        ? (dr["SALE_PRICE5"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE5"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE5"]))
+
+        //                    : (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                ),
+
+        //                HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
+
+        //            }).ToList();
+
+        //            response.Data = items;
+        //            response.Message = "Success";
+        //            response.Flag = 1;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Data = new List<SalesInvoice>();
+        //        response.Message = ex.Message;
+        //        response.Flag = 0;
+        //    }
+
+        //    return response;
+        //}
+
         public SalesInvoiceInsertResponse Insert(SalesInvoiceInsertRequest input)
         {
             SalesInvoiceInsertResponse response = new SalesInvoiceInsertResponse();
