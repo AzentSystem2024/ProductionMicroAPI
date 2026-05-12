@@ -126,14 +126,14 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("verify")]
-        public saveTimeSheetResponseData VerifyData(saveTimeSheetData timesheetData)
+        public TimeSheetHeaderListResponseData VerifyData(ApproveRequest request)
         {
-            saveTimeSheetResponseData res = new saveTimeSheetResponseData();
+            TimeSheetHeaderListResponseData res = new TimeSheetHeaderListResponseData();
 
             try
             {
 
-                _timeSheetService.VerifyData(timesheetData);
+                _timeSheetService.VerifyData(request);
 
                 res.flag = "1";
                 res.message = "Success";

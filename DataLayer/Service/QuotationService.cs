@@ -234,6 +234,116 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public QuotationResponse Verify(QuotationUpdate quotation)
+        {
+            QuotationResponse response = new QuotationResponse();
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("QUANTITY", typeof(float));
+                        tvp.Columns.Add("PRICE", typeof(float));
+                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
+                        tvp.Columns.Add("AMOUNT", typeof(float));
+                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
+                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
+                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
+                        tvp.Columns.Add("REMARKS", typeof(string));
+
+                        foreach (var detail in quotation.Details)
+                        {
+                            tvp.Rows.Add(
+                                detail.ITEM_ID ?? 0,
+                                detail.UOM ?? "",
+                                detail.QUANTITY ?? 0,
+                                detail.PRICE ?? 0,
+                                detail.DISC_PERCENT ?? 0,
+                                detail.AMOUNT ?? 0,
+                                detail.TAX_PERCENT ?? 0,
+                                detail.TAX_AMOUNT ?? 0,
+                                detail.TOTAL_AMOUNT ?? 0,
+                                detail.REMARKS ?? ""
+                            );
+                        }
+                        // Create DataTable for SQTN_TERMS
+                        DataTable tvpTerms = new DataTable();
+                        tvpTerms.Columns.Add("ID", typeof(int));
+                        tvpTerms.Columns.Add("QTN_ID", typeof(int));
+                        tvpTerms.Columns.Add("TERMS", typeof(string));
+
+                        if (quotation.Terms != null && quotation.Terms.Any())
+                        {
+                            foreach (var term in quotation.Terms)
+                            {
+                                tvpTerms.Rows.Add(term.ID, term.QTN_ID, term.TERMS);
+                            }
+                        }
+
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 10);
+                            cmd.Parameters.AddWithValue("@QTN_ID", quotation.ID ?? 0);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", quotation.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", quotation.FIN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@STORE_ID", quotation.STORE_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@QTN_DATE", ParseDate(quotation.QTN_DATE));
+                            cmd.Parameters.AddWithValue("@CUST_ID", quotation.CUST_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SALESMAN_ID", quotation.SALESMAN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@CONTACT_NAME", quotation.CONTACT_NAME ?? "");
+                            cmd.Parameters.AddWithValue("@SUBJECT", quotation.SUBJECT ?? "");
+                            cmd.Parameters.AddWithValue("@REF_NO", quotation.REF_NO ?? "");
+                            cmd.Parameters.AddWithValue("@PAY_TERM_ID", quotation.PAY_TERM_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@DELIVERY_TERM_ID", quotation.DELIVERY_TERM_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@VALID_DAYS", quotation.VALID_DAYS ?? 0);
+                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", quotation.GROSS_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@TAX_AMOUNT", quotation.TAX_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@CHARGE_DESCRIPTION", quotation.CHARGE_DESCRIPTION ?? "");
+                            cmd.Parameters.AddWithValue("@CHARGE_AMOUNT", quotation.CHARGE_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@DISCOUNT_DESCRIPTION", quotation.DISCOUNT_DESCRIPTION ?? "");
+                            cmd.Parameters.AddWithValue("@DISCOUNT_AMOUNT", quotation.DISCOUNT_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@ROUND_OFF", quotation.ROUND_OFF ?? false);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", quotation.TRANS_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", quotation.NET_AMOUNT ?? 0);
+                            //cmd.Parameters.AddWithValue("@TERMS", string.IsNullOrWhiteSpace(quotation.TERMS) ? (object)DBNull.Value : quotation.TERMS);
+                            //if (!string.IsNullOrWhiteSpace(quotation.TERMS) && quotation.TERMS.ToLower() != "string")
+                            //    cmd.Parameters.AddWithValue("@TERMS", quotation.TERMS);
+                            //else
+                            //    cmd.Parameters.AddWithValue("@TERMS", DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NARRATION", quotation.NARRATION ?? "");
+
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SQTN_DETAIL", tvp);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_TB_SQTN_DETAIL";
+
+                            // Add SQTN_TERMS TVP
+                            SqlParameter tvpTermsParam = cmd.Parameters.AddWithValue("@SQTN_TERMS", tvpTerms);
+                            tvpTermsParam.SqlDbType = SqlDbType.Structured;
+                            tvpTermsParam.TypeName = "dbo.UDT_TB_SQTN_TERM";
+
+                            cmd.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                        response.Flag = "1";
+                        response.Message = "Success";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        response.Flag = "0";
+                        response.Message = ex.Message;
+                    }
+                }
+            }
+            return response;
+        }
 
         public QuotationDetailSelectResponse GetQuotation(int qtnId)
         {
@@ -376,24 +486,119 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+        //public ItemListResponse GetQuotationItems(QuotationRequest request)
+        //{
+        //    ItemListResponse response = new ItemListResponse { Data = new List<Item>() };
+        //    try
+        //    {
+        //        using (SqlConnection connection = ADO.GetConnection())
+        //        {
+        //            if (connection.State == ConnectionState.Closed)
+        //                connection.Open();
+        //            using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection))
+        //            {
+        //                cmd.CommandType = CommandType.StoredProcedure;
+        //                cmd.Parameters.AddWithValue("@ACTION", 6);
+        //                cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
+        //                using (SqlDataReader reader = cmd.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        Item item = new Item
+        //                        {
+        //                            ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
+        //                            ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
+        //                            DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
+        //                            MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
+        //                            UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
+        //                            COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)0,
+        //                            STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)0,
+        //                            VAT_PERC = reader["VAT_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["VAT_PERC"]) : 0,
+        //                        };
+        //                        response.Data.Add(item);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        response.Flag = 1;
+        //        response.Message = "Success";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Flag = 0;
+        //        response.Message = "Error: " + ex.Message;
+        //        response.Data = null;
+        //    }
+        //    return response;
+        //}
         public ItemListResponse GetQuotationItems(QuotationRequest request)
         {
             ItemListResponse response = new ItemListResponse { Data = new List<Item>() };
+
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
+
+                    // ✅ Step 1: Get PRICE_CLASS_ID
+                    int priceClassId = 0;
+                    using (SqlCommand cmdPrice = new SqlCommand("SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID", connection))
+                    {
+                        cmdPrice.Parameters.AddWithValue("@CUST_ID", request.CUSTOMER_ID);
+                        priceClassId = Convert.ToInt32(cmdPrice.ExecuteScalar());
+                    }
+
+                    // ✅ Step 2: Fetch Items
                     using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ACTION", 6);
                         cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
+
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
+                                decimal price = 0;
+
+                                // ✅ Step 3: Apply same price logic
+                                if (priceClassId == 1)
+                                {
+                                    price = reader["SALE_PRICE1"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE1"]) == 0
+                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                        : Convert.ToDecimal(reader["SALE_PRICE1"]);
+                                }
+                                else if (priceClassId == 2)
+                                {
+                                    price = reader["SALE_PRICE2"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE2"]) == 0
+                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                        : Convert.ToDecimal(reader["SALE_PRICE2"]);
+                                }
+                                else if (priceClassId == 3)
+                                {
+                                    price = reader["SALE_PRICE3"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE3"]) == 0
+                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                        : Convert.ToDecimal(reader["SALE_PRICE3"]);
+                                }
+                                else if (priceClassId == 4)
+                                {
+                                    price = reader["SALE_PRICE4"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE4"]) == 0
+                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                        : Convert.ToDecimal(reader["SALE_PRICE4"]);
+                                }
+                                else if (priceClassId == 5)
+                                {
+                                    price = reader["SALE_PRICE5"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE5"]) == 0
+                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                        : Convert.ToDecimal(reader["SALE_PRICE5"]);
+                                }
+                                else
+                                {
+                                    price = reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]);
+                                }
+
                                 Item item = new Item
                                 {
                                     ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
@@ -401,15 +606,20 @@ namespace MicroApi.DataLayer.Service
                                     DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
                                     MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
                                     UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
-                                    COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)0,
+
+                                    //COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)0,
                                     STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)0,
                                     VAT_PERC = reader["VAT_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["VAT_PERC"]) : 0,
+
+                                    COST = price
                                 };
+
                                 response.Data.Add(item);
                             }
                         }
                     }
                 }
+
                 response.Flag = 1;
                 response.Message = "Success";
             }
@@ -419,8 +629,10 @@ namespace MicroApi.DataLayer.Service
                 response.Message = "Error: " + ex.Message;
                 response.Data = null;
             }
+
             return response;
         }
+
 
         public bool DeleteQuotation(int qtnId)
         {

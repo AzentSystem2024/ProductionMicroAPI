@@ -557,6 +557,8 @@ namespace MicroApi.DataLayer.Services
                 tbl.Columns.Add("UOM_PURCH", typeof(string));
                 tbl.Columns.Add("UOM_MULTIPLE", typeof(int));
                 tbl.Columns.Add("PURCH_DET_ID", typeof(int));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
                 //tbl.Columns.Add("DEPT_ID", typeof(int));
 
                 if (purchaseReturn.PurchDetail != null && purchaseReturn.PurchDetail.Any())
@@ -582,7 +584,9 @@ namespace MicroApi.DataLayer.Services
                         dRow["UOM_PURCH"] = ur.UOM_PURCH;
                         dRow["UOM_MULTIPLE"] = ur.UOM_MULTIPLE;
                         dRow["PURCH_DET_ID"] = ur.PURCH_DET_ID;
-                       // dRow["DEPT_ID"] = ur.DEPT_ID;
+                        dRow["CGST"] = ur.CGST;
+                        dRow["SGST"] = ur.SGST;
+                        // dRow["DEPT_ID"] = ur.DEPT_ID;
                         tbl.Rows.Add(dRow);
                     }
                 }
@@ -593,7 +597,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_PURCHASE_RETURN";
                 cmd.Parameters.AddWithValue("ACTION", 5);
-                cmd.Parameters.AddWithValue("@ID", purchaseReturn.TRANS_ID);
+                cmd.Parameters.AddWithValue("@TRANS_ID", purchaseReturn.TRANS_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchaseReturn.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", purchaseReturn.FIN_ID);
                 cmd.Parameters.AddWithValue("@STORE_ID", purchaseReturn.STORE_ID);
@@ -607,6 +611,8 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@USER_ID", purchaseReturn.USER_ID);
                 cmd.Parameters.AddWithValue("@NARRATION", purchaseReturn.NARRATION);
                 cmd.Parameters.AddWithValue("@GRN_NO", purchaseReturn.GRN_NO);
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchaseReturn.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchaseReturn.ROUND_OFF);
 
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_RET_DETAIL", tbl);

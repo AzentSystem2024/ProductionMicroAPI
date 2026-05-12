@@ -1,0 +1,70 @@
+﻿using MicroApi.Models;
+using MicroApi.Helper;
+using MicroApi.Models;
+using System.Data.SqlClient;
+using System.Data;
+using MicroApi.DataLayer.Interface;
+using System.Globalization;
+using System.Linq;
+using System.ComponentModel.Design;
+using System.Reflection;
+using System.Reflection.PortableExecutable;
+using Newtonsoft.Json;
+
+namespace MicroApi.Services
+{
+    public class SynchService : ISynchService
+    {
+
+        public SynchResponse UploadData(Synch model)
+        {
+            SynchResponse response = new SynchResponse();
+
+            SqlConnection con = new SqlConnection();
+
+            try
+            {
+                // DataTable tbl = JsonConvert.DeserializeObject<DataTable>(object.DATA);
+                DataTable tbl = JsonConvert.DeserializeObject<DataTable>(
+     model.DATA.ToString()
+ );
+                con = ADO.GetConnection();
+
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = con;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "SP_SYNCH_UPDATE";
+                cmd.CommandTimeout = 0;
+
+                cmd.Parameters.AddWithValue("@TABLE_NAME", model.TABLE_NAME);
+                cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
+
+                SqlParameter tvpParam =
+                    cmd.Parameters.AddWithValue("@SYNCH_" + model.TABLE_NAME, tbl);
+
+                tvpParam.SqlDbType = SqlDbType.Structured;
+                tvpParam.TypeName = "dbo.SYNCH_" + model.TABLE_NAME;
+
+                cmd.ExecuteNonQuery();
+
+                response.flag = 1;
+                response.Message = "Data Uploaded Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = ex.Message;
+            }
+            finally
+            {
+                if (con.State == ConnectionState.Open)
+                    con.Close();
+            }
+
+            return response;
+        }
+    }
+}

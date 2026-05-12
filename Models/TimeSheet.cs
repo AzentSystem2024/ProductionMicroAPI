@@ -37,16 +37,16 @@ namespace MicroApi.Models
         public string? EMP_CODE { get; set; }
         public string? EMP_NAME { get; set; }
         public string? STATUS { get; set; }
-        public string TS_MONTH { get; set; }
-        public int EMP_ID { get; set; }
-        public float DAYS { get; set; }
-        public float NORMAL_OT { get; set; }
-        public float HOLIDAY_OT { get; set; }
-        public string LEAVE_FROM { get; set; }
-        public string LEAVE_TO { get; set; }
-        public float WORKED_DAYS { get; set; }
+        public string? TS_MONTH { get; set; }
+        public int? EMP_ID { get; set; }
+        public float? DAYS { get; set; }
+        public float? NORMAL_OT { get; set; }
+        public float? HOLIDAY_OT { get; set; }
+        public string? LEAVE_FROM { get; set; }
+        public string? LEAVE_TO { get; set; }
+        public float? WORKED_DAYS { get; set; }
         public float? DAYS_DEDUCTED { get; set; }
-        public string REMARKS { get; set; }
+        public string? REMARKS { get; set; }
         public List<saveTimeSheetDetailData>? TIMESHEET_DETAIL { get; set; }
         public List<saveTimeSheetSalaryData>? TIMESHEET_SALARY { get; set; }
     }

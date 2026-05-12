@@ -9,7 +9,7 @@ namespace MicroApi.DataLayer.Interface
         public saveTimeSheetData selectTimeSheetData(int id);
         public saveTimeSheetResponseData UpdateData(saveTimeSheetData advData);
         public saveTimeSheetResponseData DeleteTimeSheet(int id);
-        public saveTimeSheetResponseData VerifyData(saveTimeSheetData advData);
+        public TimeSheetHeaderListResponseData VerifyData(ApproveRequest request);
         public saveTimeSheetResponseData ApproveData(saveTimeSheetData advData);
         TimeSheetHeaderListResponseData GetTimeSheetByCompanyAndMonth(TimeSheetRequest request);
         TimeSheetHeaderListResponseData ApproveTimeSheets(ApproveRequest request);

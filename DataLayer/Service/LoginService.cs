@@ -186,7 +186,8 @@ namespace MicroApi.DataLayer.Service
                             CanApprove = Convert.ToBoolean(reader["CanApprove"]),
                             CanDelete = Convert.ToBoolean(reader["CanDelete"]),
                             CanPrint = Convert.ToBoolean(reader["CanPrint"]),
-                            HideCost = reader["HideCost"] != DBNull.Value && Convert.ToBoolean(reader["HideCost"])
+                            HideCost = reader["HideCost"] != DBNull.Value && Convert.ToBoolean(reader["HideCost"]),
+                            CanVerify = reader["CanVerify"] != DBNull.Value && Convert.ToBoolean(reader["CanVerify"])
 
                         };
 

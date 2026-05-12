@@ -55,6 +55,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public CreditNoteResponse Verify(AC_CreditNoteUpdate model)
+        {
+            CreditNoteResponse res = new CreditNoteResponse();
+
+            try
+            {
+                res = _creditNoteService.Verify(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Update Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("list")]
         public CreditNoteListResponse GetCreditNoteList(CreditlistRequest request)
         {

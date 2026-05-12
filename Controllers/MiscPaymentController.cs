@@ -55,6 +55,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public MiscpaymentResponse Verify(MiscPaymentUpdate model)
+        {
+            MiscpaymentResponse res = new MiscpaymentResponse();
+
+            try
+            {
+                res = _miscpaymentService.Verify(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Update Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("list")]
         public MiscPaymentListResponse GetMiscPaymentList(MiscpaymentListRequest request)
         {

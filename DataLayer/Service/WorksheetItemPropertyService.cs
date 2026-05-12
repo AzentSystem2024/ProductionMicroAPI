@@ -799,7 +799,7 @@ namespace MicroApi.DataLayer.Services
             List<ItemStoreProperty> itemsuppliers = new List<ItemStoreProperty>();
             try
             {
-                string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE,TB_AC_TRANS_HEADER.NARRATION from TB_WORKSHEET INNER JOIN TB_AC_TRANS_HEADER ON TB_WORKSHEET.TRANS_ID=TB_AC_TRANS_HEADER.TRANS_ID WHERE WS_TYPE = 2 and TB_WORKSHEET.ID = " + id;
+                string strSQL = "SELECT ID,WS_TYPE, WS_NO,WS_DATE,TB_AC_TRANS_HEADER.NARRATION,TB_AC_TRANS_HEADER.TRANS_STATUS from TB_WORKSHEET INNER JOIN TB_AC_TRANS_HEADER ON TB_WORKSHEET.TRANS_ID=TB_AC_TRANS_HEADER.TRANS_ID WHERE WS_TYPE = 2 and TB_WORKSHEET.ID = " + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "ItemProperty");
 
@@ -813,6 +813,7 @@ namespace MicroApi.DataLayer.Services
                         WS_NO = ADO.ToString(dr["WS_NO"]),
                         WS_DATE = Convert.ToDateTime(dr["WS_DATE"]),
                         NARRATION = ADO.ToString(dr["NARRATION"]),
+                        Status = ADO.ToString(dr["TRANS_STATUS"]),
                     };
                 }
                 SqlCommand cmd = new SqlCommand();

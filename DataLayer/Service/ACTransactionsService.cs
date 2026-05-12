@@ -263,6 +263,7 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+      
         private static void AddParam(SqlCommand cmd, string name, object? value)
         {
             cmd.Parameters.AddWithValue(name, value ?? DBNull.Value);

@@ -6,6 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         MiscReceiptResponse Insert(MiscReceipt model);
         MiscReceiptResponse Update(MiscReceiptUpdate model);
+        MiscReceiptResponse Verify(MiscReceiptUpdate model);
         MiscReceiptListResponse GetReceiptList(MiscReceiptsListRequest request);
         MiscReceiptResponse GetMiscReceiptById(int id);
         LasrVoucherResponse GetLastVoucherNo();

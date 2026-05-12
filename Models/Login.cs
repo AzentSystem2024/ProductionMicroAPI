@@ -81,7 +81,7 @@
         public bool CanDelete { get; set; }
         public bool CanPrint { get; set; }
         public bool HideCost { get; set; }
-
+        public bool CanVerify { get; set; }
         public List<Menu> Children { get; set; } = new();
     }
 

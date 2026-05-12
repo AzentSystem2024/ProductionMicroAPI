@@ -183,6 +183,7 @@
 
     public class QuotationRequest
     {
+        public int? CUSTOMER_ID { get; set; }
         public int STORE_ID { get; set; }
     }
 
@@ -219,7 +220,7 @@
         public string DESCRIPTION { get; set; }
         public string? MATRIX_CODE { get; set; }
         public string? UOM {  get; set; }
-        public float? COST { get; set; }
+        public decimal? COST { get; set; }
         public float? STOCK_QTY { get; set; }
         public decimal? VAT_PERC { get; set; }
     }

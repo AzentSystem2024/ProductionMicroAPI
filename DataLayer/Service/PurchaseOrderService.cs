@@ -511,6 +511,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("ACTION", 5);
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
+                cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
                 cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);
@@ -545,7 +546,6 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("DELIVERY_DATE", worksheet.DELIVERY_DATE);
                 cmd.Parameters.AddWithValue("@USER_ID", worksheet.USER_ID);
-
                 //cmd.Parameters.AddWithValue("CREATED_STORE_ID", worksheet.CREATED_STORE_ID);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_PO_DETAIL", tbl);

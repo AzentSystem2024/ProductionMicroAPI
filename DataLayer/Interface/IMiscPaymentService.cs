@@ -6,6 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         MiscpaymentResponse Save(MiscPayment model);
         MiscpaymentResponse Edit(MiscPaymentUpdate model);
+        MiscpaymentResponse Verify(MiscPaymentUpdate model);
         MiscPaymentSelectedView GetMiscPaymentById(int id);
         MiscPaymentListResponse GetMiscPaymentList(MiscpaymentListRequest request);
         MiscpaymentResponse commit(MiscPaymentUpdate model);

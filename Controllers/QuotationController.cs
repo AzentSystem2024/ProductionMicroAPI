@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class QuotationController : ControllerBase
@@ -79,6 +79,20 @@ namespace MicroApi.Controllers
             try
             {
                 _quotationService.EditData(quotationUpdate);
+                return Ok(new { Flag = "1", Message = "Success" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Flag = "0", Message = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("Verify")]
+        public IActionResult Verify([FromBody] QuotationUpdate quotationUpdate)
+        {
+            try
+            {
+                _quotationService.Verify(quotationUpdate);
                 return Ok(new { Flag = "1", Message = "Success" });
             }
             catch (Exception ex)

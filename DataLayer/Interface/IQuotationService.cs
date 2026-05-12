@@ -8,6 +8,7 @@ namespace MicroApi.DataLayer.Interface
         QuotationDetailSelectResponse GetQuotation(int qtnId);
         int SaveData(Quotation quotation);
         QuotationResponse EditData(QuotationUpdate quotation);
+        QuotationResponse Verify(QuotationUpdate quotation);
         bool DeleteQuotation(int qtnId);
         ItemListResponse GetQuotationItems(QuotationRequest request);
         QuotationResponse ApproveQuotation(QuotationUpdate request);

@@ -72,6 +72,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public SalesInvoiceInsertResponse Verify(SalesInvoiceInsertRequest input)
+        {
+            SalesInvoiceInsertResponse res = new SalesInvoiceInsertResponse();
+
+            try
+            {
+                res = _salesinvoiceService.Verify(input);
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("commit")]
         public SalesInvoiceInsertResponse Commit(SalesInvoiceInsertRequest input)
         {

@@ -74,7 +74,7 @@
         public string? PARTY_NAME { get; set; }
         public int? TRANS_TYPE { get; set; }
         public string? NARRATION { get; set; }
-        public int? TRANS_STATUS { get; set; }
+        public string? TRANS_STATUS { get; set; }
         public string? CHEQUE_NO { get; set; }
         public string? CHEQUE_DATE { get; set; }
         public string? BANK_NAME { get; set; }

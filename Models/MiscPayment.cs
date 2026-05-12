@@ -70,7 +70,7 @@
         public string NARRATION { get; set; }
         public int? PAY_TYPE_ID { get; set; }
         public int? PAY_HEAD_ID { get; set; }
-        public int TRANS_STATUS { get; set; }
+        public string TRANS_STATUS { get; set; }
         public float AMOUNT { get; set; }
         public int HEAD_ID { get; set; }
         public string REMARKS  { get; set; }

@@ -343,80 +343,27 @@ namespace MicroApi.DataLayer.Service
         }
 
 
-        public saveTimeSheetResponseData VerifyData(saveTimeSheetData ts)
+        public TimeSheetHeaderListResponseData VerifyData(ApproveRequest request)
         {
-            try
+            TimeSheetHeaderListResponseData response = new TimeSheetHeaderListResponseData();
+            // response.data = new List<TimeSheetHeader>();
+            //string ids = string.Join(",", request.IDs);
+
+            using (SqlConnection connection = ADO.GetConnection())
+
             {
-                saveTimeSheetResponseData res = new saveTimeSheetResponseData();
-                using (SqlConnection connection = ADO.GetConnection())
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = connection;
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "SP_TB_TIMESHEET";
+                SqlCommand cmd = new SqlCommand("SP_TB_TIMESHEET", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ACTION", 4);
+                //cmd.Parameters.AddWithValue("@IDS", ids);
+                cmd.Parameters.AddWithValue("@IDs", string.Join(",", request.IDs));
 
-                    cmd.Parameters.AddWithValue("@ACTION", 4);
 
-                    cmd.Parameters.AddWithValue("ID", ts.ID);
-
-                    cmd.Parameters.AddWithValue("EMP_ID", (object)ts.EMP_ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)ts.COMPANY_ID ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("TS_MONTH", string.IsNullOrEmpty(ts.TS_MONTH) ? DBNull.Value : DateTime.ParseExact(ts.TS_MONTH, "MMMM yyyy", CultureInfo.InvariantCulture));
-                    cmd.Parameters.AddWithValue("DAYS", (object)ts.DAYS ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("NORMAL_OT", (object)ts.NORMAL_OT ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("HOLIDAY_OT", (object)ts.HOLIDAY_OT ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("LEAVE_FROM", string.IsNullOrEmpty(ts.LEAVE_FROM) ? DBNull.Value : DateTime.ParseExact(ts.LEAVE_FROM, "dd-MM-yyyy", CultureInfo.InvariantCulture));
-                    cmd.Parameters.AddWithValue("LEAVE_TO", string.IsNullOrEmpty(ts.LEAVE_TO) ? DBNull.Value : DateTime.ParseExact(ts.LEAVE_TO, "dd-MM-yyyy", CultureInfo.InvariantCulture));
-                    cmd.Parameters.AddWithValue("WORKED_DAYS", (object)ts.WORKED_DAYS ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("DAYS_DEDUCTED", (object)ts.DAYS_DEDUCTED ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("REMARKS", (object)ts.REMARKS ?? DBNull.Value);
-
-                    DataTable tbl1 = new DataTable();
-
-                    tbl1.Columns.Add("DEPT_ID", typeof(Int32));
-                    tbl1.Columns.Add("DAYS", typeof(float));
-                    tbl1.Columns.Add("NORMAL_OT", typeof(float));
-                    tbl1.Columns.Add("HOLIDAY_OT", typeof(float));
-                    tbl1.Columns.Add("STORE_ID", typeof(int));
-
-                    foreach (saveTimeSheetDetailData ur1 in ts.TIMESHEET_DETAIL)
-                    {
-                        DataRow dRow1 = tbl1.NewRow();
-                        dRow1["DEPT_ID"] = ur1.DEPT_ID;
-                        dRow1["DAYS"] = ur1.DAYS;
-                        dRow1["NORMAL_OT"] = ur1.NORMAL_OT;
-                        dRow1["HOLIDAY_OT"] = ur1.HOLIDAY_OT;
-                        dRow1["STORE_ID"] = ur1.STORE_ID;
-                        tbl1.Rows.Add(dRow1);
-                    }
-
-                    cmd.Parameters.AddWithValue("@UDT_TB_TIMESHEET_DETAIL", tbl1);
-
-                    DataTable tbl2 = new DataTable();
-
-                    tbl2.Columns.Add("SALARY_HEAD_ID", typeof(Int32));
-                    tbl2.Columns.Add("AMOUNT", typeof(float));
-
-                    foreach (saveTimeSheetSalaryData ur1 in ts.TIMESHEET_SALARY)
-                    {
-                        DataRow dRow1 = tbl2.NewRow();
-                        dRow1["SALARY_HEAD_ID"] = ur1.SALARY_HEAD_ID;
-                        dRow1["AMOUNT"] = ur1.AMOUNT;
-                        tbl2.Rows.Add(dRow1);
-                    }
-
-                    cmd.Parameters.AddWithValue("@UDT_TB_TIMESHEET_SALARY", tbl2);
-
-                    cmd.ExecuteNonQuery();
-                }
-
-                return res;
-
+                cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            response.flag = "1";
+            response.message = "Verified successfully.";
+            return response;
         }
 
         public saveTimeSheetResponseData ApproveData(saveTimeSheetData ts)

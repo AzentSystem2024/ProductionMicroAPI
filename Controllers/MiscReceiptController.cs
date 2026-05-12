@@ -51,6 +51,22 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public MiscReceiptResponse Verify(MiscReceiptUpdate model)
+        {
+            MiscReceiptResponse res = new MiscReceiptResponse();
+            try
+            {
+                res = _miscreceiptService.Verify(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
         [Route("list")]
         public MiscReceiptListResponse GetReceiptList(MiscReceiptsListRequest request)
         {

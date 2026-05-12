@@ -672,7 +672,9 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("VAT_AMOUNT", typeof(decimal));
                 tbl.Columns.Add("GRN_STORE_ID", typeof(int));
                 tbl.Columns.Add("RETURN_AMOUNT", typeof(float));
-                //tbl.Columns.Add("DEPT_ID", typeof(int));
+                tbl.Columns.Add("CGST", typeof(decimal));
+                tbl.Columns.Add("SGST", typeof(decimal));
+                tbl.Columns.Add("DISC_AMT", typeof(float));
 
                 if (purchHeader.PurchDetails != null && purchHeader.PurchDetails.Any())
                 {
@@ -700,7 +702,9 @@ namespace MicroApi.DataLayer.Service
                         dRow["VAT_AMOUNT"] = (object?)ur.VAT_AMOUNT ?? DBNull.Value;
                         dRow["GRN_STORE_ID"] = (object?)ur.GRN_STORE_ID ?? DBNull.Value;
                         dRow["RETURN_AMOUNT"] = ur.RETURN_AMOUNT;
-                       // dRow["DEPT_ID"] = (object?)ur.DEPT_ID ?? DBNull.Value;
+                        dRow["CGST"] = (object?)ur.CGST ?? DBNull.Value;
+                        dRow["SGST"] = (object?)ur.SGST ?? DBNull.Value;
+                        dRow["DISC_AMT"] = (object?)ur.DISC_AMT ?? DBNull.Value;
 
                         tbl.Rows.Add(dRow);
                     }
@@ -734,7 +738,9 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@RETURN_AMOUNT", purchHeader.RETURN_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@ADJ_AMOUNT", purchHeader.ADJ_AMOUNT ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAID_AMOUNT", purchHeader.PAID_AMOUNT);
-
+                cmd.Parameters.AddWithValue("@NARRATION", purchHeader.NARRATION);
+                cmd.Parameters.AddWithValue("@VEHICLE_NO", purchHeader.VEHICLE_NO ?? string.Empty);
+                cmd.Parameters.AddWithValue("@ROUND_OFF", purchHeader.ROUND_OFF);
                 cmd.Parameters.AddWithValue("@UDT_TB_PURCH_DETAIL", tbl);
 
 
