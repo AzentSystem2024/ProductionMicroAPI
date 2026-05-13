@@ -343,6 +343,10 @@ namespace MicroApi.DataLayer.Services
                                     AmtInForeignCurrency = reader["AmtInForeignCurrency"] == DBNull.Value
                                                             ? 0
                                                             : Convert.ToDecimal(reader["AmtInForeignCurrency"]),
+                                    PatientCreditCardNumber = reader["PatientCreditCardNumber"]?.ToString() ?? "",
+                                    PatientCreditCardExpDt = reader["PatientCreditCardExpDt"] == DBNull.Value
+                                        ? null
+                                        : Convert.ToDateTime(reader["PatientCreditCardExpDt"]),
                                 });
                             }
                         }
@@ -444,6 +448,9 @@ namespace MicroApi.DataLayer.Services
             tbl.Columns.Add("CurrencyACode", typeof(string));
             tbl.Columns.Add("CurrencyRateConversion", typeof(decimal));
             tbl.Columns.Add("AmtInForeignCurrency", typeof(decimal));
+
+            tbl.Columns.Add("PatientCreditCardNumber ", typeof(string));
+            tbl.Columns.Add("PatientCreditCardExpDt ", typeof(DateTime));
 
             items.data?.ForEach(ur => tbl.Rows.Add(
 
@@ -563,7 +570,12 @@ namespace MicroApi.DataLayer.Services
 
             ur.CurrencyRateConversion ?? (object)DBNull.Value,
 
-            ur.AmtInForeignCurrency ?? (object)DBNull.Value
+            ur.AmtInForeignCurrency ?? (object)DBNull.Value,
+            ur.PatientCreditCardNumber ?? "",
+            ur.PatientCreditCardExpDt.HasValue
+                ? ur.PatientCreditCardExpDt
+                : DBNull.Value
+
         ));
 
             tbl.AcceptChanges();
