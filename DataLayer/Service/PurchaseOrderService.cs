@@ -511,7 +511,6 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("ACTION", 5);
 
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
-                cmd.Parameters.AddWithValue("ID", worksheet.ID);
                 cmd.Parameters.AddWithValue("COMPANY_ID", worksheet.COMPANY_ID);
                 cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 // cmd.Parameters.AddWithValue("PO_NO", worksheet.PO_NO);

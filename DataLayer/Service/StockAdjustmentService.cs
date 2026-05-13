@@ -165,6 +165,80 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public StockAdjustmentResponse Verify(StockAdjustmentUpdate stockAdjustment)
+        {
+            StockAdjustmentResponse response = new StockAdjustmentResponse();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("REASON_ID", typeof(int));
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("COST", typeof(float));
+                        tvp.Columns.Add("STOCK_QTY", typeof(float));
+                        tvp.Columns.Add("NEW_QTY", typeof(float));
+                        tvp.Columns.Add("ADJ_QTY", typeof(float));
+                        tvp.Columns.Add("AMOUNT", typeof(float));
+                        tvp.Columns.Add("BATCH_NO", typeof(string));
+                        tvp.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+
+                        foreach (var detail in stockAdjustment.Details)
+                        {
+                            tvp.Rows.Add(
+                                detail.REASON_ID ?? 0,
+                                detail.ITEM_ID ?? 0,
+                                detail.COST ?? 0,
+                                detail.STOCK_QTY ?? 0,
+                                detail.NEW_QTY ?? 0,
+                                detail.ADJ_QTY ?? 0,
+                                detail.AMOUNT ?? 0,
+                                detail.BATCH_NO ?? "0",
+                                detail.EXPIRY_DATE ?? DateTime.Now
+                            );
+                        }
+
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_STOCK_ADJUSTMENT", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 8);
+                            cmd.Parameters.AddWithValue("@ADJ_ID", stockAdjustment.ID ?? 0);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", stockAdjustment.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@STORE_ID", stockAdjustment.STORE_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@ADJ_DATE", stockAdjustment.ADJ_DATE);
+                            cmd.Parameters.AddWithValue("@REASON_ID", stockAdjustment.REASON_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", stockAdjustment.FIN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", stockAdjustment.TRANS_ID ?? 0);
+                            // cmd.Parameters.AddWithValue("@CREDIT_HEAD_ID", stockAdjustment.CREDIT_HEAD_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", stockAdjustment.NET_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@NARRATION", stockAdjustment.NARRATION ?? "");
+
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ITEM_ADJ_DETAIL", tvp);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_TB_ITEM_ADJ_DETAIL";
+
+                            cmd.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                        response.Flag = "1";
+                        response.Message = "Success";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        response.Flag = "0";
+                        response.Message = ex.Message;
+                    }
+                }
+            }
+            return response;
+        }
         public StockAdjustmentDetailResponse GetStockAdjustment(int adjId)
         {
             StockAdjustmentDetailResponse response = new StockAdjustmentDetailResponse 

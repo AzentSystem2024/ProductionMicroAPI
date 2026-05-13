@@ -95,6 +95,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public TransferInResponse Verify(TransferInUpdate transferIn)
+        {
+            var res = new TransferInResponse();
+            try
+            {
+                _transferInService.Verify(transferIn);
+                res.Flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost]
         [Route("list")]
         public TransferInListsResponse List(TransferInListRequest request)
         {

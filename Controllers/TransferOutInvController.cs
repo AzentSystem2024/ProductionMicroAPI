@@ -59,6 +59,27 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public TransferSaveResponse Verify(TransferOutInvUpdate transferOut)
+        {
+            TransferSaveResponse res = new TransferSaveResponse();
+
+            try
+            {
+
+                _transferOutInv.Verify(transferOut);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("getitem")]
         public ItemInfoResponse GetItemInfo(ItemRequest request)
         {

@@ -86,6 +86,20 @@ namespace MicroApi.Controllers
                 return BadRequest(new { Flag = "0", Message = ex.Message });
             }
         }
+        [HttpPost]
+        [Route("Verify")]
+        public IActionResult Verify([FromBody] PhysicalStockUpdate physicalStockUpdate)
+        {
+            try
+            {
+                _physicalStockService.Verify(physicalStockUpdate);
+                return Ok(new { Flag = "1", Message = "Success" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Flag = "0", Message = ex.Message });
+            }
+        }
 
         [HttpPost]
         [Route("delete/{physicalId:int}")]
