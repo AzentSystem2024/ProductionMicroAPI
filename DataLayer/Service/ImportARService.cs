@@ -88,7 +88,9 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@BatchNo", vInput.BatchNo);
                 cmd.Parameters.AddWithValue("@Action", vInput.Action);
 
-                cmd.Parameters.AddWithValue("@UDT_TB_IMPORT_AR_DATA", tblAR);
+                SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_IMPORT_AR_DATA", tblAR);
+                tvpParam.SqlDbType = SqlDbType.Structured;
+                tvpParam.TypeName = "dbo.UDT_TB_IMPORT_AR_DATA";
 
 
                 cmd.ExecuteNonQuery();
@@ -326,7 +328,21 @@ namespace MicroApi.DataLayer.Services
 
                                     Verified = reader["Verified"] == DBNull.Value
                                         ? false
-                                        : Convert.ToBoolean(reader["Verified"])
+                                        : Convert.ToBoolean(reader["Verified"]),
+
+                                    PatientCreditCardHolderName = reader["PatientCreditCardHolderName"]?.ToString() ?? "",
+
+                                    ReceiptCardRemarks = reader["ReceiptCardRemarks"]?.ToString() ?? "",
+
+                                    CurrencyACode = reader["CurrencyACode"]?.ToString() ?? "",
+
+                                    CurrencyRateConversion = reader["CurrencyRateConversion"] == DBNull.Value
+                                                            ? 0
+                                                            : Convert.ToDecimal(reader["CurrencyRateConversion"]),
+
+                                    AmtInForeignCurrency = reader["AmtInForeignCurrency"] == DBNull.Value
+                                                            ? 0
+                                                            : Convert.ToDecimal(reader["AmtInForeignCurrency"]),
                                 });
                             }
                         }
@@ -423,81 +439,132 @@ namespace MicroApi.DataLayer.Services
 
             tbl.Columns.Add("Verified", typeof(bool));
 
+            tbl.Columns.Add("PatientCreditCardHolderName", typeof(string));
+            tbl.Columns.Add("ReceiptCardRemarks", typeof(string));
+            tbl.Columns.Add("CurrencyACode", typeof(string));
+            tbl.Columns.Add("CurrencyRateConversion", typeof(decimal));
+            tbl.Columns.Add("AmtInForeignCurrency", typeof(decimal));
+
             items.data?.ForEach(ur => tbl.Rows.Add(
-                ur.TransactionID,
-                ur.InvoiceType,
-                ur.TransactionType,
-                ur.TransactionIncomeGroup,
-                ur.ApexTransactionNumber,
-                ur.ApexTransactionDate,
 
-                ur.ApexPatientCode,
-                ur.ApexTPACode,
-                ur.ApexInsuCode,
-                ur.ApexInstCode,
+            ur.TransactionID > 0 ? ur.TransactionID : DBNull.Value,
 
-                ur.ApexReportingDoctor,
-                ur.ApexReferringDoctor,
-                ur.ApexReportingDoctorDept,
-                ur.ApexReferringDoctorDept,
+            ur.InvoiceType ?? "",
 
-                ur.IncomeGroupServiceCount,
+            ur.TransactionType ?? "",
 
-                ur.IncomeGrossAmount,
-                ur.IncomePolicyConcAmount,
-                ur.IncomeAddlConcAmount,
-                ur.IncomeNetAmount,
-                ur.IncomePatientAmount,
-                ur.IncomeInstAmount,
-                ur.IncomeInsuAmount,
+            ur.TransactionIncomeGroup ?? "",
 
-                ur.PatientInsuCardNumber,
-                ur.PatientEmployeeCode,
+            ur.ApexTransactionNumber ?? "",
 
-                ur.Paymode,
-                ur.PaymodeGateway,
-                ur.PaymodeAmount,
+            ur.ApexTransactionDate.HasValue
+                ? ur.ApexTransactionDate
+                : DBNull.Value,
 
-                ur.PaymentRefNo,
+            ur.ApexPatientCode ?? "",
 
-                ur.DenialCode,
+            ur.ApexTPACode ?? "",
 
-                ur.AmtInLocalCurrency,
+            ur.ApexInsuCode ?? "",
 
-                ur.RecordEnteredBy,
-                ur.RecordStatus,
-                ur.PostedFlag,
+            ur.ApexInstCode ?? "",
 
-                ur.GPRefNo,
+            ur.ApexReportingDoctor ?? "",
 
-                ur.ReferenceDocNumber,
-                ur.ReferenceDocDate,
+            ur.ApexReferringDoctor ?? "",
 
-                ur.PatientName,
+            ur.ApexReportingDoctorDept ?? "",
 
-                ur.ServiceCategory,
+            ur.ApexReferringDoctorDept ?? "",
 
-                ur.ApexTransferDate,
-                ur.AXTransferDate,
+            ur.IncomeGroupServiceCount ?? (object)DBNull.Value,
 
-                ur.PatientVATAmt,
-                ur.InsuranceVATAmt,
-                ur.CorporateVATAmt,
+            ur.IncomeGrossAmount ?? (object)DBNull.Value,
 
-                ur.VATPerc,
+            ur.IncomePolicyConcAmount ?? (object)DBNull.Value,
 
-                ur.VATType,
-                ur.VATLink,
+            ur.IncomeAddlConcAmount ?? (object)DBNull.Value,
 
-                ur.ServiceCode,
-                ur.ServiceName,
+            ur.IncomeNetAmount ?? (object)DBNull.Value,
 
-                ur.CPTCode,
+            ur.IncomePatientAmount ?? (object)DBNull.Value,
 
-                ur.OrgnBranchCode,
+            ur.IncomeInstAmount ?? (object)DBNull.Value,
 
-                ur.Verified
-            ));
+            ur.IncomeInsuAmount ?? (object)DBNull.Value,
+
+            ur.PatientInsuCardNumber ?? "",
+
+            ur.PatientEmployeeCode ?? "",
+
+            ur.Paymode ?? "",
+
+            ur.PaymodeGateway ?? "",
+
+            ur.PaymodeAmount ?? (object)DBNull.Value,
+
+            ur.PaymentRefNo ?? "",
+
+            ur.DenialCode ?? "",
+
+            ur.AmtInLocalCurrency ?? "",
+
+            ur.RecordEnteredBy ?? "",
+
+            ur.RecordStatus ?? "",
+
+            ur.PostedFlag ?? "",
+
+            ur.GPRefNo ?? "",
+
+            ur.ReferenceDocNumber ?? "",
+
+            ur.ReferenceDocDate ?? "",
+
+            ur.PatientName ?? "",
+
+            ur.ServiceCategory ?? "",
+
+            ur.ApexTransferDate.HasValue
+                ? ur.ApexTransferDate
+                : DBNull.Value,
+
+            ur.AXTransferDate.HasValue
+                ? ur.AXTransferDate
+                : DBNull.Value,
+
+            ur.PatientVATAmt ?? (object)DBNull.Value,
+
+            ur.InsuranceVATAmt ?? (object)DBNull.Value,
+
+            ur.CorporateVATAmt ?? (object)DBNull.Value,
+
+            ur.VATPerc ?? (object)DBNull.Value,
+
+            ur.VATType ?? "",
+
+            ur.VATLink ?? "",
+
+            ur.ServiceCode ?? "",
+
+            ur.ServiceName ?? "",
+
+            ur.CPTCode ?? "",
+
+            ur.OrgnBranchCode ?? "",
+
+            ur.Verified ?? false,
+
+            ur.PatientCreditCardHolderName ?? "",
+
+            ur.ReceiptCardRemarks ?? "",
+
+            ur.CurrencyACode ?? "",
+
+            ur.CurrencyRateConversion ?? (object)DBNull.Value,
+
+            ur.AmtInForeignCurrency ?? (object)DBNull.Value
+        ));
 
             tbl.AcceptChanges();
 

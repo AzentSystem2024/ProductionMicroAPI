@@ -107,6 +107,16 @@ namespace MicroApi.Models
         public string OrgnBranchCode { get; set; }
 
         public bool? Verified { get; set; }
+
+        public string PatientCreditCardHolderName { get; set; }
+
+        public string ReceiptCardRemarks { get; set; }
+
+        public string CurrencyACode { get; set; }
+
+        public decimal? CurrencyRateConversion { get; set; }
+
+        public decimal? AmtInForeignCurrency { get; set; }
     }
 
     public class ImportARLog
