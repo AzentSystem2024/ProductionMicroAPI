@@ -8,6 +8,7 @@ namespace MicroApi.DataLayer.Interface
         public List<TransferInItemList> GetTransferInItems(TransferInInput input);
         public Int32 Insert(TransferIn transferIn);
         public Int32 Update(TransferInUpdate transferIn);
+        public Int32 Verify(TransferInUpdate transferIn);
         public bool Delete(int id);
         TransferInListsResponse List(TransferInListRequest request);
         TransferInInvUpdate GetTransferIn(int id);

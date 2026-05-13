@@ -150,6 +150,75 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
+        public Int32 Verify(TransferOutInvUpdate transferOut)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlTransaction objtrans = connection.BeginTransaction();
+                try
+                {
+                    // --- Build TVP ---
+                    DataTable tbl = new DataTable();
+                    tbl.Columns.Add("ITEM_ID", typeof(int));
+                    tbl.Columns.Add("UOM", typeof(string));
+                    tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("COST", typeof(double));
+                    tbl.Columns.Add("AMOUNT", typeof(double));
+                    tbl.Columns.Add("BATCH_NO", typeof(string));
+                    tbl.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+                    tbl.Columns.Add("PACKING_ID", typeof(int));
+
+                    if (transferOut.DETAILS != null && transferOut.DETAILS.Any())
+                    {
+                        foreach (TransferOutDetailUpdate ur in transferOut.DETAILS)
+                        {
+                            DataRow dRow = tbl.NewRow();
+
+                            dRow["ITEM_ID"] = ur.ITEM_ID;
+                            dRow["UOM"] = ur.UOM ?? "";
+                            dRow["QUANTITY"] = ur.QUANTITY ?? 0;
+                            dRow["COST"] = ur.COST ?? 0;
+
+                            dRow["AMOUNT"] = ur.AMOUNT;
+
+                            dRow["BATCH_NO"] = ur.BATCH_NO ?? "";
+                            dRow["EXPIRY_DATE"] = ur.EXPIRY_DATE ?? (object)DBNull.Value;
+                            dRow["PACKING_ID"] = 0;
+                            tbl.Rows.Add(dRow);
+                        }
+                    }
+
+                    SqlCommand cmd = new SqlCommand("SP_TB_TRANSFER_OUT", connection, objtrans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ACTION", 7);
+                    cmd.Parameters.AddWithValue("@TRANS_ID", transferOut.TRANS_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", transferOut.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", transferOut.STORE_ID);
+                    cmd.Parameters.AddWithValue("@TRANSFER_DATE", transferOut.TRANSFER_DATE);
+                    cmd.Parameters.AddWithValue("@DEST_STORE_ID", transferOut.DEST_STORE_ID);
+                    cmd.Parameters.AddWithValue("@NET_AMOUNT", transferOut.NET_AMOUNT);
+                    cmd.Parameters.AddWithValue("@FIN_ID", transferOut.FIN_ID);
+                    cmd.Parameters.AddWithValue("@USER_ID", transferOut.USER_ID);
+                    cmd.Parameters.AddWithValue("@NARRATION", transferOut.NARRATION ?? "");
+                    cmd.Parameters.AddWithValue("@REASON_ID", transferOut.REASON_ID);
+
+                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_DETAIL", tbl);
+                    tvpParam.SqlDbType = SqlDbType.Structured;
+
+                    object result = cmd.ExecuteScalar();
+
+                    objtrans.Commit();
+
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+                catch (Exception ex)
+                {
+                    objtrans.Rollback();
+                    throw;
+                }
+            }
+        }
 
 
 

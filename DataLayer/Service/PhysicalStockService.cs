@@ -148,6 +148,72 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public PhysicalStockResponse Verify(PhysicalStockUpdate physicalStock)
+        {
+            PhysicalStockResponse response = new PhysicalStockResponse();
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("QTY_OH", typeof(float));
+                        tvp.Columns.Add("COST", typeof(float));
+                        tvp.Columns.Add("QTY_COUNT", typeof(float));
+                        tvp.Columns.Add("ADJUSTED_QTY", typeof(decimal));
+                        tvp.Columns.Add("BATCH_NO", typeof(string));
+                        tvp.Columns.Add("EXPIRY_DATE", typeof(DateTime));
+
+                        foreach (var detail in physicalStock.Details)
+                        {
+                            tvp.Rows.Add(
+                                detail.ITEM_ID ?? 0,
+                                detail.QTY_OH ?? 0,
+                                detail.COST ?? 0,
+                                detail.QTY_COUNT ?? 0,
+                                detail.ADJUSTED_QTY ?? 0,
+                                detail.BATCH_NO ?? "0",
+                                detail.EXPIRY_DATE ?? DateTime.Now
+                            );
+                        }
+
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_PHYSICAL_STOCK", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 10);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", physicalStock.TRANS_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", physicalStock.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@STORE_ID", physicalStock.STORE_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@PHYSICAL_DATE", physicalStock.PHYSICAL_DATE);
+                            cmd.Parameters.AddWithValue("@REASON_ID", physicalStock.REASON_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@REFERENCE_NO", physicalStock.REFERENCE_NO ?? "");
+                            cmd.Parameters.AddWithValue("@FIN_ID", physicalStock.FIN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@NARRATION", physicalStock.NARRATION ?? "");
+
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ITEM_PHYSICAL_DETAIL", tvp);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_TB_ITEM_PHYSICAL_DETAIL";
+
+                            cmd.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                        response.Flag = "1";
+                        response.Message = "Success";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        response.Flag = "0";
+                        response.Message = ex.Message;
+                    }
+                }
+            }
+            return response;
+        }
 
         public PhysicalStockSelectDetailResponse GetPhysicalStock(int physicalId)
         {

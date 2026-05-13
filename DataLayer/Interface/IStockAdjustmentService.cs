@@ -8,6 +8,7 @@ namespace MicroApi.DataLayer.Interface
         StockAdjustmentListResponse GetAllStockAdjustments(StockAdjListRequest request);
         int SaveData(StockAdjustment stockAdjustment);
         StockAdjustmentResponse EditData(StockAdjustmentUpdate stockAdjustment);
+        StockAdjustmentResponse Verify(StockAdjustmentUpdate stockAdjustment);
         StockAdjustmentDetailResponse GetStockAdjustment(int adjId);
         bool DeleteStockAdjustment(int adjId);
         StockItemListResponse GetStockAdjustmentItems(StockAdjustmentRequest request);

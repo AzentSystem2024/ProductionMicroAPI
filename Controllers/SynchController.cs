@@ -58,5 +58,24 @@ namespace MicroApi.Controllers
 
             return Ok(response);
         }
+        [HttpPost]
+        [Route("download")]
+        public SynchDownloadResponse DownloadData(SynchDownload model)
+        {
+            SynchDownloadResponse response = new SynchDownloadResponse();
+
+            try
+            {
+                response = _synchService.DownloadData(model);
+
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
     }
 }

@@ -90,6 +90,20 @@ namespace MicroApi.Controllers
                 return BadRequest(new { Flag = "0", Message = ex.Message });
             }
         }
+        [HttpPost]
+        [Route("verify")]
+        public IActionResult Verify([FromBody] StockAdjustmentUpdate stockAdjustmentUpdate)
+        {
+            try
+            {
+                _stockAdjustmentService.Verify(stockAdjustmentUpdate);
+                return Ok(new { Flag = "1", Message = "Success" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Flag = "0", Message = ex.Message });
+            }
+        }
 
 
         [HttpPost]

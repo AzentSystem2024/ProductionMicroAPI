@@ -38,6 +38,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@USER_ROLE", user.USER_ROLE);
                         //cmd.Parameters.AddWithValue("@DOB", user.DOB ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@IS_INACTIVE", user.IS_INACTIVE);
+                        cmd.Parameters.AddWithValue("@STORE_ID", user.STORE_ID);
 
                         string companyIdsCsv = user.COMPANY_ID != null ? string.Join(",", user.COMPANY_ID) : "";
                         cmd.Parameters.AddWithValue("@COMPANY_ID", companyIdsCsv);
@@ -94,6 +95,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@USER_ROLE", user.USER_ROLE);
                        // cmd.Parameters.AddWithValue("@DOB", user.DOB ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@EMAIL", user.EMAIL ?? "");
+                        cmd.Parameters.AddWithValue("@STORE_ID", user.STORE_ID);
 
                         string companyIds = user.COMPANY_ID != null ? string.Join(",", user.COMPANY_ID) : "";
                         cmd.Parameters.AddWithValue("@COMPANY_ID", companyIds);
@@ -188,8 +190,9 @@ namespace MicroApi.DataLayer.Service
                                         WHATSAPP_NO = reader["WHATSAPP_NO"]?.ToString(),
                                         MOBILE = reader["MOBILE"]?.ToString(),
                                          USER_ROLE = reader["USER_ROLE"] != DBNull.Value ? Convert.ToInt32(reader["USER_ROLE"]) : 0,
-                                        // DOB = reader["DOB"] != DBNull.Value ? Convert.ToDateTime(reader["DOB"]) : (DateTime?)null,
-                                        EMAIL = reader["EMAIL"]?.ToString(),
+                                         STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                         // DOB = reader["DOB"] != DBNull.Value ? Convert.ToDateTime(reader["DOB"]) : (DateTime?)null,
+                                         EMAIL = reader["EMAIL"]?.ToString(),
                                         IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"]),
                                         COMPANY_ID = reader["COMPANY_ID"]?.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries) .Select(s => int.TryParse(s, out var val) ? val : 0) .Where(id => id > 0) .ToList(),
                                      };
@@ -258,7 +261,8 @@ namespace MicroApi.DataLayer.Service
                                     WHATSAPP_NO = reader["WHATSAPP_NO"]?.ToString() ?? "",
                                     MOBILE = reader["MOBILE"]?.ToString() ?? "",
                                     USER_ROLE = reader["USER_ROLE"]?.ToString() ?? "",
-                                   // DOB = reader["DOB"] != DBNull.Value ? Convert.ToDateTime(reader["DOB"]) : (DateTime?)null,
+                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                    // DOB = reader["DOB"] != DBNull.Value ? Convert.ToDateTime(reader["DOB"]) : (DateTime?)null,
                                     EMAIL = reader["EMAIL"]?.ToString() ?? "",
                                     IS_INACTIVE = reader["IS_INACTIVE"] != DBNull.Value && Convert.ToBoolean(reader["IS_INACTIVE"]),
                                     COMPANY_ID = reader["COMPANY_ID"]?.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries).Select(s => int.TryParse(s, out var val) ? val : 0).Where(id => id > 0).ToList(),

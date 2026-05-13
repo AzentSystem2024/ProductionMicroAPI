@@ -9,6 +9,7 @@
         public string MOBILE { get; set; }     
         public int USER_ROLE { get; set; }
         //public DateTime? DOB { get; set; }
+        public int? STORE_ID { get; set; }
         public string EMAIL { get; set; }
         public bool IS_INACTIVE { get; set; }
         public List<int> COMPANY_ID { get; set; }
@@ -26,6 +27,7 @@
         public string MOBILE { get; set; }
         public int USER_ROLE { get; set; }
         //public DateTime? DOB { get; set; }
+        public int? STORE_ID { get; set; }
         public string EMAIL { get; set; }
         public List<int> COMPANY_ID { get; set; }
         public bool IS_INACTIVE { get; set; }
@@ -51,7 +53,8 @@
         public string WHATSAPP_NO { get; set; }
         public string MOBILE { get; set; }
         public string USER_ROLE { get; set; }
-       // public DateTime? DOB { get; set; }
+        // public DateTime? DOB { get; set; }
+        public int? STORE_ID { get; set; }
         public string EMAIL { get; set; }
         public bool IS_INACTIVE { get; set; }
         public List<int> COMPANY_ID { get; set; }

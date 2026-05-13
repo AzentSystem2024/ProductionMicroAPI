@@ -6,6 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         public Int32 Insert(TransferOutInv transferOut);
         public List<ItemInfo> GetItemInfo(ItemRequest request);
+        public Int32 Verify(TransferOutInvUpdate transferOut);
         public Int32 Update(TransferOutInvUpdate transferOut);
         public List<TransferOutDetailList> GetTransferOutList(TransferOutListRequest request);
         TransferOutInvUpdate GetTransferOut(int id);

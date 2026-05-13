@@ -121,7 +121,7 @@
         public string EMAIL { get; set; }
         public string PHONE { get; set; }
 
-
+        public int STORE_ID { get; set; }
         public List<SalesInvoiceItem> Details { get; set; }
     }
     public class SalesInvoiceItem

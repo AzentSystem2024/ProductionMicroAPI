@@ -66,5 +66,56 @@ namespace MicroApi.Services
 
             return response;
         }
+        public SynchDownloadResponse DownloadData(SynchDownload model)
+        {
+            SynchDownloadResponse response = new SynchDownloadResponse();
+
+            SqlConnection con = new SqlConnection();
+
+            try
+            {
+                con = ADO.GetConnection();
+
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = con;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.CommandText = "SP_SYNCH_GETDATA";
+
+                cmd.CommandTimeout = 0;
+
+                cmd.Parameters.AddWithValue("@TABLE_NAME", model.TABLE_NAME);
+                cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
+                cmd.Parameters.AddWithValue("@TIMESTAMP", model.TIMESTAMP);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+
+                response.Flag = 1;
+                response.Message = "Success";
+
+                // Convert DataTable to JSON String
+                response.DATA = JsonConvert.SerializeObject(dt);
+            }
+            catch (Exception ex)
+            {
+                response.Flag = 0;
+                response.Message = ex.Message;
+                response.DATA = "";
+            }
+            finally
+            {
+                if (con.State == ConnectionState.Open)
+                    con.Close();
+            }
+
+            return response;
+        }
     }
 }

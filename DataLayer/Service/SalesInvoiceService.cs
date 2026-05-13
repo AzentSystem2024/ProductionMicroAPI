@@ -525,7 +525,7 @@ namespace MicroApi.DataLayer.Service
                                         CIN = reader["CIN"]?.ToString(),
                                         EMAIL = reader["EMAIL"]?.ToString(),
                                         PHONE = reader["PHONE"]?.ToString(),
-
+                                        STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
                                         Details = new List<SalesInvoiceItem>()
                                     };
                                 }
