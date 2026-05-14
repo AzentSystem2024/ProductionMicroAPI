@@ -129,6 +129,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@TOTAL_QTY", deliverynote.TOTAL_QTY);
                     cmd.Parameters.AddWithValue("@USER_ID", deliverynote.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", (object?)deliverynote.NARRATION ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IS_VERIFIED", deliverynote.IS_VERIFIED);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_DN_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;

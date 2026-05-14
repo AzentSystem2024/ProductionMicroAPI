@@ -86,7 +86,7 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("@UserID", vInput.UserID);
                 cmd.Parameters.AddWithValue("@FileName", vInput.FileName);
                 cmd.Parameters.AddWithValue("@BatchNo", vInput.BatchNo);
-                cmd.Parameters.AddWithValue("@Action", vInput.Action);
+                cmd.Parameters.AddWithValue("@Action", 1);
 
                 SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_IMPORT_AR_DATA", tblAR);
                 tvpParam.SqlDbType = SqlDbType.Structured;
@@ -449,8 +449,8 @@ namespace MicroApi.DataLayer.Services
             tbl.Columns.Add("CurrencyRateConversion", typeof(decimal));
             tbl.Columns.Add("AmtInForeignCurrency", typeof(decimal));
 
-            tbl.Columns.Add("PatientCreditCardNumber ", typeof(string));
-            tbl.Columns.Add("PatientCreditCardExpDt ", typeof(DateTime));
+            tbl.Columns.Add("PatientCreditCardNumber", typeof(string));
+            tbl.Columns.Add("PatientCreditCardExpDt", typeof(DateTime));
 
             items.data?.ForEach(ur => tbl.Rows.Add(
 
