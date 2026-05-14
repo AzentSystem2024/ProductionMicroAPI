@@ -119,6 +119,8 @@ namespace MicroApi.Models
         public decimal? AmtInForeignCurrency { get; set; }
         public string? PatientCreditCardNumber { get; set; }
         public DateTime?  PatientCreditCardExpDt { get; set; }
+        public string? Status { get; set; }
+        public string? FailureReason { get; set; }
     }
 
     public class ImportARLog
