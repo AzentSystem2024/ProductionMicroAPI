@@ -92,6 +92,7 @@
         public int? PDC_ID { get; set; }
         public int? CREATE_USER_ID { get; set; }
         public string? ADD_TIME { get; set; }
+        public bool? IS_VERIFIED { get; set; }
         public List<JournalUpdateDetail> DETAILS { get; set; }
     }
 
@@ -167,6 +168,7 @@
         public string NARRATION { get; set; }
         public bool IS_APPROVED { get; set; }
         public int? DEPT_ID { get; set; }
+        public int? TRANS_STATUS { get; set; }
         public List<JournalListDetail> DETAILS { get; set; }
     }
 
