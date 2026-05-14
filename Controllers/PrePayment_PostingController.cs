@@ -73,6 +73,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public PrepaymentPostingResponse Verify(PrePayment_PostingEdit model)
+        {
+            PrepaymentPostingResponse res = new PrepaymentPostingResponse();
+
+            try
+            {
+                res = _prePayment_PostingService.Verify(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("prepaylist")]
         public PrePayment_PostingListResponse GetPrePaymentList(PrepaytListRequest request)
         {

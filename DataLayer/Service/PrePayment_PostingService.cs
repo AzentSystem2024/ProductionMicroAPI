@@ -201,6 +201,72 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public PrepaymentPostingResponse Verify(PrePayment_PostingEdit model)
+        {
+            var response = new PrepaymentPostingResponse();
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_PREPAYMENT_POSTING", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // SP Parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 6);
+                        cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@TRANS_TYPE", 39);
+                        cmd.Parameters.AddWithValue("@CREATE_USER_ID", model.CREATE_USER_ID ?? 0);
+                        // Create DataTable for UDT_TB_PREPAY_POSTING
+                        DataTable dtPrepayDetail = new DataTable();
+                        dtPrepayDetail.Columns.Add("ID", typeof(int));
+                        dtPrepayDetail.Columns.Add("DUE_AMOUNT", typeof(decimal));
+                        dtPrepayDetail.Columns.Add("DUE_DATE", typeof(DateTime));
+                        dtPrepayDetail.Columns.Add("SL_NO", typeof(int));
+                        dtPrepayDetail.Columns.Add("DR_AMOUNT", typeof(decimal));
+                        dtPrepayDetail.Columns.Add("CR_AMOUNT", typeof(decimal));
+
+                        int slNo = 1;
+                        if (model.PREPAY_DETAIL != null)
+                        {
+                            foreach (var item in model.PREPAY_DETAIL)
+                            {
+                                dtPrepayDetail.Rows.Add(
+                                    item.ID,
+                                    item.DUE_AMOUNT,
+                                    item.DUE_DATE,
+                                    slNo++,
+                                    item.DR_AMOUNT,
+                                    item.CR_AMOUNT
+                                );
+                            }
+                        }
+
+                        SqlParameter tvpPrepayDetail = cmd.Parameters.AddWithValue("@UDT_TB_PREPAY_POSTING", dtPrepayDetail);
+                        tvpPrepayDetail.SqlDbType = SqlDbType.Structured;
+                        tvpPrepayDetail.TypeName = "UDT_TB_PREPAY_POSTING";
+
+                        // Execute SP
+                        cmd.ExecuteNonQuery();
+
+                        response.flag = 1;
+                        response.Message = "Success.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+
+            return response;
+        }
         public PrePayment_PostingListResponse GetPrePaymentList(PrepaytListRequest request)
         {
             var response = new PrePayment_PostingListResponse
