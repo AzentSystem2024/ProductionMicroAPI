@@ -142,6 +142,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@ADD_TIME", ParseDate(model.ADD_TIME));
                         cmd.Parameters.AddWithValue("@CREATED_STORE_ID", model.CREATED_STORE_ID ?? 0);
                         cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
+                        cmd.Parameters.AddWithValue("@IS_VERIFIED", model.IS_VERIFIED);
 
                         // UDT: UDT_CUST_REC_DETAIL
                         DataTable dt = new DataTable();

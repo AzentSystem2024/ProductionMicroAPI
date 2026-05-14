@@ -78,6 +78,7 @@
         public int? CREATED_STORE_ID { get; set; }
         public int? SUPPLIER_ID { get; set; }
         public double? NET_AMOUNT { get; set; }
+        public bool? IS_VERIFIED { get; set; }
         public List<SupplierPaymentDetail> SUPP_DETAIL { get; set; }
     }
     public class SupplierPaymentResponse
