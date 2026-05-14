@@ -175,6 +175,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@IS_PAYMENT", (object)pdc.IS_PAYMENT ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@ENTRY_STATUS", (object)pdc.ENTRY_STATUS ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@AC_TRANS_ID", (object)pdc.AC_TRANS_ID ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IS_VERIFIED", pdc.IS_VERIFIED);
 
                         cmd.ExecuteNonQuery();
                     }

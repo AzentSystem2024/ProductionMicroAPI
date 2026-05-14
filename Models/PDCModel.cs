@@ -18,6 +18,7 @@
         public bool? IS_PAYMENT { get; set; }
         public int? ENTRY_STATUS { get; set; }
         public int? AC_TRANS_ID { get; set; }
+        public bool? IS_VERIFIED { get; set; }
     }
      public class PDCModelSelect
     {
