@@ -425,6 +425,7 @@ namespace MicroApi.DataLayer.Service
                                         NARRATION = reader["NARRATION"]?.ToString(),
                                         IS_APPROVED = reader["TRANS_STATUS"] != DBNull.Value && Convert.ToInt32(reader["TRANS_STATUS"]) == 5,
                                         DEPT_ID = reader["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(reader["DEPT_ID"]) : 0,
+                                        TRANS_STATUS = Convert.ToInt32(reader["TRANS_STATUS"]),
                                         DETAILS = new List<JournalListDetail>()
                                     };
                                 }

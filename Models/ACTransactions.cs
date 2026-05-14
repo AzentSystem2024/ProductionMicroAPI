@@ -168,6 +168,7 @@
         public string NARRATION { get; set; }
         public bool IS_APPROVED { get; set; }
         public int? DEPT_ID { get; set; }
+        public int? TRANS_STATUS { get; set; }
         public List<JournalListDetail> DETAILS { get; set; }
     }
 
