@@ -375,6 +375,49 @@ namespace MicroApi.DataLayer.Services
             return res;
         }
 
+
+        public processARResponse processAR(processARInput vinput)
+        {
+            processARResponse res = new processARResponse();
+
+            SqlConnection connection = ADO.GetConnection();
+            SqlTransaction objtrans = connection.BeginTransaction();
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand
+                {
+                    Connection = connection,
+                    Transaction = objtrans,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_PROCESS_AR",
+                    CommandTimeout = 0
+                };
+
+                cmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
+
+                cmd.ExecuteNonQuery();
+
+                objtrans.Commit();
+
+                res.flag = "1";
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                objtrans.Rollback();
+
+                res.flag = "0";
+                res.message = ex.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return res;
+        }
+
         private DataTable CreateARDataTable(ImportARInput items)
         {
             DataTable tbl = new DataTable();

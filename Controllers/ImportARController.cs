@@ -101,5 +101,27 @@ namespace MicroApi.Controllers
             return res;
         }
 
+
+        [HttpPost]
+        [Route("process")]
+        public processARResponse processAR(processARInput vinput)
+        {
+            processARResponse res = new processARResponse();
+
+            try
+            {
+
+                res =_importItemLogService.processAR(vinput);
+
+            }
+            catch (Exception ex)
+            {
+                res.flag = "0";
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+
     }
 }
