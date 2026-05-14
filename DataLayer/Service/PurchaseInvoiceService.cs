@@ -289,6 +289,7 @@ namespace MicroApi.DataLayer.Service
                         GST_NO = ADO.ToString(dr["GST_NO"]),
                         PAN_NO = ADO.ToString(dr["PAN_NO"]),
                         CIN = ADO.ToString(dr["CIN"]),
+                        STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : (int?)null
                     };
                 }
 
@@ -450,6 +451,7 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.Parameters.AddWithValue("ACTION", 1);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_ID", purchHeader.SUPP_ID ?? (object)DBNull.Value);
@@ -585,6 +587,7 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.Parameters.AddWithValue("ACTION", 2);
                 cmd.Parameters.AddWithValue("@ID", purchHeader.ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
@@ -721,6 +724,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("ACTION", 5);
                 cmd.Parameters.AddWithValue("@ID", purchHeader.ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_ID", purchHeader.SUPP_ID ?? (object)DBNull.Value);
@@ -857,6 +861,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("ACTION", 6);
                 cmd.Parameters.AddWithValue("@ID", purchHeader.ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", purchHeader.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", purchHeader.STORE_ID);
                 cmd.Parameters.AddWithValue("@USER_ID", purchHeader.USER_ID);
                 cmd.Parameters.AddWithValue("@PURCH_DATE", purchHeader.PURCH_DATE ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SUPP_ID", purchHeader.SUPP_ID ?? (object)DBNull.Value);

@@ -85,6 +85,7 @@
     {
         public int? ID { get; set; }
         public int COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public int USER_ID { get; set; }
         public string? DOC_NO { get; set; }
         public string? SUPPPLIER_NAME { get; set; }
