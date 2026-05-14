@@ -92,6 +92,7 @@
         public int? PDC_ID { get; set; }
         public int? CREATE_USER_ID { get; set; }
         public string? ADD_TIME { get; set; }
+        public bool? IS_VERIFIED { get; set; }
         public List<JournalUpdateDetail> DETAILS { get; set; }
     }
 
