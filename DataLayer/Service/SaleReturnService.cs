@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection.PortableExecutable;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -355,6 +356,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? "");
                 cmd.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? "");
                 cmd.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
+                cmd.Parameters.AddWithValue("@IS_VERIFIED", model.IS_VERIFIED);
 
                 var tvp = cmd.Parameters.AddWithValue("@UDT_SALE_RETURN_DETAIL", tbl);
                 tvp.SqlDbType = SqlDbType.Structured;

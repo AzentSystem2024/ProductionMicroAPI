@@ -127,6 +127,7 @@
         public string? VEHICLE_NO { get; set; }
         public bool? ROUND_OFF { get; set; }
         public bool? IS_APPROVED { get; set; }
+        public bool? IS_VERIFIED { get; set; }
         public List<SaleReturnDetailInsert>? Details { get; set; }
     }
     public class SaleReturnViewResponse
