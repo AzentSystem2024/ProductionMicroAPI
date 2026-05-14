@@ -46,6 +46,7 @@
         public int? USER_ID { get; set; }
         public string? NARRATION { get; set; }
         public int? DN_TYPE { get; set; }
+        public bool? IS_VERIFIED { get; set; }
         public List<DELIVERY_NOTE_DETAILUPDATE>? Details { get; set; }
     }
     public class DELIVERY_NOTE_DETAILUPDATE
