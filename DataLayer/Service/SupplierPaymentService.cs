@@ -305,7 +305,7 @@ namespace MicroApi.DataLayer.Service
                                         PAY_DATE = reader["PAY_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["PAY_DATE"]).ToString("dd-MM-yyyy") : null,
                                         COMPANY_ID = reader["COMPANY_ID"] as int? ?? 0,
                                         FIN_ID = reader["FIN_ID"] as int? ?? 0,
-                                        TRANS_STATUS = reader["TRANS_STATUS"] as int? ?? 0,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         SUPP_ID = reader["SUPP_ID"] as int? ?? 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),

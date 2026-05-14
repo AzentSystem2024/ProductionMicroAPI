@@ -456,7 +456,7 @@ namespace MicroApi.DataLayer.Service
                                         COMPANY_ID = reader["COMPANY_ID"] as int? ?? 0,
                                         STORE_ID = reader["STORE_ID"] as int? ?? 0,
                                         FIN_ID = reader["FIN_ID"] as int? ?? 0,
-                                        TRANS_STATUS = reader["TRANS_STATUS"] as int? ?? 0,
+                                        TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : 0,
                                         REF_NO = reader["REF_NO"]?.ToString(),
                                         DISTRIBUTOR_ID = reader["CUSTOMER_ID"] as int? ?? 0,
                                         NARRATION = reader["NARRATION"]?.ToString(),
