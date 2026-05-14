@@ -249,6 +249,59 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
+        public int Verify(DepreciationUpdateRequest request)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Prepare DataTable for TVP
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("Asset_ID", typeof(int));
+                        tvp.Columns.Add("Days", typeof(int));
+                        tvp.Columns.Add("Depr_Amount", typeof(float));
+
+                        foreach (var detail in request.ASSET_IDS)
+                        {
+                            tvp.Rows.Add(detail.Asset_ID, detail.Days, detail.Depr_Amount);
+                        }
+
+                        using (SqlCommand cmd = new SqlCommand("SP_DEPRECIATION", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 7);
+                            cmd.Parameters.AddWithValue("@ID", request.ID);
+                            cmd.Parameters.AddWithValue("@TRANS_ID", request.TRANS_ID);
+                            cmd.Parameters.AddWithValue("@DEPR_DATE", request.DEPR_DATE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NARRATION", request.NARRATION ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@AMOUNT", request.AMOUNT ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_DEPR_DATE", request.LAST_DEPR_DATE ?? (object)DBNull.Value);
+
+                            SqlParameter tvpParam = cmd.Parameters.AddWithValue("@ASSET_IDS", tvp);
+                            tvpParam.SqlDbType = SqlDbType.Structured;
+                            tvpParam.TypeName = "dbo.UDT_ASSETID_LIST";
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        return request.ID ?? 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Error updating data: " + ex.Message);
+                    }
+                }
+            }
+        }
         public int ApproveDepreciation(DepreciationApproveRequest request)
         {
             using (SqlConnection connection = ADO.GetConnection())

@@ -1177,7 +1177,18 @@ namespace MicroApi.DataLayer.Services
                     tbl.Rows.Add(dRow);
                     tbl.AcceptChanges();
                 }
+                DataTable tblStore = new DataTable();
 
+                tblStore.Columns.Add("STORE_ID", typeof(int));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow drStore = tblStore.NewRow();
+
+                    drStore["STORE_ID"] = store.STORE_ID;
+
+                    tblStore.Rows.Add(drStore);
+                }
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
                 cmd.Transaction = objtrans;
@@ -1192,6 +1203,10 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROMOTION_SCHEMA", tbl);
+
+                SqlParameter storeParam = cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_STORE", tblStore);
+                storeParam.SqlDbType = SqlDbType.Structured;
+                storeParam.TypeName = "dbo.UDT_TB_WORKSHEET_STORE";
 
                 object result = cmd.ExecuteScalar();
 
@@ -1269,6 +1284,19 @@ namespace MicroApi.DataLayer.Services
                     tbl.Rows.Add(dRow);
                     tbl.AcceptChanges();
                 }
+                DataTable tblStore = new DataTable();
+
+                tblStore.Columns.Add("STORE_ID", typeof(int));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow drStore = tblStore.NewRow();
+
+                    drStore["STORE_ID"] = store.STORE_ID;
+
+                    tblStore.Rows.Add(drStore);
+                }
+               
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
@@ -1283,6 +1311,10 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROMOTION_SCHEMA", tbl);
+
+                SqlParameter storeParam = cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_STORE", tblStore);
+                storeParam.SqlDbType = SqlDbType.Structured;
+                storeParam.TypeName = "dbo.UDT_TB_WORKSHEET_STORE";
 
                 object result = cmd.ExecuteScalar();
 
@@ -1384,12 +1416,24 @@ namespace MicroApi.DataLayer.Services
                     tbl.Rows.Add(dRow);
                     tbl.AcceptChanges();
                 }
+                DataTable tblStore = new DataTable();
 
+                tblStore.Columns.Add("STORE_ID", typeof(int));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow drStore = tblStore.NewRow();
+
+                    drStore["STORE_ID"] = store.STORE_ID;
+
+                    tblStore.Rows.Add(drStore);
+                }
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
                 cmd.Transaction = objtrans;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_WORKSHEET_PROMOTION_SCHEMA";
+               
 
                 cmd.Parameters.AddWithValue("ACTION", 5);
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
@@ -1398,6 +1442,9 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROMOTION_SCHEMA", tbl);
+                SqlParameter storeParam = cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_STORE", tblStore);
+                storeParam.SqlDbType = SqlDbType.Structured;
+                storeParam.TypeName = "dbo.UDT_TB_WORKSHEET_STORE";
 
                 cmd.ExecuteNonQuery();
 
@@ -1476,12 +1523,24 @@ namespace MicroApi.DataLayer.Services
                     tbl.Rows.Add(dRow);
                     tbl.AcceptChanges();
                 }
+                DataTable tblStore = new DataTable();
 
+                tblStore.Columns.Add("STORE_ID", typeof(int));
+
+                foreach (var store in worksheet.worksheet_item_store)
+                {
+                    DataRow drStore = tblStore.NewRow();
+
+                    drStore["STORE_ID"] = store.STORE_ID;
+
+                    tblStore.Rows.Add(drStore);
+                }
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
                 cmd.Transaction = objtrans;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_WORKSHEET_PROMOTION_SCHEMA";
+               
 
                 cmd.Parameters.AddWithValue("ACTION", 6);
                 cmd.Parameters.AddWithValue("ID", worksheet.ID);
@@ -1490,6 +1549,9 @@ namespace MicroApi.DataLayer.Services
                 cmd.Parameters.AddWithValue("STORE_ID", worksheet.STORE_ID);
                 cmd.Parameters.AddWithValue("NARRATION", worksheet.NARRATION);
                 cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_PROMOTION_SCHEMA", tbl);
+                SqlParameter storeParam = cmd.Parameters.AddWithValue("@UDT_TB_WORKSHEET_STORE", tblStore);
+                storeParam.SqlDbType = SqlDbType.Structured;
+                storeParam.TypeName = "dbo.UDT_TB_WORKSHEET_STORE";
 
                 object result = cmd.ExecuteScalar();
 

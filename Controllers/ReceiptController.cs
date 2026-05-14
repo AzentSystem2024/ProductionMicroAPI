@@ -54,6 +54,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public ReceiptResponse Verify(ReceiptUpdate model)
+        {
+            ReceiptResponse res = new ReceiptResponse();
+
+            try
+            {
+                res = _receiptService.Verify(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("invoicelist")]
         public PendingInvoiceListResponse GetPendingInvoiceList(InvoicependingRequest request)
         {

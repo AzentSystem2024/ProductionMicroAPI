@@ -80,6 +80,19 @@ namespace MicroApi.Controllers
                 return StatusCode(500, new { Flag = 0, Message = $"Error updating data: {ex.Message}" });
             }
         }
+        [HttpPost("Verify")]
+        public IActionResult Verify([FromBody] DepreciationUpdateRequest request)
+        {
+            try
+            {
+                var result = _depreciationService.Verify(request);
+                return Ok(new { Flag = 1, Message = "Success", Data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Flag = 0, Message = $"Error Verifying data: {ex.Message}" });
+            }
+        }
         [HttpPost("approve")]
         public IActionResult ApproveDepreciation([FromBody] DepreciationApproveRequest request)
         {

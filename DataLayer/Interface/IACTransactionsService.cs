@@ -14,6 +14,7 @@ namespace MicroApi.DataLayer.Interface
 
         DebitNoteResponse SaveDebitNote(AC_DebitNote model);
         DebitNoteResponse UpdateDebitNote(AC_DebitNoteUpdate model);
+        DebitNoteResponse DebitVerify(AC_DebitNoteUpdate model);
         DebitNoteListResponse GetDebitNoteList(DebitlistRequest request);
         AC_DebitNoteSelect GetDebitNoteById(int id);
         DebitNoteResponse Commit(AC_DebitNoteUpdate model);
