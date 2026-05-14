@@ -172,5 +172,6 @@ namespace MicroApi.Models
     {
         public string ColumnName { get; set; }
         public string ColumnTitle { get; set; }
+        public string ColumnType { get; set; }
     }
 }

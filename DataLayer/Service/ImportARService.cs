@@ -29,7 +29,8 @@ namespace MicroApi.DataLayer.Services
                         cmd.CommandText = @"
                     SELECT 
                         ColName,
-                        ColTitle
+                        ColTitle,
+                        ColType
                     FROM TB_REPORT_COLUMNS
                     WHERE ReportID = @ReportID
                     ORDER BY ID";
@@ -43,7 +44,8 @@ namespace MicroApi.DataLayer.Services
                                 res.data.Add(new ImportArColumns
                                 {
                                     ColumnName = reader["ColName"]?.ToString() ?? "",
-                                    ColumnTitle = reader["ColTitle"]?.ToString() ?? ""
+                                    ColumnTitle = reader["ColTitle"]?.ToString() ?? "",
+                                    ColumnType = reader["ColType"]?.ToString() ?? ""
                                 });
                             }
                         }
