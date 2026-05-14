@@ -10,6 +10,7 @@ namespace MicroApi.DataLayer.Interface
         PendingInvoiceListResponse GetPendingInvoiceList(InvoicependingRequest request);
         ReceiptListResponse GetReceiptList(ReceiptsListRequest request);
         ReceiptResponse Update(ReceiptUpdate model);
+        ReceiptResponse Verify(ReceiptUpdate model);
         ReceiptSelectResponse GetReceiptById(int id);
         ReceiptResponse Commit(ReceiptUpdate model);
         RecResponse GetReceiptNo();

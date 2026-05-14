@@ -50,8 +50,7 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-
-
+       
         [HttpPost]
         [Route("list")]
         public JournalListResponse JournalList(JVlistRequest request)
@@ -172,6 +171,24 @@ namespace MicroApi.Controllers
             try
             {
                 res = _journalService.UpdateDebitNote(model);  
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("verify")]
+        public DebitNoteResponse DebitVerify(AC_DebitNoteUpdate model)
+        {
+            DebitNoteResponse res = new DebitNoteResponse();
+
+            try
+            {
+                res = _journalService.DebitVerify(model);
             }
             catch (Exception ex)
             {
