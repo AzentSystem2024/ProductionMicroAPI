@@ -130,6 +130,7 @@
         public string? GST_NO { get; set; }
         public string? PAN_NO { get; set; }
         public string? CIN { get; set; }
+        public string? STATUS { get; set; }
         public List<PurchDetails> PurchDetails { get; set; }
     }
     public class PurchDetails

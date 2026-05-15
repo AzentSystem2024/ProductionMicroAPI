@@ -289,7 +289,8 @@ namespace MicroApi.DataLayer.Service
                         GST_NO = ADO.ToString(dr["GST_NO"]),
                         PAN_NO = ADO.ToString(dr["PAN_NO"]),
                         CIN = ADO.ToString(dr["CIN"]),
-                        STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : (int?)null
+                        STORE_ID = dr["STORE_ID"] != DBNull.Value ? Convert.ToInt32(dr["STORE_ID"]) : (int?)null,
+                        STATUS = dr["STATUS"]?.ToString(),
                     };
                 }
 
