@@ -350,12 +350,12 @@ namespace MicroApi.DataLayer.Services
                                         ? null
                                         : Convert.ToDateTime(reader["PatientCreditCardExpDt"]),
                                     Status = reader["Status"] == DBNull.Value
-                                            ? "Pending"
+                                            ? "Open"
                                             : Convert.ToInt32(reader["Status"]) == 1
-                                                ? "Processed"
+                                                ? "Posted"
                                                 : Convert.ToInt32(reader["Status"]) == -1
                                                     ? "Failed"
-                                                    : "Pending",
+                                                    : "Open",
                                     FailureReason = reader["FailureReason"]?.ToString() ?? "",
                                 });
                             }
