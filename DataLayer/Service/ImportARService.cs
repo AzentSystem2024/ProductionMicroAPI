@@ -350,12 +350,12 @@ namespace MicroApi.DataLayer.Services
                                         ? null
                                         : Convert.ToDateTime(reader["PatientCreditCardExpDt"]),
                                     Status = reader["Status"] == DBNull.Value
-                                            ? "Pending"
+                                            ? "Open"
                                             : Convert.ToInt32(reader["Status"]) == 1
-                                                ? "Processed"
+                                                ? "Posted"
                                                 : Convert.ToInt32(reader["Status"]) == -1
                                                     ? "Failed"
-                                                    : "Pending",
+                                                    : "Open",
                                     FailureReason = reader["FailureReason"]?.ToString() ?? "",
                                 });
                             }
@@ -370,6 +370,49 @@ namespace MicroApi.DataLayer.Services
             {
                 res.flag = 0;
                 res.message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+
+
+        public processARResponse processAR(processARInput vinput)
+        {
+            processARResponse res = new processARResponse();
+
+            SqlConnection connection = ADO.GetConnection();
+            SqlTransaction objtrans = connection.BeginTransaction();
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand
+                {
+                    Connection = connection,
+                    Transaction = objtrans,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_PROCESS_AR",
+                    CommandTimeout = 0
+                };
+
+                cmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
+
+                cmd.ExecuteNonQuery();
+
+                objtrans.Commit();
+
+                res.flag = "1";
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                objtrans.Rollback();
+
+                res.flag = "0";
+                res.message = ex.Message;
+            }
+            finally
+            {
+                connection.Close();
             }
 
             return res;

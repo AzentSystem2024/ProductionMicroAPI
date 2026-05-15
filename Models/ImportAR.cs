@@ -176,4 +176,14 @@ namespace MicroApi.Models
         public string ColumnTitle { get; set; }
         public string ColumnType { get; set; }
     }
+
+    public class processARResponse
+    {
+        public string flag { get; set; }
+        public string message { get; set; }
+    }   
+    public class processARInput
+    {
+        public int TransactionID { get; set; }
+    }
 }
