@@ -123,5 +123,27 @@ namespace MicroApi.Controllers
             return res;
         }
 
+
+        [HttpPost]
+        [Route("arlist")]
+        public ARResponse arList()
+        {
+            ARResponse res = new ARResponse();
+
+            try
+            {
+
+                res = _importItemLogService.arList();
+
+            }
+            catch (Exception ex)
+            {
+                res.flag = "0";
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+
     }
 }
