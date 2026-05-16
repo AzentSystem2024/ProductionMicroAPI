@@ -10,6 +10,7 @@ namespace MicroApi.DataLayer.Interface
         PayrollViewResponse GetPayrollDetails(int id);
         public PayrollResponse Edit(UpdateItemRequest model);
         SalaryApproveResponse CommitGenerateSalary(SalaryApprove request);
+        SalaryApproveResponse Verify(SalaryApprove request);
         DeleteSalaryResponse DeleteGeneratedSalary(DeleteSalaryRequest request);
         PayrollViewResponse GetPayrollApprove(int id);
 

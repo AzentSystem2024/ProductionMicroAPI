@@ -12,13 +12,15 @@ namespace RetailApi.DAL.Services
         public List<Currency> GetAllCurrency()
         {
             List<Currency> currencyList = new List<Currency>();
+
             using (SqlConnection connection = ADO.GetConnection())
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = connection;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "SP_TB_CURRENCY";
-                cmd.Parameters.AddWithValue("ACTION", 0);
+                cmd.Parameters.AddWithValue("@ACTION", 0);
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable tbl = new DataTable();
                 da.Fill(tbl);
@@ -27,21 +29,45 @@ namespace RetailApi.DAL.Services
                 {
                     currencyList.Add(new Currency
                     {
-                        ID = Convert.ToInt32(dr["ID"]),
-                        CODE = Convert.ToString(dr["CODE"]),
-                        SYMBOL = Convert.ToString(dr["SYMBOL"]),
-                        DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]),
-                        EXCHANGE = Convert.ToString(dr["EXCHANGE"]),
+                        ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : 0,
 
-                        FRACTION_UNIT = Convert.ToString(dr["FRACTION_UNIT"]),
-                        COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]),
-                        COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]),
-                        IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"])
+                        CODE = dr["CODE"] != DBNull.Value
+                            ? Convert.ToString(dr["CODE"])
+                            : null,
 
+                        SYMBOL = dr["SYMBOL"] != DBNull.Value
+                            ? Convert.ToString(dr["SYMBOL"])
+                            : null,
+
+                        DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value
+                            ? Convert.ToString(dr["DESCRIPTION"])
+                            : null,
+
+                        EXCHANGE = dr["EXCHANGE"] != DBNull.Value
+                            ? Convert.ToString(dr["EXCHANGE"])
+                            : null,
+
+                        FRACTION_UNIT = dr["FRACTION_UNIT"] != DBNull.Value
+                            ? Convert.ToString(dr["FRACTION_UNIT"])
+                            : null,
+
+                        COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value
+                            ? Convert.ToInt32(dr["COMPANY_ID"])
+                            : 0,
+
+                        COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value
+                            ? Convert.ToString(dr["COMPANY_NAME"])
+                            : null,
+
+                        IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value
+                            ? Convert.ToBoolean(dr["IS_INACTIVE"])
+                            : false
                     });
                 }
+
                 connection.Close();
             }
+
             return currencyList;
         }
         public Int32 SaveData(Currency currency)
@@ -90,9 +116,9 @@ namespace RetailApi.DAL.Services
                 string strSQL = "SELECT TB_CURRENCY.ID,TB_CURRENCY.CODE, TB_CURRENCY.SYMBOL, TB_CURRENCY.DESCRIPTION, " +
               "TB_CURRENCY.FRACTION_UNIT,TB_CURRENCY.EXCHANGE,TB_CURRENCY.IS_INACTIVE,TB_CURRENCY.IS_DELETED,TB_CURRENCY.COMPANY_ID," +
                 "TB_CURRENCY.COMPANY_ID," +
-               "TB_COMPANY.COMPANY_NAME " +
+               "TB_COMPANY_MASTER.COMPANY_NAME " +
                "FROM TB_CURRENCY " +
-               "INNER JOIN TB_COMPANY ON TB_CURRENCY.COMPANY_ID = TB_COMPANY.ID " +
+               "LEFT JOIN TB_COMPANY_MASTER ON TB_CURRENCY.COMPANY_ID = TB_COMPANY_MASTER.ID " +
                "WHERE TB_CURRENCY.ID =" + id;
 
                 DataTable tbl = ADO.GetDataTable(strSQL, "Currency");
@@ -100,16 +126,45 @@ namespace RetailApi.DAL.Services
                 {
                     DataRow dr = tbl.Rows[0];
 
-                    currency.ID = Convert.ToInt32(dr["ID"]);
-                    currency.CODE = Convert.ToString(dr["CODE"]);
-                    currency.SYMBOL = Convert.ToString(dr["SYMBOL"]);
-                    currency.DESCRIPTION = Convert.ToString(dr["DESCRIPTION"]);
-                    currency.FRACTION_UNIT = Convert.ToString(dr["FRACTION_UNIT"]);
-                    currency.EXCHANGE = Convert.ToString(dr["EXCHANGE"]);
-                    currency.IS_INACTIVE = Convert.ToBoolean(dr["IS_INACTIVE"]);
-                    currency.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                    currency.COMPANY_NAME = Convert.ToString(dr["COMPANY_NAME"]);
-                    currency.IS_DELETED = Convert.ToString(dr["IS_DELETED"]);
+                    currency.ID = dr["ID"] != DBNull.Value
+     ? Convert.ToInt32(dr["ID"])
+     : 0;
+
+                    currency.CODE = dr["CODE"] != DBNull.Value
+                        ? Convert.ToString(dr["CODE"])
+                        : null;
+
+                    currency.SYMBOL = dr["SYMBOL"] != DBNull.Value
+                        ? Convert.ToString(dr["SYMBOL"])
+                        : null;
+
+                    currency.DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value
+                        ? Convert.ToString(dr["DESCRIPTION"])
+                        : null;
+
+                    currency.FRACTION_UNIT = dr["FRACTION_UNIT"] != DBNull.Value
+                        ? Convert.ToString(dr["FRACTION_UNIT"])
+                        : null;
+
+                    currency.EXCHANGE = dr["EXCHANGE"] != DBNull.Value
+                        ? Convert.ToString(dr["EXCHANGE"])
+                        : null;
+
+                    currency.IS_INACTIVE = dr["IS_INACTIVE"] != DBNull.Value
+                        ? Convert.ToBoolean(dr["IS_INACTIVE"])
+                        : false;
+
+                    currency.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value
+                        ? Convert.ToInt32(dr["COMPANY_ID"])
+                        : 0;
+
+                    currency.COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value
+                        ? Convert.ToString(dr["COMPANY_NAME"])
+                        : null;
+
+                    currency.IS_DELETED = dr["IS_DELETED"] != DBNull.Value
+                        ? Convert.ToString(dr["IS_DELETED"])
+                        : null;
 
                 }
             }

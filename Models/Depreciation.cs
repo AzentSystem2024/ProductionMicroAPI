@@ -78,6 +78,7 @@
         public decimal? AMOUNT { get; set; }
         public string? VOUCHER_NO { get; set; }
         public string? TRANS_STATUS { get; set; }
+
         public int? TRANS_ID { get; set; }
         public string? LAST_DEPR_DATE { get; set; }
         public List<AssetDepreciationDetail> ASSET_IDS { get; set; }

@@ -5,7 +5,7 @@ using MicroApi.Models;
 
 namespace RetailApi.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CurrencyController : ControllerBase
