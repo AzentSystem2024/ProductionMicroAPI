@@ -108,6 +108,22 @@ namespace MicroApi.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("Verify")]
+        public SalaryApproveResponse Verify(SalaryApprove request)
+        {
+            SalaryApproveResponse response = new SalaryApproveResponse();
+            try
+            {
+                response = _SalaryService.Verify(request);
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
+            }
+            return response;
+        }
 
         [HttpPost]
         [Route("delete")]
