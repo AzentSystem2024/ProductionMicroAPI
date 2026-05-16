@@ -403,10 +403,9 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandTimeout = 0;
 
                         cmd.Parameters.AddWithValue("@ACTION", 0);
-                        cmd.Parameters.AddWithValue("@TRANS_ID", DBNull.Value);
+                        cmd.Parameters.Add("@TRANS_ID", SqlDbType.BigInt).Value = DBNull.Value;
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                        cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
 
                         cmd.Parameters.AddWithValue("@DATE_FROM",
                             request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
