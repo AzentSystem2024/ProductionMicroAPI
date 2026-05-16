@@ -19,6 +19,7 @@
         public int? TRANS_STATUS { get; set; }
         public string? REF_NO { get; set; }
         public string? PURCH_NO { get; set; }
+        public bool? IS_VERIFIED { get; set; }
         public List<MiscPurchDetail>? Details { get; set; }
     }
     public class MiscPurchDetail
