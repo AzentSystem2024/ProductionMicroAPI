@@ -151,6 +151,7 @@ public class MiscPurchInvoiceService : IMiscPurchInvoiceService
             cmd.Parameters.AddWithValue("@USER_ID", model.USER_ID ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@NARRATION", model.NARRATION ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@REF_NO", model.REF_NO ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@IS_VERIFIED", model.IS_VERIFIED ?? (object)DBNull.Value);
 
             SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_MISC_PURCH_DETAIL", tbl);
             tvpParam.SqlDbType = SqlDbType.Structured;
