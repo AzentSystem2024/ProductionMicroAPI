@@ -154,6 +154,9 @@
         public string? PARTICULARS { get; set; }
         public decimal? DEBIT_AMOUNT { get; set; }
         public decimal? CREDIT_AMOUNT { get; set; }
+        public string? DEPT_NAME { get; set; }
+        public string? CLINICIAN { get; set; }
+        public string? DEPARTMENT_GROUP { get; set; }
         public int? DEPT_ID { get; set; }
         public int? STORE_ID { get; set; }
     }
@@ -169,6 +172,7 @@
         public bool IS_APPROVED { get; set; }
         public int? DEPT_ID { get; set; }
         public int? TRANS_STATUS { get; set; }
+        public string? SUB_TYPE { get; set; }
         public List<JournalListDetail> DETAILS { get; set; }
     }
 

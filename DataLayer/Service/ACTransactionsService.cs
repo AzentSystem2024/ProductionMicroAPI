@@ -468,6 +468,91 @@ namespace MicroApi.DataLayer.Service
 
             return res;
         }
+
+        public JournalResponse GetERPJournalById(int id)
+        {
+            JournalResponse res = new JournalResponse();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (var cmd = new SqlCommand("SP_GET_ERP_JV", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Only mandatory inputs
+                        cmd.Parameters.AddWithValue("@TRANS_ID", id);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            JournalViewHeader header = null;
+
+                            while (reader.Read())
+                            {
+                                if (header == null)
+                                {
+                                    header = new JournalViewHeader
+                                    {
+                                        TRANS_ID = Convert.ToInt32(reader["TRANS_ID"]),
+                                        DOC_NO = reader["VOUCHER_NO"]?.ToString(),
+                                        TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("yyyy-MM-dd") : null,
+                                        PARTY_NAME = reader["PARTY_NAME"]?.ToString(),
+                                        REF_NO = reader["REF_NO"]?.ToString(),
+                                        TRANS_TYPE = Convert.ToInt32(reader["TRANS_TYPE"]),
+                                        NARRATION = reader["NARRATION"]?.ToString(),
+                                        IS_APPROVED = reader["TRANS_STATUS"] != DBNull.Value && Convert.ToInt32(reader["TRANS_STATUS"]) == 5,
+                                        TRANS_STATUS = Convert.ToInt32(reader["TRANS_STATUS"]),
+                                        SUB_TYPE = reader["SUB_TYPE"]?.ToString(),
+
+                                        DETAILS = new List<JournalListDetail>(),
+                                    };
+                                }
+
+                                header.DETAILS.Add(new JournalListDetail
+                                {
+                                    ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    SL_NO = reader["SL_NO"] != DBNull.Value ? Convert.ToInt32(reader["SL_NO"]) : (int?)null,
+                                    BILL_NO = reader["BILL_NO"]?.ToString(),
+                                    LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
+                                    LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
+                                    PARTICULARS = reader["PARTICULARS"]?.ToString(),
+                                    DEBIT_AMOUNT = reader["DEBIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DEBIT_AMOUNT"]) : 0,
+                                    CREDIT_AMOUNT = reader["CREDIT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["CREDIT_AMOUNT"]) : 0,
+                                    DEPT_NAME = reader["DEPT_NAME"]?.ToString(),
+                                    CLINICIAN = reader["Clinician"]?.ToString(),
+                                    DEPARTMENT_GROUP = reader["DepartmentGroup"]?.ToString(),
+                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                });
+                            }
+
+                            if (header != null)
+                            {
+                                res.flag = 1;
+                                res.Message = "Success";
+                                res.Data = header;
+                            }
+                            else
+                            {
+                                res.flag = 0;
+                                res.Message = "Journal not found";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+
         public VoucherResponse GetLastVoucherNo()
         {
             VoucherResponse res = new VoucherResponse();
