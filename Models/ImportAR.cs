@@ -211,6 +211,7 @@ namespace MicroApi.Models
         public string? ApexTPACode { get; set; }
         public string? ApexInsuCode { get; set; }
         public string? ApexInstCode { get; set; }
+        public int? AcTransID { get; set; }
         public string? Status { get; set; }
         public string? FailureReason { get; set; }
     }

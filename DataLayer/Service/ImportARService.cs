@@ -474,6 +474,9 @@ namespace MicroApi.DataLayer.Services
                                     ApexInsuCode = reader["ApexInsuCode"]?.ToString(),
 
                                     ApexInstCode = reader["ApexInstCode"]?.ToString(),
+                                    AcTransID = reader["AcTransID"] == DBNull.Value
+                                        ? 0
+                                        : Convert.ToInt32(reader["AcTransID"]),
 
                                     Status = reader["Status"] == DBNull.Value
                                         ? "Open"
