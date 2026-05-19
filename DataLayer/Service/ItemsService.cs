@@ -735,9 +735,10 @@ namespace MicroApi.DataLayer.Services
                 // Query to get item suppliers
                 strSQL = "SELECT TB_ITEM_SUPPLIER.ID, TB_ITEM_SUPPLIER.SUPP_ID, TB_ITEM_SUPPLIER.REORDER_NO, " +
                     "TB_ITEM_SUPPLIER.COST, TB_ITEM_SUPPLIER.IS_PRIMARY, TB_ITEM_SUPPLIER.IS_CONSIGNMENT, " +
-                    "TB_SUPPLIER.SUPP_NAME, TB_SUPPLIER.CURRENCY_ID " +
+                    "TB_SUPPLIER.SUPP_NAME, TB_SUPPLIER.CURRENCY_ID,TB_CURRENCY.DESCRIPTION " +
              "FROM TB_ITEM_SUPPLIER " +
              "INNER JOIN TB_SUPPLIER ON TB_ITEM_SUPPLIER.SUPP_ID = TB_SUPPLIER.ID " +
+             "LEFT JOIN TB_CURRENCY ON TB_SUPPLIER.CURRENCY_ID=TB_CURRENCY.ID " +
              "WHERE TB_ITEM_SUPPLIER.ITEM_ID = " + id;
 
                 DataTable tblItemSuppliers = ADO.GetDataTable(strSQL, "ItemSupplier");
@@ -752,8 +753,8 @@ namespace MicroApi.DataLayer.Services
                         REORDER_NO = dr2["REORDER_NO"] != DBNull.Value ? Convert.ToString(dr2["REORDER_NO"]) : string.Empty,
                         COST = dr2["COST"] != DBNull.Value ? Convert.ToSingle(dr2["COST"]) : 0f,
                         IS_PRIMARY = dr2["IS_PRIMARY"] != DBNull.Value ? Convert.ToBoolean(dr2["IS_PRIMARY"]) : false,
-                        IS_CONSIGNMENT = dr2["IS_CONSIGNMENT"] != DBNull.Value ? Convert.ToBoolean(dr2["IS_CONSIGNMENT"]) : false
-
+                        IS_CONSIGNMENT = dr2["IS_CONSIGNMENT"] != DBNull.Value ? Convert.ToBoolean(dr2["IS_CONSIGNMENT"]) : false,
+                        CURRENCY = dr2["DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr2["DESCRIPTION"]) : string.Empty,
                     });
                 }
 

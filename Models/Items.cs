@@ -123,7 +123,7 @@
         public float? COST { get; set; }
         public bool? IS_PRIMARY { get; set; }
         public bool? IS_CONSIGNMENT { get; set; }
-
+        public string? CURRENCY { get; set; }
     }
     public class ITEM_COMPONENTS
     {

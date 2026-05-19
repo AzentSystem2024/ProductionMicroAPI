@@ -770,7 +770,7 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = "SELECT TB_PO_HEADER.*, TB_STORES.STORE_NAME, TB_SUPPLIER.SUPP_NAME," +
-                    "TB_PAYMENT_TERMS.DESCRIPTION as PAYMENT_NAME,TB_CURRENCY.DESCRIPTION AS CURRENCY_NAME, " +
+                    "TB_PAYMENT_TERMS.DESCRIPTION as PAYMENT_NAME,TB_CURRENCY.DESCRIPTION AS CURRENCY_NAME,TB_CURRENCY.SYMBOL, " +
                     "TB_VAT_RULE_SUPPLIER.DESCRIPTION AS VAT_RULE_NAME,TB_SUPPLIER.EMAIL, " +
                     "TB_DELIVERY_TERMS.DESCRIPTION AS DELIVERY_TERM, TB_STATUS.STATUS_DESC, " +
                     "TB_AC_TRANS_HEADER.NARRATION AS NARRATION, " +
@@ -842,6 +842,7 @@ namespace MicroApi.DataLayer.Services
                         EXCHANGE_RATE = dr["EXCHANGE_RATE"] == DBNull.Value ? 0 : Convert.ToSingle(dr["EXCHANGE_RATE"]),
 
                         CURRENCY_ID = dr["CURRENCY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CURRENCY_ID"]),
+                        CURRENCY_SYMBOL = dr["SYMBOL"]?.ToString() ?? "",
                         DELIVERY_DATE = dr["DELIVERY_DATE"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dr["DELIVERY_DATE"]),
 
                         PAY_TERM = dr["PAYMENT_NAME"]?.ToString() ?? "",

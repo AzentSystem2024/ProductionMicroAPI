@@ -2,13 +2,13 @@
 {
     public class ItemProperty2
     {
-        public int ID { get; set; }
+        public int? ID { get; set; }
 
-        public string CODE { get; set; }
+        public string? CODE { get; set; }
 
-        public string DESCRIPTION { get; set; }
+        public string? DESCRIPTION { get; set; }
 
-        public int COMPANY_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
 
         public string? IS_DELETED { get; set; }
         public string? COMPANY_NAME { get; set; }
