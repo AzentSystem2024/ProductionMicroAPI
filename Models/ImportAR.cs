@@ -184,7 +184,11 @@ namespace MicroApi.Models
     }
     public class processARInput
     {
-        public int TransactionID { get; set; }
+        public int? TransactionID { get; set; }
+        public int? CompanyID { get; set; }
+        public int? UserID { get; set; }
+        public int? StoreID { get; set; }
+        public int? FinID { get; set; }
     }
 
 

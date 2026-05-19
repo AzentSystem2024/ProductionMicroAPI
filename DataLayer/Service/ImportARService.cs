@@ -397,6 +397,10 @@ namespace MicroApi.DataLayer.Services
                 };
 
                 cmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
+                cmd.Parameters.AddWithValue("@COMPANY_ID ", vinput.CompanyID);
+                cmd.Parameters.AddWithValue("@STORE_ID ", vinput.StoreID);
+                cmd.Parameters.AddWithValue("@FIN_ID  ", vinput.FinID);
+                cmd.Parameters.AddWithValue("@USER_ID  ", vinput.UserID);
 
                 cmd.ExecuteNonQuery();
 

@@ -47,8 +47,8 @@ namespace MicroApi.DataLayer.Service
                                     HeadName = reader["HEAD_NAME"].ToString(),
                                     ID = !reader.IsDBNull(reader.GetOrdinal("ID")) ? reader.GetInt32(reader.GetOrdinal("ID")) : 0,
                                     IS_INACTIVE = reader["STATUS"].ToString(),
-                                    IS_DIRECT = !reader.IsDBNull(reader.GetOrdinal("CATEGORY"))
-                                    && Convert.ToBoolean(reader["CATEGORY"]),
+                                    IS_DIRECT = !reader.IsDBNull(reader.GetOrdinal("IS_DIRECT"))
+                                    && Convert.ToBoolean(reader["IS_DIRECT"]),
 
                                                             IS_SYS_HEAD = !reader.IsDBNull(reader.GetOrdinal("IS_SYS_HEAD"))
                                     && Convert.ToBoolean(reader["IS_SYS_HEAD"]),
