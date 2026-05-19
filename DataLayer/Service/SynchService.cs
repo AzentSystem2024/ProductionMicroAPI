@@ -76,6 +76,7 @@ namespace MicroApi.Services
             {
                 DataTable tbl = JsonConvert.DeserializeObject<DataTable>
                 (
+
                     model.DATA.ToString()
                 );
 
@@ -92,12 +93,12 @@ namespace MicroApi.Services
 
                 cmd.Parameters.AddWithValue("@TABLE_NAME", model.TABLE_NAME);
                 cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
+                cmd.Parameters.AddWithValue("@SYNCH_" + model.TABLE_NAME, tbl);
+                //SqlParameter tvpParam =
+                    
 
-                SqlParameter tvpParam =
-                    cmd.Parameters.AddWithValue("@SYNCH_" + model.TABLE_NAME, tbl);
-
-                tvpParam.SqlDbType = SqlDbType.Structured;
-                tvpParam.TypeName = "dbo.SYNCH_" + model.TABLE_NAME;
+                //tvpParam.SqlDbType = SqlDbType.Structured;
+                //tvpParam.TypeName = "dbo.SYNCH_" + model.TABLE_NAME;
 
                 cmd.ExecuteNonQuery();
 
@@ -194,5 +195,33 @@ namespace MicroApi.Services
 
             return response;
         }
+        public DataTable GetSynchPendingStores()
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using SqlConnection con = ADO.GetConnection();
+                using SqlCommand cmd = new SqlCommand("SP_GETPENDINGSTORES", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
+
+                //    cmd.Parameters.Add("@intMinutes", SqlDbType.Int).Value = request.intMinutes;
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                // 👉 Log this properly in your system
+                throw;
+            }
+
+            return dt;
+        }
     }
+
 }

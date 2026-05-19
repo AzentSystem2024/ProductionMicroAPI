@@ -1,4 +1,5 @@
 ﻿using MicroApi.Models;
+using System.Data;
 
 namespace MicroApi.DataLayer.Interface
 {
@@ -6,6 +7,6 @@ namespace MicroApi.DataLayer.Interface
     {
         SynchResponse UploadData(Synch model);
         SynchDownloadResponse DownloadData(SynchDownload model);
-
+        DataTable GetSynchPendingStores();
     }
 }
