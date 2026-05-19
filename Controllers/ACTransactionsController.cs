@@ -88,6 +88,28 @@ namespace MicroApi.Controllers
 
             return res;
         }
+
+        [HttpPost]
+        [Route("selecterp/{id:int}")]
+
+        public JournalResponse GetERPJournalById(int id)
+        {
+            JournalResponse res = new JournalResponse();
+
+            try
+            {
+                res = _journalService.GetERPJournalById(id);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = null;
+            }
+
+            return res;
+        }
+
         [HttpPost]
         [Route("voucherno")]
         public VoucherResponse GetLastVoucherNo()
