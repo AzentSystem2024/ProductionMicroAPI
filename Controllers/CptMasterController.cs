@@ -12,7 +12,7 @@ using System.Configuration;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CptMasterController : ControllerBase

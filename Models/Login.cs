@@ -132,6 +132,7 @@
         public bool? SELLING_PRICE_INCL_VAT { get; set; }
         public bool? IS_HQ_APP { get; set; }
         public bool? ENABLE_PROMOTION_LEVEL { get; set; }
+        public bool? ENABLE_ITEM_CATEGORY_ACCOUNTS { get; set; }
         //public string? HSN_CODE { get; set; }
         //public float? GST_PERC { get; set; }
     }

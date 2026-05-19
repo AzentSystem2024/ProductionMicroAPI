@@ -182,9 +182,11 @@ namespace MicroApi.DataLayer.Services
                     {
                         cmd.Connection = connection;
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = @"SELECT * 
-                                    FROM TB_IMPORT_AR_DATA 
-                                    WHERE LOG_ID = @LogID";
+                        cmd.CommandText = @"SELECT D.*
+                                            FROM TB_IMPORT_AR_DATA D
+                                            INNER JOIN TB_IMPORT_AR_HEADER H
+                                                ON H.ID = D.HeaderID
+                                            WHERE H.LogID = @LogID";
 
                         cmd.Parameters.AddWithValue("@LogID", vInput.LogID);
 
@@ -423,58 +425,124 @@ namespace MicroApi.DataLayer.Services
         public ARResponse arList()
         {
             ARResponse res = new ARResponse();
-            res.data = new List<ARData>();
+
+            res.header = new List<ARHeader>();
+            res.detail = new List<ARDetail>();
 
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                    using (SqlCommand cmd = new SqlCommand())
+                    // HEADER
+                    using (SqlCommand cmdHeader = new SqlCommand())
                     {
-                        cmd.Connection = connection;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = @"SELECT TB_IMPORT_AR_DATA.*,TB_IMPORT_AR_LOG.FileName,TB_IMPORT_AR_LOG.Time AS ImportedDate  FROM TB_IMPORT_AR_DATA 
-                                            INNER JOIN TB_IMPORT_AR_LOG 
-                                            ON TB_IMPORT_AR_LOG.ID = TB_IMPORT_AR_DATA.LOG_ID";
+                        cmdHeader.Connection = connection;
+                        cmdHeader.CommandType = CommandType.Text;
 
+                        cmdHeader.CommandText = @"
+                SELECT *
+                FROM TB_IMPORT_AR_HEADER";
 
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqlDataReader reader = cmdHeader.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                res.data.Add(new ARData
+                                res.header.Add(new ARHeader
                                 {
-                                    ID = reader["ID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["ID"]),
+                                    HeaderID = reader["ID"] == DBNull.Value
+                                        ? 0
+                                        : Convert.ToInt32(reader["ID"]),
 
-                                    TransactionID = reader["TransactionID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["TransactionID"]),
+                                    InvoiceType = reader["InvoiceType"]?.ToString(),
 
-                                    InvoiceType = reader["InvoiceType"]?.ToString() ?? "",
+                                    TransactionType = reader["TransactionType"]?.ToString(),
 
-                                    TransactionType = reader["TransactionType"]?.ToString() ?? "",
-
-                                    TransactionIncomeGroup = reader["TransactionIncomeGroup"]?.ToString() ?? "",
-
-                                    ApexTransactionNumber = reader["ApexTransactionNumber"]?.ToString() ?? "",
+                                    ApexTransactionNumber = reader["ApexTransactionNumber"]?.ToString(),
 
                                     ApexTransactionDate = reader["ApexTransactionDate"] == DBNull.Value
                                         ? null
                                         : Convert.ToDateTime(reader["ApexTransactionDate"]),
 
-                                    ApexPatientCode = reader["ApexPatientCode"]?.ToString() ?? "",
+                                    ApexPatientCode = reader["ApexPatientCode"]?.ToString(),
 
-                                    ApexTPACode = reader["ApexTPACode"]?.ToString() ?? "",
+                                    ApexTPACode = reader["ApexTPACode"]?.ToString(),
 
-                                    ApexInsuCode = reader["ApexInsuCode"]?.ToString() ?? "",
+                                    ApexInsuCode = reader["ApexInsuCode"]?.ToString(),
 
-                                    ApexInstCode = reader["ApexInstCode"]?.ToString() ?? "",
+                                    ApexInstCode = reader["ApexInstCode"]?.ToString(),
 
-                                    ApexReportingDoctor = reader["ApexReportingDoctor"]?.ToString() ?? "",
+                                    Status = reader["Status"] == DBNull.Value
+                                        ? "Open"
+                                        : Convert.ToInt32(reader["Status"]) == 1
+                                            ? "Posted"
+                                            : Convert.ToInt32(reader["Status"]) == -1
+                                                ? "Failed"
+                                                : "Open",
 
-                                    ApexReferringDoctor = reader["ApexReferringDoctor"]?.ToString() ?? "",
+                                    FailureReason = reader["FailureReason"]?.ToString()
+                                });
+                            }
+                        }
+                    }
 
-                                    ApexReportingDoctorDept = reader["ApexReportingDoctorDept"]?.ToString() ?? "",
+                    // DETAIL
+                    using (SqlCommand cmdDetail = new SqlCommand())
+                    {
+                        cmdDetail.Connection = connection;
+                        cmdDetail.CommandType = CommandType.Text;
 
-                                    ApexReferringDoctorDept = reader["ApexReferringDoctorDept"]?.ToString() ?? "",
+                        cmdDetail.CommandText = @"
+                SELECT 
+                    D.*,
+                    L.FileName,
+                    L.Time AS ImportedDate
+                FROM TB_IMPORT_AR_DATA D
+                INNER JOIN TB_IMPORT_AR_HEADER H
+                    ON H.ID = D.HeaderID
+                INNER JOIN TB_IMPORT_AR_LOG L
+                    ON L.ID = H.LogID";
+
+                        using (SqlDataReader reader = cmdDetail.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.detail.Add(new ARDetail
+                                {
+                                    HeaderID = reader["HeaderID"] == DBNull.Value
+                                        ? 0
+                                        : Convert.ToInt32(reader["HeaderID"]),
+
+                                    TransactionID = reader["TransactionID"] == DBNull.Value
+                                        ? 0
+                                        : Convert.ToInt32(reader["TransactionID"]),
+
+                                    InvoiceType = reader["InvoiceType"]?.ToString(),
+
+                                    TransactionType = reader["TransactionType"]?.ToString(),
+
+                                    TransactionIncomeGroup = reader["TransactionIncomeGroup"]?.ToString(),
+
+                                    ApexTransactionNumber = reader["ApexTransactionNumber"]?.ToString(),
+
+                                    ApexTransactionDate = reader["ApexTransactionDate"] == DBNull.Value
+                                        ? null
+                                        : Convert.ToDateTime(reader["ApexTransactionDate"]),
+
+                                    ApexPatientCode = reader["ApexPatientCode"]?.ToString(),
+
+                                    ApexTPACode = reader["ApexTPACode"]?.ToString(),
+
+                                    ApexInsuCode = reader["ApexInsuCode"]?.ToString(),
+
+                                    ApexInstCode = reader["ApexInstCode"]?.ToString(),
+
+                                    ApexReportingDoctor = reader["ApexReportingDoctor"]?.ToString(),
+
+                                    ApexReferringDoctor = reader["ApexReferringDoctor"]?.ToString(),
+
+                                    ApexReportingDoctorDept = reader["ApexReportingDoctorDept"]?.ToString(),
+
+                                    ApexReferringDoctorDept = reader["ApexReferringDoctorDept"]?.ToString(),
 
                                     IncomeGroupServiceCount = reader["IncomeGroupServiceCount"] == DBNull.Value
                                         ? 0
@@ -508,39 +576,39 @@ namespace MicroApi.DataLayer.Services
                                         ? 0
                                         : Convert.ToDecimal(reader["IncomeInsuAmount"]),
 
-                                    PatientInsuCardNumber = reader["PatientInsuCardNumber"]?.ToString() ?? "",
+                                    PatientInsuCardNumber = reader["PatientInsuCardNumber"]?.ToString(),
 
-                                    PatientEmployeeCode = reader["PatientEmployeeCode"]?.ToString() ?? "",
+                                    PatientEmployeeCode = reader["PatientEmployeeCode"]?.ToString(),
 
-                                    Paymode = reader["Paymode"]?.ToString() ?? "",
+                                    Paymode = reader["Paymode"]?.ToString(),
 
-                                    PaymodeGateway = reader["PaymodeGateway"]?.ToString() ?? "",
+                                    PaymodeGateway = reader["PaymodeGateway"]?.ToString(),
 
                                     PaymodeAmount = reader["PaymodeAmount"] == DBNull.Value
                                         ? 0
                                         : Convert.ToDecimal(reader["PaymodeAmount"]),
 
-                                    PaymentRefNo = reader["PaymentRefNo"]?.ToString() ?? "",
+                                    PaymentRefNo = reader["PaymentRefNo"]?.ToString(),
 
-                                    DenialCode = reader["DenialCode"]?.ToString() ?? "",
+                                    DenialCode = reader["DenialCode"]?.ToString(),
 
-                                    AmtInLocalCurrency = reader["AmtInLocalCurrency"]?.ToString() ?? "",
+                                    AmtInLocalCurrency = reader["AmtInLocalCurrency"]?.ToString(),
 
-                                    RecordEnteredBy = reader["RecordEnteredBy"]?.ToString() ?? "",
+                                    RecordEnteredBy = reader["RecordEnteredBy"]?.ToString(),
 
-                                    RecordStatus = reader["RecordStatus"]?.ToString() ?? "",
+                                    RecordStatus = reader["RecordStatus"]?.ToString(),
 
-                                    PostedFlag = reader["PostedFlag"]?.ToString() ?? "",
+                                    PostedFlag = reader["PostedFlag"]?.ToString(),
 
-                                    GPRefNo = reader["GPRefNo"]?.ToString() ?? "",
+                                    GPRefNo = reader["GPRefNo"]?.ToString(),
 
-                                    ReferenceDocNumber = reader["ReferenceDocNumber"]?.ToString() ?? "",
+                                    ReferenceDocNumber = reader["ReferenceDocNumber"]?.ToString(),
 
-                                    ReferenceDocDate = reader["ReferenceDocDate"]?.ToString() ?? "",
+                                    ReferenceDocDate = reader["ReferenceDocDate"]?.ToString(),
 
-                                    PatientName = reader["PatientName"]?.ToString() ?? "",
+                                    PatientName = reader["PatientName"]?.ToString(),
 
-                                    ServiceCategory = reader["ServiceCategory"]?.ToString() ?? "",
+                                    ServiceCategory = reader["ServiceCategory"]?.ToString(),
 
                                     ApexTransferDate = reader["ApexTransferDate"] == DBNull.Value
                                         ? null
@@ -566,50 +634,56 @@ namespace MicroApi.DataLayer.Services
                                         ? 0
                                         : Convert.ToDecimal(reader["VATPerc"]),
 
-                                    VATType = reader["VATType"]?.ToString() ?? "",
+                                    VATType = reader["VATType"]?.ToString(),
 
-                                    VATLink = reader["VATLink"]?.ToString() ?? "",
+                                    VATLink = reader["VATLink"]?.ToString(),
 
-                                    ServiceCode = reader["ServiceCode"]?.ToString() ?? "",
+                                    ServiceCode = reader["ServiceCode"]?.ToString(),
 
-                                    ServiceName = reader["ServiceName"]?.ToString() ?? "",
+                                    ServiceName = reader["ServiceName"]?.ToString(),
 
-                                    CPTCode = reader["CPTCode"]?.ToString() ?? "",
+                                    CPTCode = reader["CPTCode"]?.ToString(),
 
-                                    OrgnBranchCode = reader["OrgnBranchCode"]?.ToString() ?? "",
+                                    OrgnBranchCode = reader["OrgnBranchCode"]?.ToString(),
 
                                     Verified = reader["Verified"] == DBNull.Value
                                         ? false
                                         : Convert.ToBoolean(reader["Verified"]),
 
-                                    PatientCreditCardHolderName = reader["PatientCreditCardHolderName"]?.ToString() ?? "",
+                                    PatientCreditCardHolderName = reader["PatientCreditCardHolderName"]?.ToString(),
 
-                                    ReceiptCardRemarks = reader["ReceiptCardRemarks"]?.ToString() ?? "",
+                                    ReceiptCardRemarks = reader["ReceiptCardRemarks"]?.ToString(),
 
-                                    CurrencyACode = reader["CurrencyACode"]?.ToString() ?? "",
+                                    CurrencyACode = reader["CurrencyACode"]?.ToString(),
 
                                     CurrencyRateConversion = reader["CurrencyRateConversion"] == DBNull.Value
-                                                            ? 0
-                                                            : Convert.ToDecimal(reader["CurrencyRateConversion"]),
+                                        ? 0
+                                        : Convert.ToDecimal(reader["CurrencyRateConversion"]),
 
                                     AmtInForeignCurrency = reader["AmtInForeignCurrency"] == DBNull.Value
-                                                            ? 0
-                                                            : Convert.ToDecimal(reader["AmtInForeignCurrency"]),
-                                    PatientCreditCardNumber = reader["PatientCreditCardNumber"]?.ToString() ?? "",
+                                        ? 0
+                                        : Convert.ToDecimal(reader["AmtInForeignCurrency"]),
+
+                                    PatientCreditCardNumber = reader["PatientCreditCardNumber"]?.ToString(),
+
                                     PatientCreditCardExpDt = reader["PatientCreditCardExpDt"] == DBNull.Value
                                         ? null
                                         : Convert.ToDateTime(reader["PatientCreditCardExpDt"]),
+
                                     Status = reader["Status"] == DBNull.Value
-                                            ? "Open"
-                                            : Convert.ToInt32(reader["Status"]) == 1
-                                                ? "Posted"
-                                                : Convert.ToInt32(reader["Status"]) == -1
-                                                    ? "Failed"
-                                                    : "Open",
-                                    FailureReason = reader["FailureReason"]?.ToString() ?? "",
-                                    FileName = reader["FileName"]?.ToString() ?? "",
+                                        ? "Open"
+                                        : Convert.ToInt32(reader["Status"]) == 1
+                                            ? "Posted"
+                                            : Convert.ToInt32(reader["Status"]) == -1
+                                                ? "Failed"
+                                                : "Open",
+
+                                    FailureReason = reader["FailureReason"]?.ToString(),
+
+                                    FileName = reader["FileName"]?.ToString(),
+
                                     ImportedDate = reader["ImportedDate"] == DBNull.Value
-                                        ? DateTime.MinValue
+                                        ? null
                                         : Convert.ToDateTime(reader["ImportedDate"])
                                 });
                             }
@@ -623,7 +697,7 @@ namespace MicroApi.DataLayer.Services
             catch (Exception ex)
             {
                 res.flag = "0";
-                res.message = "Error: " + ex.Message;
+                res.message = ex.Message;
             }
 
             return res;

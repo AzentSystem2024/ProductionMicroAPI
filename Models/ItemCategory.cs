@@ -19,6 +19,7 @@
         public int DEPT_ID { get; set; }
 
         public string? DEPT_NAME { get; set; }
+        public string? HEAD_NAME { get; set; }
 
         public string? IS_DELETED { get; set; }
 

@@ -271,6 +271,7 @@ namespace MicroApi.DataLayer.Service
                         SELLING_PRICE_INCL_VAT = reader["SELLING_PRICE_INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["SELLING_PRICE_INCL_VAT"]),
                         IS_HQ_APP = reader["IS_HQ_APP"] != DBNull.Value && Convert.ToBoolean(reader["IS_HQ_APP"]),
                         ENABLE_PROMOTION_LEVEL = reader["ENABLE_PROMOTION_LEVEL"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_PROMOTION_LEVEL"]),
+                        ENABLE_ITEM_CATEGORY_ACCOUNTS = reader["ENABLE_ITEM_CATEGORY_ACCOUNTS"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_ITEM_CATEGORY_ACCOUNTS"])
                         //HSN_CODE = reader["FT_HSN_CODE"]?.ToString() ?? "",
                     };
                 }

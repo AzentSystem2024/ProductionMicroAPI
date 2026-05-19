@@ -10,6 +10,8 @@
         public int ID { get; set; }
         public string IS_INACTIVE { get; set; }
         public string? CostType { get; set; }
+        public bool? IS_DIRECT { get; set; }
+        public bool? IS_SYS_HEAD { get; set; }
     }
     public class ListResponse
     {

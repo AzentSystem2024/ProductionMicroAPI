@@ -37,7 +37,8 @@ namespace MicroApi.DataLayer.Services
 
                         COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? Convert.ToString(dr["COMPANY_NAME"]) : "",
                         DEPT_ID = dr["DEPT_ID"] != DBNull.Value ? Convert.ToInt32(dr["DEPT_ID"]) : 0,
-                        DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : ""
+                        DEPT_NAME = dr["DEPT_NAME"] != DBNull.Value ? Convert.ToString(dr["DEPT_NAME"]) : "",
+                        HEAD_NAME = dr["HEAD_NAME"] != DBNull.Value ? Convert.ToString(dr["HEAD_NAME"]) : ""
 
                     });
                 }

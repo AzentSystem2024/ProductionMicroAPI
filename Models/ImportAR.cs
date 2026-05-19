@@ -192,12 +192,28 @@ namespace MicroApi.Models
     {
         public string flag { get; set; }
         public string message { get; set; }
-        public List<ARData> data { get; set; }
+        public List<ARHeader> header { get; set; }
+        public List<ARDetail> detail { get; set; }
     }
 
-    public class ARData
+    public class ARHeader
     {
-        public int? ID { get; set; }
+        public int? HeaderID { get; set; }
+        public string? InvoiceType { get; set; }
+        public string? TransactionType { get; set; }
+        public string? ApexTransactionNumber { get; set; }
+        public DateTime? ApexTransactionDate { get; set; }
+        public string? ApexPatientCode { get; set; }
+        public string? ApexTPACode { get; set; }
+        public string? ApexInsuCode { get; set; }
+        public string? ApexInstCode { get; set; }
+        public string? Status { get; set; }
+        public string? FailureReason { get; set; }
+    }
+
+    public class ARDetail
+    {
+        public int? HeaderID { get; set; }
 
         public int? TransactionID { get; set; }
 
