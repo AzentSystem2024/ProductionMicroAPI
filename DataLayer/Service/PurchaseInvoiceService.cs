@@ -294,45 +294,24 @@ namespace MicroApi.DataLayer.Service
                     };
                 }
 
-                string strDetailSQL = @"SELECT distinct
-                            TB_PURCH_DETAIL.*, 
-                            TB_STORES.STORE_NAME, 
-                            TB_ITEMS.DESCRIPTION, 
-                            TB_ITEMS.ITEM_CODE, 
-                            TB_PO_DETAIL.GRN_QTY, 
-                            TB_PO_DETAIL.QUANTITY AS PO_QUANTITY,
-
-                            GRN.QUANTITY AS GRN_QTY,
-                            ISNULL(GRN.INVOICE_QTY,0) AS INVOICE_QTY,
-
-                            GRN.UOM,
-                            TB_GRN_HEADER.GRN_NO,
-                            TB_ITEMS.HSN_CODE,
-                            TB_GRN_HEADER.GRN_DATE,
-
-                            (ISNULL(GRN.QUANTITY,0) - ISNULL(GRN.INVOICE_QTY,0)) AS PENDING_QTY
-
-                        FROM TB_PURCH_DETAIL
-
-                        LEFT JOIN TB_PURCH_HEADER 
-                        ON TB_PURCH_DETAIL.PURCH_ID = TB_PURCH_HEADER.ID
-
-                        LEFT JOIN TB_STORES 
-                        ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID 
-
-                        LEFT JOIN TB_ITEMS 
-                        ON TB_PURCH_DETAIL.ITEM_ID = TB_ITEMS.ID 
-
-                        LEFT JOIN TB_PO_DETAIL 
-                        ON TB_PURCH_DETAIL.PO_DET_ID = TB_PO_DETAIL.ID 
-
-                        LEFT JOIN TB_GRN_DETAIL GRN
-                        ON TB_PURCH_DETAIL.GRN_DET_ID = GRN.ID
-
-                        LEFT JOIN TB_GRN_HEADER 
-                        ON GRN.GRN_ID = TB_GRN_HEADER.ID
-
-                        WHERE TB_PURCH_HEADER.TRANS_ID =  " + id;
+                string strDetailSQL = @"SELECT TB_PURCH_DETAIL.*, TB_STORES.STORE_NAME, TB_ITEMS.DESCRIPTION, 
+                                TB_ITEMS.ITEM_CODE,TB_PO_DETAIL.GRN_QTY,TB_PO_DETAIL.QUANTITY AS PO_QUANTITY,
+                                GRN.QUANTITY AS GRN_QTY,GRN.INVOICE_QTY,GRN.UOM,TB_GRN_HEADER.GRN_NO,
+                                TB_ITEMS.HSN_CODE,TB_GRN_HEADER.GRN_DATE,GRN.QUANTITY - GRN.INVOICE_QTY AS PENDING_QTY
+                                FROM TB_PURCH_DETAIL
+                            LEFT JOIN TB_PURCH_HEADER 
+                            ON TB_PURCH_DETAIL.PURCH_ID = TB_PURCH_HEADER.ID
+                            LEFT JOIN TB_STORES 
+                            ON TB_PURCH_DETAIL.STORE_ID = TB_STORES.ID 
+                            LEFT JOIN TB_ITEMS 
+                            ON TB_PURCH_DETAIL.ITEM_ID = TB_ITEMS.ID 
+                            LEFT JOIN TB_PO_DETAIL 
+                            ON TB_PURCH_DETAIL.PO_DET_ID = TB_PO_DETAIL.ID 
+                            LEFT JOIN(SELECT ID,ITEM_ID,GRN_ID,QUANTITY,INVOICE_QTY,UOM
+                                FROM TB_GRN_DETAIL) GRN ON TB_PURCH_DETAIL.GRN_DET_ID = GRN.ID
+                            AND TB_PURCH_DETAIL.ITEM_ID = GRN.ITEM_ID
+                            LEFT JOIN TB_GRN_HEADER ON GRN.GRN_ID = TB_GRN_HEADER.ID
+                            WHERE TB_PURCH_HEADER.TRANS_ID = " + id;
 
                 DataTable tblpurchdetail = ADO.GetDataTable(strDetailSQL, "PurchDetails");
 

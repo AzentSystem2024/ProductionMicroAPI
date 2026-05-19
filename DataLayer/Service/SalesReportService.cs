@@ -211,19 +211,55 @@ namespace MicroApi.DataLayer.Service
                     cmd.CommandTimeout = 0;
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
-                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
-                    cmd.Parameters.AddWithValue("@SALE_TYPE", request.SALE_TYPE);
-                    cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID ?? "");
-                    cmd.Parameters.AddWithValue("@SALESMAN_ID", request.SALESMAN_ID ?? "");
-                    cmd.Parameters.AddWithValue("@DEPT_ID", request.DEPT_ID ?? "");
-                    cmd.Parameters.AddWithValue("@CAT_ID", request.CAT_ID ?? "");
-                    cmd.Parameters.AddWithValue("@SUBCAT_ID", request.SUBCAT_ID ?? "");
-                    cmd.Parameters.AddWithValue("@BRAND_ID", request.BRAND_ID ?? "");
-                    cmd.Parameters.AddWithValue("@CUSTOM1", request.CUSTOM1 ?? "");
-                    cmd.Parameters.AddWithValue("@CUSTOM2", request.CUSTOM2 ?? "");
-                    cmd.Parameters.AddWithValue("@ITEM_ID", request.ITEM_ID ?? "");
-                    cmd.Parameters.AddWithValue("@DISCOUNTED_ITEMS_ONLY", request.DISCOUNTED_ITEMS_ONLY);
-                    cmd.Parameters.AddWithValue("@INCLUDE_SUMMARY", request.INCLUDE_SUMMARY);
+                    cmd.Parameters.AddWithValue("@STORE_ID",
+    string.IsNullOrWhiteSpace(request.STORE_ID) || request.STORE_ID == "string"
+    ? ""
+    : request.STORE_ID);
+
+                    cmd.Parameters.AddWithValue("@CUST_ID",
+                        string.IsNullOrWhiteSpace(request.CUST_ID) || request.CUST_ID == "string"
+                        ? ""
+                        : request.CUST_ID);
+
+                    cmd.Parameters.AddWithValue("@SALESMAN_ID",
+                        string.IsNullOrWhiteSpace(request.SALESMAN_ID) || request.SALESMAN_ID == "string"
+                        ? ""
+                        : request.SALESMAN_ID);
+
+                    cmd.Parameters.AddWithValue("@DEPT_ID",
+                        string.IsNullOrWhiteSpace(request.DEPT_ID) || request.DEPT_ID == "string"
+                        ? ""
+                        : request.DEPT_ID);
+
+                    cmd.Parameters.AddWithValue("@CAT_ID",
+                        string.IsNullOrWhiteSpace(request.CAT_ID) || request.CAT_ID == "string"
+                        ? ""
+                        : request.CAT_ID);
+
+                    cmd.Parameters.AddWithValue("@SUBCAT_ID",
+                        string.IsNullOrWhiteSpace(request.SUBCAT_ID) || request.SUBCAT_ID == "string"
+                        ? ""
+                        : request.SUBCAT_ID);
+
+                    cmd.Parameters.AddWithValue("@BRAND_ID",
+                        string.IsNullOrWhiteSpace(request.BRAND_ID) || request.BRAND_ID == "string"
+                        ? ""
+                        : request.BRAND_ID);
+
+                    cmd.Parameters.AddWithValue("@CUSTOM1",
+                        string.IsNullOrWhiteSpace(request.CUSTOM1) || request.CUSTOM1 == "string"
+                        ? ""
+                        : request.CUSTOM1);
+
+                    cmd.Parameters.AddWithValue("@CUSTOM2",
+                        string.IsNullOrWhiteSpace(request.CUSTOM2) || request.CUSTOM2 == "string"
+                        ? ""
+                        : request.CUSTOM2);
+
+                    cmd.Parameters.AddWithValue("@ITEM_ID",
+                        string.IsNullOrWhiteSpace(request.ITEM_ID) || request.ITEM_ID == "string"
+                        ? ""
+                        : request.ITEM_ID);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -231,25 +267,79 @@ namespace MicroApi.DataLayer.Service
                         {
                             response.data.Add(new ItemWiseSalesItem
                             {
-                                ID = Convert.ToInt32(reader["ID"]),
-                                SALE_NO = reader["SALE_NO"]?.ToString(),
-                                SALE_DATE = Convert.ToDateTime(reader["SALE_DATE"]),
-                                STORE_NAME = reader["STORE_NAME"]?.ToString(),
-                                SALE_TYPE_NAME = reader["SALE_TYPE_NAME"]?.ToString(),
-                                CUST_NAME = reader["CUST_NAME"]?.ToString(),
-                                COMMENT = reader["COMMENT"]?.ToString(),
-                                ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
-                                DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
-                                QUANTITY = Convert.ToDecimal(reader["QUANTITY"]),
-                                PRICE = Convert.ToDecimal(reader["PRICE"]),
-                                DISCOUNT = Convert.ToDecimal(reader["DISCOUNT"]),
-                                DISC_REASON = reader["DISC_REASON"]?.ToString(),
-                                GROSS_AMOUNT = Convert.ToDecimal(reader["GROSS_AMOUNT"]),
-                                VAT_PERCENT = Convert.ToDecimal(reader["VAT_PERCENT"]),
-                                VAT_AMOUNT = Convert.ToDecimal(reader["VAT_AMOUNT"]),
-                                NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
-                                SALESMAN = reader["SALESMAN"]?.ToString(),
-                                COMMISSION = Convert.ToDecimal(reader["COMMISSION"])
+                                ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+
+                                SALE_NO = reader["SALE_NO"] != DBNull.Value
+        ? reader["SALE_NO"].ToString()
+        : "",
+
+                                SALE_DATE = reader["SALE_DATE"] != DBNull.Value
+        ? Convert.ToDateTime(reader["SALE_DATE"])
+        : DateTime.MinValue,
+
+                                STORE_NAME = reader["STORE_NAME"] != DBNull.Value
+        ? reader["STORE_NAME"].ToString()
+        : "",
+
+                                SALE_TYPE_NAME = reader["SALE_TYPE_NAME"] != DBNull.Value
+        ? reader["SALE_TYPE_NAME"].ToString()
+        : "",
+
+                                CUST_NAME = reader["CUST_NAME"] != DBNull.Value
+        ? reader["CUST_NAME"].ToString()
+        : "",
+
+                                COMMENT = reader["COMMENT"] != DBNull.Value
+        ? reader["COMMENT"].ToString()
+        : "",
+
+                                ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value
+        ? reader["ITEM_CODE"].ToString()
+        : "",
+
+                                DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value
+        ? reader["DESCRIPTION"].ToString()
+        : "",
+
+                                QUANTITY = reader["QUANTITY"] != DBNull.Value
+        ? Convert.ToDecimal(reader["QUANTITY"])
+        : 0,
+
+                                PRICE = reader["PRICE"] != DBNull.Value
+        ? Convert.ToDecimal(reader["PRICE"])
+        : 0,
+
+                                DISCOUNT = reader["DISCOUNT"] != DBNull.Value
+        ? Convert.ToDecimal(reader["DISCOUNT"])
+        : 0,
+
+                                DISC_REASON = reader["DISC_REASON"] != DBNull.Value
+        ? reader["DISC_REASON"].ToString()
+        : "",
+
+                                GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value
+        ? Convert.ToDecimal(reader["GROSS_AMOUNT"])
+        : 0,
+
+                                VAT_PERCENT = reader["VAT_PERCENT"] != DBNull.Value
+        ? Convert.ToDecimal(reader["VAT_PERCENT"])
+        : 0,
+
+                                VAT_AMOUNT = reader["VAT_AMOUNT"] != DBNull.Value
+        ? Convert.ToDecimal(reader["VAT_AMOUNT"])
+        : 0,
+
+                                NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value
+        ? Convert.ToDecimal(reader["NET_AMOUNT"])
+        : 0,
+
+                                SALESMAN = reader["SALESMAN"] != DBNull.Value
+        ? reader["SALESMAN"].ToString()
+        : "",
+
+                                COMMISSION = reader["COMMISSION"] != DBNull.Value
+        ? Convert.ToDecimal(reader["COMMISSION"])
+        : 0
                             });
                         }
                     }

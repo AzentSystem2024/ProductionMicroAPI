@@ -25,8 +25,7 @@ namespace MicroApi.Controllers
             {
                 response = _synchService.UploadData(model);
 
-                response.flag = 1;
-                response.Message = "Success";
+                
             }
             catch (Exception ex)
             {
@@ -77,5 +76,30 @@ namespace MicroApi.Controllers
 
             return response;
         }
+        //[HttpPost("PendingStores")]
+        //public IActionResult GetPendingStores()
+        //{
+        //    // //public IActionResult GetPendingStores([FromBody] PendingStoresFilter request)
+        //    try
+        //    {
+        //        // var dt = _service.GetSynchPendingStores(request);
+        //        var dt = _synchService.GetSynchPendingStores();
+
+        //        var result = dt.AsEnumerable()
+        //            .Select(row => dt.Columns
+        //                .Cast<DataColumn>()
+        //                .ToDictionary(
+        //                    col => col.ColumnName,
+        //                    col => row[col] == DBNull.Value ? null : row[col]
+        //                )).ToList();
+
+        //        return Ok(result);   // ✅ FIXED
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
     }
 }
