@@ -64,5 +64,128 @@ namespace MicroApi.DataLayer.Service
 
             return reportList;
         }
+        public List<TrialBalanceDimensionReport> GetTrialBalanceDimensionReport(
+   int companyId,
+   int finId,
+   DateTime dateFrom,
+   DateTime dateTo,
+   string dimensionCode
+)
+        {
+            List<TrialBalanceDimensionReport> reportList =
+                new List<TrialBalanceDimensionReport>();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (var cmd = new SqlCommand(
+                        "SP_RPT_TRIAL_BALANCE_DIMENSION",
+                        connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
+                        cmd.Parameters.AddWithValue("@FIN_ID", finId);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", dateFrom);
+                        cmd.Parameters.AddWithValue("@DATE_TO", dateTo);
+
+                        cmd.Parameters.AddWithValue(
+                            "@DIMENSION_CODE",
+                            dimensionCode
+                        );
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                reportList.Add(
+                                    new TrialBalanceDimensionReport
+                                    {
+                                        HeadID =
+                                            reader["HEAD_ID"] != DBNull.Value
+                                            ? Convert.ToInt32(reader["HEAD_ID"])
+                                            : 0,
+
+                                        MainGroup =
+                                            reader["MAIN_GROUP_NAME"]?.ToString(),
+
+                                        SubGroup =
+                                            reader["SUB_GROUP_NAME"]?.ToString(),
+
+                                        Category =
+                                            reader["CATEGORY_NAME"]?.ToString(),
+
+                                        LedgerCode =
+                                            reader["HEAD_CODE"]?.ToString(),
+
+                                        LedgerName =
+                                            reader["HEAD_NAME"]?.ToString(),
+
+                                        BU =
+                                            reader["BU"]?.ToString(),
+
+                                        LEDGER =
+                                            reader["LEDGER"]?.ToString(),
+
+                                        DEPT_GROUP =
+                                            reader["DEPT_GROUP"]?.ToString(),
+
+                                        DEPARTMENT =
+                                            reader["DEPARTMENT"]?.ToString(),
+
+                                        CLINICIAN =
+                                            reader["CLINICIAN"]?.ToString(),
+
+                                        OpeningBalanceDebit =
+                                            reader["OB_DR"] != DBNull.Value
+                                            ? Convert.ToDecimal(reader["OB_DR"])
+                                            : 0,
+
+                                        OpeningBalanceCredit =
+                                            reader["OB_CR"] != DBNull.Value
+                                            ? Convert.ToDecimal(reader["OB_CR"])
+                                            : 0,
+
+                                        DuringThePeriodDebit =
+                                            reader["TR_DR"] != DBNull.Value
+                                            ? Convert.ToDecimal(reader["TR_DR"])
+                                            : 0,
+
+                                        DuringThePeriodCredit =
+                                            reader["TR_CR"] != DBNull.Value
+                                            ? Convert.ToDecimal(reader["TR_CR"])
+                                            : 0,
+
+                                        ClosingBalanceDebit =
+                                            reader["CL_DR"] != DBNull.Value
+                                            ? Convert.ToDecimal(reader["CL_DR"])
+                                            : 0,
+
+                                        ClosingBalanceCredit =
+                                            reader["CL_CR"] != DBNull.Value
+                                            ? Convert.ToDecimal(reader["CL_CR"])
+                                            : 0
+                                    });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    "Error while fetching dimension trial balance.",
+                    ex
+                );
+            }
+
+            return reportList;
+        }
     }
+
 }
+

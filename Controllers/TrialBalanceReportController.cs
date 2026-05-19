@@ -37,6 +37,54 @@ namespace MicroApi.Controllers
                 return BadRequest(new { flag = 0, message = ex.Message });
             }
         }
+        [HttpPost("Dimension")]
+        public IActionResult GetTrialBalanceDimensionReport(
+   [FromBody] ReportRequest1 request
+)
+        {
+            try
+            {
+                DateTime dateFrom =
+                    DateTime.ParseExact(
+                        request.DateFrom,
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture
+                    );
+
+                DateTime dateTo =
+                    DateTime.ParseExact(
+                        request.DateTo,
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture
+                    );
+
+                var reportData =
+                    _trialBalanceReportService
+                    .GetTrialBalanceDimensionReport(
+                        request.CompanyId,
+                        request.FinId,
+                        dateFrom,
+                        dateTo,
+                        request.DimensionCode
+                    );
+
+                return Ok(new
+                {
+                    flag = 1,
+                    message = "Success",
+                    data = reportData
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    flag = 0,
+                    message = ex.Message
+                });
+            }
+        }
+
     }
 }
 
