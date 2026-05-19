@@ -85,6 +85,7 @@ namespace MicroApi.Models
         public string? PAY_TERM { get; set; }
         public string? DELIVERY_TERM { get; set; }
         public string? CURRENCY_NAME { get; set; }
+        public string? CURRENCY_SYMBOL { get; set; }
         public string? VAT_RULE_NAME { get; set; }
         public string? SUPPLIER_EMAIL { get; set; }
         public bool? IS_APPROVED { get; set; }

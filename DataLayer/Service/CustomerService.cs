@@ -81,6 +81,7 @@ namespace MicroApi.DataLayer.Services
                         DEALER_ID = Convert.IsDBNull(dr["DEALER_ID"]) ? 0 : Convert.ToInt32(dr["DEALER_ID"]),
                         MOB_CODE = Convert.IsDBNull(dr["MOB_CODE"]) ? null : Convert.ToString(dr["MOB_CODE"]),
                         PHONE_CODE = Convert.IsDBNull(dr["PHONE_CODE"]) ? null : Convert.ToString(dr["PHONE_CODE"]),
+                        CUSTOMER_TYPE = Convert.IsDBNull(dr["CUSTOMER_TYPE"]) ? 0 : Convert.ToInt32(dr["CUSTOMER_TYPE"]),
                         // WAREHOUSE_ID = Convert.IsDBNull(dr["WAREHOUSE_ID"]) ? 0 : Convert.ToInt32(dr["WAREHOUSE_ID"])
 
 
@@ -144,7 +145,7 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@MOB_CODE", customer.MOB_CODE ?? string.Empty);
                         cmd.Parameters.AddWithValue("@PHONE_CODE", customer.PHONE_CODE ?? string.Empty);
-                        //cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_TYPE", customer.CUSTOMER_TYPE ?? 0);
 
                         // 🔹 UDT parameter for delivery address
                         DataTable dtAddress = new DataTable();
@@ -259,7 +260,7 @@ namespace MicroApi.DataLayer.Services
                         cmd.Parameters.AddWithValue("@DEALER_ID", customer.DEALER_ID ?? 0);
                         cmd.Parameters.AddWithValue("@MOB_CODE", customer.MOB_CODE ?? string.Empty);
                         cmd.Parameters.AddWithValue("@PHONE_CODE", customer.PHONE_CODE ?? string.Empty);
-                        //cmd.Parameters.AddWithValue("@WAREHOUSE_ID", customer.WAREHOUSE_ID ?? 0);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_TYPE", customer.CUSTOMER_TYPE ?? 0);
 
                         // 🔹 Add UDT Delivery Address
                         DataTable dtAddress = new DataTable();
@@ -307,7 +308,7 @@ namespace MicroApi.DataLayer.Services
             try
             {
                 string strSQL = "SELECT TB_CUSTOMER.ID, TB_CUSTOMER.HQID, TB_CUSTOMER.AC_HEAD_ID, TB_CUSTOMER.FIRST_NAME," +
-                    " TB_CUSTOMER.CONTACT_NAME, TB_CUSTOMER.CUST_CODE," +
+                    " TB_CUSTOMER.CONTACT_NAME, TB_CUSTOMER.CUST_CODE,TB_CUSTOMER.CUSTOMER_TYPE, " +
                     " TB_CUSTOMER.ADDRESS1, TB_CUSTOMER.ADDRESS2, TB_CUSTOMER.ADDRESS3, TB_CUSTOMER.ZIP, " +
                     " TB_CUSTOMER.CITY, TB_CUSTOMER.STATE_ID, TB_CUSTOMER.COUNTRY_ID, TB_CUSTOMER.PHONE, " +
                     " TB_CUSTOMER.EMAIL, TB_CUSTOMER.SALESMAN_ID, TB_CUSTOMER.CREDIT_LIMIT, TB_CUSTOMER.CURRENT_CREDIT," +
@@ -405,7 +406,7 @@ namespace MicroApi.DataLayer.Services
 
                     customer.MOB_CODE = dr["MOB_CODE"]?.ToString();
                     customer.PHONE_CODE = dr["PHONE_CODE"]?.ToString();
-
+                    customer.CUSTOMER_TYPE = dr["CUSTOMER_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CUSTOMER_TYPE"]);
                     //customer.WAREHOUSE_ID = Convert.ToInt32(dr["WAREHOUSE_ID"]);
                 }
                 string addressSQL = @"

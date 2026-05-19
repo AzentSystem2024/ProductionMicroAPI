@@ -54,6 +54,7 @@
         //public int? WAREHOUSE_ID { get; set; }
         public string? MOB_CODE { get; set; }
         public string? PHONE_CODE { get; set; }
+        public int? CUSTOMER_TYPE { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
 
     }
@@ -123,7 +124,9 @@
         // public int? WAREHOUSE_ID { get; set; }
         public string? MOB_CODE { get; set; }
         public string? PHONE_CODE { get; set; }
+        public int? CUSTOMER_TYPE { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
+
 
     }
     public class CustDeliveryAddress
