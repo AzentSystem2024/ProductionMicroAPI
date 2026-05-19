@@ -397,13 +397,45 @@ namespace MicroApi.DataLayer.Services
                 };
 
                 cmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
+                cmd.Parameters.AddWithValue("@COMPANY_ID", vinput.CompanyID);
+                cmd.Parameters.AddWithValue("@STORE_ID", vinput.StoreID);
+                cmd.Parameters.AddWithValue("@FIN_ID", vinput.FinID);
+                cmd.Parameters.AddWithValue("@USER_ID", vinput.UserID);
+
+                // RETURN VALUE
+                SqlParameter returnParameter = new SqlParameter();
+                returnParameter.ParameterName = "@ReturnVal";
+                returnParameter.SqlDbType = SqlDbType.Int;
+                returnParameter.Direction = ParameterDirection.ReturnValue;
+
+                cmd.Parameters.Add(returnParameter);
 
                 cmd.ExecuteNonQuery();
 
+                int returnValue = Convert.ToInt32(returnParameter.Value);
+
                 objtrans.Commit();
 
-                res.flag = "1";
-                res.message = "Success";
+                if (returnValue == 1)
+                {
+                    res.flag = "1";
+                    res.message = "Success";
+                }
+                else if (returnValue == -1)
+                {
+                    res.flag = "0";
+                    res.message = "Validation Failed";
+                }
+                else if (returnValue == 0)
+                {
+                    res.flag = "0";
+                    res.message = "Invalid Transaction Type";
+                }
+                else
+                {
+                    res.flag = "0";
+                    res.message = "Unknown Error";
+                }
             }
             catch (Exception ex)
             {
@@ -470,6 +502,9 @@ namespace MicroApi.DataLayer.Services
                                     ApexInsuCode = reader["ApexInsuCode"]?.ToString(),
 
                                     ApexInstCode = reader["ApexInstCode"]?.ToString(),
+                                    AcTransID = reader["AcTransID"] == DBNull.Value
+                                        ? 0
+                                        : Convert.ToInt32(reader["AcTransID"]),
 
                                     Status = reader["Status"] == DBNull.Value
                                         ? "Open"

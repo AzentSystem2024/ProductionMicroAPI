@@ -184,7 +184,11 @@ namespace MicroApi.Models
     }
     public class processARInput
     {
-        public int TransactionID { get; set; }
+        public int? TransactionID { get; set; }
+        public int? CompanyID { get; set; }
+        public int? UserID { get; set; }
+        public int? StoreID { get; set; }
+        public int? FinID { get; set; }
     }
 
 
@@ -207,6 +211,7 @@ namespace MicroApi.Models
         public string? ApexTPACode { get; set; }
         public string? ApexInsuCode { get; set; }
         public string? ApexInstCode { get; set; }
+        public int? AcTransID { get; set; }
         public string? Status { get; set; }
         public string? FailureReason { get; set; }
     }
