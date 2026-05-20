@@ -11,12 +11,9 @@
         public string LedgerCode { get; set; }
         public string LedgerName { get; set; }
 
-        public string? BU { get; set; }
-        public string? LEDGER { get; set; }
-        public string? DEPT_GROUP { get; set; }
-        public string? DEPARTMENT { get; set; }
-        public string? CLINICIAN { get; set; }
+        public string Code { get; set; }
 
+        public string Description { get; set; }
         public decimal OpeningBalanceDebit { get; set; }
         public decimal OpeningBalanceCredit { get; set; }
 

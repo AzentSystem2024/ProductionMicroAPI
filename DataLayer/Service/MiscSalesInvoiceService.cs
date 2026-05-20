@@ -575,7 +575,7 @@ namespace MicroApi.DataLayer.Service
                         TB_SALE_DETAIL.SUB_DEPARTMENT_ID,
                         TB_SALE_DETAIL.QUANTITY,
                         TB_SALE_DETAIL.DURATION,
-                        TB_SALE_DETAIL.GROSS_AMOUNT,
+                        TB_SALE_DETAIL.TAXABLE_AMOUNT AS GROSS_AMOUNT,
                         TB_SALE_DETAIL.PATIENT_SHARE,
                         TB_SALE_DETAIL.TAX_CODE,
                         TB_SALE_DETAIL.TAX_PERC,

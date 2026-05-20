@@ -65,11 +65,11 @@ namespace MicroApi.DataLayer.Service
             return reportList;
         }
         public List<TrialBalanceDimensionReport> GetTrialBalanceDimensionReport(
-   int companyId,
-   int finId,
-   DateTime dateFrom,
-   DateTime dateTo,
-   string dimensionCode
+    int companyId,
+    int finId,
+    DateTime dateFrom,
+    DateTime dateTo,
+    string dimensionCode
 )
         {
             List<TrialBalanceDimensionReport> reportList =
@@ -125,20 +125,12 @@ namespace MicroApi.DataLayer.Service
                                         LedgerName =
                                             reader["HEAD_NAME"]?.ToString(),
 
-                                        BU =
-                                            reader["BU"]?.ToString(),
 
-                                        LEDGER =
-                                            reader["LEDGER"]?.ToString(),
+                                        Code =
+    reader["CODE"]?.ToString(),
 
-                                        DEPT_GROUP =
-                                            reader["DEPT_GROUP"]?.ToString(),
-
-                                        DEPARTMENT =
-                                            reader["DEPARTMENT"]?.ToString(),
-
-                                        CLINICIAN =
-                                            reader["CLINICIAN"]?.ToString(),
+                                        Description =
+    reader["DESCRIPTION"]?.ToString(),
 
                                         OpeningBalanceDebit =
                                             reader["OB_DR"] != DBNull.Value
@@ -185,6 +177,7 @@ namespace MicroApi.DataLayer.Service
 
             return reportList;
         }
+
     }
 
 }
