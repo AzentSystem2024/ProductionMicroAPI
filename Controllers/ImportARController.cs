@@ -126,14 +126,14 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("arlist")]
-        public ARResponse arList()
+        public ARResponse arList(ARInput input)
         {
             ARResponse res = new ARResponse();
 
             try
             {
 
-                res = _importItemLogService.arList();
+                res = _importItemLogService.arList(input);
 
             }
             catch (Exception ex)

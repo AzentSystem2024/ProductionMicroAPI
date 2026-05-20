@@ -200,6 +200,12 @@ namespace MicroApi.Models
         public List<ARDetail> detail { get; set; }
     }
 
+    public class ARInput
+    {
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+    }
+
     public class ARHeader
     {
         public int? HeaderID { get; set; }

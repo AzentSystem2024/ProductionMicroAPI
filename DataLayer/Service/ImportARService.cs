@@ -537,13 +537,13 @@ namespace MicroApi.DataLayer.Services
                 }
                 else if (returnValue == -1)
                 {
-                    res.flag = "0";
+                    res.flag = "-1";
                     res.message = "Validation Failed";
                 }
                 else if (returnValue == 0)
                 {
-                    res.flag = "0";
-                    res.message = "Invalid Transaction Type";
+                    res.flag = "1";
+                    res.message = "Success";
                 }
                 else
                 {
@@ -567,7 +567,7 @@ namespace MicroApi.DataLayer.Services
         }
 
 
-        public ARResponse arList()
+        public ARResponse arList(ARInput input)
         {
             ARResponse res = new ARResponse();
 
@@ -585,8 +585,22 @@ namespace MicroApi.DataLayer.Services
                         cmdHeader.CommandType = CommandType.Text;
 
                         cmdHeader.CommandText = @"
-                SELECT *
-                FROM TB_IMPORT_AR_HEADER";
+                        SELECT *
+                        FROM TB_IMPORT_AR_HEADER
+                        WHERE
+                        (@FROM_DATE IS NULL OR CAST(ApexTransactionDate AS DATE) >= CAST(@FROM_DATE AS DATE))
+                        AND
+                        (@TO_DATE IS NULL OR CAST(ApexTransactionDate AS DATE) <= CAST(@TO_DATE AS DATE))";
+
+                        cmdHeader.Parameters.AddWithValue(
+                            "@FROM_DATE",
+                            input.FromDate.HasValue ? (object)input.FromDate.Value : DBNull.Value
+                        );
+
+                        cmdHeader.Parameters.AddWithValue(
+                            "@TO_DATE",
+                            input.ToDate.HasValue ? (object)input.ToDate.Value : DBNull.Value
+                        );
 
                         using (SqlDataReader reader = cmdHeader.ExecuteReader())
                         {
@@ -641,15 +655,29 @@ namespace MicroApi.DataLayer.Services
                         cmdDetail.CommandType = CommandType.Text;
 
                         cmdDetail.CommandText = @"
-                SELECT 
-                    D.*,
-                    L.FileName,
-                    L.Time AS ImportedDate
-                FROM TB_IMPORT_AR_DATA D
-                INNER JOIN TB_IMPORT_AR_HEADER H
-                    ON H.ID = D.HeaderID
-                INNER JOIN TB_IMPORT_AR_LOG L
-                    ON L.ID = H.LogID";
+                        SELECT 
+                            D.*,
+                            L.FileName,
+                            L.Time AS ImportedDate
+                        FROM TB_IMPORT_AR_DATA D
+                        INNER JOIN TB_IMPORT_AR_HEADER H
+                            ON H.ID = D.HeaderID
+                        INNER JOIN TB_IMPORT_AR_LOG L
+                            ON L.ID = H.LogID
+                        WHERE
+                        (@FROM_DATE IS NULL OR CAST(H.ApexTransactionDate AS DATE) >= CAST(@FROM_DATE AS DATE))
+                        AND
+                        (@TO_DATE IS NULL OR CAST(H.ApexTransactionDate AS DATE) <= CAST(@TO_DATE AS DATE))";
+
+                        cmdDetail.Parameters.AddWithValue(
+                            "@FROM_DATE",
+                            input.FromDate.HasValue ? (object)input.FromDate.Value : DBNull.Value
+                        );
+
+                        cmdDetail.Parameters.AddWithValue(
+                            "@TO_DATE",
+                            input.ToDate.HasValue ? (object)input.ToDate.Value : DBNull.Value
+                        );
 
                         using (SqlDataReader reader = cmdDetail.ExecuteReader())
                         {

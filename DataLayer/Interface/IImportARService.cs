@@ -9,6 +9,6 @@ namespace MicroApi.DataLayer.Interface
         public viewImportARDataResponse ViewDetails(viewImportARInput vInput);
         public ImportArColumnsResponse columnsList();
         public processARResponse processAR(processARInput vinput);
-        public ARResponse arList();
+        public ARResponse arList(ARInput input);
     }
 }
