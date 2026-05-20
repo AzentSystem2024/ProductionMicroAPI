@@ -378,6 +378,81 @@ namespace MicroApi.DataLayer.Services
         }
 
 
+        //public processARResponse processAR(processARInput vinput)
+        //{
+        //    processARResponse res = new processARResponse();
+
+        //    SqlConnection connection = ADO.GetConnection();
+        //    SqlTransaction objtrans = connection.BeginTransaction();
+
+        //    try
+        //    {
+        //        SqlCommand cmd = new SqlCommand
+        //        {
+        //            Connection = connection,
+        //            Transaction = objtrans,
+        //            CommandType = CommandType.StoredProcedure,
+        //            CommandText = "SP_PROCESS_AR",
+        //            CommandTimeout = 0
+        //        };
+
+        //        cmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
+        //        cmd.Parameters.AddWithValue("@COMPANY_ID", vinput.CompanyID);
+        //        cmd.Parameters.AddWithValue("@STORE_ID", vinput.StoreID);
+        //        cmd.Parameters.AddWithValue("@FIN_ID", vinput.FinID);
+        //        cmd.Parameters.AddWithValue("@USER_ID", vinput.UserID);
+
+        //        // RETURN VALUE
+        //        SqlParameter returnParameter = new SqlParameter();
+        //        returnParameter.ParameterName = "@ReturnVal";
+        //        returnParameter.SqlDbType = SqlDbType.Int;
+        //        returnParameter.Direction = ParameterDirection.ReturnValue;
+
+        //        cmd.Parameters.Add(returnParameter);
+
+        //        cmd.ExecuteNonQuery();
+
+        //        int returnValue = Convert.ToInt32(returnParameter.Value);
+
+        //        objtrans.Commit();
+
+        //        if (returnValue == 1)
+        //        {
+        //            res.flag = "1";
+        //            res.message = "Success";
+        //        }
+        //        else if (returnValue == -1)
+        //        {
+        //            res.flag = "0";
+        //            res.message = "Validation Failed";
+        //        }
+        //        else if (returnValue == 0)
+        //        {
+        //            res.flag = "0";
+        //            res.message = "Invalid Transaction Type";
+        //        }
+        //        else
+        //        {
+        //            res.flag = "0";
+        //            res.message = "Unknown Error";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        objtrans.Rollback();
+
+        //        res.flag = "0";
+        //        res.message = ex.Message;
+        //    }
+        //    finally
+        //    {
+        //        connection.Close();
+        //    }
+
+        //    return res;
+        //}
+
+
         public processARResponse processAR(processARInput vinput)
         {
             processARResponse res = new processARResponse();
@@ -387,26 +462,65 @@ namespace MicroApi.DataLayer.Services
 
             try
             {
+                // GET TRANSACTION TYPE
+                string transactionType = "";
+
+                SqlCommand typeCmd = new SqlCommand
+                {
+                    Connection = connection,
+                    Transaction = objtrans,
+                    CommandType = CommandType.Text,
+                    CommandText = @"
+                SELECT TOP 1 TransactionType
+                FROM TB_IMPORT_AR_HEADER
+                WHERE ID = @TransactionID"
+                };
+
+                typeCmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
+
+                object typeResult = typeCmd.ExecuteScalar();
+
+                if (typeResult != null)
+                {
+                    transactionType = typeResult.ToString();
+                }
+
+                // SELECT SP BASED ON TYPE
+                string procedureName =
+                    transactionType == "Corporate" ||
+                    transactionType == "Insurance" ||
+                    transactionType == "Self Paying"
+                        ? "SP_PROCESS_AR_INVOICE"
+                        : "SP_PROCESS_AR";
+
                 SqlCommand cmd = new SqlCommand
                 {
                     Connection = connection,
                     Transaction = objtrans,
                     CommandType = CommandType.StoredProcedure,
-                    CommandText = "SP_PROCESS_AR",
+                    CommandText = procedureName,
                     CommandTimeout = 0
                 };
 
+                // COMMON PARAMETERS
                 cmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
-                cmd.Parameters.AddWithValue("@COMPANY_ID", vinput.CompanyID);
-                cmd.Parameters.AddWithValue("@STORE_ID", vinput.StoreID);
                 cmd.Parameters.AddWithValue("@FIN_ID", vinput.FinID);
                 cmd.Parameters.AddWithValue("@USER_ID", vinput.UserID);
 
+                // ONLY FOR SP_PROCESS_AR
+                if (procedureName == "SP_PROCESS_AR")
+                {
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", vinput.CompanyID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", vinput.StoreID);
+                }
+
                 // RETURN VALUE
-                SqlParameter returnParameter = new SqlParameter();
-                returnParameter.ParameterName = "@ReturnVal";
-                returnParameter.SqlDbType = SqlDbType.Int;
-                returnParameter.Direction = ParameterDirection.ReturnValue;
+                SqlParameter returnParameter = new SqlParameter
+                {
+                    ParameterName = "@ReturnVal",
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.ReturnValue
+                };
 
                 cmd.Parameters.Add(returnParameter);
 
@@ -451,7 +565,6 @@ namespace MicroApi.DataLayer.Services
 
             return res;
         }
-
 
 
         public ARResponse arList()
