@@ -607,6 +607,7 @@ namespace MicroApi.DataLayer.Services
                                     ApexTransactionDate = reader["ApexTransactionDate"] == DBNull.Value
                                         ? null
                                         : Convert.ToDateTime(reader["ApexTransactionDate"]),
+                                    OrgnBranchCode = reader["OrgnBranchCode"]?.ToString(),
 
                                     ApexPatientCode = reader["ApexPatientCode"]?.ToString(),
 

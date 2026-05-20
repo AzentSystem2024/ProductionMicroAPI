@@ -214,6 +214,7 @@ namespace MicroApi.Models
         public int? AcTransID { get; set; }
         public string? Status { get; set; }
         public string? FailureReason { get; set; }
+        public string? OrgnBranchCode { get; set; }
     }
 
     public class ARDetail
