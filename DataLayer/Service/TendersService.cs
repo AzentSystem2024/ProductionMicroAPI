@@ -145,7 +145,7 @@ namespace MicroApi.DataLayer.Services
 
                     tenders.TENDERTYPE_DESCRIPTION = dr["TENDERTYPE_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["TENDERTYPE_DESCRIPTION"]) : "";
                     tenders.CURRENCY_DESCRIPTION = dr["CURRENCY_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["CURRENCY_DESCRIPTION"]) : "";
-                    tenders.AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : 0;
+                    tenders.AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : null;
 
 
                 }
