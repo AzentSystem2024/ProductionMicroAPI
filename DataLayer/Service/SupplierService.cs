@@ -135,6 +135,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("IS_COMPANY_BRANCH", (object)supplier.IS_COMPANY_BRANCH ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("SUPP_CAT_ID", (object)supplier.SUPP_CAT_ID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("PURCHASE_TYPE", (object)supplier.PURCH_TYPE ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("IS_DEFAULT_CURRENCY", (object)supplier.IS_DEFAULT_CURRENCY ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@UDT_TB_SUPPLIER_COST", tbl);
 
                 cmd.ExecuteNonQuery();
