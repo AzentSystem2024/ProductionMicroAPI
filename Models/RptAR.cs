@@ -23,25 +23,42 @@ namespace MicroApi.Models
 
     public class RptARData
     {
-        public int ClaimUID { get; set; }
-        public string FacilityID { get; set; }
-        public string FacilityName { get; set; }
-        public string ClaimNumber { get; set; }
-        public string ReceiverID { get; set; }
-        public string PayerID { get; set; }
-        public string PatientID { get; set; }
-        public string EncounterType { get; set; }
-        public string EncounterStartDate { get; set; }
-        public string StartType { get; set; }
-        public string EncounterEndDate { get; set; }
-        public string EndType { get; set; }
-        public string MemberID { get; set; }
-        public string EmiratesID { get; set; }
-        public string TransactionDate { get; set; }
-        public decimal? GrossAmount { get; set; }
-        public decimal? PatientShare { get; set; }
-        public decimal? NetAmount { get; set; }
-        public string XMLFileName { get; set; }
+        public string? InvoiceType { get; set; }
+        public string? TransactionType { get; set; }
+        public string? TransactionIncomeGroup { get; set; }
+        public string? ApexTransactionNumber { get; set; }
+        public string? ApexTransactionDate { get; set; }
+        public string? ApexPatientCode { get; set; }
+        public string? ApexTPACode { get; set; }
+        public string? ApexInsuCode { get; set; }
+        public string? ApexInstCode { get; set; }
+        public string? ApexReportingDoctor { get; set; }
+        public string? ApexReferringDoctor { get; set; }
+        public string? ApexReportingDoctorDept { get; set; }
+        public string? ApexReferringDoctorDept { get; set; }
+        public decimal? IncomeGrossAmount { get; set; }
+        public decimal? IncomePolicyConcAmount { get; set; }
+        public decimal? IncomeAddlConcAmount { get; set; }
+
+        public decimal? IncomeNetAmount { get; set; }
+        public decimal? IncomePatientAmount { get; set; }
+        public decimal? IncomeInstAmount { get; set; }
+        public decimal? IncomeInsuAmount { get; set; }
+
+        public string? ServiceCategory { get; set; }
+        public string? ServiceCode { get; set; }
+        public string? ServiceName { get; set; }
+        public string? CPTCode { get; set; }
+        public string? OrgnBranchCode { get; set; }
+        public string? Paymode { get; set; }
+        public string? PaymodeGateway { get; set; }
+        public string? PaymodeAmount { get; set; }
+        public string? PaymentRefNo { get; set; }
+        public decimal? DeniedAmount { get; set; }
+        public string? DenialCode { get; set; }
+
+        public string? PaymentApexTransctionNumber { get; set; }
+        public string? PaymentApexTransactionDate { get; set; }
     }
 
     
