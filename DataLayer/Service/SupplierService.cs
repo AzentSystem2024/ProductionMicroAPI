@@ -87,17 +87,17 @@ namespace MicroApi.DataLayer.Service
                 tbl.Columns.Add("SUPP_ID", typeof(Int32));
                 tbl.Columns.Add("COST_ID", typeof(Int32));
 
-                foreach (SupplierCost ur in supplier.Supplier_cost)
+                foreach (SupplierCost ur in supplier.Supplier_cost ?? new List<SupplierCost>())
                 {
                     DataRow dRow = tbl.NewRow();
-
 
                     dRow["SUPP_ID"] = ur.SUPP_ID;
                     dRow["COST_ID"] = ur.COST_ID;
 
                     tbl.Rows.Add(dRow);
-                    tbl.AcceptChanges();
                 }
+
+                tbl.AcceptChanges();
 
 
                 SqlCommand cmd = new SqlCommand();
