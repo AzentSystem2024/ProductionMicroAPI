@@ -174,7 +174,7 @@ namespace MicroApi.DataLayer.Service
                    "TB_SUPPLIER.STATE_ID,TB_SUPPLIER.IS_COMPANY_BRANCH,TB_SUPPLIER.COMPANY_ID,TB_SUPPLIER.SUPP_CAT_ID,TB_SUPPLIER_CATEGORY.CATEGORY_NAME," +
 
                    "TB_COUNTRY.COUNTRY_NAME,TB_CURRENCY.CODE AS CURRENCY_CODE,TB_PAYMENT_TERMS.CODE AS PAYMENT_CODE," +
-                   "TB_VAT_RULE_SUPPLIER.DESCRIPTION ,TB_STATE.STATE_NAME " +
+                   "TB_VAT_RULE_SUPPLIER.DESCRIPTION ,TB_STATE.STATE_NAME,TB_SUPPLIER.IS_DEFAULT_CURRENCY " +
                    "FROM TB_SUPPLIER " +
 
                    "LEFT JOIN TB_COUNTRY ON TB_SUPPLIER.COUNTRY_ID = TB_COUNTRY.ID " +
@@ -224,6 +224,7 @@ namespace MicroApi.DataLayer.Service
                     supplier.SUPP_CAT_ID = ADO.ToInt32(dr["SUPP_CAT_ID"]);
                     supplier.SUPP_CAT_NAME = Convert.ToString(dr["CATEGORY_NAME"]);
                     supplier.PURCH_TYPE = ADO.ToInt32(dr["PURCHASE_TYPE"]);
+                    supplier.IS_DEFAULT_CURRENCY = Convert.ToBoolean(dr["IS_DEFAULT_CURRENCY"]);
                 }
 
                 strSQL = "SELECT * FROM TB_SUPPLIER_COSTS WHERE SUPP_ID = " + id;

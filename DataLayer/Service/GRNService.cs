@@ -84,6 +84,7 @@ namespace MicroApi.DataLayer.Service
                     SUPP_PRICE = ADO.ToFloat(dr["SUPP_PRICE"]),
                     ITEM_ID = ADO.ToInt32(dr["ITEM_ID"]),
                     PO_DETAIL_ID = ADO.ToInt32(dr["PO_DETAIL_ID"]),
+                    PO_TAXABLE_AMOUNT = ADO.ToFloat(dr["PO_TAXABLE_AMOUNT"]),
                 };
                 poDetailsList.Add(poDetail);
             }
@@ -730,7 +731,7 @@ namespace MicroApi.DataLayer.Service
 
                 strSQL = "SELECT GD.*, S.STORE_NAME, I.DESCRIPTION, I.ITEM_CODE, " +
                         "ISNULL(GRN_SUM.APPROVED_GRN_QTY,0) AS GRN_QTY, " +
-                        "POD.QUANTITY AS PO_QUANTITY, POD.PRICE " +
+                        "POD.QUANTITY AS PO_QUANTITY, POD.PRICE,POD.SUPP_AMOUNT AS PO_TAXABLE_AMOUNT " +
                         "FROM TB_GRN_DETAIL GD " +
                         "LEFT JOIN TB_STORES S ON GD.STORE_ID = S.ID " +
                         "LEFT JOIN TB_ITEMS I ON GD.ITEM_ID = I.ID " +
@@ -776,7 +777,8 @@ namespace MicroApi.DataLayer.Service
 
                         PO_QUANTITY = dr3["PO_QUANTITY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PO_QUANTITY"]),
                         GRN_QUANTITY = dr3["GRN_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["GRN_QTY"]),
-                        PRICE = dr3["PRICE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PRICE"])
+                        PRICE = dr3["PRICE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PRICE"]),
+                        PO_TAXABLE_AMOUNT = dr3["PO_TAXABLE_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PO_TAXABLE_AMOUNT"])
                     });
                 }
 

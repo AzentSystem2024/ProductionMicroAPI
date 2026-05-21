@@ -117,7 +117,7 @@ namespace MicroApi.DataLayer.Services
                "FROM TB_TENDERS " +
 
                "INNER JOIN TB_TENDER_TYPES ON TB_TENDERS.TENDER_TYPE = TB_TENDER_TYPES.ID " +
-                "INNER JOIN TB_CURRENCY ON TB_TENDERS.CURRENCY_ID = TB_CURRENCY.ID " +
+                "LEFT JOIN TB_CURRENCY ON TB_TENDERS.CURRENCY_ID = TB_CURRENCY.ID " +
 
                "WHERE TB_TENDERS.ID =" + id;
 
@@ -145,6 +145,7 @@ namespace MicroApi.DataLayer.Services
 
                     tenders.TENDERTYPE_DESCRIPTION = dr["TENDERTYPE_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["TENDERTYPE_DESCRIPTION"]) : "";
                     tenders.CURRENCY_DESCRIPTION = dr["CURRENCY_DESCRIPTION"] != DBNull.Value ? Convert.ToString(dr["CURRENCY_DESCRIPTION"]) : "";
+                    tenders.AC_HEAD_ID = dr["AC_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(dr["AC_HEAD_ID"]) : 0;
 
 
                 }

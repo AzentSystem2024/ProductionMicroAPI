@@ -96,7 +96,7 @@
         public float PO_QUANTITY { get; set; }
         public float GRN_QUANTITY { get; set; }
         public float? PRICE { get; set; }
-
+        public float? PO_TAXABLE_AMOUNT { get; set; }
 
     }
     public class PO
@@ -147,6 +147,7 @@
         public int ITEM_ID { get; set; }
         public int PO_DETAIL_ID { get; set; }
         public float PENDING_QTY { get; set; }
+        public float? PO_TAXABLE_AMOUNT { get; set; }
     }
     public class LandedCosts
     {
