@@ -471,9 +471,9 @@ namespace MicroApi.DataLayer.Services
                     Transaction = objtrans,
                     CommandType = CommandType.Text,
                     CommandText = @"
-                SELECT TOP 1 TransactionType
-                FROM TB_IMPORT_AR_HEADER
-                WHERE ID = @TransactionID"
+            SELECT TOP 1 TransactionType
+            FROM TB_IMPORT_AR_HEADER
+            WHERE ID = @TransactionID"
                 };
 
                 typeCmd.Parameters.AddWithValue("@TransactionID", vinput.TransactionID);
@@ -486,12 +486,24 @@ namespace MicroApi.DataLayer.Services
                 }
 
                 // SELECT SP BASED ON TYPE
-                string procedureName =
+                string procedureName = "";
+
+                if (
                     transactionType == "Corporate" ||
                     transactionType == "Insurance" ||
                     transactionType == "Self Paying"
-                        ? "SP_PROCESS_AR_INVOICE"
-                        : "SP_PROCESS_AR";
+                )
+                {
+                    procedureName = "SP_PROCESS_AR_INVOICE";
+                }
+                else if (transactionType == "Receipt")
+                {
+                    procedureName = "SP_PROCESS_AR_RECEIPT";
+                }
+                else
+                {
+                    procedureName = "SP_PROCESS_AR";
+                }
 
                 SqlCommand cmd = new SqlCommand
                 {
@@ -565,7 +577,6 @@ namespace MicroApi.DataLayer.Services
 
             return res;
         }
-
 
         public ARResponse arList(ARInput input)
         {
