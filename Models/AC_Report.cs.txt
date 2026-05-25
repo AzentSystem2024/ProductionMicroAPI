@@ -13,7 +13,7 @@
     {
         public int TRANS_ID { get; set; }
         public DateTime? TRANS_DATE { get; set; }
-        public int? TRANS_TYPE_ID { get; set; }
+        public int? TRANS_TYPE_ID { get; set; }  
         public string TRANS_TYPE_NAME { get; set; }
         public string VOUCHER_NO { get; set; }
         public string PARTICULARS { get; set; }
@@ -28,7 +28,7 @@
     {
         public int flag { get; set; }
         public string message { get; set; }
-        public List<LedgerStatementItem> data { get; set; } = new List<LedgerStatementItem>();
+        public List<LedgerStatementItem> data { get; set; } = new List<LedgerStatementItem>(); 
     }
     public class InitDataRequest
     {
@@ -49,7 +49,7 @@
     {
         public DateTime DATE_FROM { get; set; } = DateTime.Today;
         public DateTime DATE_TO { get; set; } = DateTime.Today;
-        public string COMPANY_ID { get; set; }
+        public string COMPANY_ID{ get; set; }
     }
 
     public class ArticleProductionItem
@@ -137,7 +137,7 @@
         public int HEAD_ID { get; set; }
         public string PARTICULARS { get; set; }
         public decimal AMOUNT { get; set; }
-
+        
     }
 
     public class BalanceSheetResponse
@@ -202,14 +202,14 @@
     {
         public int flag { get; set; }
         public string message { get; set; }
-        public List<Customer_Statement_Rpt> Data { get; set; }
+        public List<Customer_Statement_Rpt> Data { get; set; } 
     }
     public class Customer_Aging
     {
         public int COMPANY_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
-        public int? CUSTOMER_ID { get; set; }
+        public int? CUSTOMER_ID { get; set; } 
     }
     public class Customer_Aging_Rpt
     {
@@ -231,7 +231,7 @@
 
     public class CustomerAgingResult
     {
-        public int flag { get; set; }
+        public int flag { get; set; }  
         public string message { get; set; }
         public List<Customer_Aging_Rpt> Data { get; set; }
     }
@@ -241,7 +241,7 @@
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
         public int? SUPP_ID { get; set; }
-        public int? PURCH_ID { get; set; }
+        public int ? PURCH_ID { get; set; }
     }
     public class SupplierStatementReport
     {
@@ -428,9 +428,9 @@
         public string MAIN_GROUP_NAME { get; set; }
         public int HEAD_ID { get; set; }
         public string HEAD_NAME { get; set; }
-        public string CODE { get; set; }
+        public string Code { get; set; }
 
-        public string DESCRIPTION { get; set; }
+        public string Description { get; set; }
         public double AMOUNT { get; set; }
         public double BL_ORDER { get; set; }
     }
@@ -448,35 +448,4 @@
         public string message { get; set; }
         public List<ProfitLosswithDimension> data { get; set; } = new List<ProfitLosswithDimension>();
     }
-    public class BalanceSheetwithDimensionFilter
-    {
-        public int FIN_ID { get; set; }
-        public int COMPANY_ID { get; set; }
-        public DateTime DATE_FROM { get; set; } = DateTime.Today;
-        public DateTime DATE_TO { get; set; } = DateTime.Today;
-        public string DimensionCode { get; set; }
-    }
-
-    public class BalanceSheetwithDimensionItem
-    {
-        public int TYPE_ID { get; set; }
-        public string TYPE_NAME { get; set; }
-        public int MAIN_GROUP_ID { get; set; }
-        public string MAIN_GROUP_NAME { get; set; }
-        public int HEAD_ID { get; set; }
-        public string CODE { get; set; }
-
-        public string DESCRIPTION { get; set; }
-        public string PARTICULARS { get; set; }
-        public decimal AMOUNT { get; set; }
-
-    }
-
-    public class BalanceSheetwithDimensionResponse
-    {
-        public int flag { get; set; }
-        public string message { get; set; }
-        public List<BalanceSheetwithDimensionItem> data { get; set; } = new List<BalanceSheetwithDimensionItem>();
-    }
-
 }

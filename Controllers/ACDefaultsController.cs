@@ -73,5 +73,26 @@ namespace MicroApi.Controllers
             return res;
         }
 
+
+        [HttpPost]
+        [Route("settings")]
+        public ACDefaultSettingsResponse GetACDefaultSettingsList(ACDefaultSettingsInput request)
+        {
+            var res = new ACDefaultSettingsResponse();
+            try
+            {
+                res = _ACDefaultsService.GetACDefaultSettingsList(request);
+                res.flag = "1";
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = "0";
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+
     }
 }

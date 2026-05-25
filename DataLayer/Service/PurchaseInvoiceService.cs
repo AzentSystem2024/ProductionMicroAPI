@@ -1013,6 +1013,7 @@ namespace MicroApi.DataLayer.Service
                             RATE = row["RATE"] != DBNull.Value ? Convert.ToDecimal(row["RATE"]) : 0,
                             RETURN_QTY = row["RETURN_QTY"] != DBNull.Value ? Convert.ToDecimal(row["RETURN_QTY"]) : 0,
                             PO_DET_ID = row["PO_DET_ID"] != DBNull.Value ? Convert.ToInt32(row["PO_DET_ID"]) : 0,
+                            DISC_PERCENT = row["DISC_PERCENT"] != DBNull.Value ? Convert.ToDecimal(row["DISC_PERCENT"]) : 0,
                             COST = row["COST"] != DBNull.Value ? Convert.ToDecimal(row["COST"]) : 0,
                             SUPP_PRICE = row["SUPP_PRICE"] != DBNull.Value ? Convert.ToDecimal(row["SUPP_PRICE"]) : 0,
                             SUPP_AMOUNT = row["SUPP_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(row["SUPP_AMOUNT"]) : 0,

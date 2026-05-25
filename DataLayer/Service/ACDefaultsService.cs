@@ -125,5 +125,78 @@ namespace MicroApi.DataLayer.Service
             return response;
         }
 
+
+        public ACDefaultSettingsResponse GetACDefaultSettingsList(ACDefaultSettingsInput request)
+        {
+            ACDefaultSettingsResponse response = new ACDefaultSettingsResponse();
+
+            try
+            {
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand(@"
+            SELECT *
+            FROM TB_AC_DEFAULTS
+            WHERE COMPANY_ID = @COMPANY_ID", con))
+                {
+                    cmd.CommandType = CommandType.Text;
+
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.CompanyID);
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        if (rdr.Read())
+                        {
+                            response.Data = new ACDefaultSettings
+                            {
+                                GP_SUPPLIER_ID = rdr["GP_SUPPLIER_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["GP_SUPPLIER_ID"]),
+                                GP_CUSTOMER_ID = rdr["GP_CUSTOMER_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["GP_CUSTOMER_ID"]),
+                                GP_ASSET_ID = rdr["GP_ASSET_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["GP_ASSET_ID"]),
+                                GP_FIXED_ASSET_ID = rdr["GP_FIXED_ASSET_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["GP_FIXED_ASSET_ID"]),
+                                GP_CASH_ID = rdr["GP_CASH_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["GP_CASH_ID"]),
+                                GP_BANK_ID = rdr["GP_BANK_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["GP_BANK_ID"]),
+
+                                AC_CASH_ID = rdr["AC_CASH_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_CASH_ID"]),
+                                AC_PETTY_CASH_ID = rdr["AC_PETTY_CASH_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_PETTY_CASH_ID"]),
+
+                                AC_SALE_ID = rdr["AC_SALE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_SALE_ID"]),
+                                AC_OUTSIDE_SALE_ID = rdr["AC_OUTSIDE_SALE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_OUTSIDE_SALE_ID"]),
+                                AC_PURCHASE_ID = rdr["AC_PURCHASE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_PURCHASE_ID"]),
+                                AC_SALARY_PAYABLE_ID = rdr["AC_SALARY_PAYABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_SALARY_PAYABLE_ID"]),
+                                AC_SALARY_EXPENSE_ID = rdr["AC_SALARY_EXPENSE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_SALARY_EXPENSE_ID"]),
+                                AC_LS_PAYABLE_ID = rdr["AC_LS_PAYABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_LS_PAYABLE_ID"]),
+                                AC_LS_EXPENSE_ID = rdr["AC_LS_EXPENSE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_LS_EXPENSE_ID"]),
+                                AC_EOS_PAYABLE_ID = rdr["AC_EOS_PAYABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_EOS_PAYABLE_ID"]),
+
+                                AC_EOS_EXPENSE_ID = rdr["AC_EOS_EXPENSE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_EOS_EXPENSE_ID"]),
+                                AC_INVENTORY_ID = rdr["AC_INVENTORY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_INVENTORY_ID"]),
+                                AC_WIP_ID = rdr["AC_WIP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_WIP_ID"]),
+                                AC_COST_INVENTORY_ID = rdr["AC_COST_INVENTORY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_COST_INVENTORY_ID"]),
+                                AC_PDC_RECEIVABLE_ID = rdr["AC_PDC_RECEIVABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_PDC_RECEIVABLE_ID"]),
+                                AC_PDC_PAYABLE_ID = rdr["AC_PDC_PAYABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_PDC_PAYABLE_ID"]),
+                                AC_ASSET_ID = rdr["AC_ASSET_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_ASSET_ID"]),
+
+                                AC_RECEIVABLE_ID = rdr["AC_RECEIVABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_RECEIVABLE_ID"]),
+                                AC_PAYABLE_ID = rdr["AC_PAYABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_PAYABLE_ID"]),
+                                AC_ADVANCE_PAYABLE_ID = rdr["AC_ADVANCE_PAYABLE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_ADVANCE_PAYABLE_ID"]),
+                                AC_OUTPUT_VAT = rdr["AC_OUTPUT_VAT"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_OUTPUT_VAT"]),
+                                AC_DEPRECIATION_EXPENSE_ID = rdr["AC_DEPRECIATION_EXPENSE_ID"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_DEPRECIATION_EXPENSE_ID"]),
+                                AC_GOODS_TRANSIT = rdr["AC_GOODS_TRANSIT"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["AC_GOODS_TRANSIT"])
+                            };
+                        }
+                    }
+                }
+
+                response.flag = "1";
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.flag = "0";
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
     }
 }

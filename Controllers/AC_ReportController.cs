@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroApi.Controllers
 {
-   // [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AC_ReportController : ControllerBase
@@ -296,7 +296,40 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-       
+        [HttpPost("profitlossdimension")]
+        public ProfitLosswithDimensionResponse GetProfitlosswithDimension(ProfitLosswithDimensionRequest request)
+        {
+            var res = new ProfitLosswithDimensionResponse();
+            try
+            {
+                res = _ReportService.GetProfitLosswithDimension(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost("BalanceSheetDimension")]
+        public BalanceSheetwithDimensionResponse GetBalanceSheetwithDimension(BalanceSheetwithDimensionFilter request)
+        {
+            var res = new BalanceSheetwithDimensionResponse();
+            try
+            {
+                res = _ReportService.GetBalanceSheetwithDimension(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
     }
 }
 

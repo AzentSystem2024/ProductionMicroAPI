@@ -529,7 +529,7 @@ namespace MicroApi.DataLayer.Service
             res.message = res.data.Count > 0 ? "Success" : "No records found";
             return res;
         }
-    
+
         public AgedPayableReportResponse GetAgedPayableReports(AgedPayableReportRequest request)
         {
             var res = new AgedPayableReportResponse();
@@ -763,10 +763,102 @@ namespace MicroApi.DataLayer.Service
             response.message = response.flag == 1 ? "Success" : "No records found";
             return response;
         }
-       
+        public ProfitLosswithDimensionResponse GetProfitLosswithDimension(ProfitLosswithDimensionRequest request)
+        {
+            ProfitLosswithDimensionResponse response = new ProfitLosswithDimensionResponse
+            {
+                data = new List<ProfitLosswithDimension>()
+            };
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_PROFIT_LOSS_DIMENSION", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@DIMENSION_CODE", request.DimensionCode);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ProfitLosswithDimension report = new ProfitLosswithDimension
+                            {
+                                TYPE_ID = reader["TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["TYPE_ID"]) : 0,
+                                TYPE_NAME = reader["TYPE_NAME"]?.ToString(),
+                                MAIN_GROUP_ID = reader["MAIN_GROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["MAIN_GROUP_ID"]) : 0,
+                                MAIN_GROUP_NAME = reader["MAIN_GROUP_NAME"]?.ToString(),
+                                HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
+                                HEAD_NAME = reader["HEAD_NAME"]?.ToString(),
+                                CODE = reader["CODE"]?.ToString(),
+                                DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["AMOUNT"]) : 0,
+                                BL_ORDER = reader["BL_ORDER"] != DBNull.Value ? Convert.ToDouble(reader["BL_ORDER"]) : 0
+                            };
+
+                            response.data.Add(report);
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.data.Count > 0 ? 1 : 0;
+            response.message = response.data.Count > 0 ? "Success" : "No records found";
+
+            return response;
+        }
+        public BalanceSheetwithDimensionResponse GetBalanceSheetwithDimension(BalanceSheetwithDimensionFilter request)
+        {
+            var response = new BalanceSheetwithDimensionResponse { data = new List<BalanceSheetwithDimensionItem>() };
+            try
+            {
+                request.DATE_FROM = request.DATE_FROM.Date;
+                request.DATE_TO = request.DATE_TO.Date.AddDays(1).AddMilliseconds(-3);
+
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_BALANCE_SHEET_DIMENSION", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@DIMENSION_CODE", request.DimensionCode);
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            response.data.Add(new BalanceSheetwithDimensionItem
+                            {
+                                TYPE_ID = Convert.ToInt32(rdr["TYPE_ID"]),
+                                TYPE_NAME = rdr["TYPE_NAME"].ToString(),
+                                MAIN_GROUP_ID = Convert.ToInt32(rdr["MAIN_GROUP_ID"]),
+                                MAIN_GROUP_NAME = rdr["MAIN_GROUP_NAME"].ToString(),
+                                CODE = rdr["CODE"]?.ToString(),
+                                DESCRIPTION = rdr["DESCRIPTION"]?.ToString(),
+                                HEAD_ID = Convert.ToInt32(rdr["HEAD_ID"]),
+                                PARTICULARS = rdr["HEAD_NAME"].ToString(),
+                                AMOUNT = Convert.ToDecimal(rdr["AMOUNT"])
+                            });
+                        }
+                    }
+                }
+                response.flag = 1;
+                response.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = ex.Message;
+            }
+            return response;
+        }
     }
 }
-        
 
-    
+
+
 

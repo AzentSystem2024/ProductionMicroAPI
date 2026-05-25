@@ -202,6 +202,7 @@
         public decimal RETURN_QTY { get; set; }
         public int PO_DET_ID { get; set; }
         public decimal COST { get; set; }
+        public decimal? DISC_PERCENT { get; set; }
         public decimal SUPP_PRICE { get; set; }
         public decimal SUPP_AMOUNT { get; set; }
         public int GRN_DET_ID { get; set; }
