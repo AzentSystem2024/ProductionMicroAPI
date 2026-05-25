@@ -387,8 +387,8 @@ namespace MicroApi.DataLayer.Service
                                         PAY_HEAD_ID = reader["PAY_HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["PAY_HEAD_ID"]) : 0,
                                         PARTY_NAME = reader["PARTY_NAME"] != DBNull.Value ? reader["PARTY_NAME"].ToString() : null,
                                         AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["AMOUNT"]) : 0,
-                                        LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
-                                        LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
+                                        //LEDGER_CODE = reader["LEDGER_CODE"]?.ToString(),
+                                        //LEDGER_NAME = reader["LEDGER_NAME"]?.ToString(),
                                         VAT_REGN = reader["VAT_REGN"] != DBNull.Value ? Convert.ToString(reader["VAT_REGN"]) : null,
                                         DetailList = new List<MiscPaymentDetail>()
                                     };

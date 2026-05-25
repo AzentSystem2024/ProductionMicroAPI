@@ -101,8 +101,8 @@
         public float AMOUNT { get; set; }
         public string NARRATION { get; set; }
         public int TRANS_STATUS { get; set; }
-        public string LEDGER_CODE { get; set; }
-        public string LEDGER_NAME { get; set; }
+        //public string LEDGER_CODE { get; set; }
+        //public string LEDGER_NAME { get; set; }
         public string VAT_REGN { get; set; }
         public List<MiscPaymentDetail> DetailList { get; set; }
     }
