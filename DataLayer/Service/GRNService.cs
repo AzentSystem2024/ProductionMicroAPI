@@ -894,7 +894,8 @@ namespace MicroApi.DataLayer.Service
                         NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["NET_AMOUNT"]),
                         NARRATION = dr["NARRATION"] == DBNull.Value ? null : dr["NARRATION"].ToString(),
                         STATUS = dr["STATUS"] == DBNull.Value ? null : dr["STATUS"].ToString(),
-                        PO_NO = dr["PO_NO"] == DBNull.Value ? null : dr["PO_NO"].ToString()
+                        PO_NO = dr["PO_NO"] == DBNull.Value ? null : dr["PO_NO"].ToString(),
+                        SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr["SUPP_NET_AMOUNT"]),
                     });
                 }
             }
