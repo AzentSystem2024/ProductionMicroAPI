@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("api/AcReports/TrialBalance")]
     public class TrialBalanceReportController : ControllerBase
@@ -39,7 +39,7 @@ namespace MicroApi.Controllers
         }
         [HttpPost("Dimension")]
         public IActionResult GetTrialBalanceDimensionReport(
-   [FromBody] ReportRequest1 request
+    [FromBody] ReportRequest1 request
 )
         {
             try
@@ -66,6 +66,44 @@ namespace MicroApi.Controllers
                         dateFrom,
                         dateTo,
                         request.DimensionCode
+                    );
+
+                return Ok(new
+                {
+                    flag = 1,
+                    message = "Success",
+                    data = reportData
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    flag = 0,
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost("AsOnDate")]
+        public IActionResult TrialBalanceAsOnDate(
+     [FromBody] ReportRequest2 request
+ )
+        {
+            try
+            {
+                DateTime dateTo =
+                    DateTime.ParseExact(
+                        request.DateTo,
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture
+                    );
+
+                var reportData =
+                    _trialBalanceReportService
+                    .GetTrialBalanceAsOnDate(
+                        request.CompanyId,
+                        request.FinId,
+                        dateTo
                     );
 
                 return Ok(new

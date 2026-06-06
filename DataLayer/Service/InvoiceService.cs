@@ -179,6 +179,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@NET_AMOUNT", model.NET_AMOUNT ?? 0);
                         cmd.Parameters.AddWithValue("@VEHICLE_NO", model.VEHICLE_NO ?? string.Empty);
                         cmd.Parameters.AddWithValue("@ROUND_OFF", model.ROUND_OFF);
+                        cmd.Parameters.AddWithValue("@IS_VERIFIED", model.IS_VERIFIED);
+
 
                         // Prepare UDT (User Defined Table) for Sale Detail
                         DataTable DT = new DataTable();

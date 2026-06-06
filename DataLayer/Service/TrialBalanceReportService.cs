@@ -177,8 +177,112 @@ namespace MicroApi.DataLayer.Service
 
             return reportList;
         }
+        public List<TrialBalanceAsOnDate> GetTrialBalanceAsOnDate(
+       int companyId,
+       int finId,
+       DateTime dateTo
+   )
+        {
+            List<TrialBalanceAsOnDate> reportList =
+                new List<TrialBalanceAsOnDate>();
 
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (var cmd = new SqlCommand(
+                        "SP_RPT_TRIAL_BALANCE_STOREWISE",
+                        connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
+                        cmd.Parameters.AddWithValue("@FIN_ID", finId);
+                        cmd.Parameters.AddWithValue("@DATE_TO", dateTo);
+
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                TrialBalanceAsOnDate obj =
+                                    new TrialBalanceAsOnDate();
+
+                                obj.HeadID =
+                                    dr["HEAD_ID"] != DBNull.Value
+                                    ? Convert.ToInt32(dr["HEAD_ID"])
+                                    : 0;
+
+                                obj.MainGroup =
+                                    dr["MAIN_GROUP_NAME"]?.ToString();
+
+                                obj.SubGroup =
+                                    dr["SUB_GROUP_NAME"]?.ToString();
+
+                                obj.Category =
+                                    dr["CATEGORY_NAME"]?.ToString();
+
+                                obj.LedgerCode =
+                                    dr["HEAD_CODE"]?.ToString();
+
+                                obj.LedgerName =
+                                    dr["HEAD_NAME"]?.ToString();
+
+                                //-----------------------------------
+                                // Dynamic Debit/Credit Store Columns
+                                //-----------------------------------
+
+                                foreach (DataColumn col in dt.Columns)
+                                {
+                                    string colName = col.ColumnName;
+
+                                    if (colName.StartsWith("Debit-"))
+                                    {
+                                        decimal value = 0;
+
+                                        if (dr[colName] != DBNull.Value)
+                                            value = Convert.ToDecimal(dr[colName]);
+
+                                        obj.Debit.Add(
+                                            colName.Replace("Debit-", ""),
+                                            value
+                                        );
+                                    }
+
+                                    else if (colName.StartsWith("Credit-"))
+                                    {
+                                        decimal value = 0;
+
+                                        if (dr[colName] != DBNull.Value)
+                                            value = Convert.ToDecimal(dr[colName]);
+
+                                        obj.Credit.Add(
+                                            colName.Replace("Credit-", ""),
+                                            value
+                                        );
+                                    }
+                                }
+
+                                reportList.Add(obj);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    "Error while fetching storewise trial balance.",
+                    ex
+                );
+            }
+
+            return reportList;
+        }
     }
-
 }
-

@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/listGroupHead")]
     [ApiController]
     public class ListController : ControllerBase

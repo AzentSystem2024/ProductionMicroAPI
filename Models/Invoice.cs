@@ -162,6 +162,7 @@
         public float? NET_AMOUNT { get; set; }
         public string? VEHICLE_NO { get; set; }
         public bool? ROUND_OFF { get; set; }
+        public bool? IS_VERIFIED { get; set; }
         public List<SaleDetailUpdate> SALE_DETAILS { get; set; }
     }
     public class CommitInvoiceRequest
