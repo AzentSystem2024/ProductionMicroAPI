@@ -29,5 +29,6 @@
         public int CompanyId { get; set; }
         public int FinId { get; set; }
         public string DateTo { get; set; }
+        public string StoreIds { get; set; } = "";
     }
 }

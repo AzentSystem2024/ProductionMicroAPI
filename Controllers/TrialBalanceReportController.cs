@@ -103,7 +103,8 @@ namespace MicroApi.Controllers
                     .GetTrialBalanceAsOnDate(
                         request.CompanyId,
                         request.FinId,
-                        dateTo
+                        dateTo,
+        request.StoreIds
                     );
 
                 return Ok(new

@@ -20,6 +20,7 @@ public interface ITrialBalanceReportService
     List<TrialBalanceAsOnDate> GetTrialBalanceAsOnDate(
         int companyId,
         int finId,
-        DateTime dateTo
+        DateTime dateTo,
+    string storeIds
     );
 }

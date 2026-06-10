@@ -180,7 +180,8 @@ namespace MicroApi.DataLayer.Service
         public List<TrialBalanceAsOnDate> GetTrialBalanceAsOnDate(
        int companyId,
        int finId,
-       DateTime dateTo
+       DateTime dateTo,
+    string storeIds
    )
         {
             List<TrialBalanceAsOnDate> reportList =
@@ -202,6 +203,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
                         cmd.Parameters.AddWithValue("@FIN_ID", finId);
                         cmd.Parameters.AddWithValue("@DATE_TO", dateTo);
+                        cmd.Parameters.AddWithValue("@STORE_IDS", string.IsNullOrWhiteSpace(storeIds) ? "" : storeIds);
 
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                         {

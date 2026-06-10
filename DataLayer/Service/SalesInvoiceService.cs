@@ -407,32 +407,51 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@TRANS_TYPE", 25);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
-                        cmd.Parameters.AddWithValue("@DATE_FROM",
-                            request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
-
-                        cmd.Parameters.AddWithValue("@DATE_TO",
-                            request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
+                        cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_FROM));
+                        cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO == null ? (object)DBNull.Value : Convert.ToDateTime(request.DATE_TO));
 
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                response.Data.Add(new SalesInvoiceListHeader
+                                try
                                 {
-                                    TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
-                                    TRANS_TYPE = reader["TRANS_TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_TYPE"]) : 0,
-                                    TRANS_STATUS = reader["TRANS_STATUS"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_STATUS"]) : (int?)null,
-                                    VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
-                                    TRANS_DATE = reader["TRANS_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["TRANS_DATE"]).ToString("dd-MM-yyyy") : null,
-                                    CUSTOMER_ID = reader["CUSTOMER_ID"] != DBNull.Value ? Convert.ToInt32(reader["CUSTOMER_ID"]) : 0,
-                                    GROSS_AMOUNT = reader["GROSS_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GROSS_AMOUNT"]) : 0,
-                                    GST_AMOUNT = reader["GST_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["GST_AMOUNT"]) : 0,
-                                    NET_AMOUNT = reader["NET_AMOUNT"] != DBNull.Value ? Convert.ToSingle(reader["NET_AMOUNT"]) : 0,
-                                    CUST_NAME = reader["CUST_NAME"]?.ToString(),
-                                    DISCOUNT_AMOUNT = reader["DISCOUNT_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DISCOUNT_AMOUNT"]) : 0,
-                                    STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
-                                    STORE_NAME = reader["STORE_NAME"] != DBNull.Value ? Convert.ToString(reader["STORE_NAME"]) : null,
-                                });
+                                    var item = new SalesInvoiceListHeader
+                                    {
+                                        TRANS_ID = SafeInt(reader["TRANS_ID"]),
+                                        TRANS_TYPE = SafeInt(reader["TRANS_TYPE"]),
+                                        TRANS_STATUS = reader["TRANS_STATUS"] == DBNull.Value
+        ? null
+        : SafeInt(reader["TRANS_STATUS"]),
+
+                                        VOUCHER_NO = reader["VOUCHER_NO"]?.ToString(),
+
+                                        TRANS_DATE = SafeDate(reader["TRANS_DATE"])?.ToString("dd-MM-yyyy"),
+
+                                        CUSTOMER_ID = SafeInt(reader["CUSTOMER_ID"]),
+
+                                        GROSS_AMOUNT = SafeFloat(reader["GROSS_AMOUNT"]),
+
+                                        GST_AMOUNT = SafeFloat(reader["GST_AMOUNT"]),
+
+                                        NET_AMOUNT = SafeFloat(reader["NET_AMOUNT"]),
+
+                                        DISCOUNT_AMOUNT = SafeDecimal(reader["DISCOUNT_AMOUNT"]),
+
+                                        CUST_NAME = reader["CUST_NAME"]?.ToString(),
+
+                                        STORE_ID = SafeInt(reader["STORE_ID"]),
+
+                                        STORE_NAME = reader["STORE_NAME"]?.ToString()
+                                    };
+
+                                    response.Data.Add(item);
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw new Exception(
+                                        $"Error in row. TRANS_ID={reader["TRANS_ID"]}, Details={ex.Message}");
+                                }
                             }
                         }
 
@@ -448,6 +467,44 @@ namespace MicroApi.DataLayer.Service
             }
 
             return response;
+        }
+
+        private int SafeInt(object value)
+        {
+            if (value == null || value == DBNull.Value)
+                return 0;
+
+            int result;
+            return int.TryParse(value.ToString(), out result) ? result : 0;
+        }
+
+        private float SafeFloat(object value)
+        {
+            if (value == null || value == DBNull.Value)
+                return 0;
+
+            float result;
+            return float.TryParse(value.ToString(), out result) ? result : 0;
+        }
+
+        private decimal SafeDecimal(object value)
+        {
+            if (value == null || value == DBNull.Value)
+                return 0;
+
+            decimal result;
+            return decimal.TryParse(value.ToString(), out result) ? result : 0;
+        }
+
+        private DateTime? SafeDate(object value)
+        {
+            if (value == null || value == DBNull.Value)
+                return null;
+
+            DateTime result;
+            return DateTime.TryParse(value.ToString(), out result)
+                ? result
+                : (DateTime?)null;
         }
         public SalesInvoiceViewResponse GetSalesInvoiceById(int Id)
         {

@@ -104,6 +104,63 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public LedgerStatementResponsewithDimension GetLedgerStatementwithDimension(AC_ReportwithDimension request)
+        {
+            var response = new LedgerStatementResponsewithDimension
+            {
+                data = new List<LedgerStatementItemwithDimension>()
+            };
+
+            try
+            {
+                request.DATE_FROM = request.DATE_FROM.Date;
+                request.DATE_TO = request.DATE_TO.Date.AddDays(1).AddMilliseconds(-3);
+                using (SqlConnection con = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_LEDGER_STATEMENT_DIMENSION", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                    cmd.Parameters.AddWithValue("@HEAD_ID", request.HEAD_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
+                    cmd.Parameters.AddWithValue("@DIMENSION_CODE", request.DIMENSION_CODE ?? "");
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            response.data.Add(new LedgerStatementItemwithDimension
+                            {
+                                TRANS_ID = Convert.ToInt32(rdr["TRANS_ID"]),
+                                TRANS_DATE = rdr["TRANS_DATE"] == DBNull.Value ? null : Convert.ToDateTime(rdr["TRANS_DATE"]),
+                                TRANS_TYPE_ID = rdr["TRANS_TYPE_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(rdr["TRANS_TYPE_ID"]),
+                                TRANS_TYPE_NAME = rdr["TRANS_TYPE_NAME"].ToString(),
+                                VOUCHER_NO = rdr["VOUCHER_NO"].ToString(),
+                                PARTICULARS = rdr["PARTICULARS"].ToString(),
+                                DR_AMOUNT = Convert.ToDecimal(rdr["DR_AMOUNT"]),
+                                CR_AMOUNT = Convert.ToDecimal(rdr["CR_AMOUNT"]),
+                                BALANCE = rdr["BALANCE"].ToString(),
+                                DEPT_NAME = rdr["DEPT_NAME"].ToString(),
+                                STORE_NAME = rdr["STORE_NAME"].ToString(),
+                            });
+                        }
+                    }
+
+                    response.flag = 1;
+                    response.message = "Success";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.message = ex.Message;
+            }
+
+            return response;
+        }
         public ArticleProductionResponse GetArticleProductionReport(ArticleProductionFilter request)
         {
             var response = new ArticleProductionResponse
@@ -694,6 +751,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@COMP_ID", request.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@EMIRATE_ID", request.EMIRATE_ID == null ? (object)DBNull.Value : Convert.ToInt32(request.EMIRATE_ID));
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID == null ? (object)DBNull.Value : Convert.ToInt32(request.STORE_ID));
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -707,10 +766,14 @@ namespace MicroApi.DataLayer.Service
                                 DOC_NO = reader["DOC_NO"]?.ToString(),
                                 VAT_REGN_NO = reader["VAT_REGN_NO"]?.ToString(),
                                 CUST_NAME = reader["CUST_NAME"]?.ToString(),
-                                TAXABLE_AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["TAXABLE_AMOUNT"]) : 0,
+                                ZERO_RATE = reader["ZERO_RATE"] != DBNull.Value ? Convert.ToDouble(reader["ZERO_RATE"]) : 0,
+                                STANDARD_RATE = reader["STANDARD_RATE"] != DBNull.Value ? Convert.ToDouble(reader["STANDARD_RATE"]) : 0,
+                                EXEMPTED = reader["EXEMPTED"] != DBNull.Value ? Convert.ToDouble(reader["EXEMPTED"]) : 0,
                                 TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["TAX_AMOUNT"]) : 0,
                                 NARRATION = reader["NARRATION"]?.ToString(),
-                                TOTAL = reader["TOTAL"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL"]) : 0
+                                STORE_NAME = reader["STORE_NAME"]?.ToString(),
+                                TOTAL = reader["TOTAL"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL"]) : 0,
+                                STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
                             };
 
                             response.Data.Add(report);
@@ -727,40 +790,77 @@ namespace MicroApi.DataLayer.Service
 
         public VatReturnReportResponse GetVatReturnReport(VatReturnReportRequest request)
         {
-            VatReturnReportResponse response = new VatReturnReportResponse { Data = new List<VatReturnReport>() };
+            VatReturnReportResponse response = new VatReturnReportResponse
+            {
+                Header = new VatReturnHeader(),
+                Details = new List<VatReturnDetail>()
+            };
 
             using (SqlConnection conn = ADO.GetConnection())
             {
-                using (SqlCommand cmd = new SqlCommand("SP_RPT_VAT_RETURN", conn))
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_VAT_RETURN_NEW", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        bool headerLoaded = false;
+
                         while (reader.Read())
                         {
-                            VatReturnReport report = new VatReturnReport
+                            if (!headerLoaded)
                             {
+                                response.Header = new VatReturnHeader
+                                {
+                                    COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
+                                    ADDRESS = reader["ADDRESS"]?.ToString(),
+                                    ARABIC_NAME = reader["ARABIC_NAME"]?.ToString(),
+                                    TRN = reader["TRN"]?.ToString()
+
+                                };
+
+                                headerLoaded = true;
+                            }
+
+                            response.Details.Add(new VatReturnDetail
+                            {
+                                TRANS_ID = reader["TRANS_ID"]?.ToString(),
+
+
                                 ID = reader["ID"]?.ToString(),
-                                AMOUNT = reader["AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["AMOUNT"]) : 0,
-                                VAT = reader["VAT"] != DBNull.Value ? Convert.ToDecimal(reader["VAT"]) : 0,
-                                ADJUSTMENT = reader["ADJUSTMENT"] != DBNull.Value ? Convert.ToDecimal(reader["ADJUSTMENT"]) : 0,
-                                COMPANY_NAME = reader["COMPANY_NAME"]?.ToString(),
-                                ADDRESS = reader["ADDRESS"]?.ToString(),
-                                ARABIC_NAME = reader["ARABIC_NAME"]?.ToString(),
-                                TRN = reader["TRN"]?.ToString()
-                            };
-                            response.Data.Add(report);
+                                DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
+
+                                AMOUNT = reader["AMOUNT"] != DBNull.Value
+                                 ? Convert.ToDecimal(reader["AMOUNT"])
+                                 : 0,
+
+                                VAT = reader["VAT"] != DBNull.Value
+                                 ? Convert.ToDecimal(reader["VAT"])
+                                 : 0,
+
+                                ADJUSTMENT = reader["ADJUSTMENT"] != DBNull.Value
+                                 ? Convert.ToDecimal(reader["ADJUSTMENT"])
+                                 : 0,
+
+                                SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
+                                SUPP_ADDRESS = reader["SUPP_ADDRESS"]?.ToString(),
+                                TRANS_TYPE = reader["TRANS_TYPE"]?.ToString(),
+                                EMIRATE_ID = reader["EMIRATE_ID"] != DBNull.Value
+                    ? Convert.ToInt32(reader["EMIRATE_ID"])
+                    : 0
+                            });
                         }
                     }
                 }
             }
 
-            response.flag = response.Data.Count > 0 ? 1 : 0;
+            response.flag = response.Details.Count > 0 ? 1 : 0;
             response.message = response.flag == 1 ? "Success" : "No records found";
+
             return response;
         }
         public ProfitLosswithDimensionResponse GetProfitLosswithDimension(ProfitLosswithDimensionRequest request)

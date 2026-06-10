@@ -24,5 +24,7 @@ namespace MicroApi.DataLayer.Interface
         ProfitLosswithDimensionResponse GetProfitLosswithDimension(ProfitLosswithDimensionRequest request);
         BalanceSheetwithDimensionResponse GetBalanceSheetwithDimension(BalanceSheetwithDimensionFilter request);
 
+        LedgerStatementResponsewithDimension GetLedgerStatementwithDimension(AC_ReportwithDimension request);
+
     }
 }

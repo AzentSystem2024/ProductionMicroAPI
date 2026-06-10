@@ -55,6 +55,24 @@ namespace MicroApi.Controllers
 
             return res;
         }
+        [HttpPost("ledgerwithdimension")]
+        public LedgerStatementResponsewithDimension GetLedgerStatementwithdimension(AC_ReportwithDimension request)
+        {
+            var res = new LedgerStatementResponsewithDimension();
+            try
+            {
+                res = _ReportService.GetLedgerStatementwithDimension(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
         [HttpPost("articleproduction")]
         public ArticleProductionResponse GetArticleProductionReport(ArticleProductionFilter request)
         {

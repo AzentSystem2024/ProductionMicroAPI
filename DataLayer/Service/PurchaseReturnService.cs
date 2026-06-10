@@ -348,7 +348,9 @@ namespace MicroApi.DataLayer.Services
                         STORE_ID = ADO.ToInt32(dr["STORE_ID"]),
                         STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                         DOC_NO = ADO.ToString(dr["RET_NO"]),
-                        RET_DATE = Convert.ToDateTime(dr["RET_DATE"]),
+                        RET_DATE = dr["RET_DATE"] != DBNull.Value
+            ? Convert.ToDateTime(dr["RET_DATE"])
+            : (DateTime?)null,
                         SUPP_ID = ADO.ToInt32(dr["SUPP_ID"]),
                         SUPPLIER_NAME = ADO.ToString(dr["SUPP_NAME"]),
                         GRN_ID = ADO.ToInt32(dr["GRN_ID"]),
@@ -391,7 +393,7 @@ namespace MicroApi.DataLayer.Services
                 " LEFT JOIN TB_GRN_DETAIL ON TB_PURCH_RET_DETAIL.ITEM_ID = TB_GRN_DETAIL.ITEM_ID and TB_PURCH_RET_DETAIL.GRN_DET_ID = TB_GRN_DETAIL.ID " +
                 " LEFT JOIN TB_ITEM_STOCK ON TB_ITEM_STOCK.ITEM_ID = TB_ITEMS.ID and TB_ITEM_STOCK.STORE_ID = TB_GRN_DETAIL.STORE_ID " +
                 " LEFT JOIN TB_PURCH_DETAIL ON TB_PURCH_RET_DETAIL.PURCH_DET_ID=TB_PURCH_DETAIL.ID " +
-                " LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID" +
+                " LEFT JOIN TB_PURCH_HEADER ON TB_PURCH_DETAIL.PURCH_ID=TB_PURCH_HEADER.ID " +
                 " LEFT JOIN TB_PURCH_RET_HEADER ON TB_PURCH_RET_HEADER.ID=TB_PURCH_RET_DETAIL.RET_ID  " +
                 " WHERE TB_PURCH_RET_HEADER.TRANS_ID = " + id;
 
@@ -410,7 +412,9 @@ namespace MicroApi.DataLayer.Services
                         GRN_DET_ID = ADO.ToInt32(dr3["GRN_DET_ID"]),
                         ITEM_ID = ADO.ToInt32(dr3["ITEM_ID"]),
                         BATCH_NO = ADO.ToString(dr3["BATCH_NO"]),
-                        EXPIRY_DATE = Convert.ToDateTime(dr3["EXPIRY_DATE"]),
+                        EXPIRY_DATE = dr3["EXPIRY_DATE"] != DBNull.Value
+                ? Convert.ToDateTime(dr3["EXPIRY_DATE"])
+                : (DateTime?)null,
                         PENDING_QTY = ADO.ToFloat(dr3["GRN_QTY"]),
                         QUANTITY = ADO.ToFloat(dr3["QUANTITY"]),
                         RATE = ADO.ToDecimal(dr3["RATE"]),
@@ -428,7 +432,9 @@ namespace MicroApi.DataLayer.Services
                         RETURN_QTY = ADO.ToFloat(dr3["RETURN_QTY"]),
                         QTY_STOCK = ADO.ToFloat(dr3["QTY_STOCK"]),
                         PURCH_DET_ID = ADO.ToInt32(dr3["PURCH_DET_ID"]),
-                        PURCH_DATE = Convert.ToDateTime(dr3["PURCH_DATE"]),
+                        PURCH_DATE = dr3["PURCH_DATE"] != DBNull.Value
+                ? Convert.ToDateTime(dr3["PURCH_DATE"])
+                : (DateTime?)null,
                         DOC_NO = ADO.ToString(dr3["DOC_NO"]),
                         CGST = dr3["CGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["CGST"]) : null,
                         SGST = dr3["SGST"] != DBNull.Value ? (decimal?)Convert.ToDecimal(dr3["SGST"]) : null,
