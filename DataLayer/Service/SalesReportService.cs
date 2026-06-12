@@ -268,6 +268,7 @@ namespace MicroApi.DataLayer.Service
                             response.data.Add(new ItemWiseSalesItem
                             {
                                 ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value ? Convert.ToInt32(reader["TRANS_ID"]) : 0,
 
                                 SALE_NO = reader["SALE_NO"] != DBNull.Value
         ? reader["SALE_NO"].ToString()

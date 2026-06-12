@@ -10,6 +10,7 @@
         public decimal TAX_PERC { get; set; }
         public decimal PRICE { get; set; }
         public string HSN_CODE { get; set; }
+        public decimal NET_PRICE { get; set; }
     }
     public class SalesInvoiceRequest
     {
@@ -141,7 +142,7 @@
         public decimal TOTAL_AMOUNT { get; set; }
         public decimal? DISC_PERC { get; set; }
         public decimal? DISC_AMT { get; set; }
-
+        public decimal NET_PRICE { get; set; }
     }
     public class SalesInvoiceViewResponse
     {

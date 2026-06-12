@@ -1,10 +1,11 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
-using MicroApi.DataLayer.Interface;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.DataLayer.Service
 {
@@ -706,6 +707,8 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@COMP_ID", request.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.Add("@STORE_ID", SqlDbType.NVarChar)
+                            .Value = string.IsNullOrEmpty(request.STORE_ID) ? "" : request.STORE_ID;
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -751,8 +754,10 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@COMP_ID", request.COMPANY_ID);
                     cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
                     cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
-                    cmd.Parameters.AddWithValue("@EMIRATE_ID", request.EMIRATE_ID == null ? (object)DBNull.Value : Convert.ToInt32(request.EMIRATE_ID));
-                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID == null ? (object)DBNull.Value : Convert.ToInt32(request.STORE_ID));
+                    cmd.Parameters.Add("@STORE_ID", SqlDbType.NVarChar)
+                             .Value = string.IsNullOrEmpty(request.STORE_ID) ? "" : request.STORE_ID;
+                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -772,8 +777,7 @@ namespace MicroApi.DataLayer.Service
                                 TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDouble(reader["TAX_AMOUNT"]) : 0,
                                 NARRATION = reader["NARRATION"]?.ToString(),
                                 STORE_NAME = reader["STORE_NAME"]?.ToString(),
-                                TOTAL = reader["TOTAL"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL"]) : 0,
-                                STORE_ID = reader["STORE_ID"] != DBNull.Value ? Convert.ToInt32(reader["STORE_ID"]) : 0,
+                                TOTAL = reader["TOTAL"] != DBNull.Value ? Convert.ToDouble(reader["TOTAL"]) : 0
                             };
 
                             response.Data.Add(report);
@@ -832,26 +836,25 @@ namespace MicroApi.DataLayer.Service
 
 
                                 ID = reader["ID"]?.ToString(),
+                                TYPE = reader["TYPE"] != DBNull.Value ? Convert.ToInt32(reader["TYPE"]) : 0,
+                                KEY = reader["KEY"]?.ToString(),
                                 DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
 
                                 AMOUNT = reader["AMOUNT"] != DBNull.Value
-                                 ? Convert.ToDecimal(reader["AMOUNT"])
-                                 : 0,
+                 ? Convert.ToDecimal(reader["AMOUNT"])
+                 : 0,
 
                                 VAT = reader["VAT"] != DBNull.Value
-                                 ? Convert.ToDecimal(reader["VAT"])
-                                 : 0,
+                 ? Convert.ToDecimal(reader["VAT"])
+                 : 0,
 
                                 ADJUSTMENT = reader["ADJUSTMENT"] != DBNull.Value
-                                 ? Convert.ToDecimal(reader["ADJUSTMENT"])
-                                 : 0,
+                 ? Convert.ToDecimal(reader["ADJUSTMENT"])
+                 : 0,
 
                                 SUPP_NAME = reader["SUPP_NAME"]?.ToString(),
                                 SUPP_ADDRESS = reader["SUPP_ADDRESS"]?.ToString(),
-                                TRANS_TYPE = reader["TRANS_TYPE"]?.ToString(),
-                                EMIRATE_ID = reader["EMIRATE_ID"] != DBNull.Value
-                    ? Convert.ToInt32(reader["EMIRATE_ID"])
-                    : 0
+                                TRANS_TYPE = reader["TRANS_TYPE"]?.ToString()
                             });
                         }
                     }
@@ -956,6 +959,145 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public GetStoresByVatReturnKeyResponse GetStoresByVatReturnKey(GetStoresByVatReturnKeyRequest request)
+        {
+            GetStoresByVatReturnKeyResponse response =
+            new GetStoresByVatReturnKeyResponse();
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_GET_STORES_BY_VAT_RETURN_KEY", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@KEY", request.KEY);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            response.Details.Add(new GetStoresByVatReturnKeyDetail
+                            {
+                                //TRANS_ID = reader["TRANS_ID"] != DBNull.Value
+                                //    ? Convert.ToInt64(reader["TRANS_ID"])
+                                //    : 0,
+
+                                DOC_TYPE = reader["DOC_TYPE"] != DBNull.Value
+                                    ? Convert.ToInt32(reader["DOC_TYPE"])
+                                    : 0,
+                                STORE_ID = reader["STORE_ID"] != DBNull.Value
+                                    ? Convert.ToInt32(reader["STORE_ID"])
+                                    : 0,
+                                //DOC_NO = reader["DOC_NO"]?.ToString(),
+
+                                //VAT_REGN_NO = reader["VAT_REGN_NO"]?.ToString(),
+
+                                TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["TAX_AMOUNT"])
+                                    : 0,
+
+                                TOTAL = reader["TOTAL"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["TOTAL"])
+                                    : 0,
+
+                                ZERO_RATE = reader["ZERO_RATE"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["ZERO_RATE"])
+                                    : 0,
+
+                                STANDARD_RATE = reader["STANDARD_RATE"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["STANDARD_RATE"])
+                                    : 0,
+
+                                EXEMPTED = reader["EXEMPTED"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["EXEMPTED"])
+                                    : 0,
+
+                                STORE_NAME = reader["STORE_NAME"]?.ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.Details.Count > 0 ? 1 : 0;
+            response.message = response.flag == 1
+                ? "Success"
+                : "No records found";
+
+            return response;
+
+
+        }
+        public GetTransactionsByStoreResponse GetTransactionsByStore(GetTransactionsByStoreRequest request)
+        {
+            GetTransactionsByStoreResponse response =
+                new GetTransactionsByStoreResponse();
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_GET_TRANSACTIONS_BY_STORE", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
+                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
+                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            response.Details.Add(new GetTransactionsByStoreDetail
+                            {
+                                DOC_NO = reader["DOC_NO"]?.ToString(),
+
+                                TRANS_ID = reader["TRANS_ID"] != DBNull.Value
+                                    ? Convert.ToInt64(reader["TRANS_ID"])
+                                    : 0,
+
+                                TRANS_TYPE = reader["TRANS_TYPE"]?.ToString(),
+
+                                DATE = reader["DATE"] != DBNull.Value
+                                    ? Convert.ToDateTime(reader["DATE"])
+                                    : DateTime.MinValue,
+
+                                EXEMPTED = reader["EXEMPTED"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["EXEMPTED"])
+                                    : 0,
+
+                                ZERO_RATE = reader["ZERO_RATE"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["ZERO_RATE"])
+                                    : 0,
+
+                                STANDARD_RATE = reader["STANDARD_RATE"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["STANDARD_RATE"])
+                                    : 0,
+
+                                TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["TAX_AMOUNT"])
+                                    : 0,
+
+                                TOTAL = reader["TOTAL"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["TOTAL"])
+                                    : 0
+                            });
+                        }
+                    }
+                }
+            }
+
+            response.flag = response.Details.Count > 0 ? 1 : 0;
+            response.message = response.flag == 1
+                ? "Success"
+                : "No records found";
+
+            return response;
+        }
+
     }
 }
 

@@ -171,6 +171,7 @@ namespace MicroApi.Models
     public class ItemWiseSalesItem
     {
         public int ID { get; set; }
+        public int TRANS_ID { get; set; }
         public string SALE_NO { get; set; }
         public DateTime SALE_DATE { get; set; }
         public string STORE_NAME { get; set; }

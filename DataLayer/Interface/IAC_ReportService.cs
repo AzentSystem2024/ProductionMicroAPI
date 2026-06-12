@@ -26,5 +26,7 @@ namespace MicroApi.DataLayer.Interface
 
         LedgerStatementResponsewithDimension GetLedgerStatementwithDimension(AC_ReportwithDimension request);
 
+        GetStoresByVatReturnKeyResponse GetStoresByVatReturnKey(GetStoresByVatReturnKeyRequest request);
+        GetTransactionsByStoreResponse GetTransactionsByStore(GetTransactionsByStoreRequest request);
     }
 }

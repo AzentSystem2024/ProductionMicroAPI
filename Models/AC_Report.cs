@@ -352,6 +352,7 @@
         public int COMPANY_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
+        public string STORE_ID { get; set; }
     }
     public class InputVatWorksheetReport
     {
@@ -377,8 +378,8 @@
         public int COMPANY_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
-        public int EMIRATE_ID { get; set; }
-        public int STORE_ID { get; set; }
+        public string STORE_ID { get; set; }
+        public int FIN_ID { get; set; }
     }
     public class OutputVatWorksheetReport
     {
@@ -395,7 +396,6 @@
         public double STANDARD_RATE { get; set; }
         public double EXEMPTED { get; set; }
         public string STORE_NAME { get; set; }
-        public int STORE_ID { get; set; }
     }
     public class OutputVatWorksheetReportResponse
     {
@@ -442,8 +442,11 @@
 
     public class VatReturnDetail
     {
-        public string TRANS_ID { get; set; }
+
         public string ID { get; set; }
+        public int TYPE { get; set; }
+        public string KEY { get; set; }
+        public string TRANS_ID { get; set; }
         public string DESCRIPTION { get; set; }
         public decimal AMOUNT { get; set; }
         public decimal VAT { get; set; }
@@ -452,8 +455,6 @@
         public string SUPP_NAME { get; set; }
         public string SUPP_ADDRESS { get; set; }
         public string TRANS_TYPE { get; set; }
-        public int EMIRATE_ID { get; set; }
-
     }
     public class ProfitLosswithDimension
     {
@@ -544,6 +545,66 @@
         public int flag { get; set; }
         public string message { get; set; }
         public List<LedgerStatementItemwithDimension> data { get; set; } = new List<LedgerStatementItemwithDimension>();
+    }
+    public class GetStoresByVatReturnKeyRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public string KEY { get; set; }
+    }
+
+    public class GetStoresByVatReturnKeyDetail
+    {
+        //  public long TRANS_ID { get; set; }
+        public int DOC_TYPE { get; set; }
+        public int STORE_ID { get; set; }
+
+        // public string DOC_NO { get; set; }
+        //   public string VAT_REGN_NO { get; set; }
+        public decimal TAX_AMOUNT { get; set; }
+        public decimal TOTAL { get; set; }
+        public decimal ZERO_RATE { get; set; }
+        public decimal STANDARD_RATE { get; set; }
+        public decimal EXEMPTED { get; set; }
+        public string STORE_NAME { get; set; }
+    }
+
+    public class GetStoresByVatReturnKeyResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+        public List<GetStoresByVatReturnKeyDetail> Details { get; set; }
+        = new List<GetStoresByVatReturnKeyDetail>();
+    }
+    public class GetTransactionsByStoreRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public DateTime DATE_FROM { get; set; }
+        public DateTime DATE_TO { get; set; }
+        public int STORE_ID { get; set; }
+    }
+
+    public class GetTransactionsByStoreDetail
+    {
+        public string DOC_NO { get; set; }
+        public long TRANS_ID { get; set; }
+        public string TRANS_TYPE { get; set; }
+        public DateTime DATE { get; set; }
+        public decimal EXEMPTED { get; set; }
+        public decimal ZERO_RATE { get; set; }
+        public decimal STANDARD_RATE { get; set; }
+        public decimal TAX_AMOUNT { get; set; }
+        public decimal TOTAL { get; set; }
+    }
+
+    public class GetTransactionsByStoreResponse
+    {
+        public int flag { get; set; }
+        public string message { get; set; }
+
+        public List<GetTransactionsByStoreDetail> Details { get; set; }
+            = new List<GetTransactionsByStoreDetail>();
     }
 
 }

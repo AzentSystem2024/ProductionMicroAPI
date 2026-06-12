@@ -9,6 +9,7 @@ namespace MicroApi.DataLayer.Service
 {
     public class SalesInvoiceService:ISalesInvoiceService
     {
+
         //public SalesResponse GetSalesInvoiceItem(SalesInvoiceRequest input)
         //{
         //    SalesResponse response = new SalesResponse();
@@ -18,6 +19,18 @@ namespace MicroApi.DataLayer.Service
         //    {
         //        using (SqlConnection connection = ADO.GetConnection())
         //        {
+        //            if (connection.State == ConnectionState.Closed)
+        //                connection.Open();
+
+        //            // ✅ Step 1: Get PRICE_CLASS_ID
+        //            int priceClassId = 0;
+        //            using (SqlCommand cmdPrice = new SqlCommand("SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID", connection))
+        //            {
+        //                cmdPrice.Parameters.AddWithValue("@CUST_ID", input.CUSTOMER_ID);
+        //                priceClassId = Convert.ToInt32(cmdPrice.ExecuteScalar());
+        //            }
+
+        //            // ✅ Step 2: Fetch Item Data
         //            SqlCommand cmd = new SqlCommand("SP_TB_SALES_INVOICE", connection);
         //            cmd.CommandType = CommandType.StoredProcedure;
 
@@ -28,6 +41,7 @@ namespace MicroApi.DataLayer.Service
         //            DataTable tbl = new DataTable();
         //            da.Fill(tbl);
 
+        //            // ✅ Step 3: Apply Price Logic
         //            items = tbl.AsEnumerable().Select(dr => new SalesInvoice
         //            {
         //                ID = ADO.ToInt32(dr["ID"]),
@@ -35,12 +49,42 @@ namespace MicroApi.DataLayer.Service
         //                DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
         //                BARCODE = ADO.ToString(dr["BARCODE"]),
         //                UOM = ADO.ToString(dr["UOM"]),
+
         //                TAX_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]),
-        //                PRICE = dr["COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST"]),
+
+        //                PRICE =
+        //                (
+        //                    priceClassId == 1
+        //                        ? (dr["SALE_PRICE1"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE1"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE1"]))
+
+        //                    : priceClassId == 2
+        //                        ? (dr["SALE_PRICE2"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE2"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE2"]))
+
+        //                    : priceClassId == 3
+        //                        ? (dr["SALE_PRICE3"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE3"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE3"]))
+
+        //                    : priceClassId == 4
+        //                        ? (dr["SALE_PRICE4"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE4"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE4"]))
+
+        //                    : priceClassId == 5
+        //                        ? (dr["SALE_PRICE5"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE5"]) == 0
+        //                            ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                            : Convert.ToDecimal(dr["SALE_PRICE5"]))
+
+        //                    : (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
+        //                ),
+
         //                HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
+
         //            }).ToList();
-
-
 
         //            response.Data = items;
         //            response.Message = "Success";
@@ -68,15 +112,17 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    // ✅ Step 1: Get PRICE_CLASS_ID
+                    // Get Customer Price Class
                     int priceClassId = 0;
-                    using (SqlCommand cmdPrice = new SqlCommand("SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID", connection))
+                    using (SqlCommand cmdPrice = new SqlCommand(
+                        "SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID",
+                        connection))
                     {
                         cmdPrice.Parameters.AddWithValue("@CUST_ID", input.CUSTOMER_ID);
-                        priceClassId = Convert.ToInt32(cmdPrice.ExecuteScalar());
+                        object result = cmdPrice.ExecuteScalar();
+                        priceClassId = result == null ? 0 : Convert.ToInt32(result);
                     }
 
-                    // ✅ Step 2: Fetch Item Data
                     SqlCommand cmd = new SqlCommand("SP_TB_SALES_INVOICE", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -87,49 +133,62 @@ namespace MicroApi.DataLayer.Service
                     DataTable tbl = new DataTable();
                     da.Fill(tbl);
 
-                    // ✅ Step 3: Apply Price Logic
-                    items = tbl.AsEnumerable().Select(dr => new SalesInvoice
+                    items = tbl.AsEnumerable().Select(dr =>
                     {
-                        ID = ADO.ToInt32(dr["ID"]),
-                        ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
-                        DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
-                        BARCODE = ADO.ToString(dr["BARCODE"]),
-                        UOM = ADO.ToString(dr["UOM"]),
+                        decimal salePrice = 0;
 
-                        TAX_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]),
+                        switch (priceClassId)
+                        {
+                            case 1:
+                                salePrice = dr["SALE_PRICE1"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE1"]);
+                                break;
+                            case 2:
+                                salePrice = dr["SALE_PRICE2"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE2"]);
+                                break;
+                            case 3:
+                                salePrice = dr["SALE_PRICE3"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE3"]);
+                                break;
+                            case 4:
+                                salePrice = dr["SALE_PRICE4"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE4"]);
+                                break;
+                            case 5:
+                                salePrice = dr["SALE_PRICE5"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE5"]);
+                                break;
+                        }
 
-                        PRICE =
-                        (
-                            priceClassId == 1
-                                ? (dr["SALE_PRICE1"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE1"]) == 0
-                                    ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
-                                    : Convert.ToDecimal(dr["SALE_PRICE1"]))
+                        if (salePrice == 0)
+                            salePrice = dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]);
 
-                            : priceClassId == 2
-                                ? (dr["SALE_PRICE2"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE2"]) == 0
-                                    ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
-                                    : Convert.ToDecimal(dr["SALE_PRICE2"]))
+                        decimal taxPerc = dr["VAT_PERC"] == DBNull.Value
+                            ? 0
+                            : Convert.ToDecimal(dr["VAT_PERC"]);
 
-                            : priceClassId == 3
-                                ? (dr["SALE_PRICE3"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE3"]) == 0
-                                    ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
-                                    : Convert.ToDecimal(dr["SALE_PRICE3"]))
+                        decimal netPrice = salePrice;
 
-                            : priceClassId == 4
-                                ? (dr["SALE_PRICE4"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE4"]) == 0
-                                    ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
-                                    : Convert.ToDecimal(dr["SALE_PRICE4"]))
+                        if (taxPerc > 0)
+                        {
+                            decimal taxAmount = Math.Round((salePrice * taxPerc) / 100, 2);
+                            netPrice = Math.Round(salePrice - taxAmount, 2);
+                        }
 
-                            : priceClassId == 5
-                                ? (dr["SALE_PRICE5"] == DBNull.Value || Convert.ToDecimal(dr["SALE_PRICE5"]) == 0
-                                    ? (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
-                                    : Convert.ToDecimal(dr["SALE_PRICE5"]))
+                       
 
-                            : (dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]))
-                        ),
+                        return new SalesInvoice
+                        {
+                            ID = ADO.ToInt32(dr["ID"]),
+                            ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
+                            DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
+                            BARCODE = ADO.ToString(dr["BARCODE"]),
+                            UOM = ADO.ToString(dr["UOM"]),
 
-                        HSN_CODE = dr["HSN_CODE"] == DBNull.Value ? null : dr["HSN_CODE"].ToString()
+                            TAX_PERC = taxPerc,
+                            PRICE = salePrice,
+                            NET_PRICE = netPrice,
 
+                            HSN_CODE = dr["HSN_CODE"] == DBNull.Value
+                                ? null
+                                : dr["HSN_CODE"].ToString()
+                        };
                     }).ToList();
 
                     response.Data = items;
@@ -146,7 +205,6 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-
         public SalesInvoiceInsertResponse Insert(SalesInvoiceInsertRequest input)
         {
             SalesInvoiceInsertResponse response = new SalesInvoiceInsertResponse();
@@ -156,6 +214,7 @@ namespace MicroApi.DataLayer.Service
                 using (SqlCommand cmd = new SqlCommand("SP_TB_SALES_INVOICE", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 0;
 
                     cmd.Parameters.AddWithValue("@ACTION", 1);
                     cmd.Parameters.AddWithValue("@COMPANY_ID", input.COMPANY_ID);
@@ -587,24 +646,38 @@ namespace MicroApi.DataLayer.Service
                                 }
 
                                 // Detail rows
+                                decimal price = reader["PRICE"] != DBNull.Value
+                                ? Convert.ToDecimal(reader["PRICE"])
+                                : 0;
+
+                                decimal taxPerc = reader["TAX_PERC"] != DBNull.Value
+                                    ? Convert.ToDecimal(reader["TAX_PERC"])
+                                    : 0;
+
+                                decimal netPrice = taxPerc > 0
+                                    ? Math.Round(price - ((price * taxPerc) / 100), 2)
+                                    : price;
+
                                 header.Details.Add(new SalesInvoiceItem
                                 {
-                                    ITEM_ID = Convert.ToInt32(reader["ITEM_ID"]),
+                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : 0,
                                     ITEM_CODE = reader["ITEM_CODE"]?.ToString(),
                                     DESCRIPTION = reader["DESCRIPTION"]?.ToString(),
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     UOM = reader["UOM"]?.ToString(),
+
                                     COST = reader["COST"] != DBNull.Value ? Convert.ToDecimal(reader["COST"]) : 0,
 
                                     QUANTITY = reader["QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["QUANTITY"]) : 0,
-                                    PRICE = reader["PRICE"] != DBNull.Value ? Convert.ToDouble(reader["PRICE"]) : 0,
+                                    PRICE = Convert.ToDouble(price),
+                                    NET_PRICE = netPrice,
+
                                     AMOUNT = reader["TAXABLE_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAXABLE_AMOUNT"]) : 0,
-                                    TAX_PERC = reader["TAX_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_PERC"]) : 0,
+                                    TAX_PERC = taxPerc,
                                     TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
                                     TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0,
                                     DISC_PERC = reader["DISC_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_PERC"]) : 0,
                                     DISC_AMT = reader["DISC_AMT"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_AMT"]) : 0
-
                                 });
                             }
 

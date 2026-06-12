@@ -348,6 +348,40 @@ namespace MicroApi.Controllers
             }
             return res;
         }
+        [HttpPost("GetStoresByVatReturnKey")]
+        public GetStoresByVatReturnKeyResponse GetStoresByVatReturnKey(GetStoresByVatReturnKeyRequest request)
+        {
+            var res = new GetStoresByVatReturnKeyResponse();
+            try
+            {
+                res = _ReportService.GetStoresByVatReturnKey(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
+        [HttpPost("GetTransactionsByStore")]
+        public GetTransactionsByStoreResponse GetTransactionsByStore(GetTransactionsByStoreRequest request)
+        {
+            var res = new GetTransactionsByStoreResponse();
+            try
+            {
+                res = _ReportService.GetTransactionsByStore(request);
+                res.flag = 1;
+                res.message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.message = ex.Message;
+            }
+            return res;
+        }
     }
 }
 
