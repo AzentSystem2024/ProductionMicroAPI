@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace MicroApi.DataLayer.Services
 {
-    public class ItemsService:IItemsService
+    public class ItemsService : IItemsService
     {
         public List<Items> GetAllItems()
         {
@@ -110,7 +110,7 @@ namespace MicroApi.DataLayer.Services
             return list;
         }
 
-       
+
         public (int flag, string message) Insert(Items items)
         {
             SqlConnection connection = ADO.GetConnection();
@@ -138,7 +138,7 @@ namespace MicroApi.DataLayer.Services
 
                 foreach (ITEM_STORES ur in items.item_stores)
                 {
-                    if (ur.STORE_ID == 0) 
+                    if (ur.STORE_ID == 0)
                     {
                         return (0, "Select Store.");
                     }
@@ -876,7 +876,83 @@ namespace MicroApi.DataLayer.Services
             }
             return res;
         }
+        //public List<ItemListDto> GetAllItemsNew()
+        //{
+        //    List<ItemListDto> list = new List<ItemListDto>();
 
+        //    using (SqlConnection connection = ADO.GetConnection())
+        //    {
+        //        try
+        //        {
+        //            SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_LIST", connection);
+        //            cmd.CommandType = CommandType.StoredProcedure;
+        //            cmd.CommandTimeout = 0;
+
+        //            SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //            DataTable dt = new DataTable();
+        //            da.Fill(dt);
+
+        //            foreach (DataRow dr in dt.Rows)
+        //            {
+        //                list.Add(new ItemListDto
+        //                {
+        //                    ITEM_CODE = ADO.ToString(dr["ItemCode"]),
+        //                    BARCODE = ADO.ToString(dr["Barcode"]),
+        //                    DESCRIPTION = ADO.ToString(dr["Description"]),
+        //                    DEPARTMENT = ADO.ToString(dr["Department"]),
+        //                    CATEGORY = ADO.ToString(dr["Category"]),
+        //                    PRICE = ADO.ToDecimal(dr["Price"]),
+        //                    QTY = dr["Qty"] == DBNull.Value
+        //                        ? (decimal?)null
+        //                        : Convert.ToDecimal(dr["Qty"])
+        //                });
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw new Exception("Error fetching item list: " + ex.Message);
+        //        }
+        //    }
+
+        //    return list;
+        //}
+        public List<ItemListDto> GetAllItemsNew()
+        {
+            // List<ItemListDto> list = new List<ItemListDto>();
+            List<ItemListDto> list = new List<ItemListDto>(20000);
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_LIST", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 300;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new ItemListDto
+                            {
+                                ITEM_CODE = reader["ItemCode"].ToString(),
+                                BARCODE = reader["Barcode"].ToString(),
+                                DESCRIPTION = reader["Description"].ToString(),
+                                DEPARTMENT = reader["Department"].ToString(),
+                                CATEGORY = reader["Category"].ToString(),
+                                PRICE = reader["Price"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Price"]),
+                                QTY = reader["Qty"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(reader["Qty"])
+                            });
+                        }
+                    }
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 
 }

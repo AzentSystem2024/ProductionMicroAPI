@@ -10,5 +10,7 @@ namespace MicroApi.DataLayer.Interface
         public Items GetItems(int id);
         public bool DeleteItem(int id);
         public ItemsResponse Alias(ALIAS_DUPLICATE vInput);
+
+        public List<ItemListDto> GetAllItemsNew();
     }
 }

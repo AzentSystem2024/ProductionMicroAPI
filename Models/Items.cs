@@ -74,7 +74,7 @@
         public bool? IS_DIFFERENT_UOM_PURCH { get; set; }
         public string? UOM_PURCH { get; set; }
         public int? UOM_MULTPLE { get; set; }
-        public string? MATRIX_CODE {get; set; }
+        public string? MATRIX_CODE { get; set; }
         public string? HSN_CODE { get; set; }
         public decimal? GST_PERC { get; set; }
         public List<ITEM_STORES>? item_stores { get; set; }
@@ -82,7 +82,7 @@
         public List<ITEM_SUPPLIERS> item_suppliers { get; set; }
         public List<ITEM_COMPONENTS> item_components { get; set; }
 
-}
+    }
     public class ITEM_ALIAS
     {
         public int? ID { get; set; }
@@ -153,6 +153,12 @@
         // public string DESCRIPTION { get; set; }
 
     }
+    public class ItemListResponseNew
+    {
+        public string flag { get; set; }
+        public string message { get; set; }
+        public List<ItemListDto> data { get; set; }
+    }
     public class MasterFilter
     {
         public DateTime? FROM_DATE { get; set; }
@@ -170,6 +176,21 @@
         public DateTime? DATE_FROM { get; set; }
         public DateTime? DATE_TO { get; set; }
     }
-   
+    public class ItemListDto
+    {
+        public string ITEM_CODE { get; set; }
+
+        public string BARCODE { get; set; }
+
+        public string DESCRIPTION { get; set; }
+
+        public string DEPARTMENT { get; set; }
+
+        public string CATEGORY { get; set; }
+
+        public decimal PRICE { get; set; }
+
+        public decimal? QTY { get; set; }
+    }
 
 }

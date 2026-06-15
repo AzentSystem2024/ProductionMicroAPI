@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MicroApi.DataLayer.Interface;
+﻿using MicroApi.DataLayer.Interface;
 using MicroApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.Controllers
 {
-   // [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ItemsController : ControllerBase
@@ -80,6 +81,45 @@ namespace MicroApi.Controllers
             return res;
         }
 
+        //[HttpPost]
+        //[Route("Itemslist")]
+        //public ItemListResponseNew Itemslist()
+        //{
+        //    ItemListResponseNew res = new ItemListResponseNew();
+        //    try
+        //    {
+        //        var items = _itemsService.GetAllItemsNew();
+
+        //        res.flag = "1";
+        //        res.message = "Success";
+        //        res.data = items;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = "0";
+        //        res.message = ex.Message;
+        //        res.data = null;
+        //    }
+        //    return res;
+        //}
+        [HttpPost]
+        [Route("Itemslist")]
+        public IActionResult Itemslist()
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            // return Ok(_itemsService.GetAllItemsNew());
+            //var data = _itemsService.GetAllItemsNew();
+
+            sw.Stop();
+
+            //return Ok(new
+            //{
+            //    Count = data.Count,
+            //    ServiceTime = sw.ElapsedMilliseconds
+            //});
+            return Ok(_itemsService.GetAllItemsNew().Take(100));
+        }
+
 
 
         [HttpPost]
@@ -89,7 +129,7 @@ namespace MicroApi.Controllers
             Items objItems = new Items();
             try
             {
-                
+
                 objItems = _itemsService.GetItems(id);
             }
             catch (Exception ex)
@@ -124,7 +164,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 _itemsService.Update(itemsData);
                 res.flag = "1";
                 res.message = "Success";
@@ -149,7 +189,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
 
                 _itemsService.DeleteItem(id);
                 res.flag = "1";
@@ -174,7 +214,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 res = _itemsService.Alias(vInput);
             }
             catch (Exception ex)
