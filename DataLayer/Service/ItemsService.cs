@@ -3,6 +3,7 @@ using MicroApi.Helper;
 using MicroApi.Models;
 using System.Data;
 using System.Data.SqlClient;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace MicroApi.DataLayer.Services
 {
@@ -876,47 +877,47 @@ namespace MicroApi.DataLayer.Services
             }
             return res;
         }
-        //public List<ItemListDto> GetAllItemsNew()
-        //{
-        //    List<ItemListDto> list = new List<ItemListDto>();
-
-        //    using (SqlConnection connection = ADO.GetConnection())
-        //    {
-        //        try
-        //        {
-        //            SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_LIST", connection);
-        //            cmd.CommandType = CommandType.StoredProcedure;
-        //            cmd.CommandTimeout = 0;
-
-        //            SqlDataAdapter da = new SqlDataAdapter(cmd);
-        //            DataTable dt = new DataTable();
-        //            da.Fill(dt);
-
-        //            foreach (DataRow dr in dt.Rows)
-        //            {
-        //                list.Add(new ItemListDto
-        //                {
-        //                    ITEM_CODE = ADO.ToString(dr["ItemCode"]),
-        //                    BARCODE = ADO.ToString(dr["Barcode"]),
-        //                    DESCRIPTION = ADO.ToString(dr["Description"]),
-        //                    DEPARTMENT = ADO.ToString(dr["Department"]),
-        //                    CATEGORY = ADO.ToString(dr["Category"]),
-        //                    PRICE = ADO.ToDecimal(dr["Price"]),
-        //                    QTY = dr["Qty"] == DBNull.Value
-        //                        ? (decimal?)null
-        //                        : Convert.ToDecimal(dr["Qty"])
-        //                });
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw new Exception("Error fetching item list: " + ex.Message);
-        //        }
-        //    }
-
-        //    return list;
-        //}
         public List<ItemListDto> GetAllItemsNew()
+        {
+            List<ItemListDto> list = new List<ItemListDto>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_RPT_ITEM_LIST", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 0;
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        list.Add(new ItemListDto
+                        {
+                            ITEM_CODE = ADO.ToString(dr["ItemCode"]),
+                            BARCODE = ADO.ToString(dr["Barcode"]),
+                            DESCRIPTION = ADO.ToString(dr["Description"]),
+                            DEPARTMENT = ADO.ToString(dr["Department"]),
+                            CATEGORY = ADO.ToString(dr["Category"]),
+                            PRICE = ADO.ToDecimal(dr["Price"]),
+                            QTY = dr["Qty"] == DBNull.Value
+                                ? (decimal?)null
+                                : Convert.ToDecimal(dr["Qty"])
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error fetching item list: " + ex.Message);
+                }
+            }
+
+            return list;
+        }
+        public List<ItemListDto> GetAllItemsNew1()
         {
             // List<ItemListDto> list = new List<ItemListDto>();
             List<ItemListDto> list = new List<ItemListDto>(20000);
@@ -951,6 +952,11 @@ namespace MicroApi.DataLayer.Services
             catch (Exception ex)
             {
                 throw;
+            }
+            finally
+            {
+                //if (connection.State == ConnectionState.Open)
+                //    connection.Close();
             }
         }
     }

@@ -2,6 +2,7 @@
 using MicroApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MicroApi.Controllers
@@ -81,27 +82,7 @@ namespace MicroApi.Controllers
             return res;
         }
 
-        //[HttpPost]
-        //[Route("Itemslist")]
-        //public ItemListResponseNew Itemslist()
-        //{
-        //    ItemListResponseNew res = new ItemListResponseNew();
-        //    try
-        //    {
-        //        var items = _itemsService.GetAllItemsNew();
 
-        //        res.flag = "1";
-        //        res.message = "Success";
-        //        res.data = items;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.flag = "0";
-        //        res.message = ex.Message;
-        //        res.data = null;
-        //    }
-        //    return res;
-        //}
         [HttpPost]
         [Route("Itemslist")]
         public IActionResult Itemslist()
@@ -112,15 +93,36 @@ namespace MicroApi.Controllers
 
             sw.Stop();
 
-            //return Ok(new
-            //{
-            //    Count = data.Count,
-            //    ServiceTime = sw.ElapsedMilliseconds
-            //});
-            return Ok(_itemsService.GetAllItemsNew().Take(100));
+            //return Ok(_itemsService.GetAllItemsNew().Take(5000));
+            return Ok(_itemsService.GetAllItemsNew());
         }
+        //[HttpPost]
+        //[Route("Itemslist")]
+        //public IActionResult Itemslist(int pageNumber = 1, int pageSize = 5000)
+        //{
+        //    var sw = System.Diagnostics.Stopwatch.StartNew();
 
+        //    var data = _itemsService.GetAllItemsNew();
 
+        //    var totalRecords = data.Count;
+
+        //    var pagedData = data
+        //        .Skip((pageNumber - 1) * pageSize)
+        //        .Take(pageSize)
+        //        .ToList();
+
+        //    sw.Stop();
+
+        //    return Ok(new
+        //    {
+        //        TotalRecords = totalRecords,
+        //        PageNumber = pageNumber,
+        //        PageSize = pageSize,
+        //        TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
+        //        ServiceTime = sw.ElapsedMilliseconds,
+        //        Data = pagedData
+        //    });
+        //}
 
         [HttpPost]
         [Route("select/{id:int}")]

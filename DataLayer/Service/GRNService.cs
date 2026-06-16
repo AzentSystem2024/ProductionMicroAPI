@@ -1,4 +1,5 @@
-﻿using MicroApi.DataLayer.Interface;
+﻿using Azure.Core;
+using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
 using System.Data;
@@ -8,7 +9,7 @@ using System.Reflection;
 
 namespace MicroApi.DataLayer.Service
 {
-    public class GRNService:IGRNService
+    public class GRNService : IGRNService
     {
         public List<PO> GetPendingPo(Poinput input)
         {
@@ -44,7 +45,7 @@ namespace MicroApi.DataLayer.Service
             connection.Close();
             return POlist;
         }
-    
+
         public GRNResponse GetPoList(PODetailsInput input)
         {
             GRNResponse response = new GRNResponse();
@@ -1060,6 +1061,75 @@ namespace MicroApi.DataLayer.Service
                     connection.Close();
                 }
             }
+        }
+
+        public List<GRNDto> GetAllGRNs()
+        {
+            List<GRNDto> list = new List<GRNDto>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_GET_ALL_APPROVED_GRNS", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 300;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                foreach (DataRow dr in tbl.Rows)
+                {
+                    list.Add(new GRNDto
+                    {
+                        GRN_ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                        GRN_NO = dr["GRN_NO"] == DBNull.Value ? null : dr["GRN_NO"].ToString(),
+                        GRN_DATE = dr["GRN_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["GRN_DATE"]),
+                        //SUPP_ID = dr["SUPP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SUPP_ID"]),
+                        NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["NET_AMOUNT"]),
+                        TRANS_ID = dr["TRANS_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TRANS_ID"]),
+                        TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
+                        SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SUPP_NET_AMOUNT"]),
+                        STATUS = dr["TRANS_STATUS"] == DBNull.Value ? null : dr["TRANS_STATUS"].ToString()
+
+                    });
+                }
+            }
+
+            return list;
+        }
+        public List<GRNItemDto> GetItemsByGRN(int grnId)
+        {
+            List<GRNItemDto> list = new List<GRNItemDto>();
+
+            using (SqlConnection connection = ADO.GetConnection())
+            using (SqlCommand cmd = new SqlCommand("SP_GET_GRN_ITEMS", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@GRN_ID", grnId);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable tbl = new DataTable();
+                da.Fill(tbl);
+
+                foreach (DataRow dr in tbl.Rows)
+                {
+                    list.Add(new GRNItemDto
+                    {
+                        GRN_ID = dr["GRN_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["GRN_ID"]),
+                        ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ITEM_ID"]),
+                        ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
+                        DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
+                        QTY = dr["INVOICE_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["INVOICE_QTY"]),
+                        // FREE_QTY = dr["FREE_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["FREE_QTY"]),
+                        RATE = dr["RATE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["RATE"]),
+                        AMOUNT = dr["AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["AMOUNT"]),
+                        COST = dr["COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST"])
+                    });
+                }
+            }
+
+            return list;
         }
     }
 }

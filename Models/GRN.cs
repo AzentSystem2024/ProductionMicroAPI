@@ -173,4 +173,34 @@
         public string? DATE_FROM { get; set; }
         public string? DATE_TO { get; set; }
     }
+    public class GRNDto
+    {
+        public int GRN_ID { get; set; }
+        public string GRN_NO { get; set; }
+        public DateTime? GRN_DATE { get; set; }
+        public int PO_ID { get; set; }
+        public int SUPP_ID { get; set; }
+        public decimal NET_AMOUNT { get; set; }
+        public int TRANS_ID { get; set; }
+        public int TRANS_STATUS { get; set; }
+        public decimal TOTAL_COST { get; set; }
+        public decimal SUPP_NET_AMOUNT { get; set; }
+        public string STATUS { get; set; }
+    }
+    public class GRNItemDto
+    {
+        public int GRN_ID { get; set; }
+        public int ITEM_ID { get; set; }
+        public string ITEM_CODE { get; set; }
+        public string DESCRIPTION { get; set; }
+        public decimal QTY { get; set; }
+        // public decimal FREE_QTY { get; set; }
+        public decimal RATE { get; set; }
+        public decimal COST { get; set; }
+        public decimal AMOUNT { get; set; }
+    }
+    public class GRNItemInput
+    {
+        public int GRN_ID { get; set; }
+    }
 }

@@ -1,12 +1,17 @@
 ﻿using MicroApi.DataLayer.Interface;
 using MicroApi.DataLayer.Service;
+using MicroApi.DataLayer.Services;
+using MicroApi.Helper;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+
+using System.Data.SqlClient;
 
 namespace MicroApi.Controllers
 {
-   // [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class GRNController : ControllerBase
@@ -25,7 +30,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 var result = _grnService.GetPendingPo(input);
 
                 res.Flag = 1;
@@ -51,7 +56,7 @@ namespace MicroApi.Controllers
             try
             {
 
-                
+
 
                 var result = _grnService.GetPoList(input);
 
@@ -92,16 +97,16 @@ namespace MicroApi.Controllers
                 res.Podetails = result.Podetails;
                 res.LandedCosts = result.LandedCosts;
 
-                return res; 
+                return res;
             }
             catch (Exception ex)
             {
 
                 res.Flag = 0;
-                res.Message = "Error: " + ex.Message; 
+                res.Message = "Error: " + ex.Message;
 
 
-                return res; 
+                return res;
             }
         }
 
@@ -137,7 +142,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 _grnService.Update(Data);
                 res.Flag = 1;
                 res.Message = "Success";
@@ -158,7 +163,7 @@ namespace MicroApi.Controllers
             GRN objScheme = new GRN();
             try
             {
-                
+
                 objScheme = _grnService.GetGRN(id);
             }
             catch (Exception ex)
@@ -177,7 +182,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
 
                 _grnService.Delete(id);
                 res.Flag = 1;
@@ -200,7 +205,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 _grnService.Verify(Data);
                 res.Flag = 1;
                 res.Message = "Success";
@@ -246,9 +251,9 @@ namespace MicroApi.Controllers
 
                 */
 
-                
+
                 grn = _grnService.GetGRNList(request);
-                
+
                 res.Flag = 1;
                 res.Message = "Success";
                 res.grnheader = grn;
@@ -270,7 +275,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 _grnService.Approve(Data);
                 res.Flag = 1;
                 res.Message = "Success";
@@ -282,6 +287,34 @@ namespace MicroApi.Controllers
             }
 
             return res;
+        }
+        [HttpPost]
+        [Route("GetAllGRNs")]
+        public IActionResult GetAllGRNs()
+        {
+            try
+            {
+                var result = _grnService.GetAllGRNs();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("GetItemsByGRN")]
+        public IActionResult GetItemsByGRN([FromBody] GRNItemInput input)
+        {
+            try
+            {
+                var result = _grnService.GetItemsByGRN(input.GRN_ID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

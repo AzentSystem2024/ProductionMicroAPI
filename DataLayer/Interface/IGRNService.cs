@@ -14,5 +14,8 @@ namespace MicroApi.DataLayer.Interface
         public Int32 Approve(GRN company);
         public GRN GetGRN(int id);
         public bool Delete(int id);
+        public List<GRNDto> GetAllGRNs();
+        public List<GRNItemDto> GetItemsByGRN(int grnId);
     }
+
 }
