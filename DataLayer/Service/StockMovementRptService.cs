@@ -30,6 +30,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
                         cmd.Parameters.Add("@ITEM_TYPE", SqlDbType.Int).Value = request.ITEM_TYPE ?? 0;
                         cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
+                        cmd.Parameters.Add("@STORE_ID", SqlDbType.VarChar).Value = request.STORE_ID ?? "";
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -44,6 +45,7 @@ namespace MicroApi.DataLayer.Service
                                     COLOR = reader["COLOR"]?.ToString(),
                                     SIZE = reader["SIZE"]?.ToString(),
                                     STYLE = reader["STYLE"]?.ToString(),
+                                    STORE_NAME = reader["STORE_NAME"]?.ToString(),
                                     OPENING_QTY = reader["OPENING_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["OPENING_QTY"]) : 0,
                                     GRN_QTY = reader["GRN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["GRN_QTY"]) : 0,
                                     PURCHASE_RETURN_QTY = reader["PURCHASE_RETURN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["PURCHASE_RETURN_QTY"]) : 0,

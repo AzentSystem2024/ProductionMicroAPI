@@ -273,6 +273,9 @@ namespace MicroApi.DataLayer.Service
                         ENABLE_PROMOTION_LEVEL = reader["ENABLE_PROMOTION_LEVEL"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_PROMOTION_LEVEL"]),
                         ENABLE_ITEM_CATEGORY_ACCOUNTS = reader["ENABLE_ITEM_CATEGORY_ACCOUNTS"] != DBNull.Value && Convert.ToBoolean(reader["ENABLE_ITEM_CATEGORY_ACCOUNTS"]),
                         INCL_VAT = reader["INCL_VAT"] != DBNull.Value && Convert.ToBoolean(reader["INCL_VAT"]),
+                        SYNCH_NOTIFICATION_INTERVAL = reader["SYNCH_NOTIFICATION_INTERVAL"] != DBNull.Value  ? Convert.ToInt32(reader["SYNCH_NOTIFICATION_INTERVAL"]) : 0,
+                        SYNCH_PENDING_INTERVAL = reader["SYNCH_PENDING_INTERVAL"] != DBNull.Value ? Convert.ToInt32(reader["SYNCH_PENDING_INTERVAL"]) : 0,
+                        SHOW_SYNCH_REMINDER = reader["SHOW_SYNCH_REMINDER"] != DBNull.Value && Convert.ToBoolean(reader["SHOW_SYNCH_REMINDER"]),
                         //HSN_CODE = reader["FT_HSN_CODE"]?.ToString() ?? "",
                     };
                 }

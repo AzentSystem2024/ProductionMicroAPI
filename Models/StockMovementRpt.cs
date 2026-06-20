@@ -7,6 +7,8 @@
         public string ITEM_NAME { get; set; }
         public string MATRIX_CODE { get; set; }
         public string COLOR { get; set; }
+        public string STORE_NAME { get; set; }
+
         public string SIZE { get; set; }
         public string STYLE { get; set; }
         public decimal OPENING_QTY { get; set; }
@@ -26,7 +28,7 @@
     public class StockMovementRequest
     {
         public int COMPANY_ID { get; set; }
-      //  public int STORE_ID { get; set; }
+        public string? STORE_ID { get; set; }
         public DateTime DATE_FROM { get; set; }
         public DateTime DATE_TO { get; set; }
         public int? ITEM_TYPE { get; set; } = 0;

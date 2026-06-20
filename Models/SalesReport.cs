@@ -190,6 +190,12 @@ namespace MicroApi.Models
         public decimal NET_AMOUNT { get; set; }
         public string SALESMAN { get; set; }
         public decimal COMMISSION { get; set; }
+        public string DEPT_NAME { get; set; }
+        public string CAT_NAME { get; set; }
+        public string SUBCAT_NAME { get; set; }
+        public string BRAND_NAME { get; set; }
+        public string CUSTOM1_NAME { get; set; }
+        public string CUSTOM2_NAME { get; set; }
     }
     public class ItemWiseSalesResponse
     {

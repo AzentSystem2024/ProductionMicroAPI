@@ -123,7 +123,50 @@ namespace MicroApi.Controllers
                 });
             }
         }
+        [HttpPost("StoreWise")]
+        public IActionResult GetStorewiseTrialBalanceReport(
+    [FromBody] TBReportRequest request
+)
+        {
+            try
+            {
+                DateTime dateFrom = DateTime.ParseExact(
+                    request.DATE_FROM,
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture
+                );
 
+                DateTime dateTo = DateTime.ParseExact(
+                    request.DATE_TO,
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture
+                );
+
+                var reportData = _trialBalanceReportService
+                    .GetStorewiseTrialBalanceReport(
+                        request.COMPANY_ID,
+                        request.FIN_ID,
+                        dateFrom,
+                        dateTo,
+                        request.STORE_ID
+                    );
+
+                return Ok(new
+                {
+                    flag = 1,
+                    message = "Success",
+                    data = reportData
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    flag = 0,
+                    message = ex.Message
+                });
+            }
+        }
     }
 }
 

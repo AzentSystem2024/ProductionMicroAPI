@@ -1084,12 +1084,13 @@ namespace MicroApi.DataLayer.Service
                         GRN_ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
                         GRN_NO = dr["GRN_NO"] == DBNull.Value ? null : dr["GRN_NO"].ToString(),
                         GRN_DATE = dr["GRN_DATE"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dr["GRN_DATE"]),
-                        //SUPP_ID = dr["SUPP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SUPP_ID"]),
+                        SUPP_ID = dr["SUPP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SUPP_ID"]),
                         NET_AMOUNT = dr["NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["NET_AMOUNT"]),
                         TRANS_ID = dr["TRANS_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TRANS_ID"]),
                         TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
                         SUPP_NET_AMOUNT = dr["SUPP_NET_AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SUPP_NET_AMOUNT"]),
-                        STATUS = dr["TRANS_STATUS"] == DBNull.Value ? null : dr["TRANS_STATUS"].ToString()
+                        STATUS = dr["TRANS_STATUS"] == DBNull.Value ? null : dr["TRANS_STATUS"].ToString(),
+                        SUPP_NAME = dr["SUPP_NAME"] == DBNull.Value ? null : dr["SUPP_NAME"].ToString()
 
                     });
                 }
@@ -1124,7 +1125,12 @@ namespace MicroApi.DataLayer.Service
                         // FREE_QTY = dr["FREE_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["FREE_QTY"]),
                         RATE = dr["RATE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["RATE"]),
                         AMOUNT = dr["AMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["AMOUNT"]),
-                        COST = dr["COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST"])
+                        COST = dr["COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["COST"]),
+                        PRICE = dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]),
+                        BARCODE = dr["BARCODE"]?.ToString(),
+                        DEPARTMENT = ADO.ToString(dr["DEPT_NAME"]),
+                        CATEGORY = ADO.ToString(dr["CAT_NAME"]),
+
                     });
                 }
             }

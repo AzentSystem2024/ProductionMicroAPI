@@ -340,7 +340,13 @@ namespace MicroApi.DataLayer.Service
 
                                 COMMISSION = reader["COMMISSION"] != DBNull.Value
         ? Convert.ToDecimal(reader["COMMISSION"])
-        : 0
+        : 0,
+                                DEPT_NAME = reader["DEPT_NAME"] != DBNull.Value ? reader["DEPT_NAME"].ToString(): "",
+                                CAT_NAME = reader["CAT_NAME"] != DBNull.Value ? reader["CAT_NAME"].ToString() : "",
+                                SUBCAT_NAME = reader["SUBCAT_NAME"] != DBNull.Value ? reader["SUBCAT_NAME"].ToString() : "",
+                                BRAND_NAME = reader["BRAND_NAME"] != DBNull.Value ? reader["BRAND_NAME"].ToString() : "",
+                                CUSTOM1_NAME = reader["CUSTOM1_NAME"] != DBNull.Value ? reader["CUSTOM1_NAME"].ToString() : "",
+                                CUSTOM2_NAME = reader["CUSTOM2_NAME"] != DBNull.Value ? reader["CUSTOM2_NAME"].ToString() : "",
                             });
                         }
                     }

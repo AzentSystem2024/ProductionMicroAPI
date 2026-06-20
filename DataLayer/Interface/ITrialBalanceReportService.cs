@@ -23,4 +23,11 @@ public interface ITrialBalanceReportService
         DateTime dateTo,
     string storeIds
     );
+    List<Dictionary<string, object>> GetStorewiseTrialBalanceReport(
+         int companyId,
+         int finId,
+         DateTime dateFrom,
+         DateTime dateTo,
+         string storeIds
+     );
 }

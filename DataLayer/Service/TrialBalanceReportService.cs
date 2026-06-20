@@ -286,5 +286,57 @@ namespace MicroApi.DataLayer.Service
 
             return reportList;
         }
+        public List<Dictionary<string, object>> GetStorewiseTrialBalanceReport(int companyId,int finId,DateTime dateFrom,DateTime dateTo,string storeIds)
+        {
+            List<Dictionary<string, object>> reportList = new List<Dictionary<string, object>>();
+
+            try
+            {
+                using (var connection = ADO.GetConnection())
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+
+                    using (var cmd = new SqlCommand("SP_RPT_STOREWISE_TRIAL_BALANCE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", companyId);
+                        cmd.Parameters.AddWithValue("@FIN_ID", finId);
+                        cmd.Parameters.AddWithValue("@DATE_FROM", dateFrom);
+                        cmd.Parameters.AddWithValue("@DATE_TO", dateTo);
+                        cmd.Parameters.AddWithValue("@STORE_IDS", storeIds ?? "");
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Dictionary<string, object> row = new Dictionary<string, object>();
+
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    string columnName = reader.GetName(i);
+
+                                    row[columnName] =
+                                        reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                }
+
+                                reportList.Add(row);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                throw new Exception(
+                    "An error occurred while fetching store-wise trial balance report.",
+                    ex);
+            }
+
+            return reportList;
+        }
     }
 }

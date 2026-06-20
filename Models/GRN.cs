@@ -186,6 +186,7 @@
         public decimal TOTAL_COST { get; set; }
         public decimal SUPP_NET_AMOUNT { get; set; }
         public string STATUS { get; set; }
+        public string SUPP_NAME { get; set; }
     }
     public class GRNItemDto
     {
@@ -198,6 +199,10 @@
         public decimal RATE { get; set; }
         public decimal COST { get; set; }
         public decimal AMOUNT { get; set; }
+        public string BARCODE { get; set; }
+        public decimal PRICE { get; set; }
+        public string CATEGORY { get; set; }
+        public string DEPARTMENT { get; set; }
     }
     public class GRNItemInput
     {

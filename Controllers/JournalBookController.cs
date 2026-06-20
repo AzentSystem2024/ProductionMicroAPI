@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class JournalBookController : ControllerBase
