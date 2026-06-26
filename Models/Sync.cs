@@ -188,6 +188,7 @@
         public string DESCRIPTION { get; set; }
         public decimal QUANTITY { get; set; }
         public string UOM { get; set; }
+        public decimal? QTY_STOCK { get; set; }
     }
     public class ProductionTransferInGRN
     {

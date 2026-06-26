@@ -13,6 +13,13 @@ namespace MicroApi.DataLayer.Interface
         public bool Delete(int id);
         DeliveryDoc GetLastDocNo();
         public List<Custdetail> GetCustdetail(DeliveryRequest request);
-
+        public List<PENDINGSTOCKITEMS> GetItems(GETDNITEM request);
+        public Int32 Save(DNSave deliverynote);
+        public Int32 Edit(DNSave deliverynote);
+        DNSelect_Response DNSelectByID(int id);
+        public DeliveryNoteListResponse GetDNoteList(DeliveryNoteListRequest request);
+        public Int32 Commit(DNSave deliverynote);
+        public Int32 Verify(DNSave deliverynote);
+        public bool DNDelete(int id);
     }
 }

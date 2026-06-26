@@ -4,6 +4,7 @@
     {
         public int ID { get; set; }
         public int COMPANY_ID { get; set; }
+        public int FIN_ID { get; set; }
         public int STORE_ID { get; set; }
         public int PO_ID { get; set; }
         public string PO_NO { get; set; }
@@ -97,6 +98,7 @@
         public float GRN_QUANTITY { get; set; }
         public float? PRICE { get; set; }
         public float? PO_TAXABLE_AMOUNT { get; set; }
+        public float BALANCE_QTY { get; set; }
 
     }
     public class PO

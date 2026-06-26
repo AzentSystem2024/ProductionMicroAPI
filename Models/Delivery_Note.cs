@@ -187,5 +187,117 @@
         public string? DATE_FROM { get; set; }
         public string? DATE_TO { get; set; }
     }
+
+    public class DNSave
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public DateTime? DN_DATE { get; set; }
+        public string? REF_NO { get; set; }
+        public int? CUST_ID { get; set; }
+        public string? CONTACT_NAME { get; set; }
+        public string? CONTACT_PHONE { get; set; }
+        public string? CONTACT_FAX { get; set; }
+        public string? CONTACT_MOBILE { get; set; }
+        public int? SALESMAN_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public double? TOTAL_QTY { get; set; }
+        public int? USER_ID { get; set; }
+        public string? NARRATION { get; set; }
+        public bool? IS_APPROVED { get; set; }
+        public List<DNDetail>? Details { get; set; }
+    }
+    public class DNDetail
+    {
+        public int? ITEM_ID { get; set; }
+        public string? UOM { get; set; }
+        public double? QUANTITY { get; set; }
+    }
+    public class GETDNITEM
+    {
+        public int? ITEM_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+    }
+    public class PENDINGSTOCKITEMS
+    {
+        public int? ITEM_ID { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? UOM { get; set; }
+        public double? QTY_STOCK { get; set; }
+
+    }
+    public class DNItemResponse
+    {
+        public int Flag { get; set; }
+        public string Message { get; set; }
+        public List<PENDINGSTOCKITEMS> Data { get; set; }
+    }
+    public class DNSelect
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public DateTime? DN_DATE { get; set; }
+        public string? DN_NO { get; set; }
+        public string? REF_NO { get; set; }
+        public int? CUST_ID { get; set; }
+        public string? CONTACT_NAME { get; set; }
+        public string? CONTACT_PHONE { get; set; }
+        public string? CONTACT_FAX { get; set; }
+        public string? CONTACT_MOBILE { get; set; }
+        public int? SALESMAN_ID { get; set; }
+        public double? TOTAL_QTY { get; set; }
+        public int? TRANS_ID { get; set; }
+        public string? NARRATION { get; set; }
+        public int? DN_TYPE { get; set; }
+        public List<DNDetailSelect>? Details { get; set; }
+    }
+    public class DNDetailSelect
+    {
+        public int? DETAIL_ID { get; set; }
+        public int? ITEM_ID { get; set; }
+        public string? UOM { get; set; }
+        public double? QUANTITY { get; set; }
+        public string? ITEM_CODE { get; set; }
+        public string? DESCRIPTION { get; set; }
+        public double? QTY_STOCK { get; set; }
+      
+    }
+    public class DNSelect_Response
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public DNSelect? Data { get; set; }
+    }
+    public class DeliveryNoteListResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<DeliveryNoteList> Data { get; set; }
+    }
+ 
+    public class DeliveryNoteList
+    {
+        public int? ID { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
+        public DateTime? DN_DATE { get; set; }
+        public string? DN_NO { get; set; }
+        public string? REF_NO { get; set; }
+        public int? CUST_ID { get; set; }
+        public string? CONTACT_NAME { get; set; }
+        public string? CONTACT_FAX { get; set; }
+        public string? CONTACT_PHONE { get; set; }
+        public string? CONTACT_MOBILE { get; set; }
+        public int? SALESMAN_ID { get; set; }
+        public double? TOTAL_QTY { get; set; }
+        public string? STATUS { get; set; }
+        public int? TRANS_ID { get; set; }
+        public string? CUSTOMER_NAME { get; set; }
+        public string? STORE_NAME { get; set; }
+        public string NARRATION { get; set; }
+    }
 }
 

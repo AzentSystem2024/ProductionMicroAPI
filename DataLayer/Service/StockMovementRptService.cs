@@ -45,6 +45,7 @@ namespace MicroApi.DataLayer.Service
                                     COLOR = reader["COLOR"]?.ToString(),
                                     SIZE = reader["SIZE"]?.ToString(),
                                     STYLE = reader["STYLE"]?.ToString(),
+                                    UOM = reader["UOM"]?.ToString(),
                                     STORE_NAME = reader["STORE_NAME"]?.ToString(),
                                     OPENING_QTY = reader["OPENING_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["OPENING_QTY"]) : 0,
                                     GRN_QTY = reader["GRN_QTY"] != DBNull.Value ? Convert.ToDecimal(reader["GRN_QTY"]) : 0,

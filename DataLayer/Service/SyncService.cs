@@ -752,7 +752,8 @@ namespace MicroApi.DataLayer.Service
                                 ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
                                 QUANTITY = Convert.ToDecimal(dr["QUANTITY"]),
-                                UOM = dr["UOM"]?.ToString()
+                                UOM = dr["UOM"]?.ToString(),
+                                QTY_STOCK = Convert.ToDecimal(dr["QTY_STOCK"]),
                             });
                         }
 
@@ -765,7 +766,8 @@ namespace MicroApi.DataLayer.Service
                                 ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
                                 QUANTITY = Convert.ToDecimal(dr["QUANTITY"]),
-                                UOM = dr["UOM"]?.ToString()
+                                UOM = dr["UOM"]?.ToString(),
+                                QTY_STOCK = Convert.ToDecimal(dr["QTY_STOCK"]),
                             });
                         }
                     }
