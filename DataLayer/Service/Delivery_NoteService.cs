@@ -523,17 +523,52 @@ namespace MicroApi.DataLayer.Service
                     DataTable tbl = new DataTable();
                     da.Fill(tbl);
 
-                    foreach (DataRow dr in tbl.Rows)
+                    if (tbl.Rows.Count > 0)
                     {
-                        items.Add(new PENDINGSTOCKITEMS
+                        foreach (DataRow dr in tbl.Rows)
                         {
-                            ITEM_ID = dr["ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["ID"]),
-                            DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? null : dr["DESCRIPTION"].ToString(),
-                            ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? null : dr["ITEM_CODE"].ToString(),
-                            QTY_STOCK = dr["QTY_STOCK"] == DBNull.Value ? (double?)null : Convert.ToDouble(dr["QTY_STOCK"]),
-                            UOM = dr["UOM"] == DBNull.Value ? null : dr["UOM"].ToString(),
+                            items.Add(new PENDINGSTOCKITEMS
+                            {
+                                ITEM_ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                                DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? "" : dr["DESCRIPTION"].ToString(),
+                                ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? "" : dr["ITEM_CODE"].ToString(),
+                                QTY_STOCK = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_STOCK"]),
+                                UOM = dr["UOM"] == DBNull.Value ? "" : dr["UOM"].ToString()
+                            });
+                        }
+                    }
+                    else
+                    {
+                        string strSQL = @"SELECT ID, ITEM_CODE, DESCRIPTION, UOM
+                                  FROM TB_ITEMS
+                                  WHERE ID = " + request.ITEM_ID;
 
-                        });
+                        DataTable dtItem = ADO.GetDataTable(strSQL, "Item");
+
+                        if (dtItem.Rows.Count > 0)
+                        {
+                            DataRow dr = dtItem.Rows[0];
+
+                            items.Add(new PENDINGSTOCKITEMS
+                            {
+                                ITEM_ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                                DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? "" : dr["DESCRIPTION"].ToString(),
+                                ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? "" : dr["ITEM_CODE"].ToString(),
+                                UOM = dr["UOM"] == DBNull.Value ? "" : dr["UOM"].ToString(),
+                                QTY_STOCK = 0
+                            });
+                        }
+                        else
+                        {
+                            items.Add(new PENDINGSTOCKITEMS
+                            {
+                                ITEM_ID = request.ITEM_ID,
+                                DESCRIPTION = "",
+                                ITEM_CODE = "",
+                                UOM = "",
+                                QTY_STOCK = 0
+                            });
+                        }
                     }
                 }
             }

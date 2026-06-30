@@ -424,7 +424,7 @@ namespace MicroApi.DataLayer.Service
                                     ITEM_ID = dr["ITEM_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ITEM_ID"]),
                                     DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
                                     UOM = dr["UOM"]?.ToString(),
-                                    BOM_QTY = dr["BOM_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BOM_QTY"]),
+                                    QUANTITY = dr["BOM_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BOM_QTY"]),
                                     REQUIRED_QTY = dr["REQUIRED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["REQUIRED_QTY"]),
                                     USED_QTY = dr["USED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["USED_QTY"]),
                                     UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["UNIT_COST"]),
@@ -560,7 +560,7 @@ namespace MicroApi.DataLayer.Service
                                 DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
                                 UOM = dr["UOM"]?.ToString(),
 
-                                BOM_QTY = dr["BOM_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BOM_QTY"]),
+                                QUANTITY = dr["BOM_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BOM_QTY"]),
                                 REQUIRED_QTY = dr["REQUIRED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["REQUIRED_QTY"]),
                                 USED_QTY = dr["USED_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["USED_QTY"]),
 
@@ -730,30 +730,30 @@ namespace MicroApi.DataLayer.Service
                         // ================= HEADER =================
                         if (dr.Read())
                         {
-                            response.Data.ID = Convert.ToInt32(dr["ID"]);
-                            response.Data.DN_NO = dr["DN_NO"]?.ToString();
-                            response.Data.DN_DATE = Convert.ToDateTime(dr["DN_DATE"]);
-                            response.Data.TOTAL_QTY = Convert.ToDouble(dr["TOTAL_QTY"]);
+                            response.Data.ID = dr["ID"] != DBNull.Value ? Convert.ToInt32(dr["ID"]) : (int?)null;
+                            response.Data.DN_NO = dr["DN_NO"] != DBNull.Value ? dr["DN_NO"].ToString() : null;
+                            response.Data.DN_DATE = dr["DN_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["DN_DATE"]) : (DateTime?)null;
+                            response.Data.TOTAL_QTY = dr["TOTAL_QTY"] != DBNull.Value ? Convert.ToDouble(dr["TOTAL_QTY"]) : (double?)null;
 
-                            response.Data.COMPANY_ID = Convert.ToInt32(dr["COMPANY_ID"]);
-                            response.Data.CUST_ID = Convert.ToInt32(dr["CUST_ID"]);
-                            response.Data.COMPANY_NAME = dr["COMPANY_NAME"]?.ToString();
-                            response.Data.CONTACT_NAME = dr["CONTACT_NAME"]?.ToString();
-                            response.Data.CONTACT_PHONE = dr["CONTACT_PHONE"]?.ToString();
-                            response.Data.CONTACT_MOBILE = dr["CONTACT_MOBILE"]?.ToString();
-                            response.Data.CONTACT_FAX = dr["CONTACT_FAX"]?.ToString();
-                            response.Data.REF_NO = dr["REF_NO"]?.ToString();
-                            response.Data.CUSTOMER_NAME = dr["CUST_NAME"]?.ToString();
+                            response.Data.COMPANY_ID = dr["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(dr["COMPANY_ID"]) : (int?)null;
+                            response.Data.CUST_ID = dr["CUST_ID"] != DBNull.Value ? Convert.ToInt32(dr["CUST_ID"]) : (int?)null;
 
-                            // ===== first detail row =====
+                            response.Data.COMPANY_NAME = dr["COMPANY_NAME"] != DBNull.Value ? dr["COMPANY_NAME"].ToString() : null;
+                            response.Data.CONTACT_NAME = dr["CONTACT_NAME"] != DBNull.Value ? dr["CONTACT_NAME"].ToString() : null;
+                            response.Data.CONTACT_PHONE = dr["CONTACT_PHONE"] != DBNull.Value ? dr["CONTACT_PHONE"].ToString() : null;
+                            response.Data.CONTACT_MOBILE = dr["CONTACT_MOBILE"] != DBNull.Value ? dr["CONTACT_MOBILE"].ToString() : null;
+                            response.Data.CONTACT_FAX = dr["CONTACT_FAX"] != DBNull.Value ? dr["CONTACT_FAX"].ToString() : null;
+                            response.Data.REF_NO = dr["REF_NO"] != DBNull.Value ? dr["REF_NO"].ToString() : null;
+                            response.Data.CUSTOMER_NAME = dr["CUST_NAME"] != DBNull.Value ? dr["CUST_NAME"].ToString() : null;
+
                             response.Data.Details.Add(new DNViewDetail
                             {
-                                DETAIL_ID = Convert.ToInt32(dr["DETAIL_ID"]),
-                                ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
-                                DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
-                                QUANTITY = Convert.ToDecimal(dr["QUANTITY"]),
-                                UOM = dr["UOM"]?.ToString(),
-                                QTY_STOCK = Convert.ToDecimal(dr["QTY_STOCK"]),
+                                DETAIL_ID = dr["DETAIL_ID"] != DBNull.Value ? Convert.ToInt32(dr["DETAIL_ID"]) : (int?)null,
+                                ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? dr["ITEM_CODE"].ToString() : null,
+                                DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? dr["DESCRIPTION"].ToString() : null,
+                                QUANTITY = dr["QUANTITY"] != DBNull.Value ? Convert.ToDecimal(dr["QUANTITY"]) : (decimal?)null,
+                                UOM = dr["UOM"] != DBNull.Value ? dr["UOM"].ToString() : null,
+                                QTY_STOCK = dr["QTY_STOCK"] != DBNull.Value ? Convert.ToDecimal(dr["QTY_STOCK"]) : (decimal?)null,
                             });
                         }
 
@@ -762,12 +762,12 @@ namespace MicroApi.DataLayer.Service
                         {
                             response.Data.Details.Add(new DNViewDetail
                             {
-                                DETAIL_ID = Convert.ToInt32(dr["DETAIL_ID"]),
-                                ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
-                                DESCRIPTION = dr["DESCRIPTION"]?.ToString(),
-                                QUANTITY = Convert.ToDecimal(dr["QUANTITY"]),
-                                UOM = dr["UOM"]?.ToString(),
-                                QTY_STOCK = Convert.ToDecimal(dr["QTY_STOCK"]),
+                                DETAIL_ID = dr["DETAIL_ID"] != DBNull.Value ? Convert.ToInt32(dr["DETAIL_ID"]) : (int?)null,
+                                ITEM_CODE = dr["ITEM_CODE"] != DBNull.Value ? dr["ITEM_CODE"].ToString() : null,
+                                DESCRIPTION = dr["DESCRIPTION"] != DBNull.Value ? dr["DESCRIPTION"].ToString() : null,
+                                QUANTITY = dr["QUANTITY"] != DBNull.Value ? Convert.ToDecimal(dr["QUANTITY"]) : (decimal?)null,
+                                UOM = dr["UOM"] != DBNull.Value ? dr["UOM"].ToString() : null,
+                                QTY_STOCK = dr["QTY_STOCK"] != DBNull.Value ? Convert.ToDecimal(dr["QTY_STOCK"]) : (decimal?)null,
                             });
                         }
                     }
@@ -780,6 +780,7 @@ namespace MicroApi.DataLayer.Service
             {
                 response.Flag = 0;
                 response.Message = ex.Message;
+                response.Data = null;
             }
 
             return response;

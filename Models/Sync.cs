@@ -165,28 +165,28 @@
 
     public class DNViewHeader
     {
-        public int ID { get; set; }
-        public string DN_NO { get; set; }
-        public DateTime DN_DATE { get; set; }
-        public double TOTAL_QTY { get; set; }
-        public int COMPANY_ID { get; set; }
-        public int CUST_ID { get; set; }
-        public string CONTACT_NAME { get; set; }
-        public string CONTACT_PHONE { get; set; }
-        public string CONTACT_MOBILE { get; set; }
-        public string CONTACT_FAX { get; set; }
-        public string COMPANY_NAME { get; set; }
-        public string REF_NO { get; set; }
-        public string CUSTOMER_NAME { get; set; }
-        public List<DNViewDetail> Details { get; set; }
+        public int? ID { get; set; }
+        public string? DN_NO { get; set; }
+        public DateTime? DN_DATE { get; set; }
+        public double? TOTAL_QTY { get; set; }
+        public int? COMPANY_ID { get; set; }
+        public int? CUST_ID { get; set; }
+        public string? CONTACT_NAME { get; set; }
+        public string? CONTACT_PHONE { get; set; }
+        public string? CONTACT_MOBILE { get; set; }
+        public string? CONTACT_FAX { get; set; }
+        public string? COMPANY_NAME { get; set; }
+        public string? REF_NO { get; set; }
+        public string? CUSTOMER_NAME { get; set; }
+        public List<DNViewDetail>? Details { get; set; }
     }
 
     public class DNViewDetail
     {
-        public int DETAIL_ID { get; set; }
+        public int? DETAIL_ID { get; set; }
         public string ITEM_CODE { get; set; }
         public string DESCRIPTION { get; set; }
-        public decimal QUANTITY { get; set; }
+        public decimal? QUANTITY { get; set; }
         public string UOM { get; set; }
         public decimal? QTY_STOCK { get; set; }
     }
