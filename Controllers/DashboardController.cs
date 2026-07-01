@@ -36,5 +36,25 @@ namespace MicroApi.Controllers
 
             return response;
         }
+        [HttpPost]
+        [Route("getdashboard")]
+        public DashboarddataResponse GetDashboard(DashboardRequest request)
+        {
+            DashboarddataResponse response = new DashboarddataResponse();
+
+            try
+            {
+                response = _dashboardService.GetDashboard(request);
+
+                
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
     }
 }

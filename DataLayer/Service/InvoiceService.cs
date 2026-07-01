@@ -598,7 +598,8 @@ namespace MicroApi.DataLayer.Service
                                         DELIVERY_ADD2 = reader["CUST_DELIVERY_ADD2"]?.ToString(),
                                         DELIVERY_ADD3 = reader["CUST_DELIVERY_ADD3"]?.ToString(),
                                         MOBILE = reader["MOBILE"]?.ToString(),
-                                        
+                                        EMP_NAME = reader["EMP_NAME"]?.ToString(),
+
                                         SALE_DETAILS = new List<SaleDetailUpdate>()
                                     };
                                 }
@@ -853,6 +854,50 @@ namespace MicroApi.DataLayer.Service
             {
             }
             return InvoiceCust_stateName;
+        }
+        public List<SalesmanList> GetSalesmanByCustomer(PendingCustReq request)
+        {
+            List<SalesmanList> salesmanList = new List<SalesmanList>();
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_SALE_INVOICE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 7);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUSTOMER_ID);
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                salesmanList.Add(new SalesmanList
+                                {
+                                    ID = reader["ID"] != DBNull.Value
+                                        ? Convert.ToInt32(reader["ID"])
+                                        : 0,
+
+                                    EMP_NAME = reader["EMP_NAME"] != DBNull.Value
+                                        ? reader["EMP_NAME"].ToString()
+                                        : string.Empty
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching salesman details: " + ex.Message);
+            }
+
+            return salesmanList;
         }
     }
 }

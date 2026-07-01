@@ -171,5 +171,21 @@ namespace MicroApi.Controllers
             }
             return customers.ToList();
         }
+        [HttpPost]
+        [Route("getemployee")]
+        public List<SalesmanList> GetSalesmanByCustomer(PendingCustReq request)
+        {
+            List<SalesmanList> customers = new List<SalesmanList>();
+
+            try
+            {
+
+                customers = _invoiceService.GetSalesmanByCustomer(request);
+            }
+            catch (Exception ex)
+            {
+            }
+            return customers.ToList();
+        }
     }
 }
