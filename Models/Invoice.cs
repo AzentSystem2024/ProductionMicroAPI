@@ -85,6 +85,8 @@
         public string HSN_CODE { get; set; }
         public string REF_NO { get; set; }
         public string DN_NO { get; set; }
+        public double? DN_QUANTITY { get; set; }
+        public double? PAIR_QTY { get; set; }
 
     }
     public class InvoiceHeader
@@ -208,6 +210,7 @@
         public string DELIVERY_ADD2 { get; set; }
         public string DELIVERY_ADD3 { get; set; }
         public string MOBILE { get; set; }
+        public string EMP_NAME { get; set; }
         public List<SaleDetailUpdate> SALE_DETAILS { get; set; }
 
     }
@@ -229,6 +232,8 @@
         public decimal? SGST { get; set; }
         public string? HSN_CODE { get; set; }
         public string? DN_NO { get; set; }
+        public double? DN_QUANTITY { get; set; }
+        public double? PAIR_QTY { get; set; }
     }
     public class InvoiceHeaderSelectResponse
     {
@@ -263,5 +268,15 @@
         public DateTime? DATE_TO { get; set; }
         public int? STORE_ID { get; set; }
 
+    }
+    public class PendingCustReq
+    {
+        public int CUSTOMER_ID { get; set; }
+       
+    }
+    public class SalesmanList
+    {
+        public int ID { get; set; }
+        public string EMP_NAME { get; set; }
     }
 }

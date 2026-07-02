@@ -410,6 +410,8 @@ namespace MicroApi.DataLayer.Service
                                     HSN_CODE = reader["HSN_CODE"] == DBNull.Value ? null : reader["HSN_CODE"].ToString(),
                                     REF_NO = reader["REF_NO"] == DBNull.Value ? null : reader["REF_NO"].ToString(),
                                     DN_NO = reader["DN_NO"]?.ToString(),
+                                    DN_QUANTITY = reader["DN_QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["DN_QUANTITY"]) : 0,
+                                    PAIR_QTY = reader["PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["PAIR_QTY"]) : 0,
 
                                 };
 
@@ -598,7 +600,8 @@ namespace MicroApi.DataLayer.Service
                                         DELIVERY_ADD2 = reader["CUST_DELIVERY_ADD2"]?.ToString(),
                                         DELIVERY_ADD3 = reader["CUST_DELIVERY_ADD3"]?.ToString(),
                                         MOBILE = reader["MOBILE"]?.ToString(),
-                                        
+                                        EMP_NAME = reader["EMP_NAME"]?.ToString(),
+
                                         SALE_DETAILS = new List<SaleDetailUpdate>()
                                     };
                                 }
@@ -623,6 +626,8 @@ namespace MicroApi.DataLayer.Service
                                     SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0,
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     DN_NO = reader["DN_NO"]?.ToString(),
+                                    DN_QUANTITY = reader["DN_QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["DN_QUANTITY"]) : 0,
+                                    PAIR_QTY = reader["PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["PAIR_QTY"]) : 0,
                                 });
                             }
 
@@ -853,6 +858,50 @@ namespace MicroApi.DataLayer.Service
             {
             }
             return InvoiceCust_stateName;
+        }
+        public List<SalesmanList> GetSalesmanByCustomer(PendingCustReq request)
+        {
+            List<SalesmanList> salesmanList = new List<SalesmanList>();
+
+            try
+            {
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_SALE_INVOICE", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ACTION", 7);
+                        cmd.Parameters.AddWithValue("@CUSTOMER_ID", request.CUSTOMER_ID);
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                salesmanList.Add(new SalesmanList
+                                {
+                                    ID = reader["ID"] != DBNull.Value
+                                        ? Convert.ToInt32(reader["ID"])
+                                        : 0,
+
+                                    EMP_NAME = reader["EMP_NAME"] != DBNull.Value
+                                        ? reader["EMP_NAME"].ToString()
+                                        : string.Empty
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching salesman details: " + ex.Message);
+            }
+
+            return salesmanList;
         }
     }
 }

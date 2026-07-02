@@ -166,6 +166,7 @@ namespace MicroApi.DataLayer.Services
 
                             vatClass.IGST_INPUT_HEAD_ID = dr["IGST_INPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IGST_INPUT_HEAD_ID"]);
                             vatClass.IGST_OUTPUT_HEAD_ID = dr["IGST_OUTPUT_HEAD_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["IGST_OUTPUT_HEAD_ID"]);
+                            vatClass.VAT_PERC = dr["VAT_PERC"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["VAT_PERC"]);
                         }
                         else // VAT
                         {

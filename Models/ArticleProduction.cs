@@ -146,6 +146,7 @@
         public int ITEM_ID { get; set; }
         public string DESCRIPTION { get; set; }
         public string UOM { get; set; }
+        public decimal QUANTITY { get; set; }
         public decimal BOM_QTY { get; set; }
         public decimal REQUIRED_QTY { get; set; }
         public decimal USED_QTY { get; set; }
@@ -153,6 +154,7 @@
         public decimal TOTAL_COST { get; set; }
         public string ITEM_CODE { get; set; }
         public decimal QTY_AVAILABLE { get; set; }
+        public decimal? BALANCE_QTY { get; set; }
 
     }
 

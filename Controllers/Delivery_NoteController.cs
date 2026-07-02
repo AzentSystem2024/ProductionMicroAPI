@@ -196,5 +196,167 @@ namespace MicroApi.Controllers
 
             return res;
         }
+
+        [HttpPost]
+        [Route("getitem")]
+        public DNItemResponse GetItems(GETDNITEM request)
+        {
+            DNItemResponse res = new DNItemResponse();
+
+            try
+            {
+                var result = _delivery_noteservice.GetItems(request);
+
+                res.Flag = 1;
+                res.Message = "Success";
+                res.Data = result;
+            }
+            catch (Exception ex)
+            {
+                res.Flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("Save")]
+        public DeliverynotesaveResponse Save(DNSave deliverynote)
+        {
+            DeliverynotesaveResponse res = new DeliverynotesaveResponse();
+
+            try
+            {
+
+                _delivery_noteservice.Save(deliverynote);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("Edit")]
+        public DeliverynotesaveResponse EDit(DNSave deliverynote)
+        {
+            DeliverynotesaveResponse res = new DeliverynotesaveResponse();
+
+            try
+            {
+
+                _delivery_noteservice.Edit(deliverynote);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("DNselect/{id:int}")]
+        public DNSelect_Response DNSelectByID(int id)
+        {
+            DNSelect_Response res = new DNSelect_Response();
+            try
+            {
+                res = _delivery_noteservice.DNSelectByID(id);
+            }
+            catch (Exception ex)
+            {
+            }
+            return res;
+        }
+        [HttpPost]
+        [Route("DNlist")]
+        public DeliveryNoteListResponse GetDNoteList(DeliveryNoteListRequest request)
+        {
+            try
+            {
+                DeliveryNoteListResponse res = _delivery_noteservice.GetDNoteList(request);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new DeliveryNoteListResponse
+                {
+                    flag = 0,
+                    Message = ex.Message,
+                    Data = new List<DeliveryNoteList>()
+                };
+            }
+        }
+        [HttpPost]
+        [Route("Commit")]
+        public DeliverynotesaveResponse Commit(DNSave deliverynote)
+        {
+            DeliverynotesaveResponse res = new DeliverynotesaveResponse();
+
+            try
+            {
+
+                _delivery_noteservice.Commit(deliverynote);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("Verify")]
+        public DeliverynotesaveResponse Verify(DNSave deliverynote)
+        {
+            DeliverynotesaveResponse res = new DeliverynotesaveResponse();
+
+            try
+            {
+
+                _delivery_noteservice.Verify(deliverynote);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
+        [Route("DNdelete/{id:int}")]
+        public DeliverynotesaveResponse DNDelete(int id)
+        {
+            DeliverynotesaveResponse res = new DeliverynotesaveResponse();
+
+            try
+            {
+
+
+                _delivery_noteservice.DNDelete(id);
+                res.flag = 1;
+                res.Message = "Success";
+
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+            return res;
+        }
     }
 }

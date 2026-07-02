@@ -98,12 +98,12 @@
         public bool IS_INACTIVE { get; set; }
 
     }
-    public class District
-    {
-        public string DISTRICT_NAME { get; set; }
-        public int STATE_ID { get; set; }
-        public int COUNTRY_ID { get; set; }
-    }
+    //public class District
+    //{
+    //    public string DISTRICT_NAME { get; set; }
+    //    public int STATE_ID { get; set; }
+    //    public int COUNTRY_ID { get; set; }
+    //}
     public class InsertResponse
     {
         public int flag { get; set; }

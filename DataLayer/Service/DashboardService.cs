@@ -161,5 +161,108 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public DashboarddataResponse GetDashboard(DashboardRequest request)
+        {
+            DashboarddataResponse response = new DashboarddataResponse();
+
+            response.flag = 1;
+            response.Message = "Success";
+
+            response.data = new GetDashboardData
+            {
+                TopMovingArticles = new List<TopMovingArticle>(),
+                LastMonthSales = new List<LastMonthSale>(),
+                RegionWiseSales = new List<RegionWiseSale>(),
+                SalesmanWiseSales = new List<SalesmanWiseSale>()
+            };
+
+            using (SqlConnection con = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_GET_DASHBOARD", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@DATE_FROM",
+                        (object)request.DATE_FROM ?? DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@DATE_TO",
+                        (object)request.DATE_TO ?? DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@COMPANY_ID",
+                        (object)request.COMPANY_ID ?? DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@FIN_ID",
+                        (object)request.FIN_ID ?? DBNull.Value);
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        // Top Moving Articles
+                        while (dr.Read())
+                        {
+                            response.data.TopMovingArticles.Add(new TopMovingArticle
+                            {
+                                ART_NO = dr["ART_NO"].ToString(),
+                                ARTICLE_NAME = dr["ARTICLE_NAME"].ToString(),
+                                TOTAL_QTY = Convert.ToDecimal(dr["TOTAL_QTY"]),
+                                TOTAL_TRANSACTIONS = Convert.ToInt32(dr["TOTAL_TRANSACTIONS"])
+                            });
+                        }
+
+                        // Last Month Sales
+                        if (dr.NextResult())
+                        {
+                            while (dr.Read())
+                            {
+                                response.data.LastMonthSales.Add(new LastMonthSale
+                                {
+                                    SALE_NO = dr["SALE_NO"].ToString(),
+                                    SALE_DATE = Convert.ToDateTime(dr["SALE_DATE"]),
+                                    ITEM_CODE = dr["ITEM_CODE"].ToString(),
+                                    ITEM_NAME = dr["ITEM_NAME"].ToString(),
+                                    QUANTITY = Convert.ToDecimal(dr["QUANTITY"]),
+                                    PRICE = Convert.ToDecimal(dr["PRICE"]),
+                                    NET_AMOUNT = Convert.ToDecimal(dr["NET_AMOUNT"])
+                                });
+                            }
+                        }
+
+                        // Region Wise Sales
+                        if (dr.NextResult())
+                        {
+                            while (dr.Read())
+                            {
+                                response.data.RegionWiseSales.Add(new RegionWiseSale
+                                {
+                                    STATE_NAME = dr["STATE_NAME"].ToString(),
+                                    SALE_NO = dr["SALE_NO"].ToString(),
+                                    SALE_DATE = Convert.ToDateTime(dr["SALE_DATE"]),
+                                    TOTAL_INVOICES = Convert.ToInt32(dr["TOTAL_INVOICES"]),
+                                    TOTAL_SALES = Convert.ToDecimal(dr["TOTAL_SALES"]),
+                                    GROSS_AMOUNT = Convert.ToDecimal(dr["GROSS_AMOUNT"]),
+                                    TAX_AMOUNT = Convert.ToDecimal(dr["TAX_AMOUNT"])
+                                });
+                            }
+                        }
+
+                        // Salesman Wise Sales
+                        if (dr.NextResult())
+                        {
+                            while (dr.Read())
+                            {
+                                response.data.SalesmanWiseSales.Add(new SalesmanWiseSale
+                                {
+                                    SALESMAN_ID = Convert.ToInt32(dr["SALESMAN_ID"]),
+                                    SALESMAN_NAME = dr["SALESMAN_NAME"].ToString(),
+                                    TOTAL_INVOICES = Convert.ToInt32(dr["TOTAL_INVOICES"]),
+                                    TOTAL_SALES = Convert.ToDecimal(dr["TOTAL_SALES"])
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            return response;
+        }
     }
 }

@@ -298,7 +298,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@NARRATION", grnHeader.NARRATION);
                 cmd.Parameters.AddWithValue("@USER_ID", grnHeader.USER_ID);
                 cmd.Parameters.AddWithValue("@IS_APPROVED", grnHeader.IS_APPROVED == true ? 1 : 0);
-
+                cmd.Parameters.AddWithValue("@FIN_ID", grnHeader.FIN_ID);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_DETAIL", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_ITEM_COST", tbl1);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_COST", tbl2);
@@ -456,6 +456,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", grnHeader.SUPP_NET_AMOUNT);
                 cmd.Parameters.AddWithValue("@EXCHANGE_RATE", grnHeader.EXCHANGE_RATE);
                 cmd.Parameters.AddWithValue("@NARRATION", grnHeader.NARRATION);
+                cmd.Parameters.AddWithValue("@FIN_ID", grnHeader.FIN_ID);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_DETAIL", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_ITEM_COST", tbl1);
@@ -614,6 +615,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", grnHeader.SUPP_NET_AMOUNT);
                 cmd.Parameters.AddWithValue("@EXCHANGE_RATE", grnHeader.EXCHANGE_RATE);
                 cmd.Parameters.AddWithValue("@NARRATION", grnHeader.NARRATION);
+                cmd.Parameters.AddWithValue("@FIN_ID", grnHeader.FIN_ID);
 
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_DETAIL", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_ITEM_COST", tbl1);
@@ -732,7 +734,8 @@ namespace MicroApi.DataLayer.Service
 
                 strSQL = "SELECT GD.*, S.STORE_NAME, I.DESCRIPTION, I.ITEM_CODE, " +
                         "ISNULL(GRN_SUM.APPROVED_GRN_QTY,0) AS GRN_QTY, " +
-                        "POD.QUANTITY AS PO_QUANTITY, POD.PRICE,POD.SUPP_AMOUNT AS PO_TAXABLE_AMOUNT " +
+                        "POD.QUANTITY AS PO_QUANTITY,((POD.QUANTITY - ISNULL(GRN_SUM.APPROVED_GRN_QTY,0))+ GD.QUANTITY) AS BALANCE_QTY, " +
+                        "POD.PRICE,POD.SUPP_AMOUNT AS PO_TAXABLE_AMOUNT " +
                         "FROM TB_GRN_DETAIL GD " +
                         "LEFT JOIN TB_STORES S ON GD.STORE_ID = S.ID " +
                         "LEFT JOIN TB_ITEMS I ON GD.ITEM_ID = I.ID " +
@@ -779,7 +782,8 @@ namespace MicroApi.DataLayer.Service
                         PO_QUANTITY = dr3["PO_QUANTITY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PO_QUANTITY"]),
                         GRN_QUANTITY = dr3["GRN_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["GRN_QTY"]),
                         PRICE = dr3["PRICE"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PRICE"]),
-                        PO_TAXABLE_AMOUNT = dr3["PO_TAXABLE_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PO_TAXABLE_AMOUNT"])
+                        PO_TAXABLE_AMOUNT = dr3["PO_TAXABLE_AMOUNT"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["PO_TAXABLE_AMOUNT"]),
+                        BALANCE_QTY = dr3["BALANCE_QTY"] == DBNull.Value ? 0 : Convert.ToSingle(dr3["BALANCE_QTY"]),
                     });
                 }
 
@@ -1024,7 +1028,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@SUPP_NET_AMOUNT", grnHeader.SUPP_NET_AMOUNT);
                 cmd.Parameters.AddWithValue("@EXCHANGE_RATE", grnHeader.EXCHANGE_RATE);
                 cmd.Parameters.AddWithValue("@NARRATION", grnHeader.NARRATION);
-
+                cmd.Parameters.AddWithValue("@FIN_ID", grnHeader.FIN_ID);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_DETAIL", tbl);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_ITEM_COST", tbl1);
                 cmd.Parameters.AddWithValue("@UDT_TB_GRN_COST", tbl2);

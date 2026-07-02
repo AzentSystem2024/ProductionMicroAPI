@@ -55,6 +55,7 @@
         public string? MOB_CODE { get; set; }
         public string? PHONE_CODE { get; set; }
         public int? CUSTOMER_TYPE { get; set; }
+        public int? DISTRICT_ID { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
 
     }
@@ -125,6 +126,7 @@
         public string? MOB_CODE { get; set; }
         public string? PHONE_CODE { get; set; }
         public int? CUSTOMER_TYPE { get; set; }
+        public int? DISTRICT_ID { get; set; }
         public List<CustDeliveryAddress>? DeliveryAddresses { get; set; }
 
 

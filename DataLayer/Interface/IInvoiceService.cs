@@ -13,5 +13,6 @@ namespace MicroApi.DataLayer.Interface
         InvResponse GetInvoiceNo();
         InvoiceResponse Delete(int id);
         List<InvoiceCust_stateName> Getcustlist(InvoiceListRequest request);
+        List<SalesmanList> GetSalesmanByCustomer(PendingCustReq request);
     }
 }

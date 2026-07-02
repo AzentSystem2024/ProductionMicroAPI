@@ -30,7 +30,7 @@ namespace MicroApi.DataLayer.Service
                         cmd.Parameters.AddWithValue("@DATE_FROM", dateFrom.Date);
                         cmd.Parameters.AddWithValue("@DATE_TO", dateTo.Date);
                         cmd.Parameters.AddWithValue("@STORE_ID", STORE_ID ?? "");
-
+                        cmd.CommandTimeout = 0;
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
