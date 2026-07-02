@@ -6,5 +6,6 @@ namespace MicroApi.DataLayer.Interface
     {
         public ARReceiptResponse receiptList(ARReceiptInput vinput);
         public ARInvoiceResponse invoiceList(ARInvoiceInput vinput);
+        public ManualProcessResponse ManualProcess(ManualProcessInput vinput);
     }
 }

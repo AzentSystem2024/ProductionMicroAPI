@@ -26,6 +26,7 @@ namespace MicroApi.DataLayer.Services
 						cmd.CommandText = @"
                         SELECT 
                             H.ID AS ReceiptID,
+                            D.ID AS ReceiptDetailID,
                             H.REC_NO,
                             H.REC_DATE,
                             D.BILL_NO AS BILL_NO,
@@ -53,7 +54,10 @@ namespace MicroApi.DataLayer.Services
                                     ReceiptID = reader["ReceiptID"] == DBNull.Value
 										? 0
 										: Convert.ToInt32(reader["ReceiptID"]),
-									ReceiptNo = reader["REC_NO"]?.ToString() ?? "",
+                                    ReceiptDetailID = reader["ReceiptDetailID"] == DBNull.Value
+                                        ? 0
+                                        : Convert.ToInt32(reader["ReceiptDetailID"]),
+                                    ReceiptNo = reader["REC_NO"]?.ToString() ?? "",
 									Date = reader["REC_DATE"] == DBNull.Value
 										? ""
 										: Convert.ToDateTime(reader["REC_DATE"]).ToString("dd/MM/yyyy"),
@@ -104,8 +108,8 @@ namespace MicroApi.DataLayer.Services
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = @"
                     SELECT
-                        H.ID AS InvoiceID,
-                        H.SALE_NO AS InvoiceNo,
+                        D.ID AS InvoiceID,
+                        H.REF_NO AS InvoiceNo,
                         H.SALE_DATE AS [Date],
                         C.CUST_NAME AS Customer,
                         I.ITEM_CODE AS SERVICE_CODE,
@@ -162,6 +166,59 @@ namespace MicroApi.DataLayer.Services
         }
 
 
+
+        public ManualProcessResponse ManualProcess(ManualProcessInput vinput)
+        {
+            ManualProcessResponse response = new ManualProcessResponse();
+
+            try
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("InvoiceID", typeof(int));
+                dt.Columns.Add("RejectedAmount", typeof(decimal));
+                dt.Columns.Add("ReceivedAmount", typeof(decimal));
+
+                if (vinput.data != null)
+                {
+                    foreach (var item in vinput.data)
+                    {
+                        dt.Rows.Add(
+                            item.InvoiceID,
+                            (object?)item.RejectedAmount ?? DBNull.Value,
+                            (object?)item.ReceivedAomount ?? DBNull.Value
+                        );
+                    }
+                }
+
+                using (SqlConnection connection = ADO.GetConnection())
+                using (SqlCommand cmd = new SqlCommand("SP_AR_MANUAL_PROCESS", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ReceiptDetailID", vinput.ReceiptDetailID);
+
+                    SqlParameter param = cmd.Parameters.AddWithValue("@InvoiceData", dt);
+                    param.SqlDbType = SqlDbType.Structured;
+                    param.TypeName = "dbo.UDT_ManualProcessInvoice";
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            response.flag = dr["Flag"].ToString();
+                            response.message = dr["Message"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = "0";
+                response.message = ex.Message;
+            }
+
+            return response;
+        }
 
     }
 }

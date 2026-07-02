@@ -62,5 +62,27 @@ namespace MicroApi.Controllers
         }
 
 
+        [HttpPost]
+        [Route("manualprocess")]
+        public ManualProcessResponse ManualProcess(ManualProcessInput vinput)
+        {
+            ManualProcessResponse res = new ManualProcessResponse();
+
+            try
+            {
+
+                res = _ARManualMatchingService.ManualProcess(vinput);
+
+            }
+            catch (Exception ex)
+            {
+                res.flag = "0";
+                res.message = ex.Message;
+            }
+
+            return res;
+        }
+
+
     }
 }
