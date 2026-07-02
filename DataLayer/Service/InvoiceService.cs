@@ -410,6 +410,8 @@ namespace MicroApi.DataLayer.Service
                                     HSN_CODE = reader["HSN_CODE"] == DBNull.Value ? null : reader["HSN_CODE"].ToString(),
                                     REF_NO = reader["REF_NO"] == DBNull.Value ? null : reader["REF_NO"].ToString(),
                                     DN_NO = reader["DN_NO"]?.ToString(),
+                                    DN_QUANTITY = reader["DN_QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["DN_QUANTITY"]) : 0,
+                                    PAIR_QTY = reader["PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["PAIR_QTY"]) : 0,
 
                                 };
 
@@ -624,6 +626,8 @@ namespace MicroApi.DataLayer.Service
                                     SGST = reader["SGST"] != DBNull.Value ? Convert.ToDecimal(reader["SGST"]) : 0,
                                     HSN_CODE = reader["HSN_CODE"]?.ToString(),
                                     DN_NO = reader["DN_NO"]?.ToString(),
+                                    DN_QUANTITY = reader["DN_QUANTITY"] != DBNull.Value ? Convert.ToDouble(reader["DN_QUANTITY"]) : 0,
+                                    PAIR_QTY = reader["PAIR_QTY"] != DBNull.Value ? Convert.ToDouble(reader["PAIR_QTY"]) : 0,
                                 });
                             }
 

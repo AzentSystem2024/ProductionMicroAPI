@@ -154,6 +154,7 @@
         public decimal TOTAL_COST { get; set; }
         public string ITEM_CODE { get; set; }
         public decimal QTY_AVAILABLE { get; set; }
+        public decimal? BALANCE_QTY { get; set; }
 
     }
 

@@ -430,7 +430,8 @@ namespace MicroApi.DataLayer.Service
                                     UNIT_COST = dr["UNIT_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["UNIT_COST"]),
                                     TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
                                     ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
-                                    QTY_AVAILABLE = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["QTY_STOCK"])
+                                    QTY_AVAILABLE = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["QTY_STOCK"]),
+                                    BALANCE_QTY = dr["BALANCE_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BALANCE_QTY"])
 
                                 });
                             }
@@ -568,7 +569,8 @@ namespace MicroApi.DataLayer.Service
                                 TOTAL_COST = dr["TOTAL_COST"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["TOTAL_COST"]),
 
                                 ITEM_CODE = dr["ITEM_CODE"]?.ToString(),
-                                QTY_AVAILABLE = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["QTY_STOCK"])
+                                QTY_AVAILABLE = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["QTY_STOCK"]),
+                                BALANCE_QTY = dr["BALANCE_QTY"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["BALANCE_QTY"]),
                             });
                         }
 
@@ -754,6 +756,9 @@ namespace MicroApi.DataLayer.Service
                                 QUANTITY = dr["QUANTITY"] != DBNull.Value ? Convert.ToDecimal(dr["QUANTITY"]) : (decimal?)null,
                                 UOM = dr["UOM"] != DBNull.Value ? dr["UOM"].ToString() : null,
                                 QTY_STOCK = dr["QTY_STOCK"] != DBNull.Value ? Convert.ToDecimal(dr["QTY_STOCK"]) : (decimal?)null,
+                                ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(dr["ITEM_ID"]) : (int?)null,
+                                TOTAL_PAIR_QTY = dr["TOTAL_PAIR_QTY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["TOTAL_PAIR_QTY"]),
+                                PAIR_QTY = dr["PAIR_QTY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["PAIR_QTY"]),
                             });
                         }
 
@@ -768,6 +773,9 @@ namespace MicroApi.DataLayer.Service
                                 QUANTITY = dr["QUANTITY"] != DBNull.Value ? Convert.ToDecimal(dr["QUANTITY"]) : (decimal?)null,
                                 UOM = dr["UOM"] != DBNull.Value ? dr["UOM"].ToString() : null,
                                 QTY_STOCK = dr["QTY_STOCK"] != DBNull.Value ? Convert.ToDecimal(dr["QTY_STOCK"]) : (decimal?)null,
+                                ITEM_ID = dr["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(dr["ITEM_ID"]) : (int?)null,
+                                TOTAL_PAIR_QTY = dr["TOTAL_PAIR_QTY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["TOTAL_PAIR_QTY"]),
+                                PAIR_QTY = dr["PAIR_QTY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["PAIR_QTY"]),
                             });
                         }
                     }

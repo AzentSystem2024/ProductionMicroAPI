@@ -226,6 +226,8 @@
         public string? ITEM_CODE { get; set; }
         public string? UOM { get; set; }
         public double? QTY_STOCK { get; set; }
+        public double? PAIR_QTY { get; set; }
+        public double? TOTAL_PAIR_QTY { get; set; }
 
     }
     public class DNItemResponse

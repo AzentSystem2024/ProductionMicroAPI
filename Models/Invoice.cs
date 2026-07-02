@@ -85,6 +85,8 @@
         public string HSN_CODE { get; set; }
         public string REF_NO { get; set; }
         public string DN_NO { get; set; }
+        public double? DN_QUANTITY { get; set; }
+        public double? PAIR_QTY { get; set; }
 
     }
     public class InvoiceHeader
@@ -230,6 +232,8 @@
         public decimal? SGST { get; set; }
         public string? HSN_CODE { get; set; }
         public string? DN_NO { get; set; }
+        public double? DN_QUANTITY { get; set; }
+        public double? PAIR_QTY { get; set; }
     }
     public class InvoiceHeaderSelectResponse
     {

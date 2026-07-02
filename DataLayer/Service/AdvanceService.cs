@@ -115,11 +115,11 @@ namespace MicroApi.DataLayer.Services
                             ON adv.TRANS_ID = trans.TRANS_ID
                             LEFT JOIN TB_STATUS stat 
                             ON trans.TRANS_STATUS = stat.ID
-                            INNER JOIN TB_EMPLOYEE emp 
+                            LEFT JOIN TB_EMPLOYEE emp 
                             ON emp.ID = adv.EMP_ID
                             INNER JOIN TB_SALARY_HEAD salheader 
                             ON salheader.ID = adv.ADV_HEAD_ID
-                            WHERE trans.TRANS_ID = " + id; // ✅ changed adv.TRANS_ID → trans.TRANS_ID
+                            WHERE trans.TRANS_ID = " + id; 
 
                 DataTable tblHeader = ADO.GetDataTable(strSQL, "PayAdvance");
 

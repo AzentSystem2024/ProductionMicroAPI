@@ -189,6 +189,9 @@
         public decimal? QUANTITY { get; set; }
         public string UOM { get; set; }
         public decimal? QTY_STOCK { get; set; }
+        public int? ITEM_ID { get; set; }
+        public double? PAIR_QTY { get; set; }
+        public double? TOTAL_PAIR_QTY { get; set; }
     }
     public class ProductionTransferInGRN
     {

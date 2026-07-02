@@ -533,7 +533,9 @@ namespace MicroApi.DataLayer.Service
                                 DESCRIPTION = dr["DESCRIPTION"] == DBNull.Value ? "" : dr["DESCRIPTION"].ToString(),
                                 ITEM_CODE = dr["ITEM_CODE"] == DBNull.Value ? "" : dr["ITEM_CODE"].ToString(),
                                 QTY_STOCK = dr["QTY_STOCK"] == DBNull.Value ? 0 : Convert.ToDouble(dr["QTY_STOCK"]),
-                                UOM = dr["UOM"] == DBNull.Value ? "" : dr["UOM"].ToString()
+                                UOM = dr["UOM"] == DBNull.Value ? "" : dr["UOM"].ToString(),
+                                TOTAL_PAIR_QTY = dr["TOTAL_PAIR_QTY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["TOTAL_PAIR_QTY"]),
+                                PAIR_QTY = dr["PAIR_QTY"] == DBNull.Value ? 0 : Convert.ToDouble(dr["PAIR_QTY"]),
                             });
                         }
                     }
