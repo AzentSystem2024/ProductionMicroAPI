@@ -25,6 +25,8 @@
         public List<TopMovingItemData> TopMovingItems { get; set; }
 
         public List<TenderSummaryStoreData> TenderSummary { get; set; }
+        public List<RevenueData> Revenue { get; set; }
+        public List<ExpenseData> Expense { get; set; }
     }
 
     public class GrossSaleData
@@ -105,5 +107,17 @@
         public int flag { get; set; }
         public string Message { get; set; }
         public GetDashboardData data { get; set; }
+    }
+    public class RevenueData
+    {
+        public int STORE_ID { get; set; }
+        public string STORE { get; set; }
+        public decimal REVENUE { get; set; }
+    }
+    public class ExpenseData
+    {
+        public int STORE_ID { get; set; }
+        public string STORE { get; set; }
+        public decimal EXPENSE { get; set; }
     }
 }
