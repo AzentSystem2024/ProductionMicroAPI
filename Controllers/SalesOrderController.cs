@@ -257,6 +257,15 @@ namespace MicroApi.Controllers
             else
                 return BadRequest(response);
         }
+        [HttpPost("Verify")]
+        public IActionResult Verify([FromBody] SalesOrderUpdate request)
+        {
+            var response = _salesOrderService.Verify(request);
+            if (response.Flag == "1")
+                return Ok(response);
+            else
+                return BadRequest(response);
+        }
         [HttpPost]
         [Route("listQuotation")]
         public IActionResult ListQuotation([FromBody] SOQUOTATIONRequest request)

@@ -448,6 +448,77 @@ namespace MicroApi.DataLayer.Service
                 }
             }
         }
+        public Int32 DNVerify(Delivery_NoteUpdate deliverynote)
+        {
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                SqlTransaction objtrans = connection.BeginTransaction();
+                try
+                {
+                    DataTable tbl = new DataTable();
+                    tbl.Columns.Add("SO_DETAIL_ID", typeof(Int32));
+                    tbl.Columns.Add("ITEM_ID", typeof(Int32));
+                    tbl.Columns.Add("REMARKS", typeof(string));
+                    tbl.Columns.Add("UOM", typeof(string));
+                    tbl.Columns.Add("QUANTITY", typeof(double));
+                    tbl.Columns.Add("PACKING_ID", typeof(Int32));
+
+                    if (deliverynote.Details != null && deliverynote.Details.Any())
+                    {
+                        foreach (var d in deliverynote.Details)
+                        {
+                            DataRow dRow = tbl.NewRow();
+                            dRow["SO_DETAIL_ID"] = d.SO_DETAIL_ID;
+                            dRow["ITEM_ID"] = d.ITEM_ID == null ? (object)DBNull.Value : d.ITEM_ID;
+                            dRow["REMARKS"] = (object?)d.REMARKS ?? DBNull.Value;
+                            dRow["UOM"] = string.IsNullOrEmpty(d.UOM) ? (object)DBNull.Value : d.UOM;
+                            dRow["QUANTITY"] = d.DELIVERED_QUANTITY;
+                            dRow["PACKING_ID"] = 0;
+                            tbl.Rows.Add(dRow);
+                        }
+                    }
+
+                    SqlCommand cmd = new SqlCommand("SP_TB_DELIVERY_NOTE", connection, objtrans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ACTION", 7);
+                    cmd.Parameters.AddWithValue("@ID", deliverynote.ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", deliverynote.COMPANY_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", deliverynote.STORE_ID);
+                    cmd.Parameters.AddWithValue("@DN_DATE", (object?)deliverynote.DN_DATE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@REF_NO", (object?)deliverynote.REF_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CUST_ID", deliverynote.CUST_ID);
+                    cmd.Parameters.AddWithValue("@CONTACT_NAME", (object?)deliverynote.CONTACT_NAME ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CONTACT_PHONE", (object?)deliverynote.CONTACT_PHONE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CONTACT_FAX", (object?)deliverynote.CONTACT_FAX ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CONTACT_MOBILE", (object?)deliverynote.CONTACT_MOBILE ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@SALESMAN_ID", deliverynote.SALESMAN_ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", deliverynote.FIN_ID);
+                    cmd.Parameters.AddWithValue("@TOTAL_QTY", deliverynote.TOTAL_QTY);
+                    cmd.Parameters.AddWithValue("@USER_ID", deliverynote.USER_ID);
+                    cmd.Parameters.AddWithValue("@NARRATION", (object?)deliverynote.NARRATION ?? DBNull.Value);
+
+                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_DN_DETAIL", tbl);
+                    tvpParam.SqlDbType = SqlDbType.Structured;
+
+                    object result = cmd.ExecuteScalar();
+                    Int32 updateid = ADO.ToInt32(result);
+
+                    objtrans.Commit();
+                    return updateid;
+                }
+                catch (Exception ex)
+                {
+                    objtrans.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
+            }
+        }
         public bool Delete(int id)
         {
             try

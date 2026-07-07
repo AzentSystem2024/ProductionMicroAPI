@@ -26,8 +26,12 @@ namespace MicroApi.DataLayer.Service
                     GrossSale = new List<GrossSaleData>(),
                     TopMovingItems = new List<TopMovingItemData>(),
                     TenderSummary = new List<TenderSummaryStoreData>(),
-                    Revenue = new List<RevenueData>(),
-                    Expense = new List<ExpenseData>()
+
+                    ProfitLoss = new ProfitLossSummary
+                    {
+                        Revenue = new List<RevenueData>(),
+                        Expense = new List<ExpenseData>()
+                    }
                 }
             };
 
@@ -156,46 +160,42 @@ namespace MicroApi.DataLayer.Service
                             {
                                 while (reader.Read())
                                 {
-                                    response.data.Revenue.Add(new RevenueData
+                                    int storeId = reader["STORE_ID"] != DBNull.Value
+                                        ? Convert.ToInt32(reader["STORE_ID"])
+                                        : 0;
+
+                                    string store = reader["STORE"]?.ToString();
+
+                                    decimal revenue = reader["REVENUE"] != DBNull.Value
+                                        ? Convert.ToDecimal(reader["REVENUE"])
+                                        : 0;
+
+                                    decimal expense = reader["EXPENSE"] != DBNull.Value
+                                        ? Convert.ToDecimal(reader["EXPENSE"])
+                                        : 0;
+
+                                    if (revenue != 0)
                                     {
-                                        STORE_ID = reader["STORE_ID"] != DBNull.Value
-                                            ? Convert.ToInt32(reader["STORE_ID"])
-                                            : 0,
+                                        response.data.ProfitLoss.Revenue.Add(new RevenueData
+                                        {
+                                            STORE_ID = storeId,
+                                            STORE = store,
+                                            REVENUE = revenue
+                                        });
+                                    }
 
-                                        STORE = reader["STORE"] != DBNull.Value
-                                            ? reader["STORE"].ToString()
-                                            : "",
-
-                                        REVENUE = reader["REVENUE"] != DBNull.Value
-                                            ? Convert.ToDecimal(reader["REVENUE"])
-                                            : 0
-                                    });
+                                    if (expense != 0)
+                                    {
+                                        response.data.ProfitLoss.Expense.Add(new ExpenseData
+                                        {
+                                            STORE_ID = storeId,
+                                            STORE = store,
+                                            EXPENSE = expense
+                                        });
+                                    }
                                 }
                             }
-                            /* ============================================
-                               5. EXPENSE
-                               ============================================ */
 
-                            if (reader.NextResult())
-                            {
-                                while (reader.Read())
-                                {
-                                    response.data.Expense.Add(new ExpenseData
-                                    {
-                                        STORE_ID = reader["STORE_ID"] != DBNull.Value
-                                            ? Convert.ToInt32(reader["STORE_ID"])
-                                            : 0,
-
-                                        STORE = reader["STORE"] != DBNull.Value
-                                            ? reader["STORE"].ToString()
-                                            : "",
-
-                                        EXPENSE = reader["EXPENSE"] != DBNull.Value
-                                            ? Convert.ToDecimal(reader["EXPENSE"])
-                                            : 0
-                                    });
-                                }
-                            }
                         }
 
                         response.flag = 1;

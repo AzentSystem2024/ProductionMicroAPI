@@ -17,16 +17,40 @@
         public string Message { get; set; }
         public DashboardData data { get; set; }
     }
+    public class ProfitLossData
+    {
+        public int STORE_ID { get; set; }
+        public string STORE { get; set; }
+        public decimal REVENUE { get; set; }
+        public decimal EXPENSE { get; set; }
+    }
 
     public class DashboardData
     {
         public List<GrossSaleData> GrossSale { get; set; }
-
         public List<TopMovingItemData> TopMovingItems { get; set; }
-
         public List<TenderSummaryStoreData> TenderSummary { get; set; }
+
+        public ProfitLossSummary ProfitLoss { get; set; }
+    }
+    public class ProfitLossSummary
+    {
         public List<RevenueData> Revenue { get; set; }
         public List<ExpenseData> Expense { get; set; }
+    }
+
+    public class RevenueData
+    {
+        public int STORE_ID { get; set; }
+        public string STORE { get; set; }
+        public decimal REVENUE { get; set; }
+    }
+
+    public class ExpenseData
+    {
+        public int STORE_ID { get; set; }
+        public string STORE { get; set; }
+        public decimal EXPENSE { get; set; }
     }
 
     public class GrossSaleData
@@ -108,16 +132,5 @@
         public string Message { get; set; }
         public GetDashboardData data { get; set; }
     }
-    public class RevenueData
-    {
-        public int STORE_ID { get; set; }
-        public string STORE { get; set; }
-        public decimal REVENUE { get; set; }
-    }
-    public class ExpenseData
-    {
-        public int STORE_ID { get; set; }
-        public string STORE { get; set; }
-        public decimal EXPENSE { get; set; }
-    }
+    
 }

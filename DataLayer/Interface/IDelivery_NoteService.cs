@@ -10,6 +10,7 @@ namespace MicroApi.DataLayer.Interface
         public Delivery_Note_List_Response GetDeliveryNoteList(DeliveryNoteListRequest request);
         Delivery_Note_Select_Response GetDeliveryNoteById(int id);
         public Int32 Approve(Delivery_NoteUpdate deliverynote);
+        public Int32 DNVerify(Delivery_NoteUpdate deliverynote);
         public bool Delete(int id);
         DeliveryDoc GetLastDocNo();
         public List<Custdetail> GetCustdetail(DeliveryRequest request);

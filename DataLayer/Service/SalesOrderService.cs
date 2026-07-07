@@ -929,6 +929,126 @@ namespace MicroApi.DataLayer.Service
             }
             return response;
         }
+        public SalesOrderResponse Verify(SalesOrderUpdate request)
+        {
+            SalesOrderResponse response = new SalesOrderResponse();
+            using (SqlConnection connection = ADO.GetConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        DataTable tvp = new DataTable();
+                        tvp.Columns.Add("BRAND_ID", typeof(int));
+                        tvp.Columns.Add("ARTICLE_TYPE", typeof(int));
+                        tvp.Columns.Add("CATEGORY_ID", typeof(string));
+                        tvp.Columns.Add("ART_NO", typeof(string));
+                        tvp.Columns.Add("COLOR_ID", typeof(string));
+                        tvp.Columns.Add("CONTENT", typeof(string));
+                        tvp.Columns.Add("PACKING_ID", typeof(string));
+                        tvp.Columns.Add("QUANTITY", typeof(float));
+                        tvp.Columns.Add("ITEM_ID", typeof(int));
+                        tvp.Columns.Add("UOM", typeof(string));
+                        tvp.Columns.Add("PRICE", typeof(float));
+                        tvp.Columns.Add("DISC_PERCENT", typeof(float));
+                        tvp.Columns.Add("AMOUNT", typeof(float));
+                        tvp.Columns.Add("TAX_PERCENT", typeof(float));
+                        tvp.Columns.Add("TAX_AMOUNT", typeof(float));
+                        tvp.Columns.Add("TOTAL_AMOUNT", typeof(float));
+                        tvp.Columns.Add("QTN_DETAIL_ID", typeof(int));
+
+                        if (request.Details != null && request.Details.Any())
+                        {
+                            foreach (var detail in request.Details)
+                            {
+                                tvp.Rows.Add(
+                                detail.BRAND_ID ?? (object)DBNull.Value,
+                                detail.ARTICLE_TYPE ?? (object)DBNull.Value,
+                                detail.CATEGORY_ID ?? (object)DBNull.Value,
+                                detail.ART_NO ?? (object)DBNull.Value,
+                                detail.COLOR_ID ?? (object)DBNull.Value,
+                                detail.CONTENT ?? (object)DBNull.Value,
+                                detail.PACKING_ID ?? (object)DBNull.Value,
+                                detail.QUANTITY ?? (object)DBNull.Value,
+                                detail.ITEM_ID ?? (object)DBNull.Value,
+                                detail.UOM ?? (object)DBNull.Value,
+                                detail.PRICE ?? (object)DBNull.Value,
+                                detail.DISC_PERCENT ?? (object)DBNull.Value,
+                                detail.AMOUNT ?? (object)DBNull.Value,
+                                detail.TAX_PERCENT ?? (object)DBNull.Value,
+                                detail.TAX_AMOUNT ?? (object)DBNull.Value,
+                                detail.TOTAL_AMOUNT ?? (object)DBNull.Value,
+                                detail.QTN_DETAIL_ID ?? (object)DBNull.Value
+                             );
+                            }
+                        }
+
+                        //// Create DataTable for QTN_ID_LIST
+                        //DataTable tvpQTN = new DataTable();
+                        //tvpQTN.Columns.Add("QTN_ID", typeof(int));
+                        //foreach (var qtnId in request.QTN_ID_LIST)
+                        //{
+                        //    tvpQTN.Rows.Add(qtnId);
+                        //}
+
+                        using (SqlCommand cmd = new SqlCommand("SP_TB_SO", connection, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@ACTION", 10);
+                            cmd.Parameters.AddWithValue("@ID", request.ID ?? 0);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SO_DATE", ParseDate(request.SO_DATE));
+                            cmd.Parameters.AddWithValue("@CUST_ID", request.CUST_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@USER_ID", request.USER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@REMARKS", request.REMARKS ?? "");
+                            cmd.Parameters.AddWithValue("@DELIVERY_ADDRESS", request.DELIVERY_ADDRESS ?? 0);
+                            cmd.Parameters.AddWithValue("@WAREHOUSE", request.WAREHOUSE ?? 0);
+                            cmd.Parameters.AddWithValue("@TOTAL_QTY", request.TOTAL_QTY ?? 0);
+                            cmd.Parameters.AddWithValue("@SUBDEALER_ID", request.SUBDEALER_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@QTN_ID", request.QTN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@SALESMAN_ID", request.SALESMAN_ID ?? 0);
+                            cmd.Parameters.AddWithValue("@GROSS_AMOUNT", request.GROSS_AMOUNT ?? 0);
+                            cmd.Parameters.AddWithValue("@NET_AMOUNT", request.NET_AMOUNT ?? 0);
+
+                            // Add QTN_ID_LIST as a structured parameter
+                            //SqlParameter qtnParam = cmd.Parameters.AddWithValue("@QTN_ID_LIST", tvpQTN);
+                            //qtnParam.SqlDbType = SqlDbType.Structured;
+                            //qtnParam.TypeName = "dbo.UDT_QTN_ID_LIST";
+
+
+                            if (tvp.Rows.Count > 0)
+                            {
+                                SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SO_DETAIL", tvp);
+                                tvpParam.SqlDbType = SqlDbType.Structured;
+                                tvpParam.TypeName = "dbo.UDT_TB_SO_DETAIL";
+                            }
+                            else
+                            {
+                                SqlParameter tvpParam = cmd.Parameters.AddWithValue("@SO_DETAIL", new DataTable());
+                                tvpParam.SqlDbType = SqlDbType.Structured;
+                                tvpParam.TypeName = "dbo.UDT_TB_SO_DETAIL";
+                            }
+
+                            cmd.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                        response.Flag = "1";
+                        response.Message = "Sales Order verified successfully.";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        response.Flag = "0";
+                        response.Message = "Error approving Sales Order: " + ex.Message;
+                    }
+                }
+            }
+            return response;
+        }
         public SOQUOTATIONLISTResponse GetSOQUOTATIONLIST(SOQUOTATIONRequest request)
         {
             SOQUOTATIONLISTResponse response = new SOQUOTATIONLISTResponse { Data = new List<SOQUOTATIONLIST>() };

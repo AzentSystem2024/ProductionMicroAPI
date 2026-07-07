@@ -157,6 +157,27 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("DNVerify")]
+        public DeliverynotesaveResponse DNVerify(Delivery_NoteUpdate deliverynote)
+        {
+            DeliverynotesaveResponse res = new DeliverynotesaveResponse();
+
+            try
+            {
+
+                _delivery_noteservice.DNVerify(deliverynote);
+                res.flag = 1;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("delete/{id:int}")]
         public DeliverynotesaveResponse Delete(int id)
         {
