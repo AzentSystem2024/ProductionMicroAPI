@@ -141,6 +141,7 @@ namespace MicroApi.DataLayer.Services
                                         : Convert.ToInt32(reader["InvoiceID"]),
 
                                     InvoiceNo = reader["InvoiceNo"]?.ToString() ?? "",
+                                    Customer = reader["Customer"]?.ToString() ?? "",    
 
                                     Date = reader["Date"] == DBNull.Value
                                         ? ""
