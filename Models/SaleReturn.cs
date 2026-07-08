@@ -107,6 +107,7 @@
     {
         public int? TRANS_ID { get; set; }
         public int? COMPANY_ID { get; set; }
+        public int? STORE_ID { get; set; }
         public int? FIN_ID { get; set; }
         public int? CUST_ID { get; set; }
         public DateTime? RET_DATE { get; set; }

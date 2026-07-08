@@ -406,7 +406,7 @@ namespace MicroApi.DataLayer.Service
                         foreach (var item in input.Details)
                         {
                             dt.Rows.Add(
-                                item.QUANTITY, item.PRICE,
+                            item.QUANTITY, item.PRICE,
                             item.AMOUNT,
                             item.TAX_PERC,
                             item.TAX_AMOUNT,

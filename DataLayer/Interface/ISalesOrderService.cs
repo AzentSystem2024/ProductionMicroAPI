@@ -18,6 +18,7 @@ namespace MicroApi.DataLayer.Interface
         PairResponse GetPairQtyByPackingId(PackingPairRequest request);
         WarehouseResponse GetWarehouseByCustId(SOQUOTATIONRequest request);
         SalesOrderResponse ApproveSalesOrder(SalesOrderUpdate request);
+        SalesOrderResponse Verify(SalesOrderUpdate request);
         SOQUOTATIONLISTResponse GetSOQUOTATIONLIST(SOQUOTATIONRequest request);
         LatestVocherNOResponse GetLatestVoucherNumber();
         public List<Subdealers> GetSubdealer(SubdealerRequest id);

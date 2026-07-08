@@ -25,7 +25,13 @@ namespace MicroApi.DataLayer.Service
                 {
                     GrossSale = new List<GrossSaleData>(),
                     TopMovingItems = new List<TopMovingItemData>(),
-                    TenderSummary = new List<TenderSummaryStoreData>()
+                    TenderSummary = new List<TenderSummaryStoreData>(),
+
+                    ProfitLoss = new ProfitLossSummary
+                    {
+                        Revenue = new List<RevenueData>(),
+                        Expense = new List<ExpenseData>()
+                    }
                 }
             };
 
@@ -146,6 +152,50 @@ namespace MicroApi.DataLayer.Service
                                     });
                                 }
                             }
+                            /* ============================================
+                               4. REVENUE
+                               ============================================ */
+
+                            if (reader.NextResult())
+                            {
+                                while (reader.Read())
+                                {
+                                    int storeId = reader["STORE_ID"] != DBNull.Value
+                                        ? Convert.ToInt32(reader["STORE_ID"])
+                                        : 0;
+
+                                    string store = reader["STORE"]?.ToString();
+
+                                    decimal revenue = reader["REVENUE"] != DBNull.Value
+                                        ? Convert.ToDecimal(reader["REVENUE"])
+                                        : 0;
+
+                                    decimal expense = reader["EXPENSE"] != DBNull.Value
+                                        ? Convert.ToDecimal(reader["EXPENSE"])
+                                        : 0;
+
+                                    if (revenue != 0)
+                                    {
+                                        response.data.ProfitLoss.Revenue.Add(new RevenueData
+                                        {
+                                            STORE_ID = storeId,
+                                            STORE = store,
+                                            REVENUE = revenue
+                                        });
+                                    }
+
+                                    if (expense != 0)
+                                    {
+                                        response.data.ProfitLoss.Expense.Add(new ExpenseData
+                                        {
+                                            STORE_ID = storeId,
+                                            STORE = store,
+                                            EXPENSE = expense
+                                        });
+                                    }
+                                }
+                            }
+
                         }
 
                         response.flag = 1;
