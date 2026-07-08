@@ -327,6 +327,7 @@ namespace MicroApi.DataLayer.Service
                                 TRANS_ID = firstRow["TRANS_ID"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["TRANS_ID"]) : null,
                                 NARRATION = firstRow["NARRATION"] != DBNull.Value ? firstRow["NARRATION"].ToString() : null,
                                 DN_TYPE = firstRow["DN_TYPE"] != DBNull.Value ? (int?)Convert.ToInt32(firstRow["DN_TYPE"]) : null,
+                                STATUS = firstRow["STATUS"] != DBNull.Value ? firstRow["STATUS"].ToString() : null,
                                 Details = new List<Delivery_Note_Detail_Select>()
                             };
 

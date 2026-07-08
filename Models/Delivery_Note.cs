@@ -127,6 +127,7 @@
         public int? TRANS_ID { get; set; }
         public string? NARRATION { get; set; }
         public int? DN_TYPE { get; set; }
+        public string? STATUS { get; set; }
         public List<Delivery_Note_Detail_Select>? Details { get; set; }
     }
     public class Delivery_Note_Detail_Select

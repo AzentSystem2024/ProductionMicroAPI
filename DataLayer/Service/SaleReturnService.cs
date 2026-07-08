@@ -245,6 +245,7 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.Parameters.AddWithValue("@ACTION", 3);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
                 cmd.Parameters.AddWithValue("@RET_DATE", model.RET_DATE);
@@ -341,6 +342,7 @@ namespace MicroApi.DataLayer.Service
 
                 cmd.Parameters.AddWithValue("@ACTION", 6);
                 cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
@@ -439,6 +441,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@ACTION", 7);
                 cmd.Parameters.AddWithValue("@TRANS_ID", model.TRANS_ID);
                 cmd.Parameters.AddWithValue("@COMPANY_ID", model.COMPANY_ID);
+                cmd.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
                 cmd.Parameters.AddWithValue("@FIN_ID", model.FIN_ID);
                 cmd.Parameters.AddWithValue("@CUST_ID", model.CUST_ID);
                 cmd.Parameters.AddWithValue("@RET_DATE", model.RET_DATE);
@@ -474,6 +477,7 @@ namespace MicroApi.DataLayer.Service
                     connection.Close();
             }
         }
+
         public SaleReturnViewResponse GetSaleReturnById(int id)
         {
             var response = new SaleReturnViewResponse
