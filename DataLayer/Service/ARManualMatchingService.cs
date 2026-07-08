@@ -117,7 +117,7 @@ namespace MicroApi.DataLayer.Services
                         H.SALE_DATE AS [Date],
                         C.CUST_NAME AS Customer,
                         I.ITEM_CODE AS SERVICE_CODE,
-                        D.TOTAL_AMOUNT AS Amount
+                        D.TOTAL_AMOUNT - D.RECEIVED_AMOUNT - REJECTED_AMOUNT  AS Amount
                     FROM TB_SALE_HEADER H
                     INNER JOIN TB_CUSTOMER C
                         ON C.ID = H.CUSTOMER_ID
@@ -126,6 +126,7 @@ namespace MicroApi.DataLayer.Services
                     INNER JOIN TB_ITEMS I
                         ON I.ID = D.ITEM_ID
                     WHERE H.REF_NO = @ReferenceNo
+                    AND D.TOTAL_AMOUNT - D.RECEIVED_AMOUNT - D.REJECTED_AMOUNT > 0
                     ORDER BY H.SALE_DATE DESC";
 
                         cmd.Parameters.AddWithValue("@ReferenceNo", vInput.ReferenceNo);
