@@ -27,9 +27,10 @@ namespace MicroApi.DataLayer.Services
                         SELECT 
                             H.ID AS ReceiptID,
                             D.ID AS ReceiptDetailID,
-                            H.REC_NO,
+                            AC.REF_NO AS REC_NO,
                             H.REC_DATE,
                             D.BILL_NO AS BILL_NO,
+	                        C.CUST_NAME AS CUSTOMER,
                             D.SERVICE_CODE,
                             D.REC_AMOUNT,
                             D.DENIED_AMOUNT,
@@ -39,6 +40,8 @@ namespace MicroApi.DataLayer.Services
                             ON D.REC_ID = H.ID
                         INNER JOIN TB_CUSTOMER C
                             ON C.ID = H.CUSTOMER_ID
+                        INNER JOIN TB_AC_TRANS_HEADER AC 
+	                        ON AC.TRANS_ID = H.TRANS_ID
                         WHERE D.IS_MATCHED = 0
                           AND C.COMPANY_ID = @CompanyID
                         ORDER BY H.REC_DATE DESC";
@@ -58,7 +61,8 @@ namespace MicroApi.DataLayer.Services
                                         ? 0
                                         : Convert.ToInt32(reader["ReceiptDetailID"]),
                                     ReceiptNo = reader["REC_NO"]?.ToString() ?? "",
-									Date = reader["REC_DATE"] == DBNull.Value
+                                    Customer = reader["CUSTOMER"]?.ToString() ?? "",
+                                    Date = reader["REC_DATE"] == DBNull.Value
 										? ""
 										: Convert.ToDateTime(reader["REC_DATE"]).ToString("dd/MM/yyyy"),
 
