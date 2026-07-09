@@ -191,7 +191,7 @@ namespace MicroApi.DataLayer.Services
                         dt.Rows.Add(
                             item.InvoiceID,
                             (object?)item.RejectedAmount ?? DBNull.Value,
-                            (object?)item.ReceivedAomount ?? DBNull.Value
+                            (object?)item.ReceivedAmount ?? DBNull.Value
                         );
                     }
                 }

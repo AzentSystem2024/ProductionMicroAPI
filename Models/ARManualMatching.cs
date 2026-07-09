@@ -68,7 +68,7 @@ namespace MicroApi.Models
     {
         public int InvoiceID { get; set; }
         public decimal? RejectedAmount { get; set; }
-        public decimal? ReceivedAomount { get; set; }
+        public decimal? ReceivedAmount { get; set; }
     }
    
 
