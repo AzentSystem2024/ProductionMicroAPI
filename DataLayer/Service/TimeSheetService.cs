@@ -143,8 +143,9 @@ namespace MicroApi.DataLayer.Service
             {
                 string strSQL = " SELECT header.ID, header.TS_MONTH , header.EMP_ID, header.TOTAL_DAYS, header.NORMAL_OT , " +
                     " header.HOLIDAY_OT, header.LEAVE_FROM, header.LEAVE_TO, header.WORKED_DAYS,header.COMPANY_ID, " +
-                    " header.DEDUCT_DAYS, header.REMARKS , status.STATUS_DESC as STATUS " +
-                    " FROM TB_PAY_TS_HEADER header " +
+                    " header.DEDUCT_DAYS, header.REMARKS , status.STATUS_DESC as STATUS,TB_EMPLOYEE.EMP_CODE,TB_EMPLOYEE.EMP_NAME " +
+                    " FROM TB_PAY_TS_HEADER header" +
+                    " LEFT JOIN TB_EMPLOYEE ON header.EMP_ID=TB_EMPLOYEE.ID " +
                     " LEFT JOIN TB_STATUS status ON " +
                     " status.ID = header.TS_STATUS " +
                     " WHERE header.ID =" + id;
@@ -158,6 +159,8 @@ namespace MicroApi.DataLayer.Service
                     ts.COMPANY_ID = ADO.ToInt32(dr["COMPANY_ID"]);
                     ts.TS_MONTH = Convert.ToDateTime(dr["TS_MONTH"]).ToString("MMMM yyyy");
                     ts.EMP_ID = ADO.ToInt32(dr["EMP_ID"]);
+                    ts.EMP_CODE = ADO.ToString(dr["EMP_CODE"]);
+                    ts.EMP_NAME = ADO.ToString(dr["EMP_NAME"]);
                     ts.DAYS = ADO.ToFloat(dr["TOTAL_DAYS"]);
                     ts.NORMAL_OT = ADO.ToFloat(dr["NORMAL_OT"]);
                     ts.HOLIDAY_OT = ADO.ToFloat(dr["HOLIDAY_OT"]);
@@ -170,7 +173,7 @@ namespace MicroApi.DataLayer.Service
                 }
 
 
-                string strSQL1 = " SELECT detail.DEPT_ID, dept.DEPT_NAME , detail.DAYS, detail.NORMAL_OT,detail.STORE_ID, " +
+                string strSQL1 = " SELECT detail.ID,detail.TS_ID,detail.DEPT_ID, dept.DEPT_NAME , detail.DAYS, detail.NORMAL_OT,detail.STORE_ID, " +
                     "detail.HOLIDAY_OT FROM TB_PAY_TS_DETAIL detail INNER JOIN TB_PAY_TS_HEADER header " +
                     " ON detail.TS_ID = header.ID  " +
                     "LEFT JOIN  TB_DEPARTMENT dept ON dept.ID = detail.DEPT_ID " +
@@ -184,6 +187,8 @@ namespace MicroApi.DataLayer.Service
                     {
                         ts.TIMESHEET_DETAIL.Add(new saveTimeSheetDetailData
                         {
+                            ID = ADO.ToInt32(dr["ID"]),
+                            TS_ID = ADO.ToInt32(dr["TS_ID"]),
                             DEPT_ID = ADO.ToInt32(dr["DEPT_ID"]),
                             DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
                             DAYS = ADO.ToFloat(dr["DAYS"]),

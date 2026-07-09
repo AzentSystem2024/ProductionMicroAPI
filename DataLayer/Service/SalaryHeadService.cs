@@ -37,6 +37,7 @@ namespace MicroApi.DataLayer.Service
                             PAYSLIP_TITLE = dr["HEAD_TITLE"]?.ToString(),
                             HEAD_ACTIVE = dr["HEAD_ACTIVE"] != DBNull.Value ? Convert.ToBoolean(dr["HEAD_ACTIVE"]) : (bool?)null,
                             HEAD_TYPE = dr["HEAD_TYPE"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_TYPE"]) : (int?)null,
+                            HEAD_TYPE_NAME = dr["HEAD_TYPE_NAME"]?.ToString(),
                             AFFECT_LEAVE = dr["AFFECT_LEAVE"] != DBNull.Value ? Convert.ToBoolean(dr["AFFECT_LEAVE"]) : (bool?)null,
                             HEAD_NATURE = dr["HEAD_NATURE"] != DBNull.Value ? Convert.ToInt32(dr["HEAD_NATURE"]) : (int?)null,
                             FIXED_AMOUNT = dr["HEAD_AMOUNT"] != DBNull.Value ? Convert.ToDouble(dr["HEAD_AMOUNT"]) : (double?)null,

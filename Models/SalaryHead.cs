@@ -33,6 +33,7 @@
         public string? PAYSLIP_TITLE { get; set; }
         public bool? HEAD_ACTIVE { get; set; }
         public int? HEAD_TYPE { get; set; }
+        public string? HEAD_TYPE_NAME { get; set; }
         public bool? AFFECT_LEAVE { get; set; }
         public int? HEAD_ORDER { get; set; }
         public int? HEAD_NATURE { get; set; }
