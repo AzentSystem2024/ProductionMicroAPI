@@ -285,7 +285,9 @@ namespace MicroApi.DataLayer.Service
                         DataTable dt = new DataTable();
                         da.Fill(dt);
 
-                        if (dt.Rows.Count > 0)
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
                         {
                             response.flag = 1;
                             response.Message = "Success";
@@ -341,7 +343,9 @@ namespace MicroApi.DataLayer.Service
                         DataTable dt = new DataTable();
                         da.Fill(dt);
 
-                        if (dt.Rows.Count > 0)
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
                         {
                             response.flag = 1;
                             response.Message = "Success";

@@ -24,6 +24,7 @@ namespace MicroApi.DataLayer.Service
                     using (SqlCommand cmd = new SqlCommand("SP_RPT_STOCK_MOVEMENT", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 0;
                         cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
                         //cmd.Parameters.Add("@STORE_ID", SqlDbType.Int).Value = request.STORE_ID;
                         cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;

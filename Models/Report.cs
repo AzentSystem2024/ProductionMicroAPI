@@ -51,7 +51,7 @@
     public class FixedAssetReportRequest
     {
         public int COMPANY_ID { get; set; }
-        public int DEPARTMENT_ID { get; set; }
+        public string DEPARTMENT_ID { get; set; }
         //public int STORE_ID { get; set; }
     }
     public class DepreciationReport
@@ -75,7 +75,7 @@
         public string DATE_FROM { get; set; }
         public string DATE_TO { get; set; }
         public int COMPANY_ID { get; set; }
-        public int DEPARTMENT_ID { get; set; }
+        public string DEPARTMENT_ID { get; set; }
     }
     public class DepreciationReportResponse
     {
