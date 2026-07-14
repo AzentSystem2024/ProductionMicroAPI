@@ -114,14 +114,14 @@ namespace MicroApi.Services
                 IF EXISTS(SELECT 1 FROM TB_STORE_SYNCH_STATUS WHERE STORE_ID = @STORE_ID)
                 BEGIN
                     UPDATE TB_STORE_SYNCH_STATUS
-                    SET LAST_SYNCH_TIME = GETDATE()
+                    SET LAST_SYNCH_TIME = GETUTCDATE()
                     WHERE STORE_ID = @STORE_ID
                 END
                 ELSE
                 BEGIN
                 INSERT INTO TB_STORE_SYNCH_STATUS
                 (STORE_ID,LAST_SYNCH_TIME)
-                VALUES(@STORE_ID,GETDATE())
+                VALUES(@STORE_ID,GETUTCDATE())
                 END";
 
                 cmdStatus.Parameters.AddWithValue("@STORE_ID", model.STORE_ID);
@@ -195,32 +195,80 @@ namespace MicroApi.Services
 
             return response;
         }
-        public DataTable GetSynchPendingStores()
+        public List<PendingStoreResponse> GetSynchPendingStores()
         {
-            DataTable dt = new DataTable();
+            List<PendingStoreResponse> list = new List<PendingStoreResponse>();
+
+            using (SqlConnection con = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_GETPENDINGSTORES", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 0;
+
+                   // con.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new PendingStoreResponse
+                            {
+                                ID = Convert.ToInt32(reader["ID"]),
+                                CODE = reader["CODE"].ToString(),
+                                STORE_NAME = reader["STORE_NAME"].ToString(),
+                                ADDRESS1 = reader["ADDRESS1"].ToString(),
+                                TIME_DIFFERENCE = reader["DIFF_MINUTES"].ToString(),
+                                // 24-hour (Railway time)
+                                LAST_SYNCH_TIME = Convert.ToDateTime(reader["LAST_SYNCH_TIME"]).ToString("yyyy-MM-dd HH:mm:ss")
+
+                            });
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+        public SynchResponse UpdateLastSynchTime(UpdateLastSynchTimeRequest request)
+        {
+            SynchResponse response = new SynchResponse();
 
             try
             {
                 using SqlConnection con = ADO.GetConnection();
-                using SqlCommand cmd = new SqlCommand("SP_GETPENDINGSTORES", con);
 
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandTimeout = 0;
+                using SqlCommand cmd = new SqlCommand();
+                cmd.Connection = con;
+                cmd.CommandType = CommandType.Text;
 
-                //    cmd.Parameters.Add("@intMinutes", SqlDbType.Int).Value = request.intMinutes;
+                cmd.CommandText = @"
+                IF EXISTS (SELECT 1 FROM TB_STORE_SYNCH_STATUS WHERE STORE_ID = @STORE_ID)
+                BEGIN
+                    UPDATE TB_STORE_SYNCH_STATUS
+                    SET LAST_SYNCH_TIME = GETUTCDATE()
+                    WHERE STORE_ID = @STORE_ID
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO TB_STORE_SYNCH_STATUS (STORE_ID, LAST_SYNCH_TIME)
+                    VALUES (@STORE_ID, GETUTCDATE())
+                END";
 
-                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                {
-                    da.Fill(dt);
-                }
+                cmd.Parameters.Add("@STORE_ID", SqlDbType.Int).Value = request.STORE_ID;
+
+                cmd.ExecuteNonQuery();
+
+                response.flag = 1;
+                response.Message = "Success.";
             }
             catch (Exception ex)
             {
-                // 👉 Log this properly in your system
-                throw;
+                response.flag = 0;
+                response.Message = ex.Message;
             }
 
-            return dt;
+            return response;
         }
     }
 

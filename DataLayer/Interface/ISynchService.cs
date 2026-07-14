@@ -7,6 +7,7 @@ namespace MicroApi.DataLayer.Interface
     {
         SynchResponse UploadData(Synch model);
         SynchDownloadResponse DownloadData(SynchDownload model);
-        DataTable GetSynchPendingStores();
+        List<PendingStoreResponse> GetSynchPendingStores();
+        SynchResponse UpdateLastSynchTime(UpdateLastSynchTimeRequest request);
     }
 }

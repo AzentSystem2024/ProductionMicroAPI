@@ -81,27 +81,28 @@ namespace MicroApi.Controllers
         [HttpPost("PendingStores")]
         public IActionResult GetPendingStores()
         {
-            // //public IActionResult GetPendingStores([FromBody] PendingStoresFilter request)
             try
             {
-                // var dt = _service.GetSynchPendingStores(request);
-                var dt = _synchService.GetSynchPendingStores();
-
-                var result = dt.AsEnumerable()
-                    .Select(row => dt.Columns
-                        .Cast<DataColumn>()
-                        .ToDictionary(
-                            col => col.ColumnName,
-                            col => row[col] == DBNull.Value ? null : row[col]
-                        )).ToList();
-
-                return Ok(result);   // ✅ FIXED
+                var result = _synchService.GetSynchPendingStores();
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpPost("UpdateLastSynchTime")]
+        public IActionResult UpdateLastSynchTime(UpdateLastSynchTimeRequest request)
+        {
+            try
+            {
+                var response = _synchService.UpdateLastSynchTime(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

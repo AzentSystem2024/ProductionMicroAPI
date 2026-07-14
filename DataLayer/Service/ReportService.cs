@@ -206,50 +206,70 @@ namespace MicroApi.DataLayer.Service
 
             using (SqlConnection conn = ADO.GetConnection())
             {
+               // conn.Open();
+
+                Console.WriteLine("Database : " + conn.Database);
+
                 using (SqlCommand cmd = new SqlCommand("SP_RPT_PROFIT_LOSS_BRANCH", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 300;
 
-                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
-                    cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
-                    cmd.Parameters.AddWithValue("@DATE_FROM", request.DATE_FROM);
-                    cmd.Parameters.AddWithValue("@DATE_TO", request.DATE_TO);
-                    cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID ?? "");
+                    cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                    cmd.Parameters.Add("@FIN_ID", SqlDbType.Int).Value = request.FIN_ID;
+                    cmd.Parameters.Add("@DATE_FROM", SqlDbType.DateTime).Value = request.DATE_FROM;
+                    cmd.Parameters.Add("@DATE_TO", SqlDbType.DateTime).Value = request.DATE_TO;
+                    cmd.Parameters.Add("@STORE_ID", SqlDbType.VarChar).Value = request.STORE_ID ?? "";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        // Print all column names returned by SQL
+                        Console.WriteLine("Columns Returned:");
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            Console.WriteLine($"{i} : {reader.GetName(i)}");
+                        }
+
                         while (reader.Read())
                         {
-                            var item = new ProfitLossBranch
+                            ProfitLossBranch item = new ProfitLossBranch
                             {
-                                TYPE_ID = Convert.ToInt32(reader["TYPE_ID"]),
+                                TYPE_ID = reader["TYPE_ID"] != DBNull.Value ? Convert.ToInt32(reader["TYPE_ID"]) : 0,
                                 TYPE_NAME = reader["TYPE_NAME"]?.ToString(),
-                                GROUP_ID = Convert.ToInt32(reader["GROUP_ID"]),
+                                GROUP_ID = reader["GROUP_ID"] != DBNull.Value ? Convert.ToInt32(reader["GROUP_ID"]) : 0,
                                 GROUP_NAME = reader["GROUP_NAME"]?.ToString(),
-                                CATEGORY_ID = Convert.ToInt32(reader["CATEGORY_ID"]),
+                                CATEGORY_ID = reader["CATEGORY_ID"] != DBNull.Value ? Convert.ToInt32(reader["CATEGORY_ID"]) : 0,
                                 CATEGORY_NAME = reader["CATEGORY_NAME"]?.ToString(),
-                                HEAD_ID = Convert.ToInt32(reader["HEAD_ID"]),
+                                HEAD_ID = reader["HEAD_ID"] != DBNull.Value ? Convert.ToInt32(reader["HEAD_ID"]) : 0,
                                 HEAD_CODE = reader["HEAD_CODE"]?.ToString(),
                                 HEAD_NAME = reader["HEAD_NAME"]?.ToString(),
                                 StoreAmounts = new Dictionary<string, decimal?>()
                             };
 
-                            // Handle dynamic columns (stores + TOTAL)
                             for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                string columnName = reader.GetName(i);
+                                string column = reader.GetName(i);
 
-                                // Skip fixed columns
-                                if (!new[]
+                                if (column == "TYPE_ID" ||
+                                    column == "TYPE_NAME" ||
+                                    column == "GROUP_ID" ||
+                                    column == "GROUP_NAME" ||
+                                    column == "CATEGORY_ID" ||
+                                    column == "CATEGORY_NAME" ||
+                                    column == "HEAD_ID" ||
+                                    column == "HEAD_CODE" ||
+                                    column == "HEAD_NAME" ||
+                                    column == "BL_ORDER")
                                 {
-                            "TYPE_ID","TYPE_NAME","GROUP_ID","GROUP_NAME",
-                            "CATEGORY_ID","CATEGORY_NAME","HEAD_ID",
-                            "HEAD_CODE","HEAD_NAME"
-                        }.Contains(columnName))
-                                {
-                                    item.StoreAmounts[columnName] =
-                                        reader.IsDBNull(i) ? (decimal?)null : Convert.ToDecimal(reader.GetValue(i));
+                                    continue;
                                 }
+
+                                decimal? value = null;
+
+                                if (!reader.IsDBNull(i))
+                                    value = Convert.ToDecimal(reader.GetValue(i));
+
+                                item.StoreAmounts.Add(column, value);
                             }
 
                             response.ProfitLossDetails.Add(item);
@@ -258,7 +278,7 @@ namespace MicroApi.DataLayer.Service
                 }
             }
 
-            response.Flag = (response.ProfitLossDetails.Count > 0) ? 1 : 0;
+            response.Flag = response.ProfitLossDetails.Any() ? 1 : 0;
             response.Message = response.Flag == 1 ? "Success" : "No records found";
 
             return response;
