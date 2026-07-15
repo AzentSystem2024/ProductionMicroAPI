@@ -53,6 +53,7 @@
         public decimal LESS_HOURS { get; set; }
         public decimal NET_AMOUNT { get; set; }
         public string STATUS { get; set; }
+        public int TRANS_ID { get; set; }
         public List<SalaryHeadData> DATA { get; set; }
     }
 
@@ -87,6 +88,7 @@
        public class SalaryApprove
     {
         public int COMPANY_ID { get; set; }
+        public int FIN_ID { get; set; }
         public int USER_ID { get; set; }
         public List<int> PAYDETAIL_ID { get; set; }
     }

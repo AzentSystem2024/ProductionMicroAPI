@@ -126,41 +126,41 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-        [HttpPost("BalanceSheet")]
-        public BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request)
-        {
-            var res = new BalanceSheetResponse();
-            try
-            {
-                res = _ReportService.GetBalanceSheetReport(request);
-                res.flag = 1;
-                res.message = "Success";
-            }
-            catch (Exception ex)
-            {
-                res.flag = 0;
-                res.message = ex.Message;
-            }
-            return res;
-        }
+        //[HttpPost("BalanceSheet")]
+        //public BalanceSheetResponse GetBalanceSheetReport(BalanceSheetFilter request)
+        //{
+        //    var res = new BalanceSheetResponse();
+        //    try
+        //    {
+        //        res = _ReportService.GetBalanceSheetReport(request);
+        //        res.flag = 1;
+        //        res.message = "Success";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = 0;
+        //        res.message = ex.Message;
+        //    }
+        //    return res;
+        //}
 
-        [HttpPost("profitloss")]
-        public ProfitLossReportResponse GetProfitlossReport(ProfitLossReportRequest request)
-        {
-            var res = new ProfitLossReportResponse();
-            try
-            {
-                res = _ReportService.GetProfitLossReport(request);
-                res.flag = 1;
-                res.message = "Success";
-            }
-            catch (Exception ex)
-            {
-                res.flag = 0;
-                res.message = ex.Message;
-            }
-            return res;
-        }
+        //[HttpPost("profitloss")]
+        //public ProfitLossReportResponse GetProfitlossReport(ProfitLossReportRequest request)
+        //{
+        //    var res = new ProfitLossReportResponse();
+        //    try
+        //    {
+        //        res = _ReportService.GetProfitLossReport(request);
+        //        res.flag = 1;
+        //        res.message = "Success";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = 0;
+        //        res.message = ex.Message;
+        //    }
+        //    return res;
+        //}
         [HttpPost("SupplierStatement")]
         public IActionResult GetSupplierStateReports(SupplierStatReportRequest request)
         {
@@ -314,7 +314,7 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-        [HttpPost("profitlossdimension")]
+        [HttpPost("profitloss")]//dimension
         public ProfitLosswithDimensionResponse GetProfitlosswithDimension(ProfitLosswithDimensionRequest request)
         {
             var res = new ProfitLosswithDimensionResponse();
@@ -331,7 +331,7 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-        [HttpPost("BalanceSheetDimension")]
+        [HttpPost("BalanceSheet")]//Dimension
         public BalanceSheetwithDimensionResponse GetBalanceSheetwithDimension(BalanceSheetwithDimensionFilter request)
         {
             var res = new BalanceSheetwithDimensionResponse();

@@ -7,7 +7,7 @@ using System.Diagnostics.Metrics;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
@@ -26,7 +26,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 customers = _customerService.GetAllCustomers(request);
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace MicroApi.Controllers
             CustomerUpdate objCustomer = new CustomerUpdate();
             try
             {
-                
+
                 objCustomer = _customerService.GetItems(id);
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
                 Int32 ID = _customerService.SaveData(customerData);
 
                 res.flag = "1";
@@ -108,7 +108,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                
+
 
                 _customerService.DeleteCustomers(id);
                 res.flag = "1";

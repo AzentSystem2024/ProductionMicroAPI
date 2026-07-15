@@ -39,6 +39,8 @@ namespace MicroApi.Models
     {
         public int? ID { get; set; }
         public int? USER_ID { get; set; }
+        public int? FIN_ID { get; set; }
+        public int? COMPANY_ID { get; set; }
         public int? STORE_ID { get; set; }
         public string? DOC_NO { get; set; }
         public DateTime? DOC_DATE { get; set; }

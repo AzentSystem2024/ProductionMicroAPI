@@ -201,7 +201,7 @@ namespace MicroApi.Services
 
             using (SqlConnection con = ADO.GetConnection())
             {
-                using (SqlCommand cmd = new SqlCommand("SP_GETPENDINGSTORES", con))
+                using (SqlCommand cmd = new SqlCommand("SP_GET_STORE_SYNCH_STATUS", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandTimeout = 0;
@@ -219,8 +219,7 @@ namespace MicroApi.Services
                                 STORE_NAME = reader["STORE_NAME"].ToString(),
                                 ADDRESS1 = reader["ADDRESS1"].ToString(),
                                 TIME_DIFFERENCE = reader["DIFF_MINUTES"].ToString(),
-                                // 24-hour (Railway time)
-                                LAST_SYNCH_TIME = Convert.ToDateTime(reader["LAST_SYNCH_TIME"]).ToString("yyyy-MM-dd HH:mm:ss")
+                                LAST_SYNCH_TIME = Convert.ToDateTime(reader["LAST_SYNCH_TIME"]).ToString("dd-MM-yyyy hh:mm:ss tt")
 
                             });
                         }

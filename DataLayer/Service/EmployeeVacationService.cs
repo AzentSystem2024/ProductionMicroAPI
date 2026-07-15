@@ -71,7 +71,8 @@ namespace MicroApi.DataLayer.Services
 
                     cmd.Parameters.AddWithValue("@ACTION", 1);
 
-                    //cmd.Parameters.AddWithValue("ID", employee.ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", (object)vacation.FIN_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object)vacation.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@USER_ID", (object)vacation.USER_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@STORE_ID", (object)vacation.STORE_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@EMP_ID", (object)vacation.EMP_ID ?? DBNull.Value);
@@ -168,6 +169,8 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@ACTION", 2);
 
                     cmd.Parameters.AddWithValue("ID", vacation.ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", (object)vacation.FIN_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object)vacation.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@USER_ID", (object)vacation.USER_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@STORE_ID", (object)vacation.STORE_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@EMP_ID", (object)vacation.EMP_ID ?? DBNull.Value);
@@ -251,6 +254,8 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@ACTION", 4);
 
                     cmd.Parameters.AddWithValue("ID", vacation.ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", (object)vacation.FIN_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object)vacation.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@USER_ID", (object)vacation.USER_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@STORE_ID", (object)vacation.STORE_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@EMP_ID", (object)vacation.EMP_ID ?? DBNull.Value);
@@ -306,6 +311,8 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@ACTION", 5);
 
                     cmd.Parameters.AddWithValue("ID", vacation.ID);
+                    cmd.Parameters.AddWithValue("@FIN_ID", (object)vacation.FIN_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", (object)vacation.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@USER_ID", (object)vacation.USER_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@STORE_ID", (object)vacation.STORE_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@EMP_ID", (object)vacation.EMP_ID ?? DBNull.Value);

@@ -132,6 +132,7 @@ namespace MicroApi.DataLayer.Service
                                         LESS_HOURS = Convert.ToDecimal(reader["LESS_HOURS"]),
                                         NET_AMOUNT = Convert.ToDecimal(reader["NET_AMOUNT"]),
                                         STATUS = Convert.ToString(reader["STATUS"]),
+                                        TRANS_ID = Convert.ToInt32(reader["APPROVE_TRANS_ID"]),
                                         DATA = new List<SalaryHeadData>()
                                     };
                                 }
@@ -265,7 +266,6 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        // Create UDT
                         DataTable payDetailTable = new DataTable();
                         payDetailTable.Columns.Add("PAYDETAIL_ID", typeof(int));
 
@@ -277,26 +277,21 @@ namespace MicroApi.DataLayer.Service
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_SALARY_DETAIL_ID", payDetailTable);
                         tvpParam.SqlDbType = SqlDbType.Structured;
                         tvpParam.TypeName = "UDT_SALARY_DETAIL_ID";
+
                         cmd.Parameters.AddWithValue("@ACTION", 1);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@USER_ID", request.USER_ID);
+                        cmd.Parameters.AddWithValue("@FIN_ID", request.FIN_ID);
 
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
-                        da.Fill(dt);
 
-                        int rowsAffected = cmd.ExecuteNonQuery();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
 
-                        if (rowsAffected > 0)
-                        {
-                            response.flag = 1;
-                            response.Message = "Success";
-                        }
-                        else
-                        {
-                            response.flag = 0;
-                            response.Message = "No Data Processed";
-                        }
+                        response.flag = 1;
+                        response.Message = "Success";
                     }
                 }
             }
