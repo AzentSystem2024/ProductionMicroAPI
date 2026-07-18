@@ -100,6 +100,20 @@ namespace MicroApi.Controllers
 
             return response;
         }
+        [HttpPost]
+        [Route("GetTimesheetReport")]
+        public IActionResult GetTimesheetReport(TimesheetReportRequest request)
+        {
+            try
+            {
+                var result = _service.GetTimesheetReport(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
 

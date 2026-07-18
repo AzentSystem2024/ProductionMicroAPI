@@ -161,5 +161,71 @@ namespace MicroApi.DataLayer.Services
                 throw ex;
             }
         }
+        public List<LeaveListResponse> GetLeaveApplicationList(LeaveListRequest request)
+        {
+            try
+            {
+                List<LeaveListResponse> res = new List<LeaveListResponse>();
+
+                using (SqlConnection connection = ADO.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = connection;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "SP_RPT_LEAVE_APPLICATION_LIST";
+
+                    cmd.Parameters.AddWithValue("@FromDate", request.FromDate);
+                    cmd.Parameters.AddWithValue("@ToDate", request.ToDate);
+                    cmd.Parameters.AddWithValue("@DepartmentId", request.DepartmentId);
+                    cmd.Parameters.AddWithValue("@EmployeeId", request.EmployeeId);
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        LeaveListResponse obj = new LeaveListResponse();
+
+                        obj.LeaveCode = dr["LeaveCode"].ToString();
+                        obj.ApplicationNo = dr["ApplicationNo"].ToString();
+                        obj.EmployeeCode = dr["EmployeeCode"].ToString();
+                        obj.DepartmentCode = dr["DepartmentCode"].ToString();
+                        obj.EmployeeName = dr["EmployeeName"].ToString();
+
+                        obj.LeaveBalance = dr["LeaveBalance"] == DBNull.Value
+                            ? 0
+                            : Convert.ToDecimal(dr["LeaveBalance"]);
+
+                        obj.LeaveStartDate = dr["LeaveStartDate"] == DBNull.Value
+                            ? (DateTime?)null
+                            : Convert.ToDateTime(dr["LeaveStartDate"]);
+
+                        obj.LeaveEndDate = dr["LeaveEndDate"] == DBNull.Value
+                            ? (DateTime?)null
+                            : Convert.ToDateTime(dr["LeaveEndDate"]);
+
+                        obj.ApprovedDays = dr["ApprovedDays"] == DBNull.Value
+                            ? 0
+                            : Convert.ToInt32(dr["ApprovedDays"]);
+
+                        obj.Approved = dr["Approved"].ToString();
+
+                        obj.ResumedDate = dr["ResumedDate"] == DBNull.Value
+                            ? (DateTime?)null
+                            : Convert.ToDateTime(dr["ResumedDate"]);
+
+                        res.Add(obj);
+                    }
+
+                    dr.Close();
+                    connection.Close();
+                }
+
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

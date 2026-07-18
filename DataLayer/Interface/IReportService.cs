@@ -9,5 +9,7 @@ namespace MicroApi.DataLayer.Interface
         DepreciationReportResponse GetDepreciationReport(DepreciationReportRequest request);
         PrepaymentReportResponse GetPrepaymentReport(PrepaymentReportRequest request);
         ProfitLossBranchResponse GetProfitLossBranch(ProfitLossBranchRequest request);
+        List<TimesheetReportResponse> GetTimesheetReport(TimesheetReportRequest request);
+        
     }
 }

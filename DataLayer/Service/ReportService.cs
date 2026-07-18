@@ -283,6 +283,59 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
+        public List<TimesheetReportResponse> GetTimesheetReport(TimesheetReportRequest request)
+        {
+            List<TimesheetReportResponse> list = new List<TimesheetReportResponse>();
+
+            using (SqlConnection conn = ADO.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_RPT_TIMESHEET", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 300;
+
+                    cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int).Value = request.COMPANY_ID;
+                    cmd.Parameters.Add("@DEPARTMENT_ID", SqlDbType.VarChar).Value = request.DEPARTMENT_ID ?? "";
+                    cmd.Parameters.Add("@TS_MONTH", SqlDbType.DateTime).Value =
+                        request.TS_MONTH.HasValue ? (object)request.TS_MONTH.Value : DBNull.Value;
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            list.Add(new TimesheetReportResponse
+                            {
+                                EMP_CODE = dr["EMP_CODE"]?.ToString(),
+                                EMP_NAME = dr["EMP_NAME"]?.ToString(),
+                                DEPT_NAME = dr["DEPT_NAME"]?.ToString(),
+                                TS_MONTH = dr["TS_MONTH"] != DBNull.Value ? Convert.ToDateTime(dr["TS_MONTH"]) : (DateTime?)null,
+
+                                TOTAL_DAYS = dr["TOTAL_DAYS"] != DBNull.Value ? Convert.ToDecimal(dr["TOTAL_DAYS"]) : 0,
+                                WORKED_DAYS = dr["WORKED_DAYS"] != DBNull.Value ? Convert.ToDecimal(dr["WORKED_DAYS"]) : 0,
+                                DEDUCT_DAYS = dr["DEDUCT_DAYS"] != DBNull.Value ? Convert.ToDecimal(dr["DEDUCT_DAYS"]) : 0,
+                                ABSENTEES = dr["ABSENTEES"] != DBNull.Value ? Convert.ToDecimal(dr["ABSENTEES"]) : 0,
+
+                                NORMAL_OT = dr["NORMAL_OT"] != DBNull.Value ? Convert.ToDecimal(dr["NORMAL_OT"]) : 0,
+                                HOLIDAY_OT = dr["HOLIDAY_OT"] != DBNull.Value ? Convert.ToDecimal(dr["HOLIDAY_OT"]) : 0,
+
+                                BASIC = dr["BASIC"] != DBNull.Value ? Convert.ToDecimal(dr["BASIC"]) : 0,
+                                ALLOWANCE = dr["ALLOWANCE"] != DBNull.Value ? Convert.ToDecimal(dr["ALLOWANCE"]) : 0,
+                                ADDITIONS = dr["ADDITIONS"] != DBNull.Value ? Convert.ToDecimal(dr["ADDITIONS"]) : 0,
+                                DEDUCTIONS = dr["DEDUCTIONS"] != DBNull.Value ? Convert.ToDecimal(dr["DEDUCTIONS"]) : 0,
+
+                                LEAVE_FROM = dr["LEAVE_FROM"] != DBNull.Value ? Convert.ToDateTime(dr["LEAVE_FROM"]) : (DateTime?)null,
+                                LEAVE_TO = dr["LEAVE_TO"] != DBNull.Value ? Convert.ToDateTime(dr["LEAVE_TO"]) : (DateTime?)null,
+
+                                REMARKS = dr["REMARKS"]?.ToString(),
+                                STATUS_DESC = dr["STATUS_DESC"]?.ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
     }
 }
 

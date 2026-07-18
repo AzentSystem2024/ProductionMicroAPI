@@ -9,6 +9,7 @@ namespace MicroApi.DataLayer.Interface
         public saveLeaveTypeData selectLeaveTypeData(int id);
         public saveLeaveTypeResponseData UpdateData(saveLeaveTypeData typeData);
         public saveLeaveTypeResponseData DeleteLeaveType(int id);
+        List<LeaveListResponse> GetLeaveApplicationList(LeaveListRequest request);
 
     }
 }

@@ -5,7 +5,7 @@ using MicroApi.Models;
 
 namespace MicroApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class LeaveTypeController : ControllerBase
@@ -121,7 +121,12 @@ namespace MicroApi.Controllers
             }
             return res;
         }
-
+        [HttpPost("LeaveApplicationList")]
+        public IActionResult LeaveApplicationList([FromBody] LeaveListRequest request)
+        {
+            var result = _leaveTypeService.GetLeaveApplicationList(request);
+            return Ok(result);
+        }
 
     }
 }

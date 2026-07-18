@@ -318,7 +318,6 @@ namespace MicroApi.DataLayer.Service
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        // Create UDT
                         DataTable payDetailTable = new DataTable();
                         payDetailTable.Columns.Add("PAYDETAIL_ID", typeof(int));
 
@@ -330,32 +329,22 @@ namespace MicroApi.DataLayer.Service
                         SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_SALARY_DETAIL_ID", payDetailTable);
                         tvpParam.SqlDbType = SqlDbType.Structured;
                         tvpParam.TypeName = "UDT_SALARY_DETAIL_ID";
+
                         cmd.Parameters.AddWithValue("@ACTION", 2);
                         cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
                         cmd.Parameters.AddWithValue("@USER_ID", request.USER_ID);
 
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
+                        // Execute only once
+                        cmd.ExecuteNonQuery();
 
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
-                        {
-                            response.flag = 1;
-                            response.Message = "Success";
-                        }
-                        else
-                        {
-                            response.flag = 0;
-                            response.Message = "No Data Processed";
-                        }
+                        response.flag = 1;
+                        response.Message = "Success";
                     }
                 }
             }
             catch (Exception ex)
             {
-                response.flag = -1;
+                response.flag = 0;
                 response.Message = ex.Message;
             }
 

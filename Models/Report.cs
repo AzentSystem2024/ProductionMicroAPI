@@ -147,4 +147,31 @@
         // Dynamic store columns
         public Dictionary<string, decimal?> StoreAmounts { get; set; }
     }
+    public class TimesheetReportRequest
+    {
+        public int COMPANY_ID { get; set; }
+        public string DEPARTMENT_ID { get; set; } = "";
+        public DateTime? TS_MONTH { get; set; }
+    }
+    public class TimesheetReportResponse
+    {
+        public string EMP_CODE { get; set; }
+        public string EMP_NAME { get; set; }
+        public string DEPT_NAME { get; set; }
+        public DateTime? TS_MONTH { get; set; }
+        public decimal TOTAL_DAYS { get; set; }
+        public decimal WORKED_DAYS { get; set; }
+        public decimal DEDUCT_DAYS { get; set; }
+        public decimal NORMAL_OT { get; set; }
+        public decimal HOLIDAY_OT { get; set; }
+        public DateTime? LEAVE_FROM { get; set; }
+        public DateTime? LEAVE_TO { get; set; }
+        public string REMARKS { get; set; }
+        public string STATUS_DESC { get; set; }
+        public decimal ABSENTEES { get; set; }
+        public decimal BASIC { get; set; }
+        public decimal ALLOWANCE { get; set; }
+        public decimal ADDITIONS { get; set; }
+        public decimal DEDUCTIONS { get; set; }
+    }
 }
