@@ -244,7 +244,7 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("@ACTION", 4);
 
                     cmd.Parameters.AddWithValue("ID", adv.ID);
-                    cmd.Parameters.AddWithValue("COMPANY_ID" ,(object)adv.COMPANY_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("COMPANY_ID", (object)adv.COMPANY_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("EMP_ID", (object)adv.EMP_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("DATE", (object)adv.DATE ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("ADV_TYPE_ID", (object)adv.ADV_TYPE_ID ?? DBNull.Value);
@@ -254,6 +254,10 @@ namespace MicroApi.DataLayer.Services
                     cmd.Parameters.AddWithValue("REC_INSTALL_COUNT", (object)adv.REC_INSTALL_COUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("REC_INSTALL_AMOUNT", (object)adv.REC_INSTALL_AMOUNT ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("REMARKS", (object)adv.REMARKS ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PAY_HEAD_ID", adv.PAY_HEAD_ID);
+                    cmd.Parameters.AddWithValue("PAY_TYPE_ID", (object)adv.PAY_TYPE_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("CHEQUE_NO", (object)adv.CHEQUE_NO ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("CHEQUE_DATE", (object)adv.CHEQUE_DATE ?? DBNull.Value);
 
                     cmd.ExecuteNonQuery();
                 }

@@ -63,7 +63,7 @@ namespace MicroApi.Controllers
 
             try
             {
-                response = _SalaryService.GetPayrollDetails(request.PAYDETAIL_ID);
+                response = _SalaryService.GetPayrollDetails(request);
             }
             catch (Exception ex)
             {

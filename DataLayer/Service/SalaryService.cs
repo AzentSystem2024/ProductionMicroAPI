@@ -98,7 +98,7 @@ namespace MicroApi.DataLayer.Service
 
             return response;
         }
-        public PayrollViewResponse GetPayrollDetails(int id)
+        public PayrollViewResponse GetPayrollDetails(PayrollViewRequest request)
         {
             PayrollViewResponse response = null;
 
@@ -108,7 +108,8 @@ namespace MicroApi.DataLayer.Service
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ACTION", 2);
-                    cmd.Parameters.AddWithValue("@PAYDETAIL_ID", id);
+                    cmd.Parameters.AddWithValue("@PAYDETAIL_ID", request.PAYDETAIL_ID);
+                    cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
 
                     //con.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())

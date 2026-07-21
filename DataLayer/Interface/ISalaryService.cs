@@ -7,7 +7,7 @@ namespace MicroApi.DataLayer.Interface
     {
         GenerateSalaryResponse GenerateSalary(List<Salary> salaryList);
         SalaryLookupResponse GetSalaryLookup(SalaryLookupRequest request);
-        PayrollViewResponse GetPayrollDetails(int id);
+        PayrollViewResponse GetPayrollDetails(PayrollViewRequest request);
         public PayrollResponse Edit(UpdateItemRequest model);
         SalaryApproveResponse CommitGenerateSalary(SalaryApprove request);
         SalaryApproveResponse Verify(SalaryApprove request);

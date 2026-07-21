@@ -38,7 +38,7 @@ namespace MicroApi.Controllers
         //    }
         //}
         [HttpPost]
-        //[HttpPost("Dimension")]
+        [HttpPost("Dimension")]
         public IActionResult GetTrialBalanceDimensionReport(
     [FromBody] ReportRequest1 request
 )

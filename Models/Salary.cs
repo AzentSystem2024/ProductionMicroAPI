@@ -37,6 +37,7 @@
     public class PayrollViewRequest
     {
         public int PAYDETAIL_ID { get; set; }
+        public int COMPANY_ID { get; set; }
     }
     public class PayrollViewResponse
     {
