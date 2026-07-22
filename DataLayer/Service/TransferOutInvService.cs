@@ -58,6 +58,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@USER_ID", transferOut.USER_ID);
                 cmd.Parameters.AddWithValue("@NARRATION", transferOut.NARRATION ?? "");
                 cmd.Parameters.AddWithValue("@REASON_ID", (object?)transferOut.REASON_ID ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferOut.DEPT_ID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@IS_APPROVED", transferOut.IS_APPROVED == true ? 1 : 0);
 
                 var tvp = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_DETAIL", tbl);
@@ -133,6 +134,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@USER_ID", transferOut.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", transferOut.NARRATION ?? "");
                     cmd.Parameters.AddWithValue("@REASON_ID", transferOut.REASON_ID);
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferOut.DEPT_ID ?? DBNull.Value);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
@@ -202,6 +204,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@USER_ID", transferOut.USER_ID);
                     cmd.Parameters.AddWithValue("@NARRATION", transferOut.NARRATION ?? "");
                     cmd.Parameters.AddWithValue("@REASON_ID", transferOut.REASON_ID);
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferOut.DEPT_ID ?? DBNull.Value);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;

@@ -11,6 +11,7 @@
         public int USER_ID { get; set; }
         public string NARRATION { get; set; }
         public int? REASON_ID { get; set; }
+        public int? DEPT_ID { get; set; }
         public bool? IS_APPROVED { get; set; }
 
         // Detail rows
@@ -55,6 +56,7 @@
         public string? STORE_STATE { get; set; }
         public string? STORE_PHONE { get; set; }
         public string? STORE_EMAIL { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<TransferOutDetailUpdate>? DETAILS { get; set; }
     }
     public class TransferOutDetailUpdate

@@ -51,6 +51,7 @@
         public int COMPANY_ID { get; set; }
         public string COMPANY_CODE { get; set; }
         public string COMPANY_NAME { get; set; }
+         public string COMPANY_TYPE { get; set; }
         public int STATE_ID { get; set; }
         public string? STATE_NAME { get; set; }
     }

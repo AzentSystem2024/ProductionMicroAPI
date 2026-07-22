@@ -127,7 +127,7 @@ namespace MicroApi.DataLayer.Service
                             COMPANY_ID = DbHelper.GetInt(reader["COMPANY_ID"]),
                             COMPANY_NAME = DbHelper.GetString(reader["COMPANY_NAME"]),
                             COMPANY_CODE = DbHelper.GetString(reader["COMPANY_CODE"]),
-
+                            COMPANY_TYPE = DbHelper.GetString(reader["COMPANY_TYPE"]),
 
                         });
                     }
@@ -141,6 +141,7 @@ namespace MicroApi.DataLayer.Service
                         COMPANY_ID = DbHelper.GetInt(reader["COMPANY_ID"]),
                         COMPANY_NAME = DbHelper.GetString(reader["COMPANY_NAME"]),
                         COMPANY_CODE = DbHelper.GetString(reader["COMPANY_CODE"]),
+                        COMPANY_TYPE = DbHelper.GetString(reader["COMPANY_TYPE"]),
                         STATE_ID = DbHelper.GetInt(reader["ID"]),
                         STATE_NAME = DbHelper.GetString(reader["STATE_NAME"])
                     };
@@ -405,7 +406,14 @@ namespace MicroApi.DataLayer.Service
 
         public InitLoginResponse InitLoginData(string loginName)
         {
-            var response = new InitLoginResponse();
+            var response = new InitLoginResponse
+            {
+                flag = 0,
+                Message = "Login failed.",
+                USER_ID = null,
+                USER_NAME = null,
+                Companies = new List<CompanyList>()
+            };
 
             if (string.IsNullOrWhiteSpace(loginName))
             {
@@ -424,35 +432,108 @@ namespace MicroApi.DataLayer.Service
                     using (var cmd = new SqlCommand("SP_VERIFY_LOGIN", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@LOGIN_NAME", loginName);
-                        cmd.Parameters.AddWithValue("@PASSWORD", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@COMPANY_ID", DBNull.Value);
-                        cmd.Parameters.AddWithValue("@FINANCIAL_YEAR_ID", DBNull.Value);
+
+                        // LOGIN NAME
+                        cmd.Parameters.Add("@LOGIN_NAME", SqlDbType.NVarChar, 100)
+                            .Value = loginName;
+
+                        // Init login - password is not required
+                        cmd.Parameters.Add("@PASSWORD", SqlDbType.NVarChar, 100)
+                            .Value = DBNull.Value;
+
+                        // Company and financial year are not selected yet
+                        cmd.Parameters.Add("@COMPANY_ID", SqlDbType.Int)
+                            .Value = DBNull.Value;
+
+                        cmd.Parameters.Add("@FINANCIAL_YEAR_ID", SqlDbType.Int)
+                            .Value = DBNull.Value;
+
+                        // Optional parameters
+                        cmd.Parameters.Add("@LOCAL_IP", SqlDbType.NVarChar, 50)
+                            .Value = DBNull.Value;
+
+                        cmd.Parameters.Add("@COMPUTER_NAME", SqlDbType.NVarChar, 50)
+                            .Value = DBNull.Value;
+
+                        cmd.Parameters.Add("@DOMAIN_NAME", SqlDbType.NVarChar, 50)
+                            .Value = DBNull.Value;
+
+                        cmd.Parameters.Add("@COMPUTER_USER", SqlDbType.NVarChar, 50)
+                            .Value = DBNull.Value;
+
+                        cmd.Parameters.Add("@INTERNET_IP", SqlDbType.NVarChar, 50)
+                            .Value = DBNull.Value;
+
+                        cmd.Parameters.Add("@SYSTEM_TIME_UTC", SqlDbType.DateTime)
+                            .Value = DBNull.Value;
+
+                        cmd.Parameters.Add("@FORCE_LOGIN", SqlDbType.Bit)
+                            .Value = false;
+
+                        cmd.Parameters.Add("@TOKEN", SqlDbType.NVarChar, -1)
+                            .Value = DBNull.Value;
 
                         using (var reader = cmd.ExecuteReader())
                         {
+                            // =====================================================
+                            // RESULT SET 1 - LOGIN STATUS
+                            // =====================================================
                             if (reader.Read())
                             {
-                                response.flag = reader["FLAG"] != DBNull.Value ? Convert.ToInt32(reader["FLAG"]) : 0;
-                                response.Message = reader["MESSAGE"]?.ToString();
+                                response.flag =
+                                    reader["FLAG"] != DBNull.Value
+                                        ? Convert.ToInt32(reader["FLAG"])
+                                        : 0;
+
+                                response.Message =
+                                    reader["MESSAGE"] != DBNull.Value
+                                        ? reader["MESSAGE"].ToString()
+                                        : string.Empty;
                             }
 
-                            if (reader.NextResult()) { }
+                            // If login failed, stop here
+                            if (response.flag != 1)
+                                return response;
 
+
+                            // =====================================================
+                            // RESULT SET 2 - USER INFORMATION
+                            // =====================================================
+                            if (reader.NextResult())
+                            {
+                                if (reader.Read())
+                                {
+                                    response.USER_ID =
+                                        reader["USER_ID"] != DBNull.Value
+                                            ? Convert.ToInt32(reader["USER_ID"])
+                                            : (int?)null;
+
+                                    response.USER_NAME =
+                                        reader["USER_NAME"] != DBNull.Value
+                                            ? reader["USER_NAME"].ToString()
+                                            : string.Empty;
+                                }
+                            }
+
+
+                            // =====================================================
+                            // RESULT SET 3 - COMPANY LIST
+                            // =====================================================
                             if (reader.NextResult())
                             {
                                 while (reader.Read())
                                 {
-                                    if (response.USER_ID == null && reader["USER_ID"] != DBNull.Value)
-                                    {
-                                        response.USER_ID = Convert.ToInt32(reader["USER_ID"]);
-                                        response.USER_NAME = reader["USER_NAME"]?.ToString();
-                                    }
-
                                     response.Companies.Add(new CompanyList
                                     {
-                                        COMPANY_ID = reader["COMPANY_ID"] != DBNull.Value ? Convert.ToInt32(reader["COMPANY_ID"]) : 0,
-                                        COMPANY_NAME = reader["COMPANY_NAME"]?.ToString()
+                                        COMPANY_ID =
+                                            reader["COMPANY_ID"] != DBNull.Value
+                                                ? Convert.ToInt32(reader["COMPANY_ID"])
+                                                : 0,
+
+                                        COMPANY_NAME =
+                                            reader["COMPANY_NAME"] != DBNull.Value
+                                                ? reader["COMPANY_NAME"].ToString()
+                                                : string.Empty
                                     });
                                 }
                             }

@@ -10,6 +10,7 @@ namespace MicroApi.DataLayer.Interface
         SalPayLastDocno GetLastDocNo();
         SalaryPaymentDetailResponse GetSalaryPaymentById(int id);
         SalaryPaymentResponse update(SalaryPaymentUpdate model);
+        SalaryPaymentResponse Verify(SalaryPaymentUpdate model);
         SalaryPaymentResponse commit(SalaryPaymentUpdate model);
         SalaryPaymentResponse Delete(int id);
     }

@@ -126,6 +126,24 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("Verify")]
+        public SalaryPaymentResponse Verify(SalaryPaymentUpdate model)
+        {
+            SalaryPaymentResponse res = new SalaryPaymentResponse();
+
+            try
+            {
+                res = _salaryService.Verify(model);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("commit")]
         public SalaryPaymentResponse commit(SalaryPaymentUpdate model)
         {
