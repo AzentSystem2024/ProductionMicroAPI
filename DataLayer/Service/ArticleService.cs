@@ -1,4 +1,5 @@
-﻿using MicroApi.DataLayer.Interface;
+﻿using Azure.Core;
+using MicroApi.DataLayer.Interface;
 using MicroApi.Helper;
 using MicroApi.Models;
 using Newtonsoft.Json;
@@ -58,7 +59,8 @@ namespace MicroApi.Service
                         cmd.Parameters.AddWithValue("@IMAGE_NAME", article.IMAGE_NAME ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@CREATED_DATE", article.CREATED_DATE);
                         cmd.Parameters.AddWithValue("@STANDARD_PACKING", article.STANDARD_PACKING ?? (object)DBNull.Value);
-                        //cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
+                         cmd.Parameters.AddWithValue("@COMPANY_ID", article.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_TYPE", article.COMPANY_TYPE);
                         cmd.Parameters.AddWithValue("@HSN_CODE", article.HSN_CODE ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@GST_PERC", article.GST_PERC ?? 0);
 
@@ -424,8 +426,8 @@ namespace MicroApi.Service
 
 
 
-        public ArticleListResponse GetArticleList()
-        {
+        public ArticleListResponse GetArticleList(ArticleListRequest2 request)
+        {//
             var res = new ArticleListResponse();
             res.Data = new List<ArticleUpdate>();
 
@@ -442,6 +444,9 @@ namespace MicroApi.Service
                         cmd.CommandTimeout = 1000;
                         cmd.Parameters.AddWithValue("@ACTION", 0);
                         //cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_TYPE", (object)request.COMPANY_TYPE ?? DBNull.Value);
+
 
                         using (var reader = cmd.ExecuteReader())
                         {

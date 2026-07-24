@@ -36,6 +36,25 @@ namespace MicroApi.Controllers
             return res;
         }
         [HttpPost]
+        [Route("getstoreitem")]
+        public GetItemListResponse Getitems(GetItemlistRequest request)
+        {
+            GetItemListResponse res = new GetItemListResponse();
+
+            try
+            {
+                res = _salesinvoiceService.Getitems(request);
+            }
+            catch (Exception ex)
+            {
+                res.flag = 0;
+                res.Message = "Error: " + ex.Message;
+                res.Data = new List<GetItemlist>();
+            }
+
+            return res;
+        }
+        [HttpPost]
         [Route("insert")]
         public SalesInvoiceInsertResponse Insert(SalesInvoiceInsertRequest input)
         {

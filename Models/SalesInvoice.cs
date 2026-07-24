@@ -2,7 +2,7 @@
 {
     public class SalesInvoice
     {
-        public int ID { get; set; }
+        public int ITEM_ID { get; set; }
         public string ITEM_CODE { get; set; }
         public string DESCRIPTION { get; set; }
         public string BARCODE { get; set; }
@@ -11,11 +11,13 @@
         public decimal PRICE { get; set; }
         public string HSN_CODE { get; set; }
         public decimal NET_PRICE { get; set; }
+        public decimal QTY_STOCK { get; set; }
     }
     public class SalesInvoiceRequest
     {
         public int? CUSTOMER_ID { get; set; }
         public int ITEM_ID { get; set; }
+        public int? STORE_ID { get; set; }
     }
     public class SalesResponse
     {
@@ -143,6 +145,7 @@
         public decimal? DISC_PERC { get; set; }
         public decimal? DISC_AMT { get; set; }
         public decimal NET_PRICE { get; set; }
+        public double QTY_STOCK { get; set; }
     }
     public class SalesInvoiceViewResponse
     {
@@ -150,6 +153,20 @@
         public string Message { get; set; }
         public SalesInvoiceView Data { get; set; }
     }
-
-
+    public class GetItemlist
+    {
+        public string? DESCRIPTION { get; set; }
+        public int ITEM_ID { get; set; }
+        public string? ITEM_CODE { get; set; }
+    }
+    public class GetItemlistRequest
+    {
+        public int? STORE_ID { get; set; }
+    }
+    public class GetItemListResponse
+    {
+        public int flag { get; set; }
+        public string Message { get; set; }
+        public List<GetItemlist> Data { get; set; }
+    }
 }

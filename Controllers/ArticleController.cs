@@ -73,12 +73,13 @@ namespace MicroApi.Controllers
 
         [HttpPost]
         [Route("List")]
-        public ArticleListResponse ArticleLogList()
+        public ArticleListResponse GetArticleList([FromBody] ArticleListRequest2 request)
         {
+
             ArticleListResponse res = new ArticleListResponse();
             try
             {
-                res = _articleService.GetArticleList();
+                res = _articleService.GetArticleList(request);
             }
             catch (Exception ex)
             {
@@ -86,7 +87,24 @@ namespace MicroApi.Controllers
                 res.Message = ex.Message;
             }
             return res;
+
+
+
         }
+        //public ArticleListResponse ArticleLogList()
+        //{
+        //    ArticleListResponse res = new ArticleListResponse();
+        //    try
+        //    {
+        //        res = _articleService.GetArticleList();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        res.flag = 0;
+        //        res.Message = ex.Message;
+        //    }
+        //    return res;
+        //}
         [HttpPost]
         [Route("listitem")]
         public ListItemsResponse GetItems()

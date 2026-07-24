@@ -126,6 +126,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@REASON_ID", transferIn.REASON_ID);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", transferIn.NET_AMOUNT);
                     cmd.Parameters.Add("@IS_APPROVED", SqlDbType.Bit).Value = transferIn.IS_APPROVED;
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferIn.DEPT_ID ?? DBNull.Value);
 
                     var tvp = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFERINV_IN", tbl);
                     tvp.SqlDbType = SqlDbType.Structured;
@@ -186,6 +187,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ISSUE_ID", transferIn.ISSUE_ID);
                     cmd.Parameters.AddWithValue("@REASON_ID", transferIn.REASON_ID);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", transferIn.NET_AMOUNT);
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferIn.DEPT_ID ?? DBNull.Value);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFERINV_IN", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
@@ -259,6 +261,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ISSUE_ID", transferIn.ISSUE_ID);
                     cmd.Parameters.AddWithValue("@REASON_ID", transferIn.REASON_ID);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", transferIn.NET_AMOUNT);
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferIn.DEPT_ID ?? DBNull.Value);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFERINV_IN", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
@@ -321,7 +324,9 @@ namespace MicroApi.DataLayer.Service
                             ISSUE_ID = ADO.ToInt32(dr["ISSUE_ID"]),
                             STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
                             STATUS = ADO.ToString(dr["STATUS"]),
-                            DOC_NO = ADO.ToString(dr["TRANSFER_NO"])
+                            DOC_NO = ADO.ToString(dr["TRANSFER_NO"]),
+                            DEPT_ID = dr["DEPT_ID"] == DBNull.Value ? null : ADO.ToInt32(dr["DEPT_ID"]),
+                            DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
 
                         };
                         list.Add(obj);
@@ -380,6 +385,7 @@ namespace MicroApi.DataLayer.Service
                                 NARRATION = firstRow["NARRATION"] == DBNull.Value ? null : ADO.ToString(firstRow["NARRATION"]),
                                 REASON_ID = firstRow["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["REASON_ID"]),
                                 DOC_NO = firstRow["TRANSFER_NO"] == DBNull.Value ? null : ADO.ToString(firstRow["TRANSFER_NO"]),
+                                DEPT_ID = firstRow["DEPT_ID"] == DBNull.Value ? null : ADO.ToInt32(firstRow["DEPT_ID"]),
                                 ISSUE_ID = ADO.ToInt32(firstRow["ISSUE_ID"]),
                                 COMPANY_NAME = firstRow["COMPANY_NAME"]?.ToString(),
                                 ADDRESS1 = firstRow["ADDRESS1"]?.ToString(),
@@ -540,7 +546,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@ISSUE_ID", transferIn.ISSUE_ID);
                     cmd.Parameters.AddWithValue("@REASON_ID", transferIn.REASON_ID);
                     cmd.Parameters.AddWithValue("@NET_AMOUNT", transferIn.NET_AMOUNT);
-
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferIn.DEPT_ID ?? DBNull.Value);
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFERINV_IN", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
 

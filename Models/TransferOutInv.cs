@@ -89,6 +89,8 @@
         public string? STORE_NAME { get; set; }
         public string? DOC_NO { get; set; }
         public string? STATUS { get; set; }
+        public int? DEPT_ID { get; set; }
+        public string? DEPT_NAME { get; set; }
 
 
     }

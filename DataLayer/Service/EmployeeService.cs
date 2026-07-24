@@ -363,7 +363,7 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@COMPANY_ID", employee.COMPANY_ID);
                 if (employee.SUB_DEPT_ID.HasValue)
                     cmd.Parameters.AddWithValue("@SUB_DEPT_ID", employee.SUB_DEPT_ID);
-                if (employee.SUB_DEPT_ID.HasValue)
+                if (employee.COUNTRY_ID.HasValue)
                     cmd.Parameters.AddWithValue("@COUNTRY_ID", employee.COUNTRY_ID);
 
                 // Handle attachments only during update

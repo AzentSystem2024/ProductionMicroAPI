@@ -292,7 +292,9 @@ namespace MicroApi.DataLayer.Service
                             REASON_ID = dr["REASON_ID"] == DBNull.Value ? 0 : ADO.ToInt32(dr["REASON_ID"]),
                             DOC_NO = ADO.ToString(dr["ISSUE_NO"]),
                             STORE_NAME = ADO.ToString(dr["STORE_NAME"]),
-                            STATUS = ADO.ToString(dr["STATUS"])
+                            STATUS = ADO.ToString(dr["STATUS"]),
+                            DEPT_ID = dr["DEPT_ID"] == DBNull.Value ? null : ADO.ToInt32(dr["DEPT_ID"]),
+                            DEPT_NAME = ADO.ToString(dr["DEPT_NAME"]),
 
                         };
 
@@ -344,6 +346,7 @@ namespace MicroApi.DataLayer.Service
                                 NARRATION = h["NARRATION"]?.ToString(),
                                 REASON_ID = h["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(h["REASON_ID"]),
                                 DOC_NO = h["ISSUE_NO"] == DBNull.Value ? null : ADO.ToString(h["ISSUE_NO"]),
+                                DEPT_ID = h["DEPT_ID"] == DBNull.Value ? null : ADO.ToInt32(h["DEPT_ID"]),
                                 DETAILS = new List<TransferOutDetailUpdate>()
                             };
                         }
@@ -364,7 +367,7 @@ namespace MicroApi.DataLayer.Service
                                 NARRATION = h["NARRATION"]?.ToString(),
                                 REASON_ID = h["REASON_ID"] == DBNull.Value ? null : ADO.ToInt32(h["REASON_ID"]),
                                 DOC_NO = h["TRANSFER_NO"] == DBNull.Value ? null : ADO.ToString(h["TRANSFER_NO"]),
-
+                                DEPT_ID = h["DEPT_ID"] == DBNull.Value ? null : ADO.ToInt32(h["DEPT_ID"]),
                                 COMPANY_NAME = h["COMPANY_NAME"]?.ToString(),
                                 ADDRESS1 = h["ADDRESS1"]?.ToString(),
                                 ADDRESS2 = h["ADDRESS2"]?.ToString(),
@@ -528,13 +531,14 @@ namespace MicroApi.DataLayer.Service
                     cmd.Parameters.AddWithValue("@USER_ID", (object?)transferOut.USER_ID ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@NARRATION", (object?)transferOut.NARRATION ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@REASON_ID", (object?)transferOut.REASON_ID ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DEPT_ID", (object?)transferOut.DEPT_ID ?? DBNull.Value);
 
                     SqlParameter tvpParam = cmd.Parameters.AddWithValue("@UDT_TB_TRANSFER_DETAIL", tbl);
                     tvpParam.SqlDbType = SqlDbType.Structured;
 
-                    cmd.ExecuteNonQuery();   // ⚠ better than ExecuteScalar()
+                    cmd.ExecuteNonQuery();  
 
-                    objtrans.Commit();       // ✅ THIS WAS MISSING
+                    objtrans.Commit();       
 
                     return transferOut.TRANS_ID;
                 }

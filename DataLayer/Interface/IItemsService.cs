@@ -6,7 +6,7 @@ namespace MicroApi.DataLayer.Interface
     {
         public List<Items> GetAllItems();
         public (int flag, string message) Insert(Items company);
-        public bool Update(Items company);
+        public ItemsResponse Update(Items items);
         public Items GetItems(int id);
         public bool DeleteItem(int id);
         public ItemsResponse Alias(ALIAS_DUPLICATE vInput);

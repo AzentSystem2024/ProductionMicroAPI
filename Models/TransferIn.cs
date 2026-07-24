@@ -13,6 +13,7 @@
         public int REASON_ID { get; set; }
         public double NET_AMOUNT { get; set; }
         public bool? IS_APPROVED { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<TransferInDetail> DETAILS { get; set; }
     }
     public class TransferInDetail
@@ -39,6 +40,7 @@
         public int? FIN_ID { get; set; }
         public int? REASON_ID { get; set; }
         public double? NET_AMOUNT { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<TransferInDetail>? DETAILS { get; set; }
     }
 
@@ -125,6 +127,8 @@
         public string STORE_NAME { get; set; }
         public string STATUS { get; set; }
         public string DOC_NO { get; set; }
+        public int? DEPT_ID { get; set; }
+        public string? DEPT_NAME { get; set; }
 
     }
 
@@ -165,6 +169,7 @@
         public string? STORE_STATE { get; set; }
         public string? STORE_PHONE { get; set; }
         public string? STORE_EMAIL { get; set; }
+        public int? DEPT_ID { get; set; }
         public List<TransferInDetailUpdate> DETAILS { get; set; }
     }
     public class TransferinDoc

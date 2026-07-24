@@ -253,7 +253,7 @@ namespace MicroApi.DataLayer.Service
             return res;
         }
 
-      
+
 
         public PackingResponse Update(PackingUpdate packing)
         {
@@ -378,7 +378,7 @@ namespace MicroApi.DataLayer.Service
             {
                 using (SqlConnection connection = ADO.GetConnection())
                 {
-                   // connection.Open();
+                    // connection.Open();
 
                     using (SqlCommand cmd = new SqlCommand("SP_ManagePackingData", connection))
                     {
@@ -396,7 +396,7 @@ namespace MicroApi.DataLayer.Service
                                 packing = new PackingSelect
                                 {
                                     ID = reader.GetInt64(reader.GetOrdinal("ID")),
-                                   // COMPANY_ID = reader["COMPANY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["COMPANY_ID"]),
+                                    // COMPANY_ID = reader["COMPANY_ID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["COMPANY_ID"]),
                                     ART_NO = reader["ArtNo"]?.ToString(),
                                     ORDER_NO = reader["OrderNo"]?.ToString(),
                                     DESCRIPTION = reader["PackingName"]?.ToString(),
@@ -517,6 +517,8 @@ namespace MicroApi.DataLayer.Service
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@ActionType", "GetPackingList");
                         //cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_ID", request.COMPANY_ID);
+                        cmd.Parameters.AddWithValue("@COMPANY_TYPE", request.COMPANY_TYPE);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -525,7 +527,7 @@ namespace MicroApi.DataLayer.Service
                                 packingList.Add(new PackingListItem
                                 {
                                     ID = reader.IsDBNull(reader.GetOrdinal("ID")) ? 0 : reader.GetInt64(reader.GetOrdinal("ID")),
-                                  // COMPANY_ID = reader.IsDBNull(reader.GetOrdinal("COMPANY_ID")) ? 0 : reader.GetInt32(reader.GetOrdinal("COMPANY_ID")),
+                                    // COMPANY_ID = reader.IsDBNull(reader.GetOrdinal("COMPANY_ID")) ? 0 : reader.GetInt32(reader.GetOrdinal("COMPANY_ID")),
                                     ArtNo = reader.IsDBNull(reader.GetOrdinal("ArtNo")) ? null : reader.GetString(reader.GetOrdinal("ArtNo")),
                                     Color = reader.IsDBNull(reader.GetOrdinal("Color")) ? null : reader.GetString(reader.GetOrdinal("Color")),
                                     OrderNo = reader.IsDBNull(reader.GetOrdinal("OrderNo")) ? null : reader.GetString(reader.GetOrdinal("OrderNo")),

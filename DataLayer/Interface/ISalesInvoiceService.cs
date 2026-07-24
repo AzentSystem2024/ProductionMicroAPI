@@ -12,5 +12,6 @@ namespace MicroApi.DataLayer.Interface
         SalesInvoiceViewResponse GetSalesInvoiceById(int id);
         SalesInvoiceInsertResponse Commit(SalesInvoiceInsertRequest input);
         SalesInvoiceInsertResponse Delete(int id);
+        GetItemListResponse Getitems(GetItemlistRequest request);
     }
 }

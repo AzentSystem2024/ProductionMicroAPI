@@ -1,4 +1,5 @@
 ﻿using MicroApi.DataLayer.Interface;
+using MicroApi.DataLayer.Services;
 using MicroApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -159,25 +160,23 @@ namespace MicroApi.Controllers
             };
         }
         [HttpPost]
-        [Route("update")]
-        public ItemResponse Update(Items itemsData)
+        [Route("Update")]
+        public IActionResult Update(Items items)
         {
-            ItemResponse res = new ItemResponse();
-
             try
             {
+                var response = _itemsService.Update(items);
 
-                _itemsService.Update(itemsData);
-                res.flag = "1";
-                res.message = "Success";
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                res.flag = "0";
-                res.message = ex.Message;
+                return Ok(new ItemsResponse
+                {
+                    flag = "0",
+                    message = ex.Message
+                });
             }
-
-            return res;
         }
 
 

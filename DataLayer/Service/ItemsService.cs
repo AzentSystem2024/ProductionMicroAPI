@@ -353,214 +353,377 @@ namespace MicroApi.DataLayer.Services
                 return (0, "Error: " + ex.Message);
             }
         }
-        public bool Update(Items items)
+        public ItemsResponse Update(Items items)
         {
-            SqlConnection connection = ADO.GetConnection();
-            SqlTransaction objtrans = connection.BeginTransaction();
-
-            try
+            var response = new ItemsResponse
             {
-                if (items.item_stores != null && items.item_stores.Any(ur => ur.STORE_ID == 0))
-                {
-                    throw new Exception("Alert:Select Store...!");
-                }
+                flag = "0",
+                message = "Update failed"
+            };
 
-                if (items.TYPE_ID != 8)
-                {
-                    if (items.item_suppliers != null && items.item_suppliers.Any(ur => !ur.SUPP_ID.HasValue || ur.SUPP_ID.Value == 0))
-                    {
-                        throw new Exception("Alert:Select Supplier...!");
-                    }
-                }
-
-                DataTable tbl = new DataTable();
-                tbl.Columns.Add("ID", typeof(Int32));
-                tbl.Columns.Add("STORE_ID", typeof(Int32));
-                tbl.Columns.Add("SALE_PRICE", typeof(float));
-                tbl.Columns.Add("SALE_PRICE1", typeof(float));
-                tbl.Columns.Add("SALE_PRICE2", typeof(float));
-                tbl.Columns.Add("SALE_PRICE3", typeof(float));
-                tbl.Columns.Add("SALE_PRICE4", typeof(float));
-                tbl.Columns.Add("SALE_PRICE5", typeof(float));
-                tbl.Columns.Add("COST", typeof(float));
-                tbl.Columns.Add("IS_INACTIVE", typeof(bool));
-                tbl.Columns.Add("IS_NOT_SALE_ITEM", typeof(bool));
-                tbl.Columns.Add("IS_NOT_SALE_RETURN", typeof(bool));
-                tbl.Columns.Add("IS_PRICE_REQUIRED", typeof(bool));
-                tbl.Columns.Add("IS_NOT_DISCOUNTABLE", typeof(bool));
-
-                foreach (ITEM_STORES ur in items.item_stores)
-                {
-                    DataRow dRow = tbl.NewRow();
-                    dRow["ID"] = ur.ID;
-                    dRow["STORE_ID"] = ur.STORE_ID;
-                    dRow["SALE_PRICE"] = ur.SALE_PRICE ?? 0f;
-                    dRow["SALE_PRICE1"] = ur.SALE_PRICE1 ?? 0f;
-                    dRow["SALE_PRICE2"] = ur.SALE_PRICE2 ?? 0f;
-                    dRow["SALE_PRICE3"] = ur.SALE_PRICE3 ?? 0f;
-                    dRow["SALE_PRICE4"] = ur.SALE_PRICE4 ?? 0f;
-                    dRow["SALE_PRICE5"] = ur.SALE_PRICE5 ?? 0f;
-                    dRow["COST"] = ur.COST;
-                    dRow["IS_INACTIVE"] = ur.IS_INACTIVE;
-                    dRow["IS_NOT_SALE_ITEM"] = ur.IS_NOT_SALE_ITEM;
-                    dRow["IS_NOT_SALE_RETURN"] = ur.IS_NOT_SALE_RETURN;
-                    dRow["IS_PRICE_REQUIRED"] = ur.IS_PRICE_REQUIRED;
-                    dRow["IS_NOT_DISCOUNTABLE"] = ur.IS_NOT_DISCOUNTABLE;
-                    tbl.Rows.Add(dRow);
-                    tbl.AcceptChanges();
-                }
-
-                DataTable tbl1 = new DataTable();
-                tbl1.Columns.Add("ID", typeof(Int32));
-                tbl1.Columns.Add("ALIAS", typeof(string));
-                tbl1.Columns.Add("IS_DEFAULT", typeof(bool));
-                tbl1.Columns.Add("ALIAS_TYPE_ID", typeof(Int32));
-
-                if (items.item_alias != null && items.item_alias.Any())
-                {
-                    foreach (ITEM_ALIAS ur in items.item_alias)
-                    {
-                        DataRow dRow1 = tbl1.NewRow();
-                        dRow1["ID"] = ur.ID;
-                        dRow1["ALIAS"] = ur.ALIAS;
-                        dRow1["IS_DEFAULT"] = 0;
-                        dRow1["ALIAS_TYPE_ID"] = ur.ALIAS_TYPE_ID;
-                        tbl1.Rows.Add(dRow1);
-                        tbl1.AcceptChanges();
-                    }
-                }
-
-                DataTable tbl2 = new DataTable();
-                tbl2.Columns.Add("ID", typeof(Int32));
-                tbl2.Columns.Add("SUPP_ID", typeof(Int32));
-                tbl2.Columns.Add("REORDER_NO", typeof(string));
-                tbl2.Columns.Add("COST", typeof(float));
-                tbl2.Columns.Add("IS_PRIMARY", typeof(bool));
-                tbl2.Columns.Add("IS_CONSIGNMENT", typeof(bool));
-
-                if (items.item_suppliers != null && items.item_suppliers.Any())
-                {
-                    foreach (ITEM_SUPPLIERS ur in items.item_suppliers)
-                    {
-                        DataRow dRow2 = tbl2.NewRow();
-                        dRow2["ID"] = ur.ID;
-                        dRow2["SUPP_ID"] = ur.SUPP_ID;
-                        dRow2["REORDER_NO"] = ur.REORDER_NO;
-                        dRow2["COST"] = ur.COST;
-                        dRow2["IS_PRIMARY"] = ur.IS_PRIMARY;
-                        dRow2["IS_CONSIGNMENT"] = ur.IS_CONSIGNMENT;
-                        tbl2.Rows.Add(dRow2);
-                        tbl2.AcceptChanges();
-                    }
-                }
-
-                DataTable tbl3 = new DataTable();
-                tbl3.Columns.Add("ID", typeof(Int32));
-                tbl3.Columns.Add("ITEM_ID", typeof(Int32));
-                tbl3.Columns.Add("COMPONENT_ITEM_ID", typeof(Int32));
-                tbl3.Columns.Add("QUANTITY", typeof(float));
-                tbl3.Columns.Add("UOM", typeof(string));
-
-                if (items.item_components != null && items.item_components.Any())
-                {
-                    foreach (ITEM_COMPONENTS ur in items.item_components)
-                    {
-                        DataRow dRow3 = tbl3.NewRow();
-                        dRow3["ID"] = ur.ID;
-                        dRow3["ITEM_ID"] = ur.ITEM_ID;
-                        dRow3["COMPONENT_ITEM_ID"] = ur.COMPONENT_ITEM_ID;
-                        dRow3["QUANTITY"] = ur.QUANTITY;
-                        dRow3["UOM"] = ur.UOM;
-                        tbl3.Rows.Add(dRow3);
-                        tbl3.AcceptChanges();
-                    }
-                }
-
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = connection;
-                cmd.Transaction = objtrans;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "SP_TB_ITEMS";
-                cmd.Parameters.AddWithValue("ACTION", 3);
-                cmd.Parameters.AddWithValue("ID", items.ID);
-                cmd.Parameters.AddWithValue("HQID", items.HQID);
-                cmd.Parameters.AddWithValue("COMPANY_ID", items.COMPANY_ID);
-                cmd.Parameters.AddWithValue("ITEM_CODE", items.ITEM_CODE);
-                cmd.Parameters.AddWithValue("BARCODE", items.BARCODE);
-                cmd.Parameters.AddWithValue("DESCRIPTION", items.DESCRIPTION);
-                cmd.Parameters.AddWithValue("ARABIC_DESCRIPTION", items.ARABIC_DESCRIPTION);
-                cmd.Parameters.AddWithValue("TYPE_ID", items.TYPE_ID);
-                cmd.Parameters.AddWithValue("DEPT_ID", items.DEPT_ID);
-                cmd.Parameters.AddWithValue("CAT_ID", items.CAT_ID);
-                cmd.Parameters.AddWithValue("SUBCAT_ID", items.SUBCAT_ID);
-                cmd.Parameters.AddWithValue("BRAND_ID", items.BRAND_ID);
-                cmd.Parameters.AddWithValue("PACKING_ID", items.PACKING_ID);
-                cmd.Parameters.AddWithValue("UNIT_ID", items.UNIT_ID);
-                cmd.Parameters.AddWithValue("LONG_DESCRIPTION", items.LONG_DESCRIPTION);
-                cmd.Parameters.AddWithValue("SALE_PRICE", items.SALE_PRICE);
-                cmd.Parameters.AddWithValue("COST", items.COST);
-                cmd.Parameters.AddWithValue("PROFIT_MARGIN", items.PROFIT_MARGIN);
-                cmd.Parameters.AddWithValue("QTY_STOCK", items.QTY_STOCK);
-                cmd.Parameters.AddWithValue("QTY_COMMITTED", items.QTY_COMMITTED);
-                cmd.Parameters.AddWithValue("CREATED_DATE", items.CREATED_DATE);
-                cmd.Parameters.AddWithValue("LAST_PO_DATE", items.LAST_PO_DATE);
-                cmd.Parameters.AddWithValue("LAST_GRN_DATE", items.LAST_GRN_DATE);
-                cmd.Parameters.AddWithValue("LAST_SALE_DATE", items.LAST_SALE_DATE);
-                cmd.Parameters.AddWithValue("PARENT_ITEM_ID", items.PARENT_ITEM_ID);
-                cmd.Parameters.AddWithValue("CHILD_QTY", items.CHILD_QTY);
-                cmd.Parameters.AddWithValue("ORIGIN_COUNTRY", items.ORIGIN_COUNTRY);
-                cmd.Parameters.AddWithValue("SHELF_LIFE", items.SHELF_LIFE);
-                cmd.Parameters.AddWithValue("NOTES", items.NOTES);
-                cmd.Parameters.AddWithValue("IS_INACTIVE", items.IS_INACTIVE);
-                cmd.Parameters.AddWithValue("IS_PRICE_REQUIRED", items.IS_PRICE_REQUIRED);
-                cmd.Parameters.AddWithValue("IS_NOT_DISCOUNTABLE", items.IS_NOT_DISCOUNTABLE);
-                cmd.Parameters.AddWithValue("IS_NOT_PURCH_ITEM", items.IS_NOT_PURCH_ITEM);
-                cmd.Parameters.AddWithValue("IS_NOT_SALE_ITEM", items.IS_NOT_SALE_ITEM);
-                cmd.Parameters.AddWithValue("IS_NOT_SALE_RETURN", items.IS_NOT_SALE_RETURN);
-                cmd.Parameters.AddWithValue("IS_BLOCKED", items.IS_BLOCKED);
-                cmd.Parameters.AddWithValue("IMAGE_NAME", items.IMAGE_NAME);
-                cmd.Parameters.AddWithValue("ITEM_SL", items.ITEM_SL);
-                cmd.Parameters.AddWithValue("SALE_PRICE1", items.SALE_PRICE1);
-                cmd.Parameters.AddWithValue("SALE_PRICE2", items.SALE_PRICE2);
-                cmd.Parameters.AddWithValue("SALE_PRICE3", items.SALE_PRICE3);
-                cmd.Parameters.AddWithValue("SALE_PRICE4", items.SALE_PRICE4);
-                cmd.Parameters.AddWithValue("SALE_PRICE5", items.SALE_PRICE5);
-                cmd.Parameters.AddWithValue("PURCH_PRICE", items.PURCH_PRICE);
-                cmd.Parameters.AddWithValue("PURCH_CURRENCY", items.PURCH_CURRENCY);
-                cmd.Parameters.AddWithValue("IS_CONSIGNMENT", items.IS_CONSIGNMENT);
-                cmd.Parameters.AddWithValue("VAT_CLASS_ID", items.VAT_CLASS_ID);
-                cmd.Parameters.AddWithValue("ITEM_PROPERTY1", items.ITEM_PROPERTY1);
-                cmd.Parameters.AddWithValue("ITEM_PROPERTY2", items.ITEM_PROPERTY2);
-                cmd.Parameters.AddWithValue("ITEM_PROPERTY3", items.ITEM_PROPERTY3);
-                cmd.Parameters.AddWithValue("ITEM_PROPERTY4", items.ITEM_PROPERTY4);
-                cmd.Parameters.AddWithValue("ITEM_PROPERTY5", items.ITEM_PROPERTY5);
-                cmd.Parameters.AddWithValue("BIN_LOCATION", items.BIN_LOCATION);
-                cmd.Parameters.AddWithValue("RESTOCK_LEVEL", items.RESTOCK_LEVEL);
-                cmd.Parameters.AddWithValue("REORDER_POINT", items.REORDER_POINT);
-                cmd.Parameters.AddWithValue("COSTING_METHOD", items.COSTING_METHOD);
-                cmd.Parameters.AddWithValue("POS_DESCRIPTION", items.POS_DESCRIPTION);
-                cmd.Parameters.AddWithValue("IS_DIFFERENT_UOM_PURCH", items.IS_DIFFERENT_UOM_PURCH);
-                cmd.Parameters.AddWithValue("UOM_PURCH", items.UOM_PURCH);
-                cmd.Parameters.AddWithValue("UOM_MULTPLE", items.UOM_MULTPLE);
-                cmd.Parameters.AddWithValue("MATRIX_CODE", items.MATRIX_CODE);
-                cmd.Parameters.AddWithValue("GST_PERC", items.GST_PERC);
-                cmd.Parameters.AddWithValue("HSN_CODE", items.HSN_CODE);
-
-                cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_STORE", tbl);
-                cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_ALIAS", tbl1);
-                cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_SUPPLIER", tbl2);
-                cmd.Parameters.AddWithValue("@UDT_TB_ITEMS_COMPONENT", tbl3);
-
-                cmd.ExecuteNonQuery();
-                objtrans.Commit();
-                connection.Close();
-                return true;
-            }
-            catch (Exception ex)
+            using (SqlConnection connection = ADO.GetConnection())
             {
-                objtrans.Rollback();
-                connection.Close();
-                throw ex;
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                using (SqlTransaction objtrans = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // -----------------------------
+                        // VALIDATION
+                        // -----------------------------
+
+                        if (items.item_stores != null &&
+                            items.item_stores.Any(x => x.STORE_ID == 0))
+                        {
+                            response.flag = "0";
+                            response.message = "Alert: Select Store.";
+                            return response;
+                        }
+
+                        if (items.TYPE_ID != 8)
+                        {
+                            if (items.item_suppliers != null &&
+                                items.item_suppliers.Any(x =>
+                                    !x.SUPP_ID.HasValue || x.SUPP_ID.Value == 0))
+                            {
+                                response.flag = "0";
+                                response.message = "Alert: Select Supplier.";
+                                return response;
+                            }
+                        }
+
+                        // -----------------------------
+                        // STORE TVP
+                        // -----------------------------
+
+                        DataTable tbl = new DataTable();
+
+                        tbl.Columns.Add("ID", typeof(int));
+                        tbl.Columns.Add("STORE_ID", typeof(int));
+                        tbl.Columns.Add("SALE_PRICE", typeof(float));
+                        tbl.Columns.Add("SALE_PRICE1", typeof(float));
+                        tbl.Columns.Add("SALE_PRICE2", typeof(float));
+                        tbl.Columns.Add("SALE_PRICE3", typeof(float));
+                        tbl.Columns.Add("SALE_PRICE4", typeof(float));
+                        tbl.Columns.Add("SALE_PRICE5", typeof(float));
+                        tbl.Columns.Add("COST", typeof(float));
+                        tbl.Columns.Add("IS_INACTIVE", typeof(bool));
+                        tbl.Columns.Add("IS_NOT_SALE_ITEM", typeof(bool));
+                        tbl.Columns.Add("IS_NOT_SALE_RETURN", typeof(bool));
+                        tbl.Columns.Add("IS_PRICE_REQUIRED", typeof(bool));
+                        tbl.Columns.Add("IS_NOT_DISCOUNTABLE", typeof(bool));
+
+                        if (items.item_stores != null)
+                        {
+                            foreach (var store in items.item_stores)
+                            {
+                                DataRow row = tbl.NewRow();
+
+                                row["ID"] = store.ID.HasValue? (object)store.ID.Value: DBNull.Value;
+                                row["STORE_ID"] = store.STORE_ID;
+                                row["SALE_PRICE"] = store.SALE_PRICE ?? 0;
+                                row["SALE_PRICE1"] = store.SALE_PRICE1 ?? 0;
+                                row["SALE_PRICE2"] = store.SALE_PRICE2 ?? 0;
+                                row["SALE_PRICE3"] = store.SALE_PRICE3 ?? 0;
+                                row["SALE_PRICE4"] = store.SALE_PRICE4 ?? 0;
+                                row["SALE_PRICE5"] = store.SALE_PRICE5 ?? 0;
+                                row["COST"] = store.COST ?? 0;
+                                row["IS_INACTIVE"] = store.IS_INACTIVE;
+                                row["IS_NOT_SALE_ITEM"] = store.IS_NOT_SALE_ITEM;
+                                row["IS_NOT_SALE_RETURN"] = store.IS_NOT_SALE_RETURN;
+                                row["IS_PRICE_REQUIRED"] = store.IS_PRICE_REQUIRED;
+                                row["IS_NOT_DISCOUNTABLE"] = store.IS_NOT_DISCOUNTABLE;
+
+                                tbl.Rows.Add(row);
+                            }
+                        }
+
+                        // -----------------------------
+                        // ALIAS TVP
+                        // -----------------------------
+
+                        DataTable tbl1 = new DataTable();
+
+                        tbl1.Columns.Add("ID", typeof(int));
+                        tbl1.Columns.Add("ALIAS", typeof(string));
+                        tbl1.Columns.Add("IS_DEFAULT", typeof(bool));
+                        tbl1.Columns.Add("ALIAS_TYPE_ID", typeof(int));
+
+                        if (items.item_alias != null)
+                        {
+                            foreach (var alias in items.item_alias)
+                            {
+                                DataRow row = tbl1.NewRow();
+
+                                row["ID"] = alias.ID.HasValue? (object)alias.ID.Value : DBNull.Value;
+                                row["ALIAS"] = alias.ALIAS ?? "";
+                                row["IS_DEFAULT"] = false;
+                                row["ALIAS_TYPE_ID"] = alias.ALIAS_TYPE_ID;
+
+                                tbl1.Rows.Add(row);
+                            }
+                        }
+
+                        // -----------------------------
+                        // SUPPLIER TVP
+                        // -----------------------------
+
+                        DataTable tbl2 = new DataTable();
+
+                        tbl2.Columns.Add("ID", typeof(int));
+                        tbl2.Columns.Add("SUPP_ID", typeof(int));
+                        tbl2.Columns.Add("REORDER_NO", typeof(string));
+                        tbl2.Columns.Add("COST", typeof(float));
+                        tbl2.Columns.Add("IS_PRIMARY", typeof(bool));
+                        tbl2.Columns.Add("IS_CONSIGNMENT", typeof(bool));
+
+                        if (items.item_suppliers != null)
+                        {
+                            foreach (var supplier in items.item_suppliers)
+                            {
+                                DataRow row = tbl2.NewRow();
+
+                                row["ID"] = supplier.ID.HasValue ? (object)supplier.ID.Value: DBNull.Value;
+                                row["SUPP_ID"] = supplier.SUPP_ID ?? 0;
+                                row["REORDER_NO"] = supplier.REORDER_NO ?? "";
+                                row["COST"] = supplier.COST ?? 0;
+                                row["IS_PRIMARY"] = supplier.IS_PRIMARY;
+                                row["IS_CONSIGNMENT"] = supplier.IS_CONSIGNMENT;
+
+                                tbl2.Rows.Add(row);
+                            }
+                        }
+
+                        // -----------------------------
+                        // COMPONENT TVP
+                        // -----------------------------
+
+                        DataTable tbl3 = new DataTable();
+
+                        tbl3.Columns.Add("ID", typeof(int));
+                        tbl3.Columns.Add("ITEM_ID", typeof(int));
+                        tbl3.Columns.Add("COMPONENT_ITEM_ID", typeof(int));
+                        tbl3.Columns.Add("QUANTITY", typeof(float));
+                        tbl3.Columns.Add("UOM", typeof(string));
+
+                        if (items.item_components != null)
+                        {
+                            foreach (var component in items.item_components)
+                            {
+                                DataRow row = tbl3.NewRow();
+
+                                row["ID"] = component.ID.HasValue
+                                    ? (object)component.ID.Value
+                                    : DBNull.Value;
+
+                                row["ITEM_ID"] = component.ITEM_ID.HasValue
+                                    ? (object)component.ITEM_ID.Value
+                                    : DBNull.Value;
+
+                                row["COMPONENT_ITEM_ID"] = component.COMPONENT_ITEM_ID.HasValue
+                                    ? (object)component.COMPONENT_ITEM_ID.Value
+                                    : DBNull.Value;
+
+                                row["QUANTITY"] = component.QUANTITY.HasValue
+                                    ? (object)component.QUANTITY.Value
+                                    : DBNull.Value;
+
+                                row["UOM"] = component.UOM ?? "";
+
+                                tbl3.Rows.Add(row);
+                            }
+                        }
+
+                        // -----------------------------
+                        // STORED PROCEDURE
+                        // -----------------------------
+
+                        using (SqlCommand cmd = new SqlCommand(
+                            "SP_TB_ITEMS",
+                            connection,
+                            objtrans))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.CommandTimeout = 1000;
+
+                            cmd.Parameters.AddWithValue("@ACTION", 3);
+                            cmd.Parameters.AddWithValue("@ID", items.ID);
+                            cmd.Parameters.AddWithValue("@HQID", items.HQID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@COMPANY_ID", items.COMPANY_ID ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@ITEM_CODE", items.ITEM_CODE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@BARCODE", items.BARCODE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@DESCRIPTION", items.DESCRIPTION ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@POS_DESCRIPTION", items.POS_DESCRIPTION ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ARABIC_DESCRIPTION", items.ARABIC_DESCRIPTION ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@TYPE_ID", items.TYPE_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@DEPT_ID", items.DEPT_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CAT_ID", items.CAT_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SUBCAT_ID", items.SUBCAT_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@BRAND_ID", items.BRAND_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@PACKING_ID", items.PACKING_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@UNIT_ID", items.UNIT_ID ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@LONG_DESCRIPTION", items.LONG_DESCRIPTION ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SALE_PRICE", items.SALE_PRICE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@COST", items.COST ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@PROFIT_MARGIN", items.PROFIT_MARGIN ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@QTY_STOCK", items.QTY_STOCK ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@QTY_COMMITTED", items.QTY_COMMITTED ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@CREATED_DATE", items.CREATED_DATE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_PO_DATE", items.LAST_PO_DATE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_GRN_DATE", items.LAST_GRN_DATE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@LAST_SALE_DATE", items.LAST_SALE_DATE ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@RESTOCK_LEVEL", items.RESTOCK_LEVEL ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@REORDER_POINT", items.REORDER_POINT ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@PARENT_ITEM_ID", items.PARENT_ITEM_ID ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CHILD_QTY", items.CHILD_QTY ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ORIGIN_COUNTRY", items.ORIGIN_COUNTRY ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@SHELF_LIFE", items.SHELF_LIFE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@BIN_LOCATION", items.BIN_LOCATION ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NOTES", items.NOTES ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@IS_INACTIVE", items.IS_INACTIVE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IS_PRICE_REQUIRED", items.IS_PRICE_REQUIRED ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IS_NOT_DISCOUNTABLE", items.IS_NOT_DISCOUNTABLE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IS_NOT_PURCH_ITEM", items.IS_NOT_PURCH_ITEM ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IS_NOT_SALE_ITEM", items.IS_NOT_SALE_ITEM ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IS_NOT_SALE_RETURN", items.IS_NOT_SALE_RETURN ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@IS_BLOCKED", items.IS_BLOCKED ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@IMAGE_NAME", items.IMAGE_NAME ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ITEM_SL", items.ITEM_SL ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@SALE_PRICE1", items.SALE_PRICE1 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SALE_PRICE2", items.SALE_PRICE2 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SALE_PRICE3", items.SALE_PRICE3 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SALE_PRICE4", items.SALE_PRICE4 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@SALE_PRICE5", items.SALE_PRICE5 ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@PURCH_PRICE", items.PURCH_PRICE ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@PURCH_CURRENCY", items.PURCH_CURRENCY ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@IS_CONSIGNMENT", items.IS_CONSIGNMENT ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@VAT_CLASS_ID", items.VAT_CLASS_ID ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@ITEM_PROPERTY1", items.ITEM_PROPERTY1 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ITEM_PROPERTY2", items.ITEM_PROPERTY2 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ITEM_PROPERTY3", items.ITEM_PROPERTY3 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ITEM_PROPERTY4", items.ITEM_PROPERTY4 ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ITEM_PROPERTY5", items.ITEM_PROPERTY5 ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@COSTING_METHOD", items.COSTING_METHOD ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@IS_DIFFERENT_UOM_PURCH",
+                                items.IS_DIFFERENT_UOM_PURCH ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@UOM_PURCH",
+                                items.UOM_PURCH ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@UOM_MULTPLE",
+                                items.UOM_MULTPLE ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@MATRIX_CODE",
+                                items.MATRIX_CODE ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@GST_PERC",
+                                items.GST_PERC ?? (object)DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@HSN_CODE",
+                                items.HSN_CODE ?? (object)DBNull.Value);
+
+                            // -----------------------------
+                            // TVP PARAMETERS
+                            // -----------------------------
+
+                            SqlParameter storeParam =
+                                cmd.Parameters.AddWithValue(
+                                    "@UDT_TB_ITEMS_STORE",
+                                    tbl);
+
+                            storeParam.SqlDbType = SqlDbType.Structured;
+                            storeParam.TypeName = "UDT_TB_ITEMS_STORE";
+
+                            SqlParameter aliasParam =
+                                cmd.Parameters.AddWithValue(
+                                    "@UDT_TB_ITEMS_ALIAS",
+                                    tbl1);
+
+                            aliasParam.SqlDbType = SqlDbType.Structured;
+                            aliasParam.TypeName = "UDT_TB_ITEMS_ALIAS";
+
+                            SqlParameter supplierParam =
+                                cmd.Parameters.AddWithValue(
+                                    "@UDT_TB_ITEMS_SUPPLIER",
+                                    tbl2);
+
+                            supplierParam.SqlDbType = SqlDbType.Structured;
+                            supplierParam.TypeName = "UDT_TB_ITEMS_SUPPLIER";
+
+                            SqlParameter componentParam =
+                                cmd.Parameters.AddWithValue(
+                                    "@UDT_TB_ITEMS_COMPONENT",
+                                    tbl3);
+
+                            componentParam.SqlDbType = SqlDbType.Structured;
+                            componentParam.TypeName = "UDT_TB_ITEMS_COMPONENT";
+
+                            // -----------------------------
+                            // EXECUTE AND READ SP RESPONSE
+                            // -----------------------------
+
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    response.flag =
+                                        reader["flag"] != DBNull.Value
+                                            ? Convert.ToString(reader["flag"])
+                                            : "";
+
+                                    response.message =
+                                        reader["message"] != DBNull.Value
+                                            ? reader["message"].ToString()
+                                            : "";
+                                }
+                            }
+
+                            if (response.flag == "1")
+                            {
+                                objtrans.Commit();
+                            }
+                            else
+                            {
+                                objtrans.Rollback();
+                            }
+
+                            return response;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        try
+                        {
+                            objtrans.Rollback();
+                        }
+                        catch
+                        {
+                        }
+
+                        response.flag = "0";
+                        response.message = ex.Message;
+
+                        return response;
+                    }
+                }
             }
         }
         public Items GetItems(int id)
@@ -760,7 +923,7 @@ namespace MicroApi.DataLayer.Services
                 }
 
                 // Query to get item aliases
-                strSQL = "SELECT * FROM TB_ITEM_ALIAS WHERE  ITEM_ID =" + id;
+                strSQL = "SELECT * FROM TB_ITEM_ALIAS WHERE IS_DEFAULT= 0 AND ITEM_ID =" + id;
 
                 DataTable tblItemAlias = ADO.GetDataTable(strSQL, "ItemAlias");
 

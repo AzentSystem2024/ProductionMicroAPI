@@ -6,8 +6,8 @@ using System.Data;
 
 namespace MicroApi.DataLayer.Service
 {
-        public class DropDownService : IDropDownService
-        {
+    public class DropDownService : IDropDownService
+    {
         public List<DropDown> GetDropDownData(DropDownInput input)
         {
             List<DropDown> vList = new List<DropDown>();
@@ -26,6 +26,7 @@ namespace MicroApi.DataLayer.Service
                 cmd.Parameters.AddWithValue("@DEPT_ID", (object)input.DEPT_ID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@PAGE_NUMBER", input.PAGE_NUMBER);
                 cmd.Parameters.AddWithValue("@PAGE_SIZE", input.PAGE_SIZE);
+                cmd.Parameters.AddWithValue("@COMPANY_TYPE", (object)input.COMPANY_TYPE ?? DBNull.Value);
 
                 if (input.NAME == "STATE_NAME")
                     cmd.Parameters.AddWithValue("@COUNTRY_ID", input.COUNTRY_ID);
@@ -46,7 +47,7 @@ namespace MicroApi.DataLayer.Service
                     {
                         ID = Convert.ToInt32(dr["ID"]),
                         DESCRIPTION = Convert.ToString(dr["DESCRIPTION"])
-                        
+
                     });
                 }
                 connection.Close();

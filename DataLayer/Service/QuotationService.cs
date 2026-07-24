@@ -533,7 +533,18 @@ namespace MicroApi.DataLayer.Service
         //}
         public ItemListResponse GetQuotationItems(QuotationRequest request)
         {
-            ItemListResponse response = new ItemListResponse { Data = new List<Item>() };
+            ItemListResponse response = new ItemListResponse
+            {
+                Data = new List<Item>()
+            };
+
+            // Customer validation
+            if (request.CUSTOMER_ID == 0)
+            {
+                response.Flag = -1;
+                response.Message = "Select customer.";
+                return response;
+            }
 
             try
             {
@@ -542,18 +553,26 @@ namespace MicroApi.DataLayer.Service
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
 
-                    // ✅ Step 1: Get PRICE_CLASS_ID
+                    // Get PRICE_CLASS_ID
                     int priceClassId = 0;
-                    using (SqlCommand cmdPrice = new SqlCommand("SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID", connection))
+
+                    using (SqlCommand cmdPrice = new SqlCommand(
+                        "SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID",
+                        connection))
                     {
                         cmdPrice.Parameters.AddWithValue("@CUST_ID", request.CUSTOMER_ID);
-                        priceClassId = Convert.ToInt32(cmdPrice.ExecuteScalar());
+
+                        priceClassId = Convert.ToInt32(
+                            cmdPrice.ExecuteScalar());
                     }
 
-                    // ✅ Step 2: Fetch Items
-                    using (SqlCommand cmd = new SqlCommand("SP_TB_QUOTATION", connection))
+                    // Fetch Items
+                    using (SqlCommand cmd = new SqlCommand(
+                        "SP_TB_QUOTATION",
+                        connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
+
                         cmd.Parameters.AddWithValue("@ACTION", 6);
                         cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
 
@@ -563,53 +582,88 @@ namespace MicroApi.DataLayer.Service
                             {
                                 decimal price = 0;
 
-                                // ✅ Step 3: Apply same price logic
+                                // Apply price class logic
                                 if (priceClassId == 1)
                                 {
-                                    price = reader["SALE_PRICE1"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE1"]) == 0
-                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                    price = reader["SALE_PRICE1"] == DBNull.Value ||
+                                            Convert.ToDecimal(reader["SALE_PRICE1"]) == 0
+                                        ? reader["SALE_PRICE"] == DBNull.Value
+                                            ? 0
+                                            : Convert.ToDecimal(reader["SALE_PRICE"])
                                         : Convert.ToDecimal(reader["SALE_PRICE1"]);
                                 }
                                 else if (priceClassId == 2)
                                 {
-                                    price = reader["SALE_PRICE2"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE2"]) == 0
-                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                    price = reader["SALE_PRICE2"] == DBNull.Value ||
+                                            Convert.ToDecimal(reader["SALE_PRICE2"]) == 0
+                                        ? reader["SALE_PRICE"] == DBNull.Value
+                                            ? 0
+                                            : Convert.ToDecimal(reader["SALE_PRICE"])
                                         : Convert.ToDecimal(reader["SALE_PRICE2"]);
                                 }
                                 else if (priceClassId == 3)
                                 {
-                                    price = reader["SALE_PRICE3"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE3"]) == 0
-                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                    price = reader["SALE_PRICE3"] == DBNull.Value ||
+                                            Convert.ToDecimal(reader["SALE_PRICE3"]) == 0
+                                        ? reader["SALE_PRICE"] == DBNull.Value
+                                            ? 0
+                                            : Convert.ToDecimal(reader["SALE_PRICE"])
                                         : Convert.ToDecimal(reader["SALE_PRICE3"]);
                                 }
                                 else if (priceClassId == 4)
                                 {
-                                    price = reader["SALE_PRICE4"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE4"]) == 0
-                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                    price = reader["SALE_PRICE4"] == DBNull.Value ||
+                                            Convert.ToDecimal(reader["SALE_PRICE4"]) == 0
+                                        ? reader["SALE_PRICE"] == DBNull.Value
+                                            ? 0
+                                            : Convert.ToDecimal(reader["SALE_PRICE"])
                                         : Convert.ToDecimal(reader["SALE_PRICE4"]);
                                 }
                                 else if (priceClassId == 5)
                                 {
-                                    price = reader["SALE_PRICE5"] == DBNull.Value || Convert.ToDecimal(reader["SALE_PRICE5"]) == 0
-                                        ? (reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]))
+                                    price = reader["SALE_PRICE5"] == DBNull.Value ||
+                                            Convert.ToDecimal(reader["SALE_PRICE5"]) == 0
+                                        ? reader["SALE_PRICE"] == DBNull.Value
+                                            ? 0
+                                            : Convert.ToDecimal(reader["SALE_PRICE"])
                                         : Convert.ToDecimal(reader["SALE_PRICE5"]);
                                 }
                                 else
                                 {
-                                    price = reader["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SALE_PRICE"]);
+                                    price = reader["SALE_PRICE"] == DBNull.Value
+                                        ? 0
+                                        : Convert.ToDecimal(reader["SALE_PRICE"]);
                                 }
 
                                 Item item = new Item
                                 {
-                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value ? Convert.ToInt32(reader["ITEM_ID"]) : (int?)null,
-                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
-                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
-                                    MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value ? reader["MATRIX_CODE"].ToString() : null,
-                                    UOM = reader["UOM"] != DBNull.Value ? reader["UOM"].ToString() : null,
+                                    ITEM_ID = reader["ITEM_ID"] != DBNull.Value
+                                        ? Convert.ToInt32(reader["ITEM_ID"])
+                                        : (int?)null,
 
-                                    //COST = reader["COST"] != DBNull.Value ? Convert.ToSingle(reader["COST"]) : (float?)0,
-                                    STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value ? Convert.ToSingle(reader["STOCK_QTY"]) : (float?)0,
-                                    VAT_PERC = reader["VAT_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["VAT_PERC"]) : 0,
+                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value
+                                        ? reader["ITEM_CODE"].ToString()
+                                        : null,
+
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value
+                                        ? reader["DESCRIPTION"].ToString()
+                                        : null,
+
+                                    MATRIX_CODE = reader["MATRIX_CODE"] != DBNull.Value
+                                        ? reader["MATRIX_CODE"].ToString()
+                                        : null,
+
+                                    UOM = reader["UOM"] != DBNull.Value
+                                        ? reader["UOM"].ToString()
+                                        : null,
+
+                                    STOCK_QTY = reader["STOCK_QTY"] != DBNull.Value
+                                        ? Convert.ToSingle(reader["STOCK_QTY"])
+                                        : (float?)0,
+
+                                    VAT_PERC = reader["VAT_PERC"] != DBNull.Value
+                                        ? Convert.ToDecimal(reader["VAT_PERC"])
+                                        : 0,
 
                                     COST = price
                                 };

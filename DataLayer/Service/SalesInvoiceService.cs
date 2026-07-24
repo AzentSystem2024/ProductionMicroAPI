@@ -105,6 +105,15 @@ namespace MicroApi.DataLayer.Service
             SalesResponse response = new SalesResponse();
             List<SalesInvoice> items = new List<SalesInvoice>();
 
+            // Customer validation
+            if (input.CUSTOMER_ID == 0)
+            {
+                response.Flag = -1;
+                response.Message = "Select customer.";
+                response.Data = new List<SalesInvoice>();
+                return response;
+            }
+
             try
             {
                 using (SqlConnection connection = ADO.GetConnection())
@@ -114,23 +123,33 @@ namespace MicroApi.DataLayer.Service
 
                     // Get Customer Price Class
                     int priceClassId = 0;
+
                     using (SqlCommand cmdPrice = new SqlCommand(
                         "SELECT ISNULL(PRICE_CLASS_ID,0) FROM TB_CUSTOMER WHERE ID=@CUST_ID",
                         connection))
                     {
                         cmdPrice.Parameters.AddWithValue("@CUST_ID", input.CUSTOMER_ID);
+
                         object result = cmdPrice.ExecuteScalar();
-                        priceClassId = result == null ? 0 : Convert.ToInt32(result);
+
+                        priceClassId = result == null
+                            ? 0
+                            : Convert.ToInt32(result);
                     }
 
-                    SqlCommand cmd = new SqlCommand("SP_TB_SALES_INVOICE", connection);
+                    SqlCommand cmd = new SqlCommand(
+                        "SP_TB_SALES_INVOICE",
+                        connection);
+
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@ACTION", 5);
                     cmd.Parameters.AddWithValue("@ITEM_ID", input.ITEM_ID);
+                    cmd.Parameters.AddWithValue("@STORE_ID", input.STORE_ID);
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable tbl = new DataTable();
+
                     da.Fill(tbl);
 
                     items = tbl.AsEnumerable().Select(dr =>
@@ -140,24 +159,43 @@ namespace MicroApi.DataLayer.Service
                         switch (priceClassId)
                         {
                             case 1:
-                                salePrice = dr["SALE_PRICE1"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE1"]);
+                                salePrice = dr["SALE_PRICE1"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDecimal(dr["SALE_PRICE1"]);
                                 break;
+
                             case 2:
-                                salePrice = dr["SALE_PRICE2"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE2"]);
+                                salePrice = dr["SALE_PRICE2"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDecimal(dr["SALE_PRICE2"]);
                                 break;
+
                             case 3:
-                                salePrice = dr["SALE_PRICE3"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE3"]);
+                                salePrice = dr["SALE_PRICE3"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDecimal(dr["SALE_PRICE3"]);
                                 break;
+
                             case 4:
-                                salePrice = dr["SALE_PRICE4"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE4"]);
+                                salePrice = dr["SALE_PRICE4"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDecimal(dr["SALE_PRICE4"]);
                                 break;
+
                             case 5:
-                                salePrice = dr["SALE_PRICE5"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE5"]);
+                                salePrice = dr["SALE_PRICE5"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDecimal(dr["SALE_PRICE5"]);
                                 break;
                         }
 
+                        // Fallback to normal sale price
                         if (salePrice == 0)
-                            salePrice = dr["SALE_PRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["SALE_PRICE"]);
+                        {
+                            salePrice = dr["SALE_PRICE"] == DBNull.Value
+                                ? 0
+                                : Convert.ToDecimal(dr["SALE_PRICE"]);
+                        }
 
                         decimal taxPerc = dr["VAT_PERC"] == DBNull.Value
                             ? 0
@@ -167,15 +205,16 @@ namespace MicroApi.DataLayer.Service
 
                         if (taxPerc > 0)
                         {
-                            decimal taxAmount = Math.Round((salePrice * taxPerc) / 100, 2);
-                            netPrice = Math.Round(salePrice - taxAmount, 2);
-                        }
+                            decimal taxAmount =
+                                Math.Round((salePrice * taxPerc) / 100, 2);
 
-                       
+                            netPrice =
+                                Math.Round(salePrice - taxAmount, 2);
+                        }
 
                         return new SalesInvoice
                         {
-                            ID = ADO.ToInt32(dr["ID"]),
+                            ITEM_ID = ADO.ToInt32(dr["ID"]),
                             ITEM_CODE = ADO.ToString(dr["ITEM_CODE"]),
                             DESCRIPTION = ADO.ToString(dr["DESCRIPTION"]),
                             BARCODE = ADO.ToString(dr["BARCODE"]),
@@ -187,7 +226,9 @@ namespace MicroApi.DataLayer.Service
 
                             HSN_CODE = dr["HSN_CODE"] == DBNull.Value
                                 ? null
-                                : dr["HSN_CODE"].ToString()
+                                : dr["HSN_CODE"].ToString(),
+
+                            QTY_STOCK = ADO.ToDecimal(dr["QTY_STOCK"])
                         };
                     }).ToList();
 
@@ -677,7 +718,8 @@ namespace MicroApi.DataLayer.Service
                                     TAX_AMOUNT = reader["TAX_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TAX_AMOUNT"]) : 0,
                                     TOTAL_AMOUNT = reader["TOTAL_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["TOTAL_AMOUNT"]) : 0,
                                     DISC_PERC = reader["DISC_PERC"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_PERC"]) : 0,
-                                    DISC_AMT = reader["DISC_AMT"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_AMT"]) : 0
+                                    DISC_AMT = reader["DISC_AMT"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_AMT"]) : 0,
+                                    QTY_STOCK = reader["QTY_STOCK"] != DBNull.Value ? Convert.ToDouble(reader["QTY_STOCK"]) : 0,
                                 });
                             }
 
@@ -773,6 +815,57 @@ namespace MicroApi.DataLayer.Service
                         response.Message = "Sales Invoice Commit Successfully";
                     }
                 }
+            }
+
+            return response;
+        }
+        public GetItemListResponse Getitems(GetItemlistRequest request)
+        {
+            GetItemListResponse response = new GetItemListResponse
+            {
+                flag = 0,
+                Message = "Failed",
+                Data = new List<GetItemlist>()
+            };
+
+            try
+            {
+                using (SqlConnection conn = ADO.GetConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SP_TB_SALES_INVOICE", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Add required parameters
+                        cmd.Parameters.AddWithValue("@ACTION", 8);
+                        cmd.Parameters.AddWithValue("@STORE_ID", request.STORE_ID);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response.Data.Add(new GetItemlist
+                                {
+                                    ITEM_ID = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                                    ITEM_CODE = reader["ITEM_CODE"] != DBNull.Value ? reader["ITEM_CODE"].ToString() : null,
+                                    DESCRIPTION = reader["DESCRIPTION"] != DBNull.Value ? reader["DESCRIPTION"].ToString() : null,
+                                    
+                                });
+                            }
+                        }
+
+                        response.flag = 1;
+                        response.Message = "Success";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.flag = 0;
+                response.Message = "Error: " + ex.Message;
             }
 
             return response;
